@@ -1,0 +1,78 @@
+//
+// Copyright 1999-2006 by Structural Mechanics, Lund University.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Library General Public
+// License as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Library General Public License for more details.
+//
+// You should have received a copy of the GNU Library General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA.
+//
+// Please report all bugs and problems to "ivf@byggmek.lth.se".
+//
+//
+// Written by Jonas Lindemann
+//
+
+#include <ivfui/IvfWorkspaceWindow.h>
+
+CIvfWorkspaceWindow::CIvfWorkspaceWindow(int X, int Y, int W, int H)
+:CIvfFltkWorkspace(X, Y, W, H, "Ivf++"), CIvfPopupMenu()
+{
+	resizable(this);
+	setParent(this);
+	m_popupButtonDown = false;
+}
+
+void CIvfWorkspaceWindow::redraw()
+{
+	Fl_Gl_Window::redraw();
+}
+
+void CIvfWorkspaceWindow::show()
+{
+	Fl_Gl_Window::show();
+}
+
+void CIvfWorkspaceWindow::setWindowTitle(const char *title)
+{
+	label(title);
+}
+
+void CIvfWorkspaceWindow::doMouseDown(int x, int y)
+{
+	CIvfFltkWorkspace::doMouseDown(x, y);
+
+	switch (getActivationButton()) {
+	case AB_LEFT:
+		m_popupButtonDown = isLeftButtonDown();
+		break;
+	case AB_MIDDLE:
+		m_popupButtonDown = isMiddleButtonDown();
+		break;
+	case AB_RIGHT:
+		m_popupButtonDown = isRightButtonDown();
+		break;
+	default:
+		break;
+	}
+}
+
+void CIvfWorkspaceWindow::doMouseUp(int x, int y)
+{
+	CIvfFltkWorkspace::doMouseUp(x, y);
+
+	if (m_popupButtonDown)
+		this->popup();
+
+	m_popupButtonDown = false;
+}
+

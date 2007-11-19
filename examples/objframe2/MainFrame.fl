@@ -1,0 +1,168 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0104 
+header_name {.h} 
+code_name {.cpp}
+class CMainFrame {open : {CViewModeChangeEvent, CCoordinateEvent, CSelectionChangedEvent}
+} {
+  Function {CMainFrame()} {open
+  } {
+    code {} {}
+    Fl_Window wndMain {
+      label {ObjectiveFrame HCI prototype} open selected
+      xywh {471 240 849 653} type Double resizable visible
+    } {
+      Fl_Box workspaceView {
+        label label
+        xywh {87 0 762 609} box FLAT_BOX color 27 resizable
+        code0 {\#include "WorkspaceView.h"}
+        class CWorkspaceView
+      }
+      Fl_Scroll {} {open
+        xywh {0 0 87 653}
+      } {
+        Fl_Button btnSelectAll {
+          label {Select all nodes}
+          callback {workspaceView->selectAll();}
+          tooltip {Select all nodes} xywh {5 35 74 35} down_box DOWN_BOX shortcut 0x40061 labelfont 1 labelsize 12 align 128
+        }
+        Fl_Light_Button btnSelect {
+          label Select
+          callback {workspaceView->setViewMode(CWorkspaceView::VM_SELECT_SHAPES);
+outInfo->value("Select nodes and beams using the mouse.");}
+          tooltip {Select nodes and beams} xywh {5 6 74 23} type Radio down_box DOWN_BOX shortcut 0x40073 selection_color 4 labelfont 1 labelsize 12
+        }
+        Fl_Light_Button btnMove {
+          label Move
+          callback {workspaceView->setViewMode(CWorkspaceView::VM_MOVE_SHAPES);
+outInfo->value("Use the mouse to select start point for move.");}
+          tooltip {Move selected nodes} xywh {5 169 74 23} type Radio down_box DOWN_BOX shortcut 0x4006d selection_color 4 labelfont 1 labelsize 12
+        }
+        Fl_Light_Button btnCopy {
+          label Copy
+          callback {workspaceView->setViewMode(CWorkspaceView::VM_COPY_SHAPES);
+outInfo->value("Use the mouse to select starting point for copy operation.");}
+          tooltip {Copy selected nodes} xywh {5 195 74 23} type Radio down_box DOWN_BOX shortcut 0x40063 selection_color 4 labelfont 1 labelsize 12
+        }
+        Fl_Button btnDelete {
+          label Delete
+          callback {workspaceView->deleteSelectedNodes();}
+          tooltip {Delete selected nodes} xywh {5 221 74 23} shortcut 0xffff labelfont 1 labelsize 12
+        }
+        Fl_Light_Button btnCreateNodes {
+          label Nodes
+          callback {workspaceView->setViewMode(CWorkspaceView::VM_CREATE_SHAPES);
+outInfo->value("Use the mouse to create nodes.");}
+          tooltip {Create nodes} xywh {5 82 74 23} type Radio down_box DOWN_BOX shortcut 0x4006e value 1 selection_color 4 labelfont 1 labelsize 12
+        }
+        Fl_Light_Button btnCreateLines {
+          label Beams
+          callback {workspaceView->setViewMode(CWorkspaceView::VM_CREATE_LINES);
+outInfo->value("Create beams by selecting two nodes.");}
+          tooltip {Create beams between nodes} xywh {5 108 74 23} type Radio down_box DOWN_BOX shortcut 0x4006e selection_color 4 labelfont 1 labelsize 12
+        }
+        Fl_Light_Button btnCreateVectors {
+          label Loads
+          callback {workspaceView->setViewMode(CWorkspaceView::VM_CREATE_VECTORS);
+outInfo->value("Select a node to create a load.");}
+          tooltip {Create node loads} xywh {5 134 74 23} type Radio down_box DOWN_BOX shortcut 0x4006e selection_color 4 labelfont 1 labelsize 12
+        }
+      }
+      Fl_Scroll {} {open
+        xywh {87 611 756 42}
+      } {
+        Fl_Output outX {
+          label {X }
+          xywh {106 619 64 27} color 31 labelfont 1 textfont 1 textsize 16
+        }
+        Fl_Output outY {
+          label {Y }
+          xywh {202 620 64 26} color 31 labelfont 1 textfont 1 textsize 16
+        }
+        Fl_Output outZ {
+          label {Z }
+          xywh {302 620 65 26} color 31 labelfont 1 textfont 1 textsize 16
+        }
+        Fl_Output outInfo {
+          label Info
+          xywh {426 619 417 26} color 31 labelfont 1 textfont 1
+        }
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {wndMain->size(Fl::w()-40, Fl::h()-40);
+wndMain->position(20,40);
+outInfo->value("Använd musen för att placera ut noder.");
+wndMain->show();
+workspaceView->setViewModeChangeEvent(this);
+workspaceView->setCoordinateEvent(this);
+workspaceView->setSelectionChangedEvent(this);
+
+btnMove->deactivate();
+btnCopy->deactivate();
+btnDelete->deactivate();
+
+workspaceView->show();} {
+      callback {workspaceView->deleteSelectedNodes();}
+    }
+  }
+  Function {onViewModeChange(TViewModeEvent newMode)} {open return_type virtual
+  } {
+    code {switch (newMode) {
+case VM_SELECT_SHAPES:
+	outInfo->value("Välj noder och stänger med musen.");
+	btnSelect->setonly();
+	break;
+case VM_CREATE_LINES:
+	outInfo->value("Skapa stänger genom att markera två noder.");
+	btnCreateLines->setonly();
+	break;
+case VM_CREATE_VECTORS:
+	outInfo->value("Markera en nod för att placera en last.");
+	btnCreateVectors->setonly();
+	break;
+case VM_CREATE_SHAPES:
+	outInfo->value("Använd musen för att placera ut noder.");
+	btnCreateNodes->setonly();
+	break;
+case VM_MOVE_SHAPES:
+	outInfo->value("Använd musen för att välja startpunkt vid förflyttning av noder.");
+	btnMove->setonly();
+	break;
+case VM_COPY_SHAPES:
+	outInfo->value("Använd musen för att välja startpunkt vid kopiering av noder.");
+	btnCopy->setonly();
+	break;
+default:
+	btnCreateNodes->setonly();
+	break;
+}} {
+      callback {workspaceView->setViewMode(CWorkspaceView::VM_SELECT_SHAPES);}
+    }
+  }
+  Function {onCoordinate(double x, double y, double z)} {open return_type {virtual void}
+  } {
+    code {char buffer[255];
+sprintf(buffer, "%4.2g", x);
+outX->value(buffer);
+sprintf(buffer, "%4.2g", y);
+outZ->value(buffer);
+sprintf(buffer, "%4.2g", z);
+outY->value(buffer);} {}
+  }
+  Function {onSelectionChanged()} {} {
+    code {if (workspaceView->getSelection()->getSize()>0)
+{
+	btnMove->activate();
+	btnCopy->activate();
+	btnDelete->activate();
+}
+else
+{
+	btnMove->deactivate();
+	btnCopy->deactivate();
+	btnDelete->deactivate();
+}} {}
+  }
+} 

@@ -1,0 +1,5 @@
+SET(IVFAPP_NAME robot )
+SET(IVFAPP_LIBS ivf ivfui )
+SET(IVFAPP_DEBUG_LIBS ivfd ivfuid )
+
+IVFAPP_SETUP()

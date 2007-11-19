@@ -1,0 +1,27 @@
+*** Makefile.in.org	2006-07-04 23:03:29.000000000 +0200
+--- Makefile.in	2006-07-04 23:03:58.000000000 +0200
+***************
+*** 72,82 ****
+  PACKAGE = @PACKAGE@
+  RANLIB = @RANLIB@
+  STRIP = @STRIP@
+  VERSION = @VERSION@
+  
+! SUBDIRS = src doc examples man ms-visual-c swig
+  
+  EXTRA_DIST =    .cvsignore   gle.spec
+  
+  
+  docdir = $(datadir)/doc/gle/
+--- 72,82 ----
+  PACKAGE = @PACKAGE@
+  RANLIB = @RANLIB@
+  STRIP = @STRIP@
+  VERSION = @VERSION@
+  
+! SUBDIRS = src doc man ms-visual-c swig
+  
+  EXTRA_DIST =    .cvsignore   gle.spec
+  
+  
+  docdir = $(datadir)/doc/gle/

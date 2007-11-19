@@ -1,0 +1,53 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0100 
+header_name {.h} 
+code_name {.cpp} 
+gridx 5 
+gridy 5 
+snap 3
+decl {int x;} {selected
+} 
+
+class CStatusMessage {open
+} {
+  Function {CStatusMessage()} {open
+  } {
+    Fl_Window wndStatus {
+      label Status open
+      xywh {416 298 298 100} resizable non_modal visible
+    } {
+      Fl_Slider sldProgress {
+        xywh {5 70 285 25} type {Horz Fill}
+      }
+      Fl_Output outMessage {
+        xywh {5 5 285 55} color 15 labelsize 12 align 0 textsize 12
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {wndStatus->show();
+wndStatus->redraw();
+wndStatus->make_current();} {}
+  }
+  Function {hide()} {open
+  } {
+    code {wndStatus->hide();} {}
+  }
+  Function {setProgressMax(int maxValue)} {open
+  } {
+    code {sldProgress->maximum(maxValue);} {}
+  }
+  Function {setProgress(int pos)} {open
+  } {
+    code {sldProgress->value(pos);
+wndStatus->make_current();
+sldProgress->redraw();} {}
+  }
+  Function {setMessage(char* msg)} {open
+  } {
+    code {outMessage->value(msg);
+outMessage->redraw();
+wndStatus->make_current();} {}
+  }
+} 

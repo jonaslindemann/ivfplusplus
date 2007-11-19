@@ -1,0 +1,58 @@
+1. INSTALL from source - Windows
+--------------------------------
+
+This document describes how to build the Windows version of the Ivf++ library from the source tree. A more convenient way of using the library is to use the pre-compiled packages available at sourceforge, which contain binary versions of the Ivf++ library and dependencies.
+
+To make it easier to build the Ivf++ libraries a new build system has been developed for the 1.0 release. This system automatically handles the download, building and installing dependancies as well as building the main Ivf++ libraries. 
+
+1.1 Requirements by the Ivf++ build system
+------------------------------------------
+
+The new Ivf++ build system is based on CMake and Python. The build system has been tested with Python 2.3/2.4 and CMake 2.4. If the documentation is to be build as well Doxygen is required.
+
+1.2 Downloading and building dependency libraries
+-------------------------------------------------
+
+The first step in building Ivf++ is to make sure all dependencies are available and installed at a location that can be found by the Ivf++ build system. The easiest way of doing this is to download the ivf-win32-depend package from sourceforge and install it. This package contains pre-built version of the libraries required for Ivf++. If this package is not used the following packages has to be build first:
+
+- FLTK 1.1.7
+- gle-3.1.0
+- freetype 2.x
+- libjpeg
+- libpng
+- libzlib
+
+Please make sure that they are available for the build environment used. If Visual Studio is used they are set in the Tools/Options/Projects/VC++ Directories. If a command line build is used please set the INCLUDE and LIB environment variables. 
+
+1.3 Configuring and building Ivf++
+-------------------------------
+
+The main build of Ivf++ is configured using the ./ivfbuild configure subcommand. This command takes the build type as a required parameter. The selectable build types can be:
+
+- shared_debug, Shared libraries with debug information.
+- shared_release, Optimised shared libraries without debug information.
+- static_debug, Static libraries with debug information.
+- static_release, Optimised static libraries without debug information.
+
+To configure a shared_release build issue the following command:
+
+C:\..\> ivfbuild configure shared_release
+
+... The Ivf++ build is configured ...
+
+If a command line build is desired use the following command instead:
+
+C:\..\> ivfbuild configure shared_release nmake
+
+... The Ivf++ build is configured for command line build ...
+
+Ivf++ is not build within the source tree. Under Linux the build is located in the linux_build folder. In this folder CMake will generate the "real" Makefiles.
+
+To start the build issue the following command:
+
+C:\..\> ./ivfbuild build
+
+... The Ivf++ libraries are built ...
+
+All executables built by the library are installed in the bin-directory in distribution-directory. Libraries are build in the lib-directory of the distribution-directory.
+

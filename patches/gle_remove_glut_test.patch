@@ -1,0 +1,80 @@
+*** configure.org	2006-07-04 22:54:40.000000000 +0200
+--- configure	2006-07-04 22:58:00.000000000 +0200
+***************
+*** 9472,9546 ****
+  echo "$as_me: error: Cannot find required Xi (X11 Input Extension) library" >&2;}
+     { (exit 1); exit 1; }; }
+  fi
+  
+  
+- # latest versions of glut also use Xi the XInput extension
+- echo "$as_me:$LINENO: checking for glutSwapBuffers in -lglut" >&5
+- echo $ECHO_N "checking for glutSwapBuffers in -lglut... $ECHO_C" >&6
+- if test "${ac_cv_lib_glut_glutSwapBuffers+set}" = set; then
+-   echo $ECHO_N "(cached) $ECHO_C" >&6
+- else
+-   ac_check_lib_save_LIBS=$LIBS
+- LIBS="-lglut $X_PRE_LIBS -lXmu $X_LIBS -lX11 $X_EXTRA_LIBS $LIBS"
+- cat >conftest.$ac_ext <<_ACEOF
+- #line $LINENO "configure"
+- /* confdefs.h.  */
+- _ACEOF
+- cat confdefs.h >>conftest.$ac_ext
+- cat >>conftest.$ac_ext <<_ACEOF
+- /* end confdefs.h.  */
+- 
+- /* Override any gcc2 internal prototype to avoid an error.  */
+- #ifdef __cplusplus
+- extern "C"
+- #endif
+- /* We use char because int might match the return type of a gcc2
+-    builtin and then its argument prototype would still apply.  */
+- char glutSwapBuffers ();
+- int
+- main ()
+- {
+- glutSwapBuffers ();
+-   ;
+-   return 0;
+- }
+- _ACEOF
+- rm -f conftest.$ac_objext conftest$ac_exeext
+- if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+-   (eval $ac_link) 2>&5
+-   ac_status=$?
+-   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-   (exit $ac_status); } &&
+-          { ac_try='test -s conftest$ac_exeext'
+-   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+-   (eval $ac_try) 2>&5
+-   ac_status=$?
+-   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-   (exit $ac_status); }; }; then
+-   ac_cv_lib_glut_glutSwapBuffers=yes
+- else
+-   echo "$as_me: failed program was:" >&5
+- sed 's/^/| /' conftest.$ac_ext >&5
+- 
+- ac_cv_lib_glut_glutSwapBuffers=no
+- fi
+- rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+- LIBS=$ac_check_lib_save_LIBS
+- fi
+- echo "$as_me:$LINENO: result: $ac_cv_lib_glut_glutSwapBuffers" >&5
+- echo "${ECHO_T}$ac_cv_lib_glut_glutSwapBuffers" >&6
+- if test $ac_cv_lib_glut_glutSwapBuffers = yes; then
+-   X_LIBS="-lglut $X_LIBS"
+- else
+-   { { echo "$as_me:$LINENO: error: Cannot find required glut library" >&5
+- echo "$as_me: error: Cannot find required glut library" >&2;}
+-    { (exit 1); exit 1; }; }
+- fi
+- 
+- 
+- 
+  # This is how to use the variables set by AC_PATH_XTRA:
+  #       cc @X_CFLAGS@ -c -o foo.o foo.c
+  #       cc @X_LIBS@ (-lfoo...) @X_PRE_LIBS@ -lX11 @X_EXTRA_LIBS@
+  # (Perhaps X_LIBS should have been called X_LDFLAGS.)
+  
+--- 9472,9481 ----

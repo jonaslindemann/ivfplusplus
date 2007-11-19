@@ -1,0 +1,29 @@
+/* XPM */
+static char *tlDiagram[] = {
+/* width height num_colors chars_per_pixel */
+"    18    18        4            1",
+/* colors */
+"` c #400000",
+". c #000081",
+"# c #c20000",
+"a c none",
+/* pixels */
+"aaaaaaaaaaaaaaaaaa",
+"aa.aaaaaaaaaaaaaaa",
+"a...aaaaaaaaaaaaaa",
+".`.`.aaaaaaaaaaaaa",
+"`a.a`aaaa######aaa",
+"aa.aaaa##``````aaa",
+"aa.aaa#``aaaaaaaaa",
+"aa.aa#`aaaaaaaaaaa",
+"aa.a#`aaaaaaaaaaaa",
+"aa.#`aaaaaaaaaaaaa",
+"aa.`aaaaaaaaaaaaaa",
+"aa.aaaaaaaaaaaaaaa",
+"aa.aaaaaaaaaaaaaaa",
+"aa.aaaaaaaaaa.aaaa",
+"aa.aaaaaaaaaaa.aaa",
+"aa..............aa",
+"aa````````````.`aa",
+"aaaaaaaaaaaaa.`aaa"
+};

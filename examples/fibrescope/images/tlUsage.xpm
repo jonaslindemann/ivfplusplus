@@ -1,0 +1,41 @@
+/* XPM */
+static char *tlUsage[] = {
+/* width height num_colors chars_per_pixel */
+"    18    18       16            1",
+/* colors */
+"` c #400000",
+". c #650000",
+"# c #8d0000",
+"a c #b20000",
+"b c #da0000",
+"c c #ff0000",
+"d c #ff3000",
+"e c #ff6500",
+"f c none",
+"g c #ff9900",
+"h c #ffce00",
+"i c #ffff00",
+"j c #ffff30",
+"k c #ffff65",
+"l c #ffff99",
+"m c #ffffce",
+/* pixels */
+"ffffffffffffffffff",
+"ffffmmmmmmmmmmffff",
+"ffffllllllllllffff",
+"ffffkkkkkkkkkkffff",
+"ffffjjjjjjjjjjffff",
+"ffffiiiiiiiiiiffff",
+"ffffhhhhhhhhhhffff",
+"ffffggggggggggffff",
+"ffffeeeeeeeeeeffff",
+"ffffddddddddddffff",
+"ffffccccccccccffff",
+"ffffbbbbbbbbbbffff",
+"ffffaaaaaaaaaaffff",
+"ffff##########ffff",
+"ffff..........ffff",
+"ffff``````````ffff",
+"ffffffffffffffffff",
+"ffffffffffffffffff"
+};
