@@ -102,10 +102,10 @@ def updateTree(top):
 				haveLicense = checkLicense(filename)		
 				if haveLicense == True:
 					print filename, " : Have license information."
-					updateLicense(filename, "1999", "2006")
+					updateLicense(filename, "1999", "2007")
 				else:
 					print filename, " : Contains no license information."
-					addLicense(filename, "1999", "2006")
+					addLicense(filename, "1999", "2007")
 
 updateTree('../include')
 updateTree('../src')
