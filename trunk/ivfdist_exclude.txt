@@ -1,0 +1,6 @@
+CMakeLists.txt
+~
+Thumbs.db
+Makefile.am
+Makefile
+Makefile.in

@@ -1,0 +1,25 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0104 
+header_name {.h} 
+code_name {.cpp}
+class CRobotWindow {open
+} {
+  Function {CRobotWindow()} {open
+  } {
+    Fl_Window wndMain {open
+      xywh {408 202 601 481} type Double resizable visible
+    } {
+      Fl_Box robotView {
+        label label selected
+        xywh {80 10 445 450} box FLAT_BOX resizable
+        code0 {\#include "RobotView.h"}
+        class CRobotView
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {wndMain->show();
+robotView->show();} {}
+  }
+} 

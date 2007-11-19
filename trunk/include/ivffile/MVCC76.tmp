@@ -1,0 +1,77 @@
+#ifndef _CIvfDxfWriter_h_
+#define _CIvfDxfWriter_h_
+
+#include <ivf/ivfconfig.h>
+#include <ivffile/IvfFileWriter.h>
+
+IvfSmartPointer(CIvfDxfWriter);
+
+class IVFFILE_API CIvfDxfWriter : public CIvfFileWriter {
+private:
+	std::fstream m_file;
+protected:
+	void popMatrix();
+    void dxfTag(int number, const char* value);
+    void dxfInt(int number, int value);
+    void dxfFloat(int number, double value);
+
+    void dxfBeginSection(const char* value);
+    void dxfEndSection();
+
+    void dxfBeginTables();
+    void dxfEndTables();
+
+    void dxfBeginTable(const char* value);
+    void dxfEndTable();
+
+    void dxfBeginLayer();
+    void dxfEndLayer();
+
+    void dxfBeginEntitites();
+    void dxfEndEntitites();
+
+    void dxfColor(int number);
+
+    void dxfLineType(const char* name);
+
+    void dxfLine();
+    void dxfLayer(const char* value);
+    void dxfFirstPoint(double x, double y, double z);
+    void dxfSecondPoint(double x, double y, double z);
+    void dxfThirdPoint(double x, double y, double z);
+    void dxfFourthPoint(double x, double y, double z);
+
+    void dxfPolyline();
+    void dxfPolylineIntro();
+    void dxfPolylineFlag(int flag);
+    void dxfVertex();
+    void dxfEndSeq();
+
+    void dxfSolid();
+	void dxf3DFace();
+
+    void dxfEndOfFile();
+
+	void pushMatrix();
+
+	void quad(
+		double x1, double y1, double z1,
+		double x2, double y2, double z2,
+		double x3, double y3, double z3,
+		double x4, double y4, double z4
+		);
+
+	void tri(
+		double x1, double y1, double z1,
+		double x2, double y2, double z2,
+		double x3, double y3, double z3
+		);
+		
+public:
+	CIvfDxfWriter();
+	virtual ~CIvfDxfWriter();
+
+	void write();
+};
+
+#endif 

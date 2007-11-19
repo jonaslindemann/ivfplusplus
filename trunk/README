@@ -1,0 +1,238 @@
+README - Interactive Visualisation Framework - Ivf++ 1.0.0
+----------------------------------------------------------
+
+Ivf++ was written to ease the use of the OpenGL library. The Ivf++ library started as a 
+small set of classes used in some smaller projects to test some ideas. It has since then 
+grown to 140  classes and has been used in real-world applications. When the library 
+started there were no specific goals but reusability. During the development, the following 
+goals have been important.
+
+	1.	Ease of use
+	2.	Extendibility
+	3.	Reusability
+	4.	Portability
+
+The library has been successfully used under Linux, (IRIX 6.x) and Windows
+9x/NT/2000/XP.
+
+WHATS NEW IN Ivf++ 1.0.0
+------------------------
+
+- To support building Ivf++ on MacOS X, Linux, and Windows withouth immense
+  effort, the GNU Autotools was abandoned in favor of the CMAKE build system.
+  This system automatically generates Makefiles for Unix/Linux based systems and
+  makefiles/projectfiles for Win32/64.
+- Real-world demo applications added.
+- A lot of small fixes.
+- GUI for generating Ivf++ applications (ivfappgen gui)
+- GUI for generating Ivf++ classes (ivfclassgen gui)
+- Pre-build win32 binary releases.
+
+WHATS NEW IN Ivf++ 0.9.1
+------------------------
+
+- Problems with libtool led to invalid shared library names.
+- Python based configuration tool "ivfconfig" for easy configuration of
+  build options
+
+WHATS NEW IN Ivf++ 0.9.0
+------------------------
+
+- New event model in CIvfWidgetBase based classes in libraries such as
+  ivffltk, ivfwin32. In this event model event classes can be assigned to
+  the widgets, enabling the use of handler classes.
+- Handler classes for mouse viewing, scene rendering, selection and
+  interaction, see the handlers and fly examples
+- Updated reference documentation. Most classes are documented.
+- Win32: Native Win32 user interface library ivfwin32 added that can be used
+  as a replacement for the FLTK based ivfui library on Windows.
+- Stereo rendering support
+- Win32: MFC support updated, due to popular demand.
+- ivf3dui library implementing 3D user interface controls
+- Python script ivfappgen added to easily create template Ivf++ applications
+
+WHATS NEW IN Ivf++ 0.8.1
+------------------------
+
+- Support for viewports using the CIvfViewport class. See example viewports.
+- getWorkspace() added to CIvfWorspaceWidget.
+- Win32: DLL-version will now build.
+
+WHATS NEW IN Ivf++ 0.8.0
+------------------------
+
+- Smartpointer system added. All classes using reference counting are
+  can be declared using CIvfXXXPtr instead. This pointer can then 
+  automatically deal with addReference()/deleteReference() calls and
+  object destruction. Smartpointers are easily declared using the
+  IvfSmartPointer macro added before the class declaration.
+- Lighting implemented using a singleton CIvfLighting.
+- Singletons for managing blending, rasterization and pixelops.
+- Class info implemented in all classes using the IvfClassInfo macro.
+- Initial support for VertexArrays. 
+- DLL-support for all libraries except the widget libraries. Any
+  ideas why I can't link my widget libraries with the FLTK DLL version??
+- ivffont, ivfmanip not supported anymore. Major redesign needed.
+- TGA and BMP image loading (Thanks to John Aspras), see the ivfext library.
+
+WHATS NEW IN Ivf++ 0.8.b5
+------------------------
+
+- Loading of Ac3D, DXF and .poly files natively.
+- JPEG and PNG image loaders implemented.
+- GLUT dependencies removed. The ivfui library now uses FLTK to
+  implement the GUI. This also a more clean and simple implementation.
+- Uses the gle-3.0.3 extrusion library instead of the one in GLUT.
+- Widget functionality placed in a separate library ivfwidget. Specific
+  widgets are derived using multiple inheritance.
+- CIvfWorkspace, CIvfConstructionplane, for implementing cursor manipulation
+- CIvfUcs3d user coordinate system class.
+- All math specific classes moved to ivfmath.
+- Culling algorithm separated into the CIvfCulling class.
+- Buffer selection separated into the CIvfBufferSelection class.
+- CIvfPolySet added to support geometry for Ac3D/3DS files
+- Win32: precompiled JPEG/PNG/GLE/ZLIB included in the distribution.
+- New implemented examples, using the new ivfui library.
+- An object can now be assigned a render state using the CIvfRenderState
+  derived classes CIvfPolyState, CIvfBlendState, CIvfLightingState, 
+  CIvfCompositeState.
+  
+WHATS MISSING in Ivf++ 0.8.b5
+-----------------------------
+
+- DLL-support on windows not updated.
+- Documentation of the new classes.
+
+WHATS NEW IN Ivf++ 0.6.6
+------------------------
+
+- Now implements a simple matrix/vector library ivfmath.
+- Image loading is separated from the core ivf library. An IvfTexture is
+  assigned an image using a IvfImage derived class. Special image loaders
+  (Currently only SGI images) are located in the ivfimage library.
+- Most IvfVector references have been replaced by IvfVec3d or IvfVec4d.
+
+WHATS NEW IN Ivf++ 0.6.4
+------------------------
+
+- The library now uses prefixed includes. (Sorry...)
+  #include <IvfShape.h> changes to #include <ivf/IvfShape.h>
+  The prefix denotes the library where the class definition can be
+  found.
+- Library can now be built as DLL:s under Windows.
+- Initial support for manipulators, see fltk1 example.
+- Initial scene-graph culling.
+- Support for using the library with the Microsoft MFC library
+- Test drive of Ivf++ autoconf/automake system.
+- Documentation will be released separately.
+
+
+LICENSING
+---------
+
+Ivf++ comes with complete free source code. Ivf++ is available under the terms of the 
+GNU Library General Public License, Version 2 (LGPL) with exceptions:
+
+
+1.	Modifications to the Ivf++ configure script, config header file, 
+	and makefiles by themselves to support a specific platform do not 
+	constitute a modified or derivative work.
+
+	The authors do request that such modifications be contributed to the 
+	Ivf++ project - send all contributions to "ivf@byggmek.lth.se".
+
+2.	Objects/Classes that are subclassed from Ivf++ classes do not constitute
+	a derivative work.
+
+3.	Static linking of applications and widgets to the Ivf++ library does not
+	constitute a derivative work and does not require the author to provide
+	source code for the application or widget, use the shared Ivf++
+	libraries, or link their applications or widgets against a user-supplied
+	version of Ivf++.
+
+.	If you link the application or widget to a modified version of Ivf++,
+	then the changes to Ivf++ must be provided under the terms of the LGPL
+	in sections 1, 2, and 4.
+	
+4.	You do not have to provide a copy of the Ivf++ license with programs
+	that are linked to the Ivf++ library, nor do you have to identify the
+	Ivf++ license in your program or documentation as required by section 6
+	of the LGPL.
+
+	However, programs must still identify their use of Ivf++. The following
+	example statement can be included in user documentation to satisfy this
+	requirement:
+
+	[program/widget] is based in part on the work of the Ivf++ project 	
+	(http://www.gorkon.byggmek.lth.se/ivfweb).
+
+
+DOCUMENTATION
+-------------
+
+Documentation to the Ivf++ library is provided as a User's guide provided as a
+Adobe Acrobat .PDF file and a reference guide. These are provided as separate
+distributions available from http://sourceforge.net/projects/ivfplusplus. Unpack
+the tar file in the ivf++ directory using the following command:
+
+	tar xvzf ivf-doc-x.x.x.tar.gz
+	
+This will extract the documentation in the /doc folder, which contains the
+following:
+
+	/doc/html	Class reference in html form.
+	
+
+
+REQUIREMENTS
+------------
+
+General
+
+	Working OpenGL environment including the GLU library.
+        Fast Light Toolkit 1.1.x - http://www.fltk.org
+        JPEG library (libjpeg) - ftp://ftp.uu.net/graphics/jpeg/
+        PNG library (libpng) - http://www.libpng.org
+        Tubing and extrusion library, gle-3.0.x
+	http://www.sourceforge.net/projects/gle
+
+Windows
+
+	Visual C++ 6.0, with a recent service pack.
+
+When compiling the libraries on SGI Irix 6.x it use the -n32 switch. 
+Currently the makefiles for Ivf++ currently only support -n32 objects. 
+Also when on SGI systems do not use the prepackaged versions of the libraries. 
+These packages will place the include and library files on different locations.
+
+TRADEMARKS
+----------
+
+Microsoft and Windows are registered trademarks of Microsoft Corportation. 
+UNIX is a registered trademark of the X/Open Group, Inc. 
+OpenGL is a registered trademark of Silicon Graphics, Inc.
+
+COPYRIGHT
+---------
+
+Ivf++ is copyright (C) 1999-2005 by Structural Mechanics, Lund University
+
+IvfTgaImage and IvfBmpImage are copyright (C) 2002- John Aspras
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public License
+as published by the Free Software Foundation; either version 2, with 
+exceptions. (see LICENSING above)
+
+This library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+USA.
+
+
+

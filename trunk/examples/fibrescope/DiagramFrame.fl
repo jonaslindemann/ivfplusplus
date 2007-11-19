@@ -1,0 +1,34 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0100 
+header_name {.h} 
+code_name {.cpp} 
+gridx 5 
+gridy 5 
+snap 3
+decl {int x;} {} 
+
+class CDiagramFrame {open
+} {
+  Function {CDiagramFrame()} {open
+  } {
+    Fl_Window wndDiagram {
+      label Stress open
+      xywh {438 136 411 300} resizable non_modal visible
+    } {
+      Fl_Box chartDiagram {
+        xywh {5 5 400 290}
+        code0 {\#include <FL/Fl_Chart.H>}
+        class Fl_Chart
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {wndDiagram->show();} {}
+  }
+  Function {hide()} {open
+  } {
+    code {wndDiagram->hide();} {selected
+    }
+  }
+} 

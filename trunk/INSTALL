@@ -1,0 +1,58 @@
+1. INSTALL - Linux
+------------------
+
+To make it easier to build the Ivf++ libraries a new build system has been developed for the 1.0 release. This system automatically handles the download, building and installing dependancies as well as building the main Ivf++ libraries. 
+
+1.1 Requirements by the Ivf++ build system
+------------------------------------------
+
+The new Ivf++ build system is based on CMake and Python. The build system has been tested with Python 2.3/2.4 and CMake 2.4. If the documentation is to be 
+build as well Doxygen is required.
+
+1.2 Downloading and building dependency libraries
+-------------------------------------------------
+
+The first step in building Ivf++ is to make sure all dependencies are available and installed at a location that can be found by the Ivf++ build system. The Ivf++ build system can automatically download, build and install the needed dependencies. Please note that FTGL requires Doxygen to build and install correctly. To do a complete build of the Ivf++ dependencies to following procedure can be used:
+
+$ ./ivfbuild depends download
+
+... All needed packages are downloaded (and patched, please see the patches dir)...
+
+$ ./ivfbuild depends build /usr/local
+
+... All packages are built with the install prefix /usr/local ...
+
+If a prefix is used located at directory writable to root only execute the following commands as root:
+
+$ ./ivfbuild depends install /usr/local
+
+... Packages are installed ...
+
+1.3 Configuring and building Ivf++
+-------------------------------
+
+The main build of Ivf++ is configured using the ./ivfbuild configure subcommand. This command takes the build type as a required parameter. The selectable build types can be:
+
+- shared_debug, Shared libraries with debug information.
+- shared_release, Optimised shared libraries without debug information.
+- static_debug, Static libraries with debug information.
+- static_release, Optimised static libraries without debug information.
+
+To configure a shared_release build installed with the /usr/local prefix, issue the following command:
+
+$ ./ivfbuild configure shared_release /usr/local
+
+... The CMake build system is configure ...
+
+Ivf++ is not build within the source tree. Under Linux the build is located in the linux2_build folder. In this folder CMake will generate the "real" Makefiles.
+
+To start the build issue the following command:
+
+$ ./ivfbuild build
+
+... The Ivf++ libraries are built ...
+
+The Ivf++ libraries are installed as root using the following command:
+
+# ./ivfbuild install
+

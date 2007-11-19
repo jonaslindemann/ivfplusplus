@@ -1,0 +1,4 @@
+#!/bin/bash
+
+./ivfbuild configure shared_release /usr/local
+

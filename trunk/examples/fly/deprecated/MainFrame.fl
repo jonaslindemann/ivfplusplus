@@ -1,0 +1,43 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0009 
+header_name {.h} 
+code_name {.cpp} 
+gridx 5 
+gridy 5 
+snap 3
+decl {\#include <FL/x.h>} {public
+} 
+
+decl {\#include <Mmsystem.h>} {} 
+
+class CMainFrame {open
+} {
+  Function {CMainFrame()} {open
+  } {
+    Fl_Window wndMain {
+      label Fly open
+      xywh {392 72 494 469} resizable visible
+    } {
+      Fl_Group {} {open
+        xywh {0 0 494 469}
+      } {
+        Fl_Box ivfFlyWidget {
+          xywh {0 0 494 469}
+          code0 {\#include "IvfFlyWidget.h"}
+          class CIvfFlyWidget
+        }
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {wndMain->show();
+ivfFlyWidget->show();
+
+MMRESULT mmResult;
+mmResult = joySetCapture(
+fl_xid(ivfFlyWidget),
+JOYSTICKID1,50,TRUE);} {selected
+    }
+  }
+} 
