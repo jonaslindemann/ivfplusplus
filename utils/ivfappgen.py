@@ -11,7 +11,6 @@ import tkMessageBox
 
 cmakefileSource = """PROJECT(%(Appname)s)
 
-SET(IVFDEBUG %(debugFlag)s )
 SET(IVFWIN32 %(win32Flag)s )
 SET(IVFSHARED %(sharedFlag)s )
 
@@ -120,12 +119,12 @@ if exist bin (
 )
 mkdir %(build_dir)s_release
 pushd %(build_dir)s_release
-cmake %(generator)s -D IVFDEBUG=OFF -D CMAKE_BUILD_TYPE=Release  ..
+cmake %(generator)s -DIVFDEBUG=OFF -DCMAKE_BUILD_TYPE=Release  ..
 popd
 
 mkdir %(build_dir)s_debug
 pushd %(build_dir)s_debug
-cmake %(generator)s -D IVFDEBUG=ON -D CMAKE_BUILD_TYPE=Debug  ..
+cmake %(generator)s -DIVFDEBUG=ON -DCMAKE_BUILD_TYPE=Debug  ..
 popd
 
 goto end
@@ -207,8 +206,11 @@ popd
 
 
 cleanCommandSource = """@echo off
-if exist %(build_dir)s (
-	rmdir /Q /S %(build_dir)s
+if exist %(build_dir)s_debug (
+	rmdir /Q /S %(build_dir)s_debug
+)
+if exist %(build_dir)s_release (
+	rmdir /Q /S %(build_dir)s_release
 )
 if exist bin (
 	rmdir /Q /S bin
