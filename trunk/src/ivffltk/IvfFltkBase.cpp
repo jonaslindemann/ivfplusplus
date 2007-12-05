@@ -403,6 +403,7 @@ int CIvfFltkBase::handle(int event)
 				return 1;
 				break;
 			default:
+				doKeyboard(Fl::event_key(), x, y);
 				return Fl_Gl_Window::handle(event);
 			}
 			doKeyboard(Fl::event_key(), x, y);
