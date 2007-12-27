@@ -192,7 +192,7 @@ int CIvfFltkBase::handle(int event)
 			doUnFocus();		
 			return 1;
 		case FL_KEYBOARD:
-		case FL_SHORTCUT:
+		//case FL_SHORTCUT:
 			switch (Fl::event_key()) {
 			case FL_Button:
 				doFunctionKey(CIvfWidgetBase::FK_BUTTON, x, y);
