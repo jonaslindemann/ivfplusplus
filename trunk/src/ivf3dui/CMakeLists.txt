@@ -18,7 +18,13 @@ IF(IVFWIN32)
 	ENDIF(IVFDEBUG)
 ELSE(IVFWIN32)
 	ADD_LIBRARY(ivf3dui ${SOURCE_FILES})
-	TARGET_LINK_LIBRARIES( ivf3dui ivf ivfmath GL GLU gle )
+	
+        IF(APPLE)
+                TARGET_LINK_LIBRARIES( ivf3dui ivf ivfmath "-framework Carbon" "-framework Cocoa" "-framework ApplicationServices" "-framework AGL" "-framework OpenGL" gle)
+        ELSE(APPLE)
+                TARGET_LINK_LIBRARIES( ivf3dui ivf ivfmath  GL GLU gle )
+        ENDIF(APPLE)	
+	
 	INSTALL_TARGETS(/lib ivf3dui)
 ENDIF(IVFWIN32)
 

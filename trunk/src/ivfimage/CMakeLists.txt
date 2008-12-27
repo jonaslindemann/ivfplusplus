@@ -18,7 +18,7 @@ IF(IVFWIN32)
 	ENDIF(IVFDEBUG)
 ELSE(IVFWIN32)
 	ADD_LIBRARY(ivfimage ${SOURCE_FILES})
-	TARGET_LINK_LIBRARIES( ivfimage ivf jpeg png)
+	TARGET_LINK_LIBRARIES( ivfimage ivf fltk_jpeg fltk_png z )
 	INSTALL_TARGETS( /lib ivfimage )
 ENDIF(IVFWIN32)
 

@@ -23,7 +23,12 @@
 
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfCamera.h>
+
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif
 
 /* accFrustum()
  * The first 6 arguments are identical to the glFrustum() call.

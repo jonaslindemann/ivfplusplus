@@ -29,7 +29,7 @@
 
 IvfSmartPointer(CIvfOutlineFont);
 
-#include <FTGL/FTGLOutlineFont.h>
+#include <FTGL/ftgl.h>
 
 /**
  * Outline font class

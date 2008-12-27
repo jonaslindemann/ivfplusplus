@@ -19,6 +19,7 @@ class SourcePackage:
 		self.pkgIncludeDir = ""
 		self.pkgLibDir = ""
 		self.pkgPatches = []
+		self.pkgDirPatches = []
 
 
 	def setLocation(self, location):
@@ -72,7 +73,10 @@ class SourcePackage:
 		self.pkgURLs.append(os.path.join(self.pkgLocation, versionTarball))
 
 	def addPatch(self, patchLoc, patchFile):
-		self.pkgPatches.append([patchLoc, patchFile])
+		self.pkgPatches.append([os.path.abspath(patchLoc), patchFile])
+		
+	def addDirPatch(self, patchLoc, patchDir):
+		self.pkgDirPatches.append([os.path.abspath(patchLoc), patchDir])
 
 	def download(self):
 
@@ -104,6 +108,12 @@ class SourcePackage:
 			patchFile = patch[1]
 
 			os.system("patch -N -s %s %s" % (self.pkgBuildDir+"/"+self.pkgDir+"/"+patchFile, patchLoc))
+			
+		for patch in self.pkgDirPatches:
+			patchLoc = patch[0]
+			patchDir = patch[1]
+			
+			os.system("pushd %s;patch -p0 < %s;popd" % (self.pkgBuildDir+"/"+self.pkgDir+"/"+patchDir, patchLoc))
 
 	def build(self):
 		print "----------------------------------------"
@@ -150,11 +160,12 @@ class SourcePackage:
 class FltkPackage(SourcePackage):
 	def __init__(self, version):
 		SourcePackage.__init__(self, version)
-		self.setLocation("http://mirror.nu6.org//ftp.easysw.com/pub/fltk/%s" % version)
+		self.setLocation("http://ftp.rz.tu-bs.de/pub/mirror/ftp.easysw.com/ftp/pub/fltk/%s" % version)
+		# self.setLocation("http://mirror.nu6.org//ftp.easysw.com/pub/fltk/%s" % version)
 		self.setDir("fltk-%s")
 		self.addTarball("fltk-%s-source.tar.gz")
 		self.setConfigOptions("--enable-shared")
-	
+		
 class GlePackage(SourcePackage):
 	def __init__(self, version):
 		SourcePackage.__init__(self, version)
@@ -163,16 +174,29 @@ class GlePackage(SourcePackage):
 		self.setDir("gle-%s")
 		self.addPatch("./patches/gle_remove_glut_test.patch", "configure")
 		self.addPatch("./patches/gle_no_examples.patch", "Makefile.in")
+		self.addDirPatch("./patches/gle_apple_source_fixes.patch", "src")
 
 class FTGLPackage(SourcePackage):
 	def __init__(self, version):
 		SourcePackage.__init__(self, version)
-		self.setLocation("http://ftp.sunet.se/pub/os/Linux/distributions/gentoo/distfiles")
+		self.setLocation("http://mesh.dl.sourceforge.net/sourceforge/ftgl")
+		#self.setLocation("http://ftp.sunet.se/pub/os/Linux/distributions/gentoo/distfiles")
 		self.addTarball("ftgl-%s.tar.gz")
-		self.setDir("FTGL")
-		self.setMakeDir("unix")
+		self.setDir("ftgl-%s")
+		#self.setMakeDir("unix")
 		self.setConfigOptions("--enable-shared")
+			
+	def extract(self):
+		SourcePackage.extract(self)
+		self.pkgDir = self.pkgDir.replace("-rc", "~rc")
+		print self.pkgDir
 		
+	def install(self):
+		self.pkgDir = self.pkgDir.replace("-rc", "~rc")
+		SourcePackage.install(self)
+		
+		
+
 class IvfBuildSystem:
 	def __init__(self):
 		self._nmake = False
@@ -221,8 +245,8 @@ class IvfBuildSystem:
 		glePackage.setIncludeDir(os.path.abspath("./depend/freeglut-2.4.0/include"))
 		libDir = os.path.abspath("./depend/freeglut-2.4.0/src")
 		glePackage.setLibDir(os.path.join(libDir, ".libs"))
-		fltkPackage = FltkPackage("1.1.7")
-		ftglPackage = FTGLPackage("2.1.2")
+		fltkPackage = FltkPackage("1.1.9")
+		ftglPackage = FTGLPackage("2.1.3-rc5")
 	
 		#dependPackages.append(freeglutPackage)
 		dependPackages.append(glePackage)
@@ -408,6 +432,17 @@ class IvfBuildSystem:
 				print "Please configure Ivf++ first. (ivfbuild configure ...)"
 				sys.exit(-1)
 				
+		if sys.platform == "darwin":
+		
+			if os.path.exists("./"+self.getBuildDir()):
+				os.chdir(self.getBuildDir())
+				os.system("make")
+				os.chdir(currDir)
+				print 'Now run "./ivfbuild install" as root to install Ivf++.'
+			else:
+				print "Please configure Ivf++ first. (ivfbuild configure ...)"
+				sys.exit(-1)
+
 		if sys.platform == "win32":
 			
 			# The default build is for VS IDE solution files. These must be

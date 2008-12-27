@@ -110,9 +110,15 @@ void CFontsWindow::onInit(int width, int height)
 	m_polygonalFont = new CIvfPolygonalFont("C:\\Windows\\Fonts\\Tahoma.ttf");
 	m_outlineFont = new CIvfOutlineFont("C:\\Windows\\Fonts\\Tahoma.ttf");
 #else
+	#ifdef __APPLE__
+	m_extrudedFont = new CIvfExtrudedFont("/Library/Fonts/Tahoma.ttf");
+        m_polygonalFont = new CIvfPolygonalFont("/Library/Fonts/Tahoma.ttf");
+        m_outlineFont = new CIvfOutlineFont("/Library/Fonts/Tahoma.ttf");
+	#else
         m_extrudedFont = new CIvfExtrudedFont("/usr/share/fonts/bitstream-vera/Vera.ttf");
         m_polygonalFont = new CIvfPolygonalFont("/usr/share/fonts/bitstream-vera/Vera.ttf");
-        m_outlineFont = new CIvfOutlineFont("/usr/share/fonts/bitstream-vera/Vera.ttf");
+	m_outlineFont = new CIvfOutlineFont("/usr/share/fonts/bitstream-vera/Vera.ttf");
+	#endif
 #endif 
 
 	glEnable(GL_TEXTURE_2D);

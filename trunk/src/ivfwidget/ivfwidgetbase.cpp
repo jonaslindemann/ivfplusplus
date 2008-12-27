@@ -27,8 +27,6 @@
 
 #include <ivf/IvfGL.h>
 
-#include <GL/gl.h>
-
 #define IvfDispatchNotify(events,eventMethod) \
 	if (events.size()>0) \
 	{ \
