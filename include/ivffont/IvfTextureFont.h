@@ -30,7 +30,7 @@
 IvfSmartPointer(CIvfTextureFont);
 
 #define FTGL_LIBRARY_STATIC
-#include <FTGL/FTGLTextureFont.h>
+#include <FTGL/ftgl.h>
 
 /**
  * Texture based font

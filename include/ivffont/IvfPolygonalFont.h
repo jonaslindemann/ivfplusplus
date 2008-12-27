@@ -29,7 +29,7 @@
 
 #include <ivffont/IvfVectorFont.h>
 
-#include <FTGL/FTGLPolygonFont.h>
+#include <FTGL/ftgl.h>
 
 IvfSmartPointer(CIvfPolygonalFont);
 

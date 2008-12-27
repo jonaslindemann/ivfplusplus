@@ -27,7 +27,7 @@
 
 #include <ivffont/IvfVectorFont.h>
 
-#include <FTGL/FTGLExtrdFont.h>
+#include <FTGL/ftgl.h>
 
 IvfSmartPointer(CIvfExtrudedFont);
 
