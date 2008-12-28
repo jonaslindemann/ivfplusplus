@@ -25,7 +25,11 @@
 #include <ivfimage/IvfPngImage.h>
 
 #ifdef IVF_HAVE_PNG
+#ifdef WIN32
+#include <png.h>
+#else
 #include <FL/images/png.h>
+#endif
 #endif
 
 CIvfPngImage::CIvfPngImage()

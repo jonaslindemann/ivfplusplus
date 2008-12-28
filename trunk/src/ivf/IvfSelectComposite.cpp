@@ -101,7 +101,7 @@ GLint CIvfSelectComposite::pick(int x, int y)
 	glRenderMode(GL_SELECT);
 
 	glInitNames();
-	glPushName(-1);
+	glPushName(IVF_NONAME);
 
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();

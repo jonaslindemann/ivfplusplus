@@ -144,6 +144,7 @@ CIvfCamera::CIvfCamera ()
 	setPerspective(45.0, 1.0, 50.0);
 
 	m_freeOrientation = false;
+	m_tileRendering = false;
 	m_stereo = false;
 	m_stereoEye = SE_LEFT;
 	m_eyeSeparation = 1.0;
@@ -474,14 +475,22 @@ void CIvfCamera::projectionTransform()
 		stereoTransform();
 	else
 	{
-		if (!m_jitter)
-			tilePerspective(m_fov, getAspect(), m_zNear, m_zFar, 
-				0.0, 0.0, 0.0, 0.0, 1.0, 
-				m_tileLeft, m_tileRight, m_tileBottom, m_tileTop);	
+		if (m_tileRendering)
+		{
+			// CHECK THIS CODE. Selection fails using the code below....
+			if (!m_jitter)
+				tilePerspective(m_fov, getAspect(), m_zNear, m_zFar, 
+					0.0, 0.0, 0.0, 0.0, 1.0, 
+					m_tileLeft, m_tileRight, m_tileBottom, m_tileTop);	
+			else
+				tilePerspective(m_fov, getAspect(), m_zNear, m_zFar, m_jitterX, m_jitterY, 
+					0.0, 0.0, 0.1, 
+					m_tileLeft, m_tileRight, m_tileBottom, m_tileTop);
+		}
 		else
-			tilePerspective(m_fov, getAspect(), m_zNear, m_zFar, m_jitterX, m_jitterY, 
-				0.0, 0.0, 0.1, 
-				m_tileLeft, m_tileRight, m_tileBottom, m_tileTop);
+		{
+			gluPerspective(m_fov, getAspect(), m_zNear, m_zFar);
+		}
 	}
 }
 
@@ -780,6 +789,16 @@ CIvfVec3d& CIvfCamera::getTarget()
 CIvfVec3d& CIvfCamera::getForwardVector()
 {
 	return m_forward;
+}
+
+void CIvfCamera::setTileRendering(bool flag)
+{
+	m_tileRendering = flag;
+}
+
+bool CIvfCamera::getTileRendering()
+{
+	return m_tileRendering;
 }
 
 void CIvfCamera::setJitter(bool flag)

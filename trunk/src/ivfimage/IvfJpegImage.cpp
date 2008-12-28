@@ -27,7 +27,11 @@
 #include <ivf/ivfconfig.h>
 
 extern "C" {
+#ifdef WIN32
+#include <jpeglib.h>
+#else
 #include <FL/images/jpeglib.h>
+#endif
 }
 
 CIvfJpegImage::CIvfJpegImage()
