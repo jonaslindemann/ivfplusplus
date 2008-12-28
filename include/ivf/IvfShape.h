@@ -35,8 +35,8 @@
 
 IvfSmartPointer(CIvfShape);
 
-#define IVF_NONAME			9999
-#define IVF_NO_ENUM         9998
+#define IVF_NONAME			999999
+#define IVF_NO_ENUM         999998
 
 // Modified JL
 

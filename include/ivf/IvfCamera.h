@@ -111,6 +111,7 @@ private:
 
 	bool m_freeOrientation;
 	bool m_jitter;
+	bool m_tileRendering;
 
 	bool m_stereo;
 	TStereoEye m_stereoEye;
@@ -289,6 +290,9 @@ public:
 	
 	void setType(TCameraType type);
 	TCameraType getType();
+
+	void setTileRendering(bool flag);
+	bool getTileRendering();
 
 	void setJitter(bool flag);
 	bool getJitter();
