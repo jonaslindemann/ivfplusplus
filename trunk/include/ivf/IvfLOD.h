@@ -70,7 +70,7 @@ private:
 	double m_farLimit;
 
 	CIvfCamera* m_camera;
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 protected:
 	double theta(double x);
 	virtual double lodFunction(double dist);

@@ -39,8 +39,8 @@ public:
 	IvfClassInfo("CIvfFibreComposite",CIvfComposite);
 
 protected:
-	void endTransform();
-	void beginTransform();
+	void doEndTransform();
+	void doBeginTransform();
 };
 
-#endif 
+#endif

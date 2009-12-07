@@ -49,7 +49,7 @@ public:
 	void setLight(CIvfOldLight* light);
 
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

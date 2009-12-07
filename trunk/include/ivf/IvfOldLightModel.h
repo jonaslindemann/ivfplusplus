@@ -26,7 +26,7 @@
 #ifndef _CIvfOldLightModel_h_
 #define _CIvfOldLightModel_h_
 
-#include <ivf/IvfObject.h>
+#include <ivf/IvfGLBase.h>
 #include <ivf/IvfOldLight.h>
 
 IvfSmartPointer(CIvfOldLightModel);
@@ -37,7 +37,7 @@ IvfSmartPointer(CIvfOldLightModel);
 * Contains all scene lighting info 
 * @author Carl-Johan Lejdfors
 */
-class IVF_API CIvfOldLightModel : public CIvfObject {
+class IVF_API CIvfOldLightModel : public CIvfGLBase {
 public:
 	void deleteLight(CIvfOldLight* light);
 	/** Constructor */
@@ -46,7 +46,7 @@ public:
 	/** Destructor */
 	~CIvfOldLightModel(); 
 
-	IvfClassInfo("CIvfOldLightModel",CIvfObject);
+	IvfClassInfo("CIvfOldLightModel",CIvfGLBase);
 
 	/** Set environment ambient lighting components */
 	void setAmbient( GLfloat r, GLfloat g, 

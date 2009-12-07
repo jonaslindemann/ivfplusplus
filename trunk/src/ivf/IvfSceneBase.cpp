@@ -94,7 +94,7 @@ void CIvfSceneBase::defaultSceneRender()
 {
 	m_preComposite->render();
 	m_composite->render();
-	m_postComposite->render();	
+	m_postComposite->render();
 }
 
 void CIvfSceneBase::doRender()
@@ -115,7 +115,7 @@ void CIvfSceneBase::defaultRendering()
 	doViewAndRender();
 }
 
-void CIvfSceneBase::createGeometry()
+void CIvfSceneBase::doCreateGeometry()
 {
 	if (m_useCulling)
 		m_culling->cull();
@@ -146,14 +146,14 @@ void CIvfSceneBase::createGeometry()
 				glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
 				break;
 			}
-			
+
 			if (m_lightMode == LM_LOCAL)
 				if (m_lighting != NULL)
 					m_lighting->render();
-			
+
 			camera->setStereoEye(CIvfCamera::SE_LEFT);
 			camera->initialize();
-			
+
 			camera->render();
 			if (m_lightMode == LM_WORLD)
 				if (m_lighting != NULL)
@@ -166,9 +166,9 @@ void CIvfSceneBase::createGeometry()
 			glPopMatrix();
 
 			glPushMatrix();
-			
+
 			glClear(GL_DEPTH_BUFFER_BIT);
-			
+
 			switch (m_colorPair) {
 			case CP_RED_GREEN:
 				glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE);
@@ -183,14 +183,14 @@ void CIvfSceneBase::createGeometry()
 				glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE);
 				break;
 			}
-			
+
 			if (m_lightMode == LM_LOCAL)
 				if (m_lighting != NULL)
 					m_lighting->render();
-			
+
 			camera->setStereoEye(CIvfCamera::SE_RIGHT);
 			camera->initialize();
-			
+
 			camera->render();
 			if (m_lightMode == LM_WORLD)
 				if (m_lighting != NULL)
@@ -199,8 +199,8 @@ void CIvfSceneBase::createGeometry()
 			m_preComposite->render();
 			m_composite->render();
 			m_postComposite->render();
-			
-			glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE); 
+
+			glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
 
 			glPopMatrix();
 		}
@@ -215,16 +215,16 @@ void CIvfSceneBase::createGeometry()
 
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-			
+
 			glPushMatrix();
 
 			if (m_lightMode == LM_LOCAL)
 				if (m_lighting != NULL)
 					m_lighting->render();
-			
+
 			camera->setStereoEye(CIvfCamera::SE_LEFT);
 			camera->initialize();
-			
+
 			camera->render();
 			if (m_lightMode == LM_WORLD)
 				if (m_lighting != NULL)
@@ -240,14 +240,14 @@ void CIvfSceneBase::createGeometry()
 
 			glDrawBuffer(GL_BACK_RIGHT);
 			glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-			
+
 			if (m_lightMode == LM_LOCAL)
 				if (m_lighting != NULL)
 					m_lighting->render();
-			
+
 			camera->setStereoEye(CIvfCamera::SE_RIGHT);
 			camera->initialize();
-			
+
 			camera->render();
 			if (m_lightMode == LM_WORLD)
 				if (m_lighting != NULL)
@@ -256,7 +256,7 @@ void CIvfSceneBase::createGeometry()
 			m_preComposite->render();
 			m_composite->render();
 			m_postComposite->render();
-			
+
 			glPopMatrix();
 		}
 		else

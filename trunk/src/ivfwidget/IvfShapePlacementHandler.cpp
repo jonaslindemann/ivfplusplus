@@ -247,8 +247,8 @@ void CIvfShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 					m_startPoint.setComponents(x, y, z);
 					m_shapeSelection->setOffset(0.0, 0.0, 0.0);
 					m_moveDone = true;
-					m_cursor->setState(CIvfObject::OS_OFF);
-					m_ruler->setState(CIvfObject::OS_OFF);
+					m_cursor->setState(CIvfGLBase::OS_OFF);
+					m_ruler->setState(CIvfGLBase::OS_OFF);
 				}
 
 				m_clickCount = 0;
@@ -293,12 +293,12 @@ void CIvfShapePlacementHandler::setShapeRepresentation(CIvfShape *shape)
 
 void CIvfShapePlacementHandler::doActivate()
 {
-	m_cursor->setState(CIvfObject::OS_ON);
+	m_cursor->setState(CIvfGLBase::OS_ON);
 }
 
 void CIvfShapePlacementHandler::doDeactivate()
 {
-	m_cursor->setState(CIvfObject::OS_OFF);
+	m_cursor->setState(CIvfGLBase::OS_OFF);
 	m_clickCount = 0;
 	this->setLockXZNoEvent(false);
 	m_cursor->setType(CIvfNodeCursor::CT_XZ);
@@ -352,8 +352,8 @@ void CIvfShapePlacementHandler::initiateMove(double x, double y, double z)
 	m_startPoint.setComponents(x, y, z);
 	setPlanePosition(x, y, z);
 	m_cursor->setPosition(x, y, z);
-	m_cursor->setState(CIvfObject::OS_ON);
-	m_ruler->setState(CIvfObject::OS_ON);
+	m_cursor->setState(CIvfGLBase::OS_ON);
+	m_ruler->setState(CIvfGLBase::OS_ON);
 }
 
 void CIvfShapePlacementHandler::initiateMove(CIvfVec3d &vec)
@@ -362,8 +362,8 @@ void CIvfShapePlacementHandler::initiateMove(CIvfVec3d &vec)
 	m_moving = true;
 	m_startPoint = vec;
 	m_cursor->setPosition(vec);
-	m_cursor->setState(CIvfObject::OS_ON);
-	m_ruler->setState(CIvfObject::OS_ON);
+	m_cursor->setState(CIvfGLBase::OS_ON);
+	m_ruler->setState(CIvfGLBase::OS_ON);
 	setPlanePosition(vec);
 }
 
@@ -372,8 +372,8 @@ void CIvfShapePlacementHandler::finalizeMove()
 	setPlanePosition(0.0, 0.0, 0.0);
 	if (m_shapeSelection!=NULL)
 		m_shapeSelection->setOffset(0.0, 0.0, 0.0);
-	m_cursor->setState(CIvfObject::OS_OFF);
-	//m_ruler->setState(CIvfObject::OS_OFF);
+	m_cursor->setState(CIvfGLBase::OS_OFF);
+	//m_ruler->setState(CIvfGLBase::OS_OFF);
 	m_moving = false;
 }
 
@@ -407,7 +407,7 @@ void CIvfShapePlacementHandler::reset()
 	setPlanePosition(0.0, 0.0, 0.0);
 	if (m_shapeSelection!=NULL)
 		m_shapeSelection->setOffset(0.0, 0.0, 0.0);
-	//m_ruler->setState(CIvfObject::OS_OFF);
+	//m_ruler->setState(CIvfGLBase::OS_OFF);
 	if ((m_operatingMode==OM_MOVE_SHAPE)||(m_operatingMode==OM_COPY_SHAPE))
 		m_cursor->setShape(NULL);
 	else

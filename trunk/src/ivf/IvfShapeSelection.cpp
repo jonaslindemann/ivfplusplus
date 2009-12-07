@@ -43,7 +43,7 @@ CIvfShapeSelection::~CIvfShapeSelection()
 
 }
 
-void CIvfShapeSelection::createGeometry()
+void CIvfShapeSelection::doCreateGeometry()
 {
 	CIvfShapeSelectionVectorIterator it;
 

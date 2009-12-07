@@ -54,7 +54,7 @@ CIvfComposite::~CIvfComposite ()
 }
 
 // ------------------------------------------------------------
-void CIvfComposite::createGeometry()
+void CIvfComposite::doCreateGeometry()
 {
 	unsigned int i;
 
@@ -62,9 +62,9 @@ void CIvfComposite::createGeometry()
 
 	while (i<m_children.size())
 	{
-		if ((m_children[i]->getState()==CIvfObject::OS_ON)&&(!getCulled())) 
+		if ((m_children[i]->getState()==CIvfGLBase::OS_ON)&&(!getCulled()))
 			m_children[i]->render();
-	
+
 		i += m_renderInterval;
 	}
 }
@@ -89,7 +89,7 @@ CIvfShape* CIvfComposite::getChild(int index)
 // ------------------------------------------------------------
 CIvfShape* CIvfComposite::removeChild(int index)
 {
-	std::vector<CIvfShape*>::iterator pos; 
+	std::vector<CIvfShape*>::iterator pos;
 
 	if ((index>=0)&&(index<(int)m_children.size()))
 	{
@@ -98,17 +98,17 @@ CIvfShape* CIvfComposite::removeChild(int index)
 			shape->deleteReference();
 		pos = m_children.begin();
 		pos += index;
-		m_children.erase(pos);		
+		m_children.erase(pos);
 		return shape;
 	}
 	else
-		return NULL;	
+		return NULL;
 }
 
 // ------------------------------------------------------------
 void CIvfComposite::deleteChild(int index)
 {
-	std::vector<CIvfShape*>::iterator pos; 
+	std::vector<CIvfShape*>::iterator pos;
 
 	if ((index>=0)&&(index<(int)m_children.size()))
 	{
@@ -117,7 +117,7 @@ void CIvfComposite::deleteChild(int index)
 			shape->deleteReference();
 		pos = m_children.begin();
 		pos += index;
-		m_children.erase(pos);		
+		m_children.erase(pos);
 		delete shape;
 	}
 }
@@ -212,16 +212,16 @@ void CIvfComposite::setHighlight(THighlightState state)
 void CIvfComposite::compositeRemove(CIvfComposite* composite, CIvfShape* deleteChild)
 {
 	int i;
-	
+
 	for (i = 0; i<composite->getSize(); i++)
 	{
 		CIvfShape* child = composite->getChild(i);
-		
+
 		if (child == deleteChild)
 		{
 			composite->removeChild(i);
 		}
-		else 
+		else
 			if (child->isClass("CIvfComposite"))
 			{
 				CIvfComposite* tree = (CIvfComposite*)child;
@@ -233,7 +233,7 @@ void CIvfComposite::compositeRemove(CIvfComposite* composite, CIvfShape* deleteC
 // ------------------------------------------------------------
 CIvfShape* CIvfComposite::removeShape(CIvfShape *removeShape)
 {
-	compositeRemove(this, removeShape);	
+	compositeRemove(this, removeShape);
 	return removeShape;
 }
 
@@ -244,7 +244,7 @@ void CIvfComposite::setRenderInterval(int interval)
 }
 
 // ------------------------------------------------------------
-void CIvfComposite::updateBoundingSphere()
+void CIvfComposite::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{
@@ -255,12 +255,12 @@ void CIvfComposite::updateBoundingSphere()
 		double midPoint[3];
 		double x, y, z;
 		double radius;
-	
+
 		maxSize[0] = maxSize[1] = maxSize[2] = -1e300;
 		minSize[0] = minSize[1] = minSize[2] = 1e300;
-	
+
 		// Determine bounding box
-		
+
 		for (i=0;i<m_children.size();i++)
 		{
 			CIvfShape* shape = m_children[i];
@@ -268,7 +268,7 @@ void CIvfComposite::updateBoundingSphere()
 			shape->getPosition(x, y, z);
 			CIvfBoundingSphere* bSphere = shape->getBoundingSphere();
 			radius = bSphere->getRadius();
-	
+
 			if ( (x+radius)>maxSize[0] )
 				maxSize[0] = x+radius;
 			if ( (y+radius)>maxSize[1] )
@@ -282,39 +282,39 @@ void CIvfComposite::updateBoundingSphere()
 			if ( (z-radius)<minSize[2] )
 				minSize[2] = z-radius;
 		}
-		
+
 		// Determine mid point of box
-		
+
 		midPoint[0] = (maxSize[0] + minSize[0])/2.0;
 		midPoint[1] = (maxSize[1] + minSize[1])/2.0;
 		midPoint[2] = (maxSize[2] + minSize[2])/2.0;
-		
+
 		// Determine sphere radius
-		
+
 		radius = sqrt( pow(maxSize[0]-midPoint[0],2) +
 			pow(maxSize[1]-midPoint[1],2) +
 			pow(maxSize[2]-midPoint[2],2));
-	
+
 		this->getBoundingSphere()->setRadius(radius);
 	}
 }
 
-CIvfShape* CIvfComposite::findShape(const char *name)
+CIvfShape* CIvfComposite::findShape(const std::string& name)
 {
-	return compositeFind(this, name);	
+	return compositeFind(this, name);
 }
 
-CIvfShape* CIvfComposite::compositeFind(CIvfComposite *composite, const char *name)
+CIvfShape* CIvfComposite::compositeFind(CIvfComposite *composite, const std::string& name)
 {
 	int i;
-	
+
 	for (i = 0; i<composite->getSize(); i++)
 	{
 		CIvfShape* child = composite->getChild(i);
 
-		if (child->getName()!=NULL)
+		if (child->getName()!="")
 		{
-			if (strcmp(child->getName(),name)==0)
+			if (child->getName() == name)
 				return child;
 		}
 

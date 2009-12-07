@@ -39,10 +39,10 @@ public:
 	CIvfColorMap();
 	virtual ~CIvfColorMap();
 
-	void open(char* fname);
+	void open(const std::string& fname);
 	void clear();
 
 	void getColor(double value, float &r, float &g, float &b);
 };
 
-#endif 
+#endif

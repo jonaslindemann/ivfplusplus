@@ -31,14 +31,14 @@ CIvfTriStripSet::~CIvfTriStripSet()
 
 }
 
-void CIvfTriStripSet::createGeometry()
+void CIvfTriStripSet::doCreateGeometry()
 {
 	CIvfIndex* coordIdx;
 	CIvfIndex* colorIdx;
 	CIvfIndex* normalIdx;
 	CIvfIndex* textureIdx;
 	long i, j;
-	
+
 	glPushAttrib(GL_COLOR_MATERIAL);
 
 	if (m_useColor)
@@ -47,7 +47,7 @@ void CIvfTriStripSet::createGeometry()
 	for (i=0; i<(int)m_coordIndexSet.size(); i++)
 	{
 		glBegin(GL_TRIANGLE_STRIP);
-		
+
 		coordIdx = m_coordIndexSet[i];
 		if (m_useColor)
 		{
@@ -55,7 +55,7 @@ void CIvfTriStripSet::createGeometry()
 				colorIdx = m_colorIndexSet[i];
 		}
 		normalIdx = m_normalIndexSet[i];
-		
+
 		if (i<(int)m_textureIndexSet.size())
 			textureIdx = m_textureIndexSet[i];
 		else
@@ -64,13 +64,13 @@ void CIvfTriStripSet::createGeometry()
 		for (j=0; j<coordIdx->getSize(); j++)
 		{
 			glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j)]->getComponents());
-			
+
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 
 			if (textureIdx!=NULL)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
-			
+
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
 		}
 
@@ -103,7 +103,7 @@ void CIvfTriStripSet::calcNormal(CIvfIndex *idx)
 	bool evenPoint = true;
 
 	normalIdx = new CIvfIndex();
-	
+
 
 	for (i=0; i<idx->getSize()-2; i++)
 	{
@@ -144,7 +144,7 @@ void CIvfTriStripSet::calcNormal(CIvfIndex *idx)
 		m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(m_normalSet.size()-1);
 		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
 	}
-	
+
 	m_normalIndexSet.push_back(normalIdx);
 
 	this->setUseVertexNormals(true);

@@ -37,7 +37,7 @@ public:
 
 	IvfClassInfo("CIvfRasterFont", CIvfShape);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif

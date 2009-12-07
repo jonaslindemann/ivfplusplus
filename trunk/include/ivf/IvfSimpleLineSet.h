@@ -94,6 +94,6 @@ private:
 	int m_nCoords;
 	int m_nCoordIndex;
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 #endif

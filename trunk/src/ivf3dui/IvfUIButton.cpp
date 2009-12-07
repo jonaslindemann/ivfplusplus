@@ -166,8 +166,8 @@ void CIvfUIButton::setVisualAction(TVisualAction action)
 		{
 			this->addChild(m_downShape);
 			this->addChild(m_upShape);
-			m_downShape->setState(CIvfObject::OS_OFF);
-			m_upShape->setState(CIvfObject::OS_ON);
+			m_downShape->setState(CIvfGLBase::OS_OFF);
+			m_upShape->setState(CIvfGLBase::OS_ON);
 		}
 		break;
 	default:
@@ -242,8 +242,8 @@ void CIvfUIButton::visualDown()
 	case VA_SHAPES:
 		if ((m_downShape!=NULL)&&(m_upShape!=NULL))
 		{
-			m_downShape->setState(CIvfObject::OS_ON);
-			m_upShape->setState(CIvfObject::OS_OFF);
+			m_downShape->setState(CIvfGLBase::OS_ON);
+			m_upShape->setState(CIvfGLBase::OS_OFF);
 		}
 		break;
 	default:
@@ -268,8 +268,8 @@ void CIvfUIButton::visualUp()
 	case VA_SHAPES:
 		if ((m_downShape!=NULL)&&(m_upShape!=NULL))
 		{
-			m_downShape->setState(CIvfObject::OS_OFF);
-			m_upShape->setState(CIvfObject::OS_ON);
+			m_downShape->setState(CIvfGLBase::OS_OFF);
+			m_upShape->setState(CIvfGLBase::OS_ON);
 		}
 		break;
 	default:
@@ -294,8 +294,8 @@ void CIvfUIButton::visualRestore()
 	case VA_SHAPES:
 		if ((m_downShape!=NULL)&&(m_upShape!=NULL))
 		{
-			m_downShape->setState(CIvfObject::OS_OFF);
-			m_upShape->setState(CIvfObject::OS_ON);
+			m_downShape->setState(CIvfGLBase::OS_OFF);
+			m_upShape->setState(CIvfGLBase::OS_ON);
 		}
 		break;
 	default:

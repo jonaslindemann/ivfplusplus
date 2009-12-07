@@ -25,7 +25,7 @@
 #ifndef _CIvfView_h_
 #define _CIvfView_h_
  
-#include <ivf/IvfObject.h>
+#include <ivf/IvfGLBase.h>
 #include <ivf/IvfViewport.h>
 
 #include <ivfmath/IvfViewFrustum.h>
@@ -39,7 +39,7 @@ IvfSmartPointer(CIvfView);
  * cameras. The viewTransform and projectionTransform methods
  * should be overidden. 
  */
-class IVF_API CIvfView : public CIvfObject  {
+class IVF_API CIvfView : public CIvfGLBase  {
 private:
 	int m_viewX;
 	int m_viewY;
@@ -59,7 +59,7 @@ public:
 	/** CIvfView destructor */
 	virtual ~CIvfView();
 
-	IvfClassInfo("CIvfView",CIvfObject);
+	IvfClassInfo("CIvfView",CIvfGLBase);
 
 	/**
 	 * Initialize perspective and viewport
@@ -119,7 +119,7 @@ protected:
 
 	// virtual methods for view and perspective transforms
 
-	void beginTransform();
+	void doBeginTransform();
 	virtual void viewTransform();
 	virtual void projectionTransform();
 };

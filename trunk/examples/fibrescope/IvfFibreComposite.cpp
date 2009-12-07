@@ -39,7 +39,7 @@ CIvfFibreComposite::~CIvfFibreComposite()
 
 }
 
-void CIvfFibreComposite::beginTransform()
+void CIvfFibreComposite::doBeginTransform()
 {
 	CIvfUserSettingsPtr userSettings = CIvfUserSettings::getInstance();
 	CIvfLightingPtr lighting = CIvfLighting::getInstance();
@@ -59,12 +59,12 @@ void CIvfFibreComposite::beginTransform()
 		}
 	}
 
-	CIvfComposite::beginTransform();
+	CIvfComposite::doBeginTransform();
 }
 
-void CIvfFibreComposite::endTransform()
+void CIvfFibreComposite::doEndTransform()
 {
-	CIvfComposite::endTransform();
+	CIvfComposite::doEndTransform();
 
 	CIvfUserSettingsPtr userSettings = CIvfUserSettings::getInstance();
 

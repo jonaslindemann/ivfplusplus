@@ -77,7 +77,7 @@ CIvfCamera* CIvfOldScene::getCamera()
 // ------------------------------------------------------------
 void CIvfOldScene::setView(CIvfView *view)
 {
-	CIvfSelectComposite::setCamera(view);	
+	CIvfSelectComposite::setCamera(view);
 }
 
 // ------------------------------------------------------------
@@ -87,19 +87,19 @@ CIvfView* CIvfOldScene::getView()
 }
 
 // ------------------------------------------------------------
-void CIvfOldScene::createGeometry()
+void CIvfOldScene::doCreateGeometry()
 {
-	CIvfSelectComposite::createGeometry();
+	CIvfSelectComposite::doCreateGeometry();
 
 	if (m_showGrid)
 		if (m_world!=NULL)
 			m_world->render();
 
-	
+
 	if (m_showCursor)
 		if (m_cursor!=NULL)
 			m_cursor->render();
-	
+
 	// Draw line from cursor to plane
 
 	if (m_showCursor)
@@ -109,7 +109,7 @@ void CIvfOldScene::createGeometry()
 			double x2, y2, z2;
 			m_pointOnPlane.getComponents(x1, y1, z1);
 			m_cursor->getPosition(x2, y2, z2);
-			
+
 			glPushAttrib(GL_LIGHTING);
 			glPushMatrix();
 			glBegin(GL_LINES);
@@ -143,21 +143,21 @@ void CIvfOldScene::createGeometry()
 		m_transparentShape->render();
 }
 
-void CIvfOldScene::beginTransform()
+void CIvfOldScene::doBeginTransform()
 {
 	glPushMatrix();
 	if (m_lightMode == IVF_LIGHT_LOCAL)
 		if (m_lighting != NULL)
 			m_lighting->render();
-	CIvfSelectComposite::beginTransform();
+	CIvfSelectComposite::doBeginTransform();
 	if (m_lightMode == IVF_LIGHT_WORLD)
 		if (m_lighting != NULL)
 			m_lighting->render();
 }
 
-void CIvfOldScene::endTransform()
+void CIvfOldScene::doEndTransform()
 {
-		CIvfSelectComposite::endTransform();
+		CIvfSelectComposite::doEndTransform();
 	glPopMatrix();
 }
 
@@ -170,7 +170,7 @@ void CIvfOldScene::setWorldSystem(CIvfCoordinateSystem * world)
 		if (!m_world->referenced())
 			delete m_world;
 	}
-	
+
 	m_world = world;
 	m_world->addReference();
 }
@@ -188,9 +188,9 @@ void CIvfOldScene::setCursor(CIvfCursor * cursor)
 		if (!m_cursor->referenced())
 			delete m_cursor;
 	}
-	
+
 	m_cursor = cursor;
-	m_cursor->addReference();	
+	m_cursor->addReference();
 }
 
 CIvfCursor* CIvfOldScene::getCursor()
@@ -215,63 +215,63 @@ void CIvfOldScene::updateCursor(int x, int y)
 		(camera!=NULL)&&
 		(m_world!=NULL))
 	{
-		
-		
-		
+
+
+
 		if (!m_cursorLocked)
 		{
 			// Calculate pick vector
-			
+
 			camera->pickVector(x, y, i, j, k);
-			
+
 			// Get camera position
-			
+
 			camera->getPosition(x0, y0, z0);
-			
+
 			// Calculate intersection with XZ plane
-			
+
 			m_world->intersect(x0, y0, z0,  i, j, k, ix, iy, iz);
 
 			// Align cursor with coordinate system
-			
+
 			m_world->alignShape(m_cursor);
-			
+
 			// Snap to transformed system
-			
+
 			m_world->transform(ix, iy, iz, ix, iy, iz);
 
 			if (m_snapToGrid)
 				m_world->snap(ix, iy, iz);
-			
+
 			// cursor is positioned in the global system
-			
+
 			double planeX, planeY, planeZ;
 			planeX = ix;
 			planeZ = iz;
 			planeY = 0.0;
-			
+
 			m_pointOnPlane.setComponents(planeX, planeY, planeZ);
-			
+
 			m_world->transformWorld(ix, iy, iz, ix, iy, iz);
 			m_world->transformWorld(&m_pointOnPlane);
 			m_cursor->setPosition(ix, iy, iz);
 		}
 		else
 		{
-			// Calculate y movement 
+			// Calculate y movement
 			double sign;
-			
+
 			if ( (m_cursorY-m_cursorStartY)>0 )
 				sign = -1.0;
 			else
 				sign = 1.0;
-			
+
 			dist = sign*sqrt(pow((double)m_cursorX-(double)m_cursorStartX,2) + pow((double)m_cursorY - (double)m_cursorStartY,2));
 			camera->getViewPort(viewWidth, viewHeight);
 			dy = 10*m_objectSize * (dist / sqrt(pow((double)viewHeight,2) + pow((double)viewWidth,2)));
-			
+
 			// move cursor in transformed y direction
-			
+
 			m_cursor->getPosition(ix, iy, iz);
 			m_world->transform(ix, iy, iz, ix, iy, iz);
 			iy = dy;

@@ -29,7 +29,7 @@ CIvfText::CIvfText()
 	m_text = "Ivf++";
 }
 
-void CIvfText::createGeometry()
+void CIvfText::doCreateGeometry()
 {
 	m_font->setText(m_text.c_str());
 	m_font->render();
@@ -45,16 +45,16 @@ CIvfFont* CIvfText::getFont(void)
 	return m_font;
 }
 
-void CIvfText::setText(const char* text)
+void CIvfText::setText(const std::string& text)
 {
 	m_text = text;
 	if (m_font!=NULL)
-		m_font->setText(m_text.c_str());
+		m_font->setText(m_text);
 }
 
-const char* CIvfText::getText(void)
+const std::string CIvfText::getText(void)
 {
-	return m_text.c_str();
+	return m_text;
 }
 
 void CIvfText::getSize(double & xsize, double & ysize, double & zsize)

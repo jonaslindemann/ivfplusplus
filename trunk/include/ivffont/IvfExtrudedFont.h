@@ -33,22 +33,22 @@ IvfSmartPointer(CIvfExtrudedFont);
 
 /**
  * Extruded font class
- * 
- * CIvfExtruded font represents a font that has a depth. 
+ *
+ * CIvfExtruded font represents a font that has a depth.
  */
 class IVFFONT_API CIvfExtrudedFont: public CIvfVectorFont {
 private:
 	FTGLExtrdFont* m_ftglExtrudedFont;
 public:
 	/** Class constructor @see CIvfFont. */
-	CIvfExtrudedFont(const char* filename);
+	CIvfExtrudedFont(const std::string& filename);
 
 	/** Class destructor */
 	virtual ~CIvfExtrudedFont();
 
 	IvfClassInfo("CIvfExtrudedFont", CIvfVectorFont);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 
 	virtual void doSetFaceSize(const unsigned int faceSize);
 	virtual void doSetDepth(const double depth);

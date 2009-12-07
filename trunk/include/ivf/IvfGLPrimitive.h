@@ -271,7 +271,7 @@ public:
 	 *
 	 * Upates the radius of the assigned bounding sphere, if any.
 	 */
-	void updateBoundingSphere();
+	void doUpdateBoundingSphere();
 };
 /** \example advgeom.cpp
  * This is an example of how to use the CIvfGLPrimitive 

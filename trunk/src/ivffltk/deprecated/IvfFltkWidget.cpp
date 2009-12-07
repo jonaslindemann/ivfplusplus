@@ -112,7 +112,7 @@ void CIvfFltkWidget::deleteSelected()
 		if (doit == true)
 			m_scene->getComposite()->removeShape(shape);
 		else
-			shape->setSelect(CIvfObject::SS_OFF);
+			shape->setSelect(CIvfGLBase::SS_OFF);
 	}
 	
 	m_selectedShapes->clear();
@@ -202,7 +202,7 @@ void CIvfFltkWidget::resetView()
 // ------------------------------------------------------------
 void CIvfFltkWidget::clearSelection()
 {
-	m_selectedShapes->setSelectChildren(CIvfObject::SS_OFF);
+	m_selectedShapes->setSelectChildren(CIvfGLBase::SS_OFF);
 	m_selectedShapes->clear();
 	m_selectedShape = NULL; 
 	
@@ -215,7 +215,7 @@ void CIvfFltkWidget::clearSelection()
 // ------------------------------------------------------------
 void CIvfFltkWidget::selectAll()
 {
-	m_selectedShapes->setSelectChildren(CIvfObject::SS_OFF);
+	m_selectedShapes->setSelectChildren(CIvfGLBase::SS_OFF);
 	m_selectedShapes->clear();
 	m_selectedShape = NULL;
 
@@ -234,7 +234,7 @@ void CIvfFltkWidget::selectAll()
 			m_selectedShapes->addChild(shape);
 	}
 
-	m_selectedShapes->setSelectChildren(CIvfObject::SS_ON);
+	m_selectedShapes->setSelectChildren(CIvfGLBase::SS_ON);
 	onSelect(m_selectedShapes);
 
 	redraw();	
@@ -589,13 +589,13 @@ void CIvfFltkWidget::doMouse(int x, int y)
 	{
 		if (m_selectedShape!=NULL)
 		{
-			if (m_selectedShape->getSelect()!=CIvfObject::SS_ON)
+			if (m_selectedShape->getSelect()!=CIvfGLBase::SS_ON)
 			{
 				bool select = true;
 				onSelectFilter(m_selectedShape, select);
 				if (select)
 				{
-					m_selectedShape->setSelect(CIvfObject::SS_ON);
+					m_selectedShape->setSelect(CIvfGLBase::SS_ON);
 					m_selectedShapes->addChild(m_selectedShape);
 					onSelect(m_selectedShapes);
 				}
@@ -604,7 +604,7 @@ void CIvfFltkWidget::doMouse(int x, int y)
 		}
 		else
 		{
-			m_selectedShapes->setSelectChildren(CIvfObject::SS_OFF);
+			m_selectedShapes->setSelectChildren(CIvfGLBase::SS_OFF);
 			m_selectedShapes->clear();
 			onDeSelect();
 			redraw();
@@ -642,14 +642,14 @@ void CIvfFltkWidget::doMouse(int x, int y)
 			{
 				if (m_selectedShape->isClass("CIvfNode"))
 				{
-					m_selectedShape->setSelect(CIvfObject::SS_ON);
+					m_selectedShape->setSelect(CIvfGLBase::SS_ON);
 					m_selectedShapes->addChild(m_selectedShape);
 				}
 				redraw();
 			}
 			else
 			{
-				m_selectedShapes->setSelectChildren(CIvfObject::SS_OFF);
+				m_selectedShapes->setSelectChildren(CIvfGLBase::SS_OFF);
 				m_selectedShapes->clear();
 				redraw();
 			}
@@ -658,7 +658,7 @@ void CIvfFltkWidget::doMouse(int x, int y)
 		if (m_selectedShapes->getSize()==2)
 		{
 			this->createLine();	
-			m_selectedShapes->setSelectChildren(CIvfObject::SS_OFF);
+			m_selectedShapes->setSelectChildren(CIvfGLBase::SS_OFF);
 			m_selectedShapes->clear();
 			redraw();
 		}

@@ -64,7 +64,7 @@ void CIvfMesh::initialize()
 	m_initDone = false;
 }
 
-void CIvfMesh::createGeometry()
+void CIvfMesh::doCreateGeometry()
 {
 
 	glPushAttrib(GL_LIGHTING|GL_AUTO_NORMAL|GL_NORMALIZE);
@@ -82,33 +82,33 @@ void CIvfMesh::createGeometry()
 	switch (m_meshType) {
 	case MT_ORDER_2:
 		glMap2d(GL_MAP2_VERTEX_3,
-			0, 1,  // U ranges 0..1 
-			3,         // U stride, 3 floats per coord 
-			2,         // U is 2nd order, ie. linear 
-			0, 1,  // V ranges 0..1 
-			m_ySize * 3,     // V stride, row is 2 coords, 3 floats per coord 
-			2,         // V is 2nd order, ie linear 
-			m_controlPoints);  // control points 
+			0, 1,  // U ranges 0..1
+			3,         // U stride, 3 floats per coord
+			2,         // U is 2nd order, ie. linear
+			0, 1,  // V ranges 0..1
+			m_ySize * 3,     // V stride, row is 2 coords, 3 floats per coord
+			2,         // V is 2nd order, ie linear
+			m_controlPoints);  // control points
 		break;
 	case MT_ORDER_4:
 		glMap2d(GL_MAP2_VERTEX_3,
-			0, 1,  // U ranges 0..1 
-			3,         // U stride, 3 floats per coord 
-			4,         // U is 2nd order, ie. linear 
-			0, 1,  // V ranges 0..1 
-			m_ySize * 3,     // V stride, row is 2 coords, 3 floats per coord 
-			4,         // V is 2nd order, ie linear 
-			m_controlPoints);  // control points 
+			0, 1,  // U ranges 0..1
+			3,         // U stride, 3 floats per coord
+			4,         // U is 2nd order, ie. linear
+			0, 1,  // V ranges 0..1
+			m_ySize * 3,     // V stride, row is 2 coords, 3 floats per coord
+			4,         // V is 2nd order, ie linear
+			m_controlPoints);  // control points
 		break;
 	default:
 		break;
 	}
-	
+
 	glMapGrid2d(
-		m_meshCols, 0.0, 1.0, 
+		m_meshCols, 0.0, 1.0,
 		m_meshRows, 0.0, 1.0
 		);
-		
+
 	glEvalMesh2(GL_FILL, 0, m_meshCols, 0, m_meshRows);
 	glFrontFace(GL_CCW);
 	glPopAttrib();
@@ -116,7 +116,7 @@ void CIvfMesh::createGeometry()
 
 void CIvfMesh::setControlPoint(int i, int j, double x, double y, double z)
 {
-	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))	
+	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))
 	{
 		m_controlPoints[3*(j+m_ySize*i)+0] = x;
 		m_controlPoints[3*(j+m_ySize*i)+1] = y;
@@ -127,7 +127,7 @@ void CIvfMesh::setControlPoint(int i, int j, double x, double y, double z)
 
 void CIvfMesh::getControlPoint(int i, int j, double &x, double &y, double &z)
 {
-	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))	
+	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))
 	{
 		x = m_controlPoints[3*(i+m_ySize*j)+0];
 		y = m_controlPoints[3*(i+m_ySize*j)+1];
@@ -152,7 +152,7 @@ void CIvfMesh::createMesh(double width, double height)
 
 void CIvfMesh::setControlPoint(int i, int j, double y)
 {
-	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))	
+	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))
 	{
 		m_controlPoints[3*(i+m_ySize*j)+1] = y;
 		m_initDone = false;

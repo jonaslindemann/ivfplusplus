@@ -62,8 +62,8 @@ bool g_firstTime = true;
 
 // Fibre band method II
 
-double g_p3[3];   // Point p3 
-double g_u3[3];   // Displacement 3 
+double g_p3[3];   // Point p3
+double g_u3[3];   // Displacement 3
 double g_ef[3];   // Camera forward vector
 double g_efp[3];  // Forward vector in plane
 double g_eo1[3];  // Fibre orientation vector
@@ -117,7 +117,7 @@ CIvfFibre::CIvfFibre()
 	m_sectionNormals = NULL;
 
 	m_fibreRadius = -1.0;
-	
+
 	if (g_firstTime)
 	{
 		int i;
@@ -147,7 +147,7 @@ CIvfCoordHist* CIvfFibre::getCoordHist()
 	return m_coords;
 }
 
-void CIvfFibre::createGeometry()
+void CIvfFibre::doCreateGeometry()
 {
 	// Get settings
 
@@ -165,8 +165,8 @@ void CIvfFibre::createGeometry()
 		glDisable(GL_DEPTH_TEST);
 	}
 
-	// To compare the methods the following code is 
-	// executed for all methods but only used in the 
+	// To compare the methods the following code is
+	// executed for all methods but only used in the
 	// extrusion method
 
 	switch (userSettings->getRepresentation()) {
@@ -174,14 +174,14 @@ void CIvfFibre::createGeometry()
 
 		////////////////////////////////////////////////////////////////
 		// Fibre band method I
-		
+
 		g_vCoordList = (CIvfVectorCoordList*)m_coords->getList();
 		g_vUndeformedList = (CIvfVectorCoordList*)m_coords->getList(0);
 
 		// Get camera up-vector
-		
+
 		userSettings->getCamera()->getUpVector(g_uv);
-		
+
 		glBegin(GL_TRIANGLES);
 		for (g_j=0; g_j<g_vCoordList->getSize()-1; g_j++)
 		{
@@ -191,18 +191,18 @@ void CIvfFibre::createGeometry()
 			g_vUndeformedList->getCoord(g_j+1, g_u2[0], g_u2[1], g_u2[2]);
 
 			// Get displacements
-			
+
 			g_vCoordList->getCoord(g_j, g_p1[0], g_p1[1], g_p1[2]);
 			g_vCoordList->getCoord(g_j+1, g_p2[0], g_p2[1], g_p2[2]);
 
 			// Calculate segment coordinates
-			
+
 			if (g_vUndeformedList!=g_vCoordList)
 			{
 				g_p1[0] = g_u1[0] + g_p1[0]*g_scale;
 				g_p1[1] = g_u1[1] + g_p1[1]*g_scale;
 				g_p1[2] = g_u1[2] + g_p1[2]*g_scale;
-				
+
 				g_p2[0] = g_u2[0] + g_p2[0]*g_scale;
 				g_p2[1] = g_u2[1] + g_p2[1]*g_scale;
 				g_p2[2] = g_u2[2] + g_p2[2]*g_scale;
@@ -212,49 +212,49 @@ void CIvfFibre::createGeometry()
 				g_p1[0] = g_u1[0];
 				g_p1[1] = g_u1[1];
 				g_p1[2] = g_u1[2];
-				
+
 				g_p2[0] = g_u2[0];
 				g_p2[1] = g_u2[1];
 				g_p2[2] = g_u2[2];
 			}
 
 			// Calculate face normal
-			
+
 			g_u[0] = g_p2[0] - g_p1[0];
 			g_u[1] = g_p2[1] - g_p1[1];
 			g_u[2] = g_p2[2] - g_p1[2];
-			
+
 			g_v[0] = g_uv[0];
 			g_v[1] = g_uv[1];
 			g_v[2] = g_uv[2];
-			
+
 			normalizedcross(g_u,g_v,g_n);
 
 			// OpenGL drawing
-			
+
 			glNormal3dv(g_n);
-			
+
 			glTexCoord2f(1.0,0.0);
 			glVertex3d(g_p1[0]+g_uv[0]*g_radius, g_p1[1]+g_uv[1]*g_radius, g_p1[2]+g_uv[2]*g_radius);
-			
+
 			glTexCoord2f(0.0,0.0);
 			glVertex3d(g_p1[0]-g_uv[0]*g_radius, g_p1[1]-g_uv[1]*g_radius, g_p1[2]-g_uv[2]*g_radius);
-			
+
 			glTexCoord2f(1.0,1.0);
 			glVertex3d(g_p2[0]+g_uv[0]*g_radius, g_p2[1]+g_uv[1]*g_radius, g_p2[2]+g_uv[2]*g_radius);
-			
+
 			glTexCoord2f(0.0,0.0);
 			glVertex3d(g_p1[0]-g_uv[0]*g_radius, g_p1[1]-g_uv[1]*g_radius, g_p1[2]-g_uv[2]*g_radius);
-			
+
 			glTexCoord2f(0.0,1.0);
 			glVertex3d(g_p2[0]-g_uv[0]*g_radius, g_p2[1]-g_uv[1]*g_radius, g_p2[2]-g_uv[2]*g_radius);
-			
+
 			glTexCoord2f(1.0,1.0);
 			glVertex3d(g_p2[0]+g_uv[0]*g_radius, g_p2[1]+g_uv[1]*g_radius, g_p2[2]+g_uv[2]*g_radius);
 		}
 		glEnd();
 		break;
-	
+
 	case FIBRE_BAND2:
 
 		////////////////////////////////////////////////////////////////
@@ -264,9 +264,9 @@ void CIvfFibre::createGeometry()
 		g_vUndeformedList = (CIvfVectorCoordList*)m_coords->getList(0);
 
 		// Get camera forward vector
-		
+
 		userSettings->getCamera()->getForwardVector(g_ef[0],g_ef[1],g_ef[2]);
-		
+
 		glBegin(GL_TRIANGLES);
 		for (g_j=0; g_j<g_vCoordList->getSize()-1; g_j++)
 		{
@@ -286,24 +286,24 @@ void CIvfFibre::createGeometry()
 				g_vUndeformedList->getCoord(g_j+2, g_u3[0], g_u3[1], g_u3[2]);
 
 			// Get displacements
-			
+
 			g_vCoordList->getCoord(g_j, g_p1[0], g_p1[1], g_p1[2]);
 			g_vCoordList->getCoord(g_j+1, g_p2[0], g_p2[1], g_p2[2]);
 			if (g_haveNext)
 				g_vCoordList->getCoord(g_j+2, g_p3[0], g_p3[1], g_p3[2]);
 
 			// Calculate segment coordinates
-			
+
 			if (g_vUndeformedList!=g_vCoordList)
 			{
 				g_p1[0] = g_u1[0] + g_p1[0]*g_scale;
 				g_p1[1] = g_u1[1] + g_p1[1]*g_scale;
 				g_p1[2] = g_u1[2] + g_p1[2]*g_scale;
-				
+
 				g_p2[0] = g_u2[0] + g_p2[0]*g_scale;
 				g_p2[1] = g_u2[1] + g_p2[1]*g_scale;
 				g_p2[2] = g_u2[2] + g_p2[2]*g_scale;
-				
+
 				if (g_haveNext)
 				{
 					g_p3[0] = g_u3[0] + g_p3[0]*g_scale;
@@ -316,7 +316,7 @@ void CIvfFibre::createGeometry()
 				g_p1[0] = g_u1[0];
 				g_p1[1] = g_u1[1];
 				g_p1[2] = g_u1[2];
-				
+
 				g_p2[0] = g_u2[0];
 				g_p2[1] = g_u2[1];
 				g_p2[2] = g_u2[2];
@@ -346,7 +346,7 @@ void CIvfFibre::createGeometry()
 				g_pn[2] = (g_p2[2] - g_p1[2]);// /g_l1;
 
 				// Calculate segment orientation
-				
+
 				normalizedcross(g_ef,g_pn,g_eo1);
 				normalizedcross(g_pn,g_eo1,g_n1);
 			}
@@ -355,7 +355,7 @@ void CIvfFibre::createGeometry()
 				g_eo1[0] = g_eo2[0];
 				g_eo1[1] = g_eo2[1];
 				g_eo1[2] = g_eo2[2];
-				
+
 				g_n1[0]  = g_n2[0];
 				g_n1[1]  = g_n2[1];
 				g_n1[2]  = g_n2[2];
@@ -367,7 +367,7 @@ void CIvfFibre::createGeometry()
 			if (g_haveNext)
 			{
 				// Calculate normal vector of plane2. Plane2 is averaged with plane1
-				
+
 				g_pn[0] = g_pn[0] + g_p3[0] - g_p2[0]; // /g_l2)/2.0;
 				g_pn[1] = g_pn[1] + g_p3[1] - g_p2[1]; // /g_l2)/2.0;
 				g_pn[2] = g_pn[2] + g_p3[2] - g_p2[2]; // /g_l2)/2.0;
@@ -379,7 +379,7 @@ void CIvfFibre::createGeometry()
 			}
 			else
 			{
-				// if single or last segment the same orientation is 
+				// if single or last segment the same orientation is
 				// used at both ends.
 
 				g_eo2[0] = g_eo1[0];
@@ -390,45 +390,45 @@ void CIvfFibre::createGeometry()
 			}
 
 			// Calculate face normal
-			
+
 
 			/*
 			g_u[0] = g_p2[0] - g_p1[0];
 			g_u[1] = g_p2[1] - g_p1[1];
 			g_u[2] = g_p2[2] - g_p1[2];
-			
+
 			g_v[0] = g_eo1[0];
 			g_v[1] = g_eo1[1];
 			g_v[2] = g_eo1[2];
-			
+
 			normalizedcross(g_u,g_v,g_n);
 			*/
 
-			// OpenGL Drawing 
+			// OpenGL Drawing
 
 			glNormal3dv(g_n1);
 
 			glTexCoord2f(1.0,0.0);
 			glVertex3d(g_p1[0]+g_eo1[0]*g_radius, g_p1[1]+g_eo1[1]*g_radius, g_p1[2]+g_eo1[2]*g_radius);
-			
+
 			glTexCoord2f(0.0,0.0);
 			glVertex3d(g_p1[0]-g_eo1[0]*g_radius, g_p1[1]-g_eo1[1]*g_radius, g_p1[2]-g_eo1[2]*g_radius);
-			
+
 			glNormal3dv(g_n2);
 
 			glTexCoord2f(1.0,g_texCoord);
 			glVertex3d(g_p2[0]+g_eo2[0]*g_radius, g_p2[1]+g_eo2[1]*g_radius, g_p2[2]+g_eo2[2]*g_radius);
-			
+
 			glNormal3dv(g_n1);
 
 			glTexCoord2f(0.0,0.0);
 			glVertex3d(g_p1[0]-g_eo1[0]*g_radius, g_p1[1]-g_eo1[1]*g_radius, g_p1[2]-g_eo1[2]*g_radius);
-			
+
 			glNormal3dv(g_n2);
 
 			glTexCoord2f(0.0,g_texCoord);
 			glVertex3d(g_p2[0]-g_eo2[0]*g_radius, g_p2[1]-g_eo2[1]*g_radius, g_p2[2]-g_eo2[2]*g_radius);
-			
+
 			glTexCoord2f(1.0,g_texCoord);
 			glVertex3d(g_p2[0]+g_eo2[0]*g_radius, g_p2[1]+g_eo2[1]*g_radius, g_p2[2]+g_eo2[2]*g_radius);
 		}
@@ -437,10 +437,10 @@ void CIvfFibre::createGeometry()
 		break;
 
 	case FIBRE_EXTRUSION:
-		
+
 		////////////////////////////////////////////////////////////////
 		// Extrusion method
-		
+
 		g_aCoordList = (CIvfArrayCoordList*)m_coords->getList();
 		g_aUndeformedList = (CIvfArrayCoordList*)m_coords->getList(0);
 
@@ -448,7 +448,7 @@ void CIvfFibre::createGeometry()
 		{
 			g_summedSpine[g_j][0] = 0.0;
 			g_summedSpine[g_j][1] = 0.0;
-			g_summedSpine[g_j][2] = 0.0;						
+			g_summedSpine[g_j][2] = 0.0;
 			if (g_j<g_aCoordList->getSize())
 			{
 				if (g_aCoordList!=g_aUndeformedList)
@@ -464,7 +464,7 @@ void CIvfFibre::createGeometry()
 					g_aUndeformedList->getCoord(g_j, g_x, g_y, g_z);
 					g_summedSpine[g_j][0] = g_x;
 					g_summedSpine[g_j][1] = g_y;
-					g_summedSpine[g_j][2] = g_z;			
+					g_summedSpine[g_j][2] = g_z;
 				}
 			}
 		}
@@ -523,7 +523,7 @@ void CIvfFibre::initSection()
 	int i;
 
 	CIvfUserSettingsPtr userSettings = CIvfUserSettings::getInstance();
-	
+
 	r = userSettings->getFibreRadius();
 	nSides = userSettings->getExtrusionSides();
 
@@ -531,10 +531,10 @@ void CIvfFibre::initSection()
 		delete [] m_sectionCoords;
 	if (m_sectionNormals!=NULL)
 		delete [] m_sectionNormals;
-	
+
 	m_sectionCoords = new gleDouble[nSides+1][2];
 	m_sectionNormals = new gleDouble[nSides+1][2];
-	
+
 	for (i = 0; i<=nSides; i++)
 	{
 		angle = 2.0*M_PI*( ((double)i) / ((double)nSides) );

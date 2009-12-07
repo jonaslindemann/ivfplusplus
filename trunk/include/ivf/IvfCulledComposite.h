@@ -62,7 +62,7 @@ public:
 
 protected:
 	virtual void cull();
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

@@ -29,7 +29,7 @@ CIvfGlePolyCone::CIvfGlePolyCone()
 
 }
 
-void CIvfGlePolyCone::createGeometry()
+void CIvfGlePolyCone::doCreateGeometry()
 {
 	if ((m_pointArray!=NULL)&&(m_radius!=NULL)&&(m_colorArray==NULL))
 	{
@@ -37,7 +37,7 @@ void CIvfGlePolyCone::createGeometry()
 		temp = (double (*)[3])m_pointArray->getData();
 
 		glePolyCone(
-			m_pointArray->getSize(), 
+			m_pointArray->getSize(),
 			temp,
 			NULL,
 			m_radius->getData()
@@ -50,14 +50,14 @@ void CIvfGlePolyCone::createGeometry()
 		{
 			gleDouble (*temp1)[3];
 			temp1 = (double (*)[3])m_pointArray->getData();
-			
+
 			float (*temp2)[3];
 			temp2 = (float (*)[3])m_colorArray->getData();
 
 			glEnable(GL_COLOR_MATERIAL);
 
 			glePolyCone(
-				m_pointArray->getSize(), 
+				m_pointArray->getSize(),
 				temp1,
 				temp2,
 				m_radius->getData()

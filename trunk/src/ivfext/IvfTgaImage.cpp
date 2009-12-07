@@ -30,7 +30,7 @@ CIvfTgaImage::CIvfTgaImage()
 	m_alphaChannel = false;
 }
 
-CIvfTgaImage::CIvfTgaImage(const char *name)
+CIvfTgaImage::CIvfTgaImage(const std::string& name)
 :CIvfFileImage(name)
 {
 
@@ -49,17 +49,17 @@ bool CIvfTgaImage::read()
 	FILE* inf;
 
 
-	if (this->getFileName()==NULL)
+	if (this->getFileName()=="")
 		return false;
 
-	inf = fopen(this->getFileName(), "rb");
+	inf = fopen(this->getFileName().c_str(), "rb");
 
 	if (!inf)
 		return false;
 
 	fclose (inf);
 
-	LoadTGA(&texture,(char *)this->getFileName());
+	LoadTGA(&texture,(char *)this->getFileName().c_str());
 
 	setSize (texture.width,texture.height);
 	setImageMap (texture.imageData);
@@ -98,7 +98,7 @@ bool CIvfTgaImage::LoadTGA(Texture * texture, char * filename)	// Load a TGA fil
 		return false;														// Exit function
 	}
 
-	if(memcmp(uTGAcompare, &tgaheader, sizeof(tgaheader)) == 0)				// See if header matches the predefined header of 
+	if(memcmp(uTGAcompare, &tgaheader, sizeof(tgaheader)) == 0)				// See if header matches the predefined header of
 	{																		// an Uncompressed TGA image
 		LoadUncompressedTGA(texture, filename, fTGA);						// If so, jump to Uncompressed TGA loading code
 	}
@@ -114,21 +114,21 @@ bool CIvfTgaImage::LoadTGA(Texture * texture, char * filename)	// Load a TGA fil
 	return true;															// All went well, continue on
 }
 
-bool CIvfTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * fTGA)	// Load an uncompressed TGA (note, much of this code is based on NeHe's 
+bool CIvfTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * fTGA)	// Load an uncompressed TGA (note, much of this code is based on NeHe's
 {																			// TGA Loading code nehe.gamedev.net)
 	if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)					// Read TGA header
-	{										
+	{
 		if(fTGA != NULL)													// if file is still open
 		{
 			fclose(fTGA);													// Close it
 		}
 		return false;														// Return failular
-	}	
+	}
 
 	texture->width  = tga.header[1] * 256 + tga.header[0];					// Determine The TGA Width	(highbyte*256+lowbyte)
 	texture->height = tga.header[3] * 256 + tga.header[2];					// Determine The TGA Height	(highbyte*256+lowbyte)
 	texture->bpp	= tga.header[4];										// Determine the bits per pixel
-	tga.Width		= texture->width;										// Copy width into local structure						
+	tga.Width		= texture->width;										// Copy width into local structure
 	tga.Height		= texture->height;										// Copy height into local structure
 	tga.Bpp			= texture->bpp;											// Copy BPP into local structure
 
@@ -184,7 +184,7 @@ bool CIvfTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE 
 }
 
 bool CIvfTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTGA)		// Load COMPRESSED TGAs
-{ 
+{
 	if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)					// Attempt to read header
 	{
 		if(fTGA != NULL)													// If file is open
@@ -222,7 +222,7 @@ bool CIvfTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * 
 
 	GLuint pixelcount	= tga.Height * tga.Width;							// Nuber of pixels in the image
 	GLuint currentpixel	= 0;												// Current pixel being read
-	GLuint currentbyte	= 0;												// Current byte 
+	GLuint currentbyte	= 0;												// Current byte
 	GLubyte * colorbuffer = (GLubyte *)malloc(tga.bytesPerPixel);			// Storage for 1 pixel
 
 	do
@@ -268,7 +268,7 @@ bool CIvfTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * 
 					return false;														// Return failed
 				}
 																						// write to memory
-				texture->imageData[currentbyte		] = colorbuffer[2];				    // Flip R and B vcolor values around in the process 
+				texture->imageData[currentbyte		] = colorbuffer[2];				    // Flip R and B vcolor values around in the process
 				texture->imageData[currentbyte + 1	] = colorbuffer[1];
 				texture->imageData[currentbyte + 2	] = colorbuffer[0];
 
@@ -286,7 +286,7 @@ bool CIvfTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * 
 					if(fTGA != NULL)													// If there is a file open
 					{
 						fclose(fTGA);													// Close file
-					}	
+					}
 
 					if(colorbuffer != NULL)												// If there is data in colorbuffer
 					{
@@ -306,7 +306,7 @@ bool CIvfTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * 
 		{
 			chunkheader -= 127;															// Subteact 127 to get rid of the ID bit
 			if(fread(colorbuffer, 1, tga.bytesPerPixel, fTGA) != tga.bytesPerPixel)		// Attempt to read following color values
-			{	
+			{
 
 				if(fTGA != NULL)														// If thereis a file open
 				{
@@ -326,7 +326,7 @@ bool CIvfTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * 
 				return false;															// return failed
 			}
 
-			for(short counter = 0; counter < chunkheader; counter++)					// copy the color into the image data as many times as dictated 
+			for(short counter = 0; counter < chunkheader; counter++)					// copy the color into the image data as many times as dictated
 			{																			// by the header
 				texture->imageData[currentbyte		] = colorbuffer[2];					// switch R and B bytes areound while copying
 				texture->imageData[currentbyte + 1	] = colorbuffer[1];
@@ -346,7 +346,7 @@ bool CIvfTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * 
 					if(fTGA != NULL)													// If there is a file open
 					{
 						fclose(fTGA);													// Close file
-					}	
+					}
 
 					if(colorbuffer != NULL)												// If there is data in colorbuffer
 					{

@@ -41,7 +41,7 @@ private:
 	bool m_useColor;
 	float m_lineWidth;
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 public:
 	/** CIvfLineStripSet constructor */
 	CIvfLineStripSet();

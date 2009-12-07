@@ -42,7 +42,7 @@ CIvfView::~CIvfView()
 }
 
 // ------------------------------------------------------------
-void CIvfView::beginTransform()
+void CIvfView::doBeginTransform()
 {
 	this->viewTransform();
 }
@@ -51,11 +51,11 @@ void CIvfView::beginTransform()
 void CIvfView::initialize()
 {
 	m_viewport->apply();
-	//glViewport(m_viewX, m_viewY, m_viewWidth, m_viewHeight);	
+	//glViewport(m_viewX, m_viewY, m_viewWidth, m_viewHeight);
 	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();	 
+	glLoadIdentity();
 	this->projectionTransform();
-	glMatrixMode(GL_MODELVIEW);    
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
 
@@ -68,9 +68,9 @@ void CIvfView::setViewPort(int width, int height)
 	m_viewWidth = width;
 	m_viewHeight = height;
 
-	if (height==0)		  
+	if (height==0)
 		m_viewAspect = (GLdouble)(m_viewWidth);
-	else		
+	else
 		m_viewAspect = (GLdouble)(m_viewWidth)/(GLdouble)(m_viewHeight);
 	*/
 }
@@ -87,9 +87,9 @@ void CIvfView::setViewPort(int tx, int ty, int tw, int th)
 	m_viewHeight = th;
 	m_viewWidth = tw;
 
-	if (th==0)		  
+	if (th==0)
 		m_viewAspect = (GLdouble)(m_viewWidth-m_viewX);
-	else		
+	else
 		m_viewAspect = (GLdouble)(m_viewWidth)/(GLdouble)(m_viewHeight);
 	*/
 }
@@ -141,9 +141,9 @@ void CIvfView::getViewPort(int &tx, int &ty, int &tw, int &th)
 	th = m_viewHeight;
 	tw = m_viewWidth;
 
-	if (th==0)		  
+	if (th==0)
 		m_viewAspect = (GLdouble)(m_viewWidth-m_viewX);
-	else		
+	else
 		m_viewAspect = (GLdouble)(m_viewWidth)/(GLdouble)(m_viewHeight);
 	*/
 }
@@ -163,7 +163,7 @@ void CIvfView::viewTransform()
 // ------------------------------------------------------------
 void CIvfView::getViewFrustum(CIvfViewFrustum *frustum)
 {
-	
+
 }
 
 // ------------------------------------------------------------

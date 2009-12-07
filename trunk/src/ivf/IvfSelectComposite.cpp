@@ -62,13 +62,13 @@ CIvfView* CIvfSelectComposite::getCamera()
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::createGeometry()
+void CIvfSelectComposite::doCreateGeometry()
 {
-	CIvfComposite::createGeometry();
+	CIvfComposite::doCreateGeometry();
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::beginTransform()
+void CIvfSelectComposite::doBeginTransform()
 {
 	glPushMatrix();
 	if (m_renderCamera)
@@ -79,13 +79,13 @@ void CIvfSelectComposite::beginTransform()
 			if (m_useCustomTransform)
 				this->customView();
 	}
-	CIvfShape::beginTransform();
+	CIvfShape::doBeginTransform();
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::endTransform()
+void CIvfSelectComposite::doEndTransform()
 {
-		CIvfShape::endTransform();
+		CIvfShape::doEndTransform();
 	glPopMatrix();
 }
 
@@ -112,17 +112,17 @@ GLint CIvfSelectComposite::pick(int x, int y)
 			m_camera->initializeSelect(x, y, 4, 4);
 		else
 			this->initializeSelect(x, y, 4, 4);
-		
+
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
-			beginTransform();
-			createGeometry();
-			endTransform();
+			doBeginTransform();
+			doCreateGeometry();
+			doEndTransform();
 		glPopMatrix();
 		glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
-	
+
 	hits = glRenderMode(GL_RENDER);
 
 	if (hits!=0)
@@ -139,28 +139,28 @@ void CIvfSelectComposite::processHits(GLint hits, GLuint buffer [ ])
 	unsigned int i, getThisName;
 	GLuint names, *ptr;
 	GLuint objectName;
-	
+
 	ptr = (GLuint *) buffer;
 	objectName = 9999;
-	for (i = 0; i < (unsigned int)hits; i++) {  
+	for (i = 0; i < (unsigned int)hits; i++) {
 		getThisName = 0;
 		names = *ptr;
-		ptr++;              
+		ptr++;
 		if (*ptr <= depth) {
 			depth = *ptr;
 			getThisName = 1;
 		}
-		ptr++;              
+		ptr++;
 		if (*ptr <= depth) {
 			depth = *ptr;
 			getThisName = 1;
 		}
-		ptr++;              
-		
+		ptr++;
+
 		if (getThisName)
 			objectName = *ptr;
 
-		ptr += names;       
+		ptr += names;
 	}
 
 	// We have an object
@@ -259,7 +259,7 @@ void CIvfSelectComposite::renameChildren()
 // ------------------------------------------------------------
 CIvfShape* CIvfSelectComposite::removeShape(CIvfShape *removeShape)
 {
-	CIvfComposite::compositeRemove(this, removeShape);	
+	CIvfComposite::compositeRemove(this, removeShape);
 	renameChildren();
 	return removeShape;
 }

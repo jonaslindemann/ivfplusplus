@@ -83,9 +83,9 @@ void CIvfArrow::setArrowType(int type)
 	m_arrowType = type;
 	setSize(m_length,m_headSize);
 	if (m_arrowType == IVF_ARROW_DOUBLE)
-		m_extraHead->setState(CIvfObject::OS_ON);
+		m_extraHead->setState(CIvfGLBase::OS_ON);
 	else
-		m_extraHead->setState(CIvfObject::OS_OFF);
+		m_extraHead->setState(CIvfGLBase::OS_OFF);
 }
 
 int CIvfArrow::getArrowType()

@@ -34,7 +34,7 @@ CIvfLight::CIvfLight()
 	setAmbientColor(0.0, 0.0, 0.0, 1.0 );
 	setDiffuseColor(1.0, 1.0, 1.0, 1.0);
 	setSpecularColor(1.0, 1.0, 1.0, 1.0);
-	
+
 	/*else {
 		setDiffuse(0.0, 0.0, 0.0, 0.0);
 		setSpecular(0.0, 0.0, 0.0, 0.0);
@@ -58,7 +58,7 @@ CIvfLight::CIvfLight()
 // ------------------------------------------------------------
 CIvfLight::~CIvfLight()
 {
-	
+
 }
 
 void CIvfLight::enable()
@@ -78,26 +78,26 @@ bool CIvfLight::isEnabled()
 	/*
 	GLboolean lightEnabled;
 	glGetBooleanv(GL_LIGHT0 + m_lightn, &lightEnabled);
-	return (bool)lightEnabled;	
+	return (bool)lightEnabled;
 	*/
 	return m_enabled;
 }
 
-void CIvfLight::createGeometry()
+void CIvfLight::doCreateGeometry()
 {
 	if (m_enabled)
 	{
-		if ( CIvfObject::getState() == CIvfObject::OS_OFF )
+		if ( CIvfGLBase::getState() == CIvfGLBase::OS_OFF )
 			return;
-		
+
 		GLenum light = GL_LIGHT0 + m_lightn;
-		
+
 		//glEnable( light );
-		
+
 		glLightfv( light, GL_AMBIENT, m_ambient );
 		glLightfv( light, GL_DIFFUSE, m_diffuse );
 		glLightfv( light, GL_SPECULAR, m_specular );
-		
+
 		switch (m_lightType) {
 		case LT_POINT:
 			m_position[3] = 1.0;
@@ -117,17 +117,17 @@ void CIvfLight::createGeometry()
 			glLightf(light, GL_SPOT_EXPONENT, m_spotExponent);
 			break;
 		default:
-			
+
 			break;
 		}
-		
+
 		glLighti( light, GL_CONSTANT_ATTENUATION, m_constatt );
 		glLighti( light, GL_LINEAR_ATTENUATION, m_linatt );
 		glLighti( light, GL_QUADRATIC_ATTENUATION, m_quadatt );
 	}
 }
 
-void CIvfLight::setAmbientColor( const float r, const float g, 
+void CIvfLight::setAmbientColor( const float r, const float g,
 						   const float b, const float a )
 {
 	m_ambient[0] = r;
@@ -136,7 +136,7 @@ void CIvfLight::setAmbientColor( const float r, const float g,
 	m_ambient[3] = a;
 }
 
-void CIvfLight::setDiffuseColor( const float r, const float g, 
+void CIvfLight::setDiffuseColor( const float r, const float g,
 						   const float b, const float a )
 {
 	m_diffuse[0] = r;
@@ -145,7 +145,7 @@ void CIvfLight::setDiffuseColor( const float r, const float g,
 	m_diffuse[3] = a;
 }
 
-void CIvfLight::setSpecularColor( const float r, const float g, 
+void CIvfLight::setSpecularColor( const float r, const float g,
 							const float b, const float a )
 {
 	m_specular[0] = r;

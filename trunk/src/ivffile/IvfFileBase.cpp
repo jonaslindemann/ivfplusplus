@@ -41,7 +41,7 @@ CIvfFileBase::~CIvfFileBase()
 {
 }
 
-void CIvfFileBase::setFileName(const char *fileName)
+void CIvfFileBase::setFileName(const std::string& fileName)
 {
 	m_fileName = fileName;
 }
@@ -51,7 +51,7 @@ CIvfShape* CIvfFileBase::getShape()
 	return m_shape;
 }
 
-const char* CIvfFileBase::getFileName()
+const std::string CIvfFileBase::getFileName()
 {
 	return m_fileName.c_str();
 }

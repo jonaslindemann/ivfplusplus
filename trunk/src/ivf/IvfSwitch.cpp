@@ -36,7 +36,7 @@ CIvfSwitch::~CIvfSwitch ()
 }
 
 // ------------------------------------------------------------
-void CIvfSwitch::createGeometry()
+void CIvfSwitch::doCreateGeometry()
 {
 	if (this->getSize()>0)
 	{

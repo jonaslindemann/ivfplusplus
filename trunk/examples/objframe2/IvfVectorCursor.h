@@ -51,7 +51,7 @@ public:
 	void setBeta(double beta);
 	void setAlpha(double alpha);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
-#endif 
+#endif

@@ -38,7 +38,7 @@ CIvfLOD::~CIvfLOD ()
 }
 
 // ------------------------------------------------------------
-void CIvfLOD::createGeometry()
+void CIvfLOD::doCreateGeometry()
 {
 	if (m_camera!=NULL)
 	{
@@ -58,7 +58,7 @@ void CIvfLOD::createGeometry()
 	{
 		this->setCurrentChild(0);
 	}
-	CIvfSwitch::createGeometry();
+	CIvfSwitch::doCreateGeometry();
 }
 
 // ------------------------------------------------------------

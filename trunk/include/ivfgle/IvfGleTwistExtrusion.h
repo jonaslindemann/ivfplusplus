@@ -55,7 +55,7 @@ public:
 	void setContourUp(CIvfVec3d& vec);
 	void setTwist(CIvfGleScalarArray* array);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif

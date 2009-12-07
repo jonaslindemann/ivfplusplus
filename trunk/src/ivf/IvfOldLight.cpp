@@ -28,7 +28,7 @@ long CIvfOldLight::lightmask = 0;
 
 // ------------------------------------------------------------
 CIvfOldLight::CIvfOldLight() 
-: CIvfObject()
+: CIvfGLBase()
 {
 	m_lightn = -1;
 	
@@ -233,7 +233,7 @@ void CIvfOldLight::render()
 {
 	if (m_active)
 	{
-		if ( CIvfObject::getState() == OS_OFF || m_lightn == -1 ) 
+		if ( CIvfGLBase::getState() == OS_OFF || m_lightn == -1 ) 
 			return;
 		
 		GLenum light = GL_LIGHT0 + m_lightn;

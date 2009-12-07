@@ -80,10 +80,10 @@ void CIvfCursor::setCursorType(TCursorType type)
 }
 
 // ------------------------------------------------------------
-void CIvfCursor::createGeometry()
+void CIvfCursor::doCreateGeometry()
 {
 	if (this->getCursorType() == CT_SOLID_CURSOR)
-		CIvfComposite::createGeometry();
+		CIvfComposite::doCreateGeometry();
 	else
 	{
 		glPushAttrib(GL_LIGHTING);

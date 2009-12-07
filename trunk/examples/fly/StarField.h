@@ -20,7 +20,7 @@ private:
 
 	void initializeStars();
 	void getPolarVectors(
-		double alfa,  double beta, 
+		double alfa,  double beta,
 		CIvfVec3d &normal, CIvfVec3d &s, CIvfVec3d &t);
 public:
 	CStarField(CIvfCamera* camera);
@@ -28,7 +28,7 @@ public:
 
 	void setCamera(CIvfCamera* camera);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
-#endif 
+#endif

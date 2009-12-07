@@ -229,13 +229,13 @@ public:
 	void setGridSpacing(double spacing);
 
 	/** Updates bounding sphere for construction plane */
-	virtual void updateBoundingSphere();
+	virtual void doUpdateBoundingSphere();
 
 	CIvfGrid* getGrid();
 	double getDepth();
 	double getWidth();
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

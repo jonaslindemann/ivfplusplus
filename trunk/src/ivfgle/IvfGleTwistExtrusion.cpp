@@ -29,7 +29,7 @@ CIvfGleTwistExtrusion::CIvfGleTwistExtrusion()
 	// Add construction code here
 }
 
-void CIvfGleTwistExtrusion::createGeometry()
+void CIvfGleTwistExtrusion::doCreateGeometry()
 {
 	if (m_contour==NULL)
 		return;
@@ -48,7 +48,7 @@ void CIvfGleTwistExtrusion::createGeometry()
 
 		gleTwistExtrusion(
 			m_contour->getSize(),
-			temp2, 
+			temp2,
 			temp3,
 			m_up,
 			m_pointArray->getSize(),
@@ -70,7 +70,7 @@ void CIvfGleTwistExtrusion::createGeometry()
 
 			gleDouble (*temp3)[2];
 			temp3 = (double (*)[2])m_contour->getNormalData();
-			
+
 			float (*temp4)[3];
 			temp4 = (float (*)[3])m_colorArray->getData();
 
@@ -78,7 +78,7 @@ void CIvfGleTwistExtrusion::createGeometry()
 
 			gleTwistExtrusion(
 				m_contour->getSize(),
-				temp2, 
+				temp2,
 				temp3,
 				m_up,
 				m_pointArray->getSize(),

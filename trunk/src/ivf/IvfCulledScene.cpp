@@ -65,7 +65,7 @@ void CIvfCulledScene::cull()
 		view = m_cullView;
 
 	view->getViewFrustum(m_frustum);
-	
+
 	m_cullCount = 0;
 
 	cullChildren(this);
@@ -92,17 +92,17 @@ void CIvfCulledScene::cullChildren(CIvfShape *shape)
 		//cout << composite->getBoundingSphere()->getRadius() << endl;
 
 		// if (composite bounding sphere intersects view frustum)
-		//    turn composite shape on and 
+		//    turn composite shape on and
 		//    traverse and cull children
-		// else 
+		// else
 		//    turn composite shape off
 
 		if ((composite==(CIvfComposite*)this)||intersectFrustum(composite->getBoundingSphere()))
 		{
 			m_matrixStack->pushMatrix();
-			
+
 			composite->getRotationQuat(vx, vy, vz, theta);
-				
+
 			//if ((x!=0.0)||(y!=0.0)||(z!=0.0))
 				m_matrixStack->translate(x, y, z);
 
@@ -122,13 +122,13 @@ void CIvfCulledScene::cullChildren(CIvfShape *shape)
 			composite->setCulled(true);
 			m_cullCount++;
 		}
-		
+
 	}
 	else
 	{
 		// if (shape intersects view frustum)
 		//    turn shape on
-		// else 
+		// else
 		//    turn shape off
 
 		shape->getPosition(x, y, z);
@@ -153,12 +153,12 @@ int CIvfCulledScene::getCullCount()
 	return m_cullCount;
 }
 
-void CIvfCulledScene::createGeometry()
+void CIvfCulledScene::doCreateGeometry()
 {
 	if (m_useCulling)
 		this->cull();
 
-	CIvfScene::createGeometry();
+	CIvfScene::doCreateGeometry();
 }
 
 void CIvfCulledScene::setUseCulling(bool flag)

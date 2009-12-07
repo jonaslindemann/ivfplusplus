@@ -59,25 +59,25 @@ bool CIvfMathBase::referenced()
 }
 
 // ------------------------------------------------------------
-const char* CIvfMathBase::getClassNameThis()
+const std::string CIvfMathBase::getClassNameThis()
 {
 	return "CIvfMathBase";
 }
 
 // ------------------------------------------------------------
-const char* CIvfMathBase::getClassName()
+const std::string CIvfMathBase::getClassName()
 {
 	return "CIvfMathBase";
 }
 
 // ------------------------------------------------------------
-bool CIvfMathBase::isClass(const char *name)
+bool CIvfMathBase::isClass(const std::string& name)
 {
 	std::string className = this->getClassNameThis();
 
 	if (!className.empty())
 	{
-		if (strcmp(className.c_str(),name)==0)
+		if (className==name)
 			return true;
 		else
 			return false;

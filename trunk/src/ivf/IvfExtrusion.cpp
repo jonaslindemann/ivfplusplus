@@ -29,7 +29,7 @@
 // ------------------------------------------------------------
 void ivfSetGLEJoinStyle(int style)
 {
-	gleSetJoinStyle(style);	
+	gleSetJoinStyle(style);
 }
 
 // ------------------------------------------------------------
@@ -58,16 +58,16 @@ CIvfExtrusion::CIvfExtrusion ()
 	m_spineStart = 0;
 	m_spineEnd = 0;
 	m_spineSize = 0;
-	
+
 	//m_coords = new GLdouble[m_nCoords][3];
 }
 
 // ------------------------------------------------------------
 CIvfExtrusion::~CIvfExtrusion ()
 {
-	
+
 	// Clean up
-	
+
 	if (m_sectionCoords!=NULL)
 		delete [] m_sectionCoords;
 	if (m_sectionNormals!=NULL)
@@ -85,7 +85,7 @@ CIvfExtrusion::~CIvfExtrusion ()
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::createGeometry()
+void CIvfExtrusion::doCreateGeometry()
 {
 	if ( (m_spineStart>=0)&&(m_spineEnd>0) )
 		m_spineDelta = m_spineEnd-m_spineStart + 1;
@@ -108,9 +108,9 @@ void CIvfExtrusion::createGeometry()
 	if (m_useColors)
 	{
 		if (!m_useTwist)
-			gleExtrusion (m_sectionSize,         
-			m_sectionCoords,     
-			m_sectionNormals, 
+			gleExtrusion (m_sectionSize,
+			m_sectionCoords,
+			m_sectionNormals,
 			m_upVector,
 			m_spineDelta,
 			&m_spineCoords[m_spineStart],
@@ -128,17 +128,17 @@ void CIvfExtrusion::createGeometry()
 	else
 	{
 		if (!m_useTwist)
-			gleExtrusion (m_sectionSize,         
-			m_sectionCoords,     
-			m_sectionNormals, 
+			gleExtrusion (m_sectionSize,
+			m_sectionCoords,
+			m_sectionNormals,
 			m_upVector,
 			m_spineDelta,
 			&m_spineCoords[m_spineStart],
 			NULL);
 		else
-			gleTwistExtrusion (m_sectionSize,         
-			m_sectionCoords,     
-			m_sectionNormals, 
+			gleTwistExtrusion (m_sectionSize,
+			m_sectionCoords,
+			m_sectionNormals,
 			m_upVector,
 			m_spineDelta,
 			&m_spineCoords[m_spineStart],
@@ -151,7 +151,7 @@ void CIvfExtrusion::createGeometry()
 void CIvfExtrusion::setSpineSize(int size)
 {
 	// Delete previous spine coords/colors if any
-	
+
 	if (m_spineCoords!=NULL)
 		delete [] m_spineCoords;
 	if (m_spineColors!=NULL)
@@ -159,23 +159,23 @@ void CIvfExtrusion::setSpineSize(int size)
 	if (m_useTwist)
 		if (m_twist!=NULL)
 			delete [] m_twist;
-		
+
 	// Set new size
-		
+
 	m_spineSize = size;
-		
+
 	// Allocate memory for new spine
-		
+
 	m_spineCoords = new gleDouble[m_spineSize][3];
 	m_spineColors = new float[m_spineSize][3];
 	if (m_useTwist)
 		m_twist = new gleDouble[m_sectionSize];
-		
+
 	// initialize spine color array
-		
+
 	CIvfMaterial* material;
 	float color[3], alfa;
-		
+
 	material = this->getMaterial();
 	if (material!=NULL)
 		material->getDiffuseColor(color[0], color[1], color[2], alfa);
@@ -185,7 +185,7 @@ void CIvfExtrusion::setSpineSize(int size)
 		color[1] = 1.0;
 		color[2] = 1.0;
 	}
-		
+
 	int i;
 	for (i = 0; i<m_spineSize; i++)
 	{
@@ -201,7 +201,7 @@ void CIvfExtrusion::setSpineSize(int size)
 void CIvfExtrusion::setSectionSize(int size)
 {
 	// Delete previous section/normal arrays
-	
+
 	if (m_sectionCoords!=NULL)
 		delete [] m_sectionCoords;
 	if (m_sectionNormals!=NULL)
@@ -210,13 +210,13 @@ void CIvfExtrusion::setSectionSize(int size)
 		delete [] m_selectSectionCoords;
 	if (m_selectSectionNormals!=NULL)
 		delete [] m_selectSectionNormals;
-	
+
 	// Set section size
-	
+
 	m_sectionSize = size;
-	
+
 	// Allocate memory for new section
-	
+
 	m_sectionCoords = new gleDouble[m_sectionSize][2];
 	m_sectionNormals = new gleDouble[m_sectionSize][2];
 	m_selectSectionCoords = new gleDouble[m_sectionSize][2];
@@ -367,7 +367,7 @@ void CIvfExtrusion::setUpVector(double x, double y, double z)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::createSelect()
+void CIvfExtrusion::doCreateSelect()
 {
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 	glPushAttrib(GL_LIGHTING_BIT);
@@ -376,9 +376,9 @@ void CIvfExtrusion::createSelect()
 	if (m_useColors)
 	{
 		if (!m_useTwist)
-			gleExtrusion (m_sectionSize,         
-			m_sectionCoords,     
-			m_sectionNormals, 
+			gleExtrusion (m_sectionSize,
+			m_sectionCoords,
+			m_sectionNormals,
 			m_upVector,
 			m_spineSize,
 			m_spineCoords,
@@ -396,17 +396,17 @@ void CIvfExtrusion::createSelect()
 	else
 	{
 		if (!m_useTwist)
-			gleExtrusion (m_sectionSize,         
-			m_sectionCoords,     
-			m_sectionNormals, 
+			gleExtrusion (m_sectionSize,
+			m_sectionCoords,
+			m_sectionNormals,
 			m_upVector,
 			m_spineSize,
 			m_spineCoords,
 			NULL);
 		else
-			gleTwistExtrusion (m_sectionSize,         
-			m_sectionCoords,     
-			m_sectionNormals, 
+			gleTwistExtrusion (m_sectionSize,
+			m_sectionCoords,
+			m_sectionNormals,
 			m_upVector,
 			m_spineSize,
 			m_spineCoords,
@@ -426,7 +426,7 @@ void CIvfExtrusion::setSelectScale(double scale)
 // ------------------------------------------------------------
 void CIvfExtrusion::setTextureMode(int mode)
 {
-	gleTextureMode(mode);	
+	gleTextureMode(mode);
 }
 
 // ------------------------------------------------------------
@@ -439,7 +439,7 @@ void CIvfExtrusion::setUseTwist(bool flag)
 		{
 			if (m_twist!=NULL)
 				delete [] m_twist;
-			
+
 			m_twist = new gleDouble[m_spineSize];
 			for (int i=0; i<m_spineSize; i++)
 				m_twist[i] = 0.0;
@@ -448,7 +448,7 @@ void CIvfExtrusion::setUseTwist(bool flag)
 		{
 			if (m_twist!=NULL)
 				delete [] m_twist;
-			
+
 			m_twist=NULL;
 		}
 	}
@@ -492,10 +492,10 @@ void CIvfExtrusion::setStartEnd(int startIdx, int endIdx)
 
 void CIvfExtrusion::setJoinStyle(int style)
 {
-	ivfSetGLEJoinStyle(style);	
+	ivfSetGLEJoinStyle(style);
 }
 
-void CIvfExtrusion::updateBoundingSphere()
+void CIvfExtrusion::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{
@@ -521,8 +521,8 @@ void CIvfExtrusion::updateBoundingSphere()
 		}
 
 		radius = sqrt(
-			pow(maxSize[0],2) + 
-			pow(maxSize[1],2) + 
+			pow(maxSize[0],2) +
+			pow(maxSize[1],2) +
 			pow(maxSize[2],2));
 
 		getBoundingSphere()->setRadius(radius);

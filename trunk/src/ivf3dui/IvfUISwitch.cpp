@@ -43,7 +43,7 @@ CIvfUISwitch::CIvfUISwitch()
 	this->setOnShape(sphereOn);
 	this->setOffShape(sphereOff);
 
-	m_onShape->setState(CIvfObject::OS_OFF);
+	m_onShape->setState(CIvfGLBase::OS_OFF);
 }
 
 CIvfUISwitch::~CIvfUISwitch()
@@ -55,13 +55,13 @@ void CIvfUISwitch::doStateChange(bool state)
 {
 	if (state)
 	{
-		if (m_onShape!=NULL) m_onShape->setState(CIvfObject::OS_ON);
-		if (m_offShape!=NULL) m_offShape->setState(CIvfObject::OS_OFF);
+		if (m_onShape!=NULL) m_onShape->setState(CIvfGLBase::OS_ON);
+		if (m_offShape!=NULL) m_offShape->setState(CIvfGLBase::OS_OFF);
 	}
 	else
 	{
-		if (m_onShape!=NULL) m_onShape->setState(CIvfObject::OS_OFF);
-		if (m_offShape!=NULL) m_offShape->setState(CIvfObject::OS_ON);
+		if (m_onShape!=NULL) m_onShape->setState(CIvfGLBase::OS_OFF);
+		if (m_offShape!=NULL) m_offShape->setState(CIvfGLBase::OS_ON);
 	}
 }
 

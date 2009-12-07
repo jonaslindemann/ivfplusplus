@@ -31,10 +31,10 @@ IvfSmartPointer(CIvfVectorFont);
 
 /**
  * Abstract base class for 3D renderable fonts
- * 
+ *
  * The CIvfVectorFont defines a base class for all
  * fonts that can be renderable in the 3D scenegraph.
- * Enables the use of real world coordinates for 
+ * Enables the use of real world coordinates for
  * specifying font sizes.
  */
 class IVFFONT_API CIvfVectorFont: public CIvfFont {
@@ -42,13 +42,13 @@ private:
 	double m_realFaceSize;
 public:
 	/** Constructor. @see CIvfFont. */
-	CIvfVectorFont(const char* filename);
+	CIvfVectorFont(const std::string& filename);
 
 	IvfClassInfo("CIvfVectorFont", CIvfVectorFont);
-	
+
 	/** Set real world font size. (default = 1.0) */
 	void setRealFaceSize(const double size);
-	
+
 	/** Return real world font size. */
 	double getRealFaceSize(void);
 protected:

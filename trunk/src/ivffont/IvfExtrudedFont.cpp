@@ -24,11 +24,11 @@
 
 #include <ivffont/IvfExtrudedFont.h>
 
-CIvfExtrudedFont::CIvfExtrudedFont(const char* filename)
+CIvfExtrudedFont::CIvfExtrudedFont(const std::string& filename)
 :CIvfVectorFont(filename)
 {
 	// Add construction code here
-	m_ftglExtrudedFont = new FTGLExtrdFont(this->getFilename());
+	m_ftglExtrudedFont = new FTGLExtrdFont(this->getFilename().c_str());
 	m_ftglExtrudedFont->CharMap(ft_encoding_unicode);
 	m_ftglExtrudedFont->FaceSize(1);
 	m_ftglExtrudedFont->Depth(0.5);
@@ -39,9 +39,9 @@ CIvfExtrudedFont::~CIvfExtrudedFont()
 	delete m_ftglExtrudedFont;
 }
 
-void CIvfExtrudedFont::createGeometry()
+void CIvfExtrudedFont::doCreateGeometry()
 {
-	m_ftglExtrudedFont->Render(this->getText());
+	m_ftglExtrudedFont->Render(this->getText().c_str());
 }
 
 void CIvfExtrudedFont::doSetFaceSize(const unsigned int faceSize)
@@ -65,7 +65,7 @@ void CIvfExtrudedFont::doSetRealFaceSize(const double size)
 void CIvfExtrudedFont::doGetSize(double & xsize, double & ysize, double & zsize)
 {
 	float llx, lly, llz, urx, ury, urz;
-	m_ftglExtrudedFont->BBox(this->getText(), llx, lly, llz, urx, ury, urz);
+	m_ftglExtrudedFont->BBox(this->getText().c_str(), llx, lly, llz, urx, ury, urz);
 	xsize = (double)urx - (double)llx;
 	ysize = (double)ury - (double)lly;
 	zsize = (double)urz - (double)llz;

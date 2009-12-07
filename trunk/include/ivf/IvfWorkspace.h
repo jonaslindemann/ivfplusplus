@@ -130,7 +130,7 @@ public:
 	void setSize(double size);
 
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

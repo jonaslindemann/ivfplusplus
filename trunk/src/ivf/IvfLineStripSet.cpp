@@ -32,13 +32,13 @@ CIvfLineStripSet::~CIvfLineStripSet()
 
 }
 
-void CIvfLineStripSet::createGeometry()
+void CIvfLineStripSet::doCreateGeometry()
 {
 	CIvfIndex* coordIdx;
 	CIvfIndex* colorIdx;
 	long i, j;
 	float oldWidth[1];
-	
+
 	glPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
 	glDisable(GL_LIGHTING);
 
@@ -59,14 +59,14 @@ void CIvfLineStripSet::createGeometry()
 				colorIdx = m_colorIndexSet[i];
 		}
 
-		
+
 		for (j=0; j<coordIdx->getSize(); j++)
 		{
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 			else
 				glColor3f(1.0f, 1.0f, 1.0f);
-			
+
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
 		}
 		glEnd();

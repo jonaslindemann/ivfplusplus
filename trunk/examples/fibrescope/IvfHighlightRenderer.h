@@ -14,7 +14,7 @@ public:
 
 	IvfClassInfo("CIvfHighlightRenderer", CIvfShape);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif

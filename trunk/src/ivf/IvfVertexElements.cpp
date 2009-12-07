@@ -34,7 +34,7 @@ CIvfVertexElements::~CIvfVertexElements()
 
 }
 
-void CIvfVertexElements::createGeometry()
+void CIvfVertexElements::doCreateGeometry()
 {
     /* set up the array data */
 	if (m_colors)

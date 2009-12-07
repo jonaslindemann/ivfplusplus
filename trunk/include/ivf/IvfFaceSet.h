@@ -71,7 +71,7 @@ public:
 
 
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 private:
 	long m_nCoordIndex;
 	long m_nFaces;

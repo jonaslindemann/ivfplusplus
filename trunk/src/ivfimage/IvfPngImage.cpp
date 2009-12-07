@@ -28,18 +28,18 @@
 #ifdef WIN32
 #include <png.h>
 #else
-#include <FL/images/png.h>
+#include <png.h>
 #endif
 #endif
 
 CIvfPngImage::CIvfPngImage()
 {
-	
+
 }
 
 CIvfPngImage::~CIvfPngImage()
 {
-	
+
 }
 
 bool CIvfPngImage::read()
@@ -52,19 +52,19 @@ bool CIvfPngImage::read()
 	png_uint_32 width, height;
 	int bit_depth, color_type;
 	FILE *fp;
-	
-	if ((fp = fopen(getFileName(), "rb")) == NULL)
+
+	if ((fp = fopen(getFileName().c_str(), "rb")) == NULL)
 		return false;
-	
+
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
 		NULL, NULL, NULL);
-	
+
 	if (png_ptr == NULL)
 	{
 		fclose(fp);
 		return false;
 	}
-	
+
 	/* Allocate/initialize the memory for image information.  REQUIRED. */
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == NULL)
@@ -73,16 +73,16 @@ bool CIvfPngImage::read()
 		png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
 		return false;
 	}
-	
+
 	/* Set up the input control if you are using standard C streams */
 	png_init_io(png_ptr, fp);
-	
+
 	/* The easiest way to read the image: */
 	png_bytep* row_pointers;
-	
+
     png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 	row_pointers = png_get_rows(png_ptr, info_ptr);
-	
+
     width            = png_get_image_width(png_ptr, info_ptr);
     height           = png_get_image_height(png_ptr, info_ptr);
     bit_depth        = png_get_bit_depth(png_ptr, info_ptr);
@@ -129,15 +129,15 @@ bool CIvfPngImage::read()
 			for (k=0; k<getChannels(); k++)
 				setValue(j, height-i-1, k, row_pointers[i][j*getChannels()+k]);
 
-	
+
 	/* At this point you have read the entire image */
-	
+
 	/* clean up after the read, and free any memory allocated - REQUIRED */
 	png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-	
+
 	/* close the file */
 	fclose(fp);
-	
+
 	/* that's it */
 	return true;
 #else

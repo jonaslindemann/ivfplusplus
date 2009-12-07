@@ -93,7 +93,7 @@ public:
 	void setVector(double vx, double vy, double vz);
 
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

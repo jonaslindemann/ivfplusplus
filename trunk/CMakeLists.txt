@@ -13,11 +13,15 @@ else(APPLE)
 set( FREETYPE_INCLUDE /usr/include/freetype2 )
 endif(APPLE)
 
-if( ${CMAKE_BUILD_TYPE} STREQUAL "Debug" )
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Release)
+endif(NOT CMAKE_BUILD_TYPE)
+
+if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
 	set(IVFDEBUG on)
-else( ${CMAKE_BUILD_TYPE} STREQUAL "Debug" )
+else( CMAKE_BUILD_TYPE STREQUAL "Debug" )
 	set(IVFDEBUG off)
-endif( ${CMAKE_BUILD_TYPE} STREQUAL "Debug" )
+endif( CMAKE_BUILD_TYPE STREQUAL "Debug" )
 
 if(WIN32)
 	message( "ivf++ windows build" )

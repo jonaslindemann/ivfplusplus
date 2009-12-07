@@ -54,10 +54,10 @@ public:
 	IvfClassInfo("CIvfFileBase",CIvfBase);
 
 	/** Sets the filename of the file to be read/written */
-	void setFileName(const char* fileName);
+	void setFileName(const std::string& fileName);
 
 	/** Returns the filename of the file to be read/written */
-	const char* getFileName();
+	const std::string getFileName();
 
 	/** Sets the shape to be exported to file */
 	void setShape(CIvfShape* shape);
@@ -70,4 +70,4 @@ public:
  * and view in Ivf++
  */
 
-#endif 
+#endif

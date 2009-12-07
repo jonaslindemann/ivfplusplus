@@ -36,13 +36,13 @@ CIvfPointSet::~CIvfPointSet()
 
 }
 
-void CIvfPointSet::createGeometry()
+void CIvfPointSet::doCreateGeometry()
 {
 	CIvfIndex* coordIdx;
 	CIvfIndex* colorIdx;
 	long i, j;
 	int oldSize;
-	
+
 	glPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
 	glDisable(GL_LIGHTING);
 
@@ -63,7 +63,7 @@ void CIvfPointSet::createGeometry()
 				colorIdx = m_colorIndexSet[i];
 		}
 
-		
+
 		for (j=0; j<coordIdx->getSize(); j++)
 		{
 			if (m_useColor)
@@ -73,7 +73,7 @@ void CIvfPointSet::createGeometry()
 					CIvfShape::getMaterial()->render();
 				else
 					glColor3f(1.0f, 1.0f, 1.0f);
-			
+
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
 		}
 		glEnd();

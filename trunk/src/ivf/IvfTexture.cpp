@@ -27,7 +27,7 @@
 
 // ------------------------------------------------------------
 CIvfTexture::CIvfTexture ()
-:CIvfObject()
+:CIvfGLBase()
 {
 	m_bound = false;
 	m_generateMipmaps = false;

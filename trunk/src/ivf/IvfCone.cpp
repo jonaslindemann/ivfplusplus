@@ -52,7 +52,7 @@ CIvfCone::~CIvfCone ()
 void CIvfCone::setTopRadius (const double radius)
 {
 	m_topRadius = radius;
-	updateBoundingSphere();
+	doUpdateBoundingSphere();
 	updateSelectBox();
 }
 
@@ -67,7 +67,7 @@ double CIvfCone::getTopRadius ()
 void CIvfCone::setBottomRadius (const double radius)
 {
 	m_bottomRadius = radius;
-	updateBoundingSphere();
+	doUpdateBoundingSphere();
 	updateSelectBox();
 }
 
@@ -81,7 +81,7 @@ double CIvfCone::getBottomRadius ()
 void CIvfCone::setHeight (const double height)
 {
 	m_height = height;
-	updateBoundingSphere();
+	doUpdateBoundingSphere();
 	updateSelectBox();
 }
 
@@ -111,7 +111,7 @@ int CIvfCone::getStacks()
 	return m_stacks;
 }
 
-void CIvfCone::createGeometry()
+void CIvfCone::doCreateGeometry()
 {
 	glPushMatrix();
 		glPushMatrix();
@@ -126,13 +126,13 @@ void CIvfCone::createGeometry()
 				getBottomRadius(),getTopRadius(),getHeight(),
 				getSlices(),getStacks());
 			gluDeleteQuadric(cylinder);
-	
+
 			GLUquadricObj* bottom = gluNewQuadric();
 			gluQuadricNormals(bottom,GLU_SMOOTH);
 			gluQuadricTexture(bottom,GL_TRUE);
 			gluQuadricDrawStyle(bottom,GLU_FILL);
 			gluQuadricOrientation(bottom,GLU_INSIDE);
-			gluDisk(bottom, 
+			gluDisk(bottom,
 				0.0, getBottomRadius(),
 				getSlices(),1);
 			gluDeleteQuadric(bottom);
@@ -148,7 +148,7 @@ void CIvfCone::createGeometry()
 				gluQuadricNormals(top,GLU_SMOOTH);
 				gluQuadricTexture(top,GL_TRUE);
 				gluQuadricDrawStyle(top,GLU_FILL);
-				gluDisk(top, 
+				gluDisk(top,
 					0.0, getTopRadius(),
 					getSlices(),1);
 				gluDeleteQuadric(top);
@@ -167,12 +167,12 @@ void CIvfCone::updateSelectBox()
 		m_selectionBox->setSize(m_topRadius*2.0,m_height,m_topRadius*2.0);
 }
 
-void CIvfCone::createSelect()
+void CIvfCone::doCreateSelect()
 {
 	m_selectionBox->render();
 }
 
-void CIvfCone::updateBoundingSphere()
+void CIvfCone::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{

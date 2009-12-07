@@ -51,7 +51,7 @@ CIvfExtrArrow::~CIvfExtrArrow()
 }
 
 // ------------------------------------------------------------
-void CIvfExtrArrow::createGeometry()
+void CIvfExtrArrow::doCreateGeometry()
 {
 	glePolyCone(6,m_coords,NULL,m_radius);
 }
@@ -83,7 +83,7 @@ void CIvfExtrArrow::initExtrusion()
 	m_coords[0][2] = (m_offset-1.0)*m_direction[2];
 	m_radius[0] = 0.0;
 
-	m_coords[1][0] = m_offset*m_direction[0]; 
+	m_coords[1][0] = m_offset*m_direction[0];
 	m_coords[1][1] = m_offset*m_direction[1];
 	m_coords[1][2] = m_offset*m_direction[2];
 	m_radius[1] = m_tailRadius;
@@ -140,12 +140,12 @@ void CIvfExtrArrow::getRadius(double &head, double &tail)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrArrow::updateBoundingSphere()
+void CIvfExtrArrow::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{
 		CIvfBoundingSphere* bSphere = getBoundingSphere();
-		bSphere->setRadius(m_length/2.0);		
+		bSphere->setRadius(m_length/2.0);
 	}
 }
 

@@ -71,7 +71,7 @@ void CIvfSolidLine::setNodes(CIvfNode *n1, CIvfNode *n2)
 	// Update extrusion parameters
 
 	initExtrusion();
-	updateBoundingSphere();
+	doUpdateBoundingSphere();
 
 	onSetNodes(n1, n2);
 }
@@ -90,7 +90,7 @@ CIvfNode* CIvfSolidLine::getNode(int idx)
 	default:
 		return NULL;
 		break;
-	}	
+	}
 }
 
 // ------------------------------------------------------------
@@ -151,13 +151,13 @@ void CIvfSolidLine::initNodes()
 {
 	if ((m_node1!=NULL)&&(m_node2!=NULL))
 	{
-		
+
 		// Create spine
-		
+
 		CIvfVec3d p1, p2;
 		CIvfVec3d v1;
 		double x, y, z, ex, ey, ez;
-		
+
 		m_node1->getPosition(x, y, z);
 		p1.setComponents(x, y, z);
 		m_node2->getPosition(x, y, z);
@@ -170,33 +170,33 @@ void CIvfSolidLine::initNodes()
 			setUpVector(1.0, 0.0, 0.0);
 		else
 			setUpVector(0.0, 1.0, 0.0);
-		
+
 		// First point
-		
+
 		p1.getComponents(x, y, z);
 		x = (-0.1-m_offsets[0]) * ex + x;
 		y = (-0.1-m_offsets[0]) * ey + y;
 		z = (-0.1-m_offsets[0]) * ez + z;
 		setSpineCoord(0, x, y, z);
-		
+
 		// Second point
-		
+
 		p1.getComponents(x, y, z);
 		x = -m_offsets[0] * ex + x;
 		y = -m_offsets[0] * ey + y;
 		z = -m_offsets[0] * ez + z;
 		setSpineCoord(1, x, y, z);
-		
+
 		// Third point
-		
+
 		p2.getComponents(x, y, z);
 		x = m_offsets[1] * ex + x;
 		y = m_offsets[1] * ey + y;
 		z = m_offsets[1] * ez + z;
 		setSpineCoord(2, x, y, z);
-		
+
 		// Fourth point
-		
+
 		p2.getComponents(x, y, z);
 		x = (0.1 + m_offsets[1]) * ex + x;
 		y = (0.1 + m_offsets[1]) * ey + y;

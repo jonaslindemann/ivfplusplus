@@ -904,9 +904,9 @@ void CIvfCustomWidget::setShowConnections(bool flag)
 	// Turn on/off connections
 
 	if ((flag)&&(m_connections!=NULL))
-		m_connections->setState(CIvfObject::OS_ON);
+		m_connections->setState(CIvfGLBase::OS_ON);
 	else
-		m_connections->setState(CIvfObject::OS_OFF);		
+		m_connections->setState(CIvfGLBase::OS_OFF);		
 	this->redraw();
 }		
 

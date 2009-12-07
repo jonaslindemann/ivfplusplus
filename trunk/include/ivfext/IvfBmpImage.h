@@ -83,7 +83,7 @@ public:
 	CIvfBmpImage();
 
 	/** CIvfBmpImage constructor */
-	CIvfBmpImage(const char* name);
+	CIvfBmpImage(const std::string& name);
 
 	/** CIvfBmpImage destructor */
 	virtual ~CIvfBmpImage();

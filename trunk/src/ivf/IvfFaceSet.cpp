@@ -27,13 +27,13 @@
 namespace std {};
 using namespace std;
 
-CIvfFaceSet::CIvfFaceSet()		
+CIvfFaceSet::CIvfFaceSet()
 :CIvfShape()
 {
 	m_nCoords = 0;
 	m_nFaces = 0;
 	m_nTextureCoords = 0;
-	
+
 	m_coords = NULL;
 	m_coordIndex = NULL;
 	m_textureCoordIndex = NULL;
@@ -42,7 +42,7 @@ CIvfFaceSet::CIvfFaceSet()
 	m_normals = NULL;
 	m_useColor = FALSE;
 	m_useTexture = FALSE;
-	
+
 }
 
 CIvfFaceSet::~CIvfFaceSet()
@@ -62,18 +62,18 @@ CIvfFaceSet::~CIvfFaceSet()
 }
 
 // ------------------------------------------------------------
-void CIvfFaceSet::createGeometry()
+void CIvfFaceSet::doCreateGeometry()
 {
 	int i,j;
-	
+
 	if (m_useColor==true)
 	{
 		glPushAttrib(GL_COLOR_MATERIAL);
 		glEnable(GL_COLOR_MATERIAL);
 	}
-	
+
 	for ( i = 0; i<m_nFaces; i++)
-	{	
+	{
 		glBegin(GL_QUADS);
 		for (j = 0; j<4; j++)
 		{
@@ -84,14 +84,14 @@ void CIvfFaceSet::createGeometry()
 					   m_textureCoords[m_textureCoordIndex[i][j]][0],
 					   m_textureCoords[m_textureCoordIndex[i][j]][1]);
 				glNormal3dv(m_normals[i]);
-				if (m_useColor == TRUE) 
+				if (m_useColor == TRUE)
 					glColor3fv(m_colors[ m_coordIndex[i][j] ]);
 				glVertex3dv(m_coords[ m_coordIndex[i][j] ]);
 			}
 		}
 		glEnd();
 	}
-	
+
 	if (m_useColor==true)
 		glPopAttrib();
 }
@@ -100,12 +100,12 @@ void CIvfFaceSet::createGeometry()
 void CIvfFaceSet::setCoordSize(long coordSize)
 {
 	m_nCoords = coordSize;
-	
+
 	if (m_coords!=NULL)
 		delete [] m_coords;
 	if (m_colors!=NULL)
 		delete [] m_colors;
-	
+
 	m_coords = new double[m_nCoords][3];
 	m_colors = new float[m_nCoords][3];
 }
@@ -138,14 +138,14 @@ void CIvfFaceSet::setCoordIndexSize(long indexSize)
 	if (indexSize>0)
 	{
 		m_nFaces = indexSize;
-		
+
 		if (m_coordIndex!=NULL)
 			delete [] m_coordIndex;
 		if (m_normals!=NULL)
 			delete [] m_normals;
 		if (m_textureCoordIndex!=NULL)
 			delete [] m_textureCoordIndex;
-		
+
 		m_coordIndex = new long[m_nFaces][4];
 		m_normals = new double[m_nFaces][3];
 		m_textureCoordIndex = new long[m_nFaces][4];
@@ -158,10 +158,10 @@ void CIvfFaceSet::setTextureCoordSize(long size)
 	if (size>0)
 	{
 		m_nTextureCoords = size;
-		
+
 		if (m_textureCoords!=NULL)
 			delete [] m_textureCoords;
-		
+
 		m_textureCoords = new double[m_nTextureCoords][2];
 	}
 }
@@ -185,7 +185,7 @@ void CIvfFaceSet::setCoordIndex(long n, long i1, long i2, long i3, long i4)
 		m_coordIndex[n][1] = i2;
 		m_coordIndex[n][2] = i3;
 		m_coordIndex[n][3] = i4;
-		
+
 		// Calculate normal
 
 		u.setComponents(
@@ -257,7 +257,7 @@ void CIvfFaceSet::getTextureCoord(long n, double &s, double &t)
 	{
 		s = m_textureCoords[n][0];
 		t = m_textureCoords[n][1];
-	}	
+	}
 }
 
 // ------------------------------------------------------------

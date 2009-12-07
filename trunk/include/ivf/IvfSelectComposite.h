@@ -115,9 +115,9 @@ private:
 	void nameChildren(CIvfShape* shape);
 protected:
 	void processHits(GLint hits, GLuint buffer[]);
-	virtual void endTransform();
-	virtual void beginTransform();
-	virtual void createGeometry();
+	virtual void doEndTransform();
+	virtual void doBeginTransform();
+	virtual void doCreateGeometry();
 	virtual void initializeSelect(int x, int y, int w, int h);
 	virtual void customView();
 };

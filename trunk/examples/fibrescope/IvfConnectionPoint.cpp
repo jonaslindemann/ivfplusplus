@@ -76,7 +76,7 @@ CIvfCoordHist* CIvfConnectionPoint::getCoordHist()
 	return m_coords;
 }
 
-void CIvfConnectionPoint::createGeometry()
+void CIvfConnectionPoint::doCreateGeometry()
 {
 	CIvfCoordListPtr coordList = m_coords->getList();
 	CIvfCoordListPtr undeformedList = m_coords->getList(0);
@@ -91,14 +91,14 @@ void CIvfConnectionPoint::createGeometry()
 
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
-	
+
 	CIvfLightingPtr lighting = CIvfLighting::getInstance();
 	lighting->enable();
 
 	radius = m_connectionRadius;
-	
+
 	undeformedList->getCoord(0, u1[0], u1[1], u1[2]);
-	
+
 	coordList->getCoord(0, p1[0], p1[1], p1[2]);
 
 	CIvfUserSettingsPtr userSettings = CIvfUserSettings::getInstance();
@@ -116,15 +116,15 @@ void CIvfConnectionPoint::createGeometry()
 		p1[1] = u1[1];
 		p1[2] = u1[2];
 	}
-	
+
 	if (userSettings->getShowUsage())
 	{
 		coordList->getColor(0, r1, g1, b1);
 		if (userSettings->getColorMap()!=NULL)
 			userSettings->getColorMap()->getColor((double)r1, r, g, b);
-		else		
+		else
 			colorScale((double)r1, r, g, b);
-		
+
 		if (r1>=1.0)
 		{
 			m_material->setDiffuseColor((float)r, (float)g, (float)b, 0.0f);
@@ -135,7 +135,7 @@ void CIvfConnectionPoint::createGeometry()
 			m_material->setDiffuseColor((float)r, (float)g, (float)b, 1.0f);
 			m_material->setAmbientColor((float)r*0.6, (float)g*0.6, (float)b*0.6, 1.0f);
 		}
-		
+
 		m_material->render();
 	}
 	else

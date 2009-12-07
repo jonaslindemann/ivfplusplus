@@ -84,6 +84,6 @@ private:
 	CIvfBrick* m_xBrick;
 	double m_size;
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 #endif

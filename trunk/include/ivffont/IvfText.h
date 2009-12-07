@@ -65,15 +65,15 @@ public:
 	CIvfFont* getFont(void);
 
 	/** Set the text to be rendered. */
-	void setText(const char* text);
+	void setText(const std::string& text);
 
 	/** Get real size of text. **/
 	void getSize(double & xsize, double & ysize, double & zsize);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 public:
 	/** Return the rendered text. */
-	const char* getText(void);
+	const std::string getText(void);
 };
 
 #endif

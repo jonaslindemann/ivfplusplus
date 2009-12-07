@@ -146,7 +146,7 @@ int CIvfPolyReader::getDatatype(string &row, int &pos, int &size)
 		return PFR_FLOAT64;
 	}
 
-	return KW_ERROR;	
+	return KW_ERROR;
 }
 
 // ------------------------------------------------------------
@@ -184,7 +184,7 @@ bool CIvfPolyReader::checkHeader(istream &in)
 			else
 				return false;
 		}
-		else 
+		else
 			return false;
 	}
 	else
@@ -210,7 +210,7 @@ bool CIvfPolyReader::parseElement(string &row)
 		parameters = options.substr(pos+5);
 		strcpy(buff,parameters.c_str());
 		if (!(in >> m_nFaces))
-			return false;		
+			return false;
 		else
 			return true;
 		break;
@@ -221,7 +221,7 @@ bool CIvfPolyReader::parseElement(string &row)
 		parameters = options.substr(pos+7);
 		strcpy(buff,parameters.c_str());
 		if (!(in >> m_nVertices))
-			return false;		
+			return false;
 		else
 			return true;
 		break;
@@ -232,7 +232,7 @@ bool CIvfPolyReader::parseElement(string &row)
 		parameters = options.substr(pos+5);
 		strcpy(buff,parameters.c_str());
 		if (!(in >> m_nEdges))
-			return false;		
+			return false;
 		else
 			return true;
 		break;
@@ -273,7 +273,7 @@ bool CIvfPolyReader::parseProperty(string &row)
 		parameters = options.substr(pos+size+1);
 
 		proptype = PFR_OTHER;
-		
+
 		if (find("x",parameters))
 			proptype = PFR_X;
 		if (find("y",parameters))
@@ -286,7 +286,7 @@ bool CIvfPolyReader::parseProperty(string &row)
 			proptype = PFR_GREEN;
 		if (find("blue",parameters))
 			proptype = PFR_BLUE;
-		
+
 		switch (m_currentElementType) {
 		case ET_FACE:
 			m_faceDataType.push_back(datatype);
@@ -310,7 +310,7 @@ bool CIvfPolyReader::parseProperty(string &row)
 		parameters = parameters.substr(pos+size+1);
 		return find("vertex_indices",parameters);
 	}
-	
+
 	return true;
 }
 
@@ -323,10 +323,10 @@ bool CIvfPolyReader::parseHeader(istream &in)
 	done = false;
 	error = false;
 
-	do 
+	do
 	{
 		getLine(m_row);
-		
+
 		switch (getKeyword(m_row)) {
 		case KW_ERROR:
 			error = true;
@@ -348,7 +348,7 @@ bool CIvfPolyReader::parseHeader(istream &in)
 			error = true;
 			break;
 		}
-	} 
+	}
 	while ((!error)&&(!done));
 
 	return !error;
@@ -369,7 +369,7 @@ bool CIvfPolyReader::readVertices(istream &in)
 	for (i=0; i<m_nVertices; i++)
 	{
 		x = y = z = 0.0;
-		
+
 		for (j=0; j<(int)m_vertexDataType.size(); j++)
 		{
 			if (m_vertexDataType[j]<PFR_UINT32)
@@ -400,7 +400,7 @@ bool CIvfPolyReader::readVertices(istream &in)
 			}
 		}
 		maxMinCalc(x, y, z);
-		polySet->addCoord(x, y, z);	
+		polySet->addCoord(x, y, z);
 	}
 	cout << "PolyFileReader: " << m_nVertices << " vertices read." << endl;
 	return true;
@@ -433,7 +433,7 @@ bool CIvfPolyReader::readFaces(istream &in)
 				polySet->addCoordIndex(idx);
 
 			idx = new CIvfIndex();
-			
+
 			if (nIndices==3)
 				idx->setTopology(IVF_IDX_TRIANGLES);
 			else
@@ -460,7 +460,7 @@ bool CIvfPolyReader::readFaces(istream &in)
 			{
 				if (!(in >> ivalue))
 					return false;
-				
+
 				idx->add(ivalue);
 			}
 		}
@@ -528,10 +528,10 @@ void CIvfPolyReader::read()
 
 	// Open file
 
-	m_inputFile.open(getFileName(),ios::in);
+	m_inputFile.open(getFileName().c_str(),ios::in);
 
 	// Check file
-	
+
 	if (!m_inputFile)
 	{
 		cout << "PolyFileReader: File invalid." << endl;

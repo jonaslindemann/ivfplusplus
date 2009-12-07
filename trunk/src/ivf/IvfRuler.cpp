@@ -58,7 +58,7 @@ void CIvfRuler::initRuler()
 	m_direction.normalize();
 }
 
-void CIvfRuler::createGeometry()
+void CIvfRuler::doCreateGeometry()
 {
 	int i, nSteps;
 	double x, y, z;
@@ -82,7 +82,7 @@ void CIvfRuler::createGeometry()
 	glBegin(GL_LINES);
 	for (i=0; i<nSteps; i++)
 	{
-		p = m_startPoint + i*m_tickStep*m_direction;	
+		p = m_startPoint + i*m_tickStep*m_direction;
 		p.getComponents(x, y, z);
 
 		glVertex3d(x - m_tickStep*0.1, y, z);

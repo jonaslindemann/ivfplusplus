@@ -63,7 +63,7 @@ public:
 
 
 protected:
-	void createGeometry();
+	void doCreateGeometry();
 };
 /** \example advgeom.cpp */
 #endif 

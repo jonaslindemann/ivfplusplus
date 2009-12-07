@@ -38,10 +38,10 @@ CIvfWireBrick::~CIvfWireBrick ()
 }
 
 // ------------------------------------------------------------
-void CIvfWireBrick::createGeometry()
+void CIvfWireBrick::doCreateGeometry()
 {
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	CIvfBrick::createGeometry();
-	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);	
+	CIvfBrick::doCreateGeometry();
+	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }
 

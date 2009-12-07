@@ -41,24 +41,24 @@ private:
 	int m_currentColor;
 protected:
 	void processShape(CIvfShape* shape);
-	
-	void dxfTag(int number, const char* value);
+
+	void dxfTag(int number, const std::string& value);
 	void dxfInt(int number, int value);
 	void dxfFloat(int number, double value);
-	void dxfBeginSection(const char* value);
+	void dxfBeginSection(const std::string& value);
 	void dxfEndSection();
 	void dxfBeginTables();
 	void dxfEndTables();
-	void dxfBeginTable(const char* value);
+	void dxfBeginTable(const std::string& value);
 	void dxfEndTable();
 	void dxfBeginLayer();
 	void dxfEndLayer();
 	void dxfBeginEntitites();
 	void dxfEndEntitites();
 	void dxfColor(int number);
-	void dxfLineType(const char* name);
+	void dxfLineType(const std::string& name);
 	void dxfLine();
-	void dxfLayer(const char* value);
+	void dxfLayer(const std::string& value);
 	void dxfFirstPoint(double x, double y, double z);
 	void dxfSecondPoint(double x, double y, double z);
 	void dxfThirdPoint(double x, double y, double z);
@@ -71,14 +71,14 @@ protected:
 	void dxfSolid();
 	void dxfEndOfFile();
 	void dxf3DFace();
-	
+
 	void quad(
 			double x1, double y1, double z1,
 			double x2, double y2, double z2,
 			double x3, double y3, double z3,
 			double x4, double y4, double z4
 		);
-	
+
 	void tri(
 			double x1, double y1, double z1,
 			double x2, double y2, double z2,
@@ -91,16 +91,16 @@ protected:
 	void popMatrix();
 
 	void transform(double &x, double &y, double &z);
-	
-	void setCurrentLayer(const char* layerName);
+
+	void setCurrentLayer(const std::string& layerName);
 	void setCurrentColor(int color);
 public:
 	CIvfDxfWriter();
 	virtual ~CIvfDxfWriter();
-	
+
 	void write();
-	
+
 	IvfClassInfo("CIvfDxfWriter",CIvfFileWriter);
 };
 
-#endif 
+#endif

@@ -103,7 +103,7 @@ public:
 	void setMarkColor(float red, float green, float blue);
 
 	/** Updates bounding sphere for grid */
-	virtual void updateBoundingSphere();
+	virtual void doUpdateBoundingSphere();
 private:
 	bool m_onlySubdivision;
 	GLdouble m_yCenter;

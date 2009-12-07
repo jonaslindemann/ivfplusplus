@@ -53,12 +53,12 @@ void CIvfCulledComposite::addChild(CIvfShape *shape)
 	shape->initBoundingSphere();
 }
 
-void CIvfCulledComposite::createGeometry()
+void CIvfCulledComposite::doCreateGeometry()
 {
 	if (m_useCulling)
 		this->cull();
 
-	CIvfComposite::createGeometry();
+	CIvfComposite::doCreateGeometry();
 }
 
 void CIvfCulledComposite::cull()
@@ -88,17 +88,17 @@ void CIvfCulledComposite::cullChildren(CIvfShape *shape)
 		//cout << composite->getBoundingSphere()->getRadius() << endl;
 
 		// if (composite bounding sphere intersects view frustum)
-		//    turn composite shape on and 
+		//    turn composite shape on and
 		//    traverse and cull children
-		// else 
+		// else
 		//    turn composite shape off
 
 		if ((composite==this)||intersectFrustum(composite->getBoundingSphere()))
 		{
 			m_matrixStack->pushMatrix();
-			
+
 			composite->getRotationQuat(vx, vy, vz, theta);
-				
+
 			//if ((x!=0.0)||(y!=0.0)||(z!=0.0))
 				m_matrixStack->translate(x, y, z);
 
@@ -118,13 +118,13 @@ void CIvfCulledComposite::cullChildren(CIvfShape *shape)
 			composite->setCulled(true);
 			m_cullCount++;
 		}
-		
+
 	}
 	else
 	{
 		// if (shape intersects view frustum)
 		//    turn shape on
-		// else 
+		// else
 		//    turn shape off
 
 		shape->getPosition(x, y, z);

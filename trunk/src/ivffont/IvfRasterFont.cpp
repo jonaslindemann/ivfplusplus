@@ -29,7 +29,7 @@ CIvfRasterFont::CIvfRasterFont()
 	// Add construction code here
 }
 
-void CIvfRasterFont::createGeometry()
+void CIvfRasterFont::doCreateGeometry()
 {
 	// Rendering code
 

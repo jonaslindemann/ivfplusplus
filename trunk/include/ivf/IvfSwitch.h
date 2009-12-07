@@ -61,7 +61,7 @@ public:
 private:
 	int m_currentChild;
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 /** \example lod.cpp */

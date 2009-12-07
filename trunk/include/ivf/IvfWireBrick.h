@@ -45,6 +45,6 @@ public:
 
 	IvfClassInfo("CIvfWireBrick",CIvfBrick);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 #endif

@@ -64,7 +64,7 @@ public:
 	 *
 	 * Each child added to the scene will be assigned
 	 * a bounding sphere using the initBoundingSphere
-	 * method of the CIvfObject class.
+	 * method of the CIvfGLBase class.
 	 */
 	void addChild(CIvfShape* shape);
 
@@ -97,7 +97,7 @@ public:
 protected:
 	bool intersectFrustum(CIvfBoundingSphere* bSphere);
 	void cull();
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

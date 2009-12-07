@@ -213,8 +213,8 @@ private:
 	//end changes
 
 protected:
-	void endTransform();
-	void beginTransform();
-	void createGeometry();
+	void doEndTransform();
+	void doBeginTransform();
+	void doCreateGeometry();
 };
 #endif

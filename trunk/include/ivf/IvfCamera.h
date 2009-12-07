@@ -26,7 +26,7 @@
 #define _CIvfCamera_h_
 
 #include <ivf/IvfView.h>
-#include <ivf/IvfObject.h>
+#include <ivf/IvfGLBase.h>
 
 #include <ivfmath/IvfViewFrustum.h>
 #include <ivfmath/IvfPoint3d.h>	

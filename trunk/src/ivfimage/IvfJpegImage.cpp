@@ -30,30 +30,30 @@ extern "C" {
 #ifdef WIN32
 #include <jpeglib.h>
 #else
-#include <FL/images/jpeglib.h>
+#include <jpeglib.h>
 #endif
 }
 
 CIvfJpegImage::CIvfJpegImage()
 {
-	
+
 }
 
 CIvfJpegImage::~CIvfJpegImage()
 {
-	
+
 }
 
 bool CIvfJpegImage::read()
 {
 	struct jpeg_decompress_struct cinfo;
-	FILE * infile;		
-	JSAMPARRAY buffer;	
-	int row_stride;		
+	FILE * infile;
+	JSAMPARRAY buffer;
+	int row_stride;
 	struct jpeg_error_mgr pub;
-	
-	if ((infile = fopen(getFileName(), "rb")) == NULL) {
-		fprintf(stderr, "can't open %s\n", getFileName());
+
+	if ((infile = fopen(getFileName().c_str(), "rb")) == NULL) {
+		fprintf(stderr, "can't open %s\n", getFileName().c_str());
 		return 0;
 	}
 
@@ -65,20 +65,20 @@ bool CIvfJpegImage::read()
 		jpeg_read_header(&cinfo, TRUE);
 	}
 	catch (...) {
-		jpeg_destroy_decompress(&cinfo);		
+		jpeg_destroy_decompress(&cinfo);
 		fclose(infile);
 		return false;
 	}
-	
+
 	jpeg_start_decompress(&cinfo);
-	
+
 	this->setChannels(cinfo.output_components);
 	this->setSize(cinfo.output_width, cinfo.output_height);
 
 	row_stride = cinfo.output_width * cinfo.output_components;
 	buffer = (*cinfo.mem->alloc_sarray)
 		((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
-	
+
 	while (cinfo.output_scanline < cinfo.output_height) {
 		(void) jpeg_read_scanlines(&cinfo, buffer, 1);
 		int i, j;
@@ -90,8 +90,8 @@ bool CIvfJpegImage::read()
 
 	jpeg_finish_decompress(&cinfo);
 	jpeg_destroy_decompress(&cinfo);
-	
+
 	fclose(infile);
-	
+
 	return 1;
 }

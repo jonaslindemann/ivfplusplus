@@ -41,9 +41,9 @@ IvfSmartPointer(CIvfComposite);
  * {
  *     .
  *     .
- *          
+ *
  *     m_scene = new CIvfComposite();
- *     
+ *
  *     CIvfSphere* sphere = new CIvfSphere();
  *     sphere->setPosition(3.0, 0.0, 0.0);
  *     CIvfCube* cube = new CIvfCube();
@@ -51,12 +51,12 @@ IvfSmartPointer(CIvfComposite);
  *
  *     m_scene->addChild(sphere);
  *     m_scene->addChild(cube);
- *     
+ *
  *     .
  *     .
  *     .
  * }
- * 
+ *
  * .
  * .
  * .
@@ -64,7 +64,7 @@ IvfSmartPointer(CIvfComposite);
  * {
  *     .
  *     .
- *   
+ *
  *     m_scene->render();
  *
  *     .
@@ -89,9 +89,9 @@ public:
 
 	/**
 	 * Determines if objects should be referenced.
-	 * 
+	 *
 	 * If set to true child object reference counting is to be
-	 * used. If a child object is not referenced when it has been 
+	 * used. If a child object is not referenced when it has been
 	 * dereferenced by CIvfComposite it is deleted. If this property
 	 * is set to false CIvfComposite does not reference its child
 	 * objects.
@@ -129,7 +129,7 @@ public:
 	/**
 	 * Set the select state of the child objects.
 	 *
-	 * Loops through the child objects and class their 
+	 * Loops through the child objects and class their
 	 * setSelect() methods.
 	 * @param state IVF_SELECT_ON selectes all child objects.
 	 * IVF_SELECT_OFF deselects all child objects.
@@ -141,13 +141,13 @@ public:
 
 	/**
 	 * Deletes all child objects
-	 * 
+	 *
 	 * Deletes all child objects if they are unreferenced.
 	 */
 	void deleteAll();
 
-	/** 
-	 * Removes child 
+	/**
+	 * Removes child
 	 *
 	 * Removes specified child at index dereferences it
 	 * and returns a reference.
@@ -155,14 +155,14 @@ public:
 	 * @returns Reference to removed object.
 	 */
 	virtual CIvfShape* removeChild(int index);
-	
-	/** 
+
+	/**
 	 * Removes child shape
 	 *
 	 * Remove specified CIvfShape instance, dereferences it
 	 * and returns a reference.
 	 * @param removeShape Reference of object to remove
-	 * @returns Reference to removed object. Returns NULL if 
+	 * @returns Reference to removed object. Returns NULL if
 	 * object was not found.
 	 */
 	virtual CIvfShape* removeShape(CIvfShape* removeShape);
@@ -205,13 +205,13 @@ public:
 
 	/** Returns the number of objects in the composite object. */
 	int getSize();
-	
-	/** 
+
+	/**
 	 * Updates bounding sphere
 	 *
 	 * Upates the radius of the assigned bounding sphere, if any.
 	 */
-	void updateBoundingSphere();
+	void doUpdateBoundingSphere();
 
 	/**
 	 * Finds a named shape
@@ -222,19 +222,19 @@ public:
 	 * in conjunction with the AC3D file reader which assigns
 	 * names to each shape.
 	 */
-	CIvfShape* findShape(const char* name);
+	CIvfShape* findShape(const std::string& name);
 
 private:
-	CIvfShape* compositeFind(CIvfComposite* composite, const char* name);
+	CIvfShape* compositeFind(CIvfComposite* composite, const std::string& name);
 	bool m_useReference;
 	int m_renderInterval;
 	std::vector<CIvfShape*> m_children;
 protected:
 	void compositeRemove(CIvfComposite* composite, CIvfShape* deleteChild);
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 /** \example placement.cpp
- * This is an example of how to position objects in a scene. 
+ * This is an example of how to position objects in a scene.
  * Using both primitives and CIvfComposite classes.
  */
 

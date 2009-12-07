@@ -63,7 +63,7 @@ void CIvfWorkspace::clearPlanes()
 		{
 			CIvfConstructionPlane* plane = m_workplanes[i];
 			plane->deleteReference();
-			
+
 			if (!plane->referenced())
 				delete plane;
 		}
@@ -122,16 +122,16 @@ void CIvfWorkspace::updateCursor(int x, int y)
 	m_currentPlane->updateCursor(x, y);
 }
 
-void CIvfWorkspace::createGeometry()
+void CIvfWorkspace::doCreateGeometry()
 {
-	CIvfSceneBase::createGeometry();
+	CIvfSceneBase::doCreateGeometry();
 
 	if (m_usePlanes)
 	{
 		m_rootPlane->render();
-		
+
 		int i;
-		
+
 		for (i=0; i<(int)m_workplanes.size(); i++)
 			m_workplanes[i]->render();
 	}
