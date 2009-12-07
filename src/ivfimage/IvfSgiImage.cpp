@@ -44,26 +44,26 @@ CIvfSgiImage::~CIvfSgiImage()
 void CIvfSgiImage::expandrow(unsigned char *optr, unsigned char *iptr, int z)
 {
 	unsigned char pixel, count;
-	
+
 	//optr += z;
 	while(1) {
 		pixel = *iptr++;
 		if ( !(count = (pixel & 0x7f)) )
 			return;
-		
-		if(pixel & 0x80) 
+
+		if(pixel & 0x80)
 		{
-			while(count--) 
+			while(count--)
 			{
 				*optr = *iptr++;
 				optr++;
 				//optr+=4;
 			}
-		} 
-		else 
+		}
+		else
 		{
 			pixel = *iptr++;
-			while(count--) 
+			while(count--)
 			{
 				*optr = pixel;
 				optr++;
@@ -98,10 +98,10 @@ bool CIvfSgiImage::read()
 	// Open file
 	//
 
-	if (this->getFileName()==NULL)
+	if (this->getFileName()=="")
 		return false;
 
-	inf = fopen(this->getFileName(), "rb");
+	inf = fopen(this->getFileName().c_str(), "rb");
 
 	if (!inf)
 		return false;
@@ -119,6 +119,7 @@ bool CIvfSgiImage::read()
 	unsigned char dummy;
 	unsigned short shortValue;
 	unsigned char byteValue;
+	size_t readBytes;
 
 	//
 	// Read file header
@@ -126,7 +127,7 @@ bool CIvfSgiImage::read()
 
 	magic = getshort(inf);
 
-	if (magic!=474) 
+	if (magic!=474)
 	{
 		fclose(inf);
 		return false;
@@ -140,8 +141,8 @@ bool CIvfSgiImage::read()
 	zSize = getshort(inf);
 	pixMin = getlong(inf);
 	pixMax = getlong(inf);
-	fread(buf,4,1,inf); 
-	fread(buf,80,1,inf);
+	readBytes = fread(buf,4,1,inf);
+	readBytes = fread(buf,80,1,inf);
 	colorMap = getlong(inf);
 	for (i=0; i<404; i++)
 		dummy = getbyte(inf);
@@ -204,7 +205,7 @@ bool CIvfSgiImage::read()
 		//
 		// Storage RLE
 		//
-	
+
 		unsigned long *starttab;
 		unsigned long *lengthtab;
 
@@ -245,7 +246,7 @@ bool CIvfSgiImage::read()
 					this->setValue(x, y, z, (GLubyte)outputRow[x]);
 			}
 		}
-			
+
 		free(inputRow);
 		free(outputRow);
 		free(starttab);
@@ -253,7 +254,7 @@ bool CIvfSgiImage::read()
 
 	}
 
-	
+
 	fclose(inf);
 
 	return true;
@@ -263,24 +264,27 @@ bool CIvfSgiImage::read()
 unsigned short CIvfSgiImage::getshort(FILE *inf)
 {
 	unsigned char buf[2];
+	size_t s;
 
-	fread(buf,2,1,inf);
+	s = fread(buf,2,1,inf);
 	return (buf[0]<<8)+(buf[1]<<0);
 }
 
 unsigned long CIvfSgiImage::getlong(FILE *inf)
 {
 	unsigned char buf[4];
+	size_t s;
 
-	fread(buf,4,1,inf);
+	s = fread(buf,4,1,inf);
 	return (buf[0]<<24)+(buf[1]<<16)+(buf[2]<<8)+(buf[3]<<0);
 }
 
 unsigned char CIvfSgiImage::getbyte(FILE *inf)
 {
 	unsigned char buf[1];
+	size_t s;
 
-	fread(buf,1,1,inf);
+	s = fread(buf,1,1,inf);
 	return buf[0]<<0;
 }
 

@@ -54,7 +54,7 @@ public:
 	 * This method first calls the virtual doSaveState() 
 	 * method to save the current state. Then it calls 
 	 * doState() to apply the new state. This method
-	 * will be called by the render() method of CIvfObject.
+	 * will be called by the render() method of CIvfGLBase.
 	 */
 	void remove();
 
@@ -63,7 +63,7 @@ public:
 	 * 
 	 * This method calls the virtual method doRestoreState()
 	 * to remove the previously applied state. This method
-	 * will be called by the render() method of CIvfObject.
+	 * will be called by the render() method of CIvfGLBase.
 	 */
 	void apply();
 

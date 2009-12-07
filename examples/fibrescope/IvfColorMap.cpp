@@ -37,7 +37,7 @@ CIvfColorMap::~CIvfColorMap()
 	this->clear();
 }
 
-void CIvfColorMap::open(char *fname)
+void CIvfColorMap::open(const std::string& fname)
 {
 	using namespace std;
 
@@ -48,15 +48,15 @@ void CIvfColorMap::open(char *fname)
 	CIvfColorPtr color;
 
 	// Clear previous color map
-	
+
 	this->clear();
 
 	// Open color map file
 
-	f.open(fname, ios::in);
+	f.open(fname.c_str(), ios::in);
 
 	// Read colors
-	
+
 	f >> nColors;
 
 	for (i=0; i<nColors; i++)
@@ -88,7 +88,7 @@ void CIvfColorMap::getColor(double value, float &r, float &g, float &b)
 		// Clamp value
 
 		clampedValue = value;
-		
+
 		if (value>1)
 			clampedValue = 1.0;
 

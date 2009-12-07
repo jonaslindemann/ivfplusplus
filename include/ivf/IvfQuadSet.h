@@ -56,7 +56,7 @@ public:
 protected:
 	void updateVertexNormals();
 	void calcNormal(CIvfIndex* idx);
-	void createGeometry();
+	void doCreateGeometry();
 };
 /** \example advgeom.cpp */
 #endif 

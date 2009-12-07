@@ -34,8 +34,8 @@ IvfSmartPointer(CIvfTextureFont);
 
 /**
  * Texture based font
- * 
- * CIvfTextureFont represents a font rendered by using a quad surface 
+ *
+ * CIvfTextureFont represents a font rendered by using a quad surface
  * with a textured font applied onto it.
  */
 class IVFFONT_API CIvfTextureFont: public CIvfVectorFont {
@@ -44,14 +44,14 @@ private:
 	unsigned int m_resolution;
 public:
 	/** Class constructor. @see CIvfFont. */
-	CIvfTextureFont(const char* filename);
+	CIvfTextureFont(const std::string& filename);
 
 	/** Class destructor */
 	virtual ~CIvfTextureFont();
 
 	IvfClassInfo("CIvfTextureFont", CIvfVectorFont);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 	virtual void doSetFaceSize(const unsigned int size);
 	virtual void doSetRealFaceSize(const double size);
 public:

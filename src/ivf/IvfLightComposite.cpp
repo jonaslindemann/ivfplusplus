@@ -34,7 +34,7 @@ CIvfLightComposite::~CIvfLightComposite()
 
 }
 
-void CIvfLightComposite::createGeometry()
+void CIvfLightComposite::doCreateGeometry()
 {
 	if (m_light!=NULL)
 	{
@@ -43,7 +43,7 @@ void CIvfLightComposite::createGeometry()
 		m_light->setPosition(x, y, z);
 		m_light->render();
 	}
-	CIvfComposite::createGeometry();
+	CIvfComposite::doCreateGeometry();
 }
 
 void CIvfLightComposite::setLight(CIvfOldLight *light)

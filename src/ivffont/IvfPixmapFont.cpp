@@ -29,7 +29,7 @@ CIvfPixmapFont::CIvfPixmapFont()
 	// Add construction code here
 }
 
-void CIvfPixmapFont::createGeometry()
+void CIvfPixmapFont::doCreateGeometry()
 {
 	// Rendering code
 

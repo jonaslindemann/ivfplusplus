@@ -92,7 +92,7 @@ void CIvfBrick::setSize (const double width, const double height, const double d
 	m_size[1] = height;
 	m_size[2] = depth;
 	updateBrick();
-	updateBoundingSphere();
+	doUpdateBoundingSphere();
 }
 
 // ------------------------------------------------------------
@@ -117,12 +117,12 @@ void CIvfBrick::setSize(CIvfPoint3d* p1, CIvfPoint3d* p2)
 	m_size[2] = fabs(bz - az);
 
 	setPosition((ax + bx)/2.0, (ay + by)/2.0, (az + bz)/2.0);
-	updateBoundingSphere();
+	doUpdateBoundingSphere();
 	updateBrick();
 }
 
 // ------------------------------------------------------------
-void CIvfBrick::createSelect()
+void CIvfBrick::doCreateSelect()
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glPushMatrix();
@@ -130,7 +130,7 @@ void CIvfBrick::createSelect()
 			glScaled(1.05, 1.05, 1.05);
 			CIvfMaterial* hMaterial = this->getHightlightMaterial();
 			hMaterial->render();
-			CIvfQuadSet::createGeometry();
+			CIvfQuadSet::doCreateGeometry();
 		glPopMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

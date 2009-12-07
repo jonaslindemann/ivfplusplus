@@ -48,10 +48,10 @@ void CIvfDxfReader::read()
 
 	// Open file
 
-	m_inputFile.open(getFileName(),std::ios::in);
+	m_inputFile.open(getFileName().c_str(),std::ios::in);
 
 	// Check file
-	
+
 	if (!m_inputFile)
 	{
 		std::cout << "DxfFileReader: File invalid." << std::endl;
@@ -98,7 +98,7 @@ bool CIvfDxfReader::checkHeader(std::istream &in)
 		return true;
 	else
 		return false;
-	
+
 }
 
 bool CIvfDxfReader::readData(std::istream &in)
@@ -114,14 +114,14 @@ bool CIvfDxfReader::readData(std::istream &in)
 
 	while (!in.eof())
 		read3DFace(in);
-	
+
 	std::cout << "DxfFileReader: Correcting normals." << std::endl;
 
 	correctFaceNormals();
-	
+
 	polySet->addCoordIndex(m_idx);
 	std::cout << "DxfFileReader: " << m_faceCount/3 << " faces read." << std::endl;
-	
+
 	return true;
 }
 
@@ -154,31 +154,31 @@ void CIvfDxfReader::read3DFace(std::istream &in)
 		findKey("10", in); in >> x;
 		findKey("20", in); in >> y;
 		findKey("30", in); in >> z;
-		
+
 		polySet->addCoord(x * scaleFactor, y * scaleFactor, z * scaleFactor);
 		maxMinCalc(x * scaleFactor, y * scaleFactor, z * scaleFactor);
 		m_idx->add(m_faceCount++);
-		
+
 		findKey("11", in); in >> x;
 		findKey("21", in); in >> y;
 		findKey("31", in); in >> z;
-		
+
 		polySet->addCoord(x * scaleFactor, y * scaleFactor, z * scaleFactor);
 		maxMinCalc(x * scaleFactor, y * scaleFactor, z * scaleFactor);
 		m_idx->add(m_faceCount++);
-		
+
 		findKey("12", in); in >> x;
 		findKey("22", in); in >> y;
 		findKey("32", in); in >> z;
-		
+
 		polySet->addCoord(x * scaleFactor, y * scaleFactor, z * scaleFactor);
 		maxMinCalc(x * scaleFactor, y * scaleFactor, z * scaleFactor);
 		m_idx->add(m_faceCount++);
-		
+
 		findKey("13", in); in >> x;
 		findKey("23", in); in >> y;
 		findKey("33", in); in >> z;
-		
+
 		polySet->addCoord(x * scaleFactor, y * scaleFactor, z * scaleFactor);
 		maxMinCalc(x * scaleFactor, y * scaleFactor, z * scaleFactor);
 		m_idx->add(m_faceCount++);

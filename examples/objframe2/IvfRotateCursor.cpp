@@ -21,7 +21,7 @@ CIvfRotateCursor::~CIvfRotateCursor()
 
 }
 
-void CIvfRotateCursor::createGeometry()
+void CIvfRotateCursor::doCreateGeometry()
 {
 	m_splineTube->render();
 }

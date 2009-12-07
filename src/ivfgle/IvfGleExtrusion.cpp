@@ -29,7 +29,7 @@ CIvfGleExtrusion::CIvfGleExtrusion()
 	// Add construction code here
 }
 
-void CIvfGleExtrusion::createGeometry()
+void CIvfGleExtrusion::doCreateGeometry()
 {
 	if (m_contour==NULL)
 		return;
@@ -48,7 +48,7 @@ void CIvfGleExtrusion::createGeometry()
 
 		gleExtrusion(
 			m_contour->getSize(),
-			temp2, 
+			temp2,
 			temp3,
 			m_up,
 			m_pointArray->getSize(),
@@ -69,7 +69,7 @@ void CIvfGleExtrusion::createGeometry()
 
 			gleDouble (*temp3)[2];
 			temp3 = (double (*)[2])m_contour->getNormalData();
-			
+
 			float (*temp4)[3];
 			temp4 = (float (*)[3])m_colorArray->getData();
 
@@ -77,7 +77,7 @@ void CIvfGleExtrusion::createGeometry()
 
 			gleExtrusion(
 				m_contour->getSize(),
-				temp2, 
+				temp2,
 				temp3,
 				m_up,
 				m_pointArray->getSize(),

@@ -26,7 +26,7 @@
 #ifndef _CIvfOldLight_h_
 #define _CIvfOldLight_h_
 
-#include <ivf/IvfObject.h>
+#include <ivf/IvfGLBase.h>
 
 IvfSmartPointer(CIvfOldLight);
 
@@ -41,7 +41,7 @@ static size_t IVF_MAX_LIGHTS = 8;
  *
  * @author Carl Johan Lejdfors
  */
-class IVF_API CIvfOldLight : public CIvfObject {
+class IVF_API CIvfOldLight : public CIvfGLBase {
 public:
 	enum TLightType {
 		LT_POINT,
@@ -61,7 +61,7 @@ public:
 	/** void* operator */
 	operator void*(); 
 
-	IvfClassInfo("CIvfOldLight",CIvfObject);
+	IvfClassInfo("CIvfOldLight",CIvfGLBase);
 
 	/** Set ambient light components */
 	void setAmbient( const GLfloat r, const GLfloat g, 

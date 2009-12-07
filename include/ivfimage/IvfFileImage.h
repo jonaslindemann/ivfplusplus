@@ -32,23 +32,23 @@ IvfSmartPointer(CIvfFileImage);
 /**
  * Image file loader base class
  *
- * This class implements the basic interface for 
+ * This class implements the basic interface for
  * derived image loading classes. Images are loaded by
  * instantiating an image loader, setting the filename
- * using the setFileName() method and then invoking the 
+ * using the setFileName() method and then invoking the
  * read() method.
  *
  * @author Jonas Lindemann
  */
 class IVFIMAGE_API CIvfFileImage : public CIvfImage {
 private:
-	char* m_fileName;
+	std::string m_fileName;
 public:
 	/** CIvfFileImage constructor */
 	CIvfFileImage();
 
 	/** CIvfFileImage constructor */
-	CIvfFileImage(const char* name);
+	CIvfFileImage(const std::string& name);
 
 	/** CIvfFileImage destructor */
 	virtual ~CIvfFileImage();
@@ -56,10 +56,10 @@ public:
 	IvfClassInfo("CIvfFileImage",CIvfImage);
 
 	/** Set filename of file to load */
-	void setFileName(const char* name);
+	void setFileName(const std::string& name);
 
 	/** Return filename of file to load */
-	const char* getFileName();
+	const std::string getFileName();
 
 	/**
 	 * Read file into image
@@ -70,4 +70,4 @@ public:
 };
 /** \example textures.cpp */
 
-#endif 
+#endif

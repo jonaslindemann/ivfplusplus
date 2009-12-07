@@ -24,10 +24,10 @@
 
 #include <ivffont/IvfTextureFont.h>
 
-CIvfTextureFont::CIvfTextureFont(const char* filename)
+CIvfTextureFont::CIvfTextureFont(const std::string& filename)
 :CIvfVectorFont(filename)
 {
-	m_ftglTextureFont = new FTGLTextureFont(this->getFilename());
+	m_ftglTextureFont = new FTGLTextureFont(this->getFilename().c_str());
 	m_ftglTextureFont->CharMap(ft_encoding_unicode);
 	m_ftglTextureFont->FaceSize(1,72);
 	m_resolution = 72;
@@ -38,9 +38,9 @@ CIvfTextureFont::~CIvfTextureFont()
 	delete m_ftglTextureFont;
 }
 
-void CIvfTextureFont::createGeometry()
+void CIvfTextureFont::doCreateGeometry()
 {
-	m_ftglTextureFont->Render(this->getText());
+	m_ftglTextureFont->Render(this->getText().c_str());
 }
 
 void CIvfTextureFont::doSetFaceSize(const unsigned int size)

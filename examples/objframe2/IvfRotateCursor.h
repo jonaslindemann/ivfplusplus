@@ -17,7 +17,7 @@ public:
 
 	IvfClassInfo("CIvfRotateCursor",CIvfShape);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
-#endif 
+#endif

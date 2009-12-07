@@ -126,7 +126,7 @@ public:
 	/** Sets the size of the shape */
 	void setShapeSize(double size);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

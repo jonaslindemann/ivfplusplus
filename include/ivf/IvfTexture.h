@@ -25,7 +25,7 @@
 #ifndef _CIvfTexture_h_
 #define _CIvfTexture_h_
 
-#include <ivf/IvfObject.h>
+#include <ivf/IvfGLBase.h>
 #include <ivf/IvfImage.h>
 
 IvfSmartPointer(CIvfTexture);
@@ -59,7 +59,7 @@ IvfSmartPointer(CIvfTexture);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfTexture : public CIvfObject {
+class IVF_API CIvfTexture : public CIvfGLBase {
 public:
 	/** Constructor */
 	CIvfTexture ();
@@ -67,7 +67,7 @@ public:
 	/** Destructor */
 	virtual ~CIvfTexture ();
 
-	IvfClassInfo("CIvfTexture",CIvfObject);
+	IvfClassInfo("CIvfTexture",CIvfGLBase);
 
 	/** 
 	 * Set texture environment color (Obsolete! Use setEnvColor() instead)

@@ -25,7 +25,7 @@
 #ifndef _CIvfMaterial_h_
 #define _CIvfMaterial_h_
 
-#include <ivf/IvfObject.h>
+#include <ivf/IvfGLBase.h>
 
 IvfSmartPointer(CIvfMaterial);
 
@@ -37,7 +37,7 @@ IvfSmartPointer(CIvfMaterial);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfMaterial : public CIvfObject {
+class IVF_API CIvfMaterial : public CIvfGLBase {
 public:
 	bool getColorMaterial();
 	void setColorMaterial(bool flag);
@@ -47,7 +47,7 @@ public:
 	/** CIvfMaterial destructor */
 	virtual ~CIvfMaterial ();
 
-	IvfClassInfo("CIvfMaterial",CIvfObject);
+	IvfClassInfo("CIvfMaterial",CIvfGLBase);
 
 	/**
 	 * Sets the shininess property.
@@ -145,6 +145,6 @@ private:
 	void modifyBrightness(float* color, double factor);
 	void toGreyscale(float* color, float* grey);
 protected:
-	virtual void createMaterial();
+	virtual void doCreateMaterial();
 };
 #endif

@@ -96,7 +96,7 @@ public:
 	 *
 	 * Upates the radius of the assigned bounding sphere, if any.
 	 */
-	void updateBoundingSphere();
+	void doUpdateBoundingSphere();
 private:
 	void updateSelectBox();
 	CIvfSelectionBox* m_selectionBox;
@@ -106,7 +106,7 @@ private:
 	double	m_topRadius;
 	double	m_bottomRadius;
 protected:
-	virtual void createSelect();
-	virtual void createGeometry();
+	virtual void doCreateSelect();
+	virtual void doCreateGeometry();
 };
 #endif

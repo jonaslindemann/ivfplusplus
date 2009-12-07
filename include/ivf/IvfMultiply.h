@@ -54,7 +54,7 @@ public:
 	void setStartIndices(int i, int j, int k);
 	void getStartIndices(int &i, int &j, int &k);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif

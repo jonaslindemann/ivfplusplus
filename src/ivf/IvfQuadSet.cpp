@@ -31,7 +31,7 @@ CIvfQuadSet::~CIvfQuadSet()
 
 }
 
-void CIvfQuadSet::createGeometry()
+void CIvfQuadSet::doCreateGeometry()
 {
 	CIvfIndex* coordIdx;
 	CIvfIndex* colorIdx;
@@ -41,7 +41,7 @@ void CIvfQuadSet::createGeometry()
 	long i, j;
 
 	glPushAttrib(GL_COLOR_MATERIAL);
-	
+
 	if (m_useColor)
 		glEnable(GL_COLOR_MATERIAL);
 
@@ -62,35 +62,35 @@ void CIvfQuadSet::createGeometry()
 			textureIdx = m_textureIndexSet[i];
 		else
 			textureIdx = NULL;
-		
+
 		for (j=0; j<coordIdx->getSize(); j+=4)
 		{
 			if (getUseVertexNormals())
 				glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j)]->getComponents());
 			else
 				glNormal3dv(m_normalSet[normalIdx->getIndex(j/4)]->getComponents());
-			
+
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 
 			if (textureIdx!=NULL)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
-			
+
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
-			
+
 			if (getUseVertexNormals())
 				glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+1)]->getComponents());
 			else
 				glNormal3dv(m_normalSet[normalIdx->getIndex(j/4)]->getComponents());
-			
+
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j+1)]->getColor());
-			
+
 			if (textureIdx!=NULL)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+1)]->getComponents());
 
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j+1)]->getComponents());
-			
+
 			if (getUseVertexNormals())
 				glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+2)]->getComponents());
 			else
@@ -98,7 +98,7 @@ void CIvfQuadSet::createGeometry()
 
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j+2)]->getColor());
-			
+
 			if (textureIdx!=NULL)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+2)]->getComponents());
 
@@ -111,7 +111,7 @@ void CIvfQuadSet::createGeometry()
 
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j+3)]->getColor());
-			
+
 			if (textureIdx!=NULL)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+3)]->getComponents());
 
@@ -176,7 +176,7 @@ void CIvfQuadSet::calcNormal(CIvfIndex *idx)
 		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
 		m_vertexNormalIndexSet[idx->getIndex(i+3)]->add(m_normalSet.size()-1);
 	}
-	
+
 	m_normalIndexSet.push_back(normalIdx);
 }
 

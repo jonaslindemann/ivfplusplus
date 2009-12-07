@@ -30,7 +30,7 @@ CIvfNode::CIvfNode ()
 		//TODO: check and complete member initialisation list!
 {
 	m_nodeSize = 0.2;
-	
+
 	m_sphereShape = new CIvfSphere();
 	m_cubeShape = new CIvfCube();
 
@@ -58,17 +58,17 @@ CIvfNode::~CIvfNode ()
 }
 
 // ------------------------------------------------------------
-void CIvfNode::createGeometry()
+void CIvfNode::doCreateGeometry()
 {
 	m_sphereShape->setRadius(m_nodeSize);
 	m_cubeShape->setSize(m_nodeSize);
-	
+
 	if (m_nodeShape)
 		m_nodeShape->render();
 }
 
 // ------------------------------------------------------------
-void CIvfNode::createSelect()
+void CIvfNode::doCreateSelect()
 {
 	m_selectionBox->setSize(m_nodeSize, m_nodeSize, m_nodeSize);
 	m_selectionBox->render();
@@ -78,7 +78,7 @@ void CIvfNode::createSelect()
 void CIvfNode::setSize(double size)
 {
 	m_nodeSize = size;
-	updateBoundingSphere();
+	doUpdateBoundingSphere();
 }
 
 // ------------------------------------------------------------
@@ -113,7 +113,7 @@ CIvfNode::TNodeType CIvfNode::getNodeType()
 	return m_nodeType;
 }
 
-void CIvfNode::updateBoundingSphere()
+void CIvfNode::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{

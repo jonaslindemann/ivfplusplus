@@ -43,12 +43,12 @@ CIvfSelectionBox::~CIvfSelectionBox ()
 }
 
 // ------------------------------------------------------------
-void CIvfSelectionBox::createGeometry()
+void CIvfSelectionBox::doCreateGeometry()
 {
 	glPushAttrib(GL_LIGHTING);
 		glDisable(GL_LIGHTING);
 		glColor3f(1.0, 1.0, 1.0);
-		CIvfWireBrick::createGeometry();
+		CIvfWireBrick::doCreateGeometry();
 	glPopAttrib();
 }
 

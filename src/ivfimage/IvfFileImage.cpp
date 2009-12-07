@@ -26,30 +26,25 @@
 
 CIvfFileImage::CIvfFileImage()
 {
-	m_fileName = NULL;
+	m_fileName = "";
 }
 
-CIvfFileImage::CIvfFileImage(const char* name)
+CIvfFileImage::CIvfFileImage(const std::string& name)
 {
-	m_fileName = NULL;
-	setFileName(name);
+	m_fileName = name;
 }
 
 CIvfFileImage::~CIvfFileImage()
 {
-	delete m_fileName;
+
 }
 
-void CIvfFileImage::setFileName(const char *name)
+void CIvfFileImage::setFileName(const std::string& name)
 {
-	if (m_fileName!=NULL)
-		delete [] m_fileName;
-
-	m_fileName = new char[strlen(name)+1];
-	strcpy(m_fileName, name);
+    m_fileName = name;
 }
 
-const char* CIvfFileImage::getFileName()
+const std::string CIvfFileImage::getFileName()
 {
 	return m_fileName;
 }

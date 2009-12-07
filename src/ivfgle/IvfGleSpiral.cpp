@@ -39,7 +39,7 @@ CIvfGleSpiral::CIvfGleSpiral()
 	m_startXfm[1][1] = 1.0;
 }
 
-void CIvfGleSpiral::createGeometry()
+void CIvfGleSpiral::doCreateGeometry()
 {
 	if (m_contour==NULL)
 		return;
@@ -53,7 +53,7 @@ void CIvfGleSpiral::createGeometry()
 
 	gleSpiral(
 		m_contour->getSize(),
-		temp2, 
+		temp2,
 		temp3,
 		m_up,
 		1.0,			// Start radius

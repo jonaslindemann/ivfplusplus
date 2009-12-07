@@ -41,7 +41,7 @@ CIvfSimpleLineSet::CIvfSimpleLineSet ()
 // ------------------------------------------------------------
 CIvfSimpleLineSet::~CIvfSimpleLineSet ()
 {
-	if (m_coordIndex!=NULL) 
+	if (m_coordIndex!=NULL)
 		delete [] m_coordIndex;
 	if (m_coords!=NULL)
 		delete [] m_coords;
@@ -50,7 +50,7 @@ CIvfSimpleLineSet::~CIvfSimpleLineSet ()
 }
 
 // ------------------------------------------------------------
-void CIvfSimpleLineSet::createGeometry()
+void CIvfSimpleLineSet::doCreateGeometry()
 {
 	int i;
 	glPushAttrib(GL_LIGHTING);
@@ -65,7 +65,7 @@ void CIvfSimpleLineSet::createGeometry()
 				m_colors[ m_coordIndex[i] ][1],
 				m_colors[ m_coordIndex[i] ][2]);
 		}
-		if (m_coordIndex[i] == -1) 
+		if (m_coordIndex[i] == -1)
 		{
 			glEnd();
 			if (i != m_nCoordIndex-1)

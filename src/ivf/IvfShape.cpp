@@ -28,7 +28,7 @@
 
 // ------------------------------------------------------------
 CIvfShape::CIvfShape ()
-		:CIvfObject()
+		:CIvfGLBase()
 		//TODO: check and complete member initialisation list!
 {
 	m_position[0] = 0.0;
@@ -159,7 +159,7 @@ CIvfMaterial* CIvfShape::getMaterial ()
 }
 
 
-void CIvfShape::createMaterial()
+void CIvfShape::doCreateMaterial()
 {
 	if (CIvfGlobalState::getInstance()->isMaterialRenderingEnabled())
 	{
@@ -168,7 +168,7 @@ void CIvfShape::createMaterial()
 			if (m_selectMaterial!=NULL)
 				m_selectMaterial->render();
 			else
-				if (m_material!=NULL) 
+				if (m_material!=NULL)
 					m_material->render();
 		}
 		else
@@ -185,19 +185,19 @@ void CIvfShape::createMaterial()
 				}
 			}
 			else
-				if (m_material!=NULL) 
+				if (m_material!=NULL)
 					m_material->render();
 		}
 	}
 }
 
-void CIvfShape::beginTransform()
+void CIvfShape::doBeginTransform()
 {
 	if (m_renderName)
 		glLoadName(m_objectName);
-	
+
 	glPushMatrix();
-	
+
 	if (!((m_position[0]==0.0)&&(m_position[1]==0.0)&&(m_position[2]==0.0)))
 		glTranslated(m_position[0],m_position[1],m_position[2]);
 
@@ -234,10 +234,10 @@ void CIvfShape::beginTransform()
 					m_texture->apply();
 			}
 		}
-	} 
+	}
 }
 
-void CIvfShape::endTransform()
+void CIvfShape::doEndTransform()
 {
 	if (m_texture!=NULL)
 	{
@@ -310,11 +310,11 @@ void CIvfShape::assignPointTo(CIvfPoint3d* point)
 	point->setComponents(m_position[0], m_position[1], m_position[2]);
 }
 
-void CIvfShape::createGeometry()
+void CIvfShape::doCreateGeometry()
 {
 }
 
-void CIvfShape::createSelect()
+void CIvfShape::doCreateSelect()
 {
 }
 

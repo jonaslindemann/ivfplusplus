@@ -24,11 +24,11 @@
 
 #include <ivffont/IvfPolygonalFont.h>
 
-CIvfPolygonalFont::CIvfPolygonalFont(const char* filename)
+CIvfPolygonalFont::CIvfPolygonalFont(const std::string& filename)
 :CIvfVectorFont(filename)
 {
 	// Add construction code here
-	m_ftglPolygonFont = new FTGLPolygonFont(this->getFilename());
+	m_ftglPolygonFont = new FTGLPolygonFont(this->getFilename().c_str());
 	m_ftglPolygonFont->CharMap(ft_encoding_unicode);
 	m_ftglPolygonFont->FaceSize(1);
 }
@@ -38,9 +38,9 @@ CIvfPolygonalFont::~CIvfPolygonalFont()
 	delete m_ftglPolygonFont;
 }
 
-void CIvfPolygonalFont::createGeometry()
+void CIvfPolygonalFont::doCreateGeometry()
 {
-	m_ftglPolygonFont->Render(this->getText());
+	m_ftglPolygonFont->Render(this->getText().c_str());
 }
 
 void CIvfPolygonalFont::doSetRealFaceSize(const double size)
@@ -59,7 +59,7 @@ void CIvfPolygonalFont::doSetFaceSize(const unsigned int size)
 void CIvfPolygonalFont::doGetSize(double & xsize, double & ysize, double & zsize)
 {
 	float llx, lly, llz, urx, ury, urz;
-	m_ftglPolygonFont->BBox(this->getText(), llx, lly, llz, urx, ury, urz);
+	m_ftglPolygonFont->BBox(this->getText().c_str(), llx, lly, llz, urx, ury, urz);
 	xsize = ((double)urx - (double)llx)*m_scaleFactor;
 	ysize = ((double)ury - (double)lly)*m_scaleFactor;
 	zsize = ((double)urz - (double)llz)*m_scaleFactor;

@@ -19,7 +19,7 @@ CIvfHighlightRenderer::~CIvfHighlightRenderer()
 }
 
 
-void CIvfHighlightRenderer::createGeometry()
+void CIvfHighlightRenderer::doCreateGeometry()
 {
 	CIvfUserSettingsPtr userSettings = CIvfUserSettings::getInstance();
 	CIvfMaterialPtr material = new CIvfMaterial();

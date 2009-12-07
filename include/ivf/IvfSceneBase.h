@@ -193,7 +193,7 @@ public:
 	CIvfShape* removeShape(CIvfShape* shape);
 
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

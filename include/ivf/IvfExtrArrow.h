@@ -95,10 +95,10 @@ public:
 	 *
 	 * Upates the radius of the assigned bounding sphere, if any.
 	 */
-	void updateBoundingSphere();
+	void doUpdateBoundingSphere();
 
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

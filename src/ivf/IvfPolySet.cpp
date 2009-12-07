@@ -32,7 +32,7 @@ CIvfPolySet::~CIvfPolySet()
 
 }
 
-void CIvfPolySet::createGeometry()
+void CIvfPolySet::doCreateGeometry()
 {
 	CIvfIndex* coordIdx;
 	CIvfIndex* colorIdx;
@@ -43,7 +43,7 @@ void CIvfPolySet::createGeometry()
 	long i, j;
 
 	glPushAttrib(GL_COLOR_MATERIAL);
-	
+
 	if (m_useColor)
 		glEnable(GL_COLOR_MATERIAL);
 
@@ -56,11 +56,11 @@ void CIvfPolySet::createGeometry()
 			{
 				int idx = this->getMaterialIndex(i);
 				CIvfMaterial* material;
-				
+
 				if (idx>=0)
 				{
 					material = this->getMaterial(idx);
-					
+
 					if (material!=NULL)
 						material->render();
 				}
@@ -90,35 +90,35 @@ void CIvfPolySet::createGeometry()
 			textureIdx = m_textureIndexSet[i];
 		else
 			textureIdx = NULL;
-		
+
 		for (j=0; j<coordIdx->getSize(); j+=topoHop)
 		{
 			if (getUseVertexNormals())
 				glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j)]->getComponents());
 			else
 				glNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
-			
+
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 
 			if (textureIdx!=NULL)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
-			
+
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
-			
+
 			if (getUseVertexNormals())
 				glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+1)]->getComponents());
 			else
 				glNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
-			
+
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j+1)]->getColor());
-			
+
 			if (textureIdx!=NULL)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+1)]->getComponents());
 
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j+1)]->getComponents());
-			
+
 			if (getUseVertexNormals())
 				glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+2)]->getComponents());
 			else
@@ -126,7 +126,7 @@ void CIvfPolySet::createGeometry()
 
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j+2)]->getColor());
-			
+
 			if (textureIdx!=NULL)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+2)]->getComponents());
 
@@ -138,13 +138,13 @@ void CIvfPolySet::createGeometry()
 					glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+3)]->getComponents());
 				else
 					glNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
-				
+
 				if (m_useColor)
 					glColor3fv(m_colorSet[colorIdx->getIndex(j+3)]->getColor());
-				
+
 				if (textureIdx!=NULL)
 					glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+3)]->getComponents());
-				
+
 				glVertex3dv(m_coordSet[coordIdx->getIndex(j+3)]->getComponents());
 			}
 		}
@@ -183,29 +183,29 @@ void CIvfPolySet::calcNormal(CIvfIndex *idx)
 		for (i=0; i<idx->getSize(); i+=4)
 		{
 			CIvfVec3d* normal = new CIvfVec3d();
-			
+
 			p1 = m_coordSet[idx->getIndex(i)];
 			p2 = m_coordSet[idx->getIndex(i+1)];
 			p3 = m_coordSet[idx->getIndex(i+3)];
-			
+
 			u.setFromPoints(*p1,*p2);
 			v.setFromPoints(*p1,*p3);
 
 			*normal = u*v; // cross product
 			(*normal).normalize();
 
-			/*		
+			/*
 			normalizedcross(u.getComponents(), v.getComponents(), n);
-			
+
 			normal->setComponents(n[0], n[1], n[2]);
 			*/
 
 			m_normalSet.push_back(normal);
-			
+
 			normalIdx->add(m_normalSet.size()-1);
-			
+
 			// Add normal idx to each vertex
-			
+
 			m_vertexNormalIndexSet[idx->getIndex(i)]->add(m_normalSet.size()-1);
 			m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(m_normalSet.size()-1);
 			m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
@@ -217,11 +217,11 @@ void CIvfPolySet::calcNormal(CIvfIndex *idx)
 		for (i=0; i<idx->getSize(); i+=3)
 		{
 			CIvfVec3d* normal = new CIvfVec3d();
-			
+
 			p1 = m_coordSet[idx->getIndex(i)];
 			p2 = m_coordSet[idx->getIndex(i+1)];
 			p3 = m_coordSet[idx->getIndex(i+2)];
-			
+
 			u.setFromPoints(*p1,*p2);
 			v.setFromPoints(*p1,*p3);
 
@@ -234,17 +234,17 @@ void CIvfPolySet::calcNormal(CIvfIndex *idx)
 			*/
 
 			m_normalSet.push_back(normal);
-			
+
 			normalIdx->add(m_normalSet.size()-1);
-			
+
 			// Add normal idx to each vertex
-			
+
 			m_vertexNormalIndexSet[idx->getIndex(i)]->add(m_normalSet.size()-1);
 			m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(m_normalSet.size()-1);
 			m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
 		}
 	}
-	
+
 	m_normalIndexSet.push_back(normalIdx);
 }
 

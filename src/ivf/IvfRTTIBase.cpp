@@ -35,25 +35,25 @@ CIvfRTTIBase::~CIvfRTTIBase()
 }
 
 // ------------------------------------------------------------
-const char* CIvfRTTIBase::getClassNameThis()
+const std::string CIvfRTTIBase::getClassNameThis()
 {
 	return "CIvfRTTIBase";
 }
 
 // ------------------------------------------------------------
-const char* CIvfRTTIBase::getClassName()
+const std::string CIvfRTTIBase::getClassName()
 {
 	return "CIvfRTTIBase";
 }
 
 // ------------------------------------------------------------
-bool CIvfRTTIBase::isClass(const char *name)
+bool CIvfRTTIBase::isClass(const std::string& name)
 {
 	std::string className = this->getClassNameThis();
 
 	if (!className.empty())
 	{
-		if (strcmp(className.c_str(),name)==0)
+		if (className == name)
 			return true;
 		else
 			return false;

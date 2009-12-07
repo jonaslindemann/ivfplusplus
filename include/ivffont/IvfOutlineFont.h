@@ -33,7 +33,7 @@ IvfSmartPointer(CIvfOutlineFont);
 
 /**
  * Outline font class
- * 
+ *
  * CIvfOutlineFont represents a font that renders the font
  * outlines.
  */
@@ -42,14 +42,14 @@ private:
 	FTGLOutlineFont* m_ftglOutlineFont;
 public:
 	/** Class constructor. @see CIvfFont. */
-	CIvfOutlineFont(const char* filename);
+	CIvfOutlineFont(const std::string& filename);
 
 	/** Class destructor. */
 	virtual ~CIvfOutlineFont();
 
 	IvfClassInfo("CIvfOutlineFont", CIvfVectorFont);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 
 	virtual void doSetRealFaceSize(const double size);
 	virtual void doSetFaceSize(const unsigned int size);

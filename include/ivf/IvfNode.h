@@ -79,7 +79,7 @@ public:
 	TNodeType getNodeType();
 
 	/** Updates bounding sphere for node */
-	virtual void updateBoundingSphere();
+	virtual void doUpdateBoundingSphere();
 private:
 	double m_nodeSize;
 	CIvfSelectionBoxPtr m_selectionBox;
@@ -88,7 +88,7 @@ private:
 	CIvfCubePtr m_cubeShape;
 	CIvfSpherePtr m_sphereShape;
 protected:
-	virtual void createSelect();
-	virtual void createGeometry();
+	virtual void doCreateSelect();
+	virtual void doCreateGeometry();
 };
 #endif

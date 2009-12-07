@@ -41,7 +41,7 @@ private:
 	CIvfDiscreteTimePtr m_discreteTime;
 	CIvfCameraPtr m_camera;
 
-	double (*m_sectionCoords)[2];	
+	double (*m_sectionCoords)[2];
 	double (*m_sectionNormals)[2];
 
 	double m_fibreRadius;
@@ -60,7 +60,7 @@ public:
 	void readFromStream(std::istream &in);
 	void saveToStream(std::ostream &out);
 protected:
-	void createGeometry();
+	void doCreateGeometry();
 };
 
-#endif 
+#endif

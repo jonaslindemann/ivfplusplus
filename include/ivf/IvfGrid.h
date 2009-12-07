@@ -125,7 +125,7 @@ public:
 	virtual void refresh();
 
 	/** Updates grid bounding box */
-	virtual void updateBoundingSphere();
+	virtual void doUpdateBoundingSphere();
 
 	/** Returns axis shape */
 	CIvfAxis* getAxisShape();
@@ -133,7 +133,7 @@ public:
 	/** Set drawing interval of grid lines */
 	void setGridInterval(int interval);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

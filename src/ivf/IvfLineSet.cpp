@@ -36,7 +36,7 @@ CIvfLineSet::~CIvfLineSet()
 
 }
 
-void CIvfLineSet::createGeometry()
+void CIvfLineSet::doCreateGeometry()
 {
 	CIvfIndex* coordIdx;
 	CIvfIndex* colorIdx;
@@ -44,7 +44,7 @@ void CIvfLineSet::createGeometry()
 
 	long i, j;
 	float oldWidth[1];
-	
+
 	glPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
 	glDisable(GL_LIGHTING);
 
@@ -70,7 +70,7 @@ void CIvfLineSet::createGeometry()
 			textureIdx = m_textureIndexSet[i];
 		else
 			textureIdx = NULL;
-		
+
 		for (j=0; j<coordIdx->getSize(); j++)
 		{
 			if (m_useColor)
@@ -91,7 +91,7 @@ void CIvfLineSet::createGeometry()
 
 			if (textureIdx!=NULL)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
-			
+
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
 		}
 		glEnd();

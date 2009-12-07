@@ -24,7 +24,7 @@
 
 #include <ivffont/IvfVectorFont.h>
 
-CIvfVectorFont::CIvfVectorFont(const char* filename)
+CIvfVectorFont::CIvfVectorFont(const std::string& filename)
 :CIvfFont(filename)
 {
 	// Add construction code here

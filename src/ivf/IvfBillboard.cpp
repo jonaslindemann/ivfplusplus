@@ -53,7 +53,7 @@ void CIvfBillboard::updateRotation()
 			m_camera->getForwardVector(ex, ey, ez);
 			break;
 		}
-		
+
 		ex = -ex;
 		ey = -ey;
 		ez = -ez;
@@ -76,7 +76,7 @@ void CIvfBillboard::updateRotation()
 
 		//this->setRotationQuat(1.0, 0.0, 0.0, m_angle2*180.0/M_PI-90);
 	}
-}	
+}
 
 void CIvfBillboard::setCamera(CIvfCamera *camera)
 {
@@ -93,14 +93,14 @@ int CIvfBillboard::getBillboardType()
 	return m_billboardType;
 }
 
-void CIvfBillboard::createGeometry()
+void CIvfBillboard::doCreateGeometry()
 {
 	this->updateRotation();
 	glPushMatrix();
 	glRotated(-m_angle1*180.0/M_PI+90, 0.0, 1.0, 0.0);
 	glPushMatrix();
 	glRotated(m_angle2*180.0/M_PI-90, 1.0, 0.0, 0.0);
-	CIvfComposite::createGeometry();
+	CIvfComposite::doCreateGeometry();
 	glPopMatrix();
 	glPopMatrix();
 }
@@ -117,7 +117,7 @@ void CIvfBillboard::setVector(double *v)
 {
 	m_forward[0] = v[0];
 	m_forward[1] = v[1];
-	m_forward[2] = v[2];	
+	m_forward[2] = v[2];
 }
 
 void CIvfBillboard::setAlignObject(int objectType)

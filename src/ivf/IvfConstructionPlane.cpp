@@ -31,7 +31,7 @@ CIvfConstructionPlane::CIvfConstructionPlane()
 	m_cursor->addReference();
 	m_grid = new CIvfGrid();
 	m_grid->addReference();
-	
+
 	m_size[0] = 10.0;
 	m_size[1] = 10.0;
 	m_cursorLocked = false;
@@ -103,40 +103,40 @@ void CIvfConstructionPlane::updateCursor(int x, int y)
 {
 	if (m_camera!=NULL)
 	{
-		
+
 		CIvfVec3d pickVector;
 		CIvfVec3d position;
 		CIvfVec3d intersection;
-		
+
 		if (!m_cursorLocked)
 		{
 			// Calculate pick vector
-			
+
 			pickVector = m_camera->pickVector(x, y);
-			
+
 			// Get camera position
-			
+
 			position = m_camera->getPosition();
-			
+
 			// Calculate intersection with XZ plane
-			
+
 			intersection = m_ucs->intersect(position, pickVector);
-		
+
 			// Align cursor with coordinate system
-			
+
 			m_cursor->setRotationQuat(m_v[0], m_v[1], m_v[2], m_theta);
-			
+
 			// Snap to transformed system
-			
+
 			intersection = m_ucs->transform(intersection);
-			
+
 			if (m_snapToGrid)
 				intersection = m_ucs->snap(intersection);
-			
+
 			m_last = intersection;
 
 			intersection = m_ucs->transformWorld(intersection);
-			
+
 			m_cursor->setPosition(intersection);
 
 
@@ -144,27 +144,27 @@ void CIvfConstructionPlane::updateCursor(int x, int y)
 		else
 		{
 			// Calculate pick vector
-			
+
 			pickVector = m_camera->pickVector(x, y);
-			
+
 			// Get camera position
-			
+
 			position = m_camera->getPosition();
-			
+
 			// Calculate intersection with XZ plane
-			
+
 			intersection = m_ucs->intersect(position, pickVector);
-		
+
 			// Snap to transformed system
-			
+
 			intersection = m_ucs->transform(intersection);
-			
+
 			if (m_snapToGrid)
 				intersection = m_ucs->snap(intersection);
 
 			CIvfVec3d delta;
 			delta = m_last - intersection;
-			
+
 			double sign;
 			if ( (m_cursorY-m_cursorStartY)>0 )
 				sign = -1.0;
@@ -175,38 +175,38 @@ void CIvfConstructionPlane::updateCursor(int x, int y)
 			wlast = m_ucs->transformWorld(m_last);
 			CIvfVec3d newPos;
 			newPos = wlast + sign*delta.length()*m_ucs->getYAxis();
-			
+
 			//m_ucs->transformWorld(newPos);
 			m_cursor->setPosition(newPos);
 
-			
+
 			/*
-			// Calculate y movement 
+			// Calculate y movement
 			double sign;
-			
+
 			if ( (m_cursorY-m_cursorStartY)>0 )
 				sign = -1.0;
 			else
 				sign = 1.0;
-			
+
 			dist = sign*sqrt(pow(m_cursorX-m_cursorStartX,2) + pow(m_cursorY - m_cursorStartY,2));
 			camera->getViewPort(viewWidth, viewHeight);
 			dy = 10*m_objectSize * (dist / sqrt(pow(viewHeight,2) + pow(viewWidth,2)));
-			
+
 			// move cursor in transformed y direction
-			
+
 			m_cursor->getPosition(ix, iy, iz);
 			m_world->transform(ix, iy, iz, ix, iy, iz);
 			iy = dy;
-			
+
 			if (m_snapToGrid)
 				m_world->snap(ix, iy, iz);
-			
+
 			m_world->transformWorld(ix, iy, iz, ix, iy, iz);
 			m_cursor->setPosition(ix, iy, iz);
 			*/
 		}
-		
+
 		m_cursorX = x;
 		m_cursorY = y;
 	}
@@ -237,7 +237,7 @@ CIvfUcs3d* CIvfConstructionPlane::getUcs()
 	return m_ucs;
 }
 
-void CIvfConstructionPlane::createGeometry()
+void CIvfConstructionPlane::doCreateGeometry()
 {
 	m_grid->render();
 	if (m_active) m_cursor->render();
@@ -289,7 +289,7 @@ bool CIvfConstructionPlane::isActive()
 	return m_active;
 }
 
-void CIvfConstructionPlane::updateBoundingSphere()
+void CIvfConstructionPlane::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{
@@ -305,7 +305,7 @@ void CIvfConstructionPlane::getPosition(double &x, double &y, double &z)
 
 CIvfVec3d& CIvfConstructionPlane::getCursorPosition()
 {
-	CIvfVec3d& pos = ivfGetTempVec3d(); 
+	CIvfVec3d& pos = ivfGetTempVec3d();
 	pos = m_cursor->getPosition();
 	return pos;
 }

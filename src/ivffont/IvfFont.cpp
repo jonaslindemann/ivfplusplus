@@ -28,7 +28,7 @@
 
 using namespace std;
 
-CIvfFont::CIvfFont(const char* filename)
+CIvfFont::CIvfFont(const std::string& filename)
 {
 	// Add construction code here
 
@@ -40,17 +40,17 @@ CIvfFont::~CIvfFont()
 {
 }
 
-const char* CIvfFont::getFilename(void)
+const std::string CIvfFont::getFilename(void)
 {
-	return m_filename.c_str();
+	return m_filename;
 }
 
-const char* CIvfFont::getText(void)
+const std::string CIvfFont::getText(void)
 {
-	return m_text.c_str();
+	return m_text;
 }
 
-void CIvfFont::setText(const char* text)
+void CIvfFont::setText(const std::string& text)
 {
 	m_text = text;
 	this->doSetText(text);
@@ -78,7 +78,7 @@ double CIvfFont::getDepth(void)
 	return m_depth;
 }
 
-void CIvfFont::doSetText(const char* text)
+void CIvfFont::doSetText(const std::string& text)
 {
 }
 

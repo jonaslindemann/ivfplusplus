@@ -38,7 +38,7 @@ class IVFEXT_API CIvfTgaImage : public CIvfFileImage {
 private:
 	bool m_alphaChannel;
 
-typedef	struct									
+typedef	struct
 {
 	GLubyte	* imageData;									// Image Data (Up To 32 Bits)
 	GLuint	bpp;											// Image Color Depth In Bits Per Pixel
@@ -46,7 +46,7 @@ typedef	struct
 	GLuint	height;											// Image Height
 	GLuint	texID;											// Texture ID Used To Select A Texture
 	GLuint	type;											// Image Type (GL_RGB, GL_RGBA)
-} Texture;	
+} Texture;
 
 
 typedef struct
@@ -60,7 +60,7 @@ typedef struct
 	GLuint		bytesPerPixel;							// Holds Number Of Bytes Per Pixel Used In The TGA File
 	GLuint		imageSize;								// Used To Store The Image Size When Setting Aside Ram
 	GLuint		temp;									// Temporary Variable
-	GLuint		type;	
+	GLuint		type;
 	GLuint		Height;									//Height of Image
 	GLuint		Width;									//Width ofImage
 	GLuint		Bpp;									// Bits Per Pixel
@@ -80,17 +80,17 @@ public:
 	CIvfTgaImage();
 
 	/** CIvfTgaImage constructor */
-	CIvfTgaImage(const char* name);
+	CIvfTgaImage(const std::string& name);
 
 	/** CIvfTgaImage destructor */
 	virtual ~CIvfTgaImage();
-	
+
 	IvfClassInfo("CIvfTgaImage",CIvfFileImage);
 
 	/** Reads Tga image */
 	virtual bool read();
 
-	/** 
+	/**
 	 * Alpha channel flag
 	 *
 	 * If set to true the alpha channel will be read, if
@@ -99,4 +99,4 @@ public:
 	void setAlphaChannel(bool flag);
 };
 
-#endif 
+#endif

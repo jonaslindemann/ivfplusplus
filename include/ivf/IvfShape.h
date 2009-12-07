@@ -25,7 +25,7 @@
 #ifndef _CIvfShape_h_
 #define _CIvfShape_h_
 
-#include <ivf/IvfObject.h>
+#include <ivf/IvfGLBase.h>
 #include <ivf/IvfMaterial.h>
 #include <ivf/IvfTexture.h>
 
@@ -43,16 +43,16 @@ IvfSmartPointer(CIvfShape);
 /**
  * Abstract shape class with material and position.
  *
- * CIvfShape implements a CIvfObject with a material and a position.
+ * CIvfShape implements a CIvfGLBase with a material and a position.
  * Methods for moving, and rotation are implemented. The CIvfShape
  * also has a special material and state for a highlight effect.
  * CIvfShape should be considered an abstract class. Classes derived 
- * from CIvfShape should override the createGeometry, 
- * createSelect methods.
+ * from CIvfShape should override the doCreateGeometry, 
+ * doCreateSelect methods.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfShape : public CIvfObject {
+class IVF_API CIvfShape : public CIvfGLBase {
 public:
 	enum THighlightState {
 		HS_ON,
@@ -73,7 +73,7 @@ public:
 	/** CIvfShape destructor */
 	virtual ~CIvfShape ();
 
-	IvfClassInfo("CIvfShape",CIvfObject);
+	IvfClassInfo("CIvfShape",CIvfGLBase);
 
 	/** Force object refresh */
 	virtual void refresh();
@@ -293,10 +293,10 @@ private:
 	bool m_normalize;
 protected:
 	/** Forces an object recalculation. */
-	virtual void createGeometry();
-	virtual void createSelect();
-	virtual void endTransform();
-	virtual void beginTransform();
-	virtual void createMaterial();
+	virtual void doCreateGeometry();
+	virtual void doCreateSelect();
+	virtual void doEndTransform();
+	virtual void doBeginTransform();
+	virtual void doCreateMaterial();
 };
 #endif

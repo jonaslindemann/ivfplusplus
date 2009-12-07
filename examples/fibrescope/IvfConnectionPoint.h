@@ -67,7 +67,7 @@ public:
 	void saveToStream(ostream &out);
 
 protected:
-	void createGeometry();
+	void doCreateGeometry();
 };
 
-#endif 
+#endif

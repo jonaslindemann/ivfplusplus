@@ -62,7 +62,7 @@ double CIvfSphere::getRadius ()
 }
 
 // ------------------------------------------------------------
-void CIvfSphere::createGeometry()
+void CIvfSphere::doCreateGeometry()
 {
 	glPushMatrix();
 		glRotated(90, 1.0, 0.0, 0.0);
@@ -102,13 +102,13 @@ void CIvfSphere::updateSelectBox()
 }
 
 // ------------------------------------------------------------
-void CIvfSphere::createSelect()
+void CIvfSphere::doCreateSelect()
 {
 	m_selectionBox->render();
 }
 
 // ------------------------------------------------------------
-void CIvfSphere::updateBoundingSphere()
+void CIvfSphere::doUpdateBoundingSphere()
 {
 	// This is very simple
 

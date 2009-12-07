@@ -29,7 +29,7 @@ CIvfGlePolyCylinder::CIvfGlePolyCylinder()
 	m_radius = 0.1;
 }
 
-void CIvfGlePolyCylinder::createGeometry()
+void CIvfGlePolyCylinder::doCreateGeometry()
 {
 	if ((m_pointArray!=NULL)&&(m_colorArray==NULL))
 	{
@@ -37,7 +37,7 @@ void CIvfGlePolyCylinder::createGeometry()
 		temp = (double (*)[3])m_pointArray->getData();
 
 		glePolyCylinder(
-			m_pointArray->getSize(), 
+			m_pointArray->getSize(),
 			temp,
 			NULL,
 			m_radius
@@ -50,14 +50,14 @@ void CIvfGlePolyCylinder::createGeometry()
 		{
 			gleDouble (*temp1)[3];
 			temp1 = (double (*)[3])m_pointArray->getData();
-			
+
 			float (*temp2)[3];
 			temp2 = (float (*)[3])m_colorArray->getData();
 
 			glEnable(GL_COLOR_MATERIAL);
 
 			glePolyCylinder(
-				m_pointArray->getSize(), 
+				m_pointArray->getSize(),
 				temp1,
 				temp2,
 				m_radius

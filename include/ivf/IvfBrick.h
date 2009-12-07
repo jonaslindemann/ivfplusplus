@@ -73,7 +73,7 @@ private:
 	void updateBrick();
 protected:
 	double	m_size[3];
-	virtual void createSelect();
+	virtual void doCreateSelect();
 	virtual void initBrick();
 };
 #endif

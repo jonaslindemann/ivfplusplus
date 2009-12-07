@@ -67,7 +67,7 @@ void CIvfGLPrimitive::addColor(float red, float green, float blue)
 	CIvfColor* color = new CIvfColor();
 	color->setColor(red, green, blue);
 	m_colorSet.push_back(color);
-}	
+}
 
 void CIvfGLPrimitive::addNormal(double n1, double n2, double n3)
 {
@@ -95,7 +95,7 @@ long CIvfGLPrimitive::getCoordSetSize()
 }
 
 long CIvfGLPrimitive::getColorSetSize()
-{	
+{
 	return m_colorSet.size();
 }
 
@@ -309,7 +309,7 @@ void CIvfGLPrimitive::refresh()
 		delete m_normalSet[i];
 	//for (i=0; i<m_normalIndexSet.size(); i++)
 	//	delete m_normalIndexSet[i];
-	
+
 	m_normalSet.clear();
 	m_normalIndexSet.clear();
 
@@ -325,7 +325,7 @@ void CIvfGLPrimitive::addColor(float red, float green, float blue, float alfa)
 	CIvfColor* color = new CIvfColor();
 	color->setColor(red, green, blue);
 	color->setAlfa(alfa);
-	m_colorSet.push_back(color);	
+	m_colorSet.push_back(color);
 }
 
 void CIvfGLPrimitive::setColor(int pos, float red, float green, float blue, float alfa)
@@ -362,7 +362,7 @@ float CIvfGLPrimitive::getAlfa(int pos)
 		return 0.0f;
 }
 
-void CIvfGLPrimitive::updateBoundingSphere()
+void CIvfGLPrimitive::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{
@@ -400,7 +400,7 @@ void CIvfGLPrimitive::updateBoundingSphere()
 
 		radius = sqrt(
 			pow(maxSize[0]-midPoint[0],2) +
-			pow(maxSize[1]-midPoint[1],2) + 
+			pow(maxSize[1]-midPoint[1],2) +
 			pow(maxSize[2]-midPoint[2],2));
 
 		getBoundingSphere()->setRadius(radius);
@@ -443,5 +443,5 @@ void CIvfGLPrimitive::clearMaterial()
 
 int CIvfGLPrimitive::getCoordIndexSetSize()
 {
-	return m_coordIndexSet.size();	
+	return m_coordIndexSet.size();
 }

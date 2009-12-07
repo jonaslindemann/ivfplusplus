@@ -36,7 +36,7 @@ CIvfNodeCursor::CIvfNodeCursor()
 	this->setUseName(false);
 
 	m_cursorShape = new CIvfComposite();
-	
+
 	CIvfMaterialPtr material = new CIvfMaterial();
 	material->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -70,13 +70,13 @@ CIvfNodeCursor::CIvfNodeCursor()
 
 	m_arrowY1 = new CIvfTransform();
 	m_arrowY1->addChild(m_arrow);
-	m_arrowY1->setState(CIvfObject::OS_OFF);
+	m_arrowY1->setState(CIvfGLBase::OS_OFF);
 	m_arrowY1->setUseName(false);
 
 	m_arrowY2 = new CIvfTransform();
 	m_arrowY2->addChild(m_arrow);
 	m_arrowY2->setRotationQuat(0.0, 0.0, 1.0, -180.0);
-	m_arrowY2->setState(CIvfObject::OS_OFF);
+	m_arrowY2->setState(CIvfGLBase::OS_OFF);
 	m_arrowY2->setUseName(false);
 
 	CIvfMaterialPtr planeMaterial = new CIvfMaterial();
@@ -85,7 +85,7 @@ CIvfNodeCursor::CIvfNodeCursor()
 	planeMaterial->setAmbientColor(0.0f, 0.0f, 0.0f, 0.5f);
 	m_plane = new CIvfQuadPlane();
 	m_plane->setMaterial(planeMaterial);
-	m_plane->setState(CIvfObject::OS_OFF);
+	m_plane->setState(CIvfGLBase::OS_OFF);
 	m_plane->setOrientation(CIvfQuadPlane::PO_XZ);
 	m_plane->setSize(100.0, 100.0);
 	m_plane->setUseName(false);
@@ -132,50 +132,50 @@ void CIvfNodeCursor::setType(TCursorType type)
 
 	switch (m_cursorType) {
 	case CT_XZ:
-		m_arrowY1->setState(CIvfObject::OS_OFF);
-		m_arrowY2->setState(CIvfObject::OS_OFF);
-		m_arrowXZ1->setState(CIvfObject::OS_ON);
-		m_arrowXZ2->setState(CIvfObject::OS_ON);
-		m_arrowXZ3->setState(CIvfObject::OS_ON);
-		m_arrowXZ4->setState(CIvfObject::OS_ON);
+		m_arrowY1->setState(CIvfGLBase::OS_OFF);
+		m_arrowY2->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ1->setState(CIvfGLBase::OS_ON);
+		m_arrowXZ2->setState(CIvfGLBase::OS_ON);
+		m_arrowXZ3->setState(CIvfGLBase::OS_ON);
+		m_arrowXZ4->setState(CIvfGLBase::OS_ON);
 		if (m_usePlane)
-			m_plane->setState(CIvfObject::OS_OFF);
+			m_plane->setState(CIvfGLBase::OS_OFF);
 		break;
 	case CT_Y:
-		m_arrowY1->setState(CIvfObject::OS_ON);
-		m_arrowY2->setState(CIvfObject::OS_ON);
-		m_arrowXZ1->setState(CIvfObject::OS_OFF);
-		m_arrowXZ2->setState(CIvfObject::OS_OFF);
-		m_arrowXZ3->setState(CIvfObject::OS_OFF);
-		m_arrowXZ4->setState(CIvfObject::OS_OFF);
+		m_arrowY1->setState(CIvfGLBase::OS_ON);
+		m_arrowY2->setState(CIvfGLBase::OS_ON);
+		m_arrowXZ1->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ2->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ3->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ4->setState(CIvfGLBase::OS_OFF);
 		if (m_usePlane)
-			m_plane->setState(CIvfObject::OS_ON);
+			m_plane->setState(CIvfGLBase::OS_ON);
 		break;
 	case CT_XYZ:
-		m_arrowY1->setState(CIvfObject::OS_ON);
-		m_arrowY2->setState(CIvfObject::OS_ON);
-		m_arrowXZ1->setState(CIvfObject::OS_ON);
-		m_arrowXZ2->setState(CIvfObject::OS_ON);
-		m_arrowXZ3->setState(CIvfObject::OS_ON);
-		m_arrowXZ4->setState(CIvfObject::OS_ON);
+		m_arrowY1->setState(CIvfGLBase::OS_ON);
+		m_arrowY2->setState(CIvfGLBase::OS_ON);
+		m_arrowXZ1->setState(CIvfGLBase::OS_ON);
+		m_arrowXZ2->setState(CIvfGLBase::OS_ON);
+		m_arrowXZ3->setState(CIvfGLBase::OS_ON);
+		m_arrowXZ4->setState(CIvfGLBase::OS_ON);
 		break;
 	case CT_Y_TOP:
-		m_arrowY1->setState(CIvfObject::OS_OFF);
-		m_arrowY2->setState(CIvfObject::OS_ON);
-		m_arrowXZ1->setState(CIvfObject::OS_OFF);
-		m_arrowXZ2->setState(CIvfObject::OS_OFF);
-		m_arrowXZ3->setState(CIvfObject::OS_OFF);
-		m_arrowXZ4->setState(CIvfObject::OS_OFF);
+		m_arrowY1->setState(CIvfGLBase::OS_OFF);
+		m_arrowY2->setState(CIvfGLBase::OS_ON);
+		m_arrowXZ1->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ2->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ3->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ4->setState(CIvfGLBase::OS_OFF);
 		break;
 	case CT_NONE:
-		m_arrowY1->setState(CIvfObject::OS_OFF);
-		m_arrowY2->setState(CIvfObject::OS_OFF);
-		m_arrowXZ1->setState(CIvfObject::OS_OFF);
-		m_arrowXZ2->setState(CIvfObject::OS_OFF);
-		m_arrowXZ3->setState(CIvfObject::OS_OFF);
-		m_arrowXZ4->setState(CIvfObject::OS_OFF);
+		m_arrowY1->setState(CIvfGLBase::OS_OFF);
+		m_arrowY2->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ1->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ2->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ3->setState(CIvfGLBase::OS_OFF);
+		m_arrowXZ4->setState(CIvfGLBase::OS_OFF);
 		if (m_usePlane)
-			m_plane->setState(CIvfObject::OS_OFF);
+			m_plane->setState(CIvfGLBase::OS_OFF);
 		break;
 	default:
 		break;
@@ -187,7 +187,7 @@ void CIvfNodeCursor::setShape(CIvfShape *shape)
 	m_nodeShape = shape;
 }
 
-void CIvfNodeCursor::createGeometry()
+void CIvfNodeCursor::doCreateGeometry()
 {
 	m_cursorShape->render();
 

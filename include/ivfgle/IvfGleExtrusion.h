@@ -49,7 +49,7 @@ public:
 	void setContourUp(double vx, double vy, double vz);
 	void setContourUp(CIvfVec3d& vec);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif

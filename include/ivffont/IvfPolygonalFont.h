@@ -35,7 +35,7 @@ IvfSmartPointer(CIvfPolygonalFont);
 
 /**
  * Polygonal font class
- * 
+ *
  * The CIvfPolygonalFont represents a font rendered with a flat surface.
  */
 class IVFFONT_API CIvfPolygonalFont: public CIvfVectorFont {
@@ -44,14 +44,14 @@ private:
 	double m_scaleFactor;
 public:
 	/** Class constructor. @see CIvfFont. */
-	CIvfPolygonalFont(const char* filename);
+	CIvfPolygonalFont(const std::string& filename);
 
 	/** Class destructor. */
 	virtual ~CIvfPolygonalFont();
 
 	IvfClassInfo("CIvfPolygonalFont", CIvfVectorFont);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 	virtual void doSetRealFaceSize(const double size);
 	virtual void doSetFaceSize(const unsigned int size);
 	virtual void doGetSize(double & xsize, double & ysize, double & zsize);

@@ -64,18 +64,18 @@ public:
 	 *
 	 * Returns true if name is equal to the name of the class.
 	 * @param name Class name to be queried.
-	 */	 
-	virtual bool isClass(const char * name);
-	
+	 */
+	virtual bool isClass(const std::string& name);
+
 	/**
 	 * Returns the name of the class.
 	 *
-	 * The name buffer must be large enough to hold the 
+	 * The name buffer must be large enough to hold the
 	 * name of the class.
 	 * @param name Reference to a string buffer.
 	 */
-	const char* getClassNameThis();
-	virtual const char* getClassName();
+	const std::string getClassNameThis();
+	virtual const std::string getClassName();
 };
 
-#endif 
+#endif

@@ -102,7 +102,7 @@ public:
 	/** Set position of control point */
 	void setControlPoint(int i, int j, double y);
 protected:
-	void createGeometry();
+	void doCreateGeometry();
 	void initialize();
 };
 

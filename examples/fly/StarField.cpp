@@ -37,7 +37,7 @@ CStarField::~CStarField()
 {
 }
 
-void CStarField::createGeometry()
+void CStarField::doCreateGeometry()
 {
 	double x, y, z;
 	m_camera->getPosition(x, y, z);
@@ -61,7 +61,7 @@ void CStarField::createGeometry()
 	glEnable(GL_ALPHA_TEST);
 
 	m_planets->render();
-	
+
 	glDisable(GL_ALPHA_TEST);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
@@ -158,7 +158,7 @@ void CStarField::initializeStars()
 	idx = new CIvfIndex();
 	idx->createLinear(0, nPointStars);
 	m_pointStars->addCoordIndex(idx);
-	
+
 	idx = new CIvfIndex();
 	idx->createLinear(0, nPointStars);
 	m_pointStars->addColorIndex(idx);
@@ -226,7 +226,7 @@ void CStarField::getPolarVectors(double alfa, double beta, CIvfVec3d &normal, CI
 
 	normal.setComponents(x, y, z);
 	normal.normalize();
-	
+
 	x = sin(alfa);
 	z = -cos(alfa);
 	y = 0.0;

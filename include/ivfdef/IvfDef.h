@@ -197,7 +197,7 @@
 		#define IVFWIN32_API
 		#define IVFFONT_API
 		#define IVFGLE_API
-#endif 
+#endif
 
 #define IvfStdPointer(classname) \
 	class classname; \
@@ -214,13 +214,13 @@
 	typedef classname* classname##StdPtr;
 
 #define IvfClassInfo(ivfclassname,ivfparent) \
-	const char* getClassNameThis() { return ivfclassname; } \
-	virtual const char* getClassName() { return ivfclassname; } \
-	virtual bool isClass(char* name) { \
+	const std::string getClassNameThis() { return ivfclassname; } \
+	virtual const std::string getClassName() { return ivfclassname; } \
+	virtual bool isClass(const std::string& name) { \
 		std::string className; \
 		className = getClassNameThis(); \
 		if (!className.empty()) { \
-			if (strcmp(className.c_str(), name)==0) \
+			if (className == name) \
 				return true; \
 			else \
 				return ivfparent::isClass(name); \
@@ -230,15 +230,15 @@
 	}
 
 #define IvfClassInfoTop(ivfclassname) \
-	void getClassNameThis(char* name) { strcpy(name, ivfclassname); } \
-	const char* getClassNameThis() { return ivfclassname; } \
-	virtual void getClassName(char* name) { strcpy(name, ivfclassname); } \
-	virtual const char* getClassName() { return ivfclassname; } \
-	virtual bool isClass(char* name) { \
-		char className[30] = ""; \
-		getClassNameThis(className); \
-		if (className!=NULL) { \
-			if (strcmp(className, name)==0) \
+	void getClassNameThis(std::string& name) { name = ivfclassname; } \
+	const std::string getClassNameThis() { return ivfclassname; } \
+	virtual void getClassName(std::string& name) { name = ivfclassname; } \
+	virtual const std::string getClassName() { return ivfclassname; } \
+	virtual bool isClass(const std::string& name) { \
+	    std::string className = ""; \
+		className = getClassNameThis(); \
+		if (!className.empty()) { \
+			if (className == name) \
 				return true; \
 			else \
 				return false; \

@@ -24,10 +24,10 @@
 
 #include <ivffont/IvfOutlineFont.h>
 
-CIvfOutlineFont::CIvfOutlineFont(const char* filename)
+CIvfOutlineFont::CIvfOutlineFont(const std::string& filename)
 :CIvfVectorFont(filename)
 {
-	m_ftglOutlineFont = new FTGLOutlineFont(this->getFilename());
+	m_ftglOutlineFont = new FTGLOutlineFont(this->getFilename().c_str());
 	m_ftglOutlineFont->CharMap(ft_encoding_unicode);
 	m_ftglOutlineFont->FaceSize(1);
 }
@@ -37,9 +37,9 @@ CIvfOutlineFont::~CIvfOutlineFont()
 	delete m_ftglOutlineFont;
 }
 
-void CIvfOutlineFont::createGeometry()
+void CIvfOutlineFont::doCreateGeometry()
 {
-	m_ftglOutlineFont->Render(this->getText());
+	m_ftglOutlineFont->Render(this->getText().c_str());
 }
 
 void CIvfOutlineFont::doSetFaceSize(const unsigned int size)
@@ -58,7 +58,7 @@ void CIvfOutlineFont::doSetRealFaceSize(const double size)
 void CIvfOutlineFont::doGetSize(double & xsize, double & ysize, double & zsize)
 {
 	float llx, lly, llz, urx, ury, urz;
-	m_ftglOutlineFont->BBox(this->getText(), llx, lly, llz, urx, ury, urz);
+	m_ftglOutlineFont->BBox(this->getText().c_str(), llx, lly, llz, urx, ury, urz);
 	xsize = (double)urx - (double)llx;
 	ysize = (double)ury - (double)lly;
 	zsize = (double)urz - (double)llz;

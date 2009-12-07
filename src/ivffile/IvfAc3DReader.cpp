@@ -88,10 +88,10 @@ void CIvfAc3DReader::read()
 
 	// Open file
 
-	m_inputFile.open(getFileName(),ios::in);
+	m_inputFile.open(getFileName().c_str(),ios::in);
 
 	// Check file
-	
+
 	if (!m_inputFile)
 	{
 		IvfDbg1("CIvfAc3DReader: File invalid.");
@@ -148,12 +148,12 @@ bool CIvfAc3DReader::readData(istream &in)
 	int keyword;
 	int optionalKeyword;
 
-	while (!in.eof()) 
+	while (!in.eof())
 	{
 		getLine(m_row);
 
 		using namespace std;
-	
+
 		keyword = getKeyword(m_row);
 		optionalKeyword = OKW_ERROR;
 
@@ -226,7 +226,7 @@ bool CIvfAc3DReader::readData(istream &in)
 
 				break;
 			default:
-				
+
 				break;
 			}
 			break;
@@ -351,7 +351,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 	else if (find("group", row))
 	{
 
-		IvfDbg1("CIvfAc3DReader: Group object found.");	
+		IvfDbg1("CIvfAc3DReader: Group object found.");
 		m_currentObject = OT_GROUP;
 
 		while (!haveMoreChildren())
@@ -395,7 +395,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 	using namespace std;
 
 	//istringstream strStream(buff,sizeof(buff));
-	
+
 	string params;
 
 	IvfDbg1("CIvfAc3DReader: Found material.");
@@ -433,7 +433,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 
 	material->setDiffuseColor(fValue1, fValue2, fValue3, 1.0f);
 
-	// 
+	//
 	// Read ambient values
 	//
 
@@ -543,7 +543,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 bool CIvfAc3DReader::parseSurf(string &row)
 {
 	using namespace std;
-	
+
 	string params;
 
 	istringstream strStream;
@@ -551,7 +551,7 @@ bool CIvfAc3DReader::parseSurf(string &row)
 	bool poly = false;
 
 	unsigned int flags;
-	
+
 	using namespace std;
 
 	params = row.substr(5);
@@ -566,7 +566,7 @@ bool CIvfAc3DReader::parseSurf(string &row)
 		m_surfaceType = ST_POLY;
 
 	//m_surfaceType = (int)(flags & 0xF);
-	//m_shadingType = 
+	//m_shadingType =
 
 	m_surfacesRead++;
 
@@ -579,7 +579,7 @@ bool CIvfAc3DReader::parseName(string &row)
 
 	string params;
 	int pos1, pos2;
-	
+
 
 	params = row.substr(5);
 
@@ -592,12 +592,12 @@ bool CIvfAc3DReader::parseName(string &row)
 
 	if (m_currentObject!=OT_LIGHT)
 	{
-		
+
 		IvfDbg1("CIvfAc3DReader: name = " << m_currentName.c_str());
-		
+
 		if (m_currentShape!=NULL)
 			m_currentShape->setName(m_currentName.c_str());
-		
+
 		//IvfDbg1("\tName : " <
 	}
 
@@ -615,7 +615,7 @@ bool CIvfAc3DReader::parseTexrep(string &row)
 	using namespace std;
 
 	params = row.substr(7);
-	
+
 	strStream.str(params);
 	strStream.seekg(0);
 	strStream >> m_texrep[0] >> m_texrep[1];
@@ -728,7 +728,7 @@ bool CIvfAc3DReader::parseNumvert(string &row, istream &in)
 
 	int i, nVerts;
 	double x, y, z;
-	
+
 	using namespace std;
 
 	params = row.substr(8);
@@ -804,7 +804,7 @@ bool CIvfAc3DReader::parseRefs(string &row, istream &in)
 
 	CIvfIndex* textureIndex;
 	CIvfIndex* idx;
-	
+
 	params = row.substr(5);
 
 	strStream.str(params);
@@ -819,7 +819,7 @@ bool CIvfAc3DReader::parseRefs(string &row, istream &in)
 	else
 	{
 		// Default shape is a CIvfPolySet. Now we want a
-		// CIvfLineStripSet, so we have to convert the 
+		// CIvfLineStripSet, so we have to convert the
 		// polyset to a line strip set.
 
 		idx = new CIvfIndex();
@@ -844,21 +844,21 @@ bool CIvfAc3DReader::parseRefs(string &row, istream &in)
 		for (i=0; i<nVertices; i++)
 		{
 			in >> coordIdx >> s >> t;
-			
+
 			m_currentPolySet->addTextureCoord(s, t);
 			textureIndex->add(m_currentTextureIndex);
 			m_currentTextureIndex++;
-			
+
 			idx->add(coordIdx);
 		}
-		
+
 		if ((nVertices>2)&&(nVertices<5))
 		{
 			if (nVertices==3)
 				idx->setTopology(IVF_IDX_TRIANGLES);
-			else 
+			else
 				idx->setTopology(IVF_IDX_QUADS);
-			
+
 			m_currentPolySet->addCoordIndex(idx);
 			m_currentPolySet->addTextureIndex(textureIndex);
 			m_currentPolySet->addMaterialIndex(m_currentMaterialIdx);
@@ -881,7 +881,7 @@ bool CIvfAc3DReader::parseRefs(string &row, istream &in)
 		m_currentLineStripSet->addCoordIndex(idx);
 		m_currentLineStripSet->addMaterialIndex(m_currentMaterialIdx);
 	}
-	
+
 	return true;
 }
 
@@ -910,7 +910,7 @@ bool CIvfAc3DReader::parseKids(string &row)
 			m_currentGroup->addChild(group);
 
 			pushGroup(group);
-			
+
 			m_currentGroup = group;
 			m_currentShape = group;
 
@@ -922,9 +922,9 @@ bool CIvfAc3DReader::parseKids(string &row)
 		{
 			//IvfDbg1("group, kids = " << m_currentNumberOfKids);
 		}
-		
+
 		m_childStack[m_currentLevel] = m_currentNumberOfKids;
-		
+
 		if (m_currentGroup->getTag()<0)
 		{
 			//IvfDbg1("loc = " << m_currentPos[0] << ", " << m_currentPos[1] << ", " << m_currentPos[2]);

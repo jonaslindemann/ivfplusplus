@@ -42,27 +42,27 @@ private:
 	unsigned int m_faceSize;
 	double m_depth;
 public:
-	/** 
-	 * CIvfFont constructor. 
-	 * 
+	/**
+	 * CIvfFont constructor.
+	 *
 	 * param filename full path to truetype font (.ttf)
 	 */
-	CIvfFont(const char* filename);
+	CIvfFont(const std::string& filename);
 
 	/** Class destructor */
 	virtual ~CIvfFont();
 
 	/** Returns font filename of currently loaded font. */
-	const char* getFilename(void);
+	const std::string getFilename(void);
 
 	IvfClassInfo("CIvfFont", CIvfShape);
-	
+
 	/** Set the text to be rendered. */
-	void setText(const char* text);
+	void setText(const std::string& text);
 
 	/** Return the current assigned text. */
-	const char* getText(void);
-	
+	const std::string getText(void);
+
 	/** Set the size of the face in points. */
 	void setFaceSize(const unsigned int faceSize);
 
@@ -79,7 +79,7 @@ public:
 	virtual void getSize(double & xsize, double & ysize, double & zsize);
 
 protected:
-	virtual void doSetText(const char* text);
+	virtual void doSetText(const std::string& text);
 	virtual void doSetFaceSize(const unsigned int faceSize);
 	virtual void doSetDepth(const double depth);
 };

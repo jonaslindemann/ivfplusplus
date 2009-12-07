@@ -37,7 +37,7 @@ public:
 
 	IvfClassInfo("CIvfPixmapFont", CIvfShape);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif

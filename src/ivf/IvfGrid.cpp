@@ -171,7 +171,7 @@ void CIvfGrid::initGrid()
 
 	m_gridLines->addCoord(0, y1, z1);
 	m_gridLines->addCoord(0, y1, z2);
-	
+
 	m_gridLines->addCoord(x1, y1, 0);
 	m_gridLines->addCoord(x2, y1, 0);
 
@@ -184,10 +184,10 @@ void CIvfGrid::initGrid()
 
 	colorIdx = new CIvfIndex();
 	colorIdx->add(0,0);
-	colorIdx->add(0,0); 
+	colorIdx->add(0,0);
 
 	double x, z;
-	int i = 4 ; 
+	int i = 4 ;
 	int j = 0;
 
 	for (x=x1; x<x2; x+=m_gridSpacing)
@@ -236,7 +236,7 @@ void CIvfGrid::refresh()
 	initGrid();
 }
 
-void CIvfGrid::createGeometry()
+void CIvfGrid::doCreateGeometry()
 {
 	if (m_useCorners) m_corners->render();
 	if (m_useOutline) m_outline->render();
@@ -286,7 +286,7 @@ void CIvfGrid::setUseSurface(bool flag)
 	m_useSurface = flag;
 }
 
-void CIvfGrid::updateBoundingSphere()
+void CIvfGrid::doUpdateBoundingSphere()
 {
 	// This is very simple
 

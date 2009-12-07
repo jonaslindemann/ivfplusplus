@@ -22,8 +22,8 @@
 // Written by Jonas Lindemann
 //
 
-#ifndef _CIvfObject_h_
-#define _CIvfObject_h_
+#ifndef _CIvfGLBase_h_
+#define _CIvfGLBase_h_
 
 #include <ivf/IvfBase.h>
 #include <ivfmath/IvfBoundingSphere.h>
@@ -31,19 +31,19 @@
 
 #include <ivf/IvfGL.h>
 
-IvfSmartPointer(CIvfObject);
+IvfSmartPointer(CIvfGLBase);
 
 static double g_nodeSize = 0.2;
 
 /**
  * Root class "renderable" objects
  *
- * CIvfObject has virtual functions for handling drawing and transformations 
+ * CIvfGLBase has virtual functions for handling drawing and transformations
  * in OpenGL.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfObject : public CIvfBase {
+class IVF_API CIvfGLBase : public CIvfBase {
 public:
 	enum TObjectState {
 		OS_ON,
@@ -77,17 +77,17 @@ public:
 	bool isEnabled();
 	void disable();
 	void enable();
-	/** CIvfObject constructor */
-	CIvfObject ();
-	
-	/** CIvfObject constructor */
-	CIvfObject (const CIvfObject&);
-	
-	/** CIvfObject destructor */
-	virtual ~CIvfObject ();
-	CIvfObject& operator = (const CIvfObject &arg);
+	/** CIvfGLBase constructor */
+	CIvfGLBase ();
 
-	IvfClassInfo("CIvfObject",CIvfBase);
+	/** CIvfGLBase constructor */
+	CIvfGLBase (const CIvfGLBase&);
+
+	/** CIvfGLBase destructor */
+	virtual ~CIvfGLBase ();
+	CIvfGLBase& operator = (const CIvfGLBase &arg);
+
+	IvfClassInfo("CIvfGLBase",CIvfBase);
 
 	/**
 	 * Sets the tag property of an object.
@@ -96,30 +96,30 @@ public:
 	 * to the object.
 	 */
 	void setTag(long tag);
-	
+
 	/** Returns the tag property of an object. */
 	long getTag();
-	
+
 	/**
 	 * Sets the select property of an object.
-	 * 
-	 * This property is used to indicate if the object is 
-	 * selected. If the select state is IVF_SELECT_ON the virtual 
-	 * method createSelect is called to create the object that is
-	 * used to indicate the select state. if the select state is 
+	 *
+	 * This property is used to indicate if the object is
+	 * selected. If the select state is IVF_SELECT_ON the virtual
+	 * method doCreateSelect is called to create the object that is
+	 * used to indicate the select state. if the select state is
 	 * SS_OFF the object is rendered as normal. Default
 	 * state is SS_OFF.
 	 * @param selectState	SS_ON, object selected.
 	 *						SS_OFF, object is not selected.
 	 */
 	void setSelect(TSelectState selectState);
-	
+
 	/** Returns the select state of an object.*/
 	TSelectState getSelect();
-	
+
 	/**
 	 * Sets object state.
-	 * 
+	 *
 	 * The state of the object is used to determine if the object
 	 * is to be drawn or not. OS_ON renders the object (default)
 	 * OS_OFF turns the object off.
@@ -127,59 +127,59 @@ public:
 	 *				OS_OFF object is not rendered.
 	 */
 	void setState(TObjectState state);
-	
+
 	/** Returns object state. */
 	TObjectState getState();
-	
+
 	bool getUseSelectShape();
 	void setUseSelectShape(bool flag);
 
-	/** 
+	/**
 	 * Returns object bounding sphere.
-	 * 
+	 *
 	 * To be implemented.
 	 */
 	CIvfBoundingSphere* getBoundingSphere();
-	
+
 	/**
 	 * Sets the display list number.
 	 *
 	 * To be implemented.
 	 */
 	void setDisplayList(GLuint nList);
-	
-	/** 
-	 * Return display list number. 
-	 * 
+
+	/**
+	 * Return display list number.
+	 *
 	 * To be implemented.
 	 */
 	GLuint getDisplayList();
-	
+
 	/**
 	 * Sets display list usage.
-	 * 
+	 *
 	 * Determines if display lists are to be used when
 	 * drawing the object. To be implemented.
 	 */
 	void setUselist(bool flag);
-	
+
 	/** Returns diusplay list usage. */
 	bool getUselist();
-	
+
 	/**
 	 * Renders the object
-	 * 
-	 * This method renders the object to screen. The code example 
-	 * below shows which routines are called when the render() 
-	 * method is called. To derive a new class based on CIvfObject
+	 *
+	 * This method renders the object to screen. The code example
+	 * below shows which routines are called when the render()
+	 * method is called. To derive a new class based on CIvfGLBase
 	 * the methods shown in the code example should be overridden.
 	 *\code
-	 * beginTransform();
+	 * doBeginTransform();
 	 * if (getSelectState() == IVF_SELECT_ON)
-	 *   createSelect();
-	 * createMaterial();
+	 *   doCreateSelect();
+	 * doCreateMaterial();
 	 * createGeomtry();
-	 * endTransform();
+	 * doEndTransform();
 	 *\endcode
 	 */
 	virtual void	render ();
@@ -187,8 +187,8 @@ public:
 	/**
 	 * Initializes use of bounding sphere
 	 *
-	 * If no bounding sphere is assigned to object, one is 
-	 * created. The updateBoundingSphere is called to update
+	 * If no bounding sphere is assigned to object, one is
+	 * created. The doUpdateBoundingSphere is called to update
 	 * the size of the bounding sphere.
 	 */
 	void initBoundingSphere();
@@ -202,7 +202,7 @@ public:
 	 * and is also called when the initBoundingSphere is called when
 	 * culling is used.
 	 */
-	virtual void updateBoundingSphere();
+	virtual void doUpdateBoundingSphere();
 
 	/**
 	 * Sets the cull flag
@@ -216,13 +216,13 @@ public:
 	bool getCulled();
 
 	/** Returns object name (default=NULL) */
-	const char* getName();
+	const std::string getName();
 
 	/** Gives the object a name */
-	void setName(const char* name);
+	void setName(const std::string& name);
 
-	/** 
-	 * Set object render state 
+	/**
+	 * Set object render state
 	 *
 	 * The render state encapsulates an OpenGL state change
 	 * using the glEnable()/glDisable() pair. The state will
@@ -236,8 +236,8 @@ public:
 	CIvfRenderState* getRenderState();
 
 protected:
-	virtual void preGeometry();
-	virtual void postGeometry();
+	virtual void doPreGeometry();
+	virtual void doPostGeometry();
 
 	/**
 	 * Compiles display list.
@@ -245,53 +245,53 @@ protected:
 	 * To be implemented.
 	 */
 	virtual void compileList();
-	
+
 	/**
 	 * Creates the select object.
 	 *
 	 * When the object is selected. This method is called
 	 * to create the object respresenting the select state.
 	 */
-	virtual void createSelect();
+	virtual void doCreateSelect();
 
 	/**
 	 * Creates the geometry of the object.
 	 *
 	 * This method is called from the render() method when geometry
-	 * rendering is to be done. Objects derived from CIvfObject
+	 * rendering is to be done. Objects derived from CIvfGLBase
 	 * should implement rendering routines from this method using
 	 * OpenGL.
 	 */
-	virtual void createGeometry ();
+	virtual void doCreateGeometry ();
 
 	/**
 	 * Creates the material of the object.
 	 *
 	 * This method is called from the render() method when material
-	 * rendering is to be done. Objects derived from CIvfObject 
+	 * rendering is to be done. Objects derived from CIvfGLBase
 	 * should implement material routines from this method using
 	 * OpenGL.
 	 */
-	virtual void createMaterial ();
+	virtual void doCreateMaterial ();
 
 	/**
 	 * Start transform
 	 *
-	 * Implements a OpenGL transform. This routine should 
+	 * Implements a OpenGL transform. This routine should
 	 * call a glPushMatrix() and then call OpenGL routines
 	 * transforming the object. The method is the first
 	 * routine to be called in the render() method.
 	 */
-	virtual void beginTransform ();
+	virtual void doBeginTransform ();
 
 	/**
 	 * End transform
-	 * 
+	 *
 	 * This is the last method called in the render() method.
-	 * if a glPushMatrix() is called in the beginTransform() a
+	 * if a glPushMatrix() is called in the doBeginTransform() a
 	 * glPopMatrix() should be called in this routine.
 	 */
-	virtual void endTransform ();
+	virtual void doEndTransform ();
 
 };
 #endif

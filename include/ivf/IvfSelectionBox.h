@@ -46,7 +46,7 @@ public:
 
 	IvfClassInfo("CIvfSelectionBox",CIvfWireBrick);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 private:
 };
 #endif

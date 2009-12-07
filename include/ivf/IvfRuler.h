@@ -68,7 +68,7 @@ public:
 
 	IvfClassInfo("CIvfRuler",CIvfShape);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

@@ -48,7 +48,7 @@ CIvfBmpImage::CIvfBmpImage()
 	m_alphaChannel = false;
 }
 
-CIvfBmpImage::CIvfBmpImage(const char *name)
+CIvfBmpImage::CIvfBmpImage(const std::string& name)
 :CIvfFileImage(name)
 {
 	imageData = NULL;
@@ -65,16 +65,16 @@ bool CIvfBmpImage::read()
 {
 	FILE* inf;
 
-	if (this->getFileName()==NULL)
+	if (this->getFileName()=="")
 		return false;
 
-	inf = fopen(this->getFileName(), "rb");
+	inf = fopen(this->getFileName().c_str(), "rb");
 
 	if (!inf)
 		return false;
 	fclose (inf);
 
-    imageData = bmp_load(this->getFileName(),&width_ret,&height_ret,&numComponents_ret);
+    imageData = bmp_load(this->getFileName().c_str(),&width_ret,&height_ret,&numComponents_ret);
 
 	setSize (width_ret,height_ret);
 	this->setImageMap (imageData);
@@ -161,11 +161,12 @@ unsigned char *CIvfBmpImage::bmp_load(const char *filename,
     int ncomp=0;
     bool swap=false; // dont need to swap bytes
      // actual size of the bitmap header; 12=os2; 40 = normal; 64=os2.1
-    
+
     struct bmpheader hd;
     struct BMPInfo inf;
+	size_t s;
     bmperror = ERROR_NO_ERROR;
-    fread((char *)&hd, sizeof(bmpheader), 1, fp);
+    s = fread((char *)&hd, sizeof(bmpheader), 1, fp);
     if (hd.FileType != MB) {
         swapbyte(&(hd.FileType));
         swap=true;
@@ -177,10 +178,11 @@ unsigned char *CIvfBmpImage::bmp_load(const char *filename,
         long infsize;    //size of BMPinfo in bytes
         unsigned char *cols=NULL; // dynamic colour palette
         unsigned char *imbuff; // returned to sender & as read from the disk
-        fread((char *)&infsize, sizeof(long), 1, fp); // insert inside 'the file is bmp' clause
+        size_t s;
+        s = fread((char *)&infsize, sizeof(long), 1, fp); // insert inside 'the file is bmp' clause
         if (swap) swapbyte(&infsize);
         if ((infsize-sizeof(long))<sizeof(inf)) { // then the next bytes appear to be valid - actually infsize must be 12,40,64
-            fread((char *)&inf, infsize-sizeof(long), 1, fp);
+            s = fread((char *)&inf, infsize-sizeof(long), 1, fp);
             if (swap) { // inverse the field of the header which need swapping
                 swapbyte(&hd.siz[0]);
                 swapbyte(&hd.siz[1]);
@@ -205,7 +207,7 @@ unsigned char *CIvfBmpImage::bmp_load(const char *filename,
             size -= sizeof(bmpheader)+infsize;
             if (inf.ImageSize<size) inf.ImageSize=size;
             imbuff = (unsigned char *)malloc( inf.ImageSize); // read from disk
-            fread((char *)imbuff, sizeof(unsigned char),inf.ImageSize, fp);
+            s = fread((char *)imbuff, sizeof(unsigned char),inf.ImageSize, fp);
             ncolours=inf.Colorbits/8;
             switch (ncolours) {
             case 1:
@@ -220,7 +222,7 @@ unsigned char *CIvfBmpImage::bmp_load(const char *filename,
 				setChannels (2);
                 break;
             case 3:
-                ncomp = RGB; 
+                ncomp = RGB;
                 setChannels (3);
                 break;
             case 4:
@@ -234,7 +236,7 @@ unsigned char *CIvfBmpImage::bmp_load(const char *filename,
             }
             if (ncomp>0) buffer = (unsigned char *)malloc( (ncomp==BW?3:ncomp)*inf.width*inf.height*sizeof(unsigned char)); // to be returned
             else buffer = (unsigned char *)malloc( 3*inf.width*inf.height*sizeof(unsigned char)); // default full colour to be returned
-            
+
             unsigned long off=0;
             unsigned long rowbytes=ncomp*sizeof(unsigned char)*inf.width;
             unsigned long doff=(rowbytes)/4;
@@ -271,14 +273,14 @@ unsigned char *CIvfBmpImage::bmp_load(const char *filename,
             }
             delete [] imbuff; // free the on-disk storage
         }
-        
+
         fclose(fp);
 
-    } 
+    }
     else // else error in header
     {
         fclose(fp);
-        return NULL;        
+        return NULL;
     }
     *width_ret = inf.width;
     *height_ret = inf.height;

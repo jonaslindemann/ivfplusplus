@@ -71,9 +71,9 @@ void CIvfMultiply::getRepeat(int &x, int &y, int &z)
 
 void CIvfMultiply::setStartIndices(int i, int j, int k)
 {
-	m_startIndices[0] = i;	
-	m_startIndices[1] = j;	
-	m_startIndices[2] = k;	
+	m_startIndices[0] = i;
+	m_startIndices[1] = j;
+	m_startIndices[2] = k;
 }
 
 void CIvfMultiply::getStartIndices(int &i, int &j, int &k)
@@ -83,9 +83,9 @@ void CIvfMultiply::getStartIndices(int &i, int &j, int &k)
 	k = m_startIndices[2];
 }
 
-void CIvfMultiply::createGeometry()
+void CIvfMultiply::doCreateGeometry()
 {
-	if (m_shape!=NULL) 
+	if (m_shape!=NULL)
 	{
 		int i, j, k;
 

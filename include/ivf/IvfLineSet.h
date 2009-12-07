@@ -42,7 +42,7 @@ private:
 	bool m_useAlpha;
 	float m_lineWidth;
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 public:
 	/** CIvfLineSet constructor */
 	CIvfLineSet();

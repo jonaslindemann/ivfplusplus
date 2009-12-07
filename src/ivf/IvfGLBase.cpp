@@ -19,13 +19,13 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfObject
+// Implementation of: public class CIvfGLBase
 
 #include <ivf/ivfconfig.h>
-#include <ivf/IvfObject.h>
+#include <ivf/IvfGLBase.h>
 
 // ------------------------------------------------------------
-CIvfObject::CIvfObject ()
+CIvfGLBase::CIvfGLBase ()
 {
 	// Set default state on
 
@@ -56,12 +56,12 @@ CIvfObject::CIvfObject ()
 }
 
 // ------------------------------------------------------------
-CIvfObject::CIvfObject (const CIvfObject&)
+CIvfGLBase::CIvfGLBase (const CIvfGLBase&)
 {
 }
 
 // ------------------------------------------------------------
-CIvfObject::~CIvfObject ()
+CIvfGLBase::~CIvfGLBase ()
 {
 	if (m_useList)
 		if (glIsList(m_displayList))
@@ -69,13 +69,13 @@ CIvfObject::~CIvfObject ()
 }
 
 // ------------------------------------------------------------
-CIvfObject& CIvfObject::operator = (const CIvfObject &arg)
+CIvfGLBase& CIvfGLBase::operator = (const CIvfGLBase &arg)
 {
 	return *this;
 }
 
 // ------------------------------------------------------------
-void CIvfObject::render ()
+void CIvfGLBase::render ()
 {
 	if ((m_state == OS_ON)&&(!m_culled))
 	{
@@ -84,18 +84,18 @@ void CIvfObject::render ()
 			if (m_renderState!=NULL)
 				m_renderState->apply();
 
-			beginTransform();
+			doBeginTransform();
 
 			if ((m_selectState == SS_ON)&&(m_useSelectShape))
-				createSelect();
+				doCreateSelect();
 
 			if (m_renderMaterial)
-				createMaterial();
+				doCreateMaterial();
 
-			preGeometry();
-			createGeometry();
-			postGeometry();
-			endTransform();
+			doPreGeometry();
+			doCreateGeometry();
+			doPostGeometry();
+			doEndTransform();
 
 			if (m_renderState!=NULL)
 				m_renderState->remove();
@@ -109,46 +109,46 @@ void CIvfObject::render ()
 }
 
 // ------------------------------------------------------------
-void CIvfObject::createGeometry ()
+void CIvfGLBase::doCreateGeometry ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfObject::createMaterial ()
+void CIvfGLBase::doCreateMaterial ()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfObject::beginTransform ()
+void CIvfGLBase::doBeginTransform ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfObject::endTransform ()
+void CIvfGLBase::doEndTransform ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfObject::setSelect(TSelectState selectState)
+void CIvfGLBase::setSelect(TSelectState selectState)
 {
 	m_selectState = selectState;
 }
 
 // ------------------------------------------------------------
-CIvfObject::TSelectState CIvfObject::getSelect()
+CIvfGLBase::TSelectState CIvfGLBase::getSelect()
 {
 	return m_selectState;
 }
 
 // ------------------------------------------------------------
-void CIvfObject::createSelect()
+void CIvfGLBase::doCreateSelect()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfObject::compileList()
+void CIvfGLBase::compileList()
 {
 	// Remove any existing display list
 
@@ -162,19 +162,19 @@ void CIvfObject::compileList()
 	// Render display list
 
 	glNewList(m_displayList, GL_COMPILE);
-		beginTransform();
-			createMaterial();
-			createGeometry();
-		endTransform();
+		doBeginTransform();
+			doCreateMaterial();
+			doCreateGeometry();
+		doEndTransform();
 	glEndList();
 }
 
 // ------------------------------------------------------------
-void CIvfObject::setUselist(bool flag)
+void CIvfGLBase::setUselist(bool flag)
 {
 	m_useList = flag;
 
-	if (m_useList) 
+	if (m_useList)
 	{
 		compileList();
 	}
@@ -186,67 +186,67 @@ void CIvfObject::setUselist(bool flag)
 }
 
 // ------------------------------------------------------------
-bool CIvfObject::getUselist()
+bool CIvfGLBase::getUselist()
 {
 	return m_useList;
 }
 
 // ------------------------------------------------------------
-void CIvfObject::setDisplayList(GLuint nList)
+void CIvfGLBase::setDisplayList(GLuint nList)
 {
 	m_displayList = nList;
 }
 
 // ------------------------------------------------------------
-GLuint CIvfObject::getDisplayList()
+GLuint CIvfGLBase::getDisplayList()
 {
-	return m_displayList;	
+	return m_displayList;
 }
 
 // ------------------------------------------------------------
-CIvfBoundingSphere* CIvfObject::getBoundingSphere()
+CIvfBoundingSphere* CIvfGLBase::getBoundingSphere()
 {
 	return m_boundSphere;
 }
 
 // ------------------------------------------------------------
-void CIvfObject::setState(TObjectState state)
+void CIvfGLBase::setState(TObjectState state)
 {
 	m_state = state;
 }
 
 // ------------------------------------------------------------
-CIvfObject::TObjectState CIvfObject::getState()
+CIvfGLBase::TObjectState CIvfGLBase::getState()
 {
 	return m_state;
 }
 
 // ------------------------------------------------------------
-void CIvfObject::setTag(long tag)
+void CIvfGLBase::setTag(long tag)
 {
 	m_tag = tag;
 }
 
 // ------------------------------------------------------------
-long CIvfObject::getTag()
+long CIvfGLBase::getTag()
 {
 	return m_tag;
 }
 
 // ------------------------------------------------------------
-void CIvfObject::setUseSelectShape(bool flag)
+void CIvfGLBase::setUseSelectShape(bool flag)
 {
 	m_useSelectShape = flag;
 }
 
 // ------------------------------------------------------------
-bool CIvfObject::getUseSelectShape()
+bool CIvfGLBase::getUseSelectShape()
 {
 	return m_useSelectShape;
 }
 
 // ------------------------------------------------------------
-void CIvfObject::initBoundingSphere()
+void CIvfGLBase::initBoundingSphere()
 {
 	// Create a bounding sphere
 
@@ -255,97 +255,97 @@ void CIvfObject::initBoundingSphere()
 
 	// Update bounding sphere
 
-	this->updateBoundingSphere();
+	this->doUpdateBoundingSphere();
 }
 
 // ------------------------------------------------------------
-void CIvfObject::updateBoundingSphere()
+void CIvfGLBase::doUpdateBoundingSphere()
 {
 	// Should be overridden
 }
 
 // ------------------------------------------------------------
-void CIvfObject::setCulled(bool flag)
+void CIvfGLBase::setCulled(bool flag)
 {
 	m_culled = flag;
 }
 
 // ------------------------------------------------------------
-bool CIvfObject::getCulled()
+bool CIvfGLBase::getCulled()
 {
 	return m_culled;
 }
 
 // ------------------------------------------------------------
-void CIvfObject::setName(const char *name)
+void CIvfGLBase::setName(const std::string& name)
 {
 	m_objectName = name;
 }
 
 // ------------------------------------------------------------
-const char* CIvfObject::getName()
+const std::string CIvfGLBase::getName()
 {
-	return m_objectName.c_str();
+	return m_objectName;
 }
 
 // ------------------------------------------------------------
-void CIvfObject::setRenderState(CIvfRenderState *state)
+void CIvfGLBase::setRenderState(CIvfRenderState *state)
 {
 	m_renderState = state;
 }
 
 // ------------------------------------------------------------
-CIvfRenderState* CIvfObject::getRenderState()
+CIvfRenderState* CIvfGLBase::getRenderState()
 {
 	return m_renderState;
 }
 
-void CIvfObject::postGeometry()
+void CIvfGLBase::doPostGeometry()
 {
 
 }
 
-void CIvfObject::preGeometry()
+void CIvfGLBase::doPreGeometry()
 {
 
 }
 
-void CIvfObject::enable()
+void CIvfGLBase::enable()
 {
 	m_state = OS_ON;
 }
 
-void CIvfObject::disable()
+void CIvfGLBase::disable()
 {
 	m_state = OS_OFF;
 }
 
-bool CIvfObject::isEnabled()
+bool CIvfGLBase::isEnabled()
 {
 	return (m_state==OS_ON);
 }
 
-void CIvfObject::enableSelect()
+void CIvfGLBase::enableSelect()
 {
 	m_selectState = SS_ON;
 }
 
-void CIvfObject::disableSelect()
+void CIvfGLBase::disableSelect()
 {
 	m_selectState = SS_OFF;
 }
 
-bool CIvfObject::isSelectEnabled()
+bool CIvfGLBase::isSelectEnabled()
 {
 	return (m_selectState==SS_ON);
 }
 
-void CIvfObject::setRenderMaterial(bool flag)
+void CIvfGLBase::setRenderMaterial(bool flag)
 {
 	m_renderMaterial = flag;
 }
 
-bool CIvfObject::getRenderMaterial()
+bool CIvfGLBase::getRenderMaterial()
 {
 	return m_renderMaterial;
 }

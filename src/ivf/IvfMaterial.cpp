@@ -29,7 +29,7 @@
 float maxrgb(float r,float g,float b)
 {
 	float max;
-	
+
 	if( r > g)
 		max = r;
 	else
@@ -44,7 +44,7 @@ float maxrgb(float r,float g,float b)
 float minrgb(float r,float g,float b)
 {
 	float min;
-	
+
 	if( r < g)
 		min = r;
 	else
@@ -65,12 +65,12 @@ void rgb2hsv(float r, float g, float b,
 	float h=0,s=1.0,v=1.0;
 	float max_v,min_v,diff,r_dist,g_dist,b_dist;
 	float undefined = 0.0;
-	
+
 	max_v = maxrgb(r,g,b);
 	min_v = minrgb(r,g,b);
 	diff = max_v - min_v;
 	v = max_v;
-	
+
 	if( max_v != 0 )
 		s = diff/max_v;
 	else
@@ -81,7 +81,7 @@ void rgb2hsv(float r, float g, float b,
 		r_dist = (max_v - r)/diff;
 		g_dist = (max_v - g)/diff;
 		b_dist = (max_v - b)/diff;
-		if( r == max_v ) 
+		if( r == max_v )
 			h = b_dist - g_dist;
 		else
 			if( g == max_v )
@@ -111,7 +111,7 @@ void hsv2rgb(float hin, float s, float v,
 	float r=0,g=0,b=0;
 	float f,p,q,t;
 	int i;
-	
+
 	h = hin;
 	if( s == 0 ) {
 		r = v;
@@ -174,7 +174,7 @@ void hsv2rgb(float hin, float s, float v,
 
 // ------------------------------------------------------------
 CIvfMaterial::CIvfMaterial ()
-:CIvfObject()
+:CIvfGLBase()
 //TODO: check and complete member initialisation list!
 {
 	this->setDiffuseColor(0.5, 0.5, 0.5, 1.0);
@@ -246,14 +246,14 @@ void CIvfMaterial::getAmbientColor (float &red, float &green, float &blue, float
 }
 
 // ------------------------------------------------------------
-void CIvfMaterial::createMaterial()
+void CIvfMaterial::doCreateMaterial()
 {
 	if (glIsEnabled(GL_LIGHTING))
 	{
 		if (CIvfGlobalState::getInstance()->isGreyscaleRenderingEnabled())
 		{
 			float temp[4];
-			
+
 			toGreyscale(m_ambientColor, temp); glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, temp);
 			toGreyscale(m_diffuseColor, temp); glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, temp);
 			toGreyscale(m_specularColor, temp); glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, temp);
@@ -264,7 +264,7 @@ void CIvfMaterial::createMaterial()
 		{
 			if (!m_colorMaterial)
 			{
-				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, m_ambientColor);	
+				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, m_ambientColor);
 				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, m_diffuseColor);
 				glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, m_specularColor);
 				glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, m_emissionColor);
@@ -320,7 +320,7 @@ void CIvfMaterial::setAlphaValue(float alpha)
 void CIvfMaterial::assignFrom(CIvfMaterial *material)
 {
 	float r, g, b, a, s;
-	
+
 	material->getSpecularColor(r, g, b, a);
 	this->setSpecularColor(r, g, b, a);
 	material->getDiffuseColor(r, g, b, a);
@@ -331,7 +331,7 @@ void CIvfMaterial::assignFrom(CIvfMaterial *material)
 	this->setEmissionColor(r, g, b, a);
 	material->getShininess(s);
 	this->setShininess(s);
-}	
+}
 
 void CIvfMaterial::multiplySpecular(double factor)
 {
@@ -339,9 +339,9 @@ void CIvfMaterial::multiplySpecular(double factor)
 	m_specularColor[1]*=factor;
 	m_specularColor[2]*=factor;
 	m_specularColor[3]*=factor;
-	
+
 	int i;
-	
+
 	for (i=0; i<4; i++)
 		if (m_specularColor[i]>1.0f)
 			m_specularColor[i] = 1.0f;
@@ -353,9 +353,9 @@ void CIvfMaterial::multiplyDiffuse(double factor)
 	m_diffuseColor[1]*=factor;
 	m_diffuseColor[2]*=factor;
 	m_diffuseColor[3]*=factor;
-	
+
 	int i;
-	
+
 	for (i=0; i<4; i++)
 		if (m_diffuseColor[i]>1.0f)
 			m_diffuseColor[i] = 1.0f;
@@ -367,9 +367,9 @@ void CIvfMaterial::multiplyAmbient(double factor)
 	m_ambientColor[1]*=factor;
 	m_ambientColor[2]*=factor;
 	m_ambientColor[3]*=factor;
-	
+
 	int i;
-	
+
 	for (i=0; i<4; i++)
 		if (m_ambientColor[i]>1.0f)
 			m_ambientColor[i] = 1.0f;
@@ -381,9 +381,9 @@ void CIvfMaterial::multiplyEmission(double factor)
 	m_emissionColor[1]*=factor;
 	m_emissionColor[2]*=factor;
 	m_emissionColor[3]*=factor;
-	
+
 	int i;
-	
+
 	for (i=0; i<4; i++)
 		if (m_emissionColor[i]>1.0f)
 			m_emissionColor[i] = 1.0f;

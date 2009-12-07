@@ -35,13 +35,13 @@ CIvfQuadStripSet::~CIvfQuadStripSet()
 
 }
 
-void CIvfQuadStripSet::createGeometry()
+void CIvfQuadStripSet::doCreateGeometry()
 {
 	CIvfIndex* coordIdx;
 	CIvfIndex* colorIdx;
 	CIvfIndex* textureIdx;
 	long i, j;
-	
+
 	glPushAttrib(GL_COLOR_MATERIAL);
 
 	if (m_useColor)
@@ -50,7 +50,7 @@ void CIvfQuadStripSet::createGeometry()
 	for (i=0; i<(int)m_coordIndexSet.size(); i++)
 	{
 		glBegin(GL_QUAD_STRIP);
-		
+
 		coordIdx = m_coordIndexSet[i];
 		if (m_useColor)
 		{
@@ -66,7 +66,7 @@ void CIvfQuadStripSet::createGeometry()
 		for (j=0; j<coordIdx->getSize(); j++)
 		{
 			glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j)]->getComponents());
-			
+
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 
@@ -104,7 +104,7 @@ void CIvfQuadStripSet::calcNormal(CIvfIndex *idx)
 	bool evenPoint = true;
 
 	normalIdx = new CIvfIndex();
-	
+
 
 	for (i=0; i<idx->getSize()-2; i+=2)
 	{
@@ -135,7 +135,7 @@ void CIvfQuadStripSet::calcNormal(CIvfIndex *idx)
 		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
 		m_vertexNormalIndexSet[idx->getIndex(i+3)]->add(m_normalSet.size()-1);
 	}
-	
+
 	m_normalIndexSet.push_back(normalIdx);
 
 	this->setUseVertexNormals(true);

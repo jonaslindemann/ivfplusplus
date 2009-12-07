@@ -35,7 +35,7 @@ CIvfOldGrid::CIvfOldGrid ()
 	m_xUnit = 0.1;
 	m_yUnit = 0.1;
 	m_xCenter = ((double)m_cols/2.0)*m_xUnit;
-	m_yCenter = ((double)m_rows/2.0)*m_yUnit;	
+	m_yCenter = ((double)m_rows/2.0)*m_yUnit;
 	m_xMark = 10;
 	m_yMark = 10;
 	m_markColor[0] = 0.6;
@@ -61,8 +61,8 @@ void CIvfOldGrid::setSize(GLint rows, GLint cols)
 	m_rows = rows;
 	m_cols = cols;
 	m_xCenter = ((double)m_cols/2.0)*m_xUnit;
-	m_yCenter = ((double)m_rows/2.0)*m_yUnit;	
-	updateBoundingSphere();
+	m_yCenter = ((double)m_rows/2.0)*m_yUnit;
+	doUpdateBoundingSphere();
 	createGrid();
 }
 
@@ -72,7 +72,7 @@ void CIvfOldGrid::setUnits(GLdouble x, GLdouble y)
 	m_xUnit = x;
 	m_yUnit = y;
 	m_xCenter = ((double)m_cols/2.0)*m_xUnit;
-	m_yCenter = ((double)m_rows/2.0)*m_yUnit;	
+	m_yCenter = ((double)m_rows/2.0)*m_yUnit;
 	createGrid();
 }
 
@@ -115,7 +115,7 @@ void CIvfOldGrid::createGrid()
 		setLineIndex(k, -1);
 		k++;
 	}
-	
+
 	for (i = 0; i<=m_cols; i++)
 	{
 		setCoord(i * 2 + m_rows*2+2, i*m_xUnit - m_xCenter, 0.0, - m_yCenter);
@@ -127,7 +127,7 @@ void CIvfOldGrid::createGrid()
 
 		if (i==m_cols/2)
 			setColor(i * 2 + m_rows*2+2, m_axisColor[0],m_axisColor[1],m_axisColor[2]);
-		
+
 		setCoord(i * 2 + 1 + m_rows*2+2, i*m_xUnit - m_xCenter, 0.0, m_rows*m_yUnit - m_yCenter);
 
 		if ((i%m_xMark)==0)
@@ -154,7 +154,7 @@ void CIvfOldGrid::setMark(int x, int y)
 	m_yMark = y;
 }
 
-void CIvfOldGrid::updateBoundingSphere()
+void CIvfOldGrid::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{
@@ -163,7 +163,7 @@ void CIvfOldGrid::updateBoundingSphere()
 
 		xSize = m_cols*m_xUnit;
 		ySize = m_rows*m_yUnit;
-		
+
 		radius = sqrt(pow(xSize,2) + pow(ySize,2)) / 2.0;
 		getBoundingSphere()->setRadius(radius);
 	}

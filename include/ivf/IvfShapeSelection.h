@@ -63,7 +63,7 @@ public:
 
 	void getSelection(CIvfShapeSelectionVector& vector);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif 

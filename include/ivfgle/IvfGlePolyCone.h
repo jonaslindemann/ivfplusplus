@@ -44,7 +44,7 @@ public:
 
 	IvfClassInfo("CIvfGlePolyCone", CIvfShape);
 protected:
-	virtual void createGeometry();
+	virtual void doCreateGeometry();
 };
 
 #endif

@@ -34,17 +34,17 @@ using namespace std;
 
 CIvfDxfWriter::CIvfDxfWriter()
 {
-	m_matrixStack = new CIvfMatrixStack();	
+	m_matrixStack = new CIvfMatrixStack();
 	m_currentLayer = "0";
 	m_currentColor = 256;
 }
 
 CIvfDxfWriter::~CIvfDxfWriter()
 {
-	
+
 }
 
-void CIvfDxfWriter::dxfTag(int number, const char* value)
+void CIvfDxfWriter::dxfTag(int number, const std::string& value)
 {
 	m_file << "  " << number << endl;
 	m_file << value << endl;
@@ -53,7 +53,7 @@ void CIvfDxfWriter::dxfTag(int number, const char* value)
 void CIvfDxfWriter::dxfInt(int number, int value)
 {
     m_file << "  " << number << endl;
-    m_file << value << endl;	
+    m_file << value << endl;
 }
 
 void CIvfDxfWriter::dxfFloat(int number, double value)
@@ -62,10 +62,10 @@ void CIvfDxfWriter::dxfFloat(int number, double value)
     m_file << value << endl;
 }
 
-void CIvfDxfWriter::dxfBeginSection(const char* value)
+void CIvfDxfWriter::dxfBeginSection(const std::string& value)
 {
 	dxfTag(0, "SECTION");
-	dxfTag(2, value);	
+	dxfTag(2, value);
 }
 
 void CIvfDxfWriter::dxfEndSection()
@@ -83,7 +83,7 @@ void CIvfDxfWriter::dxfEndTables()
 	dxfEndSection();
 }
 
-void CIvfDxfWriter::dxfBeginTable(const char* value)
+void CIvfDxfWriter::dxfBeginTable(const std::string& value)
 {
 	dxfTag(0, "TABLE");
 	dxfTag(2, value);
@@ -101,35 +101,35 @@ void CIvfDxfWriter::dxfBeginLayer()
 
 void CIvfDxfWriter::dxfEndLayer()
 {
-	dxfEndTable();	
+	dxfEndTable();
 }
 
 void CIvfDxfWriter::dxfBeginEntitites()
 {
-	dxfBeginSection("ENTITIES");	
+	dxfBeginSection("ENTITIES");
 }
 
 void CIvfDxfWriter::dxfEndEntitites()
 {
-	dxfEndSection();	
+	dxfEndSection();
 }
 
 void CIvfDxfWriter::dxfColor(int number)
 {
-	dxfInt(62, number);	
+	dxfInt(62, number);
 }
 
-void CIvfDxfWriter::dxfLineType(const char* name)
+void CIvfDxfWriter::dxfLineType(const std::string& name)
 {
-	
+
 }
 
 void CIvfDxfWriter::dxfLine()
 {
-	dxfTag(0, "LINE");	
+	dxfTag(0, "LINE");
 }
 
-void CIvfDxfWriter::dxfLayer(const char* value)
+void CIvfDxfWriter::dxfLayer(const std::string& value)
 {
 	dxfTag(8, value);
 }
@@ -144,27 +144,27 @@ void CIvfDxfWriter::dxfFirstPoint(double x, double y, double z)
 void CIvfDxfWriter::dxfSecondPoint(double x, double y, double z)
 {
 	dxfFloat(11, x);
-	dxfFloat(21, y);	
-	dxfFloat(31, z);	
+	dxfFloat(21, y);
+	dxfFloat(31, z);
 }
 
 void CIvfDxfWriter::dxfThirdPoint(double x, double y, double z)
 {
 	dxfFloat(12, x);
-	dxfFloat(22, y);	
-	dxfFloat(32, z);	
+	dxfFloat(22, y);
+	dxfFloat(32, z);
 }
 
 void CIvfDxfWriter::dxfFourthPoint(double x, double y, double z)
 {
 	dxfFloat(13, x);
-	dxfFloat(23, y);	
-	dxfFloat(33, z);	
+	dxfFloat(23, y);
+	dxfFloat(33, z);
 }
 
 void CIvfDxfWriter::dxfPolyline()
 {
-	dxfTag(0, "POLYLINE");	
+	dxfTag(0, "POLYLINE");
 }
 
 void CIvfDxfWriter::dxfPolylineIntro()
@@ -173,17 +173,17 @@ void CIvfDxfWriter::dxfPolylineIntro()
 	dxfFloat(10, 0.0);
 	dxfFloat(20, 0.0);
 	dxfFloat(30, 0.0);
-	dxfPolylineFlag(8);	
+	dxfPolylineFlag(8);
 }
 
 void CIvfDxfWriter::dxfPolylineFlag(int flag)
 {
-	dxfInt(70, flag);	
+	dxfInt(70, flag);
 }
 
 void CIvfDxfWriter::dxfVertex()
 {
-	dxfTag(0, "VERTEX");	
+	dxfTag(0, "VERTEX");
 }
 
 void CIvfDxfWriter::dxfEndSeq()
@@ -193,7 +193,7 @@ void CIvfDxfWriter::dxfEndSeq()
 
 void CIvfDxfWriter::dxfSolid()
 {
-	dxfTag(0, "SOLID");	
+	dxfTag(0, "SOLID");
 }
 
 void CIvfDxfWriter::dxfEndOfFile()
@@ -269,7 +269,7 @@ void CIvfDxfWriter::rotate(double vx, double vy, double vz, double theta)
 	m_matrixStack->rotate(vx, vy, vz, theta);
 }
 
-void CIvfDxfWriter::setCurrentLayer(const char* layerName)
+void CIvfDxfWriter::setCurrentLayer(const std::string& layerName)
 {
 	m_currentLayer = layerName;
 }
@@ -284,29 +284,29 @@ void CIvfDxfWriter::write()
 {
 	CIvfShape* shape = this->getShape();
 
-	m_file.open(this->getFileName(), ios::out);
+	m_file.open(this->getFileName().c_str(), ios::out);
 
 	if (m_file.good())
 	{
-		dxfBeginEntitites();	
-		
+		dxfBeginEntitites();
+
 		processShape(shape);
-		
+
 		dxfEndEntitites();
 		dxfEndOfFile();
-		
+
 		m_file.close();
 	}
 }
 
 void CIvfDxfWriter::processShape(CIvfShape *shape)
 {
-	if (shape->getName()!=NULL)
+	if (shape->getName()!="")
 		setCurrentLayer(shape->getName());
 
 	cout << "shape = " << shape->getClassName() << endl;
 
-	if (shape->isClass("CIvfComposite")) 
+	if (shape->isClass("CIvfComposite"))
 	{
 		int i;
 		double x, y, z;
@@ -321,7 +321,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 		pushMatrix();
 		translate(x, y, z);
 		rotate(vx, vy, vz, angle);
-		
+
 		for (i = 0; i<composite->getSize(); i++)
 		{
 			CIvfShapePtr child = composite->getChild(i);
@@ -339,7 +339,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 		double x4, y4, z4;
 		double x, y, z;
 		double vx, vy, vz, angle;
-		
+
 		if (shape->isClass("CIvfQuadSet"))
 		{
 			cout << "processShape: Exporting " << shape->getClassName() << endl;
@@ -355,7 +355,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 			for (i=0; i<quadSet->getCoordIndexSetSize(); i++)
 			{
 				CIvfIndexPtr index = quadSet->getCoordIndex(i);
-				
+
 				for (j=0; j<index->getSize(); j+=4)
 				{
 					quadSet->getCoord(index->getIndex(j), x1, y1, z1);
@@ -388,7 +388,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 			for (i=0; i<triSet->getCoordIndexSetSize(); i++)
 			{
 				CIvfIndexPtr index = triSet->getCoordIndex(i);
-				
+
 				for (j=0; j<index->getSize(); j+=3)
 				{
 					triSet->getCoord(index->getIndex(j), x1, y1, z1);
@@ -419,7 +419,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 			for (i=0; i<triSet->getCoordIndexSetSize(); i++)
 			{
 				CIvfIndexPtr index = triSet->getCoordIndex(i);
-				
+
 				for (j=0; j<index->getSize()-2; j++)
 				{
 					triSet->getCoord(index->getIndex(j), x1, y1, z1);
@@ -455,7 +455,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 					polySet->getCoord(index->getIndex(0), x1, y1, z1);
 					polySet->getCoord(index->getIndex(1), x2, y2, z2);
 					polySet->getCoord(index->getIndex(2), x3, y3, z3);
-				
+
 					tri(
 						x1, y1, z1,
 						x2, y2, z2,
@@ -468,7 +468,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 					polySet->getCoord(index->getIndex(1), x2, y2, z2);
 					polySet->getCoord(index->getIndex(2), x3, y3, z3);
 					polySet->getCoord(index->getIndex(3), x4, y4, z4);
-				
+
 					quad(
 						x1, y1, z1,
 						x2, y2, z2,

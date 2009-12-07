@@ -81,7 +81,7 @@ CIvfVectorCursor::CIvfVectorCursor()
 	angle = 0.0;
 	i = 0;
 
-	while (angle<360.0) 
+	while (angle<360.0)
 	{
 		x = 0.5*cos(angle);
 		z = 0.5*sin(angle);
@@ -98,7 +98,7 @@ CIvfVectorCursor::CIvfVectorCursor()
 
 		m_spheres1->addChild(sphere1);
 		m_spheres2->addChild(sphere2);
-		
+
 
 		angle+=angleStep;
 	}
@@ -165,7 +165,7 @@ CIvfVectorCursor::~CIvfVectorCursor()
 
 }
 
-void CIvfVectorCursor::createGeometry()
+void CIvfVectorCursor::doCreateGeometry()
 {
 	m_cursor->render();
 	m_nonRotatingCursor->render();
