@@ -13,33 +13,37 @@
 
 #include <ivfdef/IvfSingletonDestroyer.h>
 
-#include <ivfglut/IvfGlutWindow.h>
+#ifndef __APPLE__
+#include <GL/glut.h>
+#else
+#include <GLUT/glut.h>
+#endif 
+
+#include <ivfglut/IvfGlutBase.h>
+
+#define GLUT_CB(id) \
+	static void cbDisplay##id(); \
+	static void cbReshape##id(int width, int height); \
+	static void cbKeyboard##id(unsigned char key, int x, int y); \
+	static void cbMouse##id(int button, int state, int x, int y); \
+	static void cbMotion##id(int x, int y); \
+	static void cbPassiveMotion##id(int x, int y); 
 
 class CIvfGlutApplication {
 private:
 	static CIvfGlutApplication* m_instance;
 	static CIvfSingletonDestroyer<CIvfGlutApplication> m_destroyer;
-	static CIvfGlutWindow* m_windows[];
-	static void cbDisplay0();
-	static void cbReshape0(int width, int height);
-	static void cbDisplay1();
-	static void cbReshape1(int width, int height);
-	static void cbDisplay2();
-	static void cbReshape2(int width, int height);
-	static void cbDisplay3();
-	static void cbReshape3(int width, int height);
-	static void cbDisplay4();
-	static void cbReshape4(int width, int height);
-	static void cbDisplay5();
-	static void cbReshape5(int width, int height);
-	static void cbDisplay6();
-	static void cbReshape6(int width, int height);
-	static void cbDisplay7();
-	static void cbReshape7(int width, int height);
-	static void cbDisplay8();
-	static void cbReshape8(int width, int height);
-	static void cbDisplay9();
-	static void cbReshape9(int width, int height);
+	static CIvfGlutBase* m_windows[];
+	GLUT_CB(0);
+	GLUT_CB(1);
+	GLUT_CB(2);
+	GLUT_CB(3);
+	GLUT_CB(4);
+	GLUT_CB(5);
+	GLUT_CB(6);
+	GLUT_CB(7);
+	GLUT_CB(8);
+	GLUT_CB(9);
 	unsigned int m_displayMode;
 	unsigned int m_nextWindow;
 public:	
@@ -49,7 +53,7 @@ public:
 	void setDisplayMode(unsigned int mode);
 	unsigned int getDisplayMode();
 	
-	bool addWindow(CIvfGlutWindow* window);
+	bool addWindow(CIvfGlutBase* window);
 	
 	void mainLoop();
 	void run();

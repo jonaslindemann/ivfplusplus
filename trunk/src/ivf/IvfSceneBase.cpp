@@ -49,70 +49,124 @@ CIvfSceneBase::CIvfSceneBase()
 
 	m_useCulling = false;
 	m_dirty = false;
+	m_nPasses = 1;
+
+	m_multipassEvent = NULL;
 }
 
 CIvfSceneBase::~CIvfSceneBase()
 {
 }
 
-void CIvfSceneBase::defaultLocalLighting()
+
+
+void CIvfSceneBase::setMultipass(bool flag)
+{
+	m_multiPass = flag;
+}
+
+bool CIvfSceneBase::getMultipass()
+{
+	return m_multiPass;
+}
+
+void CIvfSceneBase::setPasses(int passes)
+{
+	m_nPasses = passes;
+}
+
+int CIvfSceneBase::getPasses()
+{
+	return m_nPasses;
+}
+
+void CIvfSceneBase::defaultLocalLighting(int pass)
 {
 	if (m_lightMode == LM_LOCAL)
 		if (m_lighting != NULL)
 			m_lighting->render();
 }
 
-void CIvfSceneBase::doLocalLighting()
+void CIvfSceneBase::doLocalLighting(int pass)
 {
-	defaultLocalLighting();
+	defaultLocalLighting(pass);
 }
 
-void CIvfSceneBase::defaultViewSetup()
+void CIvfSceneBase::defaultViewSetup(int pass)
 {
 	if (m_view!=NULL)
 		m_view->render();
 }
 
-void CIvfSceneBase::doViewSetup()
+void CIvfSceneBase::doViewSetup(int pass)
 {
-	defaultViewSetup();
+	defaultViewSetup(pass);
 }
 
-void CIvfSceneBase::defaultWorldLighting()
+void CIvfSceneBase::defaultWorldLighting(int pass)
 {
 	if (m_lightMode == LM_WORLD)
 		if (m_lighting != NULL)
 			m_lighting->render();
 }
 
-void CIvfSceneBase::doWorldLighting()
+void CIvfSceneBase::doWorldLighting(int pass)
 {
-	defaultWorldLighting();
+	defaultWorldLighting(pass);
 }
 
-void CIvfSceneBase::defaultSceneRender()
+void CIvfSceneBase::defaultSceneRender(int pass)
 {
 	m_preComposite->render();
 	m_composite->render();
 	m_postComposite->render();
 }
 
-void CIvfSceneBase::doRender()
+void CIvfSceneBase::doRender(int pass)
 {
-	defaultSceneRender();
+	defaultSceneRender(pass);
 }
 
-void CIvfSceneBase::doViewAndRender()
+void CIvfSceneBase::doViewAndRender(int pass)
 {
-	doLocalLighting();
-	doViewSetup();
-	doWorldLighting();
-	doRender();
+	doLocalLighting(pass);
+	doViewSetup(pass);
+	doWorldLighting(pass);
+	doRender(pass);
 }
 
 void CIvfSceneBase::defaultRendering()
 {
-	doViewAndRender();
+	if (m_multiPass)
+	{
+		int renderPass = 0;
+
+		for (renderPass = 0; renderPass<m_nPasses; renderPass++)
+		{
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			if (m_multipassEvent!=NULL)
+				m_multipassEvent->onMultipass(renderPass);
+			else
+				this->doMultipass(renderPass);	
+			glMatrixMode(GL_PROJECTION);
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+			glPopMatrix();
+		}
+	}
+	else
+		doViewAndRender(0);
+}
+
+void CIvfSceneBase::doMultipass(int pass)
+{
+	doLocalLighting(pass);
+	doViewSetup(pass);
+	doWorldLighting(pass);
+	doRender(pass);
 }
 
 void CIvfSceneBase::doCreateGeometry()
@@ -442,4 +496,9 @@ void CIvfSceneBase::setAnaglyphColorPair(TAnaglyphColorPair colorPair)
 CIvfSceneBase::TAnaglyphColorPair CIvfSceneBase::getAnaglyphColorPair()
 {
 	return m_colorPair;
+}
+
+void CIvfSceneBase::setMultipassEvent(CIvfMultipassEvent* evt)
+{
+	m_multipassEvent = evt;
 }

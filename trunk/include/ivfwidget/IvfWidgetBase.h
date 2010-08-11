@@ -375,6 +375,9 @@ public:
 	/** Set size of widget */
 	void setSize(int w, int h);
 
+	int getWidth();
+	int getHeight();
+
 	/** 
 	 * Enable/disable use of overlay 
 	 *

@@ -117,7 +117,7 @@ void CExampleWindow::onInit(int width, int height)
 	// Set parameters
 
 	acReader->setFileName("models/ivf.ac");
-	acReader->setScaling(1.0);
+	//acReader->setScaling(1.0);
 
 	// Read file
 

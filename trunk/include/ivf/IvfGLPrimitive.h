@@ -259,6 +259,8 @@ public:
 	/** Returns state of vertex normal use */
 	bool getUseVertexNormals();
 
+	void invertNormals();
+
 	/** 
 	 * Updates vertex normals
 	 * 

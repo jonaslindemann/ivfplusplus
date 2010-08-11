@@ -568,7 +568,7 @@ bool CIvfAc3DReader::parseSurf(string &row)
 	//m_surfaceType = (int)(flags & 0xF);
 	//m_shadingType =
 
-	m_surfacesRead++;
+	m_surfacesRead++;  
 
 	return true;
 }

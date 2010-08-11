@@ -25,9 +25,7 @@
 #ifndef _CIvfApplication_h_
 #define _CIvfApplication_h_
 
-#include <FL/Fl.H>
-
-#include <ivf/IvfBase.h>
+#include <ivfglut/IvfGlutApplication.h>
 
 #include <ivfui/IvfWindow.h>
 
@@ -56,25 +54,11 @@ IvfSmartPointer(CIvfApplication);
  *
  * @author Jonas Lindemann
  */
-class IVFUI_API CIvfApplication : public CIvfBase {
+class IVFUI_API CIvfApplication : public CIvfGlutApplication {
 private:
 
 public:
-	/** 
-	 * CIvfApplication constructor
-	 *
-	 * Initiates the application and sets the desired 
-	 * visual needed. Use the enumeration EIvfVisual to set the 
-	 * visual.
-	 */
-	CIvfApplication(int visual);
-
-	/** CIvfApplication destructor */
-	virtual ~CIvfApplication();
-
 	IvfClassInfo("CIvfApplication",CIvfBase);
-
-	/** Initiates the FLTK event loop */
 	int run();
 	void runAppLoop(CIvfWindow* window);
 };

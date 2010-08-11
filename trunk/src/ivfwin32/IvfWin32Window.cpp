@@ -30,6 +30,8 @@
 #include <ivf/IvfRasterization.h>
 #include <ivf/IvfPixelOps.h>
 
+#include "ARB_Multisample.h"
+
 #define GET_X_LPARAM(lp)   ((int)(short)LOWORD(lp)) 
 #define GET_Y_LPARAM(lp)   ((int)(short)HIWORD(lp))
 
@@ -113,6 +115,7 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,
 			
 			case WM_PAINT:
 				wglMakeCurrent( window->getDC(), window->getRC() );
+				glEnable(GL_MULTISAMPLE_ARB);
 				window->doDraw();
 				SwapBuffers(window->getDC());
 				wglMakeCurrent( NULL, NULL );
@@ -251,6 +254,7 @@ CIvfWin32Window::CIvfWin32Window(int X, int Y, int W, int H)
 	m_size[0] = W;
 	m_size[1] = H;
 	m_fullscreen = false;
+	m_multisample = false;
 	m_colorBits = 32;
 	
 	m_created = false;
@@ -385,21 +389,21 @@ bool CIvfWin32Window::createWindow()
 			0,											
 			0, 0, 0										
 	};
-	
+
 	if (!(m_hDC=GetDC(m_hWnd)))							
 	{
 		destroyWindow();								
 		MessageBox(NULL,"Can't Create A GL Device Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
 		return FALSE;								
 	}
-	
+
 	if (!(PixelFormat=ChoosePixelFormat(m_hDC,&pfd)))	
 	{
 		destroyWindow();								
 		MessageBox(NULL,"Can't Find A Suitable PixelFormat.","ERROR",MB_OK|MB_ICONEXCLAMATION);
 		return FALSE;								
 	}
-	
+
 	if(!SetPixelFormat(m_hDC,PixelFormat,&pfd))		
 	{
 		destroyWindow();								
@@ -421,6 +425,65 @@ bool CIvfWin32Window::createWindow()
 		return FALSE;								
 	}
 	
+	if (m_multisample)
+	{
+		if (::InitMultisample(m_hInstance, m_hWnd, pfd))
+		{
+			PixelFormat = arbMultisampleFormat;
+
+			DestroyWindow(m_hWnd);
+
+			// Recreate window with correct pixelformat
+
+			if (!(m_hWnd=CreateWindowEx(dwExStyle,							
+										"Ivf",							
+										m_caption.c_str(),								
+										dwStyle |							
+										WS_CLIPSIBLINGS |					
+										WS_CLIPCHILDREN,					
+										0, 0,								
+										WindowRect.right-WindowRect.left,	
+										WindowRect.bottom-WindowRect.top,	
+										NULL,								
+										NULL,								
+										m_hInstance,							
+										NULL)))								
+			{
+				destroyWindow();								
+				MessageBox(NULL,"Window Creation Error.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+				return false;								
+			}
+
+			if (!(m_hDC=GetDC(m_hWnd)))							
+			{
+				destroyWindow();								
+				MessageBox(NULL,"Can't Create A GL Device Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+				return FALSE;								
+			}
+
+			if(!SetPixelFormat(m_hDC,PixelFormat,&pfd))		
+			{
+				destroyWindow();								
+				MessageBox(NULL,"Can't Set The PixelFormat.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+				return FALSE;								
+			}
+			
+			if (!(m_hRC=wglCreateContext(m_hDC)))				
+			{
+				destroyWindow();								
+				MessageBox(NULL,"Can't Create A GL Rendering Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+				return FALSE;								
+			}
+			
+			if(!wglMakeCurrent(m_hDC,m_hRC))					
+			{
+				destroyWindow();								
+				MessageBox(NULL,"Can't Activate The GL Rendering Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+				return FALSE;								
+			}
+		}
+	}
+
 	ShowWindow(m_hWnd,SW_SHOW);						
 	SetForegroundWindow(m_hWnd);						
 	SetFocus(m_hWnd);									
@@ -533,6 +596,11 @@ HWND CIvfWin32Window::getHandle()
 void CIvfWin32Window::setFullscreen(bool flag)
 {
 	m_fullscreen = flag;
+}
+
+void CIvfWin32Window::setMultisample(bool flag)
+{
+	m_multisample = flag;
 }
 
 void CIvfWin32Window::show()

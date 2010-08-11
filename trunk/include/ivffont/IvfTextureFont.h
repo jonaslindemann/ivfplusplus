@@ -29,7 +29,6 @@
 
 IvfSmartPointer(CIvfTextureFont);
 
-#define FTGL_LIBRARY_STATIC
 #include <FTGL/ftgl.h>
 
 /**

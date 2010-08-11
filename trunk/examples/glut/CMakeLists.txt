@@ -15,13 +15,15 @@ endif(WIN32)
 
 file(GLOB SOURCE_FILES *.cpp)
 file(GLOB INCLUDE_FILES *.h)
-file(GLOB EXTRA_FILES ${PROJECT_SOURCE_DIR}/../../src/ivfglut/*.cpp)
 
 message(${EXTRA_FILES})
 
 if (APPLE)
 	set( EXT_LIBS "-framework carbon" "-framework cocoa" "-framework applicationservices" "-framework agl" "-framework opengl" "-framework GLUT" ivfmath ivf ivfwidget) 
+else (APPLE)
+	set( EXT_LIBS opengl32 glu32 freeglut ivfmath ivfui ivfwidget )
 endif (APPLE)
+	
 
 add_executable(ivfglutapp ${INCLUDE_FILES} ${SOURCE_FILES} ${EXTRA_FILES})
 target_link_libraries(ivfglutapp ${EXT_LIBS})

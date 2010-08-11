@@ -179,6 +179,16 @@ void CIvfWidgetBase::clearMouseStatus()
 	m_middleButtonDown = false;
 }
 
+int CIvfWidgetBase::getWidth()
+{
+	return m_size[0];
+}
+
+int CIvfWidgetBase::getHeight()
+{
+	return m_size[1];
+}
+
 //
 // Implementation specific interface routines
 //
