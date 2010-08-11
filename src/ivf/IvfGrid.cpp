@@ -45,6 +45,14 @@ CIvfGrid::CIvfGrid()
 
 	m_gridInterval = 1;
 
+	m_surfaceMaterial = new CIvfMaterial();
+	m_surfaceMaterial->setDiffuseColor(0.3f, 0.3f, 0.3f, 0.2f);
+
+	m_cornerColor[0] = 0.8f; m_cornerColor[1] = 0.8f; m_cornerColor[2] = 0.8f; m_cornerColor[3] = 1.0f;
+	m_outlineColor[0] = 0.5f; m_outlineColor[1] = 0.5f; m_outlineColor[2] = 0.5f; m_outlineColor[3] = 1.0f;
+	m_majorColor[0] = 0.5f; m_majorColor[1] = 0.5f; m_majorColor[2] = 0.5f; m_majorColor[3] = 1.0f; 
+	m_minorColor[0] = 0.3f; m_minorColor[1] = 0.3f; m_minorColor[2] = 0.3f; m_minorColor[3] = 1.0f; 
+
 	initGrid();
 }
 
@@ -101,7 +109,7 @@ void CIvfGrid::initGrid()
 
 	m_corners->addCoordIndex(idx);
 
-	m_corners->addColor(0.8f, 0.8f, 0.8f);
+	m_corners->addColor(m_cornerColor[0], m_cornerColor[1], m_cornerColor[2], m_cornerColor[3]);
 
 	CIvfIndex* colorIdx = new CIvfIndex();
 	colorIdx->createConstant(0, idx->getSize());
@@ -112,6 +120,7 @@ void CIvfGrid::initGrid()
 	// Define outline
 
 	m_outline->clear();
+	m_outline->setLineWidth(1);
 
 	m_outline->addCoord(x1+cs, y1, z1);
 	m_outline->addCoord(x2-cs, y1, z1);
@@ -134,7 +143,7 @@ void CIvfGrid::initGrid()
 
 	m_outline->addCoordIndex(idx);
 
-	m_outline->addColor(0.5f, 0.5f, 0.5f);
+	m_outline->addColor(m_outlineColor[0], m_outlineColor[1], m_outlineColor[2], m_outlineColor[3]);
 
 	colorIdx = new CIvfIndex();
 	colorIdx->createConstant(0, idx->getSize());
@@ -156,10 +165,7 @@ void CIvfGrid::initGrid()
 
 	m_surface->addCoordIndex(idx);
 
-	CIvfMaterial* material = new CIvfMaterial();
-	material->setDiffuseColor(0.3f, 0.3f, 0.3f, 0.2f);
-
-	m_surface->setMaterial(material);
+	m_surface->setMaterial(m_surfaceMaterial);
 
 	// Create axis
 
@@ -168,6 +174,7 @@ void CIvfGrid::initGrid()
 	// Create grid lines
 
 	m_gridLines->clear();
+	m_gridLines->setLineWidth(1);
 
 	m_gridLines->addCoord(0, y1, z1);
 	m_gridLines->addCoord(0, y1, z2);
@@ -179,8 +186,8 @@ void CIvfGrid::initGrid()
 	idx->add(0,1);
 	idx->add(2,3);
 
-	m_gridLines->addColor(0.5f, 0.5f, 0.5f);
-	m_gridLines->addColor(0.3f, 0.3f, 0.3f);
+	m_gridLines->addColor(m_majorColor[0], m_majorColor[1], m_majorColor[2], m_majorColor[3]);
+	m_gridLines->addColor(m_minorColor[0], m_minorColor[1], m_minorColor[2], m_minorColor[3]);
 
 	colorIdx = new CIvfIndex();
 	colorIdx->add(0,0);
@@ -238,11 +245,11 @@ void CIvfGrid::refresh()
 
 void CIvfGrid::doCreateGeometry()
 {
+	if (m_useAxis) m_axis->render();
+	if (m_useSurface) m_surface->render();
 	if (m_useCorners) m_corners->render();
 	if (m_useOutline) m_outline->render();
 	if (m_useGrid) m_gridLines->render();
-	if (m_useSurface) m_surface->render();
-	if (m_useAxis) m_axis->render();
 }
 
 bool CIvfGrid::isRoughly(double x, double value)
@@ -315,3 +322,31 @@ void CIvfGrid::setGridInterval(int interval)
 	m_gridInterval = interval;
 	initGrid();
 }
+
+void CIvfGrid::setCornerColor(float red, float green, float blue, float alpha)
+{
+	m_cornerColor[0] = red; m_cornerColor[1] = green; m_cornerColor[2] = blue; m_cornerColor[3] = alpha;
+}
+
+void CIvfGrid::setOutlineColor(float red, float green, float blue, float alpha)
+{
+	m_outlineColor[0] = red; m_outlineColor[1] = green; m_outlineColor[2] = blue; m_outlineColor[3] = alpha;
+}
+
+void CIvfGrid::setSurfaceMaterial(CIvfMaterial* material)
+{
+	m_surfaceMaterial = material;
+}
+
+void CIvfGrid::setMajorColor(float red, float green, float blue, float alpha)
+{
+	m_majorColor[0] = red; m_majorColor[1] = green; m_majorColor[2] = blue; m_majorColor[3] = alpha; 
+
+}
+
+void CIvfGrid::setMinorColor(float red, float green, float blue, float alpha)
+{
+	m_minorColor[0] = red; m_minorColor[1] = green; m_minorColor[2] = blue; m_minorColor[3] = alpha; 
+}
+
+

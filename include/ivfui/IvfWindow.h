@@ -25,7 +25,7 @@
 #ifndef _CIvfWindow_h_
 #define _CIvfWindow_h_
 
-#include <ivffltk/IvfFltkBase.h>
+#include <ivfglut/IvfGlutBase.h>
 #include <ivfui/IvfPopupMenu.h>
 
 IvfSmartPointer(CIvfWindow);
@@ -41,7 +41,7 @@ IvfSmartPointer(CIvfWindow);
  *
  * @author Jonas Lindemann
  */
-class IVFUI_API CIvfWindow : public CIvfFltkBase, public CIvfPopupMenu {
+class IVFUI_API CIvfWindow : public CIvfGlutBase, public CIvfPopupMenu {
 private:
 	bool m_popupButtonDown;
 public:

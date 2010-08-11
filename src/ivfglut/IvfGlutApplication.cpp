@@ -1,54 +1,130 @@
 #include <ivfglut/IvfGlutApplication.h>
 
+#include <ivf/IvfGL.h>
+
 #ifndef __APPLE__
-#include <GL/gl.h>
 #include <GL/glut.h>
 #else
-#include <OpenGL/gl.h>
 #include <GLUT/glut.h>
 #endif 
 
-#define GLUTCB_DISPLAY(name,id) \
-void CIvfGlutApplication::cb##name##id() \
+#define GLUTCB_DISPLAY(id) \
+void CIvfGlutApplication::cbDisplay##id() \
 { \
 	if (m_windows[id]!=0) \
-		m_windows[id]->glut##name(); \
+		m_windows[id]->glutDisplay(); \
 }
 
-#define GLUTCB_RESHAPE(name,id) \
-void CIvfGlutApplication::cb##name##id(int width, int height) \
+#define GLUTCB_RESHAPE(id) \
+void CIvfGlutApplication::cbReshape##id(int width, int height) \
 { \
 	if (m_windows[id]!=0) \
-		m_windows[id]->glut##name(width, height); \
+		m_windows[id]->glutReshape(width, height); \
 }
+
+#define GLUTCB_KEYBOARD(id) \
+void CIvfGlutApplication::cbKeyboard##id(unsigned char key, int x, int y) \
+{ \
+	if (m_windows[id]!=0) \
+		m_windows[id]->glutKeyboard(key, x, y); \
+}
+
+#define GLUTCB_MOUSE(id) \
+	void CIvfGlutApplication::cbMouse##id(int button, int state, int x, int y) \
+	{ \
+		if (m_windows[id]!=0) \
+			m_windows[id]->glutMouse(button, state, x, y); \
+	}
+
+#define GLUTCB_MOTION(id) \
+	void CIvfGlutApplication::cbMotion##id(int x, int y) \
+	{ \
+		if (m_windows[id]!=0) \
+			m_windows[id]->glutMotion(x, y); \
+	}
+
+#define GLUTCB_PASSIVE_MOTION(id) \
+	void CIvfGlutApplication::cbPassiveMotion##id(int x, int y) \
+	{ \
+		if (m_windows[id]!=0) \
+			m_windows[id]->glutPassiveMotion(x, y); \
+	}
 
 #define GLUT_WIN_CB(id) \
-glutDisplayFunc(cbDisplay##id); \
-glutReshapeFunc(cbReshape##id);
+	glutDisplayFunc(cbDisplay##id); \
+	glutReshapeFunc(cbReshape##id); \
+	glutKeyboardFunc(cbKeyboard##id); \
+	glutMouseFunc(cbMouse##id); \
+	glutMotionFunc(cbMotion##id); \
+	glutPassiveMotionFunc(cbPassiveMotion##id);
+	
+GLUTCB_DISPLAY(0)
+GLUTCB_DISPLAY(1)
+GLUTCB_DISPLAY(2)
+GLUTCB_DISPLAY(3)
+GLUTCB_DISPLAY(4)
+GLUTCB_DISPLAY(5)
+GLUTCB_DISPLAY(6)
+GLUTCB_DISPLAY(7)
+GLUTCB_DISPLAY(8)
+GLUTCB_DISPLAY(9)
 
-GLUTCB_DISPLAY(Display,0)
-GLUTCB_DISPLAY(Display,1)
-GLUTCB_DISPLAY(Display,2)
-GLUTCB_DISPLAY(Display,3)
-GLUTCB_DISPLAY(Display,4)
-GLUTCB_DISPLAY(Display,5)
-GLUTCB_DISPLAY(Display,6)
-GLUTCB_DISPLAY(Display,7)
-GLUTCB_DISPLAY(Display,8)
-GLUTCB_DISPLAY(Display,9)
+GLUTCB_RESHAPE(0)
+GLUTCB_RESHAPE(1)
+GLUTCB_RESHAPE(2)
+GLUTCB_RESHAPE(3)
+GLUTCB_RESHAPE(4)
+GLUTCB_RESHAPE(5)
+GLUTCB_RESHAPE(6)
+GLUTCB_RESHAPE(7)
+GLUTCB_RESHAPE(8)
+GLUTCB_RESHAPE(9)
 
-GLUTCB_RESHAPE(Reshape,0)
-GLUTCB_RESHAPE(Reshape,1)
-GLUTCB_RESHAPE(Reshape,2)
-GLUTCB_RESHAPE(Reshape,3)
-GLUTCB_RESHAPE(Reshape,4)
-GLUTCB_RESHAPE(Reshape,5)
-GLUTCB_RESHAPE(Reshape,6)
-GLUTCB_RESHAPE(Reshape,7)
-GLUTCB_RESHAPE(Reshape,8)
-GLUTCB_RESHAPE(Reshape,9)
+GLUTCB_KEYBOARD(0)
+GLUTCB_KEYBOARD(1)
+GLUTCB_KEYBOARD(2)
+GLUTCB_KEYBOARD(3)
+GLUTCB_KEYBOARD(4)
+GLUTCB_KEYBOARD(5)
+GLUTCB_KEYBOARD(6)
+GLUTCB_KEYBOARD(7)
+GLUTCB_KEYBOARD(8)
+GLUTCB_KEYBOARD(9)
 
-CIvfGlutWindow* CIvfGlutApplication::m_windows[] = {0};
+GLUTCB_MOUSE(0)
+GLUTCB_MOUSE(1)
+GLUTCB_MOUSE(2)
+GLUTCB_MOUSE(3)
+GLUTCB_MOUSE(4)
+GLUTCB_MOUSE(5)
+GLUTCB_MOUSE(6)
+GLUTCB_MOUSE(7)
+GLUTCB_MOUSE(8)
+GLUTCB_MOUSE(9)
+
+GLUTCB_MOTION(0)
+GLUTCB_MOTION(1)
+GLUTCB_MOTION(2)
+GLUTCB_MOTION(3)
+GLUTCB_MOTION(4)
+GLUTCB_MOTION(5)
+GLUTCB_MOTION(6)
+GLUTCB_MOTION(7)
+GLUTCB_MOTION(8)
+GLUTCB_MOTION(9)
+
+GLUTCB_PASSIVE_MOTION(0)
+GLUTCB_PASSIVE_MOTION(1)
+GLUTCB_PASSIVE_MOTION(2)
+GLUTCB_PASSIVE_MOTION(3)
+GLUTCB_PASSIVE_MOTION(4)
+GLUTCB_PASSIVE_MOTION(5)
+GLUTCB_PASSIVE_MOTION(6)
+GLUTCB_PASSIVE_MOTION(7)
+GLUTCB_PASSIVE_MOTION(8)
+GLUTCB_PASSIVE_MOTION(9)
+
+CIvfGlutBase* CIvfGlutApplication::m_windows[] = {0};
 CIvfGlutApplication* CIvfGlutApplication::m_instance = 0;
 CIvfSingletonDestroyer<CIvfGlutApplication> CIvfGlutApplication::m_destroyer;
 
@@ -74,7 +150,7 @@ CIvfGlutApplication* CIvfGlutApplication::getInstance()
 CIvfGlutApplication::CIvfGlutApplication(int* argc, char** argv) 
 { 		
 	glutInit(argc, argv);
-	this->setDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	this->setDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	m_nextWindow = 0;
 }
 
@@ -104,7 +180,7 @@ void CIvfGlutApplication::run()
 	this->mainLoop();
 }
 
-bool CIvfGlutApplication::addWindow(CIvfGlutWindow* window)
+bool CIvfGlutApplication::addWindow(CIvfGlutBase* window)
 {
 	m_windows[m_nextWindow] = window;
 	m_windows[m_nextWindow]->create();

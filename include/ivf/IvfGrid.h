@@ -51,6 +51,12 @@ private:
 	CIvfQuadSet* m_surface;
 	CIvfAxis*	 m_axis;
 
+	CIvfMaterialPtr m_surfaceMaterial;
+	float m_cornerColor[4];
+	float m_outlineColor[4];
+	float m_majorColor[4];
+	float m_minorColor[4];
+
 	double m_gridSpacing;
 
 	bool m_useSurface;
@@ -132,6 +138,12 @@ public:
 
 	/** Set drawing interval of grid lines */
 	void setGridInterval(int interval);
+
+	void setCornerColor(float red, float green, float blue, float alpha);
+	void setOutlineColor(float red, float green, float blue, float alpha);
+	void setSurfaceMaterial(CIvfMaterial* material);
+	void setMajorColor(float red, float green, float blue, float alpha);
+	void setMinorColor(float red, float green, float blue, float alpha);
 protected:
 	virtual void doCreateGeometry();
 };

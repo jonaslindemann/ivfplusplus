@@ -489,7 +489,10 @@ void CIvfCamera::projectionTransform()
 		}
 		else
 		{
-			gluPerspective(m_fov, getAspect(), m_zNear, m_zFar);
+			if (!m_jitter)
+				gluPerspective(m_fov, getAspect(), m_zNear, m_zFar);
+			else
+				accPerspective(m_fov, getAspect(), m_zNear, m_zFar, m_jitterX, m_jitterY, 0.0, 0.0, 0.1);
 		}
 	}
 }

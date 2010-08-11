@@ -10,6 +10,7 @@ option(IVF_IMAGE "Build Ivf++ image support." OFF)
 option(IVF_GLE "Build Ivf++ with GLE support." ON)
 option(IVF_FONT "Build Ivf++ with font support." OFF)
 option(IVF_EXAMPLES "Build Ivf++ examples." OFF)
+option(IVF_FLTK_EXAMPLES "Build Ivf++ FLTK examples." OFF)
 option(IVF_DEBUG "Build Ivf++ with debug information." OFF)
 option(IVF_SHARED "Build Ivf++ as shared libraries." OFF)
 

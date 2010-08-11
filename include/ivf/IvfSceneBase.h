@@ -32,6 +32,14 @@
 #include <ivf/IvfCulling.h>
 #include <ivf/IvfBufferSelection.h>
 
+class IVF_API CIvfMultipassEvent {
+public:
+	/**
+	 * onMultipass method
+	 */
+	virtual void onMultipass(int pass) {};
+};
+
 IvfSmartPointer(CIvfSceneBase);
 
 /**
@@ -84,6 +92,7 @@ public:
 		CP_RED_CYAN
 	};
 private:
+	CIvfMultipassEvent* m_multipassEvent;
 	CIvfCompositePtr m_preComposite;
 	CIvfCompositePtr m_composite;
 	CIvfCompositePtr m_postComposite;
@@ -100,22 +109,23 @@ private:
 	bool m_dirty;
 
 	bool m_multiPass;
-	bool m_nPasses;
+	int m_nPasses;
 
 public:
 	void doResize(int width, int height);
 
-	void defaultLocalLighting();
-	void defaultViewSetup();
-	void defaultWorldLighting();
-	void defaultSceneRender();
+	void defaultLocalLighting(int pass = 0);
+	void defaultViewSetup(int pass = 0);
+	void defaultWorldLighting(int pass = 0);
+	void defaultSceneRender(int pass = 0);
 	void defaultRendering();
 
-	virtual void doLocalLighting();
-	virtual void doViewSetup();
-	virtual void doWorldLighting();
-	virtual void doRender();
-	virtual void doViewAndRender();
+	virtual void doLocalLighting(int pass);
+	virtual void doViewSetup(int pass);
+	virtual void doWorldLighting(int pass);
+	virtual void doRender(int pass);
+	virtual void doViewAndRender(int pass);
+	virtual void doMultipass(int pass);
 
 	/** CIvfSceneBase constructor */
 	CIvfSceneBase();
@@ -191,6 +201,14 @@ public:
 	int getSelectionSize();
 	CIvfShape* getSelectedShape(int idx);
 	CIvfShape* removeShape(CIvfShape* shape);
+
+	void setMultipass(bool flag);
+	bool getMultipass();
+
+	void setPasses(int passes);
+	int getPasses();
+
+	void setMultipassEvent(CIvfMultipassEvent* evt);
 
 protected:
 	virtual void doCreateGeometry();

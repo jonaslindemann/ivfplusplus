@@ -55,6 +55,7 @@ private:
 	double		m_zeroTime;
 
 	bool		m_fullscreen;
+	bool		m_multisample;
 	bool		m_active;
 
 	bool		m_created;
@@ -89,6 +90,9 @@ public:
 
 	/** Enable/Disable fullscreen */
 	void setFullscreen(bool flag);
+
+	/** Enable/Disable multisample support */
+	void setMultisample(bool flag);
 
 	/** Set color depth */
 	void setColorBits(int bits);

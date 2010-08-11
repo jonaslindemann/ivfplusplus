@@ -320,6 +320,17 @@ void CIvfGLPrimitive::refresh()
 		this->updateVertexNormals();
 }
 
+void CIvfGLPrimitive::invertNormals()
+{
+	int i;
+	for (i=0; i<(int)m_normalSet.size(); i++)
+	{
+		CIvfVec3d* normal = m_normalSet[i];
+		normal->negate();
+	}
+}
+
+
 void CIvfGLPrimitive::addColor(float red, float green, float blue, float alfa)
 {
 	CIvfColor* color = new CIvfColor();
