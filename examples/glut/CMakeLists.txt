@@ -16,10 +16,8 @@ endif(WIN32)
 file(GLOB SOURCE_FILES *.cpp)
 file(GLOB INCLUDE_FILES *.h)
 
-message(${EXTRA_FILES})
-
 if (APPLE)
-	set( EXT_LIBS "-framework carbon" "-framework cocoa" "-framework applicationservices" "-framework agl" "-framework opengl" "-framework GLUT" ivfmath ivf ivfwidget) 
+	set( EXT_LIBS "-framework carbon" "-framework cocoa" "-framework applicationservices" "-framework agl" "-framework opengl" "-framework GLUT" ivfmath ivf ivfui ivfglut ivfwidget) 
 else (APPLE)
 	set( EXT_LIBS opengl32 glu32 freeglut ivfmath ivfui ivfwidget )
 endif (APPLE)

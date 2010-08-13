@@ -56,11 +56,14 @@ IvfSmartPointer(CIvfApplication);
  */
 class IVFUI_API CIvfApplication : public CIvfGlutApplication {
 private:
-
+	static CIvfApplication* m_instance;
+	static CIvfSingletonDestroyer<CIvfApplication> m_destroyer;
 public:
-	IvfClassInfo("CIvfApplication",CIvfBase);
-	int run();
-	void runAppLoop(CIvfWindow* window);
+	static CIvfApplication* getInstance(int* argc, char** argv);
+	static CIvfApplication* getInstance();
+protected:
+	/** Protected constructor (do not use) */
+	CIvfApplication(int* argc, char** argv);
 };
 
 #endif 

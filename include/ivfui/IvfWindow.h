@@ -26,7 +26,6 @@
 #define _CIvfWindow_h_
 
 #include <ivfglut/IvfGlutBase.h>
-#include <ivfui/IvfPopupMenu.h>
 
 IvfSmartPointer(CIvfWindow);
 
@@ -41,34 +40,10 @@ IvfSmartPointer(CIvfWindow);
  *
  * @author Jonas Lindemann
  */
-class IVFUI_API CIvfWindow : public CIvfGlutBase, public CIvfPopupMenu {
+class IVFUI_API CIvfWindow : public CIvfGlutBase {
 private:
-	bool m_popupButtonDown;
 public:
-	/** 
-	 * CIvfWindow constructor
-	 *
-	 * Window will not be visible until the 
-	 * show() method is called.
-	 *
-	 * @param X Window x position
-	 * @param Y Window y position
-	 * @param W Window width
-	 * @param H Window height
-	 */
 	CIvfWindow(int X, int Y, int W, int H);
-	virtual ~CIvfWindow();
-
-	IvfClassInfo("CIvfWindow",CIvfFltkBase);
-
-	/** Sets window title */
-	void setWindowTitle(const char* title);
-
-	/** Shows window on screen */
-	void show();
-
-	virtual void doMouseDown(int x, int y);
-	virtual void doMouseUp(int x, int y);
 };
 
 /** \example ac3dreader.cpp  */

@@ -25,18 +25,11 @@
 #include <ivfui/IvfWindow.h>
 
 CIvfWindow::CIvfWindow(int X, int Y, int W, int H)
-:CIvfFltkBase(X, Y, W, H, "Ivf++"), CIvfPopupMenu()
+:CIvfGlutBase(X, Y, W, H)
 {
-	setParent(this);
-	this->resizable(this);
-
-	// Workaround: On Windows the window is resizable. On Linux it is locked.
-	// Settings this will enable resizing the window on Linux.
-
-	this->size_range(0,0,20000,20000);
-
-	m_popupButtonDown = false;
 }
+/*
+
 
 CIvfWindow::~CIvfWindow()
 {
@@ -45,7 +38,7 @@ CIvfWindow::~CIvfWindow()
 
 void CIvfWindow::setWindowTitle(const char *title)
 {
-	label(title);
+	#label(title);
 }
 
 
@@ -82,4 +75,4 @@ void CIvfWindow::doMouseUp(int x, int y)
 
 	m_popupButtonDown = false;
 }
-
+*/
