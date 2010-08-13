@@ -24,7 +24,36 @@
 
 #include <ivfui/IvfApplication.h>
 
+CIvfApplication* CIvfApplication::m_instance = 0;
+CIvfSingletonDestroyer<CIvfApplication> CIvfApplication::m_destroyer;
+
+CIvfApplication::CIvfApplication(int* argc, char** argv)
+:CIvfGlutApplication(argc, argv)
+{
+
+}
+
+CIvfApplication* CIvfApplication::getInstance(int* argc, char** argv) 
+{
+    if (m_instance == 0)  
+    {  
+		m_instance = new CIvfApplication(argc, argv); 
+		m_destroyer.setSingleton(m_instance);
+    }
+    return m_instance; 
+}
+
+CIvfApplication* CIvfApplication::getInstance() 
+{
+    if (m_instance != 0)  
+    	return m_instance;
+    else 
+    	return 0;
+}
+
+/*
 CIvfApplication::CIvfApplication(int visual)
+:CIvfGlutApplicationBase(visual)
 {
     Fl::visual(visual);
 	Fl::get_system_colors();
@@ -50,3 +79,4 @@ void CIvfApplication::runAppLoop(CIvfWindow *window)
 		finished = (!window->doAppLoop())||(Fl::first_window()==NULL);
 	}
 }
+*/
