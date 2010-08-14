@@ -212,6 +212,7 @@ void CIvfGlutApplication::run()
 
 void CIvfGlutApplication::runAppLoop(CIvfGlutBase *window)
 {
+#ifdef FREEGLUT
 	bool finished = false;
 
 	while (!finished)
@@ -219,6 +220,15 @@ void CIvfGlutApplication::runAppLoop(CIvfGlutBase *window)
 		glutMainLoopEvent();
 		finished = (!window->doAppLoop());
 	}
+#else
+	bool finished = false;
+
+	while (!finished)
+	{
+		glutCheckLoop();
+		finished = (!window->doAppLoop());
+	}
+#endif
 }
 
 void CIvfGlutApplication::enableTimer(int timerIdx, int msecs)

@@ -51,11 +51,18 @@ bool CIvfJpegImage::read()
 	JSAMPARRAY buffer;
 	int row_stride;
 	struct jpeg_error_mgr pub;
-
+#ifdef WIN32
 	if (fopen_s(&infile, getFileName().c_str(), "rb") != 0) {
 		fprintf(stderr, "can't open %s\n", getFileName().c_str());
 		return 0;
 	}
+#else
+	infile = fopen(getFileName().c_str(), "rb");
+	if ( infile == NULL) {
+		fprintf(stderr, "can't open %s\n", getFileName().c_str());
+		return 0;
+	}
+#endif 	
 
     cinfo.err = jpeg_std_error(&pub);
 	jpeg_create_decompress(&cinfo);

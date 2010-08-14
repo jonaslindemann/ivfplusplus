@@ -93,7 +93,9 @@ bool CIvfSgiImage::read()
 	unsigned char buf[80];
 	unsigned long i, j, k;
 	FILE* inf;
+#ifdef WIN32
 	errno_t err;
+#endif
 
 	//
 	// Open file
@@ -102,10 +104,17 @@ bool CIvfSgiImage::read()
 	if (this->getFileName()=="")
 		return false;
 
+#ifdef WIN32
 	err = fopen_s(&inf, this->getFileName().c_str(), "rb");
 
 	if (err)
 		return false;
+#else
+	inf = fopen(this->getFileName().c_str(), "rb");
+	
+	if (inf==NULL)
+		return false;
+#endif
 
 	unsigned short magic;
 	unsigned char storage;
