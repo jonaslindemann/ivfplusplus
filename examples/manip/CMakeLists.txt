@@ -1,6 +1,6 @@
 SET(IVFAPP_NAME manip )
-SET(IVFAPP_LIBS ivf ivfui ivf3dui )
-SET(IVFAPP_DEBUG_LIBS ivfd ivfuid ivf3duid)
+SET(IVFAPP_LIBS ivf ivfglut ivf3dui )
+SET(IVFAPP_DEBUG_LIBS ivfd ivfglutd ivf3duid)
 
 IVFAPP_SETUP()
 

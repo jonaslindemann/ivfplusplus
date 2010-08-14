@@ -52,7 +52,7 @@ bool CIvfJpegImage::read()
 	int row_stride;
 	struct jpeg_error_mgr pub;
 
-	if ((infile = fopen(getFileName().c_str(), "rb")) == NULL) {
+	if (fopen_s(&infile, getFileName().c_str(), "rb") != 0) {
 		fprintf(stderr, "can't open %s\n", getFileName().c_str());
 		return 0;
 	}

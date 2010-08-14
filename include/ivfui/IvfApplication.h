@@ -54,7 +54,7 @@ IvfSmartPointer(CIvfApplication);
  *
  * @author Jonas Lindemann
  */
-class IVFUI_API CIvfApplication : public CIvfGlutApplication {
+class IVFUI_API CIvfApplication {
 private:
 	static CIvfApplication* m_instance;
 	static CIvfSingletonDestroyer<CIvfApplication> m_destroyer;

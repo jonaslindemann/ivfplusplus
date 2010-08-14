@@ -134,10 +134,10 @@ public:
 	 * deallocate it. setChannels() should be called before
 	 * setSize(), to avoid unnesseccary allocation.
 	 */
-	void setChannels(int channels);
+	void setChannels(unsigned int channels);
 
 	/** Returns the number of channels in the image */
-	int getChannels();
+	unsigned int getChannels();
 
 	/** 
 	 * Sets the internal format of the image 

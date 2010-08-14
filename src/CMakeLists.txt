@@ -11,7 +11,7 @@ if (IVF_UI)
 	endif (IVF_UI_WIN32)
 
 	if (IVF_UI_GLUT)
-		set(IVF_DIRS ${IVF_DIRS} ivfui ivfglut)
+		set(IVF_DIRS ${IVF_DIRS} ivfglut)
 	endif (IVF_UI_GLUT)
 
 endif(IVF_UI)

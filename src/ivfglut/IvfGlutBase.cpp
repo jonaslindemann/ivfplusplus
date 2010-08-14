@@ -21,6 +21,19 @@ CIvfGlutBase::CIvfGlutBase(int X, int Y, int W, int H)
 	m_pos[1] = Y;
 	m_size[0] = W;
 	m_size[1] = H;
+
+#ifdef WIN32
+	LARGE_INTEGER count;
+	QueryPerformanceFrequency(&m_countsPerSec);
+	QueryPerformanceCounter(&count);
+	m_zeroTime = (double)(count.QuadPart)/(double)(m_countsPerSec.QuadPart);
+#else
+	timeval tv;
+	gettimeofday(&tv, 0);
+	m_zeroTime = (double)tv.tv_sec + 1e-6*(double)tv.tv_usec;
+#endif
+	m_elapsedTime = 0.0;
+
 	CIvfGlutApplication* application = CIvfGlutApplication::getInstance();
 	application->addWindow(this);
 }
@@ -40,6 +53,30 @@ void CIvfGlutBase::create()
 void CIvfGlutBase::doRedraw()
 {
 	glutPostRedisplay();
+}
+
+double CIvfGlutBase::doElapsedTime()
+{
+#ifdef WIN32
+	LARGE_INTEGER count;
+	QueryPerformanceCounter(&count);
+	double currentTime = (double)(count.QuadPart)/(double)(m_countsPerSec.QuadPart);
+	return currentTime - m_zeroTime;
+#else
+	timeval tv;
+	gettimeofday(&tv, 0);
+	return (double)tv.tv_sec + 1e-6*(double)tv.tv_usec - m_zeroTime;
+#endif
+}
+
+void CIvfGlutBase::doEnableTimeout(float time, int nbr)
+{
+	CIvfGlutApplication::getInstance()->enableTimer(nbr, (int)time*1000.0);
+}
+
+void CIvfGlutBase::doDisableTimeout(int nbr)
+{
+	CIvfGlutApplication::getInstance()->disableTimer(nbr);
 }
 
 void CIvfGlutBase::glutDisplay()
@@ -93,6 +130,86 @@ void CIvfGlutBase::glutMotion(int x, int y)
 void CIvfGlutBase::glutPassiveMotion(int x, int y)
 {
 	this->doMouseMove(x, y);
+}
+
+void CIvfGlutBase::glutTimer0(int value)
+{
+	if (this->doTimeout0())
+		CIvfGlutApplication::getInstance()->enableTimer(0, (int)this->getTimeout(0)*1000.0);
+	else
+		CIvfGlutApplication::getInstance()->disableTimer(0);
+}
+
+void CIvfGlutBase::glutTimer1(int value)
+{
+	if (this->doTimeout1())
+		CIvfGlutApplication::getInstance()->enableTimer(1, (int)this->getTimeout(1)*1000.0);
+	else
+		CIvfGlutApplication::getInstance()->disableTimer(1);
+}
+
+void CIvfGlutBase::glutTimer2(int value)
+{
+	if (this->doTimeout2())
+		CIvfGlutApplication::getInstance()->enableTimer(2, (int)this->getTimeout(2)*1000.0);
+	else
+		CIvfGlutApplication::getInstance()->disableTimer(2);
+}
+
+void CIvfGlutBase::glutTimer3(int value)
+{
+	if (this->doTimeout3())
+		CIvfGlutApplication::getInstance()->enableTimer(3, (int)this->getTimeout(3)*1000.0);
+	else
+		CIvfGlutApplication::getInstance()->disableTimer(3);
+}
+
+void CIvfGlutBase::glutTimer4(int value)
+{
+	if (this->doTimeout4())
+		CIvfGlutApplication::getInstance()->enableTimer(4, (int)this->getTimeout(4)*1000.0);
+	else
+		CIvfGlutApplication::getInstance()->disableTimer(4);
+}
+
+void CIvfGlutBase::glutTimer5(int value)
+{
+	if (this->doTimeout5())
+		CIvfGlutApplication::getInstance()->enableTimer(5, (int)this->getTimeout(5)*1000.0);
+	else
+		CIvfGlutApplication::getInstance()->disableTimer(5);
+}
+
+void CIvfGlutBase::glutTimer6(int value)
+{
+	if (this->doTimeout6())
+		CIvfGlutApplication::getInstance()->enableTimer(6, (int)this->getTimeout(6)*1000.0);
+	else
+		CIvfGlutApplication::getInstance()->disableTimer(6);
+}
+
+void CIvfGlutBase::glutTimer7(int value)
+{
+	if (this->doTimeout7())
+		CIvfGlutApplication::getInstance()->enableTimer(7, (int)this->getTimeout(7)*1000.0);
+	else
+		CIvfGlutApplication::getInstance()->disableTimer(7);
+}
+
+void CIvfGlutBase::glutTimer8(int value)
+{
+	if (this->doTimeout8())
+		CIvfGlutApplication::getInstance()->enableTimer(8, (int)this->getTimeout(8)*1000.0);
+	else
+		CIvfGlutApplication::getInstance()->disableTimer(8);
+}
+
+void CIvfGlutBase::glutTimer9(int value)
+{
+	if (this->doTimeout9())
+		CIvfGlutApplication::getInstance()->enableTimer(9, (int)this->getTimeout(9)*1000.0);
+	else
+		CIvfGlutApplication::getInstance()->disableTimer(9);
 }
 
 void CIvfGlutBase::setCaption(const std::string& caption)

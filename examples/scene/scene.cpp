@@ -11,8 +11,8 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfui/IvfApplication.h>
-#include <ivfui/IvfWorkspaceWindow.h>
+#include <ivfglut/IvfGlutApplication.h>
+#include <ivfglut/IvfGlutBase.h>
 
 #include <ivf/IvfMaterial.h>
 #include <ivf/IvfSphere.h>
@@ -57,7 +57,8 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfApplicationPtr app = new CIvfApplication(IVF_DOUBLE|IVF_RGB);
+	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	app->setDisplayMode(IVF_DOUBLE|IVF_RGB);
 
 	// Create a window
 

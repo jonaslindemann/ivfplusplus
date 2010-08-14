@@ -19,7 +19,7 @@ file(GLOB INCLUDE_FILES *.h)
 if (APPLE)
 	set( EXT_LIBS "-framework carbon" "-framework cocoa" "-framework applicationservices" "-framework agl" "-framework opengl" "-framework GLUT" ivfmath ivf ivfui ivfglut ivfwidget) 
 else (APPLE)
-	set( EXT_LIBS opengl32 glu32 freeglut ivfmath ivfui ivfwidget )
+	set( EXT_LIBS opengl32 glu32 freeglut ivf ivfmath ivfui ivfglut ivfwidget )
 endif (APPLE)
 	
 

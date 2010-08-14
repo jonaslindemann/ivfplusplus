@@ -53,7 +53,7 @@ bool CIvfPngImage::read()
 	int bit_depth, color_type;
 	FILE *fp;
 
-	if ((fp = fopen(getFileName().c_str(), "rb")) == NULL)
+	if (fopen_s(&fp, getFileName().c_str(), "rb") !=0 )
 		return false;
 
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
@@ -122,7 +122,7 @@ bool CIvfPngImage::read()
 
 	setSize(width, height);
 
-	int i, j, k;
+	unsigned int i, j, k;
 
 	for (i=0; i<height; i++)
 		for (j=0; j<width; j++)

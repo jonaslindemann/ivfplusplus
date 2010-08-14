@@ -24,6 +24,10 @@
 
 #include <ivffile/IvfPolyReader.h>
 
+#ifdef WIN32
+#define strcpy strcpy_s
+#endif
+
 #define KW_ERROR       -1
 #define KW_COMMENT     0
 #define KW_ELEMENT     1

@@ -93,6 +93,7 @@ bool CIvfSgiImage::read()
 	unsigned char buf[80];
 	unsigned long i, j, k;
 	FILE* inf;
+	errno_t err;
 
 	//
 	// Open file
@@ -101,9 +102,9 @@ bool CIvfSgiImage::read()
 	if (this->getFileName()=="")
 		return false;
 
-	inf = fopen(this->getFileName().c_str(), "rb");
+	err = fopen_s(&inf, this->getFileName().c_str(), "rb");
 
-	if (!inf)
+	if (err)
 		return false;
 
 	unsigned short magic;

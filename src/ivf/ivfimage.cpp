@@ -39,7 +39,7 @@ CIvfImage::~CIvfImage()
 		delete [] m_imageMap;
 }
 
-void CIvfImage::setChannels(int channels)
+void CIvfImage::setChannels(unsigned int channels)
 {
 	m_channels = channels;
 
@@ -64,7 +64,7 @@ void CIvfImage::setChannels(int channels)
 	this->setSize(m_size[0], m_size[1]);
 }
 
-int CIvfImage::getChannels()
+unsigned int CIvfImage::getChannels()
 {
 	return m_channels;
 }
