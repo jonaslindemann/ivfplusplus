@@ -11,8 +11,8 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfui/IvfApplication.h>
-#include <ivfui/IvfWindow.h>
+#include <ivfglut/IvfGlutApplication.h>
+#include <ivfglut/IvfGlutBase.h>
 
 #include <ivf/IvfCamera.h>
 #include <ivf/IvfSphere.h>
@@ -33,7 +33,7 @@ using namespace std;
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfWindow {
+class CExampleWindow: public CIvfGlutBase {
 private:
 
 	// Camera movement state variables
@@ -58,7 +58,7 @@ private:
 	double				m_speed;
 public:
 	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfWindow(X, Y, W, H) {};
+		:CIvfGlutBase(X, Y, W, H) {};
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -403,7 +403,8 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfApplicationPtr app = new CIvfApplication(IVF_DOUBLE|IVF_RGB);
+	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	app->setDisplayMode(IVF_DOUBLE|IVF_RGB);
 
 	// Create a window
 

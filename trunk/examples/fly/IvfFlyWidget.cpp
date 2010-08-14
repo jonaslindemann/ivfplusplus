@@ -9,13 +9,12 @@
 
 #include <ivffile/IvfAc3DReader.h>
 
-#include <FL/x.H>
 //#include <Mmsystem.h>
 
 #include "StarField.h"
 
 CIvfFlyWidget::CIvfFlyWidget(int X, int Y, int W, int H, const char *L)
-:CIvfWindow(X, Y, W, H)
+:CIvfGlutBase(X, Y, W, H)
 {
 }
 
@@ -108,7 +107,7 @@ void CIvfFlyWidget::onInitContext(int width, int height)
 
 void CIvfFlyWidget::onResize(int width, int height)
 {
-	m_camera->setViewPort(w(), h());
+	m_camera->setViewPort(width, height);
 	m_camera->initialize();
 }
 

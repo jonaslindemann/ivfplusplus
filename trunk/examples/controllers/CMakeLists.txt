@@ -1,5 +1,5 @@
 SET(IVFAPP_NAME controllers)
-SET(IVFAPP_LIBS ivf ivfui ivffile ivfctl)
-SET(IVFAPP_DEBUG_LIBS ivfd ivfuid ivffiled ivfctld)
+SET(IVFAPP_LIBS ivf ivfglut ivffile ivfctl)
+SET(IVFAPP_DEBUG_LIBS ivfd ivfglutd ivffiled ivfctld)
 
 IVFAPP_SETUP()

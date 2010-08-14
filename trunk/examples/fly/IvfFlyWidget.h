@@ -8,14 +8,14 @@
 
 #include <ivfwidget/IvfFlyHandler.h>
 
-#include <ivfui/IvfWindow.h>
+#include <ivfglut/IvfGlutBase.h>
 
 #include "StarField.h"
 //#include "Joystick.h"
 
 IvfSmartPointer(CIvfFlyWidget);
 
-class CIvfFlyWidget : public CIvfWindow {
+class CIvfFlyWidget : public CIvfGlutBase {
 private:
 	CIvfCameraPtr			m_camera;
 	CIvfScenePtr			m_scene;

@@ -1,5 +1,5 @@
-#include <ivfui/IvfApplication.h>
-#include <ivfui/IvfWindow.h>
+#include <ivfglut/IvfGlutApplication.h>
+#include <ivfglut/IvfGlutBase.h>
 
 #include "IvfFlyWidget.h"
 
@@ -8,7 +8,8 @@ main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfApplicationPtr app = new CIvfApplication(IVF_DOUBLE|IVF_RGB);
+	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_MULTISAMPLE);
 
 	// Create a window
 
