@@ -8,6 +8,10 @@
 #include <GLUT/glut.h>
 #endif 
 
+#ifndef WIN32
+#include <sys/time.h>
+#endif 
+
 #include <ivfglut/IvfGlutApplication.h>
 
 IvfSmartPointer(CIvfGlutBase);

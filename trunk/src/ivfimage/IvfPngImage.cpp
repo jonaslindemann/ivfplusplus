@@ -52,9 +52,14 @@ bool CIvfPngImage::read()
 	png_uint_32 width, height;
 	int bit_depth, color_type;
 	FILE *fp;
-
+#ifdef WIN32
 	if (fopen_s(&fp, getFileName().c_str(), "rb") !=0 )
 		return false;
+#else
+	fp = fopen(getFileName().c_str(), "rb");
+	if (fp==NULL)
+		return false;
+#endif
 
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
 		NULL, NULL, NULL);
