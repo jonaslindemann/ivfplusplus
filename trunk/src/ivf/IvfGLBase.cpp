@@ -162,10 +162,24 @@ void CIvfGLBase::compileList()
 	// Render display list
 
 	glNewList(m_displayList, GL_COMPILE);
+		if (m_renderState!=NULL)
+			m_renderState->apply();
+
 		doBeginTransform();
+
+		if ((m_selectState == SS_ON)&&(m_useSelectShape))
+			doCreateSelect();
+
+		if (m_renderMaterial)
 			doCreateMaterial();
-			doCreateGeometry();
+
+		doPreGeometry();
+		doCreateGeometry();
+		doPostGeometry();
 		doEndTransform();
+
+		if (m_renderState!=NULL)
+			m_renderState->remove();
 	glEndList();
 }
 

@@ -61,7 +61,7 @@ private:
 	bool m_rotating;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H);
+	CExampleWindow(int X, int Y, int W, int H, bool fullScreen);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -77,8 +77,8 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) 
+CExampleWindow::CExampleWindow(int X, int Y, int W, int H, bool fullScreen)
+		:CIvfGlutBase(X, Y, W, H, fullScreen) 
 {
 
 }
@@ -121,11 +121,16 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Read file
 
+	double max[3];
+	double min[3];
+
 	acReader->read();
+	acReader->getSize(min, max);
 
 	// Retrieve poly set
 
 	CIvfShapePtr shape = acReader->getShape();
+	//shape->setUselist(true);
 
 	m_scene->addChild(shape);
 
@@ -265,15 +270,15 @@ int main(int argc, char **argv)
 	// Create Ivf++ application object.
 
 	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
-	app->setDisplayMode(IVF_DOUBLE|IVF_RGB);
-
+	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512, false);
+	window->setModeString("1280x1024");
 
 	// Set window title and show window
 
-	window->setWindowTitle("Ivf++ Ac3D file reader example");
+	//window->setWindowTitle("Ivf++ Ac3D file reader example");
 	window->show();
 
 	// Enter main application loop
