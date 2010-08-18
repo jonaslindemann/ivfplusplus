@@ -16,9 +16,10 @@
 
 IvfSmartPointer(CIvfGlutBase);
 
-CIvfGlutBase::CIvfGlutBase(int X, int Y, int W, int H)
+CIvfGlutBase::CIvfGlutBase(int X, int Y, int W, int H, bool fullScreen)
 :CIvfWidgetBase()
 {
+	m_fullScreen = fullScreen;
 	m_id = -1;
 	m_caption = "Glut Window";
 	m_pos[0] = X;
@@ -49,9 +50,16 @@ CIvfGlutBase::~CIvfGlutBase()
 
 void CIvfGlutBase::create()
 {
-	m_id = glutCreateWindow(m_caption.c_str());
-	glutPositionWindow(m_pos[0], m_pos[1]);
-	glutReshapeWindow(m_size[0], m_size[1]);
+	if (m_fullScreen)
+	{
+
+	}
+	else
+	{
+		m_id = glutCreateWindow(m_caption.c_str());
+		glutPositionWindow(m_pos[0], m_pos[1]);
+		glutReshapeWindow(m_size[0], m_size[1]);
+	}
 }
 
 void CIvfGlutBase::doRedraw()
@@ -117,9 +125,16 @@ void CIvfGlutBase::glutMouse(int button, int state, int x, int y)
 
 	switch (state) {
 	case GLUT_DOWN:
+		if (glutGetModifiers() == GLUT_ACTIVE_SHIFT)
+			setModifierKey(CIvfWidgetBase::MT_SHIFT);
+		if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
+			setModifierKey(CIvfWidgetBase::MT_CTRL);
+		if (glutGetModifiers() == GLUT_ACTIVE_ALT)
+			setModifierKey(CIvfWidgetBase::MT_ALT);
 		this->doMouseDown(x, y);
 		break;
 	case GLUT_UP:
+		setModifierKey(CIvfWidgetBase::MT_NONE);
 		this->doMouseUp(x, y);
 		this->clearMouseStatus();
 		break;
@@ -239,8 +254,15 @@ const std::string CIvfGlutBase::getWindowTitle()
 
 void CIvfGlutBase::show()
 {
-	glutSetWindow(m_id);
-	glutShowWindow();
+	if (this->m_fullScreen)
+	{
+		this->enterFullscreen();
+	}
+	else
+	{
+		glutSetWindow(m_id);
+		glutShowWindow();
+	}
 }
 
 void CIvfGlutBase::setId(int id)
@@ -253,6 +275,14 @@ int CIvfGlutBase::getId()
 	return m_id;
 }
 
+void CIvfGlutBase::setModeString(const std::string& modeString)
+{
+	m_modeString = modeString;
+}
 
-
+void CIvfGlutBase::enterFullscreen()
+{
+	glutGameModeString(m_modeString.c_str());
+	glutEnterGameMode();
+}
 

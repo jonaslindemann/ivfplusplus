@@ -15,6 +15,7 @@ class CIvfGlutBase : public CIvfWidgetBase {
 private:
 	int m_id;
 	std::string m_caption;
+	std::string m_modeString;
 	int m_pos[2];
 	int m_size[2];
 #ifdef WIN32
@@ -22,8 +23,9 @@ private:
 #endif
 	double		m_elapsedTime;
 	double		m_zeroTime;
+	bool		m_fullScreen;
 public:
-	CIvfGlutBase(int X, int Y, int W, int H);
+	CIvfGlutBase(int X, int Y, int W, int H, bool fullScreen = false);
 	virtual ~CIvfGlutBase();
 	
 	void create();
@@ -61,4 +63,6 @@ public:
 	double doElapsedTime();
 	void doEnableTimeout(float time, int nbr);
 	void doDisableTimeout(int nbr);
+	void setModeString(const std::string& modeString);
+	void enterFullscreen();
 };

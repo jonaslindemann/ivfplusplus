@@ -78,6 +78,7 @@ public:
 	void mainLoop();
 	void run();
 	void runAppLoop(CIvfGlutBase *window);
+
 protected:
 	/** Protected constructor (do not use) */
 	CIvfGlutApplication(int* argc, char** argv);

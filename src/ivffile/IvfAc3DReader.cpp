@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2010 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,6 +30,9 @@
 
 #include <sstream>
 
+#define IvfLog(txt) \
+	std::cout << txt << std::endl;
+
 #define KW_ERROR       -1
 #define KW_MATERIAL     0
 #define KW_OBJECT       1
@@ -49,6 +52,7 @@
 #define OKW_KIDS		9
 #define OKW_MAT			10
 #define OKW_REFS		11
+#define OKW_CREASE		12
 
 using namespace std;
 
@@ -94,34 +98,34 @@ void CIvfAc3DReader::read()
 
 	if (!m_inputFile)
 	{
-		IvfDbg1("CIvfAc3DReader: File invalid.");
+		IvfLog("CIvfAc3DReader: File invalid.");
 		return;
 	}
 	else
-		IvfDbg1("CIvfAc3DReader: File ok.");
+		IvfLog("CIvfAc3DReader: File ok.");
 
 	// Read and check header
 
 	if (!checkHeader(m_inputFile))
 	{
-		IvfDbg1("CIvfAc3DReader: Invalid header or unsupported type.");
+		IvfLog("CIvfAc3DReader: Invalid header or unsupported type.");
 		m_inputFile.close();
 		return;
 	}
 	else
-		IvfDbg1("CIvfAc3DReader: Header ok.");
+		IvfLog("CIvfAc3DReader: Header ok.");
 
 	// Read data
 
 	if (!readData(m_inputFile))
 	{
-		IvfDbg1("CIvfAc3DReader: Invalid data.");
+		IvfLog("CIvfAc3DReader: Invalid data.");
 		return;
 	}
 	else
-		IvfDbg1("CIvfAc3DReader: data ok.");
+		IvfLog("CIvfAc3DReader: data ok.");
 
-	IvfDbg1("CIvfAc3DReader: " << m_surfacesRead << " surfaces read.");
+	IvfLog("CIvfAc3DReader: " << m_surfacesRead << " surfaces read.");
 
 	m_inputFile.close();
 
@@ -302,6 +306,9 @@ int CIvfAc3DReader::getOptionalKeyword(string &row)
 	if (find("texrep", row))
 		return OKW_TEXREP;
 
+	if (find("crease", row))
+		return OKW_CREASE;
+
 	return OKW_ERROR;
 }
 
@@ -318,7 +325,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 
 	if (find("world",row))
 	{
-		IvfDbg1("CIvfAc3DReader: World object found.");
+		IvfLog("CIvfAc3DReader: World object found.");
 		m_world = new CIvfComposite();
 		this->setShape(m_world);
 		m_currentGroup = m_world;
@@ -329,7 +336,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 	}
 	else if (find("poly", row))
 	{
-		IvfDbg1("CIvfAc3DReader: Poly object found.");
+		IvfLog("CIvfAc3DReader: Poly object found.");
 
 		m_currentTextureIndex = 0;
 
@@ -351,7 +358,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 	else if (find("group", row))
 	{
 
-		IvfDbg1("CIvfAc3DReader: Group object found.");
+		IvfLog("CIvfAc3DReader: Group object found.");
 		m_currentObject = OT_GROUP;
 
 		while (!haveMoreChildren())
@@ -398,7 +405,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 
 	string params;
 
-	IvfDbg1("CIvfAc3DReader: Found material.");
+	IvfLog("CIvfAc3DReader: Found material.");
 
 	//
 	// Create material
@@ -429,7 +436,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 	strStream.seekg(0);
 	strStream >> fValue1 >> fValue2 >> fValue3;
 
-	IvfDbg1("\trgb  : " << fValue1 << ", " << fValue2 << ", " << fValue3);
+	IvfLog("\trgb  : " << fValue1 << ", " << fValue2 << ", " << fValue3);
 
 	material->setDiffuseColor(fValue1, fValue2, fValue3, 1.0f);
 
@@ -454,7 +461,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 	strStream.seekg(0);
 	strStream >> fValue1 >> fValue2 >> fValue3;
 
-	IvfDbg1("\tamb  : " << fValue1 << ", " << fValue2 << ", " << fValue3);
+	IvfLog("\tamb  : " << fValue1 << ", " << fValue2 << ", " << fValue3);
 
 	material->setAmbientColor(fValue1, fValue2, fValue3, 1.0f);
 
@@ -474,7 +481,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 	strStream.seekg(0);
 	strStream >> fValue1 >> fValue2 >> fValue3;
 
-	IvfDbg1("\temis : " << fValue1 << ", " << fValue2 << ", " << fValue3);
+	IvfLog("\temis : " << fValue1 << ", " << fValue2 << ", " << fValue3);
 
 	material->setEmissionColor(fValue1, fValue2, fValue3, 1.0f);
 
@@ -494,7 +501,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 	strStream.seekg(0);
 	strStream >> fValue1 >> fValue2 >> fValue3;
 
-	IvfDbg1("\tspec : " << fValue1 << ", " << fValue2 << ", " << fValue3);
+	IvfLog("\tspec : " << fValue1 << ", " << fValue2 << ", " << fValue3);
 
 	material->setSpecularColor(fValue1, fValue2, fValue3, 1.0f);
 
@@ -514,7 +521,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 	strStream.seekg(0);
 	strStream >> fValue1;
 
-	IvfDbg1("\tshi  : " << fValue1);
+	IvfLog("\tshi  : " << fValue1);
 
 	material->setShininess(fValue1);
 
@@ -533,7 +540,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 	strStream.seekg(0);
 	strStream >> fValue1;
 
-	IvfDbg1("\ttrans : " << fValue1);
+	IvfLog("\ttrans : " << fValue1);
 
 	material->setAlphaValue(1.0f-fValue1);
 
@@ -593,12 +600,12 @@ bool CIvfAc3DReader::parseName(string &row)
 	if (m_currentObject!=OT_LIGHT)
 	{
 
-		IvfDbg1("CIvfAc3DReader: name = " << m_currentName.c_str());
+		IvfLog("CIvfAc3DReader: name = " << m_currentName.c_str());
 
 		if (m_currentShape!=NULL)
 			m_currentShape->setName(m_currentName.c_str());
 
-		//IvfDbg1("\tName : " <
+		//IvfLog("\tName : " <
 	}
 
 	return true;
@@ -685,7 +692,7 @@ bool CIvfAc3DReader::parseTexture(string &row)
 
 	m_lastTexture = texture;
 
-	IvfDbg1("CIvfAc3DReader: texture = " << params.c_str());
+	IvfLog("CIvfAc3DReader: texture = " << params.c_str());
 
 	return true;
 }
@@ -743,7 +750,7 @@ bool CIvfAc3DReader::parseNumvert(string &row, istream &in)
 		m_currentPolySet->addCoord(x, y, z);
 	}
 
-	IvfDbg1("CIvfAc3DReader: " << nVerts << " vertices read.");
+	IvfLog("CIvfAc3DReader: " << nVerts << " vertices read.");
 
 	m_haveGeometry = true;
 
@@ -864,7 +871,7 @@ bool CIvfAc3DReader::parseRefs(string &row, istream &in)
 			m_currentPolySet->addMaterialIndex(m_currentMaterialIdx);
 		}
 		else
-			IvfDbg1("CIvfAc3DReader: Topology not supported. (refs " << nVertices << " )");
+			IvfLog("CIvfAc3DReader: Topology not supported. (refs " << nVertices << " )");
 	}
 	else
 	{
@@ -915,19 +922,19 @@ bool CIvfAc3DReader::parseKids(string &row)
 			m_currentShape = group;
 
 			//delete m_currentPolySet;
-			//IvfDbg1("poly, kids = " << m_currentNumberOfKids);
+			//IvfLog("poly, kids = " << m_currentNumberOfKids);
 
 		}
 		else
 		{
-			//IvfDbg1("group, kids = " << m_currentNumberOfKids);
+			//IvfLog("group, kids = " << m_currentNumberOfKids);
 		}
 
 		m_childStack[m_currentLevel] = m_currentNumberOfKids;
 
 		if (m_currentGroup->getTag()<0)
 		{
-			//IvfDbg1("loc = " << m_currentPos[0] << ", " << m_currentPos[1] << ", " << m_currentPos[2]);
+			//IvfLog("loc = " << m_currentPos[0] << ", " << m_currentPos[1] << ", " << m_currentPos[2]);
 			m_currentGroup->setPosition(m_currentPos[0], m_currentPos[1], m_currentPos[2]);
 			m_currentGroup->setTag(1);
 		}
@@ -942,7 +949,7 @@ bool CIvfAc3DReader::parseKids(string &row)
 		{
 			// m_currentGroup->addChild(m_currentPolySet);
 			m_currentGroup->addChild(m_currentShape);
-			//IvfDbg1("loc = " << m_currentPos[0] << ", " << m_currentPos[1] << ", " << m_currentPos[2]);
+			//IvfLog("loc = " << m_currentPos[0] << ", " << m_currentPos[1] << ", " << m_currentPos[2]);
 			m_currentShape->setPosition(m_currentPos[0], m_currentPos[1], m_currentPos[2]);
 		}
 
@@ -974,7 +981,7 @@ void CIvfAc3DReader::clearVertexList()
 
 void CIvfAc3DReader::pushGroup(CIvfComposite *group)
 {
-	//IvfDbg1("-->");
+	//IvfLog("-->");
 	if (m_groupStack[m_currentLevel]==NULL)
 		m_groupStack[m_currentLevel] = group;
 	else
@@ -986,7 +993,7 @@ void CIvfAc3DReader::pushGroup(CIvfComposite *group)
 
 void CIvfAc3DReader::popGroup()
 {
-	//IvfDbg1("<--");
+	//IvfLog("<--");
 	m_groupStack[m_currentLevel]=NULL;
 
 	if (m_currentLevel>0)
