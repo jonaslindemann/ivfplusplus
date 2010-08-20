@@ -189,9 +189,19 @@ int CIvfWidgetBase::getHeight()
 	return m_size[1];
 }
 
+void CIvfWidgetBase::fullscreen()
+{
+	doFullscreen();
+}
+
 //
 // Implementation specific interface routines
 //
+
+void CIvfWidgetBase::doFullscreen()
+{
+
+}
 
 void CIvfWidgetBase::doDraw()
 {

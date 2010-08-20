@@ -1,4 +1,16 @@
 #!/bin/bash
 
-./ivfbuild configure shared_release /usr/local
+if [ -d ./build ]
+then
+	echo "Build dir exists. Removing."
+	rm -rf ./build
+fi
+
+mkdir build
+
+cd build
+
+export CXXFLAGS=-O3
+cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+
 

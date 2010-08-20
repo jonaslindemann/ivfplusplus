@@ -24,18 +24,6 @@
 #include <ivffile/IvfAc3DReader.h>
 #include <ivffile/IvfDxfWriter.h>
 
-#ifdef IVFUI_LIB
-#pragma message( "IVFUI_LIB defined" )
-#endif 
-
-#ifdef IVF_DLL
-#pragma message( "IVF_DLL defined" )
-#endif 
-
-#ifdef IVFUI_API
-#pragma message( "IVFUI_API" )
-#endif 
-
 // ------------------------------------------------------------
 // Window class definition
 // ------------------------------------------------------------
@@ -153,6 +141,9 @@ void CExampleWindow::onInit(int width, int height)
 	*/
 
 	//enableTimeout(0.01, 0);
+	
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 1);	
 }
 
 // ------------------------------------------------------------
@@ -280,7 +271,8 @@ int main(int argc, char **argv)
 
 	//window->setWindowTitle("Ivf++ Ac3D file reader example");
 	window->show();
-
+	window->fullscreen();
+	
 	// Enter main application loop
 
 	app->run();

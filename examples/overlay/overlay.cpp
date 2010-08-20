@@ -14,6 +14,8 @@
 #include <ivfglut/IvfGlutApplication.h>
 #include <ivfglut/IvfGlutBase.h>
 
+#include <ivfwidget/IvfMouseViewHandler.h>
+
 #include <ivf/IvfCamera.h>
 #include <ivf/IvfAxis.h>
 #include <ivf/IvfComposite.h>
@@ -28,11 +30,18 @@
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class CExampleWindow: public CIvfGlutBase,
+	CIvfInitEvent,
+	CIvfRenderEvent,
+	CIvfOverlayEvent,
+	CIvfResizeEvent
+{
 private:
 	CIvfCameraPtr		m_camera;
 	CIvfCompositePtr	m_scene;
 	CIvfLightPtr		m_light;
+	
+	CIvfMouseViewHandlerPtr m_mouseViewHandler;
 
 	double m_angleX;
 	double m_angleY;
@@ -45,32 +54,37 @@ private:
 	int m_beginY;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+	CExampleWindow(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
-	virtual void onResize(int width, int height);
 	virtual void onRender();
-	virtual void onMouseDown(int x, int y);
-	virtual void onMouseMove(int x, int y);
-	virtual void onMouseUp(int x, int y);
 	virtual void onOverlay();
+	virtual void onResize(int width, int height);
 };
 
 // ------------------------------------------------------------
 // Window class implementation
 // ------------------------------------------------------------
 
-void CExampleWindow::onInit(int width, int height)
+CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
+:CIvfGlutBase(X, Y, W, H)
 {
-	// Initialize variables
+	this->addInitEvent(this);
+	this->addRenderEvent(this);
+	this->addOverlayEvent(this);
+	this->addResizeEvent(this);
+}
 
-	m_angleX = 0.0;
-	m_angleY = 0.0;
-	m_moveX = 0.0;
-	m_moveY = 0.0;
-	m_zoomX = 0.0;
-	m_zoomY = 0.0;
+void CExampleWindow::onResize(int width, int height)
+{
+	m_camera->setPerspective(45.0, 0.1, 100.0);
+	m_camera->setViewPort(width, height);
+	m_camera->initialize();
+}
+
+void CExampleWindow::onInit(int width, int height)
+{	
+	// Initialize variables
 
 	// Initialize Ivf++ camera
 
@@ -108,14 +122,10 @@ void CExampleWindow::onInit(int width, int height)
 	m_light->enable();
 
 	this->setUseOverlay(true);
-}
-
-// ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
-{
-	m_camera->setPerspective(45.0, 0.1, 100.0);
-	m_camera->setViewPort(width, height);
-	m_camera->initialize();
+	
+	m_mouseViewHandler = new CIvfMouseViewHandler(this, m_camera);
+	m_mouseViewHandler->activate();
+	
 }
 
 // ------------------------------------------------------------
@@ -124,68 +134,6 @@ void CExampleWindow::onRender()
 	m_light->render();
 	m_camera->render();
 	m_scene->render();
-}
-
-// ------------------------------------------------------------
-void CExampleWindow::onMouseDown(int x, int y)
-{
-	m_beginX = x;
-	m_beginY = y;
-}
-
-// ------------------------------------------------------------
-void CExampleWindow::onMouseMove(int x, int y)
-{
-	m_angleX = 0.0;
-	m_angleY = 0.0;
-	m_moveX = 0.0;
-	m_moveY = 0.0;
-	m_zoomX = 0.0;
-	m_zoomY = 0.0;
-
-	if (isLeftButtonDown())
-	{
-		m_angleX = (x - m_beginX);
-		m_angleY = (y - m_beginY);
-		m_beginX = x;
-		m_beginY = y;
-		m_camera->rotatePositionY(m_angleX/100.0);
-		m_camera->rotatePositionX(m_angleY/100.0);
-		redraw();
-	}
-
-	if (isRightButtonDown())
-	{
-		if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
-		{
-			m_zoomX = (x - m_beginX);
-			m_zoomY = (y - m_beginY);
-		}
-		else
-		{
-			m_moveX = (x - m_beginX);
-			m_moveY = (y - m_beginY);
-		}
-		m_beginX = x;
-		m_beginY = y;
-
-		m_camera->moveSideways(m_moveX/100.0);
-		m_camera->moveVertical(m_moveY/100.0);
-		m_camera->moveDepth(m_zoomY/50.0);
-
-		redraw();
-	}
-}
-
-// ------------------------------------------------------------
-void CExampleWindow::onMouseUp(int x, int y)
-{
-	m_angleX = 0.0;
-	m_angleY = 0.0;
-	m_moveX = 0.0;
-	m_moveY = 0.0;
-	m_zoomX = 0.0;
-	m_zoomY = 0.0;
 }
 
 // ------------------------------------------------------------
@@ -207,7 +155,7 @@ int main(int argc, char **argv)
 	// Create Ivf++ application object.
 
 	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
-	app->setDisplayMode(IVF_DOUBLE|IVF_RGB);
+	app->setDisplayMode(IVF_DOUBLE|IVF_DEPTH|IVF_MULTISAMPLE|IVF_RGBA);
 
 	// Create a window
 
@@ -215,7 +163,7 @@ int main(int argc, char **argv)
 
 	// Set window title and show window
 
-	window->setWindowTitle("Ivf++ Extrusion example");
+	window->setWindowTitle("Ivf++ Overlay example");
 	window->show();
 
 	// Enter main application loop

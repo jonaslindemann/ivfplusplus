@@ -19,6 +19,7 @@
 #include <GL/freeglut_ext.h>
 #endif
 #else
+#include <ApplicationServices/ApplicationServices.h>
 #include <GLUT/glut.h>
 #endif 
 
@@ -64,6 +65,10 @@ private:
 	GLUT_CB(8);
 	GLUT_CB(9);
 	unsigned int m_displayMode;
+#ifdef __APPLE__
+    ProcessSerialNumber m_psn;
+#endif
+	
 public:	
 	static CIvfGlutApplication* getInstance(int* argc, char** argv);
 	static CIvfGlutApplication* getInstance();

@@ -31,7 +31,7 @@ public:
 	void create();
 	
 	void show();
-	
+		
 	void setCaption(const std::string& caption);
 	const std::string getCaption();
 	
@@ -63,6 +63,8 @@ public:
 	double doElapsedTime();
 	void doEnableTimeout(float time, int nbr);
 	void doDisableTimeout(int nbr);
+	void doFullscreen();
+
 	void setModeString(const std::string& modeString);
 	void enterFullscreen();
 };
