@@ -5,6 +5,7 @@
 #ifndef __APPLE__
 #include <GL/glut.h>
 #else
+#include <ApplicationServices/ApplicationServices.h>
 #include <GLUT/glut.h>
 #endif 
 
@@ -178,7 +179,11 @@ CIvfGlutApplication* CIvfGlutApplication::getInstance()
 
 
 CIvfGlutApplication::CIvfGlutApplication(int* argc, char** argv) 
-{ 		
+{ 	
+#ifdef __APPLE__
+    OSStatus err = noErr;
+    err=GetCurrentProcess(&m_psn);
+#endif 	
 	glutInit(argc, argv);
 	this->setDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	m_nextWindow = 0;
@@ -225,6 +230,9 @@ void CIvfGlutApplication::runAppLoop(CIvfGlutBase *window)
 
 	while (!finished)
 	{
+		CGEventRef mouseWheelEv=CGEventCreateScrollWheelEvent(NULL,kCGScrollEventUnitPixel,1,(int32_t) 0);
+		CGEventPostToPSN(&m_psn,mouseWheelEv);
+		CFRelease(mouseWheelEv); 		
 		glutCheckLoop();
 		finished = (!window->doAppLoop());
 	}

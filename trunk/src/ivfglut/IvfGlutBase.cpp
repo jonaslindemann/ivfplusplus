@@ -62,11 +62,6 @@ void CIvfGlutBase::create()
 	}
 }
 
-void CIvfGlutBase::doRedraw()
-{
-	glutPostRedisplay();
-}
-
 double CIvfGlutBase::doElapsedTime()
 {
 #ifdef WIN32
@@ -263,6 +258,17 @@ void CIvfGlutBase::show()
 		glutSetWindow(m_id);
 		glutShowWindow();
 	}
+}
+
+void CIvfGlutBase::doFullscreen()
+{
+	glutSetWindow(m_id);
+	glutFullScreen();
+}
+
+void CIvfGlutBase::doRedraw()
+{
+	glutPostRedisplay();
 }
 
 void CIvfGlutBase::setId(int id)

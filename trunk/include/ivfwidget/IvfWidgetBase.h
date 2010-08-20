@@ -377,6 +377,8 @@ public:
 
 	int getWidth();
 	int getHeight();
+	
+	void fullscreen();
 
 	/** 
 	 * Enable/disable use of overlay 
@@ -659,6 +661,8 @@ public:
 	 * the return value should be true.
 	 */
 	virtual bool onAppLoop();
+	
+	virtual void doFullscreen();
 
 	/**
 	 * Idle method processing 
