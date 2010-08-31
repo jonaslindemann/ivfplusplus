@@ -118,9 +118,13 @@ void CExampleWindow::onInit(int width, int height)
 	// Retrieve poly set
 
 	CIvfShapePtr shape = acReader->getShape();
-	//shape->setUselist(true);
+	shape->initBoundingSphere();
+	std::cout << shape->getBoundingSphere()->getRadius() << std::endl;
+
+	m_camera->setPosition(0.0, 0.0, shape->getBoundingSphere()->getRadius());
 
 	m_scene->addChild(shape);
+
 
 	// Create a light
 
@@ -128,7 +132,7 @@ void CExampleWindow::onInit(int width, int height)
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
-	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
+	m_light->setLightPosition(0.0, 0.0, 1.0, 0.0);
 	m_light->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
@@ -144,6 +148,7 @@ void CExampleWindow::onInit(int width, int height)
 	
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 1);	
+	m_scene->setUselist(true);
 }
 
 // ------------------------------------------------------------
@@ -261,6 +266,7 @@ int main(int argc, char **argv)
 	// Create Ivf++ application object.
 
 	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	//app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 	// Create a window
 
@@ -275,7 +281,7 @@ int main(int argc, char **argv)
 	
 	// Enter main application loop
 
-	app->run();
+	app->runAppLoop(window);
 
 	return 0;
 }
