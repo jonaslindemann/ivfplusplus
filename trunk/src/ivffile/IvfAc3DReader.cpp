@@ -24,7 +24,7 @@
 
 #include <ivffile/IvfAc3DReader.h>
 
-#include <ivfimage/IvfSgiImage.h>
+#include <ivfimage/IvfPngImage.h>
 
 #include <ivf/IvfTexture.h>
 
@@ -38,6 +38,7 @@
 #define KW_OBJECT       1
 #define KW_SURF         2
 #define KW_EMPTY_ROW	3
+#define KW_COMMENT		4
 
 #define OKW_ERROR      -1
 #define OKW_NAME		0
@@ -174,6 +175,8 @@ bool CIvfAc3DReader::readData(istream &in)
 			if (!parseSurf(m_row))
 				return false;
 			break;
+		case KW_COMMENT:
+			break;
 		case KW_ERROR:
 			optionalKeyword = getOptionalKeyword(m_row);
 
@@ -258,6 +261,9 @@ int CIvfAc3DReader::getKeyword(string &row)
 
 	if (find("SURF", row))
 		return KW_SURF;
+
+	if (find("//", row))
+		return KW_COMMENT;
 
 	if (row.empty())
 		return KW_EMPTY_ROW;
@@ -350,6 +356,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 		m_currentLineStripSet = NULL;
 
 		m_currentPolySet = new CIvfPolySet();
+		//m_currentPolySet->setUseVertexNormals(true);
 		m_currentPolySet->setMaterialSet(m_materialSet);
 		m_currentShape = m_currentPolySet;
 		m_currentObject = OT_POLY;
@@ -567,7 +574,7 @@ bool CIvfAc3DReader::parseSurf(string &row)
 	strStream.seekg(0);
 	strStream >> flags;
 
-	if (params == "0x22")
+	if (params == "0x32")
 		m_surfaceType = ST_POLY_LINE;
 	else
 		m_surfaceType = ST_POLY;
@@ -678,7 +685,7 @@ bool CIvfAc3DReader::parseTexture(string &row)
 
 	params = prefixDir+params;
 
-	CIvfSgiImage* image = new CIvfSgiImage();
+	CIvfPngImage* image = new CIvfPngImage();
 	image->setFileName(params.c_str());
 	image->read();
 
@@ -949,6 +956,7 @@ bool CIvfAc3DReader::parseKids(string &row)
 		{
 			// m_currentGroup->addChild(m_currentPolySet);
 			m_currentGroup->addChild(m_currentShape);
+			m_currentShape->refresh();
 			//IvfLog("loc = " << m_currentPos[0] << ", " << m_currentPos[1] << ", " << m_currentPos[2]);
 			m_currentShape->setPosition(m_currentPos[0], m_currentPos[1], m_currentPos[2]);
 		}

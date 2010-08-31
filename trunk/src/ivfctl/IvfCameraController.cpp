@@ -235,8 +235,6 @@ void CIvfCameraController::doUpdate(double dt)
 				p1 = m_path->getPosition(m_t+0.3);
 				forward = p1-p0;
 
-				forward.print(std::cout);
-
 				m_camera->setForwardVector(forward);
 			}
 		}
