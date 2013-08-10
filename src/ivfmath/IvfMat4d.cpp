@@ -36,10 +36,10 @@ int  CIvfMat4d::LU_Decompose  (double matrix[4][4], int* index)
 #ifdef WIN32
     register int    i, j, k;		/* Loop Indices */
     register int    imax;		/* Maximum i Index */
-    auto     double big;		/* Non-Zero Largest Element */
-    auto     double sum;		/* Accumulator */
-    auto     double temp;		/* Scratch Variable */
-    auto     double vv[4];		/* Implicit Scaling of Each Row */
+    double big;		/* Non-Zero Largest Element */
+    double sum;		/* Accumulator */
+    double temp;		/* Scratch Variable */
+    double vv[4];		/* Implicit Scaling of Each Row */
 #else
     int    i, j, k;		/* Loop Indices */
     int    imax;		/* Maximum i Index */
@@ -107,9 +107,9 @@ void  CIvfMat4d::LU_Backsub  (double matrix[4][4], int* index, double* B)
 {
 #ifdef WIN32
     register int    i,j;
-    auto     int    ii;
-    auto     int    ip;
-    auto     double sum;
+    int    ii;
+    int    ip;
+    double sum;
 #else
     int    i,j;
     int    ii;
@@ -450,9 +450,9 @@ CIvfMat4d& CIvfMat4d::inv()
 	//
 #ifdef WIN32
     register int         i,j;
-    auto     int         index[4];
-    auto     double      column[4];
-    auto     double		 inverse[4][4];
+    int         index[4];
+    double      column[4];
+    double		 inverse[4][4];
 #else
     int         i,j;
     int         index[4];
