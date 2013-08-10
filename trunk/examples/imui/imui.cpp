@@ -172,8 +172,8 @@ void CExampleWindow::onGui()
 {
 	std::cout << "onGui()" << std::endl;
 	
-	glRasterPos2i(50,50);
-	glutBitmapString(GLUT_BITMAP_9_BY_15, "Hello, World!");
+	//glRasterPos2i(50,50);
+	//glutBitmapString(GLUT_BITMAP_9_BY_15, "Hello, World!");
 }
 
 

@@ -50,6 +50,7 @@ CIvfSceneBase::CIvfSceneBase()
 	m_useCulling = false;
 	m_dirty = false;
 	m_nPasses = 1;
+	m_multiPass = false;
 
 	m_multipassEvent = NULL;
 }

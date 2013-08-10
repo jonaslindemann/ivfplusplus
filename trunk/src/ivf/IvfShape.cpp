@@ -261,7 +261,7 @@ void CIvfShape::setRotationQuat(double vx, double vy, double vz, double theta)
 {
 	m_rotQuat[0] = vx;
 	m_rotQuat[1] = vy;
-	m_rotQuat[2] = vz;
+ 	m_rotQuat[2] = vz;
 	m_rotQuat[3] = theta;
 }
 

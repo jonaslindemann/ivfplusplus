@@ -5,10 +5,11 @@
 int
 main(int argc, char **argv) 
 {
-	Fl::gl_visual(FL_DOUBLE|FL_RGB|FL_ALPHA);
+	Fl::gl_visual(FL_DOUBLE|FL_RGB|FL_ALPHA|FL_MULTISAMPLE);
 	Fl::get_system_colors();
 	
 	CMainFrame *frame = new CMainFrame();
+	frame->workspaceView->mode(FL_DOUBLE|FL_RGB|FL_ALPHA|FL_MULTISAMPLE);
     frame->show();
 
     return Fl::run();

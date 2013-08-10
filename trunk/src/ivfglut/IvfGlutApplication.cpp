@@ -230,11 +230,15 @@ void CIvfGlutApplication::runAppLoop(CIvfGlutBase *window)
 
 	while (!finished)
 	{
+#ifdef __APPLE__
 		CGEventRef mouseWheelEv=CGEventCreateScrollWheelEvent(NULL,kCGScrollEventUnitPixel,1,(int32_t) 0);
 		CGEventPostToPSN(&m_psn,mouseWheelEv);
 		CFRelease(mouseWheelEv); 		
 		glutCheckLoop();
 		finished = (!window->doAppLoop());
+#else
+		glutMainLoop();		
+#endif
 	}
 #endif
 }
