@@ -132,7 +132,7 @@ void CIvfGLPrimitive::getNormal(long pos, double &n1, double &n2, double &n3)
 		m_normalSet[pos]->getComponents(n1, n2, n3);
 }
 
-CIvfMaterial* CIvfGLPrimitive::getMaterial(int pos)
+CIvfMaterial* CIvfGLPrimitive::getMaterialAt(int pos)
 {
 	if ( (pos>=0)&&(pos<m_materialSet->getSize()) )
 		return m_materialSet->getMaterial(pos);

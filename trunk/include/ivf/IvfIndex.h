@@ -86,10 +86,10 @@ public:
 	void createConstant(long value, long size);
 
 	/** Assigns values from another index */
-	void assignFrom(CIvfIndex* idx);
+	void assignFrom(CIvfIndexBase* idx);
 
 	/** Assigns \em idx the values of this index */
-	void assignTo(CIvfIndex* idx);
+	void assignTo(CIvfIndexBase* idx);
 
 	/** Add values from array \em i to this index */ 
 	void addArray(long* i, long size);

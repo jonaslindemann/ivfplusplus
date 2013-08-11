@@ -322,7 +322,7 @@ void CIvfOldScene::setObjectSize(double size)
 
 void CIvfOldScene::setNodeSize(double size)
 {
-	g_nodeSize = size;
+	//g_nodeSize = size;
 }
 
 void CIvfOldScene::setWorkspace(double size)

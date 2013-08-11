@@ -135,7 +135,7 @@ public:
 	int getMaterialSetSize();
 
 	/** Return a specific material from material set */
-	CIvfMaterial* getMaterial(int pos);
+	CIvfMaterial* getMaterialAt(int pos);
 
 	/** Return material set */
 	CIvfMaterialSet* getMaterialSet();

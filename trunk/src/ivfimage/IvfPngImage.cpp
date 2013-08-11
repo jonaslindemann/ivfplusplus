@@ -48,7 +48,6 @@ bool CIvfPngImage::read()
 
 	png_structp png_ptr;
 	png_infop info_ptr;
-	unsigned int sig_read = 0;
 	png_uint_32 width, height;
 	int bit_depth, color_type;
 	FILE *fp;

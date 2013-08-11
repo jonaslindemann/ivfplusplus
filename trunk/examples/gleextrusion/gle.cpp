@@ -2,8 +2,8 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfui/IvfApplication.h>
-#include <ivfui/IvfWindow.h>
+#include <ivfglut/IvfGlutApplication.h>
+#include <ivfglut/IvfGlutBase.h>
 
 #include <ivfwidget/IvfMouseViewHandler.h>
 #include <ivfwidget/IvfSceneHandler.h>
@@ -32,9 +32,9 @@ using namespace std;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CDemosysWindow);
+IvfSmartPointer(CExampleWindow);
 
-class CDemosysWindow: public CIvfWindow,
+class CExampleWindow: public CIvfGlutBase,
 	CIvfInitEvent,
 	CIvfInitContextEvent,
 	CIvfResizeEvent,
@@ -54,12 +54,10 @@ private:
 	CIvfSceneHandlerPtr m_sceneHandler;
 
 public:
-	CDemosysWindow(int X, int Y, int W, int H);
+	CExampleWindow(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onInitContext(int width, int height);
-	virtual void onResize(int width, int height);
-	virtual void onRender();
 	virtual void onClear();
 	virtual void onKeyboard(int key, int x, int y);
 };
@@ -68,8 +66,8 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CDemosysWindow::CDemosysWindow(int X, int Y, int W, int H)
-	:CIvfWindow(X, Y, W, H)
+CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
+	:CIvfGlutBase(X, Y, W, H)
 {
 	addInitEvent(this);
 	addInitContextEvent(this);
@@ -83,7 +81,7 @@ double rnd()
 	return (double)rand()/(double)RAND_MAX;
 }
 
-void CDemosysWindow::onInit(int width, int height)
+void CExampleWindow::onInit(int width, int height)
 {
 	// Setup a simple scene
 
@@ -207,34 +205,24 @@ void CDemosysWindow::onInit(int width, int height)
 	m_sceneHandler = new CIvfSceneHandler(this, m_scene);
 }
 
-void CDemosysWindow::onKeyboard(int key, int x, int y)
+void CExampleWindow::onKeyboard(int key, int x, int y)
 {
 	m_gleShapes->cycleForward();
 	redraw();
 }
 
-void CDemosysWindow::onInitContext(int width, int height)
+void CExampleWindow::onInitContext(int width, int height)
 {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 }
 
-void CDemosysWindow::onClear()
+void CExampleWindow::onClear()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
 }
 
-void CDemosysWindow::onResize(int width, int height)
-{
-
-}
-
-void CDemosysWindow::onRender()
-{
-
-}
-
 // ------------------------------------------------------------
 // Main program
 // ------------------------------------------------------------
@@ -244,24 +232,25 @@ void CDemosysWindow::onRender()
 // Main program
 // ------------------------------------------------------------
 
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
-
-	CIvfApplicationPtr app = new CIvfApplication(IVF_DOUBLE|IVF_RGB);
-
+    
+	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
+    
 	// Create a window
-
-	CDemosysWindowPtr window = new CDemosysWindow(0, 0, 512, 512);
-
+    
+	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+    
 	// Set window title and show window
-
-	window->setWindowTitle("Ivf++ Cube example");
+    
+	window->setWindowTitle("Ivf++ event handler examples");
 	window->show();
-
+    
 	// Enter main application loop
-
-    app->run();
-
+    
+	app->run();
+    
 	return 0;
 }

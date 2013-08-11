@@ -59,7 +59,7 @@ void CIvfPolySet::doCreateGeometry()
 
 				if (idx>=0)
 				{
-					material = this->getMaterial(idx);
+					material = this->getMaterialAt(idx);
 
 					if (material!=NULL)
 						material->render();
