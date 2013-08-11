@@ -81,7 +81,7 @@ void CIvfIndex::addArray(long *i, long size)
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::assignFrom(CIvfIndex *idx)
+void CIvfIndex::assignFrom(CIvfIndexBase *idx)
 {
 	long i;
 
@@ -92,7 +92,7 @@ void CIvfIndex::assignFrom(CIvfIndex *idx)
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::assignTo(CIvfIndex *idx)
+void CIvfIndex::assignTo(CIvfIndexBase *idx)
 {
 	idx->clear();
 	idx->assignFrom(this);

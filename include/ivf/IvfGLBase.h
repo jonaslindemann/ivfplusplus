@@ -33,7 +33,7 @@
 
 IvfSmartPointer(CIvfGLBase);
 
-static double g_nodeSize = 0.2;
+//static double g_nodeSize = 0.2;
 
 /**
  * Root class "renderable" objects
