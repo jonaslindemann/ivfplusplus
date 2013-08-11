@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 	// Create Ivf++ application object.
 
 	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
-	app->setDisplayMode(IVF_DOUBLE|IVF_RGB);
+	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH);
 
 	// Create a window
 
