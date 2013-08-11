@@ -1,4 +1,4 @@
-set(IVF_DIRS ivfmath ivf ivffile ivfctl ivf3dui ivfwidget)
+set(IVF_DIRS gle ivfmath ivf ivffile ivfctl ivf3dui ivfwidget)
 
 if (IVF_UI)
 
@@ -16,9 +16,7 @@ if (IVF_UI)
 
 endif(IVF_UI)
 
-if (IVF_GLE)
-	set(IVF_DIRS ${IVF_DIRS} ivfgle)
-endif(IVF_GLE)
+set(IVF_DIRS ${IVF_DIRS} ivfgle)
 
 if (IVF_IMAGE)
 	set(IVF_DIRS ${IVF_DIRS} ivfimage ivfext)
