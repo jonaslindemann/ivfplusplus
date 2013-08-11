@@ -25,7 +25,7 @@ IF(WIN32)
 	ENDIF(IVF_DEBUG)
 ELSE(WIN32)
 	ADD_LIBRARY(ivffltk ${SOURCE_FILES})
-	TARGET_LINK_LIBRARIES( ivffltk ivf ivfwidget fltk fltk_gl )
+	TARGET_LINK_LIBRARIES( ivffltk )
 	INSTALL_TARGETS( /lib ivffltk )
 ENDIF(WIN32)
 
