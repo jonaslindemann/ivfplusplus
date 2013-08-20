@@ -133,8 +133,15 @@ void CExampleWindow::onInit(int width, int height)
 	image5->read();
 
 	CIvfImagePtr image6 = new CIvfImage();
-	image6->setSize(4,32);
-
+	image6->setSize(4,4);
+    
+    for (int i=0; i<4; i++)
+    {
+        image6->setPixel(i, 0, 255, 0, 0);
+        image6->setPixel(i, 1, 0, 255, 0);
+        image6->setPixel(i, 2, 0, 0, 255);
+        image6->setPixel(i, 3, 255, 0, 255);
+    }
 
 	// Create a texture
 
@@ -159,9 +166,9 @@ void CExampleWindow::onInit(int width, int height)
 	texture4->setGenerateMipmaps(true);
 
 	CIvfTexturePtr texture5 = new CIvfTexture();
-	texture5->setImage(image5);
-	texture5->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-	texture5->setGenerateMipmaps(true);
+	texture5->setImage(image6);
+	texture5->setFilters(GL_NEAREST, GL_NEAREST);
+	texture5->setGenerateMipmaps(false);
 
 	m_coloredTexture = new CIvfTexture();
 	m_coloredTexture->setFilters(GL_NEAREST, GL_NEAREST);
@@ -170,15 +177,18 @@ void CExampleWindow::onInit(int width, int height)
 	CIvfNodePtr node1 = new CIvfNode();
 	CIvfNodePtr node2 = new CIvfNode();
 
-	node1->setPosition(-2.0, 0.0, 0.0);
-	node2->setPosition( 2.0, 0.0, 0.0);
+	node1->setPosition(-2.0, -0.5, 0.0);
+	node2->setPosition( 2.0, 0.5, 0.0);
 
 	m_solidLine = new CIvfSolidLine();
 	m_solidLine->setNodes(node1, node2);
+    m_solidLine->setSides(12);
 	m_solidLine->setMaterial(material);
 	m_solidLine->setTexture(m_coloredTexture);
+    m_solidLine->setTextureMode(GLE_TEXTURE_ENABLE | GLE_TEXTURE_VERTEX_MODEL_CYL);
+    //m_solidLine->setTextureMode(GLE_TEXTURE_ENABLE | GLE_TEXTURE_VERTEX_MODEL_CYL);
 	m_coloredTexture->setTextureModifier(1.0, 1.0/m_solidLine->getLength(), 0.0);
-	m_coloredTexture->setTextureMode(GL_BLEND);
+	m_coloredTexture->setTextureMode(GL_MODULATE);
 
 	m_scene->addChild(m_solidLine);
 

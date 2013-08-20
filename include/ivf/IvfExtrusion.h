@@ -297,6 +297,7 @@ private:
 	int m_spineStart;
 	int m_spineEnd;
 	int m_spineDelta;
+    int m_textureMode;
 	gleDouble (*m_sectionCoords)[2];	
 	gleDouble (*m_sectionNormals)[2];
 	gleDouble (*m_selectSectionCoords)[2];	
