@@ -196,8 +196,13 @@ typedef double gleVector[3];
 #include <windows.h>
 #endif
 
+#ifdef __APPLE__
+#include <OpenGL/OpenGL.h>
+#include <OpenGL/glu.h>
+#else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
 
 #if FLIP_NORMAL
 #define	N3F_F(x) {					\
