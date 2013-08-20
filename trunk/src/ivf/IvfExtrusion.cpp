@@ -58,6 +58,7 @@ CIvfExtrusion::CIvfExtrusion ()
 	m_spineStart = 0;
 	m_spineEnd = 0;
 	m_spineSize = 0;
+    m_textureMode = 0;
 
 	//m_coords = new GLdouble[m_nCoords][3];
 }
@@ -369,6 +370,7 @@ void CIvfExtrusion::setUpVector(double x, double y, double z)
 // ------------------------------------------------------------
 void CIvfExtrusion::doCreateSelect()
 {
+    gleTextureMode(m_textureMode);
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 	glPushAttrib(GL_LIGHTING_BIT);
 	glDisable(GL_LIGHTING);
@@ -415,6 +417,7 @@ void CIvfExtrusion::doCreateSelect()
 	}
 	glPopAttrib();
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    gleTextureMode(0);
 }
 
 // ------------------------------------------------------------
@@ -426,6 +429,7 @@ void CIvfExtrusion::setSelectScale(double scale)
 // ------------------------------------------------------------
 void CIvfExtrusion::setTextureMode(int mode)
 {
+    m_textureMode = mode;
 	gleTextureMode(mode);
 }
 
