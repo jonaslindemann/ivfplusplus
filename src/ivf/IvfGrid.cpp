@@ -34,6 +34,9 @@ CIvfGrid::CIvfGrid()
 	m_gridLines = new CIvfLineSet();
 	m_surface = new CIvfQuadSet();
 	m_axis = new CIvfAxis();
+    m_axis->setState(CIvfShape::OS_OFF);
+    m_corners->setState(CIvfShape::OS_OFF);
+    m_outline->setState(CIvfShape::OS_OFF);
 
 	m_gridSpacing = 0.1;
 
