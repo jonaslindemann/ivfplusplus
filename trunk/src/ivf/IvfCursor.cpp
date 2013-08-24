@@ -27,7 +27,7 @@
 CIvfCursor::CIvfCursor ()
 		:CIvfComposite()
 {
-	m_cursorType = CT_SOLID_CURSOR;
+	m_cursorType = CT_LINE_CURSOR;
 	m_size = 1.0;
 
 	m_xMaterial = new CIvfMaterial();
@@ -88,6 +88,7 @@ void CIvfCursor::doCreateGeometry()
 	{
 		glPushAttrib(GL_LIGHTING);
 		glDisable(GL_LIGHTING);
+        glLineWidth(2.0);
 		glBegin(GL_LINES);
 			glColor3d(1.0, 1.0, 0.0);
 			glVertex3d(-m_size/2.0,0.0,0.0);
@@ -99,6 +100,7 @@ void CIvfCursor::doCreateGeometry()
 			glVertex3d(0.0, 0.0, -m_size/2);
 			glVertex3d(0.0, 0.0,  m_size/2);
 		glEnd();
+        glLineWidth(1.0);
 		glPopAttrib();
 	}
 }
