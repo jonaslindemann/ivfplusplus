@@ -42,6 +42,7 @@ CIvfGlobalState::CIvfGlobalState()
 	m_renderMaterial = true;
 	m_renderTexture = true;
 	m_renderGreyscale = false;
+    m_colorOutput = true;
 }
 
 CIvfGlobalState::~CIvfGlobalState()
@@ -93,4 +94,20 @@ bool CIvfGlobalState::isGreyscaleRenderingEnabled()
 {
 	return m_renderGreyscale;
 }
+
+void CIvfGlobalState::enableColorOutput()
+{
+    m_colorOutput = true;
+}
+
+void CIvfGlobalState::disableColorOutput()
+{
+    m_colorOutput = false;
+}
+
+bool CIvfGlobalState::isColorOutputEnabled()
+{
+    return m_colorOutput;
+}
+
 

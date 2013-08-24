@@ -49,6 +49,7 @@ private:
 	bool m_renderMaterial;
 	bool m_renderTexture;
 	bool m_renderGreyscale;
+    bool m_colorOutput;
 public:
 	/** Return instance of CIvfGlobalState */
 	static CIvfGlobalState* getInstance();
@@ -67,6 +68,10 @@ public:
 	void enableGreyscaleRendering();
 	void disableGreyscaleRendering();
 	bool isGreyscaleRenderingEnabled();
+    
+    void enableColorOutput();
+    void disableColorOutput();
+    bool isColorOutputEnabled();
 
 protected:
 	CIvfGlobalState();

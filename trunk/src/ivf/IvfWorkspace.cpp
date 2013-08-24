@@ -129,9 +129,9 @@ void CIvfWorkspace::doCreateGeometry()
 	if (m_usePlanes)
 	{
 		m_rootPlane->render();
-
+        
 		int i;
-
+        
 		for (i=0; i<(int)m_workplanes.size(); i++)
 			m_workplanes[i]->render();
 	}
