@@ -27,8 +27,9 @@
 CIvfCursor::CIvfCursor ()
 		:CIvfComposite()
 {
-	m_cursorType = CT_LINE_CURSOR;
+	m_cursorType = CT_SOLID_CURSOR;
 	m_size = 1.0;
+    m_thickness = 0.05;
 
 	m_xMaterial = new CIvfMaterial();
 	m_xMaterial->setDiffuseColor(1.0, 1.0, 0.0, 1.0);
@@ -43,15 +44,15 @@ CIvfCursor::CIvfCursor ()
 	m_zMaterial->setAmbientColor(0.5, 0.5, 0.0, 1.0);
 
 	m_xBrick = new CIvfBrick();
-	m_xBrick->setSize(m_size, m_size*0.05, m_size*0.05);
+	m_xBrick->setSize(m_size, m_size*m_thickness, m_size*m_thickness);
 	m_xBrick->setMaterial(m_xMaterial);
 
 	m_yBrick = new CIvfBrick();
-	m_yBrick->setSize(m_size*0.05, m_size, m_size*0.05);
+	m_yBrick->setSize(m_size*m_thickness, m_size, m_size*m_thickness);
 	m_yBrick->setMaterial(m_yMaterial);
 
 	m_zBrick = new CIvfBrick();
-	m_zBrick->setSize(m_size*0.05, m_size*0.05, m_size);
+	m_zBrick->setSize(m_size*m_thickness, m_size*m_thickness, m_size);
 	m_zBrick->setMaterial(m_zMaterial);
 
 	addChild(m_xBrick);
@@ -68,9 +69,18 @@ CIvfCursor::~CIvfCursor ()
 void CIvfCursor::setSize(double size)
 {
 	m_size = size;
-	m_xBrick->setSize(m_size, m_size*0.05, m_size*0.05);
-	m_yBrick->setSize(m_size*0.05, m_size, m_size*0.05);
-	m_zBrick->setSize(m_size*0.05, m_size*0.05, m_size);
+	m_xBrick->setSize(m_size, m_size*m_thickness, m_size*m_thickness);
+	m_yBrick->setSize(m_size*m_thickness, m_size, m_size*m_thickness);
+	m_zBrick->setSize(m_size*m_thickness, m_size*m_thickness, m_size);
+}
+
+// ------------------------------------------------------------
+void CIvfCursor::setThickness(double thickness)
+{
+    m_thickness = thickness;
+	m_xBrick->setSize(m_size, m_size*m_thickness, m_size*m_thickness);
+	m_yBrick->setSize(m_size*m_thickness, m_size, m_size*m_thickness);
+	m_zBrick->setSize(m_size*m_thickness, m_size*m_thickness, m_size);
 }
 
 // ------------------------------------------------------------

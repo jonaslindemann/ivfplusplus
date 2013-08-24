@@ -413,3 +413,9 @@ CIvfGrid* CIvfConstructionPlane::getGrid()
 {
 	return m_grid;
 }
+
+CIvfCursor* CIvfConstructionPlane::getCursor()
+{
+    return m_cursor;
+}
+

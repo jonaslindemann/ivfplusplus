@@ -61,6 +61,8 @@ public:
 	 * length.
 	 */
 	void setSize(double size);
+    
+    void setThickness(double thickness);
 
 	/** 
 	 * Set cursor type
@@ -83,6 +85,7 @@ private:
 	CIvfBrick* m_yBrick;
 	CIvfBrick* m_xBrick;
 	double m_size;
+    double m_thickness;
 protected:
 	virtual void doCreateGeometry();
 };

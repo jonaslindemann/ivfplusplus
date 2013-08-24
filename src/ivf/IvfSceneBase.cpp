@@ -53,6 +53,10 @@ CIvfSceneBase::CIvfSceneBase()
 	m_multiPass = false;
 
 	m_multipassEvent = NULL;
+    m_renderFlatShadow = true;
+    m_shadowColor[0] = 0.35;
+    m_shadowColor[1] = 0.35;
+    m_shadowColor[2] = 0.35;
 }
 
 CIvfSceneBase::~CIvfSceneBase()
@@ -121,6 +125,25 @@ void CIvfSceneBase::defaultSceneRender(int pass)
 	m_preComposite->render();
 	m_composite->render();
 	m_postComposite->render();
+    
+    if (m_renderFlatShadow)
+    {
+        glPushMatrix();
+        glScaled(1.0, 0.0, 1.0);
+        glPushAttrib(GL_ENABLE_BIT);
+        glDisable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
+        CIvfGlobalState::getInstance()->disableColorOutput();
+        CIvfGlobalState::getInstance()->disableTextureRendering();
+        glColor3d(m_shadowColor[0], m_shadowColor[1], m_shadowColor[2]);
+        m_preComposite->render();
+        m_composite->render();
+        m_postComposite->render();
+        CIvfGlobalState::getInstance()->enableColorOutput();
+        CIvfGlobalState::getInstance()->enableTextureRendering();
+        glPopAttrib();
+        glPopMatrix();
+    }
 }
 
 void CIvfSceneBase::doRender(int pass)
@@ -503,3 +526,16 @@ void CIvfSceneBase::setMultipassEvent(CIvfMultipassEvent* evt)
 {
 	m_multipassEvent = evt;
 }
+
+void CIvfSceneBase::setRenderFlatShadow(bool flag)
+{
+    m_renderFlatShadow = flag;
+}
+
+void CIvfSceneBase::setShadowColor(double red, double green, double blue)
+{
+    m_shadowColor[0] = red;
+    m_shadowColor[1] = green;
+    m_shadowColor[2] = blue;
+}
+

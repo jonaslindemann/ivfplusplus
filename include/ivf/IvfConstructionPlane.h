@@ -234,6 +234,8 @@ public:
 	CIvfGrid* getGrid();
 	double getDepth();
 	double getWidth();
+    
+    CIvfCursor* getCursor();
 protected:
 	virtual void doCreateGeometry();
 };

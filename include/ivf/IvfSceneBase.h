@@ -110,6 +110,8 @@ private:
 
 	bool m_multiPass;
 	int m_nPasses;
+    bool m_renderFlatShadow;
+    double m_shadowColor[3];
 
 public:
 	void doResize(int width, int height);
@@ -209,6 +211,9 @@ public:
 	int getPasses();
 
 	void setMultipassEvent(CIvfMultipassEvent* evt);
+    
+    void setRenderFlatShadow(bool flag);
+    void setShadowColor(double red, double green, double blue);
 
 protected:
 	virtual void doCreateGeometry();

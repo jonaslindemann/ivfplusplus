@@ -280,7 +280,8 @@ void CIvfMaterial::doCreateMaterial()
 		}
 	}
 	else
-		glColor4fv(m_diffuseColor);
+        if (CIvfGlobalState::getInstance()->isColorOutputEnabled())
+            glColor4fv(m_diffuseColor);
 }
 
 void CIvfMaterial::setEmissionColor(const float red, const float green, const float blue, const float alfa)
