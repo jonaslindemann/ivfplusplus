@@ -216,6 +216,7 @@ public:
     void setShadowColor(double red, double green, double blue);
 
 protected:
+    virtual void doPostClear();
 	virtual void doCreateGeometry();
 };
 

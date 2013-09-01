@@ -402,12 +402,14 @@ void CIvfSceneBase::deleteAll()
 {
 	m_composite->deleteAll();
 	m_dirty = true;
+    this->doPostClear();
 }
 
 void CIvfSceneBase::clear()
 {
 	m_composite->clear();
 	m_dirty = true;
+    this->doPostClear();
 }
 
 int CIvfSceneBase::pick(int x, int y)
@@ -465,6 +467,12 @@ void CIvfSceneBase::doResize(int width, int height)
 	m_view->setViewPort(width, height);
 	m_view->initialize();
 }
+
+void CIvfSceneBase::doPostClear()
+{
+    
+}
+
 
 void CIvfSceneBase::setStereoMode(TStereoMode mode)
 {

@@ -130,6 +130,7 @@ public:
 	void setSize(double size);
 
 protected:
+    virtual void doPostClear();
 	virtual void doCreateGeometry();
 };
 
