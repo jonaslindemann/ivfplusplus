@@ -37,6 +37,8 @@ CIvfWorkspace::CIvfWorkspace()
 	m_currentPlane = m_rootPlane;
 	m_currentPlaneIdx = 0;
 	m_usePlanes = true;
+    
+    this->addChild(m_currentPlane->getCursor());
 }
 
 CIvfWorkspace::~CIvfWorkspace()
@@ -237,3 +239,9 @@ void CIvfWorkspace::disableCursor()
 {
 	getCurrentPlane()->disableCursor();
 }
+
+void CIvfWorkspace::doPostClear()
+{
+    this->addChild(m_currentPlane->getCursor());    
+}
+
