@@ -3,6 +3,7 @@
 #include <ivf/IvfGL.h>
 
 #ifndef __APPLE__
+#define FREEGLUT_STATIC
 #include <GL/glut.h>
 #else
 #include <ApplicationServices/ApplicationServices.h>
