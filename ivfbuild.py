@@ -84,9 +84,9 @@ class SourcePackage:
 
 		for tarball in self.pkgTarballs:
 			if not os.path.isfile(self.pkgBuildDir+"/"+tarball):
-				print "----------------------------------------"
-				print "Downloading: ", tarball
-				print "----------------------------------------"
+				print("----------------------------------------")
+				print("Downloading: ", tarball)
+				print("----------------------------------------")
 				os.system("wget %s" % self.pkgURLs[i])
 				os.rename(tarball, self.pkgBuildDir+"/"+tarball)
 			i=i+1
@@ -95,9 +95,9 @@ class SourcePackage:
 
 		if not os.path.exists(self.pkgBuildDir+"/"+self.pkgDir):
 			for tarball in self.pkgTarballs:
-				print "----------------------------------------"
-				print "Extracting: ", tarball
-				print "----------------------------------------"
+				print("----------------------------------------")
+				print("Extracting: ", tarball)
+				print("----------------------------------------")
 				if os.path.isfile(self.pkgBuildDir+"/"+tarball):
 					os.system("tar xzf %s -C %s" % (self.pkgBuildDir+"/"+tarball, self.pkgBuildDir))
 
@@ -116,9 +116,9 @@ class SourcePackage:
 			os.system("pushd %s;patch -p0 < %s;popd" % (self.pkgBuildDir+"/"+self.pkgDir+"/"+patchDir, patchLoc))
 
 	def build(self):
-		print "----------------------------------------"
-		print "Building: ", self.pkgDir
-		print "----------------------------------------"
+		print("----------------------------------------")
+		print("Building: ", self.pkgDir)
+		print("----------------------------------------")
 		currDir = os.getcwd()
 		os.chdir(self.pkgBuildDir+"/"+self.pkgDir)
 		os.chdir(self.pkgMakeDir)
@@ -126,9 +126,9 @@ class SourcePackage:
 		os.chdir(currDir)
 
 	def install(self):
-		print "----------------------------------------"
-		print "Installing: ", self.pkgDir
-		print "----------------------------------------"
+		print("----------------------------------------")
+		print("Installing: ", self.pkgDir)
+		print("----------------------------------------")
 		currDir = os.getcwd()
 		os.chdir(self.pkgBuildDir+"/"+self.pkgDir)
 		os.chdir(self.pkgMakeDir)
@@ -136,9 +136,9 @@ class SourcePackage:
 		os.chdir(currDir)
 
 	def configure(self):
-		print "----------------------------------------"
-		print "Configuring: ", self.pkgDir
-		print "----------------------------------------"
+		print("----------------------------------------")
+		print("Configuring: ", self.pkgDir)
+		print("----------------------------------------")
 		currDir = os.getcwd()
 		os.chdir(self.pkgBuildDir+"/"+self.pkgDir)
 		if self.pkgConfigInMakeDir:
@@ -152,8 +152,8 @@ class SourcePackage:
 		if self.pkgLibDir!="":
 			envVariables = envVariables + "LDFLAGS=-L%s " % self.pkgLibDir
 
-		print "Executing: ", envVariables+" ./"+self.pkgConfigCmd+" "+self.pkgConfigOptions
-		print "Current dir: ", os.getcwd()
+		print("Executing: ", envVariables+" ./"+self.pkgConfigCmd+" "+self.pkgConfigOptions)
+		print("Current dir: ", os.getcwd())
 		os.system(envVariables+" ./"+self.pkgConfigCmd+" "+self.pkgConfigOptions)
 		os.chdir(currDir)
 
@@ -189,7 +189,7 @@ class FTGLPackage(SourcePackage):
 	def extract(self):
 		SourcePackage.extract(self)
 		self.pkgDir = self.pkgDir.replace("-rc", "~rc")
-		print self.pkgDir
+		print(self.pkgDir)
 		
 	def install(self):
 		self.pkgDir = self.pkgDir.replace("-rc", "~rc")
@@ -229,9 +229,9 @@ class IvfBuildSystem:
 		
 	def depends(self):
 		
-		print
-		print "Ivf++ dependency build."
-		print
+		print()
+		print("Ivf++ dependency build.")
+		print()
 		
 		# Check arguments
 	
@@ -332,9 +332,9 @@ class IvfBuildSystem:
 
 	def configure(self):
 		
-		print
-		print "Configuring Ivf++ build."
-		print
+		print()
+		print("Configuring Ivf++ build.")
+		print()
 		
 		buildDir = self.getBuildDir()
 			
@@ -399,25 +399,25 @@ class IvfBuildSystem:
 		
 		if sys.platform == "win32":
 			if self._nmake:
-				print
-				print 'Now run "ivfbuild build", to build Ivf++.'
+				print()
+				print('Now run "ivfbuild build", to build Ivf++.')
 			else:
-				print
-				print 'Please use the ivf.sln and examples.sln solutions in'
-				print 'the win32_build directory to build Ivf++ with the'
-				print 'Visual Studio IDE.'
+				print()
+				print('Please use the ivf.sln and examples.sln solutions in')
+				print('the win32_build directory to build Ivf++ with the')
+				print('Visual Studio IDE.')
 		else:
-			print
-			print 'Now run "./ivfbuild build", to build Ivf++.'
+			print()
+			print('Now run "./ivfbuild build", to build Ivf++.')
 			
 				
 		
 
 	def build(self):
 		
-		print
-		print "Building Ivf++."
-		print 
+		print()
+		print("Building Ivf++.")
+		print()
 	
 		currDir = os.getcwd()
 		
@@ -427,9 +427,9 @@ class IvfBuildSystem:
 				os.chdir(self.getBuildDir())
 				os.system("make")
 				os.chdir(currDir)
-				print 'Now run "./ivfbuild install" as root to install Ivf++.'
+				print('Now run "./ivfbuild install" as root to install Ivf++.')
 			else:
-				print "Please configure Ivf++ first. (ivfbuild configure ...)"
+				print("Please configure Ivf++ first. (ivfbuild configure ...)")
 				sys.exit(-1)
 				
 		if sys.platform == "darwin":
@@ -438,9 +438,9 @@ class IvfBuildSystem:
 				os.chdir(self.getBuildDir())
 				os.system("make")
 				os.chdir(currDir)
-				print 'Now run "./ivfbuild install" as root to install Ivf++.'
+				print('Now run "./ivfbuild install" as root to install Ivf++.')
 			else:
-				print "Please configure Ivf++ first. (ivfbuild configure ...)"
+				print("Please configure Ivf++ first. (ivfbuild configure ...)")
 				sys.exit(-1)
 
 		if sys.platform == "win32":
@@ -451,14 +451,14 @@ class IvfBuildSystem:
 			
 			if os.path.exists("./"+self.getBuildDir()):
 				if os.path.exists("./"+self.getBuildDir()+"/ivf.sln"):
-					print "Please use Visual Studio .NET IDE to build the solution files, ivf.sln and"
-					print "examples.sln to build Ivf++ and associated examples."
+					print("Please use Visual Studio .NET IDE to build the solution files, ivf.sln and")
+					print("examples.sln to build Ivf++ and associated examples.")
 				elif os.path.exists("./"+self.getBuildDir()+"/Makefile"):
 					
 					# Check for correct VS setup
 					
 					if not os.environ.has_key("VSINSTALLDIR"):
-						print "Please run the vsvars32.bat to setup the Visual Studio build environment."
+						print("Please run the vsvars32.bat to setup the Visual Studio build environment.")
 						sys.exit(-1)
 						
 					# Setup include and library search paths
@@ -471,16 +471,16 @@ class IvfBuildSystem:
 					if os.environ.has_key("INCLUDE"):
 						os.environ["INCLUDE"] = os.environ["INCLUDE"]+";"+ivfIncludes+";"+ivfDependIncludes
 					else:
-						print "Please run the vsvars32.bat to setup the Visual Studio build environment."
+						print("Please run the vsvars32.bat to setup the Visual Studio build environment.")
 						sys.exit(-1)
 					if os.environ.has_key("LIB"):
 						os.environ["LIB"] = os.environ["LIB"]+";"+ivfLibs+";"+ivfDependLibs
 					else:
-						print "Please run the vsvars32.bat to setup the Visual Studio build environment."
+						print("Please run the vsvars32.bat to setup the Visual Studio build environment.")
 						sys.exit(-1)
 
-					print os.environ["INCLUDE"]
-					print os.environ["INCLUDE"]
+					print(os.environ["INCLUDE"])
+					print(os.environ["INCLUDE"])
 						
 					# Execute the build.
 						
@@ -488,17 +488,17 @@ class IvfBuildSystem:
 					os.system("nmake /f Makefile")
 					os.chdir(currDir)
 				else:
-					print "Something went wrong during configuration. Please try again."
+					print("Something went wrong during configuration. Please try again.")
 					sys.exit(-1)
 			else:
-				print "Please configure Ivf++ first. (ivfbuild configure ...)"
+				print("Please configure Ivf++ first. (ivfbuild configure ...)")
 				sys.exit(-1)
 				
 	def install(self):
 		
-		print
-		print "Installing Ivf++."
-		print 
+		print()
+		print("Installing Ivf++.")
+		print()
 	
 		currDir = os.getcwd()
 		
@@ -509,12 +509,12 @@ class IvfBuildSystem:
 				os.system("make install")
 				os.chdir(currDir)
 			else:
-				print "Please build Ivf++ first. (./ivfbuild build ...)"
+				print("Please build Ivf++ first. (./ivfbuild build ...)")
 				sys.exit(-1)
 				
 		if sys.platform == "win32":
 			
-			print "Install option not available on Windows."
+			print("Install option not available on Windows.")
 			
 	def findBuildDirs(self):
 		
@@ -539,9 +539,9 @@ class IvfBuildSystem:
 
 	def clean(self):
 		
-		print 
-		print "Cleaing build files."
-		print
+		print() 
+		print("Cleaing build files.")
+		print()
 		
 		buildDirs = self.findBuildDirs()
 		
@@ -566,7 +566,7 @@ class IvfBuildSystem:
 		# Is Doxygen availble
 		
 		if not self._doxygenAvailable:
-			print "Doxygen not available to generate documentation."
+			print("Doxygen not available to generate documentation.")
 			sys.exit(-1)
 
 		currDir = os.getcwd()
@@ -606,9 +606,9 @@ class IvfBuildSystem:
 			
 	def checkRequirements(self):
 		
-		print
-		print "Checking build system requirements."
-		print 
+		print()
+		print("Checking build system requirements.")
+		print()
 		
 		self._cmakeAvailable = False
 		self._nmakeAvailable = False
@@ -620,21 +620,21 @@ class IvfBuildSystem:
 			self._cmakeAvailable = self.existsInPath("cmake")
 		
 		if self._cmakeAvailable:
-			print "CMake, found."
+			print("CMake, found.")
 		else:
-			print "CMake, not found."
-			print
-			print "CMake must be installed to build Ivf++"
-			print
+			print("CMake, not found.")
+			print()
+			print("CMake must be installed to build Ivf++")
+			print()
 			sys.exit(-1)
 		
 		if sys.platform == "win32":
 			self._nmakeAvailable = self.existsInPath("nmake.exe")
 			
 			if self._nmakeAvailable:
-				print "NMake, found. Win32 make file build supported."
+				print("NMake, found. Win32 make file build supported.")
 			else:
-				print "NMake, not found. Please run the vsvars32.bat to enable NMake."
+				print("NMake, not found. Please run the vsvars32.bat to enable NMake.")
 				
 		if sys.platform == "win32":
 			self._doxygenAvailable = self.existsInPath("doxygen.exe")
@@ -642,16 +642,16 @@ class IvfBuildSystem:
 			self._doxygenAvailable = self.existsInPath("doxygen")
 			
 		if self._doxygenAvailable:
-			print "Doxygen, found. Documenation generation available."
+			print("Doxygen, found. Documenation generation available.")
 		else:
-			print "Doxygen, not found. Documentation generation disabled."
+			print("Doxygen, not found. Documentation generation disabled.")
 				
-		print	
+		print()
 		
 		
 					
 def showUsage():
-	print "ivfbuild depends|configure|update|build|docs|install|clean|distclean|dist [..more options..]"
+	print("ivfbuild depends|configure|update|build|docs|install|clean|distclean|dist [..more options..]")
 
 if __name__ == "__main__":
 	
@@ -665,12 +665,12 @@ if __name__ == "__main__":
 	if sys.argv[1] == "depends":
 
 		if len(sys.argv)==2:
-			print "ivfuild depends download|build|install|clean|all prefix"
+			print("ivfuild depends download|build|install|clean|all prefix")
 			sys.exit(-1)
 			
 		if sys.platform == "win32":
-			print "Dependency building is currently not supported on WIN32."
-			print "Please use the prebuild dependency package instead."
+			print("Dependency building is currently not supported on WIN32.")
+			print("Please use the prebuild dependency package instead.")
 			sys.exit(-1)
 		else:
 			if sys.argv[2] == "download":
@@ -684,7 +684,7 @@ if __name__ == "__main__":
 			elif sys.argv[2] == "all":
 				ivfBuildSystem.setDependBuildType(sys.argv[2])
 			else:
-				print "Build type ", sys.argv[2], " not supported."
+				print("Build type ", sys.argv[2], " not supported.")
 				sys.exit(-1)
 				
 			if len(sys.argv)==4:
@@ -695,7 +695,7 @@ if __name__ == "__main__":
 	if sys.argv[1] == "configure":
 	
 		if len(sys.argv)==2:
-			print "ivfuild configure shared_debug|shared_release|static_debug|static_release [nmake|prefix]"
+			print("ivfuild configure shared_debug|shared_release|static_debug|static_release [nmake|prefix]")
 			sys.exit(-1)
 			
 		if sys.argv[2] == "shared_debug":
@@ -707,7 +707,7 @@ if __name__ == "__main__":
 		elif sys.argv[2] == "static_release":
 			ivfBuildSystem.setBuildType(sys.argv[2])
 		else:
-			print "Build type ", sys.argv[2], " not supported."
+			print("Build type ", sys.argv[2], " not supported.")
 			sys.exit(-1)
 			
 		if len(sys.argv)==4:
