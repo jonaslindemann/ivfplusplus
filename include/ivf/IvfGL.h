@@ -74,12 +74,16 @@ typedef unsigned short wchar_t;
 // End rip...
 //////////////////////////////////////////////////
 
-#ifdef __APPLE__
+#if defined(__APPLE__)
 #include <OpenGL/gl.h>
+#  include <OpenGL/gl3.h> // defines OpenGL 3.0+ functions
 #include <OpenGL/glu.h>
 #else
-#include <GL/gl.h>
+#if defined(WIN32)
+#define GLEW_STATIC 1
+#endif
+#include <GL/glew.h>
 #include <GL/glu.h>
 #endif
-#endif
 
+#endif

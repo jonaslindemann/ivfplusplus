@@ -14,11 +14,9 @@
 #include <ivfdef/IvfSingletonDestroyer.h>
 
 #ifndef __APPLE__
+#include <GL/glew.h>
 #define FREEGLUT_STATIC
-#include <GL/glut.h>
-#ifdef FREEGLUT
-#include <GL/freeglut_ext.h>
-#endif
+#include <GL/freeglut.h>
 #else
 #include <ApplicationServices/ApplicationServices.h>
 #include <GLUT/glut.h>

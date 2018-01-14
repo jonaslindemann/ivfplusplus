@@ -63,6 +63,14 @@ void CIvfGlutBase::create()
 		m_id = glutCreateWindow(m_caption.c_str());
 		glutPositionWindow(m_pos[0], m_pos[1]);
 		glutReshapeWindow(m_size[0], m_size[1]);
+
+		GLenum err = glewInit();
+		if (GLEW_OK != err)
+		{
+			/* Problem: glewInit failed, something is seriously wrong. */
+			fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+		}
+		fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 	}
 }
 
