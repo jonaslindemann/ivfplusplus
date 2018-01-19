@@ -42,7 +42,8 @@ class IVF_API CIvfCursor : public CIvfComposite {
 public:
 	enum TCursorType {
 		CT_LINE_CURSOR,
-		CT_SOLID_CURSOR
+		CT_SOLID_CURSOR,
+		CT_INVISIBLE
 	};
 public:
 	/** CIvfCursor constructor */

@@ -1,4 +1,6 @@
 bin/Debug/*
 build-debug/*
+build-release/*
+bin/Release/*
 lib/*
 *.pyc

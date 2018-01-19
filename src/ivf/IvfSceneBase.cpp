@@ -53,7 +53,7 @@ CIvfSceneBase::CIvfSceneBase()
 	m_multiPass = false;
 
 	m_multipassEvent = NULL;
-    m_renderFlatShadow = true;
+    m_renderFlatShadow = false;
     m_shadowColor[0] = 0.35;
     m_shadowColor[1] = 0.35;
     m_shadowColor[2] = 0.35;
