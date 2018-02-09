@@ -45,15 +45,16 @@ private:
 	std::vector<CIvfConstructionPlane*> m_workplanes;
 	CIvfConstructionPlane* m_currentPlane;
 	CIvfConstructionPlane* m_rootPlane;
+
+    CIvfShapePtr m_cursorShape;
+
 	int m_currentPlaneIdx;
 	bool m_usePlanes;
 	bool m_useCursor;
+    bool m_useCursorShape;
+    bool m_hideCursor;
+
 public:
-	void disableCursor();
-	void enableCursor();
-	double getSize();
-	bool getUseCursor();
-	void setUseCursor(bool flag);
 	/** CIvfWorkspace constructor */
 	CIvfWorkspace();
 
@@ -128,6 +129,23 @@ public:
 
   	/** No descriptions */
 	void setSize(double size);
+
+    void disableCursor();
+    void enableCursor();
+    double getSize();
+    bool getUseCursor();
+    void setUseCursor(bool flag);
+
+    void setCursorShape(CIvfShape* shape);
+    CIvfShape* cursorShape();
+    void setUseCursorShape(bool flag);
+    bool useCursorShape();
+
+    void enableCursorShape();
+    void disableCursorShape();
+
+    void hideCursor();
+    void showCursor();
 
 protected:
     virtual void doPostClear();
