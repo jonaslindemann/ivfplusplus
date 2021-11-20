@@ -24,7 +24,7 @@
 
 #include <ivf/IvfImage.h>
 
-CIvfImage::CIvfImage()
+CImage::CImage()
 {
 	m_imageMap = NULL;
 	m_size[0] = -1;
@@ -33,13 +33,13 @@ CIvfImage::CIvfImage()
 	m_internalFormat = GL_RGB;
 }
 
-CIvfImage::~CIvfImage()
+CImage::~CImage()
 {
 	if (m_imageMap!=NULL)
 		delete [] m_imageMap;
 }
 
-void CIvfImage::setChannels(unsigned int channels)
+void CImage::setChannels(unsigned int channels)
 {
 	m_channels = channels;
 
@@ -64,12 +64,12 @@ void CIvfImage::setChannels(unsigned int channels)
 	this->setSize(m_size[0], m_size[1]);
 }
 
-unsigned int CIvfImage::getChannels()
+unsigned int CImage::getChannels()
 {
 	return m_channels;
 }
 
-void CIvfImage::setSize(int width, int height)
+void CImage::setSize(int width, int height)
 {
 	if ((width>0)&&(height>0))
 	{
@@ -84,17 +84,17 @@ void CIvfImage::setSize(int width, int height)
 	}
 }
 
-int CIvfImage::getWidth()
+int CImage::getWidth()
 {
 	return m_size[0];
 }
 
-int CIvfImage::getHeight()
+int CImage::getHeight()
 {
 	return m_size[1];
 }
 
-void CIvfImage::setImageMap(void* image)
+void CImage::setImageMap(void* image)
 {
 	if (m_imageMap!=NULL)
 		delete [] m_imageMap;
@@ -102,29 +102,29 @@ void CIvfImage::setImageMap(void* image)
 	m_imageMap =(unsigned char*) image;
 }
 
-GLubyte* CIvfImage::getImageMap()
+GLubyte* CImage::getImageMap()
 {
 	return m_imageMap;
 }
 
-void CIvfImage::setPixel(int x, int y, GLubyte red, GLubyte green, GLubyte blue)
+void CImage::setPixel(int x, int y, GLubyte red, GLubyte green, GLubyte blue)
 {
 	setValue(x, y, 0, red);
 	setValue(x, y, 1, green);
 	setValue(x, y, 2, blue);
 }
 
-void CIvfImage::setPixelAlpha(int x, int y, GLubyte alpha)
+void CImage::setPixelAlpha(int x, int y, GLubyte alpha)
 {
 	setValue(x, y, 3, alpha);
 }
 
-bool CIvfImage::valid(int x, int y)
+bool CImage::valid(int x, int y)
 {
 	return ((x>=0)&&(x<m_size[0])&&(y>=0)&&(y<m_size[1]));
 }
 
-void CIvfImage::getPixel(int x, int y, GLubyte &red, GLubyte &green, GLubyte &blue)
+void CImage::getPixel(int x, int y, GLubyte &red, GLubyte &green, GLubyte &blue)
 {
 	if (valid(x, y))
 	{
@@ -134,7 +134,7 @@ void CIvfImage::getPixel(int x, int y, GLubyte &red, GLubyte &green, GLubyte &bl
 	}
 }
 
-GLubyte CIvfImage::getPixelAlpha(int x, int y)
+GLubyte CImage::getPixelAlpha(int x, int y)
 {
 	if (valid(x, y))
 	{
@@ -144,14 +144,14 @@ GLubyte CIvfImage::getPixelAlpha(int x, int y)
 		return 0;
 }
 
-void CIvfImage::clear()
+void CImage::clear()
 {
 	fillColor(0,0,0);
 	if (m_channels==4)
 		fillColorAlpha(255);
 }
 
-void CIvfImage::fillColor(GLubyte red, GLubyte green, GLubyte blue)
+void CImage::fillColor(GLubyte red, GLubyte green, GLubyte blue)
 {
 	int i, j;
 
@@ -160,7 +160,7 @@ void CIvfImage::fillColor(GLubyte red, GLubyte green, GLubyte blue)
 			setPixel(i, j, red, green, blue);
 }
 
-void CIvfImage::fillColorAlpha(GLubyte alpha)
+void CImage::fillColorAlpha(GLubyte alpha)
 {
 	int i, j;
 
@@ -169,7 +169,7 @@ void CIvfImage::fillColorAlpha(GLubyte alpha)
 			setPixelAlpha(i, j, alpha);
 }
 
-void CIvfImage::fillRect(int x1, int y1, int x2, int y2, GLubyte red, GLubyte green, GLubyte blue)
+void CImage::fillRect(int x1, int y1, int x2, int y2, GLubyte red, GLubyte green, GLubyte blue)
 {
 	if ( (valid(x1, y1))&&(valid(x2, y2)) )
 	{
@@ -181,7 +181,7 @@ void CIvfImage::fillRect(int x1, int y1, int x2, int y2, GLubyte red, GLubyte gr
 	}
 }
 
-void CIvfImage::fillRectAlpha(int x1, int y1, int x2, int y2, GLubyte alpha)
+void CImage::fillRectAlpha(int x1, int y1, int x2, int y2, GLubyte alpha)
 {
 	if ( (valid(x1, y1))&&(valid(x2, y2)) )
 	{
@@ -193,13 +193,13 @@ void CIvfImage::fillRectAlpha(int x1, int y1, int x2, int y2, GLubyte alpha)
 	}
 }
 
-double CIvfImage::getRatio()
+double CImage::getRatio()
 {
 	return m_ratio;
 }
 
 
-void CIvfImage::drawFrame(int x1, int y1, int x2, int y2, GLubyte red, GLubyte green, GLubyte blue)
+void CImage::drawFrame(int x1, int y1, int x2, int y2, GLubyte red, GLubyte green, GLubyte blue)
 {
 	if ( (valid(x1, y1))&&(valid(x2, y2)) )
 	{
@@ -219,7 +219,7 @@ void CIvfImage::drawFrame(int x1, int y1, int x2, int y2, GLubyte red, GLubyte g
 	}
 }
 
-void CIvfImage::drawFrameAlpha(int x1, int y1, int x2, int y2, GLubyte alpha)
+void CImage::drawFrameAlpha(int x1, int y1, int x2, int y2, GLubyte alpha)
 {
 	if ( (valid(x1, y1))&&(valid(x2, y2)) )
 	{
@@ -241,7 +241,7 @@ void CIvfImage::drawFrameAlpha(int x1, int y1, int x2, int y2, GLubyte alpha)
 
 
 
-GLint CIvfImage::getFormat()
+GLint CImage::getFormat()
 {
 	switch (m_channels) {
 	case 1:
@@ -262,7 +262,7 @@ GLint CIvfImage::getFormat()
 	}
 }
 
-void CIvfImage::setValue(int x, int y, int channel, GLubyte value)
+void CImage::setValue(int x, int y, int channel, GLubyte value)
 {
 	if (valid(x, y))
 	{
@@ -270,7 +270,7 @@ void CIvfImage::setValue(int x, int y, int channel, GLubyte value)
 	}
 }
 
-void CIvfImage::createAlphaMask(int treshold, int component, int over, int under)
+void CImage::createAlphaMask(int treshold, int component, int over, int under)
 {
 	if (m_channels>3)
 	{
@@ -318,7 +318,7 @@ void CIvfImage::createAlphaMask(int treshold, int component, int over, int under
 	}
 }
 
-void CIvfImage::replaceColor(GLubyte srcRed, GLubyte srcGreen, GLubyte srcBlue, GLubyte tgtRed, GLubyte tgtGreen, GLubyte tgtBlue)
+void CImage::replaceColor(GLubyte srcRed, GLubyte srcGreen, GLubyte srcBlue, GLubyte tgtRed, GLubyte tgtGreen, GLubyte tgtBlue)
 {
 	int i, j;
 	GLubyte red, green, blue;
@@ -333,7 +333,7 @@ void CIvfImage::replaceColor(GLubyte srcRed, GLubyte srcGreen, GLubyte srcBlue, 
 		}
 }
 
-void CIvfImage::copyFromImage(CIvfImage* image, int srcStartX, int srcEndX, int srcStartY, int srcEndY, int destX, int destY)
+void CImage::copyFromImage(CImage* image, int srcStartX, int srcEndX, int srcStartY, int srcEndY, int destX, int destY)
 {
 	int i, j;
 	GLubyte red, green, blue;
@@ -350,17 +350,17 @@ void CIvfImage::copyFromImage(CIvfImage* image, int srcStartX, int srcEndX, int 
 }
 
 
-GLint CIvfImage::getInternalFormat()
+GLint CImage::getInternalFormat()
 {
 	return m_internalFormat;
 }
 
-void CIvfImage::setInternalFormat(GLint format)
+void CImage::setInternalFormat(GLint format)
 {
 	m_internalFormat = format;
 }
 
-void CIvfImage::createAlphaFromColor()
+void CImage::createAlphaFromColor()
 {
 	if (m_channels>3)
 	{

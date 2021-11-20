@@ -19,29 +19,29 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfWireBrick
+// Implementation of: public class CWireBrick
 
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfWireBrick.h>
 
 
 // ------------------------------------------------------------
-CIvfWireBrick::CIvfWireBrick ()
-		:CIvfBrick()
+CWireBrick::CWireBrick ()
+		:CBrick()
 		//TODO: check and complete member initialisation list!
 {
 }
 
 // ------------------------------------------------------------
-CIvfWireBrick::~CIvfWireBrick ()
+CWireBrick::~CWireBrick ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfWireBrick::doCreateGeometry()
+void CWireBrick::doCreateGeometry()
 {
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	CIvfBrick::doCreateGeometry();
+	CBrick::doCreateGeometry();
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }
 

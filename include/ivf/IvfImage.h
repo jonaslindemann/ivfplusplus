@@ -28,7 +28,7 @@
 #include <ivf/IvfBase.h>
 #include <ivf/IvfGL.h> // OpenGL stuff
 
-IvfSmartPointer(CIvfImage);
+IvfSmartPointer(CImage);
 
 /**
  * Image class
@@ -37,7 +37,7 @@ IvfSmartPointer(CIvfImage);
  * The class is used as a base class for the image loaders in 
  * the ivfimage library.
  */
-class IVF_API CIvfImage : public CIvfBase {
+class IVF_API CImage : public CBase {
 private:
 	int m_size[2];
 	int m_channels;
@@ -46,12 +46,12 @@ private:
 	GLint m_internalFormat;
 public:
 	/** CIvfImage constructor */
-	CIvfImage();
+	CImage();
 
 	/** CIvfImage destructor */
-	virtual ~CIvfImage();
+	virtual ~CImage();
 
-	IvfClassInfo("CIvfImage",CIvfBase);
+	IvfClassInfo("CIvfImage",CBase);
 
 	/** 
 	 * Clear image
@@ -167,7 +167,7 @@ public:
 	/** Return image ratio */
 	double getRatio();
 
-	void copyFromImage(CIvfImage* image, int srcStartX, int srcEndX, int srcStartY, int srcEndY, int destX, int destY);
+	void copyFromImage(CImage* image, int srcStartX, int srcEndX, int srcStartY, int srcEndY, int destX, int destY);
 
 	/** Sets the image map used by the image class */
 	void setImageMap(void* image);

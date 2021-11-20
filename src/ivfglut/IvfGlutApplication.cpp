@@ -2,49 +2,49 @@
 
 
 #define GLUTCB_DISPLAY(id) \
-void CIvfGlutApplication::cbDisplay##id() \
+void CGlutApplication::cbDisplay##id() \
 { \
 	if (m_windows[id]!=0) \
 		m_windows[id]->glutDisplay(); \
 }
 
 #define GLUTCB_RESHAPE(id) \
-void CIvfGlutApplication::cbReshape##id(int width, int height) \
+void CGlutApplication::cbReshape##id(int width, int height) \
 { \
 	if (m_windows[id]!=0) \
 		m_windows[id]->glutReshape(width, height); \
 }
 
 #define GLUTCB_KEYBOARD(id) \
-void CIvfGlutApplication::cbKeyboard##id(unsigned char key, int x, int y) \
+void CGlutApplication::cbKeyboard##id(unsigned char key, int x, int y) \
 { \
 	if (m_windows[id]!=0) \
 		m_windows[id]->glutKeyboard(key, x, y); \
 }
 
 #define GLUTCB_MOUSE(id) \
-	void CIvfGlutApplication::cbMouse##id(int button, int state, int x, int y) \
+	void CGlutApplication::cbMouse##id(int button, int state, int x, int y) \
 	{ \
 		if (m_windows[id]!=0) \
 			m_windows[id]->glutMouse(button, state, x, y); \
 	}
 
 #define GLUTCB_MOTION(id) \
-	void CIvfGlutApplication::cbMotion##id(int x, int y) \
+	void CGlutApplication::cbMotion##id(int x, int y) \
 	{ \
 		if (m_windows[id]!=0) \
 			m_windows[id]->glutMotion(x, y); \
 	}
 
 #define GLUTCB_PASSIVE_MOTION(id) \
-	void CIvfGlutApplication::cbPassiveMotion##id(int x, int y) \
+	void CGlutApplication::cbPassiveMotion##id(int x, int y) \
 	{ \
 		if (m_windows[id]!=0) \
 			m_windows[id]->glutPassiveMotion(x, y); \
 	}
 
 #define GLUTCB_TIMER(id) \
-	void CIvfGlutApplication::cbTimer##id(int value) \
+	void CGlutApplication::cbTimer##id(int value) \
 	{ \
 		if (value == 1) \
 		{ \
@@ -146,22 +146,22 @@ GLUTCB_TIMER(7)
 GLUTCB_TIMER(8)
 GLUTCB_TIMER(9)
 
-CIvfGlutBase* CIvfGlutApplication::m_windows[10] = {0};
-CIvfGlutApplication* CIvfGlutApplication::m_instance = 0;
-unsigned int CIvfGlutApplication::m_nextWindow = 0;
-CIvfSingletonDestroyer<CIvfGlutApplication> CIvfGlutApplication::m_destroyer;
+CGlutBase* CGlutApplication::m_windows[10] = {0};
+CGlutApplication* CGlutApplication::m_instance = 0;
+unsigned int CGlutApplication::m_nextWindow = 0;
+CSingletonDestroyer<CGlutApplication> CGlutApplication::m_destroyer;
 
-CIvfGlutApplication* CIvfGlutApplication::getInstance(int* argc, char** argv) 
+CGlutApplication* CGlutApplication::getInstance(int* argc, char** argv) 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CIvfGlutApplication(argc, argv); 
+		m_instance = new CGlutApplication(argc, argv); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CIvfGlutApplication* CIvfGlutApplication::getInstance() 
+CGlutApplication* CGlutApplication::getInstance() 
 {
     if (m_instance != 0)  
     	return m_instance;
@@ -170,7 +170,7 @@ CIvfGlutApplication* CIvfGlutApplication::getInstance()
 }
 
 
-CIvfGlutApplication::CIvfGlutApplication(int* argc, char** argv) 
+CGlutApplication::CGlutApplication(int* argc, char** argv) 
 { 	
 #ifdef __APPLE__
     OSStatus err = noErr;
@@ -181,33 +181,33 @@ CIvfGlutApplication::CIvfGlutApplication(int* argc, char** argv)
 	m_nextWindow = 0;
 }
 
-CIvfGlutApplication::~CIvfGlutApplication() 
+CGlutApplication::~CGlutApplication() 
 { 
 
 }
 
-void CIvfGlutApplication::setDisplayMode(unsigned int mode)
+void CGlutApplication::setDisplayMode(unsigned int mode)
 {
 	m_displayMode = mode;
 	glutInitDisplayMode(mode);
 }
 
-unsigned int CIvfGlutApplication::getDisplayMode()
+unsigned int CGlutApplication::getDisplayMode()
 {
 	return m_displayMode;
 }
 
-void CIvfGlutApplication::mainLoop()
+void CGlutApplication::mainLoop()
 {
 	glutMainLoop();
 }
 
-void CIvfGlutApplication::run()
+void CGlutApplication::run()
 {
 	this->mainLoop();
 }
 
-void CIvfGlutApplication::runAppLoop(CIvfGlutBase *window)
+void CGlutApplication::runAppLoop(CGlutBase *window)
 {
 #ifdef FREEGLUT
 	bool finished = false;
@@ -235,7 +235,7 @@ void CIvfGlutApplication::runAppLoop(CIvfGlutBase *window)
 #endif
 }
 
-void CIvfGlutApplication::enableTimer(int timerIdx, int msecs)
+void CGlutApplication::enableTimer(int timerIdx, int msecs)
 {
 	switch (timerIdx) {
 	case (0):
@@ -271,7 +271,7 @@ void CIvfGlutApplication::enableTimer(int timerIdx, int msecs)
 	}
 }
 
-void CIvfGlutApplication::disableTimer(int timerIdx)
+void CGlutApplication::disableTimer(int timerIdx)
 {
 	switch (timerIdx) {
 	case (0):
@@ -307,7 +307,7 @@ void CIvfGlutApplication::disableTimer(int timerIdx)
 	}
 }
 
-bool CIvfGlutApplication::addWindow(CIvfGlutBase* window)
+bool CGlutApplication::addWindow(CGlutBase* window)
 {
 	m_windows[m_nextWindow] = window;
 	m_windows[m_nextWindow]->create();

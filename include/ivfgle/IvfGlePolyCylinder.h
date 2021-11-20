@@ -31,18 +31,18 @@
 #include <ivfgle/IvfGleCoordArray.h>
 #include <ivfgle/IvfGleColorArray.h>
 
-IvfSmartPointer(CIvfGlePolyCylinder);
+IvfSmartPointer(CGlePolyCylinder);
 
-class IVFGLE_API CIvfGlePolyCylinder: public CIvfGleExtrudedBase {
+class IVFGLE_API CGlePolyCylinder: public CGleExtrudedBase {
 private:
 	double	m_radius;
 public:
-	CIvfGlePolyCylinder();
+	CGlePolyCylinder();
 
 	void setRadius(double radius);
 	double getRadius();
 
-	IvfClassInfo("CIvfGlePolyCylinder", CIvfShape);
+	IvfClassInfo("CGlePolyCylinder", CShape);
 protected:
 	virtual void doCreateGeometry();
 };

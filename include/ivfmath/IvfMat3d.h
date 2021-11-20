@@ -36,21 +36,21 @@
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfMat3d : public CIvfMathBase {
+class IVFMATH_API CMat3d : public CMathBase {
 private:
 	double m_matrix[3][3];
 public:
-	/** CIvfMat3d constructor */
-	CIvfMat3d();
+	/** CMat3d constructor */
+	CMat3d();
 
-	/** CIvfMat3d copy constructor */
-	CIvfMat3d(CIvfMat3d& M);
+	/** CMat3d copy constructor */
+	CMat3d(CMat3d& M);
 
-	/** CIvfMat3d scalar constructor */
-	CIvfMat3d(double scalar);
+	/** CMat3d scalar constructor */
+	CMat3d(double scalar);
 
-	/** CIvfMat3d destructor */
-	virtual ~CIvfMat3d();
+	/** CMat3d destructor */
+	virtual ~CMat3d();
 
 	/** Initializes matrix with all ones (=1.0) */
 	void one();
@@ -86,40 +86,40 @@ public:
 	void setRow(int row, double v1, double v2, double v3);
 
 	/** Return the transpose of the matrix */
-	CIvfMat3d& t();
+	CMat3d& t();
 
 	/** Return the inverse of the matrix */
-	CIvfMat3d& inv();
+	CMat3d& inv();
 
 	/** Assignment operator Matrix = Matrix */
-	CIvfMat3d& operator=(CIvfMat3d& A);
+	CMat3d& operator=(CMat3d& A);
 
 	/** Assignment operator Matrix = scalar */
-	CIvfMat3d& operator=(double a);
+	CMat3d& operator=(double a);
 
 	/** += operator assignment Matrix += Matrix */
-	CIvfMat3d& operator+=(CIvfMat3d& A);
+	CMat3d& operator+=(CMat3d& A);
 
 	/** -= operator assignment Matrix -= Matrix */
-	CIvfMat3d& operator-=(CIvfMat3d& A);
+	CMat3d& operator-=(CMat3d& A);
 
 	/** Matrix/Matrix multiplication operator */
-	CIvfMat3d& operator*(CIvfMat3d& A);
+	CMat3d& operator*(CMat3d& A);
 
 	/** Matrix/Vector multiplication operator */
-	CIvfVec3d& operator*(CIvfVec3d& v);
+	CVec3d& operator*(CVec3d& v);
 
 	/** Matrix/Scalar multiplication operator */
-	CIvfMat3d& operator*(double scalar);
+	CMat3d& operator*(double scalar);
 
 	/** Elemental division operator */
-	CIvfMat3d& operator/(double scalar);
+	CMat3d& operator/(double scalar);
 
 	/** Matrix/Matrix addition operator */
-	CIvfMat3d& operator+(CIvfMat3d& A);
+	CMat3d& operator+(CMat3d& A);
 };
 
-IVFMATH_API CIvfMat3d& ivfGetTempMatrix3d();
+IVFMATH_API CMat3d& ivfGetTempMatrix3d();
 
 /** \example math.cpp */
 

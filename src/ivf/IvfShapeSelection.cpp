@@ -26,9 +26,9 @@
 
 #include <ivf/IvfSolidLine.h>
 
-CIvfShapeSelection::CIvfShapeSelection()
+CShapeSelection::CShapeSelection()
 {
-	m_hlMaterial = new CIvfMaterial();
+	m_hlMaterial = new CMaterial();
 	m_hlMaterial->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_hlMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_hlMaterial->setAmbientColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -38,14 +38,14 @@ CIvfShapeSelection::CIvfShapeSelection()
 	m_offset[2] = 0.0;
 }
 
-CIvfShapeSelection::~CIvfShapeSelection()
+CShapeSelection::~CShapeSelection()
 {
 
 }
 
-void CIvfShapeSelection::doCreateGeometry()
+void CShapeSelection::doCreateGeometry()
 {
-	CIvfShapeSelectionVectorIterator it;
+	CShapeSelectionVectorIterator it;
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE);
@@ -53,14 +53,14 @@ void CIvfShapeSelection::doCreateGeometry()
 
 	for (it=m_selection.begin(); it!=m_selection.end(); it++)
 	{
-		CIvfShapePtr shape = *it;
+		CShapePtr shape = *it;
 
 
-		if (!shape->isClass("CIvfSolidLine"))
+		if (!shape->isClass("CSolidLine"))
 		{
 			glPushMatrix();
 			glTranslated(m_offset[0], m_offset[1], m_offset[2]);
-			CIvfMaterialPtr oldMat = shape->getMaterial();
+			CMaterialPtr oldMat = shape->getMaterial();
 			shape->setMaterial(m_hlMaterial);
 			shape->setScale(1.4, 1.4, 1.4);
 			shape->render();
@@ -70,13 +70,13 @@ void CIvfShapeSelection::doCreateGeometry()
 		}
 		else
 		{
-			CIvfShape* temp = shape;
-			CIvfSolidLinePtr solidLine = (CIvfSolidLine*) temp;
+			CShape* temp = shape;
+			CSolidLinePtr solidLine = (CSolidLine*) temp;
 
 			double oldRadius = solidLine->getRadius();
 			solidLine->setRadius(oldRadius*1.4);
 
-			CIvfMaterialPtr oldMat = shape->getMaterial();
+			CMaterialPtr oldMat = shape->getMaterial();
 			shape->setMaterial(m_hlMaterial);
 			shape->render();
 			shape->setMaterial(oldMat);
@@ -89,25 +89,25 @@ void CIvfShapeSelection::doCreateGeometry()
 	glDisable(GL_BLEND);
 }
 
-void CIvfShapeSelection::add(CIvfShape *shape)
+void CShapeSelection::add(CShape *shape)
 {
 	m_selectionSet.insert(shape);
 	if (m_selectionSet.size()>m_selection.size())
-		m_selection.push_back(CIvfShapePtr(shape));
+		m_selection.push_back(CShapePtr(shape));
 }
 
-void CIvfShapeSelection::clear()
+void CShapeSelection::clear()
 {
 	m_selection.clear();
 	m_selectionSet.clear();
 }
 
-int CIvfShapeSelection::getSize()
+int CShapeSelection::getSize()
 {
 	return m_selection.size();
 }
 
-CIvfShape* CIvfShapeSelection::getShape(int idx)
+CShape* CShapeSelection::getShape(int idx)
 {
 	if ((idx>=0)&&(idx<(int)m_selection.size()))
 		return m_selection[idx];
@@ -115,20 +115,20 @@ CIvfShape* CIvfShapeSelection::getShape(int idx)
 		return NULL;
 }
 
-void CIvfShapeSelection::getSelection(CIvfShapeSelectionVector &vec)
+void CShapeSelection::getSelection(CShapeSelectionVector &vec)
 {
-	CIvfShapeSelectionVectorIterator it;
+	CShapeSelectionVectorIterator it;
 
 	for (it=m_selection.begin(); it!=m_selection.end(); it++)
 	{
-		CIvfShapePtr shape = *it;
+		CShapePtr shape = *it;
 		vec.push_back(shape);
 	}
 }
 
-bool CIvfShapeSelection::contains(CIvfShape *shape)
+bool CShapeSelection::contains(CShape *shape)
 {
-	std::set<CIvfShape*>::iterator it;
+	std::set<CShape*>::iterator it;
 
 	it = m_selectionSet.find(shape);
 	return (it != m_selectionSet.end());
@@ -148,25 +148,25 @@ bool CIvfShapeSelection::contains(CIvfShape *shape)
 	*/
 }
 
-void CIvfShapeSelection::addTo(CIvfComposite *composite)
+void CShapeSelection::addTo(CComposite *composite)
 {
-	CIvfShapeSelectionVectorIterator it;
+	CShapeSelectionVectorIterator it;
 
 	for (it=m_selection.begin(); it!=m_selection.end(); it++)
 	{
-		CIvfShapePtr shape = *it;
+		CShapePtr shape = *it;
 		composite->addChild(shape);
 	}
 }
 
-void CIvfShapeSelection::moveShapes(double dx, double dy, double dz)
+void CShapeSelection::moveShapes(double dx, double dy, double dz)
 {
-	CIvfShapeSelectionVectorIterator it;
+	CShapeSelectionVectorIterator it;
 	double x, y, z;
 
 	for (it=m_selection.begin(); it!=m_selection.end(); it++)
 	{
-		CIvfShapePtr shape = *it;
+		CShapePtr shape = *it;
 
 		shape->getPosition(x, y, z);
 		x+=dx;
@@ -176,7 +176,7 @@ void CIvfShapeSelection::moveShapes(double dx, double dy, double dz)
 	}
 }
 
-void CIvfShapeSelection::assignFrom(CIvfShapeSelection *selection)
+void CShapeSelection::assignFrom(CShapeSelection *selection)
 {
 	clear();
 
@@ -184,22 +184,22 @@ void CIvfShapeSelection::assignFrom(CIvfShapeSelection *selection)
 
 	for (i=0; i<selection->getSize(); i++)
 	{
-		CIvfShape* shape = selection->getShape(i);
+		CShape* shape = selection->getShape(i);
 		add(shape);
 	}
 }
 
-void CIvfShapeSelection::setOffset(double dx, double dy, double dz)
+void CShapeSelection::setOffset(double dx, double dy, double dz)
 {
 	m_offset[0] = dx;
 	m_offset[1] = dy;
 	m_offset[2] = dz;
 }
 
-void CIvfShapeSelection::remove(CIvfShape *shape)
+void CShapeSelection::remove(CShape *shape)
 {
-	std::set<CIvfShape*>::iterator sit;
-	std::vector<CIvfShapePtr>::iterator vit;
+	std::set<CShape*>::iterator sit;
+	std::vector<CShapePtr>::iterator vit;
 
 	sit = m_selectionSet.find(shape);
 
@@ -216,7 +216,7 @@ void CIvfShapeSelection::remove(CIvfShape *shape)
 	}
 }
 
-void CIvfShapeSelection::setHighlightMaterial(CIvfMaterial *material)
+void CShapeSelection::setHighlightMaterial(CMaterial *material)
 {
 	m_hlMaterial = material;
 }

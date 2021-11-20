@@ -26,35 +26,35 @@
 
 #include <ivf/IvfGL.h>
 
-CIvfPixelOps* CIvfPixelOps::m_instance = 0;
-CIvfSingletonDestroyer<CIvfPixelOps> CIvfPixelOps::m_destroyer;
+CPixelOps* CPixelOps::m_instance = 0;
+CSingletonDestroyer<CPixelOps> CPixelOps::m_destroyer;
 
-CIvfPixelOps* CIvfPixelOps::getInstance () 
+CPixelOps* CPixelOps::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CIvfPixelOps(); 
+		m_instance = new CPixelOps(); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CIvfPixelOps::CIvfPixelOps()
+CPixelOps::CPixelOps()
 {
 
 }
 
-void CIvfPixelOps::enableDepthTest()
+void CPixelOps::enableDepthTest()
 {
 	glEnable(GL_DEPTH_TEST);
 }
 
-void CIvfPixelOps::disableDepthTest()
+void CPixelOps::disableDepthTest()
 {
 	glDisable(GL_DEPTH_TEST);
 }
 
-bool CIvfPixelOps::isDepthTestEnabled()
+bool CPixelOps::isDepthTestEnabled()
 {
 	GLboolean depthTest;
 	glGetBooleanv(GL_DEPTH_TEST, &depthTest);

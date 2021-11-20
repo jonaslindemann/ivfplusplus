@@ -47,11 +47,11 @@
 	static void cbTimer##id(int value);
 	
 
-class CIvfGlutApplication {
+class CGlutApplication {
 private:
-	static CIvfGlutApplication* m_instance;
-	static CIvfSingletonDestroyer<CIvfGlutApplication> m_destroyer;
-	static CIvfGlutBase* m_windows[];
+	static CGlutApplication* m_instance;
+	static CSingletonDestroyer<CGlutApplication> m_destroyer;
+	static CGlutBase* m_windows[];
 	static unsigned int m_nextWindow;
 	GLUT_CB(0);
 	GLUT_CB(1);
@@ -69,24 +69,24 @@ private:
 #endif
 	
 public:	
-	static CIvfGlutApplication* getInstance(int* argc, char** argv);
-	static CIvfGlutApplication* getInstance();
+	static CGlutApplication* getInstance(int* argc, char** argv);
+	static CGlutApplication* getInstance();
 	
 	void setDisplayMode(unsigned int mode);
 	unsigned int getDisplayMode();
 	
-	bool addWindow(CIvfGlutBase* window);
+	bool addWindow(CGlutBase* window);
 	void enableTimer(int timerIdx, int msecs);
 	void disableTimer(int timerIdx);
 	
 	void mainLoop();
 	void run();
-	void runAppLoop(CIvfGlutBase *window);
+	void runAppLoop(CGlutBase *window);
 
 protected:
 	/** Protected constructor (do not use) */
-	CIvfGlutApplication(int* argc, char** argv);
-	~CIvfGlutApplication();
-	friend class CIvfSingletonDestroyer<CIvfGlutApplication>;
+	CGlutApplication(int* argc, char** argv);
+	~CGlutApplication();
+	friend class CSingletonDestroyer<CGlutApplication>;
 };
 

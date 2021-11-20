@@ -28,26 +28,26 @@
 
 #include <ivf/IvfComposite.h>
 
-IvfSmartPointer(CIvfTransform);
+IvfSmartPointer(CTransform);
 
 /**
  * Transform class
  *
- * CIvfTransform implements a transform node. 
+ * CTransform implements a transform node. 
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfTransform : public CIvfComposite {
+class IVF_API CTransform : public CComposite {
 private:
 
 public:
-	/** CIvfTransform constructor */
-	CIvfTransform();
+	/** CTransform constructor */
+	CTransform();
 
-	/** CIvfTransform destructor */
-	virtual ~CIvfTransform();
+	/** CTransform destructor */
+	virtual ~CTransform();
 	
-	IvfClassInfo("CIvfTransform",CIvfComposite);
+	IvfClassInfo("CTransform",CComposite);
 };
 
 /** \example robot.cpp

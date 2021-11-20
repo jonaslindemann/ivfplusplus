@@ -28,9 +28,9 @@
 #include <ivfmath/IvfVec3d.h>
 #include "IvfCoordList.h"
 
-IvfSmartPointer(CIvfArrayCoordList);
+IvfSmartPointer(CArrayCoordList);
 
-class CIvfArrayCoordList : public CIvfCoordList {
+class CArrayCoordList : public CCoordList {
 private:
 	
 	// variables for extrusion representation
@@ -42,19 +42,19 @@ private:
 	void resize(int newSize);
 
 public:
-	CIvfArrayCoordList();
-	virtual ~CIvfArrayCoordList();
+	CArrayCoordList();
+	virtual ~CArrayCoordList();
 
 	void setCoord(int idx, double x, double y, double z);
 	void addCoord(double x, double y, double z);
 	void addCoord(double x, double y, double z, float r, float g, float b);
-	void addCoord(CIvfVec3d* coord);
+	void addCoord(CVec3d* coord);
 
 	void setColor(long idx, float r, float g, float b);
 	void getColor(long idx, float &r, float &g, float &b);
 	
 	void getCoord(long idx, double &x, double &y, double &z);
-	CIvfVec3d* getCoord(long idx);
+	CVec3d* getCoord(long idx);
 
 	long getSize();
 	void clear();

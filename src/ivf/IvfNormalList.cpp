@@ -24,7 +24,7 @@
 
 #include <ivf/IvfNormalList.h>
 
-CIvfNormalList::CIvfNormalList()
+CNormalList::CNormalList()
 {
 	m_size = 0;
 	m_blockSize = 1024;
@@ -34,24 +34,24 @@ CIvfNormalList::CIvfNormalList()
 	m_next = 0;
 }
 
-CIvfNormalList::~CIvfNormalList()
+CNormalList::~CNormalList()
 {
 	delete [] m_normals;
 }
 
-void CIvfNormalList::add(double x, double y, double z)
+void CNormalList::add(double x, double y, double z)
 {
 	add(x);
 	add(y);
 	add(z);
 }
 
-void CIvfNormalList::add(double comp)
+void CNormalList::add(double comp)
 {
 	if (m_next==m_allocSize)
 	{
 		m_allocSize = m_allocSize*2;
-		IvfDbg1("CIvfNormalList: Expanding to " << m_allocSize << " normals. (allocated size)");
+		IvfDbg1("CNormalList: Expanding to " << m_allocSize << " normals. (allocated size)");
 		GLfloat* newNormals = new GLfloat[m_allocSize];
 		
 		int i;
@@ -68,12 +68,12 @@ void CIvfNormalList::add(double comp)
 	m_next++;
 }
 
-int CIvfNormalList::getSize()
+int CNormalList::getSize()
 {
 	return m_next / 3;
 }
 
-void CIvfNormalList::getNormal(int idx, double &x, double &y, double &z)
+void CNormalList::getNormal(int idx, double &x, double &y, double &z)
 {
 	if ((idx>=0)&&(idx<m_next/3))
 	{
@@ -83,7 +83,7 @@ void CIvfNormalList::getNormal(int idx, double &x, double &y, double &z)
 	}
 }
 
-double CIvfNormalList::getComp(int idx)
+double CNormalList::getComp(int idx)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{
@@ -93,22 +93,22 @@ double CIvfNormalList::getComp(int idx)
 		return -1.0;
 }
 
-void* CIvfNormalList::getData()
+void* CNormalList::getData()
 {
 	return (void*)m_normals;
 }
 
-GLenum CIvfNormalList::getDataType()
+GLenum CNormalList::getDataType()
 {
 	return GL_FLOAT;
 }
 
-GLsizei CIvfNormalList::getStride()
+GLsizei CNormalList::getStride()
 {
 	return 3*sizeof(GLfloat);
 }
 
-void CIvfNormalList::clear()
+void CNormalList::clear()
 {
 	delete [] m_normals;
 

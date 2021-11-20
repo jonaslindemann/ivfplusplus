@@ -29,18 +29,18 @@
 
 #include <ivf/IvfGL.h>
 
-IvfSmartPointer(CIvfColorList);
+IvfSmartPointer(CColorList);
 
 /**
  * Color list class
  *
- * Maintains a list of colors for use with the CIvfVertexElements class.
+ * Maintains a list of colors for use with the CVertexElements class.
  * The list is initially 1024 elements and the size is doubled if exceeding
  * 1024.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfColorList : public CIvfBase {
+class IVF_API CColorList : public CBase {
 private:
 	GLfloat* m_color;
 	long m_allocSize;
@@ -49,12 +49,12 @@ private:
 	long m_next;
 public:
 	/** CIvfColorList constructor */
-	CIvfColorList();
+	CColorList();
 
 	/** CIvfColorList destructor */
-	virtual ~CIvfColorList();
+	virtual ~CColorList();
 
-	IvfClassInfo("CIvfColorList",CIvfBase);
+	IvfClassInfo("CIvfColorList",CBase);
 
 	/** Clear the color list */
 	void clear();

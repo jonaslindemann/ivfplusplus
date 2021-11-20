@@ -34,26 +34,26 @@
 #include <ivfgle/IvfGleContour.h>
 #include <ivfgle/IvfGleScalarArray.h>
 
-IvfSmartPointer(CIvfGleTwistExtrusion);
+IvfSmartPointer(CGleTwistExtrusion);
 
-class IVFGLE_API CIvfGleTwistExtrusion: public CIvfShape {
+class IVFGLE_API CGleTwistExtrusion: public CShape {
 private:
-	CIvfGleCoordArrayPtr  m_pointArray;
-	CIvfGleColorArrayPtr  m_colorArray;
-	CIvfGleContourPtr	  m_contour;
-	CIvfGleScalarArrayPtr m_twistArray;
+	CGleCoordArrayPtr  m_pointArray;
+	CGleColorArrayPtr  m_colorArray;
+	CGleContourPtr	  m_contour;
+	CGleScalarArrayPtr m_twistArray;
 	gleDouble			  m_up[3];
 public:
-	CIvfGleTwistExtrusion();
+	CGleTwistExtrusion();
 
-	IvfClassInfo("CIvfGleTwistExtrusion", CIvfShape);
+	IvfClassInfo("CGleTwistExtrusion", CShape);
 
-	void setColors(CIvfGleColorArray* array);
-	void setPoints(CIvfGleCoordArray* array);
-	void setContour(CIvfGleContour* contour);
+	void setColors(CGleColorArray* array);
+	void setPoints(CGleCoordArray* array);
+	void setContour(CGleContour* contour);
 	void setContourUp(double vx, double vy, double vz);
-	void setContourUp(CIvfVec3d& vec);
-	void setTwist(CIvfGleScalarArray* array);
+	void setContourUp(CVec3d& vec);
+	void setTwist(CGleScalarArray* array);
 protected:
 	virtual void doCreateGeometry();
 };

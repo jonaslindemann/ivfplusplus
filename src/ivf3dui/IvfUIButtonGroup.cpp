@@ -24,33 +24,33 @@
 
 #include <ivf3dui/IvfUIButtonGroup.h>
 
-CIvfUIButtonGroup::CIvfUIButtonGroup()
+CUIButtonGroup::CUIButtonGroup()
 {
 	this->setUseName(false);
 }
 
-CIvfUIButtonGroup::~CIvfUIButtonGroup()
+CUIButtonGroup::~CUIButtonGroup()
 {
 
 }
 
-void CIvfUIButtonGroup::addChild(CIvfUIButtonBase* button)
+void CUIButtonGroup::addChild(CUIButtonBase* button)
 {
 	button->setParentControl(this);
-	button->setType(CIvfUIButtonBase::BT_TOGGLE);
-	CIvfComposite::addChild(button);
+	button->setType(CUIButtonBase::BT_TOGGLE);
+	CComposite::addChild(button);
 }
 
-void CIvfUIButtonGroup::updateState(CIvfUIButtonBase* button)
+void CUIButtonGroup::updateState(CUIButtonBase* button)
 {
 	int i;
 
 	for (i=0; i<this->getSize(); i++)
 	{
-		CIvfShape* shape = this->getChild(i);
-		CIvfUIButtonBasePtr b = (CIvfUIButtonBase*)shape;
+		CShape* shape = this->getChild(i);
+		CUIButtonBasePtr b = (CUIButtonBase*)shape;
 
 		if (b!=button)
-			b->groupUpdateState(CIvfUIButtonBase::BS_UP);
+			b->groupUpdateState(CUIButtonBase::BS_UP);
 	}	
 }

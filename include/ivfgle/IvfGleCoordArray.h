@@ -31,18 +31,18 @@
 
 #include <GL/gle.h>
 
-IvfSmartPointer(CIvfGleCoordArray);
+IvfSmartPointer(CGleCoordArray);
 
-class IVFGLE_API CIvfGleCoordArray: public CIvfBase {
+class IVFGLE_API CGleCoordArray: public CBase {
 private:
 	int m_size;
 	gleDouble (*m_coords)[3];
 public:
-	CIvfGleCoordArray();
-	CIvfGleCoordArray(int size);
-	virtual ~CIvfGleCoordArray();
+	CGleCoordArray();
+	CGleCoordArray(int size);
+	virtual ~CGleCoordArray();
 
-	IvfClassInfo("CIvfGleCoordArray", CIvfBase);
+	IvfClassInfo("CGleCoordArray", CBase);
 
 	void calcFirstAndLast();
 
@@ -52,8 +52,8 @@ public:
 	void setCoord(int idx, double x, double y, double z);
 	void getCoord(int idx, double& x, double& y, double& z);
 
-	void setCoord(int idx, CIvfVec3d& vec);
-	CIvfVec3d& getCoord(int idx);
+	void setCoord(int idx, CVec3d& vec);
+	CVec3d& getCoord(int idx);
 
 	void* getData();
 

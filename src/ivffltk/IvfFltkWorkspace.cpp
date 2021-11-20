@@ -28,86 +28,86 @@
 
 static void cb_fltkWorkspaceIdle(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	fltkBase->doIdle();
 }
 
 static void cb_fltkWorkspace0(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	if (fltkBase->doTimeout0())
 		Fl::repeat_timeout(fltkBase->getTimeout(0), cb_fltkWorkspace0, fltkBase);
 }
 
 static void cb_fltkWorkspace1(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	if (fltkBase->doTimeout1())
 		Fl::repeat_timeout(fltkBase->getTimeout(1), cb_fltkWorkspace0, fltkBase);
 }
 
 static void cb_fltkWorkspace2(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	if (fltkBase->doTimeout2())
 		Fl::repeat_timeout(fltkBase->getTimeout(2), cb_fltkWorkspace0, fltkBase);
 }
 
 static void cb_fltkWorkspace3(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	if (fltkBase->doTimeout3())
 		Fl::repeat_timeout(fltkBase->getTimeout(3), cb_fltkWorkspace0, fltkBase);
 }
 
 static void cb_fltkWorkspace4(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	if (fltkBase->doTimeout4())
 		Fl::repeat_timeout(fltkBase->getTimeout(4), cb_fltkWorkspace0, fltkBase);
 }
 
 static void cb_fltkWorkspace5(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	if (fltkBase->doTimeout5())
 		Fl::repeat_timeout(fltkBase->getTimeout(5), cb_fltkWorkspace0, fltkBase);
 }
 
 static void cb_fltkWorkspace6(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	if (fltkBase->doTimeout6())
 		Fl::repeat_timeout(fltkBase->getTimeout(6), cb_fltkWorkspace0, fltkBase);
 }
 
 static void cb_fltkWorkspace7(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	if (fltkBase->doTimeout7())
 		Fl::repeat_timeout(fltkBase->getTimeout(7), cb_fltkWorkspace0, fltkBase);
 }
 
 static void cb_fltkWorkspace8(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	if (fltkBase->doTimeout8())
 		Fl::repeat_timeout(fltkBase->getTimeout(8), cb_fltkWorkspace0, fltkBase);
 }
 
 static void cb_fltkWorkspace9(void* p)
 {
-	CIvfFltkWorkspace* fltkBase = (CIvfFltkWorkspace*) p;
+	CFltkWorkspace* fltkBase = (CFltkWorkspace*) p;
 	if (fltkBase->doTimeout9())
 		Fl::repeat_timeout(fltkBase->getTimeout(9), cb_fltkWorkspace0, fltkBase);
 }
 
-CIvfFltkWorkspace::CIvfFltkWorkspace(int X, int Y, int W, int H, const char *L) :
-Fl_Gl_Window(X, Y, W, H, L), CIvfWorkspaceWidget()
+CFltkWorkspace::CFltkWorkspace(int X, int Y, int W, int H, const char *L) :
+Fl_Gl_Window(X, Y, W, H, L), CWorkspaceWidget()
 {
 }
 
-void CIvfFltkWorkspace::draw()
+void CFltkWorkspace::draw()
 {
 	if (!valid())
 		doResize(w(), h());
@@ -115,7 +115,7 @@ void CIvfFltkWorkspace::draw()
 	doDraw();
 }
 
-int CIvfFltkWorkspace::handle(int event)
+int CFltkWorkspace::handle(int event)
 {
 	int x = Fl::event_x();
 	int y = Fl::event_y();
@@ -136,16 +136,16 @@ int CIvfFltkWorkspace::handle(int event)
 			return 1;
 		case FL_PUSH:
 			
-			setModifierKey(CIvfWidgetBase::MT_NONE);
+			setModifierKey(CWidgetBase::MT_NONE);
 			
 			if (Fl::get_key(FL_Shift_L))
-				setModifierKey(CIvfWidgetBase::MT_SHIFT);
+				setModifierKey(CWidgetBase::MT_SHIFT);
 			if (Fl::get_key(FL_Shift_R))
-				setModifierKey(CIvfWidgetBase::MT_SHIFT);
+				setModifierKey(CWidgetBase::MT_SHIFT);
 			if (Fl::get_key(FL_Control_L))
-				setModifierKey(CIvfWidgetBase::MT_CTRL);
+				setModifierKey(CWidgetBase::MT_CTRL);
 			if (Fl::get_key(FL_Control_R))
-				setModifierKey(CIvfWidgetBase::MT_CTRL);
+				setModifierKey(CWidgetBase::MT_CTRL);
 			
 			if (Fl::event_button()==FL_LEFT_MOUSE)
 				setLeftButtonStatus(true);
@@ -166,7 +166,7 @@ int CIvfFltkWorkspace::handle(int event)
 			doMouseMove(x, y);
 			return 1;
 		case FL_RELEASE:
-			setModifierKey(CIvfWidgetBase::MT_NONE);
+			setModifierKey(CWidgetBase::MT_NONE);
 			clearMouseStatus();
 			doMouseUp(x, y);
 			return 1;
@@ -179,211 +179,211 @@ int CIvfFltkWorkspace::handle(int event)
 		case FL_KEYBOARD:
 			switch (Fl::event_key()) {
 			case FL_Button:
-				doFunctionKey(CIvfWidgetBase::FK_BUTTON, x, y);
+				doFunctionKey(CWidgetBase::FK_BUTTON, x, y);
 				return 1;
 				break;
 			case FL_BackSpace:
-				doFunctionKey(CIvfWidgetBase::FK_BACKSPACE, x, y);
+				doFunctionKey(CWidgetBase::FK_BACKSPACE, x, y);
 				return 1;
 				break;
 			case FL_Tab:
-				doFunctionKey(CIvfWidgetBase::FK_TAB, x, y);
+				doFunctionKey(CWidgetBase::FK_TAB, x, y);
 				return 1;
 				break; 
 			case FL_Enter:
-				doFunctionKey(CIvfWidgetBase::FK_ENTER, x, y);
+				doFunctionKey(CWidgetBase::FK_ENTER, x, y);
 				return 1;
 				break;
 			case FL_Pause:
-				doFunctionKey(CIvfWidgetBase::FK_PAUSE, x, y);
+				doFunctionKey(CWidgetBase::FK_PAUSE, x, y);
 				return 1;
 				break;
 			case FL_Scroll_Lock:
-				doFunctionKey(CIvfWidgetBase::FK_SCROLL_LOCK, x, y);
+				doFunctionKey(CWidgetBase::FK_SCROLL_LOCK, x, y);
 				return 1;
 				break;
 			case FL_Escape:
-				doFunctionKey(CIvfWidgetBase::FK_ESCAPE, x, y);
+				doFunctionKey(CWidgetBase::FK_ESCAPE, x, y);
 				return 1;
 				break;
 			case FL_Home:
-				doFunctionKey(CIvfWidgetBase::FK_HOME, x, y);
+				doFunctionKey(CWidgetBase::FK_HOME, x, y);
 				return 1;
 				break;
 			case FL_Left:
-				doFunctionKey(CIvfWidgetBase::FK_LEFT, x, y);
+				doFunctionKey(CWidgetBase::FK_LEFT, x, y);
 				return 1;
 				break;
 			case FL_Up:
-				doFunctionKey(CIvfWidgetBase::FK_UP, x, y);
+				doFunctionKey(CWidgetBase::FK_UP, x, y);
 				return 1;
 				break; 
 			case FL_Right:
-				doFunctionKey(CIvfWidgetBase::FK_RIGHT, x, y);
+				doFunctionKey(CWidgetBase::FK_RIGHT, x, y);
 				return 1;
 				break;
 			case FL_Down:
-				doFunctionKey(CIvfWidgetBase::FK_RIGHT, x, y);
+				doFunctionKey(CWidgetBase::FK_RIGHT, x, y);
 				return 1;
 				break; 
 			case FL_Page_Up:
-				doFunctionKey(CIvfWidgetBase::FK_PAGE_UP, x, y);
+				doFunctionKey(CWidgetBase::FK_PAGE_UP, x, y);
 				return 1;
 				break;
 			case FL_Page_Down:
-				doFunctionKey(CIvfWidgetBase::FK_PAGE_DOWN, x, y);
+				doFunctionKey(CWidgetBase::FK_PAGE_DOWN, x, y);
 				return 1;
 				break;
 			case FL_End:
-				doFunctionKey(CIvfWidgetBase::FK_END, x, y);
+				doFunctionKey(CWidgetBase::FK_END, x, y);
 				return 1;
 				break;
 			case FL_Print:
-				doFunctionKey(CIvfWidgetBase::FK_PRINT, x, y);
+				doFunctionKey(CWidgetBase::FK_PRINT, x, y);
 				return 1;
 				break;
 			case FL_Insert:
-				doFunctionKey(CIvfWidgetBase::FK_INSERT, x, y);
+				doFunctionKey(CWidgetBase::FK_INSERT, x, y);
 				return 1;
 				break;
 			case FL_Menu:
-				doFunctionKey(CIvfWidgetBase::FK_MENU, x, y);
+				doFunctionKey(CWidgetBase::FK_MENU, x, y);
 				return 1;
 				break;
 			case FL_Num_Lock:
-				doFunctionKey(CIvfWidgetBase::FK_END, x, y);
+				doFunctionKey(CWidgetBase::FK_END, x, y);
 				return 1;
 				break;
 			case FL_F+1:
-				doFunctionKey(CIvfWidgetBase::FK_F1, x, y);
+				doFunctionKey(CWidgetBase::FK_F1, x, y);
 				return 1;
 				break;
 			case FL_F+2:
-				doFunctionKey(CIvfWidgetBase::FK_F2, x, y);
+				doFunctionKey(CWidgetBase::FK_F2, x, y);
 				return 1;
 				break;
 			case FL_F+3:
-				doFunctionKey(CIvfWidgetBase::FK_F3, x, y);
+				doFunctionKey(CWidgetBase::FK_F3, x, y);
 				return 1;
 				break;
 			case FL_F+4:
-				doFunctionKey(CIvfWidgetBase::FK_F4, x, y);
+				doFunctionKey(CWidgetBase::FK_F4, x, y);
 				return 1;
 				break;
 			case FL_F+5:
-				doFunctionKey(CIvfWidgetBase::FK_F5, x, y);
+				doFunctionKey(CWidgetBase::FK_F5, x, y);
 				return 1;
 				break;
 			case FL_F+6:
-				doFunctionKey(CIvfWidgetBase::FK_F6, x, y);
+				doFunctionKey(CWidgetBase::FK_F6, x, y);
 				return 1;
 				break;
 			case FL_F+7:
-				doFunctionKey(CIvfWidgetBase::FK_F7, x, y);
+				doFunctionKey(CWidgetBase::FK_F7, x, y);
 				return 1;
 				break;
 			case FL_F+8:
-				doFunctionKey(CIvfWidgetBase::FK_F8, x, y);
+				doFunctionKey(CWidgetBase::FK_F8, x, y);
 				return 1;
 				break;
 			case FL_F+9:
-				doFunctionKey(CIvfWidgetBase::FK_F9, x, y);
+				doFunctionKey(CWidgetBase::FK_F9, x, y);
 				return 1;
 				break;
 			case FL_F+10:
-				doFunctionKey(CIvfWidgetBase::FK_F10, x, y);
+				doFunctionKey(CWidgetBase::FK_F10, x, y);
 				return 1;
 				break;
 			case FL_F+11:
-				doFunctionKey(CIvfWidgetBase::FK_F11, x, y);
+				doFunctionKey(CWidgetBase::FK_F11, x, y);
 				return 1;
 				break;
 			case FL_F+12:
-				doFunctionKey(CIvfWidgetBase::FK_F12, x, y);
+				doFunctionKey(CWidgetBase::FK_F12, x, y);
 				return 1;
 				break;
 			case FL_KP+0:
-				doFunctionKey(CIvfWidgetBase::FK_KP0, x, y);
+				doFunctionKey(CWidgetBase::FK_KP0, x, y);
 				return 1;
 				break;
 			case FL_KP+1:
-				doFunctionKey(CIvfWidgetBase::FK_KP1, x, y);
+				doFunctionKey(CWidgetBase::FK_KP1, x, y);
 				return 1;
 				break;
 			case FL_KP+2:
-				doFunctionKey(CIvfWidgetBase::FK_KP2, x, y);
+				doFunctionKey(CWidgetBase::FK_KP2, x, y);
 				return 1;
 				break;
 			case FL_KP+3:
-				doFunctionKey(CIvfWidgetBase::FK_KP3, x, y);
+				doFunctionKey(CWidgetBase::FK_KP3, x, y);
 				return 1;
 				break;
 			case FL_KP+4:
-				doFunctionKey(CIvfWidgetBase::FK_KP4, x, y);
+				doFunctionKey(CWidgetBase::FK_KP4, x, y);
 				return 1;
 				break;
 			case FL_KP+5:
-				doFunctionKey(CIvfWidgetBase::FK_KP5, x, y);
+				doFunctionKey(CWidgetBase::FK_KP5, x, y);
 				return 1;
 				break;
 			case FL_KP+6:
-				doFunctionKey(CIvfWidgetBase::FK_KP6, x, y);
+				doFunctionKey(CWidgetBase::FK_KP6, x, y);
 				return 1;
 				break;
 			case FL_KP+7:
-				doFunctionKey(CIvfWidgetBase::FK_KP7, x, y);
+				doFunctionKey(CWidgetBase::FK_KP7, x, y);
 				return 1;
 				break;
 			case FL_KP+8:
-				doFunctionKey(CIvfWidgetBase::FK_KP8, x, y);
+				doFunctionKey(CWidgetBase::FK_KP8, x, y);
 				return 1;
 				break;
 			case FL_KP+9:
-				doFunctionKey(CIvfWidgetBase::FK_KP9, x, y);
+				doFunctionKey(CWidgetBase::FK_KP9, x, y);
 				return 1;
 				break;
 			case FL_KP_Enter:
-				doFunctionKey(CIvfWidgetBase::FK_KP_ENTER, x, y);
+				doFunctionKey(CWidgetBase::FK_KP_ENTER, x, y);
 				return 1;
 				break;
 			case FL_Shift_L:
-				doFunctionKey(CIvfWidgetBase::FK_SHIFT_L, x, y);
+				doFunctionKey(CWidgetBase::FK_SHIFT_L, x, y);
 				return 1;
 				break;
 			case FL_Shift_R:
-				doFunctionKey(CIvfWidgetBase::FK_SHIFT_R, x, y);
+				doFunctionKey(CWidgetBase::FK_SHIFT_R, x, y);
 				return 1;
 				break;
 			case FL_Control_L:
-				doFunctionKey(CIvfWidgetBase::FK_CONTROL_L, x, y);
+				doFunctionKey(CWidgetBase::FK_CONTROL_L, x, y);
 				return 1;
 				break;
 			case FL_Control_R:
-				doFunctionKey(CIvfWidgetBase::FK_CONTROL_R, x, y);
+				doFunctionKey(CWidgetBase::FK_CONTROL_R, x, y);
 				return 1;
 				break;
 			case FL_Caps_Lock:
-				doFunctionKey(CIvfWidgetBase::FK_CAPS_LOCK, x, y);
+				doFunctionKey(CWidgetBase::FK_CAPS_LOCK, x, y);
 				return 1;
 				break;
 			case FL_Meta_L:
-				doFunctionKey(CIvfWidgetBase::FK_META_L, x, y);
+				doFunctionKey(CWidgetBase::FK_META_L, x, y);
 				return 1;
 				break;
 			case FL_Meta_R:
-				doFunctionKey(CIvfWidgetBase::FK_META_R, x, y);
+				doFunctionKey(CWidgetBase::FK_META_R, x, y);
 				return 1;
 				break;
 			case FL_Alt_L:
-				doFunctionKey(CIvfWidgetBase::FK_ALT_L, x, y);
+				doFunctionKey(CWidgetBase::FK_ALT_L, x, y);
 				return 1;
 				break;
 			case FL_Alt_R:
-				doFunctionKey(CIvfWidgetBase::FK_ALT_R, x, y);
+				doFunctionKey(CWidgetBase::FK_ALT_R, x, y);
 				return 1;
 				break;
 			case FL_Delete:
-				doFunctionKey(CIvfWidgetBase::FK_DELETE, x, y);
+				doFunctionKey(CWidgetBase::FK_DELETE, x, y);
 				return 1;
 				break;
 			default:
@@ -400,17 +400,17 @@ int CIvfFltkWorkspace::handle(int event)
 }
 
 
-void CIvfFltkWorkspace::doEnableIdleProcessing()
+void CFltkWorkspace::doEnableIdleProcessing()
 {
 	Fl::add_idle(cb_fltkWorkspaceIdle, (void*) this);
 }
 
-void CIvfFltkWorkspace::doDisableIdleProcessing()
+void CFltkWorkspace::doDisableIdleProcessing()
 {
 	Fl::remove_idle(cb_fltkWorkspaceIdle, (void*) this);
 }
 
-void CIvfFltkWorkspace::doEnableTimeout(float time, int nbr)
+void CFltkWorkspace::doEnableTimeout(float time, int nbr)
 {
 	if ((nbr>=0)&&(nbr<10))
 	{
@@ -451,7 +451,7 @@ void CIvfFltkWorkspace::doEnableTimeout(float time, int nbr)
 	}
 }
 
-void CIvfFltkWorkspace::doRedraw()
+void CFltkWorkspace::doRedraw()
 {
 	Fl_Gl_Window::redraw();
 }

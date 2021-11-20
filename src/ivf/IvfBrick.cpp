@@ -25,8 +25,8 @@
 #include <ivf/IvfBrick.h>
 
 // ------------------------------------------------------------
-CIvfBrick::CIvfBrick ()
-		:CIvfQuadSet()
+CBrick::CBrick ()
+		:CQuadSet()
 {
 	m_size[0] = 1.0;
 	m_size[1] = 1.0;
@@ -35,12 +35,12 @@ CIvfBrick::CIvfBrick ()
 }
 
 // ------------------------------------------------------------
-CIvfBrick::~CIvfBrick ()
+CBrick::~CBrick ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfBrick::initBrick()
+void CBrick::initBrick()
 {
 	double ox, oy, oz;
 
@@ -62,9 +62,9 @@ void CIvfBrick::initBrick()
 	addTextureCoord(1.0, 1.0);
 	addTextureCoord(0.0, 1.0);
 
-	CIvfIndex* idx;
+	CIndex* idx;
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 	idx->add(1, 2, 3, 0);
 	idx->add(7, 6, 5, 4);
 	idx->add(4, 5, 1, 0);
@@ -74,7 +74,7 @@ void CIvfBrick::initBrick()
 
 	addCoordIndex(idx);
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 	idx->add(0, 1, 2, 3);
 	idx->add(0, 1, 2, 3);
 	idx->add(0, 1, 2, 3);
@@ -86,7 +86,7 @@ void CIvfBrick::initBrick()
 }
 
 // ------------------------------------------------------------
-void CIvfBrick::setSize (const double width, const double height, const double depth)
+void CBrick::setSize (const double width, const double height, const double depth)
 {
 	m_size[0] = width;
 	m_size[1] = height;
@@ -96,7 +96,7 @@ void CIvfBrick::setSize (const double width, const double height, const double d
 }
 
 // ------------------------------------------------------------
-void CIvfBrick::getSize (double &width, double &height, double &depth)
+void CBrick::getSize (double &width, double &height, double &depth)
 {
 	width = m_size[0];
 	height = m_size[1];
@@ -104,7 +104,7 @@ void CIvfBrick::getSize (double &width, double &height, double &depth)
 }
 
 // ------------------------------------------------------------
-void CIvfBrick::setSize(CIvfPoint3d* p1, CIvfPoint3d* p2)
+void CBrick::setSize(CPoint3d* p1, CPoint3d* p2)
 {
 	double ax, ay, az;
 	double bx, by, bz;
@@ -122,21 +122,21 @@ void CIvfBrick::setSize(CIvfPoint3d* p1, CIvfPoint3d* p2)
 }
 
 // ------------------------------------------------------------
-void CIvfBrick::doCreateSelect()
+void CBrick::doCreateSelect()
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glPushMatrix();
 			//glScaled(m_size[0]*1.05,m_size[1]*1.05,m_size[2]*1.05);
 			glScaled(1.05, 1.05, 1.05);
-			CIvfMaterial* hMaterial = this->getHightlightMaterial();
+			CMaterial* hMaterial = this->getHightlightMaterial();
 			hMaterial->render();
-			CIvfQuadSet::doCreateGeometry();
+			CQuadSet::doCreateGeometry();
 		glPopMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 // ------------------------------------------------------------
-void CIvfBrick::updateBrick()
+void CBrick::updateBrick()
 {
 	double ox, oy, oz;
 

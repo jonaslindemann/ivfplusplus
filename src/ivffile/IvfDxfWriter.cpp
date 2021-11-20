@@ -32,142 +32,142 @@
 
 using namespace std;
 
-CIvfDxfWriter::CIvfDxfWriter()
+CDxfWriter::CDxfWriter()
 {
-	m_matrixStack = new CIvfMatrixStack();
+	m_matrixStack = new CMatrixStack();
 	m_currentLayer = "0";
 	m_currentColor = 256;
 }
 
-CIvfDxfWriter::~CIvfDxfWriter()
+CDxfWriter::~CDxfWriter()
 {
 
 }
 
-void CIvfDxfWriter::dxfTag(int number, const std::string& value)
+void CDxfWriter::dxfTag(int number, const std::string& value)
 {
 	m_file << "  " << number << endl;
 	m_file << value << endl;
 }
 
-void CIvfDxfWriter::dxfInt(int number, int value)
+void CDxfWriter::dxfInt(int number, int value)
 {
     m_file << "  " << number << endl;
     m_file << value << endl;
 }
 
-void CIvfDxfWriter::dxfFloat(int number, double value)
+void CDxfWriter::dxfFloat(int number, double value)
 {
     m_file << "  " << number << endl;
     m_file << value << endl;
 }
 
-void CIvfDxfWriter::dxfBeginSection(const std::string& value)
+void CDxfWriter::dxfBeginSection(const std::string& value)
 {
 	dxfTag(0, "SECTION");
 	dxfTag(2, value);
 }
 
-void CIvfDxfWriter::dxfEndSection()
+void CDxfWriter::dxfEndSection()
 {
 	dxfTag(0, "ENDSEC");
 }
 
-void CIvfDxfWriter::dxfBeginTables()
+void CDxfWriter::dxfBeginTables()
 {
 	dxfBeginSection("TABLES");
 }
 
-void CIvfDxfWriter::dxfEndTables()
+void CDxfWriter::dxfEndTables()
 {
 	dxfEndSection();
 }
 
-void CIvfDxfWriter::dxfBeginTable(const std::string& value)
+void CDxfWriter::dxfBeginTable(const std::string& value)
 {
 	dxfTag(0, "TABLE");
 	dxfTag(2, value);
 }
 
-void CIvfDxfWriter::dxfEndTable()
+void CDxfWriter::dxfEndTable()
 {
 	dxfTag(0, "ENDTAB");
 }
 
-void CIvfDxfWriter::dxfBeginLayer()
+void CDxfWriter::dxfBeginLayer()
 {
 	dxfBeginTable("LAYER");
 }
 
-void CIvfDxfWriter::dxfEndLayer()
+void CDxfWriter::dxfEndLayer()
 {
 	dxfEndTable();
 }
 
-void CIvfDxfWriter::dxfBeginEntitites()
+void CDxfWriter::dxfBeginEntitites()
 {
 	dxfBeginSection("ENTITIES");
 }
 
-void CIvfDxfWriter::dxfEndEntitites()
+void CDxfWriter::dxfEndEntitites()
 {
 	dxfEndSection();
 }
 
-void CIvfDxfWriter::dxfColor(int number)
+void CDxfWriter::dxfColor(int number)
 {
 	dxfInt(62, number);
 }
 
-void CIvfDxfWriter::dxfLineType(const std::string& name)
+void CDxfWriter::dxfLineType(const std::string& name)
 {
 
 }
 
-void CIvfDxfWriter::dxfLine()
+void CDxfWriter::dxfLine()
 {
 	dxfTag(0, "LINE");
 }
 
-void CIvfDxfWriter::dxfLayer(const std::string& value)
+void CDxfWriter::dxfLayer(const std::string& value)
 {
 	dxfTag(8, value);
 }
 
-void CIvfDxfWriter::dxfFirstPoint(double x, double y, double z)
+void CDxfWriter::dxfFirstPoint(double x, double y, double z)
 {
 	dxfFloat(10, x);
 	dxfFloat(20, y);
 	dxfFloat(30, z);
 }
 
-void CIvfDxfWriter::dxfSecondPoint(double x, double y, double z)
+void CDxfWriter::dxfSecondPoint(double x, double y, double z)
 {
 	dxfFloat(11, x);
 	dxfFloat(21, y);
 	dxfFloat(31, z);
 }
 
-void CIvfDxfWriter::dxfThirdPoint(double x, double y, double z)
+void CDxfWriter::dxfThirdPoint(double x, double y, double z)
 {
 	dxfFloat(12, x);
 	dxfFloat(22, y);
 	dxfFloat(32, z);
 }
 
-void CIvfDxfWriter::dxfFourthPoint(double x, double y, double z)
+void CDxfWriter::dxfFourthPoint(double x, double y, double z)
 {
 	dxfFloat(13, x);
 	dxfFloat(23, y);
 	dxfFloat(33, z);
 }
 
-void CIvfDxfWriter::dxfPolyline()
+void CDxfWriter::dxfPolyline()
 {
 	dxfTag(0, "POLYLINE");
 }
 
-void CIvfDxfWriter::dxfPolylineIntro()
+void CDxfWriter::dxfPolylineIntro()
 {
 	dxfInt(66, 1);
 	dxfFloat(10, 0.0);
@@ -176,37 +176,37 @@ void CIvfDxfWriter::dxfPolylineIntro()
 	dxfPolylineFlag(8);
 }
 
-void CIvfDxfWriter::dxfPolylineFlag(int flag)
+void CDxfWriter::dxfPolylineFlag(int flag)
 {
 	dxfInt(70, flag);
 }
 
-void CIvfDxfWriter::dxfVertex()
+void CDxfWriter::dxfVertex()
 {
 	dxfTag(0, "VERTEX");
 }
 
-void CIvfDxfWriter::dxfEndSeq()
+void CDxfWriter::dxfEndSeq()
 {
 	dxfTag(0, "SEQEND");
 }
 
-void CIvfDxfWriter::dxfSolid()
+void CDxfWriter::dxfSolid()
 {
 	dxfTag(0, "SOLID");
 }
 
-void CIvfDxfWriter::dxfEndOfFile()
+void CDxfWriter::dxfEndOfFile()
 {
 	dxfTag(0, "EOF");
 }
 
-void CIvfDxfWriter::dxf3DFace()
+void CDxfWriter::dxf3DFace()
 {
 	dxfTag(0, "3DFACE");
 }
 
-void CIvfDxfWriter::quad(
+void CDxfWriter::quad(
 		double x1, double y1, double z1,
 		double x2, double y2, double z2,
 		double x3, double y3, double z3,
@@ -226,7 +226,7 @@ void CIvfDxfWriter::quad(
 	dxfFourthPoint(x4, y4, z4);
 }
 
-void CIvfDxfWriter::tri(
+void CDxfWriter::tri(
 		double x1, double y1, double z1,
 		double x2, double y2, double z2,
 		double x3, double y3, double z3
@@ -244,45 +244,45 @@ void CIvfDxfWriter::tri(
 	dxfFourthPoint(x3, y3, z3);
 }
 
-void CIvfDxfWriter::pushMatrix()
+void CDxfWriter::pushMatrix()
 {
 	m_matrixStack->pushMatrix();
 }
 
-void CIvfDxfWriter::popMatrix()
+void CDxfWriter::popMatrix()
 {
 	m_matrixStack->popMatrix();
 }
 
-void CIvfDxfWriter::transform(double &x, double &y, double &z)
+void CDxfWriter::transform(double &x, double &y, double &z)
 {
 	m_matrixStack->getWorldCoordinate(x, y, z, x, y, z);
 }
 
-void CIvfDxfWriter::translate(double dx, double dy, double dz)
+void CDxfWriter::translate(double dx, double dy, double dz)
 {
 	m_matrixStack->translate(dx, dy, dz);
 }
 
-void CIvfDxfWriter::rotate(double vx, double vy, double vz, double theta)
+void CDxfWriter::rotate(double vx, double vy, double vz, double theta)
 {
 	m_matrixStack->rotate(vx, vy, vz, theta);
 }
 
-void CIvfDxfWriter::setCurrentLayer(const std::string& layerName)
+void CDxfWriter::setCurrentLayer(const std::string& layerName)
 {
 	m_currentLayer = layerName;
 }
 
-void CIvfDxfWriter::setCurrentColor(int color)
+void CDxfWriter::setCurrentColor(int color)
 {
 	m_currentColor = color;
 }
 
 
-void CIvfDxfWriter::write()
+void CDxfWriter::write()
 {
-	CIvfShape* shape = this->getShape();
+	CShape* shape = this->getShape();
 
 	m_file.open(this->getFileName().c_str(), ios::out);
 
@@ -299,7 +299,7 @@ void CIvfDxfWriter::write()
 	}
 }
 
-void CIvfDxfWriter::processShape(CIvfShape *shape)
+void CDxfWriter::processShape(CShape *shape)
 {
 	if (shape->getName()!="")
 		setCurrentLayer(shape->getName());
@@ -314,7 +314,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 
 		cout << "processShape: Found " << shape->getClassName() << endl;
 
-		CIvfCompositePtr composite = (CIvfComposite*)shape;
+		CCompositePtr composite = (CComposite*)shape;
 		composite->getPosition(x, y, z);
 		composite->getRotationQuat(vx, vy, vz, angle);
 
@@ -324,7 +324,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 
 		for (i = 0; i<composite->getSize(); i++)
 		{
-			CIvfShapePtr child = composite->getChild(i);
+			CShapePtr child = composite->getChild(i);
 			processShape(child);
 		}
 
@@ -340,10 +340,10 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 		double x, y, z;
 		double vx, vy, vz, angle;
 
-		if (shape->isClass("CIvfQuadSet"))
+		if (shape->isClass("CQuadSet"))
 		{
 			cout << "processShape: Exporting " << shape->getClassName() << endl;
-			CIvfQuadSetPtr quadSet = (CIvfQuadSet*) shape;
+			CQuadSetPtr quadSet = (CQuadSet*) shape;
 
 			quadSet->getPosition(x, y, z);
 			quadSet->getRotationQuat(vx, vy, vz, angle);
@@ -354,7 +354,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 
 			for (i=0; i<quadSet->getCoordIndexSetSize(); i++)
 			{
-				CIvfIndexPtr index = quadSet->getCoordIndex(i);
+				CIndexPtr index = quadSet->getCoordIndex(i);
 
 				for (j=0; j<index->getSize(); j+=4)
 				{
@@ -373,10 +373,10 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 			popMatrix();
 		}
 
-		if (shape->isClass("CIvfTriSet"))
+		if (shape->isClass("CTriSet"))
 		{
 			cout << "processShape: Exporting " << shape->getClassName() << endl;
-			CIvfTriSetPtr triSet = (CIvfTriSet*) shape;
+			CTriSetPtr triSet = (CTriSet*) shape;
 
 			triSet->getPosition(x, y, z);
 			triSet->getRotationQuat(vx, vy, vz, angle);
@@ -387,7 +387,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 
 			for (i=0; i<triSet->getCoordIndexSetSize(); i++)
 			{
-				CIvfIndexPtr index = triSet->getCoordIndex(i);
+				CIndexPtr index = triSet->getCoordIndex(i);
 
 				for (j=0; j<index->getSize(); j+=3)
 				{
@@ -404,10 +404,10 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 			popMatrix();
 		}
 
-		if (shape->isClass("CIvfTriStripSet"))
+		if (shape->isClass("CTriStripSet"))
 		{
 			cout << "processShape: Exporting " << shape->getClassName() << endl;
-			CIvfTriStripSetPtr triSet = (CIvfTriStripSet*) shape;
+			CTriStripSetPtr triSet = (CTriStripSet*) shape;
 
 			triSet->getPosition(x, y, z);
 			triSet->getRotationQuat(vx, vy, vz, angle);
@@ -418,7 +418,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 
 			for (i=0; i<triSet->getCoordIndexSetSize(); i++)
 			{
-				CIvfIndexPtr index = triSet->getCoordIndex(i);
+				CIndexPtr index = triSet->getCoordIndex(i);
 
 				for (j=0; j<index->getSize()-2; j++)
 				{
@@ -435,10 +435,10 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 			popMatrix();
 		}
 
-		if (shape->isClass("CIvfPolySet"))
+		if (shape->isClass("CPolySet"))
 		{
 			cout << "processShape: Exporting " << shape->getClassName() << endl;
-			CIvfPolySetPtr polySet = (CIvfPolySet*) shape;
+			CPolySetPtr polySet = (CPolySet*) shape;
 
 			polySet->getPosition(x, y, z);
 			polySet->getRotationQuat(vx, vy, vz, angle);
@@ -449,7 +449,7 @@ void CIvfDxfWriter::processShape(CIvfShape *shape)
 
 			for (i=0; i<polySet->getCoordIndexSetSize(); i++)
 			{
-				CIvfIndexPtr index = polySet->getCoordIndex(i);
+				CIndexPtr index = polySet->getCoordIndex(i);
 				if (index->getTopology()==IVF_IDX_TRIANGLES)
 				{
 					polySet->getCoord(index->getIndex(0), x1, y1, z1);

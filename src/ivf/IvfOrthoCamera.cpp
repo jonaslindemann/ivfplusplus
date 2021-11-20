@@ -25,12 +25,12 @@
 
 #include <ivf/IvfOrthoCamera.h>
 
-CIvfOrthoCamera::CIvfOrthoCamera()
+COrthoCamera::COrthoCamera()
 {
 
 }
 
-CIvfOrthoCamera::~CIvfOrthoCamera()
+COrthoCamera::~COrthoCamera()
 {
 
 }

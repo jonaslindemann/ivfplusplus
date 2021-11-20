@@ -19,20 +19,20 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfSphere
+// Implementation of: public class CSphere
 
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfSphere.h>
 
 // ------------------------------------------------------------
-CIvfSphere::CIvfSphere ()
-		:CIvfShape()
+CSphere::CSphere ()
+		:CShape()
 		//TODO: check and complete member initialisation list!
 {
 	m_radius = 1.0;
 	m_slices = 8;
 	m_stacks = 8;
-	m_selectionBox = new CIvfSelectionBox();
+	m_selectionBox = new CSelectionBox();
 	m_selectionBox->setUseName(false);
 	m_qobj = gluNewQuadric();
 	gluQuadricDrawStyle(m_qobj, GLU_FILL);
@@ -42,27 +42,27 @@ CIvfSphere::CIvfSphere ()
 }
 
 // ------------------------------------------------------------
-CIvfSphere::~CIvfSphere ()
+CSphere::~CSphere ()
 {
 	gluDeleteQuadric(m_qobj);
 	delete m_selectionBox;
 }
 
 // ------------------------------------------------------------
-void CIvfSphere::setRadius (const double radius)
+void CSphere::setRadius (const double radius)
 {
 	m_radius = radius;
 	updateSelectBox();
 }
 
 // ------------------------------------------------------------
-double CIvfSphere::getRadius ()
+double CSphere::getRadius ()
 {
 	return m_radius;
 }
 
 // ------------------------------------------------------------
-void CIvfSphere::doCreateGeometry()
+void CSphere::doCreateGeometry()
 {
 	glPushMatrix();
 		glRotated(90, 1.0, 0.0, 0.0);
@@ -72,43 +72,43 @@ void CIvfSphere::doCreateGeometry()
 }
 
 // ------------------------------------------------------------
-void CIvfSphere::setSlices(const int slices)
+void CSphere::setSlices(const int slices)
 {
 	m_slices = slices;
 }
 
 // ------------------------------------------------------------
-int CIvfSphere::getSlices()
+int CSphere::getSlices()
 {
 	return m_slices;
 }
 
 // ------------------------------------------------------------
-void CIvfSphere::setStacks(const int stacks)
+void CSphere::setStacks(const int stacks)
 {
 	m_stacks = stacks;
 }
 
 // ------------------------------------------------------------
-int CIvfSphere::getStacks()
+int CSphere::getStacks()
 {
 	return m_stacks;
 }
 
 // ------------------------------------------------------------
-void CIvfSphere::updateSelectBox()
+void CSphere::updateSelectBox()
 {
 	m_selectionBox->setSize(m_radius*2.0, m_radius*2.0, m_radius*2.0);
 }
 
 // ------------------------------------------------------------
-void CIvfSphere::doCreateSelect()
+void CSphere::doCreateSelect()
 {
 	m_selectionBox->render();
 }
 
 // ------------------------------------------------------------
-void CIvfSphere::doUpdateBoundingSphere()
+void CSphere::doUpdateBoundingSphere()
 {
 	// This is very simple
 

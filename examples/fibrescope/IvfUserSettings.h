@@ -21,8 +21,8 @@
 // Comments and suggestions to jonas.lindemann@byggmek.lth.se
 //
 
-#ifndef _CIvfUserSettings_h_
-#define _CIvfUserSettings_h_
+#ifndef _CUserSettings_h_
+#define _CUserSettings_h_
 
 #include <ivf/IvfBase.h>
 #include <ivf/IvfMaterial.h>
@@ -36,18 +36,18 @@
 #define FIBRE_BAND2 1
 #define FIBRE_EXTRUSION 2
 
-IvfStdPointer(CIvfUserSettings);
+IvfStdPointer(CUserSettings);
 
-class CIvfUserSettings : public CIvfBase {
+class CUserSettings : public CBase {
 private:
-	static CIvfUserSettings* m_instance;
-	static CIvfSingletonDestroyer<CIvfUserSettings> m_destroyer;
+	static CUserSettings* m_instance;
+	static CSingletonDestroyer<CUserSettings> m_destroyer;
 
-	CIvfMaterialPtr m_connectionMaterial;
-	CIvfColorMapPtr m_colorMap;
-	CIvfCameraPtr m_camera;
+	CMaterialPtr m_connectionMaterial;
+	CColorMapPtr m_colorMap;
+	CCameraPtr m_camera;
 
-	std::vector<CIvfVec3dPtr> m_highlightPoints;
+	std::vector<CVec3dPtr> m_highlightPoints;
 	std::vector<double> m_highlightRadius;
 
 	double m_scaleFactor;
@@ -66,7 +66,7 @@ private:
 
 	double m_breakageLimit;
 public:
-	static CIvfUserSettings* getInstance();
+	static CUserSettings* getInstance();
 
 	void setScaleFactor(double factor);
 	double getScaleFactor();
@@ -86,14 +86,14 @@ public:
 	double getConnectionSize();
 	void setConnectionSize(double size);
 
-	void setColorMap(CIvfColorMap* colorMap);
-	CIvfColorMap* getColorMap();
+	void setColorMap(CColorMap* colorMap);
+	CColorMap* getColorMap();
 
-	void setConnectionMaterial(CIvfMaterial* material);
-	CIvfMaterial* getConnectionMaterial();
+	void setConnectionMaterial(CMaterial* material);
+	CMaterial* getConnectionMaterial();
 
-	void setCamera(CIvfCamera* camera);
-	CIvfCamera* getCamera();
+	void setCamera(CCamera* camera);
+	CCamera* getCamera();
 
 	void setExtrusionSides(int sides);
 	int getExtrusionSides();
@@ -117,9 +117,9 @@ public:
 
 protected:
 	/** Protected constructor (do not use) */
-	CIvfUserSettings();
-	~CIvfUserSettings();
-	friend class CIvfSingletonDestroyer<CIvfUserSettings>;
+	CUserSettings();
+	~CUserSettings();
+	friend class CSingletonDestroyer<CUserSettings>;
 };
 
 #endif 

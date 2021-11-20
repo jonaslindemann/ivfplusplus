@@ -21,8 +21,8 @@
 // Comments and suggestions to jonas.lindemann@byggmek.lth.se
 //
 
-#ifndef _CIvfConnectionPoint_h_
-#define _CIvfConnectionPoint_h_
+#ifndef _CConnectionPoint_h_
+#define _CConnectionPoint_h_
 
 #include <ivf/ivfconfig.h>
 
@@ -38,30 +38,30 @@ using namespace std;
 #include "IvfDiscreteTime.h"
 #include "IvfUserSettings.h"
 
-IvfSmartPointer(CIvfConnectionPoint);
+IvfSmartPointer(CConnectionPoint);
 
-class CIvfConnectionPoint : public CIvfShape {
+class CConnectionPoint : public CShape {
 private:
-	CIvfCoordHistPtr m_coords;
-	CIvfDiscreteTimePtr m_discreteTime;
-	CIvfCameraPtr m_camera;
+	CCoordHistPtr m_coords;
+	CDiscreteTimePtr m_discreteTime;
+	CCameraPtr m_camera;
 	bool m_useColor;
 	double m_connectionRadius;
 
 	static GLUquadricObj* m_qobj;
-	static CIvfMaterial* m_material;
+	static CMaterial* m_material;
 public:
-	CIvfConnectionPoint();
-	virtual ~CIvfConnectionPoint();
+	CConnectionPoint();
+	virtual ~CConnectionPoint();
 
-	void setCamera(CIvfCamera* camera);
+	void setCamera(CCamera* camera);
 	void setRadius(double radius);
 	void setUseColor(bool flag);
-	void setDiscreteTime(CIvfDiscreteTime* discreteTime);
+	void setDiscreteTime(CDiscreteTime* discreteTime);
 
 	void colorScale(double t, float &r, float &g, float &b);
 
-	CIvfCoordHist* getCoordHist();
+	CCoordHist* getCoordHist();
 
 	void readFromStream(istream &in);
 	void saveToStream(ostream &out);

@@ -27,7 +27,7 @@
 
 #include <ivf/IvfShape.h>
 
-IvfSmartPointer(CIvfRuler);
+IvfSmartPointer(CRuler);
 
 /**
  * Ruler class
@@ -35,21 +35,21 @@ IvfSmartPointer(CIvfRuler);
  * Implements a simple ruler, which draws a line
  * between two points with tickmarks.
  */
-class IVF_API CIvfRuler : public CIvfShape {
+class IVF_API CRuler : public CShape {
 private:
-	CIvfVec3d m_startPoint;
-	CIvfVec3d m_endPoint;
-	CIvfVec3d m_direction;
+	CVec3d m_startPoint;
+	CVec3d m_endPoint;
+	CVec3d m_direction;
 	double m_tickStep;
 	double m_length;
 
 	void initRuler();
 public:
 	/** Class constructor */
-	CIvfRuler();
+	CRuler();
 
 	/** Class destructor */
-	virtual ~CIvfRuler();
+	virtual ~CRuler();
 
 	/** Set the distance between each tick on the ruler */
 	void setTickStep(double tickStep);
@@ -61,12 +61,12 @@ public:
 	void setStartPoint(double x, double y, double z);
 
 	/** Set ruler end point */
-	void setEndPoint(CIvfVec3d& endPoint);
+	void setEndPoint(CVec3d& endPoint);
 
 	/** Set ruler start point */
-	void setStartPoint(CIvfVec3d& startPoint);
+	void setStartPoint(CVec3d& startPoint);
 
-	IvfClassInfo("CIvfRuler",CIvfShape);
+	IvfClassInfo("CRuler",CShape);
 protected:
 	virtual void doCreateGeometry();
 };

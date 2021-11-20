@@ -24,36 +24,36 @@
 
 #include <ivf/IvfBlendState.h>
 
-CIvfBlendState::CIvfBlendState()
+CBlendState::CBlendState()
 {
 	m_sfactor = GL_ONE;
 	m_dfactor = GL_ZERO;
 }
 
-CIvfBlendState::CIvfBlendState(GLenum sfactor, GLenum dfactor)
+CBlendState::CBlendState(GLenum sfactor, GLenum dfactor)
 {
 	m_sfactor = sfactor;
 	m_dfactor = dfactor;
 }
 
-CIvfBlendState::~CIvfBlendState()
+CBlendState::~CBlendState()
 {
 
 }
 
-void CIvfBlendState::doState()
+void CBlendState::doState()
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(m_sfactor, m_dfactor);
 }
 
-void CIvfBlendState::doSaveState()
+void CBlendState::doSaveState()
 {
 	m_oldState = glIsEnabled(GL_BLEND);
 	glPushAttrib(GL_BLEND);
 }
 
-void CIvfBlendState::doRestoreState()
+void CBlendState::doRestoreState()
 {
 	if (m_oldState)
 		glEnable(GL_BLEND);
@@ -63,7 +63,7 @@ void CIvfBlendState::doRestoreState()
 	glPopAttrib();
 }
 
-void CIvfBlendState::setFunction(GLenum sfactor, GLenum dfactor)
+void CBlendState::setFunction(GLenum sfactor, GLenum dfactor)
 {
 	m_sfactor = sfactor;
 	m_dfactor = dfactor;

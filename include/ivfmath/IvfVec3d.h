@@ -28,36 +28,36 @@
 #include <ivf/ivfconfig.h>
 #include <ivfmath/IvfMathBase.h>
 
-IvfSmartPointer(CIvfVec3d);
+IvfSmartPointer(CVec3d);
 
 /**
  * 3d vector class.
  *
- * CIvfVec3d implements a 3d vector and associated
+ * CVec3d implements a 3d vector and associated
  * operations and arithmetic.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfVec3d : public CIvfMathBase {
+class IVFMATH_API CVec3d : public CMathBase {
 private:
 	double m_vector[3];
 public:
-	/** CIvfVec3d constructor */
-	CIvfVec3d();
+	/** CVec3d constructor */
+	CVec3d();
 
-	/** CIvfVec3d constructor */
-	CIvfVec3d(double vx, double vy, double vz);
+	/** CVec3d constructor */
+	CVec3d(double vx, double vy, double vz);
 
-	/** CIvfVec3d copy constructor */
-	CIvfVec3d(CIvfVec3d& v);
+	/** CVec3d copy constructor */
+	CVec3d(CVec3d& v);
 
-	/** CIvfVec3d destructor */
-	virtual ~CIvfVec3d();
+	/** CVec3d destructor */
+	virtual ~CVec3d();
 
-	IvfClassInfo("CIvfVec3d",CIvfMathBase);
+	IvfClassInfo("CVec3d",CMathBase);
 
 	/** Rotate vector angle about axis */
-	void rotate(CIvfVec3d& axis, double angle);
+	void rotate(CVec3d& axis, double angle);
 
 	/** Normalize vector */
 	void normalize();
@@ -77,7 +77,7 @@ public:
 #endif
 
 	/** Set vector from two points */
-	void setFromPoints(CIvfVec3d& pos, CIvfVec3d& target);
+	void setFromPoints(CVec3d& pos, CVec3d& target);
 
 	/** Add components to vector (obsolete) */
 	void add(double dx, double dy, double dz);
@@ -109,24 +109,24 @@ public:
 	/** Set x component */
 	void setX(double value);
 
-	CIvfVec3d& operator+=(CIvfVec3d& a);
-	CIvfVec3d& operator-=(CIvfVec3d& a);
-	//CIvfVec3d& operator=(CIvfVec3d& a);
-	CIvfVec3d& operator=(CIvfVec3d& a);
+	CVec3d& operator+=(CVec3d& a);
+	CVec3d& operator-=(CVec3d& a);
+	//CVec3d& operator=(CVec3d& a);
+	CVec3d& operator=(CVec3d& a);
 	double operator[](const int idx);
 
-	bool operator==(CIvfVec3d& a);
-	bool operator!=(CIvfVec3d& a);
+	bool operator==(CVec3d& a);
+	bool operator!=(CVec3d& a);
 
 };
 
-IVFMATH_API CIvfVec3d& operator*(CIvfVec3d& a, CIvfVec3d& b);
-IVFMATH_API CIvfVec3d& operator*(CIvfVec3d& a, double b); 
-IVFMATH_API CIvfVec3d& operator*(double a, CIvfVec3d& b);
-IVFMATH_API CIvfVec3d& operator+(CIvfVec3d& a, CIvfVec3d& b);
-IVFMATH_API CIvfVec3d& operator-(CIvfVec3d& a, CIvfVec3d& b);
+IVFMATH_API CVec3d& operator*(CVec3d& a, CVec3d& b);
+IVFMATH_API CVec3d& operator*(CVec3d& a, double b); 
+IVFMATH_API CVec3d& operator*(double a, CVec3d& b);
+IVFMATH_API CVec3d& operator+(CVec3d& a, CVec3d& b);
+IVFMATH_API CVec3d& operator-(CVec3d& a, CVec3d& b);
 
-IVFMATH_API CIvfVec3d& ivfGetTempVec3d();
+IVFMATH_API CVec3d& ivfGetTempVec3d();
 
 /** \example math.cpp
  * This is an example of how to use some of the math classes.

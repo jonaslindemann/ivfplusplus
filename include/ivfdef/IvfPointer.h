@@ -31,15 +31,15 @@
 /**
  * Smart pointer class
  *
- * CIvfPointer handles the Ivf++ reference counting scheme of
+ * CPointer handles the Ivf++ reference counting scheme of
  * the CIvfBase class. To declare a Ivf++ smart pointer use the 
  * IvfSmartPointer() macro. See the following example:
  *
  * \code
  * int main()
  * {
- *    CIvfPointer<CIvfMaterial> material = new CIvfMaterial(); // addReference() called.
- *    CIvfPointer<CIvfMaterial> material2;
+ *    CPointer<CMaterial> material = new CMaterial(); // addReference() called.
+ *    CPointer<CMaterial> material2;
  *    material2 = material; // addReference() called 
  *    .
  *    .
@@ -47,14 +47,14 @@
  *    return 0;
  * } 
  * // material calls deleteReference()
- * // material2 calls deleteRefernce() and deletes CIvfMaterial object
+ * // material2 calls deleteRefernce() and deletes CMaterial object
  * \endcode
  */
-template <class T,class R> class CIvfPointerRefBase {
+template <class T,class R> class CPointerRefBase {
 private:
 	T* m_object;
 public:
-	CIvfPointerRefBase(T* object = 0)
+	CPointerRefBase(T* object = 0)
 	{
 		m_object = object;
 		if (m_object)
@@ -68,7 +68,7 @@ public:
 		}
 	}
 
-	CIvfPointerRefBase(const CIvfPointerRefBase& ivfObject)
+	CPointerRefBase(const CPointerRefBase& ivfObject)
 	{
 		m_object = ivfObject.m_object;
 		if (m_object)
@@ -82,7 +82,7 @@ public:
 		}
 	}
 
-	virtual ~CIvfPointerRefBase()
+	virtual ~CPointerRefBase()
 	{
 		if (m_object)
 		{
@@ -100,7 +100,7 @@ public:
 	T& operator* () const { return *m_object; }
 	T* operator-> () const { return m_object; }
 
-	CIvfPointerRefBase& operator= (const CIvfPointerRefBase& IvfPointerRefBase)
+	CPointerRefBase& operator= (const CPointerRefBase& IvfPointerRefBase)
 	{
 		if (m_object!=IvfPointerRefBase.m_object)
 		{
@@ -130,7 +130,7 @@ public:
 		return *this;
 	}
 
-	CIvfPointerRefBase& operator= (T* ivfObject)
+	CPointerRefBase& operator= (T* ivfObject)
 	{
 		if (m_object!=ivfObject)
 		{
@@ -162,58 +162,58 @@ public:
 
 	bool operator== (T* ivfObject) const { return m_object == ivfObject; }
 	bool operator!= (T* ivfObject) const { return m_object != ivfObject; }
-	bool operator== (const CIvfPointerRefBase& IvfPointerRefBase) const 
+	bool operator== (const CPointerRefBase& IvfPointerRefBase) const
 	{
 		return m_object == IvfPointerRefBase.m_object;
 	}
 
-	bool operator!= (const CIvfPointerRefBase& IvfPointerRefBase) const
+	bool operator!= (const CPointerRefBase& IvfPointerRefBase) const
 	{
 		return m_object != IvfPointerRefBase.m_object;
 	}
 };
 
-template <class T> class CIvfPointer {
+template <class T> class CPointer {
 private:
 	T* m_object;
 public:
-	CIvfPointer(T* object = 0)
+	CPointer(T* object = 0)
 	{
 		m_object = object;
 		if (m_object)
 		{
-			IvfDbg1("CIvfPointer: created for " << m_object->getClassName());
+			IvfDbg1("CPointer: created for " << m_object->getClassName());
 			m_object->addReference();
 		}
 		else
 		{
-			IvfDbg1("CIvfPointer: assigned 0");
+			IvfDbg1("CPointer: assigned 0");
 		}
 	}
 
-	CIvfPointer(const CIvfPointer& ivfObject)
+	CPointer(const CPointer& ivfObject)
 	{
 		m_object = ivfObject.m_object;
 		if (m_object)
 		{
-			IvfDbg1("CIvfPointer: assigned " << m_object->getClassName());
+			IvfDbg1("CPointer: assigned " << m_object->getClassName());
 			m_object->addReference();
 		}
 		else
 		{
-			IvfDbg1("CIvfPointer: assigned 0");
+			IvfDbg1("CPointer: assigned 0");
 		}
 	}
 
-	virtual ~CIvfPointer()
+	virtual ~CPointer()
 	{
 		if (m_object)
 		{
 			m_object->deleteReference();
-			IvfDbg1("CIvfPointer: " << m_object->getClassName() << " dereferenced.");
+			IvfDbg1("CPointer: " << m_object->getClassName() << " dereferenced.");
 			if (!m_object->referenced())
 			{
-				IvfDbg1("CIvfPointer: " << m_object->getClassName() << " deleted.");
+				IvfDbg1("CPointer: " << m_object->getClassName() << " deleted.");
 				delete m_object;
 			}
 		}
@@ -223,17 +223,17 @@ public:
 	T& operator* () const { return *m_object; }
 	T* operator-> () const { return m_object; }
 
-	CIvfPointer& operator= (const CIvfPointer& ivfPointer)
+	CPointer& operator= (const CPointer& ivfPointer)
 	{
 		if (m_object!=ivfPointer.m_object)
 		{
 			if (m_object)
 			{
 				m_object->deleteReference();
-				IvfDbg1("CIvfPointer(=): " << m_object->getClassName() << " dereferenced.");
+				IvfDbg1("CPointer(=): " << m_object->getClassName() << " dereferenced.");
 				if (!m_object->referenced())
 				{
-					IvfDbg1("CIvfPointer(=): " << m_object->getClassName() << " deleted.");
+					IvfDbg1("CPointer(=): " << m_object->getClassName() << " deleted.");
 					delete m_object;
 				}
 			}
@@ -242,28 +242,28 @@ public:
 
 			if (m_object)
 			{
-				IvfDbg1("CIvfPointer(=): assigned " << m_object->getClassName());
+				IvfDbg1("CPointer(=): assigned " << m_object->getClassName());
 				m_object->addReference();
 			}
 			else
 			{
-				IvfDbg1("CIvfPointer(=): assigned 0");
+				IvfDbg1("CPointer(=): assigned 0");
 			}
 		}
 		return *this;
 	}
 
-	CIvfPointer& operator= (T* ivfObject)
+	CPointer& operator= (T* ivfObject)
 	{
 		if (m_object!=ivfObject)
 		{
 			if (m_object)
 			{
 				m_object->deleteReference();
-				IvfDbg1("CIvfPointer(=): " << m_object->getClassName() << " dereferenced.");
+				IvfDbg1("CPointer(=): " << m_object->getClassName() << " dereferenced.");
 				if (!m_object->referenced())
 				{
-					IvfDbg1("CIvfPointer(=): " << m_object->getClassName() << " deleted.");
+					IvfDbg1("CPointer(=): " << m_object->getClassName() << " deleted.");
 					delete m_object;
 				}
 			}
@@ -272,12 +272,12 @@ public:
 
 			if (m_object)
 			{
-				IvfDbg1("CIvfPointer(=): assigned " << m_object->getClassName());
+				IvfDbg1("CPointer(=): assigned " << m_object->getClassName());
 				m_object->addReference();
 			}
 			else
 			{
-				IvfDbg1("CIvfPointer(=): assigned 0");
+				IvfDbg1("CPointer(=): assigned 0");
 			}
 		}
 		return *this;
@@ -285,12 +285,12 @@ public:
 
 	bool operator== (T* ivfObject) const { return m_object == ivfObject; }
 	bool operator!= (T* ivfObject) const { return m_object != ivfObject; }
-	bool operator== (const CIvfPointer& ivfPointer) const 
+	bool operator== (const CPointer& ivfPointer) const 
 	{
 		return m_object == ivfPointer.m_object;
 	}
 
-	bool operator!= (const CIvfPointer& ivfPointer) const
+	bool operator!= (const CPointer& ivfPointer) const
 	{
 		return m_object != ivfPointer.m_object;
 	}

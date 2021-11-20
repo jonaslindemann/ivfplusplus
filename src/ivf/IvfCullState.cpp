@@ -26,23 +26,23 @@
 
 #include <ivf/IvfGL.h>
 
-CIvfCullState::CIvfCullState()
+CCullState::CCullState()
 {
 	m_cull = true;
 	m_cullFace = CF_BACK;
 }
 
-CIvfCullState::~CIvfCullState()
+CCullState::~CCullState()
 {
 
 }
 
-void CIvfCullState::doSaveState()
+void CCullState::doSaveState()
 {
 	glPushAttrib(GL_ENABLE_BIT);
 }
 
-void CIvfCullState::doState()
+void CCullState::doState()
 {
 	if (m_cull)
 		glEnable(GL_CULL_FACE);
@@ -52,17 +52,17 @@ void CIvfCullState::doState()
 	glCullFace(m_cullFace);
 }
 
-void CIvfCullState::doRestoreState()
+void CCullState::doRestoreState()
 {
 	glPopAttrib();
 }
 
-void CIvfCullState::setCulling(bool flag)
+void CCullState::setCulling(bool flag)
 {
 	m_cull = flag;
 }
 
-void CIvfCullState::setCullFace(TCullFace face)
+void CCullState::setCullFace(TCullFace face)
 {
 	m_cullFace = face;
 }

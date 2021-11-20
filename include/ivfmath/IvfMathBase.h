@@ -25,24 +25,24 @@
 #include <ivfdef/IvfDef.h>
 #include <ivfdef/IvfPointer.h>
 
-IvfSmartPointer(CIvfMathBase);
+IvfSmartPointer(CMathBase);
 
 /**
  * Root class for the ivf library
  *
- * CIvfMathBase handles class type information and reference counting.
+ * CMathBase handles class type information and reference counting.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfMathBase {
+class IVFMATH_API CMathBase {
 private:
 	int m_ref;
 public:
-	/** CIvfMathBase constructor */
-	CIvfMathBase();
+	/** CMathBase constructor */
+	CMathBase();
 
-	/** CIvfMathBase destrcutor */
-	virtual ~CIvfMathBase();
+	/** CMathBase destrcutor */
+	virtual ~CMathBase();
 
 	/** Returns current reference count */
 	int getRefCount();

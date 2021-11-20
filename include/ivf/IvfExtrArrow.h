@@ -27,7 +27,7 @@
 
 #include <ivf/IvfShape.h>
 
-IvfSmartPointer(CIvfExtrArrow);
+IvfSmartPointer(CExtrArrow);
 
 /**
  * Extruded arrow class
@@ -36,7 +36,7 @@ IvfSmartPointer(CIvfExtrArrow);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfExtrArrow : public CIvfShape {
+class IVF_API CExtrArrow : public CShape {
 private:
 	void initExtrusion();
 	int arrowType;
@@ -51,14 +51,14 @@ private:
 	double m_position[3];
 	double m_offset;
 public:
-	void setDirection(CIvfVec3d& vec);
+	void setDirection(CVec3d& vec);
 	/** CIvfExtrArrow constructor */
-	CIvfExtrArrow();
+	CExtrArrow();
 
 	/** CIvfExtrArrow destructor */
-	virtual ~CIvfExtrArrow();
+	virtual ~CExtrArrow();
 
-	IvfClassInfo("CIvfExtrArrow",CIvfShape);
+	IvfClassInfo("CIvfExtrArrow",CShape);
 
 	/** Set the arrow radiuses */
 	void setRadius(double head, double tail);

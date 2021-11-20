@@ -21,41 +21,41 @@
 
 #include <ivfctl/IvfControllerGroup.h>
 
-CIvfControllerGroup::CIvfControllerGroup()
+CControllerGroup::CControllerGroup()
 {
 
 }
 
-CIvfControllerGroup::~CIvfControllerGroup()
+CControllerGroup::~CControllerGroup()
 {
 	clear();
 }
 
-void CIvfControllerGroup::doUpdate(double dt)
+void CControllerGroup::doUpdate(double dt)
 {
 	using namespace std;
 
-	vector<CIvfController*>::iterator vi;
+	vector<CController*>::iterator vi;
 
 	for (vi=m_controllers.begin(); vi!=m_controllers.end(); vi++)
 		(*vi)->update(dt);
 }
 
-void CIvfControllerGroup::addChild(CIvfController *controller)
+void CControllerGroup::addChild(CController *controller)
 {
 	controller->addReference();
 	m_controllers.push_back(controller);
 }
 
-void CIvfControllerGroup::clear()
+void CControllerGroup::clear()
 {
 	using namespace std;
 
-	vector<CIvfController*>::iterator vi;
+	vector<CController*>::iterator vi;
 
 	for (vi=m_controllers.begin(); vi!=m_controllers.end(); vi++)
 	{
-		CIvfController* controller = (*vi);
+		CController* controller = (*vi);
 
 		controller->deleteReference();
 		if (!controller->referenced())
@@ -65,9 +65,9 @@ void CIvfControllerGroup::clear()
 	m_controllers.clear();
 }
 
-void CIvfControllerGroup::doAction(CIvfAction *action)
+void CControllerGroup::doAction(CAction *action)
 {
-	CIvfController* target = action->getTarget();
+	CController* target = action->getTarget();
 	if ((target==this)||(target==NULL))
 	{
 		switch (action->getActionType()) {
@@ -88,18 +88,18 @@ void CIvfControllerGroup::doAction(CIvfAction *action)
 	{
 		using namespace std;
 		
-		vector<CIvfController*>::iterator vi;
+		vector<CController*>::iterator vi;
 		
 		for (vi=m_controllers.begin(); vi!=m_controllers.end(); vi++)
 			(*vi)->doAction(action);
 	}
 }
 
-void CIvfControllerGroup::doReset()
+void CControllerGroup::doReset()
 {
 	using namespace std;
 
-	vector<CIvfController*>::iterator vi;
+	vector<CController*>::iterator vi;
 
 	for (vi=m_controllers.begin(); vi!=m_controllers.end(); vi++)
 		(*vi)->reset();

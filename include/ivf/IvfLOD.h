@@ -28,7 +28,7 @@
 #include <ivf/IvfSwitch.h>
 #include <ivf/IvfCamera.h>
 
-IvfSmartPointer(CIvfLOD);
+IvfSmartPointer(CLOD);
 
 /**
  * Level of detail class
@@ -37,21 +37,21 @@ IvfSmartPointer(CIvfLOD);
  * depending on distance to the viewer.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfLOD : public CIvfSwitch {
+class IVF_API CLOD : public CSwitch {
 public:
 	/** Constructor */
-	CIvfLOD ();
+	CLOD ();
 
 	/** Destructor */
-	virtual ~CIvfLOD ();
+	virtual ~CLOD ();
 
-	IvfClassInfo("CIvfLOD",CIvfSwitch);
+	IvfClassInfo("CLOD",CSwitch);
 
 	/** Set camera used to determine viewer distance */
-	void setCamera(CIvfCamera* camera);
+	void setCamera(CCamera* camera);
 
 	/** Return camera */
-	CIvfCamera* getCamera();
+	CCamera* getCamera();
 
 	/** 
 	 * Set near and far limits
@@ -69,7 +69,7 @@ private:
 	double m_nearLimit;
 	double m_farLimit;
 
-	CIvfCamera* m_camera;
+	CCamera* m_camera;
 	virtual void doCreateGeometry();
 protected:
 	double theta(double x);
@@ -77,7 +77,7 @@ protected:
 };
 
 /** \example lod.cpp
- * This is an example of how to use the CIvfLOD/CIvfSwitch classes.
+ * This is an example of how to use the CLOD/CSwitch classes.
  */
 
 #endif

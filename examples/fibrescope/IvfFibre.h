@@ -21,8 +21,8 @@
 // Comments and suggestions to jonas.lindemann@byggmek.lth.se
 //
 
-#ifndef _CIvfFibre_h_
-#define _CIvfFibre_h_
+#ifndef _CFibre_h_
+#define _CFibre_h_
 
 #include <ivf/IvfShape.h>
 #include <ivf/IvfCamera.h>
@@ -33,13 +33,13 @@
 #include "IvfVectorCoordList.h"
 #include "IvfArrayCoordList.h"
 
-IvfSmartPointer(CIvfFibre);
+IvfSmartPointer(CFibre);
 
-class CIvfFibre : public CIvfShape {
+class CFibre : public CShape {
 private:
-	CIvfCoordHistPtr m_coords;
-	CIvfDiscreteTimePtr m_discreteTime;
-	CIvfCameraPtr m_camera;
+	CCoordHistPtr m_coords;
+	CDiscreteTimePtr m_discreteTime;
+	CCameraPtr m_camera;
 
 	double (*m_sectionCoords)[2];
 	double (*m_sectionNormals)[2];
@@ -48,13 +48,13 @@ private:
 
 	void initSection();
 public:
-	CIvfFibre();
-	virtual ~CIvfFibre();
+	CFibre();
+	virtual ~CFibre();
 
 	void refresh();
 
-	CIvfCoordHist* getCoordHist();
-	void setDiscreteTime(CIvfDiscreteTime* discreteTime);
+	CCoordHist* getCoordHist();
+	void setDiscreteTime(CDiscreteTime* discreteTime);
 	void setFibreRadius(double radius);
 
 	void readFromStream(std::istream &in);

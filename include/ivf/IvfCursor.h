@@ -28,7 +28,7 @@
 #include <ivf/IvfComposite.h>
 #include <ivf/IvfBrick.h>
 
-IvfSmartPointer(CIvfCursor);
+IvfSmartPointer(CCursor);
 
 /**
  * Cursor shape class
@@ -38,7 +38,7 @@ IvfSmartPointer(CIvfCursor);
  * three dimensional cross.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfCursor : public CIvfComposite {
+class IVF_API CCursor : public CComposite {
 public:
 	enum TCursorType {
 		CT_LINE_CURSOR,
@@ -47,12 +47,12 @@ public:
 	};
 public:
 	/** CIvfCursor constructor */
-	CIvfCursor ();
+	CCursor ();
 
 	/** CIvfCursor destructor */
-	virtual ~CIvfCursor ();
+	virtual ~CCursor ();
 
-	IvfClassInfo("CIvfCursor",CIvfComposite);
+	IvfClassInfo("CIvfCursor",CComposite);
 
 	/** 
 	 * Set cursor size
@@ -79,12 +79,12 @@ public:
 	int getCursorType();
 private:
 	int m_cursorType;
-	CIvfMaterial* m_zMaterial;
-	CIvfMaterial* m_yMaterial;
-	CIvfMaterial* m_xMaterial;
-	CIvfBrick* m_zBrick;
-	CIvfBrick* m_yBrick;
-	CIvfBrick* m_xBrick;
+	CMaterial* m_zMaterial;
+	CMaterial* m_yMaterial;
+	CMaterial* m_xMaterial;
+	CBrick* m_zBrick;
+	CBrick* m_yBrick;
+	CBrick* m_xBrick;
 	double m_size;
     double m_thickness;
 protected:

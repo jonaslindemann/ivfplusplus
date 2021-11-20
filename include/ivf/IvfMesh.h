@@ -27,14 +27,14 @@
 
 #include <ivf/IvfShape.h>
 
-IvfSmartPointer(CIvfMesh);
+IvfSmartPointer(CMesh);
 
 /** 
  * Mesh class
  *
  * Implements a mesh using OpenGL glEvalMesh2 function
  */
-class IVF_API CIvfMesh : public CIvfShape {
+class IVF_API CMesh : public CShape {
 public:
 	enum TMeshType {
 		MT_ORDER_2,
@@ -54,13 +54,13 @@ private:
 	int m_meshRows;
 	int m_meshCols;
 public:
-	/** CIvfMesh constructor */
-	CIvfMesh();
+	/** CMesh constructor */
+	CMesh();
 
-	/** CIvfMesh destructor */
-	virtual ~CIvfMesh();
+	/** CMesh destructor */
+	virtual ~CMesh();
 
-	IvfClassInfo("CIvfMesh",CIvfShape);
+	IvfClassInfo("CMesh",CShape);
 
 	void createMesh(double width, double height);
 

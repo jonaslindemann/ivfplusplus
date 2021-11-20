@@ -32,7 +32,7 @@
 IVF_API void ivfSetGLEJoinStyle(int style);
 IVF_API int ivfGetGLEJoinStyle();
 
-IvfSmartPointer(CIvfExtrusion);
+IvfSmartPointer(CExtrusion);
 
 /**
  * Extrusion shape class
@@ -86,15 +86,15 @@ IvfSmartPointer(CIvfExtrusion);
  * @author Jonas Lindemann
  * @version 1.0.0
  */
-class IVF_API CIvfExtrusion : public CIvfShape {
+class IVF_API CExtrusion : public CShape {
 public:
 	/** CIvfExtrusion constructor. */
-	CIvfExtrusion ();
+	CExtrusion ();
 
 	/** CIvfExtrusion destructor. */
-	virtual ~CIvfExtrusion ();
+	virtual ~CExtrusion ();
 
-	IvfClassInfo("CIvfExtrusion",CIvfShape);
+	IvfClassInfo("CIvfExtrusion",CShape);
 
 	/** 
 	 * Sets section size

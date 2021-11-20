@@ -24,7 +24,7 @@
 
 #include <ivf/IvfMesh.h>
 
-CIvfMesh::CIvfMesh()
+CMesh::CMesh()
 {
 	m_controlPoints = NULL;
 	m_initDone = false;
@@ -35,26 +35,26 @@ CIvfMesh::CIvfMesh()
 	this->setSize(4,4);
 }
 
-CIvfMesh::~CIvfMesh()
+CMesh::~CMesh()
 {
 	if (m_controlPoints!=NULL)
 		delete [] m_controlPoints;
 }
 
-void CIvfMesh::setSize(int xSize, int ySize)
+void CMesh::setSize(int xSize, int ySize)
 {
 	m_xSize = xSize;
 	m_ySize = ySize;
 	this->initialize();
 }
 
-void CIvfMesh::getSize(int &xSize, int &ySize)
+void CMesh::getSize(int &xSize, int &ySize)
 {
 	xSize = m_xSize;
 	ySize = m_ySize;
 }
 
-void CIvfMesh::initialize()
+void CMesh::initialize()
 {
 	if (m_controlPoints!=NULL)
 		delete [] m_controlPoints;
@@ -64,7 +64,7 @@ void CIvfMesh::initialize()
 	m_initDone = false;
 }
 
-void CIvfMesh::doCreateGeometry()
+void CMesh::doCreateGeometry()
 {
 
 	glPushAttrib(GL_LIGHTING|GL_AUTO_NORMAL|GL_NORMALIZE);
@@ -114,7 +114,7 @@ void CIvfMesh::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CIvfMesh::setControlPoint(int i, int j, double x, double y, double z)
+void CMesh::setControlPoint(int i, int j, double x, double y, double z)
 {
 	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))
 	{
@@ -125,7 +125,7 @@ void CIvfMesh::setControlPoint(int i, int j, double x, double y, double z)
 	}
 }
 
-void CIvfMesh::getControlPoint(int i, int j, double &x, double &y, double &z)
+void CMesh::getControlPoint(int i, int j, double &x, double &y, double &z)
 {
 	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))
 	{
@@ -136,7 +136,7 @@ void CIvfMesh::getControlPoint(int i, int j, double &x, double &y, double &z)
 	}
 }
 
-void CIvfMesh::createMesh(double width, double height)
+void CMesh::createMesh(double width, double height)
 {
 	int i, j;
 
@@ -150,7 +150,7 @@ void CIvfMesh::createMesh(double width, double height)
 		}
 }
 
-void CIvfMesh::setControlPoint(int i, int j, double y)
+void CMesh::setControlPoint(int i, int j, double y)
 {
 	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))
 	{
@@ -159,7 +159,7 @@ void CIvfMesh::setControlPoint(int i, int j, double y)
 	}
 }
 
-void CIvfMesh::setMeshType(TMeshType meshType)
+void CMesh::setMeshType(TMeshType meshType)
 {
 	m_meshType = meshType;
 
@@ -180,13 +180,13 @@ void CIvfMesh::setMeshType(TMeshType meshType)
 	}
 }
 
-void CIvfMesh::setMeshResolution(int rows, int cols)
+void CMesh::setMeshResolution(int rows, int cols)
 {
 	m_meshRows = rows;
 	m_meshCols = cols;
 }
 
-void CIvfMesh::setMeshOrientation(TMeshOrientation meshOrientation)
+void CMesh::setMeshOrientation(TMeshOrientation meshOrientation)
 {
 	m_meshOrientation = meshOrientation;
 }

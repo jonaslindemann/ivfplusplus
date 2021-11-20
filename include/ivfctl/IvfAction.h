@@ -24,35 +24,35 @@
 
 #include <ivf/IvfBase.h>
 
-IvfSmartPointer(CIvfAction);
+IvfSmartPointer(CAction);
 
-class CIvfController;
+class CController;
 
 /**
  * Action class
  *
- * Defines an action used in the CIvfActionController class.
+ * Defines an action used in the CActionController class.
  */
-class IVFCTL_API CIvfAction : public CIvfBase {
+class IVFCTL_API CAction : public CBase {
 private:
 	double m_time;
 	int m_actionType;
 	double m_dParam;
 	int m_iParam;
-	CIvfController* m_target;
+	CController* m_target;
 public:
-	/** CIvfAction constructor */
-	CIvfAction();
+	/** CAction constructor */
+	CAction();
 
-	/** CIvfAction destructor */
-	virtual ~CIvfAction();
+	/** CAction destructor */
+	virtual ~CAction();
 
-	IvfClassInfo("CIvfAction",CIvfBase);
+	IvfClassInfo("CAction",CBase);
 
-	/** Set type of action, \sa CIvfController */
+	/** Set type of action, \sa CController */
 	void setActionType(int type);
 
-	/** Return type of action \sa CIvfController */
+	/** Return type of action \sa CController */
 	int getActionType();
 
 	/** Set integer parameter of action */
@@ -70,7 +70,7 @@ public:
 	/** 
 	 * Set time of execution
 	 * 
-	 * Used by the CIvfActionController class 
+	 * Used by the CActionController class 
 	 * \param time time when action is to be executed in seconds
 	 */
 	void setTime(double time);
@@ -84,10 +84,10 @@ public:
 	 * This method sets the controller to received the action at the 
 	 * specified execution time
 	 */
-	void setTarget(CIvfController* controller);
+	void setTarget(CController* controller);
 
 	/** Return target controller */
-	CIvfController* getTarget();
+	CController* getTarget();
 };
 
 #endif 

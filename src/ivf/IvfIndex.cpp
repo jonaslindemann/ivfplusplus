@@ -27,43 +27,43 @@
 // ------------------------------------------------------------
 // ------------------------------------------------------------
 
-CIvfIndex::CIvfIndex()
+CIndex::CIndex()
 {
 
 }
 
 // ------------------------------------------------------------
-CIvfIndex::~CIvfIndex()
+CIndex::~CIndex()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::addLast(long idx)
+void CIndex::addLast(long idx)
 {
 	m_indices.push_back(idx);
 }
 
 // ------------------------------------------------------------
-long CIvfIndex::getIndex(long pos)
+long CIndex::getIndex(long pos)
 {
 	return m_indices[pos];
 }
 
 // ------------------------------------------------------------
-long CIvfIndex::getSize()
+long CIndex::getSize()
 {
 	return m_indices.size();
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::clear()
+void CIndex::clear()
 {
 	m_indices.clear();
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::createLinear(long size)
+void CIndex::createLinear(long size)
 {
 	long i;
 	m_indices.clear();
@@ -72,7 +72,7 @@ void CIvfIndex::createLinear(long size)
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::addArray(long *i, long size)
+void CIndex::addArray(long *i, long size)
 {
 	long j;
 
@@ -81,7 +81,7 @@ void CIvfIndex::addArray(long *i, long size)
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::assignFrom(CIvfIndexBase *idx)
+void CIndex::assignFrom(CIndexBase *idx)
 {
 	long i;
 
@@ -92,14 +92,14 @@ void CIvfIndex::assignFrom(CIvfIndexBase *idx)
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::assignTo(CIvfIndexBase *idx)
+void CIndex::assignTo(CIndexBase *idx)
 {
 	idx->clear();
 	idx->assignFrom(this);
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::createLinear(long start, long size)
+void CIndex::createLinear(long start, long size)
 {
 	long i;
 	m_indices.clear();
@@ -108,7 +108,7 @@ void CIvfIndex::createLinear(long start, long size)
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::createConstant(long value, long size)
+void CIndex::createConstant(long value, long size)
 {
 	long i;
 	m_indices.clear();
@@ -117,7 +117,7 @@ void CIvfIndex::createConstant(long value, long size)
 }
 
 // ------------------------------------------------------------
-void CIvfIndex::setIndex(long pos, long value)
+void CIndex::setIndex(long pos, long value)
 {
 	if ((pos>=0)&&(pos<(int)m_indices.size()))
 		m_indices[pos] = value;

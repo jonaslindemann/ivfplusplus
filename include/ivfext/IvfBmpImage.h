@@ -27,7 +27,7 @@
 
 #include <ivfimage/IvfFileImage.h>
 
-IvfSmartPointer(CIvfBmpImage);
+IvfSmartPointer(CBmpImage);
 
 /**
  * BMP image loader class
@@ -35,7 +35,7 @@ IvfSmartPointer(CIvfBmpImage);
  * This class implements a loader for Windows BMP image
  * files.
  */
-class IVFEXT_API CIvfBmpImage : public CIvfFileImage {
+class IVFEXT_API CBmpImage : public CFileImage {
 private:
 	bool m_alphaChannel;
 	unsigned char *imageData;
@@ -79,16 +79,16 @@ unsigned char * bmp_load(const char *filename,
                          int *numComponents_ret);
 
 public:
-	/** CIvfBmpImage constructor */
-	CIvfBmpImage();
+	/** CBmpImage constructor */
+	CBmpImage();
 
-	/** CIvfBmpImage constructor */
-	CIvfBmpImage(const std::string& name);
+	/** CBmpImage constructor */
+	CBmpImage(const std::string& name);
 
-	/** CIvfBmpImage destructor */
-	virtual ~CIvfBmpImage();
+	/** CBmpImage destructor */
+	virtual ~CBmpImage();
 
-	IvfClassInfo("CIvfBmpImage",CIvfFileImage);
+	IvfClassInfo("CBmpImage",CFileImage);
 
 	/** Reads Bmp image */
 	virtual bool read();

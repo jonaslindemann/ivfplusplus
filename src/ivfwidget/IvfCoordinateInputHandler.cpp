@@ -24,7 +24,7 @@
 
 #include <ivfwidget/IvfCoordinateInputHandler.h>
 
-CIvfCoordinateInputHandler::CIvfCoordinateInputHandler(CIvfWidgetBase* widget, CIvfCamera* camera)
+CCoordinateInputHandler::CCoordinateInputHandler(CWidgetBase* widget, CCamera* camera)
 {
 	m_widget = widget;
 	m_camera = camera;
@@ -36,40 +36,40 @@ CIvfCoordinateInputHandler::CIvfCoordinateInputHandler(CIvfWidgetBase* widget, C
 	m_lockXZ = false;
 	m_snap = true;
 
-	m_ucsXZ = new CIvfUcs3d();
+	m_ucsXZ = new CUcs3d();
 	m_ucsXZ->setSnapUnit(0.5);
-	m_ucsXY = new CIvfUcs3d();
+	m_ucsXY = new CUcs3d();
 	m_ucsXY->setSnapUnit(0.5);
 	m_ucsXY->setRotation(1.0, 0.0, 0.0, 90.0);
 }
 
-CIvfCoordinateInputHandler::~CIvfCoordinateInputHandler()
+CCoordinateInputHandler::~CCoordinateInputHandler()
 {
 	m_widget->removeMouseMoveEvent(this);
 	m_widget->removeMouseDownEvent(this);
 	m_widget->removeMouseUpEvent(this);
 }
 
-void CIvfCoordinateInputHandler::onMouseDown(int x, int y)
+void CCoordinateInputHandler::onMouseDown(int x, int y)
 {
 	if (isActive())
 		doMouseDown(x, y);
 }
 
-void CIvfCoordinateInputHandler::onMouseMove(int x, int y)
+void CCoordinateInputHandler::onMouseMove(int x, int y)
 {
 	if (isActive())
 		doMouseMove(x, y);
 }
 
-void CIvfCoordinateInputHandler::onMouseUp(int x, int y)
+void CCoordinateInputHandler::onMouseUp(int x, int y)
 {
 	if (isActive())
 		doMouseUp(x, y);
 }
 
 
-void CIvfCoordinateInputHandler::doMouseDown(int x, int y)
+void CCoordinateInputHandler::doMouseDown(int x, int y)
 {
 	m_mousePos[0] = x;
 	m_mousePos[1] = y;
@@ -81,7 +81,7 @@ void CIvfCoordinateInputHandler::doMouseDown(int x, int y)
 	dispatchMouseDown3dEvent(vx, vy, vz);
 }
 
-void CIvfCoordinateInputHandler::doMouseMove(int x, int y)
+void CCoordinateInputHandler::doMouseMove(int x, int y)
 {
 	m_mousePos[0] = x;
 	m_mousePos[1] = y;
@@ -93,7 +93,7 @@ void CIvfCoordinateInputHandler::doMouseMove(int x, int y)
 	dispatchMouseMove3dEvent(vx, vy, vz);
 }
 
-void CIvfCoordinateInputHandler::doMouseUp(int x, int y)
+void CCoordinateInputHandler::doMouseUp(int x, int y)
 {
 	m_mousePos[0] = x;
 	m_mousePos[1] = y;
@@ -105,27 +105,27 @@ void CIvfCoordinateInputHandler::doMouseUp(int x, int y)
 	dispatchMouseUp3dEvent(vx, vy, vz);
 }
 
-void CIvfCoordinateInputHandler::addMouseDown3dEvent(CIvfMouseDown3dEvent *event)
+void CCoordinateInputHandler::addMouseDown3dEvent(CMouseDown3dEvent *event)
 {
 	m_mouseDown3dEvents.push_back(event);
 }
 
-void CIvfCoordinateInputHandler::addMouseMove3dEvent(CIvfMouseMove3dEvent *event)
+void CCoordinateInputHandler::addMouseMove3dEvent(CMouseMove3dEvent *event)
 {
 	m_mouseMove3dEvents.push_back(event);
 }
 
-void CIvfCoordinateInputHandler::addMouseUp3dEvent(CIvfMouseUp3dEvent *event)
+void CCoordinateInputHandler::addMouseUp3dEvent(CMouseUp3dEvent *event)
 {
 	m_mouseUp3dEvents.push_back(event);
 }
 
-CIvfVec3d& CIvfCoordinateInputHandler::calcIntersection(int x, int y)
+CVec3d& CCoordinateInputHandler::calcIntersection(int x, int y)
 {
 	if (!m_lockXZ)
 	{
-		CIvfVec3d forward = m_camera->pickVector(x, y);
-		CIvfVec3d eye = m_camera->getPosition();
+		CVec3d forward = m_camera->pickVector(x, y);
+		CVec3d eye = m_camera->getPosition();
 		m_temp = m_ucsXZ->intersect(eye, forward);
 		
 		if (m_snap)
@@ -139,8 +139,8 @@ CIvfVec3d& CIvfCoordinateInputHandler::calcIntersection(int x, int y)
 	{
 		double x1, y1, z1;
 		double x2, y2, z2;
-		CIvfVec3d forward = m_camera->pickVector(x, y);
-		CIvfVec3d eye = m_camera->getPosition();
+		CVec3d forward = m_camera->pickVector(x, y);
+		CVec3d eye = m_camera->getPosition();
 		m_intersection.getComponents(x1, y1, z1);
 		m_ucsXY->setTranslation(x1, y1, z1);
 		m_temp = m_ucsXY->intersect(eye, forward);
@@ -154,7 +154,7 @@ CIvfVec3d& CIvfCoordinateInputHandler::calcIntersection(int x, int y)
 	}
 }
 
-void CIvfCoordinateInputHandler::setLockXZ(bool flag)
+void CCoordinateInputHandler::setLockXZ(bool flag)
 {
 	m_lockXZ = flag;
 	
@@ -168,28 +168,28 @@ void CIvfCoordinateInputHandler::setLockXZ(bool flag)
 	doLockXZ(flag);
 }
 
-bool CIvfCoordinateInputHandler::getLockXZ()
+bool CCoordinateInputHandler::getLockXZ()
 {
 	return m_lockXZ;
 }
 
-CIvfWidgetBase* CIvfCoordinateInputHandler::getWidget()
+CWidgetBase* CCoordinateInputHandler::getWidget()
 {
 	return m_widget;
 }
 
-CIvfCamera* CIvfCoordinateInputHandler::getCamera()
+CCamera* CCoordinateInputHandler::getCamera()
 {
 	return m_camera;
 }
 
 
-void CIvfCoordinateInputHandler::doLockXZ(bool flag)
+void CCoordinateInputHandler::doLockXZ(bool flag)
 {
 
 }
 
-void CIvfCoordinateInputHandler::setPlanePosition(CIvfVec3d& vec)
+void CCoordinateInputHandler::setPlanePosition(CVec3d& vec)
 {
 	double x, y, z;
 
@@ -199,47 +199,47 @@ void CIvfCoordinateInputHandler::setPlanePosition(CIvfVec3d& vec)
 	calcIntersection(m_mousePos[0],m_mousePos[1]);
 }
 
-void CIvfCoordinateInputHandler::setPlanePosition(double x, double y, double z)
+void CCoordinateInputHandler::setPlanePosition(double x, double y, double z)
 {	
 	m_ucsXZ->setTranslation(x, y, z);
 	m_ucsXY->setTranslation(x, y, z);
 	calcIntersection(m_mousePos[0],m_mousePos[1]);
 }
 
-void CIvfCoordinateInputHandler::setLockXZNoEvent(bool flag)
+void CCoordinateInputHandler::setLockXZNoEvent(bool flag)
 {
 	m_lockXZ = flag;
 	calcIntersection(m_mousePos[0],m_mousePos[1]);
 	doLockXZ(flag);
 }
 
-void CIvfCoordinateInputHandler::dispatchMouseDown3dEvent(double x, double y, double z)
+void CCoordinateInputHandler::dispatchMouseDown3dEvent(double x, double y, double z)
 {
-	std::vector<CIvfMouseDown3dEvent*>::iterator it;
+	std::vector<CMouseDown3dEvent*>::iterator it;
 
 	for (it=m_mouseDown3dEvents.begin(); it!=m_mouseDown3dEvents.end(); it++)
 		(*it)->onMouseDown3d(x, y, z);
 }
 
-void CIvfCoordinateInputHandler::dispatchMouseMove3dEvent(double x, double y, double z)
+void CCoordinateInputHandler::dispatchMouseMove3dEvent(double x, double y, double z)
 {
-	std::vector<CIvfMouseMove3dEvent*>::iterator it;
+	std::vector<CMouseMove3dEvent*>::iterator it;
 
 	for (it=m_mouseMove3dEvents.begin(); it!=m_mouseMove3dEvents.end(); it++)
 		(*it)->onMouseMove3d(x, y, z);
 }
 
-void CIvfCoordinateInputHandler::dispatchMouseUp3dEvent(double x, double y, double z)
+void CCoordinateInputHandler::dispatchMouseUp3dEvent(double x, double y, double z)
 {
-	std::vector<CIvfMouseUp3dEvent*>::iterator it;
+	std::vector<CMouseUp3dEvent*>::iterator it;
 
 	for (it=m_mouseUp3dEvents.begin(); it!=m_mouseUp3dEvents.end(); it++)
 		(*it)->onMouseUp3d(x, y, z);
 }
 
-void CIvfCoordinateInputHandler::removeMouseDown3dEvent(CIvfMouseDown3dEvent *event)
+void CCoordinateInputHandler::removeMouseDown3dEvent(CMouseDown3dEvent *event)
 {
-	std::vector<CIvfMouseDown3dEvent*>::iterator it;
+	std::vector<CMouseDown3dEvent*>::iterator it;
 
 	for (it=m_mouseDown3dEvents.begin(); it!=m_mouseDown3dEvents.end(); it++)
 	{
@@ -251,9 +251,9 @@ void CIvfCoordinateInputHandler::removeMouseDown3dEvent(CIvfMouseDown3dEvent *ev
 	}
 }
 
-void CIvfCoordinateInputHandler::removeMouseMove3dEvent(CIvfMouseMove3dEvent *event)
+void CCoordinateInputHandler::removeMouseMove3dEvent(CMouseMove3dEvent *event)
 {
-	std::vector<CIvfMouseMove3dEvent*>::iterator it;
+	std::vector<CMouseMove3dEvent*>::iterator it;
 
 	for (it=m_mouseMove3dEvents.begin(); it!=m_mouseMove3dEvents.end(); it++)
 	{
@@ -265,9 +265,9 @@ void CIvfCoordinateInputHandler::removeMouseMove3dEvent(CIvfMouseMove3dEvent *ev
 	}
 }
 
-void CIvfCoordinateInputHandler::removeMouseUp3dEvent(CIvfMouseUp3dEvent *event)
+void CCoordinateInputHandler::removeMouseUp3dEvent(CMouseUp3dEvent *event)
 {
-	std::vector<CIvfMouseUp3dEvent*>::iterator it;
+	std::vector<CMouseUp3dEvent*>::iterator it;
 
 	for (it=m_mouseUp3dEvents.begin(); it!=m_mouseUp3dEvents.end(); it++)
 	{

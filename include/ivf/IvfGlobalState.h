@@ -32,7 +32,7 @@
 
 #include <ivfdef/IvfSingletonDestroyer.h>
 
-IvfStdPointer(CIvfGlobalState);
+IvfStdPointer(CGlobalState);
 
 /**
  * Ivf state singleton class
@@ -42,20 +42,20 @@ IvfStdPointer(CIvfGlobalState);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfGlobalState : public CIvfBase {
+class IVF_API CGlobalState : public CBase {
 private:
-	static CIvfGlobalState* m_instance;
-	static CIvfSingletonDestroyer<CIvfGlobalState> m_destroyer;
+	static CGlobalState* m_instance;
+	static CSingletonDestroyer<CGlobalState> m_destroyer;
 	bool m_renderMaterial;
 	bool m_renderTexture;
 	bool m_renderGreyscale;
     bool m_colorOutput;
 public:
 	/** Return instance of CIvfGlobalState */
-	static CIvfGlobalState* getInstance();
+	static CGlobalState* getInstance();
 
-	IvfClassInfo("CIvfGlobalState",CIvfBase);
-	virtual ~CIvfGlobalState();
+	IvfClassInfo("CIvfGlobalState",CBase);
+	virtual ~CGlobalState();
 
 	void enableMaterialRendering();
 	void disableMaterialRendering();
@@ -74,8 +74,8 @@ public:
     bool isColorOutputEnabled();
 
 protected:
-	CIvfGlobalState();
-	friend class CIvfSingletonDestroyer<CIvfGlobalState>;
+	CGlobalState();
+	friend class CSingletonDestroyer<CGlobalState>;
 };
 
 #endif 

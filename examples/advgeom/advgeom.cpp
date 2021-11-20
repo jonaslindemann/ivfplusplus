@@ -47,11 +47,11 @@
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class CExampleWindow: public CGlutBase {
 private:
-	CIvfCameraPtr		m_camera;
-	CIvfCompositePtr	m_scene;
-	CIvfLightPtr		m_light;
+	CCameraPtr		m_camera;
+	CCompositePtr	m_scene;
+	CLightPtr		m_light;
 
 	double m_angleX;
 	double m_angleY;
@@ -64,7 +64,7 @@ private:
 	int m_beginY;
 public:
 	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+		:CGlutBase(X, Y, W, H) {};
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -91,38 +91,38 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(-6.6, 9.2, 10.5);
 	m_camera->setTarget(1.1, 0.1, 0.6);
 
 	// Create a materials
 
-	CIvfMaterialPtr greenMaterial = new CIvfMaterial();
+	CMaterialPtr greenMaterial = new CMaterial();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.2f, 0.0f, 1.0f);
 	
-	CIvfMaterialPtr redMaterial = new CIvfMaterial();
+	CMaterialPtr redMaterial = new CMaterial();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.2f, 0.0f, 0.0f, 1.0f);
 
 	// Create textures
 
-	CIvfPngImagePtr logoImage = new CIvfPngImage();
+	CPngImagePtr logoImage = new CPngImage();
 	logoImage->setFileName("images/ivf.png");
 	logoImage->read();
 
-	CIvfTexturePtr logoTexture = new CIvfTexture();
+	CTexturePtr logoTexture = new CTexture();
 	logoTexture->setImage(logoImage);
 
 	// Create scene composite
 
-	m_scene = new CIvfComposite();
+	m_scene = new CComposite();
 
 	// Create a PointSet
 
-	CIvfPointSetPtr pointSet = new CIvfPointSet();
+	CPointSetPtr pointSet = new CPointSet();
 
 	pointSet->addCoord(0.0, 0.0, 0.0);
 	pointSet->addCoord(0.0, 0.0, 1.0);
@@ -133,7 +133,7 @@ void CExampleWindow::onInit(int width, int height)
 	pointSet->addCoord(3.0, 0.0, 0.0);
 	pointSet->addCoord(3.0, 0.0, 1.0);
 	
-	CIvfIndexPtr coordIdx = new CIvfIndex();
+	CIndexPtr coordIdx = new CIndex();
 	coordIdx->createLinear(8);
 
 	pointSet->addCoordIndex(coordIdx);
@@ -147,7 +147,7 @@ void CExampleWindow::onInit(int width, int height)
 	pointSet->addColor(1.0, 1.0, 1.0);
 	pointSet->addColor(0.0, 0.0, 1.0);
 
-	CIvfIndexPtr colorIdx = new CIvfIndex();
+	CIndexPtr colorIdx = new CIndex();
 	colorIdx->createLinear(8);
 	pointSet->addColorIndex(colorIdx);
 	pointSet->setUseColor(true);
@@ -159,7 +159,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a LineSet
 
-	CIvfLineSetPtr lineSet = new CIvfLineSet();	
+	CLineSetPtr lineSet = new CLineSet();	
 	
 	lineSet->addCoord(0.0, 0.0, 0.0);
 	lineSet->addCoord(0.0, 0.0, 1.0);
@@ -170,7 +170,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineSet->addCoord(3.0, 0.0, 0.0);
 	lineSet->addCoord(3.0, 0.0, 1.0);
 	
-	coordIdx = new CIvfIndex();
+	coordIdx = new CIndex();
 	coordIdx->createLinear(8);
 
 	lineSet->addCoordIndex(coordIdx);
@@ -184,7 +184,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineSet->addColor(1.0, 1.0, 1.0);
 	lineSet->addColor(0.0, 0.0, 1.0);
 
-	colorIdx = new CIvfIndex();
+	colorIdx = new CIndex();
 	colorIdx->createLinear(8);
 
 	lineSet->addColorIndex(colorIdx);
@@ -198,7 +198,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a LineStripSet
 	
-	CIvfLineStripSetPtr lineStripSet = new CIvfLineStripSet();
+	CLineStripSetPtr lineStripSet = new CLineStripSet();
 
 	lineStripSet->addCoord(0.0, 0.0, 0.0);
 	lineStripSet->addCoord(0.0, 0.0, 1.0);
@@ -209,7 +209,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineStripSet->addCoord(3.0, 0.0, 0.0);
 	lineStripSet->addCoord(3.0, 0.0, 1.0);
 	
-	coordIdx = new CIvfIndex();
+	coordIdx = new CIndex();
 	coordIdx->createLinear(8);
 
 	lineStripSet->addCoordIndex(coordIdx);
@@ -223,7 +223,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineStripSet->addColor(1.0, 1.0, 1.0);
 	lineStripSet->addColor(0.0, 0.0, 1.0);
 
-	colorIdx = new CIvfIndex();
+	colorIdx = new CIndex();
 	colorIdx->createLinear(8);
 
 	lineStripSet->addColorIndex(colorIdx);
@@ -236,7 +236,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a TriSet
 
-	CIvfTriSetPtr triSet = new CIvfTriSet();
+	CTriSetPtr triSet = new CTriSet();
 	
 	triSet->addCoord(0.0,0.0,2.0);
 	triSet->addCoord(1.0,0.3,2.0);
@@ -248,7 +248,7 @@ void CExampleWindow::onInit(int width, int height)
 	triSet->addCoord(1.0,0.3,0.0);
 	triSet->addCoord(2.0,0.0,0.0);
 
-	coordIdx = new CIvfIndex();
+	coordIdx = new CIndex();
 	coordIdx->add(0,1,4);
 	coordIdx->add(0,4,3);
 	coordIdx->add(1,2,5);
@@ -270,7 +270,7 @@ void CExampleWindow::onInit(int width, int height)
 	triSet->addTextureCoord(0.5,1.0);
 	triSet->addTextureCoord(1.0,1.0);
 
-	CIvfIndexPtr textureIdx = new CIvfIndex();
+	CIndexPtr textureIdx = new CIndex();
 	textureIdx->assignFrom(coordIdx);
 
 	triSet->addTextureIndex(textureIdx);
@@ -284,7 +284,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a TriStripSet
 
-	CIvfTriStripSetPtr triStripSet = new CIvfTriStripSet();
+	CTriStripSetPtr triStripSet = new CTriStripSet();
 
 	triStripSet->addCoord(0.0, 0.0, 0.0);
 	triStripSet->addCoord(0.0, 0.0, 1.0);
@@ -304,12 +304,12 @@ void CExampleWindow::onInit(int width, int height)
 	triStripSet->addCoord(3.0, 1.0, 0.0);
 	triStripSet->addCoord(3.0, 1.0, 1.0);
 
-	coordIdx = new CIvfIndex();
+	coordIdx = new CIndex();
 	coordIdx->createLinear(8);
 
 	triStripSet->addCoordIndex(coordIdx);
 
-	coordIdx = new CIvfIndex();
+	coordIdx = new CIndex();
 	coordIdx->createLinear(8,8);
 
 	triStripSet->addCoordIndex(coordIdx);
@@ -323,7 +323,7 @@ void CExampleWindow::onInit(int width, int height)
 	triStripSet->addColor(1.0, 1.0, 1.0);
 	triStripSet->addColor(0.0, 0.0, 1.0);
 
-	colorIdx = new CIvfIndex();
+	colorIdx = new CIndex();
 	colorIdx->createLinear(8);
 
 	triStripSet->addColorIndex(colorIdx);
@@ -337,7 +337,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a QuadSet
 
-	CIvfQuadSetPtr quadSet = new CIvfQuadSet();
+	CQuadSetPtr quadSet = new CQuadSet();
 	
 	quadSet->addCoord(0.0,0.0,1.0);
 	quadSet->addCoord(1.0,0.0,1.0);
@@ -348,7 +348,7 @@ void CExampleWindow::onInit(int width, int height)
 	quadSet->addCoord(1.0,1.0,0.0);
 	quadSet->addCoord(0.0,1.0,0.0);
 
-	coordIdx = new CIvfIndex();
+	coordIdx = new CIndex();
 	coordIdx->add(0,1,5,4);
 	coordIdx->add(1,2,6,5);
 	coordIdx->add(2,3,7,6);
@@ -367,7 +367,7 @@ void CExampleWindow::onInit(int width, int height)
 	quadSet->addColor(1.0, 1.0, 1.0);
 	quadSet->addColor(0.0, 0.0, 1.0);
 	
-	colorIdx = new CIvfIndex();
+	colorIdx = new CIndex();
 	colorIdx->assignFrom(coordIdx);
 	
 	quadSet->addColorIndex(colorIdx);
@@ -377,13 +377,13 @@ void CExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(quadSet);
 
-	CIvfAxisPtr axis = new CIvfAxis();
+	CAxisPtr axis = new CAxis();
 	axis->setSize(1.5);
 	m_scene->addChild(axis);
 	
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
@@ -394,7 +394,7 @@ void CExampleWindow::onInit(int width, int height)
 	// Export all to a DXF file
 
 	/*
-	CIvfDxfWriterPtr dxfWriter = new CIvfDxfWriter();
+	CIvfDxfWriterPtr dxfWriter = new CDxfWriter();
 	dxfWriter->setFileName("advgeom.dxf");
 	dxfWriter->setShape(m_scene);
 	dxfWriter->write();
@@ -447,7 +447,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
+		if (getModifierKey() == CWidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -487,7 +487,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window

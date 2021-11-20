@@ -24,13 +24,13 @@
 
 #include <ivfgle/IvfGleCoordArray.h>
 
-CIvfGleCoordArray::CIvfGleCoordArray()
+CGleCoordArray::CGleCoordArray()
 {
 	m_coords = NULL;
 	m_size = 0;
 }
 
-CIvfGleCoordArray::CIvfGleCoordArray(int size)
+CGleCoordArray::CGleCoordArray(int size)
 {
 	m_coords = NULL;
 	m_size = 0;
@@ -38,13 +38,13 @@ CIvfGleCoordArray::CIvfGleCoordArray(int size)
 	setSize(size);
 }
 
-CIvfGleCoordArray::~CIvfGleCoordArray()
+CGleCoordArray::~CGleCoordArray()
 {
 	if (m_coords!=NULL)
 		delete [] m_coords;
 }
 
-void CIvfGleCoordArray::setSize(int size)
+void CGleCoordArray::setSize(int size)
 {
 	// Delete previous spine coords/colors if any
 	
@@ -60,7 +60,7 @@ void CIvfGleCoordArray::setSize(int size)
 	m_coords = new gleDouble[m_size][3];
 }
 
-void CIvfGleCoordArray::setCoord(int idx, double x, double y, double z)
+void CGleCoordArray::setCoord(int idx, double x, double y, double z)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -70,7 +70,7 @@ void CIvfGleCoordArray::setCoord(int idx, double x, double y, double z)
 	}
 }
 
-void CIvfGleCoordArray::getCoord(int idx, double &x, double &y, double &z)
+void CGleCoordArray::getCoord(int idx, double &x, double &y, double &z)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -80,7 +80,7 @@ void CIvfGleCoordArray::getCoord(int idx, double &x, double &y, double &z)
 	}
 }
 
-void CIvfGleCoordArray::setCoord(int idx, CIvfVec3d &vec)
+void CGleCoordArray::setCoord(int idx, CVec3d &vec)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -93,9 +93,9 @@ void CIvfGleCoordArray::setCoord(int idx, CIvfVec3d &vec)
 	}
 }
 
-CIvfVec3d& CIvfGleCoordArray::getCoord(int idx)
+CVec3d& CGleCoordArray::getCoord(int idx)
 {
-	CIvfVec3d& r = ivfGetTempVec3d();
+	CVec3d& r = ivfGetTempVec3d();
 
 	if ((idx>=0)&&(idx<m_size))
 		r.setComponents(m_coords[idx][0], m_coords[idx][1], m_coords[idx][2]);
@@ -103,12 +103,12 @@ CIvfVec3d& CIvfGleCoordArray::getCoord(int idx)
 	return r;
 }
 
-int CIvfGleCoordArray::getSize()
+int CGleCoordArray::getSize()
 {
 	return m_size;
 }
 
-void* CIvfGleCoordArray::getData()
+void* CGleCoordArray::getData()
 {
 	if (m_coords!=NULL)
 		return &m_coords[0];
@@ -116,14 +116,14 @@ void* CIvfGleCoordArray::getData()
 		return NULL;
 }
 
-void CIvfGleCoordArray::calcFirstAndLast()
+void CGleCoordArray::calcFirstAndLast()
 {
 	if (m_size>=4)
 	{
-		CIvfVec3d p1;
-		CIvfVec3d p2;
-		CIvfVec3d p3;
-		CIvfVec3d v;
+		CVec3d p1;
+		CVec3d p2;
+		CVec3d p3;
+		CVec3d v;
 
 		p1 = this->getCoord(1);
 		p2 = this->getCoord(2);

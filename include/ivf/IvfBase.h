@@ -31,7 +31,7 @@
 #include <ivf/IvfRefCountBase.h>
 #include <ivf/IvfRTTIBase.h>
 
-IvfSmartPointer(CIvfBase);
+IvfSmartPointer(CBase);
 
 /**
  * Root class for the ivf library
@@ -40,15 +40,15 @@ IvfSmartPointer(CIvfBase);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfBase : public CIvfRefCountBase, public CIvfRTTIBase {
+class IVF_API CBase : public CRefCountBase, public CRTTIBase {
 public:
 	/** CIvfBase constructor */
-	CIvfBase();
+	CBase();
 
 	/** CIvfBase destrcutor */
-	virtual ~CIvfBase();
+	virtual ~CBase();
 
-	IvfClassInfo("CIvfBase",CIvfRTTIBase);
+	IvfClassInfo("CIvfBase",CRTTIBase);
 };
 
 #endif 

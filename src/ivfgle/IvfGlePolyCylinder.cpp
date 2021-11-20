@@ -24,12 +24,12 @@
 
 #include <ivfgle/IvfGlePolyCylinder.h>
 
-CIvfGlePolyCylinder::CIvfGlePolyCylinder()
+CGlePolyCylinder::CGlePolyCylinder()
 {
 	m_radius = 0.1;
 }
 
-void CIvfGlePolyCylinder::doCreateGeometry()
+void CGlePolyCylinder::doCreateGeometry()
 {
 	if ((m_pointArray!=NULL)&&(m_colorArray==NULL))
 	{
@@ -69,12 +69,12 @@ void CIvfGlePolyCylinder::doCreateGeometry()
 	}
 }
 
-void CIvfGlePolyCylinder::setRadius(double radius)
+void CGlePolyCylinder::setRadius(double radius)
 {
 	m_radius = radius;
 }
 
-double CIvfGlePolyCylinder::getRadius()
+double CGlePolyCylinder::getRadius()
 {
 	return m_radius;
 }

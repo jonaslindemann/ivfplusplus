@@ -29,27 +29,27 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CIvfFibreComposite::CIvfFibreComposite()
+CFibreComposite::CFibreComposite()
 {
 
 }
 
-CIvfFibreComposite::~CIvfFibreComposite()
+CFibreComposite::~CFibreComposite()
 {
 
 }
 
-void CIvfFibreComposite::doBeginTransform()
+void CFibreComposite::doBeginTransform()
 {
-	CIvfUserSettingsPtr userSettings = CIvfUserSettings::getInstance();
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CUserSettingsPtr userSettings = CUserSettings::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 
 	if (userSettings->getFibreLighting())
 		lighting->enable();
 	else
 		lighting->disable();
 
-	CIvfMaterialPtr material = this->getMaterial();
+	CMaterialPtr material = this->getMaterial();
 	if (material!=NULL)
 	{
 		if (userSettings->getRepresentation()==FIBRE_BAND2)
@@ -59,16 +59,16 @@ void CIvfFibreComposite::doBeginTransform()
 		}
 	}
 
-	CIvfComposite::doBeginTransform();
+	CComposite::doBeginTransform();
 }
 
-void CIvfFibreComposite::doEndTransform()
+void CFibreComposite::doEndTransform()
 {
-	CIvfComposite::doEndTransform();
+	CComposite::doEndTransform();
 
-	CIvfUserSettingsPtr userSettings = CIvfUserSettings::getInstance();
+	CUserSettingsPtr userSettings = CUserSettings::getInstance();
 
-	CIvfMaterialPtr material = this->getMaterial();
+	CMaterialPtr material = this->getMaterial();
 	if (material!=NULL)
 	{
 		if (userSettings->getRepresentation()==FIBRE_BAND2)

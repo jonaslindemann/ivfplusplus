@@ -27,28 +27,28 @@
 
 
 // ------------------------------------------------------------
-CIvfSelectionBox::CIvfSelectionBox ()
-		:CIvfWireBrick()
+CSelectionBox::CSelectionBox ()
+		:CWireBrick()
 		//TODO: check and complete member initialisation list!
 {
-	CIvfMaterial* selectMaterial = new CIvfMaterial();
+	CMaterial* selectMaterial = new CMaterial();
 	selectMaterial->setDiffuseColor(1.0, 1.0, 1.0, 1.0);
 	selectMaterial->setAmbientColor(0.5, 0.5, 0.5, 1.0);
 	this->setMaterial(selectMaterial);
 }
 
 // ------------------------------------------------------------
-CIvfSelectionBox::~CIvfSelectionBox ()
+CSelectionBox::~CSelectionBox ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfSelectionBox::doCreateGeometry()
+void CSelectionBox::doCreateGeometry()
 {
 	glPushAttrib(GL_LIGHTING);
 		glDisable(GL_LIGHTING);
 		glColor3f(1.0, 1.0, 1.0);
-		CIvfWireBrick::doCreateGeometry();
+		CWireBrick::doCreateGeometry();
 	glPopAttrib();
 }
 

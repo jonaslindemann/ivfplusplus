@@ -29,7 +29,7 @@ using namespace std;
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class CExampleWindow: public CGlutBase {
 private:
 
 	// Camera movement state variables
@@ -46,18 +46,18 @@ private:
 
 	// Ivf++ object declarations
 
-	CIvfCameraPtr			m_camera;
-	CIvfCameraPtr			m_externalCamera;
-	CIvfCompositePtr		m_scene;
-	CIvfCullingPtr			m_culling;
-	CIvfLightPtr			m_light;
-	CIvfCameraPtr			m_currentCamera;
+	CCameraPtr			m_camera;
+	CCameraPtr			m_externalCamera;
+	CCompositePtr		m_scene;
+	CCullingPtr			m_culling;
+	CLightPtr			m_light;
+	CCameraPtr			m_currentCamera;
 
 	bool m_useCulling;
 
 public:
 	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+		:CGlutBase(X, Y, W, H) {};
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -89,12 +89,12 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create cameras
 
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(0.0, 0.0, 10.0);
 	m_camera->setPerspective(45.0, 0.5, 100.0);
 	m_camera->setViewPort(width, height);
 
-	m_externalCamera = new CIvfCamera();
+	m_externalCamera = new CCamera();
 	m_externalCamera->setPosition(25.0, 50.0, 50.0);
 	m_externalCamera->setPerspective(45.0, 0.5, 100.0);
 	m_externalCamera->setViewPort(width, height);
@@ -103,14 +103,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a materials
 
-	CIvfMaterialPtr material = new CIvfMaterial();
+	CMaterialPtr material = new CMaterial();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene
 
-	m_scene = new CIvfComposite();
+	m_scene = new CComposite();
 
 	// Create a somewhat complex sphere 
 
@@ -120,7 +120,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Geometry is reduced by reusing the same sphere.
 
-	CIvfSpherePtr sphere = new CIvfSphere();
+	CSpherePtr sphere = new CSphere();
 	sphere->setSlices(12);
 	sphere->setStacks(12);
 	sphere->setMaterial(material);
@@ -128,14 +128,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a grid of spheres.
 
-	CIvfTransformPtr arrayXlt = new CIvfTransform();
-	CIvfTransformPtr xlt;
+	CTransformPtr arrayXlt = new CTransform();
+	CTransformPtr xlt;
 
 	for (i=0; i<nNodes; i++)
 		for (j=0; j<nNodes; j++)
 			for (k=0; k<nNodes; k++)
 			{
-				xlt = new CIvfTransform();
+				xlt = new CTransform();
 				xlt->setPosition(
 					-10 + distance*i,
 					-10 + distance*j,
@@ -151,16 +151,16 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create culling object
 
-	m_culling = new CIvfCulling();
+	m_culling = new CCulling();
     m_culling->setComposite(m_scene);
 	m_culling->setCullView(m_camera);
 
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 
 	m_light = lighting->getLight(0);
-	m_light->setType(CIvfLight::LT_DIRECTIONAL);
+	m_light->setType(CLight::LT_DIRECTIONAL);
 	m_light->setDirection(1.0, 1.0, 1.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
@@ -220,7 +220,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
+		if (getModifierKey() == CWidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -294,7 +294,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window

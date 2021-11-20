@@ -12,43 +12,43 @@
 #define R2D(a) a*360.0/M_PI/2.0
 #define D2R(a) a*2.0*M_PI/360.0
 
-CIvfVectorCursor::CIvfVectorCursor()
+CVectorCursor::CVectorCursor()
 {
 	m_cursorType = CT_ALPHA;
 
 	m_alpha = D2R(0.0);
 	m_beta = D2R(-90.0);
 
-	m_alfaRotate = new CIvfTransform();
-	m_betaRotate = new CIvfTransform();
+	m_alfaRotate = new CTransform();
+	m_betaRotate = new CTransform();
 
-	CIvfMaterialPtr material = new CIvfMaterial();
+	CMaterialPtr material = new CMaterial();
 	material->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
-	CIvfMaterialPtr vectorMaterial = new CIvfMaterial();
+	CMaterialPtr vectorMaterial = new CMaterial();
 	vectorMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 0.6f);
 	vectorMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 0.8f);
 	vectorMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 0.5f);
 
-	CIvfMaterialPtr circleMaterial = new CIvfMaterial();
+	CMaterialPtr circleMaterial = new CMaterial();
 	circleMaterial->setDiffuseColor(0.8f, 0.8f, 0.8f, 0.6f);
 	circleMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 0.8f);
 	circleMaterial->setAmbientColor(0.2f, 0.2f, 0.2f, 0.5f);
 
-	m_cursor = new CIvfTransform();
-	m_nonRotatingCursor = new CIvfTransform();
+	m_cursor = new CTransform();
+	m_nonRotatingCursor = new CTransform();
 
-	CIvfCompositePtr arrow = new CIvfComposite();
+	CCompositePtr arrow = new CComposite();
 
-	CIvfCircularTubePtr circTube = new CIvfCircularTube();
+	CCircularTubePtr circTube = new CCircularTube();
 	circTube->setCircleRadius(0.6);
 	circTube->setRadius(0.025);
 	circTube->setStartAngle(45.0);
 	circTube->setEndAngle(180.0-45.0);
 
-	m_circle1 = new CIvfCircularTube();
+	m_circle1 = new CCircularTube();
 	m_circle1->setCircleRadius(0.5);
 	m_circle1->setCalculationPoints(32);
 	m_circle1->setRadius(0.015);
@@ -56,7 +56,7 @@ CIvfVectorCursor::CIvfVectorCursor()
 	m_circle1->setEndAngle(360.0);
 	m_circle1->setMaterial(circleMaterial);
 
-	m_circle2 = new CIvfCircularTube();
+	m_circle2 = new CCircularTube();
 	m_circle2->setCircleRadius(0.5);
 	m_circle2->setCalculationPoints(32);
 	m_circle2->setRadius(0.015);
@@ -68,8 +68,8 @@ CIvfVectorCursor::CIvfVectorCursor()
 	m_cursor->addChild(m_circle2);
 	m_nonRotatingCursor->addChild(m_circle1);
 
-	m_spheres1 = new CIvfTransform();
-	m_spheres2 = new CIvfTransform();
+	m_spheres1 = new CTransform();
+	m_spheres2 = new CTransform();
 
 	double sphereRadius = 0.04;
 
@@ -86,12 +86,12 @@ CIvfVectorCursor::CIvfVectorCursor()
 		x = 0.5*cos(angle);
 		z = 0.5*sin(angle);
 
-		CIvfSpherePtr sphere1 = new CIvfSphere();
+		CSpherePtr sphere1 = new CSphere();
 		sphere1->setRadius(sphereRadius);
 		sphere1->setPosition(x, 0.0, z);
 		sphere1->setMaterial(circleMaterial);
 
-		CIvfSpherePtr sphere2 = new CIvfSphere();
+		CSpherePtr sphere2 = new CSphere();
 		sphere2->setRadius(sphereRadius);
 		sphere2->setPosition(0.0, x, z);
 		sphere2->setMaterial(circleMaterial);
@@ -106,14 +106,14 @@ CIvfVectorCursor::CIvfVectorCursor()
 	m_nonRotatingCursor->addChild(m_spheres1);
 	m_cursor->addChild(m_spheres2);
 
-	CIvfExtrArrowPtr extrArrow1 = new CIvfExtrArrow();
+	CExtrArrowPtr extrArrow1 = new CExtrArrow();
 	extrArrow1->setSize(0.25,0.25);
 	extrArrow1->setRadius(0.05,0.025);
 	extrArrow1->setOffset(0.0);
 	extrArrow1->setDirection(circTube->getStartVector());
 	extrArrow1->setPosition(circTube->getStartPosition());
 
-	CIvfExtrArrowPtr extrArrow2 = new CIvfExtrArrow();
+	CExtrArrowPtr extrArrow2 = new CExtrArrow();
 	extrArrow2->setSize(0.25,0.25);
 	extrArrow2->setRadius(0.05,0.025);
 	extrArrow2->setOffset(0.0);
@@ -132,19 +132,19 @@ CIvfVectorCursor::CIvfVectorCursor()
 
 	// Vector indicator
 
-	CIvfBlendStatePtr blendState = new CIvfBlendState();
+	CBlendStatePtr blendState = new CBlendState();
 	blendState->setFunction(GL_ONE, GL_ONE);
 
-	CIvfDepthBufferStatePtr depthState = new CIvfDepthBufferState();
-	depthState->setState(CIvfDepthBufferState::DS_DISABLED);
+	CDepthBufferStatePtr depthState = new CDepthBufferState();
+	depthState->setState(CDepthBufferState::DS_DISABLED);
 
-	CIvfCompositeStatePtr compState = new CIvfCompositeState();
+	CCompositeStatePtr compState = new CCompositeState();
 	compState->addChild(blendState);
 	compState->addChild(depthState);
 
 	double arrowSize = 0.5;
 
-	m_vectorIndicator = new CIvfExtrArrow();
+	m_vectorIndicator = new CExtrArrow();
 	m_vectorIndicator->setSize(arrowSize*1.0, arrowSize*0.4);
 	m_vectorIndicator->setRadius(arrowSize*0.1, arrowSize*0.05);
 	m_vectorIndicator->setOffset(-0.7);
@@ -160,12 +160,12 @@ CIvfVectorCursor::CIvfVectorCursor()
 	calcVector();
 }
 
-CIvfVectorCursor::~CIvfVectorCursor()
+CVectorCursor::~CVectorCursor()
 {
 
 }
 
-void CIvfVectorCursor::doCreateGeometry()
+void CVectorCursor::doCreateGeometry()
 {
 	m_cursor->render();
 	m_nonRotatingCursor->render();
@@ -173,7 +173,7 @@ void CIvfVectorCursor::doCreateGeometry()
 }
 
 
-void CIvfVectorCursor::setType(TCursorType type)
+void CVectorCursor::setType(TCursorType type)
 {
 	m_cursorType = type;
 
@@ -208,7 +208,7 @@ void CIvfVectorCursor::setType(TCursorType type)
 	}
 }
 
-void CIvfVectorCursor::setAlpha(double alpha)
+void CVectorCursor::setAlpha(double alpha)
 {
 	double temp = alpha;
 	temp = (double)((long)((temp + (5.0/2)) / 5.0) * 5.0);
@@ -216,7 +216,7 @@ void CIvfVectorCursor::setAlpha(double alpha)
 	calcVector();
 }
 
-void CIvfVectorCursor::setBeta(double beta)
+void CVectorCursor::setBeta(double beta)
 {
 	double temp = beta;
 	temp = (double)((long)((temp + (5.0/2)) / 5.0) * 5.0);
@@ -224,7 +224,7 @@ void CIvfVectorCursor::setBeta(double beta)
 	calcVector();
 }
 
-void CIvfVectorCursor::calcVector()
+void CVectorCursor::calcVector()
 {
 	double x, y, z, t;
 
@@ -240,17 +240,17 @@ void CIvfVectorCursor::calcVector()
 	m_cursor->setRotationQuat(0.0, 1.0, 0.0, R2D(m_alpha));
 }
 
-double CIvfVectorCursor::getAlpha()
+double CVectorCursor::getAlpha()
 {
 	return R2D(m_alpha);
 }
 
-double CIvfVectorCursor::getBeta()
+double CVectorCursor::getBeta()
 {
 	return R2D(m_beta);
 }
 
-void CIvfVectorCursor::reset()
+void CVectorCursor::reset()
 {
 	m_alpha = D2R(0.0);
 	m_beta = D2R(-90.0);
@@ -266,7 +266,7 @@ void CIvfVectorCursor::reset()
 }
 
 
-CIvfVec3d& CIvfVectorCursor::getDirection()
+CVec3d& CVectorCursor::getDirection()
 {
 	return m_vector;
 }

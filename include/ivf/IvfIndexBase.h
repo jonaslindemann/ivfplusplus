@@ -30,22 +30,22 @@
 #define IVF_IDX_TRIANGLES 0
 #define IVF_IDX_QUADS     1
 
-IvfSmartPointer(CIvfIndexBase);
+IvfSmartPointer(CIndexBase);
 
 /**
  * Abstract base class for an index
  */
-class IVF_API CIvfIndexBase : public CIvfBase {
+class IVF_API CIndexBase : public CBase {
 private:
 	int m_topology;
 public:
 	/** CIvfIndex constructor */
-	CIvfIndexBase();
+	CIndexBase();
 
 	/** CIvfIndex destructor */
-	virtual ~CIvfIndexBase();
+	virtual ~CIndexBase();
 
-	IvfClassInfo("CIvfIndexBase",CIvfBase);
+	IvfClassInfo("CIndexBase",CBase);
 
 	/** Return value at position */
 	virtual long getIndex(long pos);
@@ -84,10 +84,10 @@ public:
 	virtual void createConstant(long value, long size);
 
 	/** Assigns values from another index */
-	virtual void assignFrom(CIvfIndexBase* idx);
+	virtual void assignFrom(CIndexBase* idx);
 
 	/** Assigns \em idx the values of this index */
-	virtual void assignTo(CIvfIndexBase* idx);
+	virtual void assignTo(CIndexBase* idx);
 
 	/** Add values from array \em i to this index */ 
 	virtual void addArray(long* i, long size);
@@ -112,7 +112,7 @@ public:
 	/** 
 	 * Sets topology hint 
 	 *
-	 * This information is used by the CIvfPolySet class
+	 * This information is used by the CPolySet class
 	 * to determine the topology of the index
 	 */
 	void setTopology(int topology);

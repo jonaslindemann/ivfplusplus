@@ -28,39 +28,39 @@
 #include <ivf/ivfconfig.h>
 #include <ivfmath/IvfMathBase.h>
 
-IvfSmartPointer(CIvfVec4d);
+IvfSmartPointer(CVec4d);
 
 /**
  * 4d vector class.
  *
- * CIvfVec3d implements a 4d vector and associated
+ * CVec3d implements a 4d vector and associated
  * operations and arithmetic.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfVec4d : public CIvfMathBase {
+class IVFMATH_API CVec4d : public CMathBase {
 private:
 	double m_vector[4];
 public:
-	/** CIvfVec3d constructor */
-	CIvfVec4d();
+	/** CVec3d constructor */
+	CVec4d();
 
-	/** CIvfVec3d constructor */
-	CIvfVec4d(double vx, double vy, double vz);
+	/** CVec3d constructor */
+	CVec4d(double vx, double vy, double vz);
 
-	/** CIvfVec3d constructor */
-	CIvfVec4d(double vx, double vy, double vz, double vw);
+	/** CVec3d constructor */
+	CVec4d(double vx, double vy, double vz, double vw);
 
-	/** CIvfVec3d copy constructor */
-	CIvfVec4d(CIvfVec4d& v);
+	/** CVec3d copy constructor */
+	CVec4d(CVec4d& v);
 
-	/** CIvfVec3d destructor */
-	virtual ~CIvfVec4d();
+	/** CVec3d destructor */
+	virtual ~CVec4d();
 
-	IvfClassInfo("CIvfVec4d",CIvfMathBase);
+	IvfClassInfo("CVec4d",CMathBase);
 
 	/** Rotate vector angle about axis */
-	void rotate(CIvfVec4d& axis, double angle);
+	void rotate(CVec4d& axis, double angle);
 
 	/** Normalize vector */
 	void normalize();
@@ -110,14 +110,14 @@ public:
 	void setX(double value);
 
 	/** Vector/Vector += operator */
-	CIvfVec4d& operator+=(CIvfVec4d& a);
+	CVec4d& operator+=(CVec4d& a);
 
 	/** Vector/Vector -= operator */
-	CIvfVec4d& operator-=(CIvfVec4d& a);
+	CVec4d& operator-=(CVec4d& a);
 
 	
 	/** Vector/scalar = operator */
-	CIvfVec4d& operator=(CIvfVec4d& a);
+	CVec4d& operator=(CVec4d& a);
 
 	/** Index operator */
 	double operator[](const int idx);
@@ -125,21 +125,21 @@ public:
 };
 
 /** Vector/Vector cross product operator */
-IVFMATH_API CIvfVec4d& operator*(CIvfVec4d& a, CIvfVec4d& b);
+IVFMATH_API CVec4d& operator*(CVec4d& a, CVec4d& b);
 
 /** Vector/Scalar elemental multiplication operator */
-IVFMATH_API CIvfVec4d& operator*(CIvfVec4d& a, double b); 
+IVFMATH_API CVec4d& operator*(CVec4d& a, double b); 
 
 /** Scalar/Vector elemental multiplication operator */
-IVFMATH_API CIvfVec4d& operator*(double a, CIvfVec4d& b);
+IVFMATH_API CVec4d& operator*(double a, CVec4d& b);
 
 /** Vector/Vector + operator */
-IVFMATH_API CIvfVec4d& operator+(CIvfVec4d& a, CIvfVec4d& b);
+IVFMATH_API CVec4d& operator+(CVec4d& a, CVec4d& b);
 
 /** Vector/Vector - operator */
-IVFMATH_API CIvfVec4d& operator-(CIvfVec4d& a, CIvfVec4d& b);
+IVFMATH_API CVec4d& operator-(CVec4d& a, CVec4d& b);
 
-IVFMATH_API CIvfVec4d& ivfGetTempVec4d();
+IVFMATH_API CVec4d& ivfGetTempVec4d();
 
 /** \example math.cpp */
 

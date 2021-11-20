@@ -30,39 +30,39 @@
 #include <ivfmath/IvfMathBase.h>
 #include <ivfmath/IvfSplineSegment3d.h>
 
-IvfSmartPointer(CIvfSpline3d);
+IvfSmartPointer(CSpline3d);
 
 /**
  * 3d spline class
  *
  * Implements a 3d spline class consisting of a number
- * of CIvfSplineSegment3d segments.
+ * of CSplineSegment3d segments.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfSpline3d : public CIvfMathBase {
+class IVFMATH_API CSpline3d : public CMathBase {
 private:
 	int m_size;
-	std::vector<CIvfSplineSegment3d*> m_segments;	
-	std::vector<CIvfVec3d*> m_points;
+	std::vector<CSplineSegment3d*> m_segments;	
+	std::vector<CVec3d*> m_points;
 
 	std::vector<double> m_tau;    // Slack/tightening
 	std::vector<double> m_gamma;  // Continuity
 	std::vector<double> m_beta;   // Bias
 
-	CIvfVec3d* m_start;
-	CIvfVec3d* m_end;
+	CVec3d* m_start;
+	CVec3d* m_end;
 
 	void initSpline();
 	void updateSpline();
 public:
-	/** CIvfSpline3d constructor */
-	CIvfSpline3d();
+	/** CSpline3d constructor */
+	CSpline3d();
 
-	/** CIvfSpline3d destructor */
-	virtual ~CIvfSpline3d();
+	/** CSpline3d destructor */
+	virtual ~CSpline3d();
 
-	IvfClassInfo("CIvfSpline3d",CIvfMathBase);
+	IvfClassInfo("CSpline3d",CMathBase);
 
 	/** Removes all spline points. */
 	void clear();
@@ -78,14 +78,14 @@ public:
 	void setSize(int size);
 	
 	/** Get specified point on spline. */
-	CIvfVec3d* getPoint(int idx);
+	CVec3d* getPoint(int idx);
 	
 	/** 
 	 * Get position on curve 
 	 *
 	 * @param t distance from curve start 0 <= t <= getSize()-1
 	 */
-	CIvfVec3d& getPosition(double t);
+	CVec3d& getPosition(double t);
 
 	/** Updates the spline if any points are changed */
 	void update();
@@ -111,7 +111,7 @@ public:
 	 *
 	 * @param t distance from curve start 0 <= t <= getSize()-1
 	 */
-	CIvfVec3d& getTangent(double t);
+	CVec3d& getTangent(double t);
 };
 
 #endif 

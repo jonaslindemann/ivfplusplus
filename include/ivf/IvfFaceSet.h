@@ -27,17 +27,17 @@
 
 #include <ivf/IvfShape.h>
 
-// Obsolete use CIvfTriSet, CIvfQuadSet or CIvfPolySet instead.
+// Obsolete use CTriSet, CQuadSet or CPolySet instead.
 
-IvfSmartPointer(CIvfFaceSet);
+IvfSmartPointer(CFaceSet);
 
-class IVF_API CIvfFaceSet : public CIvfShape {
+class IVF_API CFaceSet : public CShape {
 public:
-	CIvfFaceSet();
+	CFaceSet();
 
-	virtual ~CIvfFaceSet();
+	virtual ~CFaceSet();
 
-	IvfClassInfo("CIvfFaceSet",CIvfShape);
+	IvfClassInfo("CIvfFaceSet",CShape);
 
 	void setCoordSize(long coordSize);
 	long getCoordSize();

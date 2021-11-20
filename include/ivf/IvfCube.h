@@ -27,7 +27,7 @@
 
 #include <ivf/IvfBrick.h>
 
-IvfSmartPointer(CIvfCube);
+IvfSmartPointer(CCube);
 
 /**
  * Cube shape class
@@ -36,17 +36,17 @@ IvfSmartPointer(CIvfCube);
  * dimensions.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfCube : public CIvfBrick {
+class IVF_API CCube : public CBrick {
 private:
 
 public:
 	/** CIvfCube constructor. */
-	CIvfCube ();
+	CCube ();
 	
 	/** CIvfCube destructor. */
-	virtual ~CIvfCube ();
+	virtual ~CCube ();
 	
-	IvfClassInfo("CIvfCube",CIvfBrick);
+	IvfClassInfo("CIvfCube",CBrick);
 
 	/** Set size of cube size */
 	void	setSize (const double size);

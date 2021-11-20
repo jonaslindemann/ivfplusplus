@@ -23,8 +23,8 @@
 #include <ivf/IvfLOD.h>
 
 // ------------------------------------------------------------
-CIvfLOD::CIvfLOD ()
-		:CIvfSwitch()
+CLOD::CLOD ()
+		:CSwitch()
 		//TODO: check and complete member initialisation list!
 {
 	m_camera = NULL;
@@ -33,12 +33,12 @@ CIvfLOD::CIvfLOD ()
 }
 
 // ------------------------------------------------------------
-CIvfLOD::~CIvfLOD ()
+CLOD::~CLOD ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfLOD::doCreateGeometry()
+void CLOD::doCreateGeometry()
 {
 	if (m_camera!=NULL)
 	{
@@ -58,11 +58,11 @@ void CIvfLOD::doCreateGeometry()
 	{
 		this->setCurrentChild(0);
 	}
-	CIvfSwitch::doCreateGeometry();
+	CSwitch::doCreateGeometry();
 }
 
 // ------------------------------------------------------------
-double CIvfLOD::lodFunction(double dist)
+double CLOD::lodFunction(double dist)
 {
 	double g = (1/(m_farLimit-m_nearLimit))*dist - m_nearLimit/(m_farLimit - m_nearLimit);
 	double f = (theta(dist - m_nearLimit) - theta(dist - m_farLimit))*g + theta(dist - m_farLimit);;
@@ -70,32 +70,32 @@ double CIvfLOD::lodFunction(double dist)
 }
 
 // ------------------------------------------------------------
-double CIvfLOD::theta(double x)
+double CLOD::theta(double x)
 {
 	return 1.0*(double)(x>=0);
 }
 
 // ------------------------------------------------------------
-void CIvfLOD::setCamera(CIvfCamera *camera)
+void CLOD::setCamera(CCamera *camera)
 {
 	m_camera = camera;
 }
 
 // ------------------------------------------------------------
-CIvfCamera* CIvfLOD::getCamera()
+CCamera* CLOD::getCamera()
 {
 	return m_camera;
 }
 
 // ------------------------------------------------------------
-void CIvfLOD::setLimits(double nearLimit, double farLimit)
+void CLOD::setLimits(double nearLimit, double farLimit)
 {
 	m_nearLimit = nearLimit;
 	m_farLimit = farLimit;
 }
 
 // ------------------------------------------------------------
-void CIvfLOD::getLimits(double &nearLimit, double &farLimit)
+void CLOD::getLimits(double &nearLimit, double &farLimit)
 {
 	nearLimit = m_nearLimit;
 	farLimit = m_farLimit;

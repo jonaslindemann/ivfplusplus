@@ -28,7 +28,7 @@
 #include <ivf/IvfExtrusion.h>
 #include <ivf/IvfNode.h>
 
-IvfSmartPointer(CIvfSolidLine);
+IvfSmartPointer(CSolidLine);
 
 #define IVF_LINE_SIMPLE 0
 #define IVF_LINE_SOLID	1
@@ -40,20 +40,20 @@ IvfSmartPointer(CIvfSolidLine);
 /**
  * Solid line class
  *
- * CIvfSolidLine implements a solid line between
- * two CIvfNode instances. The radius and number
+ * CSolidLine implements a solid line between
+ * two CNode instances. The radius and number
  * of sides can be defined.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfSolidLine : public CIvfExtrusion {
+class IVF_API CSolidLine : public CExtrusion {
 public:
-	/** CIvfSolidLine constructor */
-	CIvfSolidLine ();
+	/** CSolidLine constructor */
+	CSolidLine ();
 
-	/** CIvfSolidLine destructor */
-	virtual ~CIvfSolidLine ();
+	/** CSolidLine destructor */
+	virtual ~CSolidLine ();
 
-	IvfClassInfo("CIvfSolidLine",CIvfExtrusion);
+	IvfClassInfo("CSolidLine",CExtrusion);
 
 	/** 
 	 * Refreshes object data
@@ -79,19 +79,19 @@ public:
 	/**
 	 * Set nodes
 	 *
-	 * The solid line is constructed between two CIvfNode instances.
+	 * The solid line is constructed between two CNode instances.
 	 * The reference count of the node is increased when assigned to 
 	 * the solid line. If the node are not referenced they are deleted
 	 * when the solid line is destroyed.
 	 */
-	void setNodes(CIvfNode* n1, CIvfNode* n2);
+	void setNodes(CNode* n1, CNode* n2);
 
 	/** 
 	 * Returns a node
 	 *
 	 * @param idx Idx of node to be retrieved. (0, 1)
 	 */
-	CIvfNode* getNode(int idx);
+	CNode* getNode(int idx);
 
 	/**
 	 * Set refresh mode
@@ -106,15 +106,15 @@ public:
 	double getLength();
 protected:
 	virtual void initExtrusion();
-	virtual void onSetNodes(CIvfNode* n1, CIvfNode* n2);
+	virtual void onSetNodes(CNode* n1, CNode* n2);
 private:
 	void initNodes();
 	void initSection();
 	double m_radius;
 	long m_nSides;
 	double m_offsets[2];
-	CIvfNodePtr m_node2;
-	CIvfNodePtr m_node1;
+	CNodePtr m_node2;
+	CNodePtr m_node1;
 	int m_refreshMode;
 public:
 	void setOffsets(double offset1, double offset2);

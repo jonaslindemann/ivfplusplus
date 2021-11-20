@@ -27,16 +27,16 @@
 #include <ivf/IvfComposite.h>
 #include <ivf/IvfLighting.h>
 
-IvfSmartPointer(CIvfFibreComposite);
+IvfSmartPointer(CFibreComposite);
 
-class CIvfFibreComposite : public CIvfComposite {
+class CFibreComposite : public CComposite {
 private:
 	float m_oldShininess;
 public:
-	CIvfFibreComposite();
-	virtual ~CIvfFibreComposite();
+	CFibreComposite();
+	virtual ~CFibreComposite();
 
-	IvfClassInfo("CIvfFibreComposite",CIvfComposite);
+	IvfClassInfo("CFibreComposite",CComposite);
 
 protected:
 	void doEndTransform();

@@ -27,7 +27,7 @@
 
 #include <ivf/IvfGLPrimitive.h>
 
-IvfSmartPointer(CIvfQuadSet);
+IvfSmartPointer(CQuadSet);
 
 /**
  * Quad set class
@@ -36,17 +36,17 @@ IvfSmartPointer(CIvfQuadSet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfQuadSet : public CIvfGLPrimitive {
+class IVF_API CQuadSet : public CGLPrimitive {
 private:
 	bool m_useColor;
 public:
-	/** CIvfQuadSet constructor */
-	CIvfQuadSet();
+	/** CQuadSet constructor */
+	CQuadSet();
 
-	/** CIvfQuadSet destructor */
-	virtual ~CIvfQuadSet();
+	/** CQuadSet destructor */
+	virtual ~CQuadSet();
 
-	IvfClassInfo("CIvfQuadSet",CIvfGLPrimitive);
+	IvfClassInfo("CQuadSet",CGLPrimitive);
 
 	/** Enable or disable the use of color values when rendering */
 	void setUseColor(bool flag);
@@ -55,7 +55,7 @@ public:
 	bool getUseColor();
 protected:
 	void updateVertexNormals();
-	void calcNormal(CIvfIndex* idx);
+	void calcNormal(CIndex* idx);
 	void doCreateGeometry();
 };
 /** \example advgeom.cpp */

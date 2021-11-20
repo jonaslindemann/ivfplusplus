@@ -27,7 +27,7 @@
 #include <ivf/IvfGL.h>
 
 // ------------------------------------------------------------
-CIvfLight::CIvfLight()
+CLight::CLight()
 {
 	m_enabled = false;
 
@@ -56,24 +56,24 @@ CIvfLight::CIvfLight()
 }
 
 // ------------------------------------------------------------
-CIvfLight::~CIvfLight()
+CLight::~CLight()
 {
 
 }
 
-void CIvfLight::enable()
+void CLight::enable()
 {
 	glEnable(GL_LIGHT0 + m_lightn);
 	m_enabled = true;
 }
 
-void CIvfLight::disable()
+void CLight::disable()
 {
 	glDisable(GL_LIGHT0 + m_lightn);
 	m_enabled = false;
 }
 
-bool CIvfLight::isEnabled()
+bool CLight::isEnabled()
 {
 	/*
 	GLboolean lightEnabled;
@@ -83,11 +83,11 @@ bool CIvfLight::isEnabled()
 	return m_enabled;
 }
 
-void CIvfLight::doCreateGeometry()
+void CLight::doCreateGeometry()
 {
 	if (m_enabled)
 	{
-		if ( CIvfGLBase::getState() == CIvfGLBase::OS_OFF )
+		if ( CGLBase::getState() == CGLBase::OS_OFF )
 			return;
 
 		GLenum light = GL_LIGHT0 + m_lightn;
@@ -127,7 +127,7 @@ void CIvfLight::doCreateGeometry()
 	}
 }
 
-void CIvfLight::setAmbientColor( const float r, const float g,
+void CLight::setAmbientColor( const float r, const float g,
 						   const float b, const float a )
 {
 	m_ambient[0] = r;
@@ -136,7 +136,7 @@ void CIvfLight::setAmbientColor( const float r, const float g,
 	m_ambient[3] = a;
 }
 
-void CIvfLight::setDiffuseColor( const float r, const float g,
+void CLight::setDiffuseColor( const float r, const float g,
 						   const float b, const float a )
 {
 	m_diffuse[0] = r;
@@ -145,7 +145,7 @@ void CIvfLight::setDiffuseColor( const float r, const float g,
 	m_diffuse[3] = a;
 }
 
-void CIvfLight::setSpecularColor( const float r, const float g,
+void CLight::setSpecularColor( const float r, const float g,
 							const float b, const float a )
 {
 	m_specular[0] = r;
@@ -154,7 +154,7 @@ void CIvfLight::setSpecularColor( const float r, const float g,
 	m_specular[3] = a;
 }
 
-void CIvfLight::setLightPosition( const float x, const float y, const float z, const float w )
+void CLight::setLightPosition( const float x, const float y, const float z, const float w )
 {
 	m_position[0] = x;
 	m_position[1] = y;
@@ -167,37 +167,37 @@ void CIvfLight::setLightPosition( const float x, const float y, const float z, c
 		m_lightType = LT_DIRECTIONAL;
 }
 
-void CIvfLight::setLightPosition( const float x, const float y, const float z)
+void CLight::setLightPosition( const float x, const float y, const float z)
 {
 	m_position[0] = x;
 	m_position[1] = y;
 	m_position[2] = z;
 }
 
-void CIvfLight::setDirection( const float x, const float y, const float z)
+void CLight::setDirection( const float x, const float y, const float z)
 {
 	m_position[0] = x;
 	m_position[1] = y;
 	m_position[2] = z;
 }
 
-void CIvfLight::setConstAtt( const int a )
+void CLight::setConstAtt( const int a )
 {
 	m_constatt = a;
 }
 
-void CIvfLight::setLinAtt( const int a )
+void CLight::setLinAtt( const int a )
 {
 	m_linatt = a;
 }
 
-void CIvfLight::setQuadAtt( const int a )
+void CLight::setQuadAtt( const int a )
 {
 	m_quadatt = a;
 }
 
 
-void CIvfLight::getAmbientColor( float &r, float &g, float &b, float &a ) const
+void CLight::getAmbientColor( float &r, float &g, float &b, float &a ) const
 {
 	r = m_ambient[0];
 	g = m_ambient[1];
@@ -205,7 +205,7 @@ void CIvfLight::getAmbientColor( float &r, float &g, float &b, float &a ) const
 	a = m_ambient[3];
 }
 
-void CIvfLight::getDiffuseColor( float &r, float &g, float &b, float &a ) const
+void CLight::getDiffuseColor( float &r, float &g, float &b, float &a ) const
 {
 	r = m_diffuse[0];
 	g = m_diffuse[1];
@@ -213,7 +213,7 @@ void CIvfLight::getDiffuseColor( float &r, float &g, float &b, float &a ) const
 	a = m_diffuse[3];
 }
 
-void CIvfLight::getSpecularColor( float &r, float &g, float &b, float &a ) const
+void CLight::getSpecularColor( float &r, float &g, float &b, float &a ) const
 {
 	r = m_specular[0];
 	g = m_specular[1];
@@ -221,7 +221,7 @@ void CIvfLight::getSpecularColor( float &r, float &g, float &b, float &a ) const
 	a = m_specular[3];
 }
 
-void CIvfLight::getLightPosition( float &x, float &y, float &z, float &w ) const
+void CLight::getLightPosition( float &x, float &y, float &z, float &w ) const
 {
 	x = m_position[0];
 	y = m_position[1];
@@ -229,67 +229,67 @@ void CIvfLight::getLightPosition( float &x, float &y, float &z, float &w ) const
 	w = m_position[3];
 }
 
-void CIvfLight::getConstAtt( int &a ) const
+void CLight::getConstAtt( int &a ) const
 {
 	a = m_constatt;
 }
 
-void CIvfLight::getLinAtt( int &a ) const
+void CLight::getLinAtt( int &a ) const
 {
 	a = m_linatt;
 }
 
-void CIvfLight::getQuadAtt( int &a ) const
+void CLight::getQuadAtt( int &a ) const
 {
 	a = m_quadatt;
 }
 
-void CIvfLight::setType(TLightType lightType)
+void CLight::setType(TLightType lightType)
 {
 	m_lightType = lightType;
 }
 
-void CIvfLight::setSpotCutoff(float cutoff)
+void CLight::setSpotCutoff(float cutoff)
 {
 	m_spotCutoff = cutoff;
 }
 
-void CIvfLight::setSpotDirection(float ex, float ey, float ez)
+void CLight::setSpotDirection(float ex, float ey, float ez)
 {
 	m_spotDirection[0] = ex;
 	m_spotDirection[1] = ey;
 	m_spotDirection[2] = ez;
 }
 
-void CIvfLight::setSpotExponent(float exponent)
+void CLight::setSpotExponent(float exponent)
 {
 	m_spotExponent = exponent;
 }
 
-CIvfLight::TLightType CIvfLight::getType()
+CLight::TLightType CLight::getType()
 {
 	return m_lightType;
 }
 
-void CIvfLight::getSpotDirection(float &ex, float &ey, float &ez)
+void CLight::getSpotDirection(float &ex, float &ey, float &ez)
 {
 	ex = m_spotDirection[0];
 	ey = m_spotDirection[1];
 	ez = m_spotDirection[2];
 }
 
-float CIvfLight::getSpotCutoff()
+float CLight::getSpotCutoff()
 {
 	return m_spotCutoff;
 }
 
-float CIvfLight::getSpotExponent()
+float CLight::getSpotExponent()
 {
 	return m_spotExponent;
 }
 
 
-void CIvfLight::setNumber(int number)
+void CLight::setNumber(int number)
 {
 	m_lightn = number;
 }

@@ -24,7 +24,7 @@
 
 #include <ivf/IvfRefCountBase.h>
 
-CIvfRefCountBase::CIvfRefCountBase()
+CRefCountBase::CRefCountBase()
 {
 	// Set initial reference count
 
@@ -32,26 +32,26 @@ CIvfRefCountBase::CIvfRefCountBase()
 }
 
 // ------------------------------------------------------------
-CIvfRefCountBase::~CIvfRefCountBase()
+CRefCountBase::~CRefCountBase()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfRefCountBase::addReference()
+void CRefCountBase::addReference()
 {
 	m_ref++;
 }
 
 // ------------------------------------------------------------
-void CIvfRefCountBase::deleteReference()
+void CRefCountBase::deleteReference()
 {
 	if (m_ref>0)
 		m_ref--;
 }
 
 // ------------------------------------------------------------
-bool CIvfRefCountBase::referenced()
+bool CRefCountBase::referenced()
 {
 	if (m_ref>0)
 		return true;
@@ -60,7 +60,7 @@ bool CIvfRefCountBase::referenced()
 }
 
 // ------------------------------------------------------------
-int CIvfRefCountBase::getRefCount()
+int CRefCountBase::getRefCount()
 {
 	return m_ref;
 }

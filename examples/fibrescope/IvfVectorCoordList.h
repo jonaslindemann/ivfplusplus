@@ -21,8 +21,8 @@
 // Comments and suggestions to jonas.lindemann@byggmek.lth.se
 //
 
-#ifndef _CIvfVectorCoordList_h_
-#define _CIvfVectorCoordList_h_
+#ifndef _CVectorCoordList_h_
+#define _CVectorCoordList_h_
 
 #include <ivf/IvfBase.h>
 #include <ivf/IvfGLPrimitive.h>
@@ -31,30 +31,30 @@
 
 #include "IvfCoordList.h"
 
-IvfSmartPointer(CIvfVectorCoordList);
+IvfSmartPointer(CVectorCoordList);
 
-class CIvfVectorCoordList : public CIvfCoordList {
+class CVectorCoordList : public CCoordList {
 private:
-	std::vector<CIvfVec3dPtr> m_coords;
-	std::vector<CIvfColorPtr> m_colors;
+	std::vector<CVec3dPtr> m_coords;
+	std::vector<CColorPtr> m_colors;
 public:
-	CIvfVectorCoordList();
-	virtual ~CIvfVectorCoordList();
+	CVectorCoordList();
+	virtual ~CVectorCoordList();
 
-	IvfClassInfo("CIvfVectorCoordList",CIvfCoordList);
+	IvfClassInfo("CVectorCoordList",CCoordList);
 	
 	void readFromStream(std::istream &in);
 	void saveToStream(std::ostream &out);
 
 	void addCoord(double x, double y, double z);
 	void addCoord(double x, double y, double z, float r, float g, float b);
-	void addCoord(CIvfVec3d* coord);
+	void addCoord(CVec3d* coord);
 
 	void setColor(long idx, float r, float g, float b);
 	void getColor(long idx, float &r, float &g, float &b);
 	
 	void getCoord(long idx, double &x, double &y, double &z);
-	CIvfVec3d* getCoord(long idx);
+	CVec3d* getCoord(long idx);
 
 	long getSize();
 	void clear();

@@ -29,7 +29,7 @@
 
 #include <ivfdef/IvfSingletonDestroyer.h>
 
-IvfStdPointer(CIvfRasterization);
+IvfStdPointer(CRasterization);
 
 /**
  * Rasterisation singleton class
@@ -39,10 +39,10 @@ IvfStdPointer(CIvfRasterization);
  * The class is accesssed in the following way:
  *
  * \code
- * CIvfRasterizationPtr rasterOps = CIvfRasterization::getInstance();
+ * CIvfRasterizationPtr rasterOps = CRasterization::getInstance();
  * \endcode
  */
-class IVF_API CIvfRasterization : public CIvfBase {
+class IVF_API CRasterization : public CBase {
 public:
 	enum TCullFace {
 		CF_FRONT,
@@ -60,13 +60,13 @@ public:
 		PM_FILL
 	};
 private:
-	static CIvfRasterization* m_instance;
-	static CIvfSingletonDestroyer<CIvfRasterization> m_destroyer;
+	static CRasterization* m_instance;
+	static CSingletonDestroyer<CRasterization> m_destroyer;
 public:
 	/** Singleton access method */
-	static CIvfRasterization* getInstance();
+	static CRasterization* getInstance();
 
-	IvfClassInfo("CIvfRasterization",CIvfBase);
+	IvfClassInfo("CRasterization",CBase);
 
 	/** Sets OpenGL polygon mode see TPolygonMode */
 	void setPolygonMode(TTargetFace face, TPolygonMode mode);
@@ -107,8 +107,8 @@ public:
 	/** Set the face to be culled, see TCullFace */
 	void setCullFace(TCullFace face);
 protected:
-	CIvfRasterization();
-	friend class CIvfSingletonDestroyer<CIvfRasterization>;
+	CRasterization();
+	friend class CSingletonDestroyer<CRasterization>;
 
 };
 

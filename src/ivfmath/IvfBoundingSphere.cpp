@@ -21,7 +21,7 @@
 
 #include <ivfmath/IvfBoundingSphere.h>
 
-CIvfBoundingSphere::CIvfBoundingSphere()
+CBoundingSphere::CBoundingSphere()
 {
 	m_radius = 0.0;
 	m_globalPos[0] = 0.0;
@@ -29,29 +29,29 @@ CIvfBoundingSphere::CIvfBoundingSphere()
 	m_globalPos[2] = 0.0;
 }
 
-CIvfBoundingSphere::~CIvfBoundingSphere()
+CBoundingSphere::~CBoundingSphere()
 {
 
 }
 
-double CIvfBoundingSphere::getRadius()
+double CBoundingSphere::getRadius()
 {
 	return m_radius;
 }
 
-void CIvfBoundingSphere::setRadius(double radius)
+void CBoundingSphere::setRadius(double radius)
 {
 	m_radius = radius;
 }
 
-void CIvfBoundingSphere::setGlobalPosition(double x, double y, double z)
+void CBoundingSphere::setGlobalPosition(double x, double y, double z)
 {
 	m_globalPos[0] = x;
 	m_globalPos[1] = y;
 	m_globalPos[2] = z;
 }
 
-void CIvfBoundingSphere::getGlobalPosition(double &x, double &y, double &z)
+void CBoundingSphere::getGlobalPosition(double &x, double &y, double &z)
 {
 	x = m_globalPos[0];
 	y = m_globalPos[1];

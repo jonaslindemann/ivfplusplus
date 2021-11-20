@@ -27,17 +27,17 @@
 
 #include <ivf/IvfShape.h>
 
-IvfSmartPointer(CIvfLight);
+IvfSmartPointer(CLight);
 
 /**
  * Light class
  *
- * Implements a single OpenGL light source. Instances of the CIvfLight
- * class should be retrieved from the CIvfLighting singleton.
+ * Implements a single OpenGL light source. Instances of the CLight
+ * class should be retrieved from the CLighting singleton.
  *
  * @author Carl-Johan Lejdfors and Jonas Lindemann
  */
-class IVF_API CIvfLight : public CIvfShape {
+class IVF_API CLight : public CShape {
 public:
 	enum TLightType {
 		LT_POINT,
@@ -62,8 +62,8 @@ private:
 	TLightType m_lightType;
 	bool m_enabled;
 public:
-	CIvfLight();
-	virtual ~CIvfLight();
+	CLight();
+	virtual ~CLight();
 
 	/** Enable light */
 	void enable();
@@ -77,7 +77,7 @@ public:
 	/** Set the number of the light = GL_LIGHT0 + number */
 	void setNumber(int number);
 
-	IvfClassInfo("CIvfLight",CIvfShape);
+	IvfClassInfo("CLight",CShape);
 
 	/** Set ambient light components */
 	void setAmbientColor( const float r, const float g, 

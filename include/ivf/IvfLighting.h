@@ -30,17 +30,17 @@
 
 #include <ivfdef/IvfSingletonDestroyer.h>
 
-IvfStdPointer(CIvfLighting);
+IvfStdPointer(CLighting);
 
 /**
  * Lighting singleton class
  *
- * The CIvfLighting singleton encapsulates OpenGL lighting. 
- * An instance of the CIvfLighting class is retrieved using the
+ * The CLighting singleton encapsulates OpenGL lighting. 
+ * An instance of the CLighting class is retrieved using the
  * getInstance() method. See the following code:
  *
  * \code
- * CIvfLightingPtr lighting = CIvfLighting::getInstance();
+ * CIvfLightingPtr lighting = CLighting::getInstance();
  * lighting->enable();
  * CIvfLightPtr light = lighting->getLight(0);
  * light->enable();
@@ -49,18 +49,18 @@ IvfStdPointer(CIvfLighting);
  *
  * @author Carl-Johan Lejdfors and Jonas Lindemann
  */
-class IVF_API CIvfLighting : public CIvfBase {
+class IVF_API CLighting : public CBase {
 private:
-	static CIvfLighting* m_instance;
-	static CIvfSingletonDestroyer<CIvfLighting> m_destroyer;
-	std::vector<CIvfLight*> m_lights;
+	static CLighting* m_instance;
+	static CSingletonDestroyer<CLighting> m_destroyer;
+	std::vector<CLight*> m_lights;
 	GLfloat m_ambient[4];
 	GLint m_local[1], m_twoside[1];
 	std::vector<bool> m_enabled;
-public:	/** Return instance of CIvfLighting */
-	static CIvfLighting* getInstance();
+public:	/** Return instance of CLighting */
+	static CLighting* getInstance();
 
-	IvfClassInfo("CIvfLighting",CIvfBase);
+	IvfClassInfo("CLighting",CBase);
 
 
 	/** Renders all lights */
@@ -104,7 +104,7 @@ public:	/** Return instance of CIvfLighting */
 	 *
 	 * param idx should be between 0 and getSize()-1
 	 */
-	CIvfLight* getLight(int idx);
+	CLight* getLight(int idx);
 
 	/** Return the maximum light sources */
 	int getSize();
@@ -119,9 +119,9 @@ public:	/** Return instance of CIvfLighting */
 	void saveEnabledState();
 protected:
 	/** Protected constructor (do not use) */
-	CIvfLighting();
-	~CIvfLighting();
-	friend class CIvfSingletonDestroyer<CIvfLighting>;
+	CLighting();
+	~CLighting();
+	friend class CSingletonDestroyer<CLighting>;
 };
  
 #endif 

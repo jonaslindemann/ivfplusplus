@@ -28,7 +28,7 @@
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfBase.h>
 
-IvfSmartPointer(CIvfRenderState);
+IvfSmartPointer(CRenderState);
 
 /**
  * Render state class
@@ -36,17 +36,17 @@ IvfSmartPointer(CIvfRenderState);
  * This class manages a OpenGL state change. This class
  * is an abstract class, and should not be used directly.
  */
-class IVF_API CIvfRenderState : public CIvfBase {
+class IVF_API CRenderState : public CBase {
 private:
 
 public:
-	/** CIvfRenderState constructor */
-	CIvfRenderState();
+	/** CRenderState constructor */
+	CRenderState();
 
-	/** CIvfRenderState destructor */
-	virtual ~CIvfRenderState();
+	/** CRenderState destructor */
+	virtual ~CRenderState();
 
-	IvfClassInfo("CIvfRenderState",CIvfBase);
+	IvfClassInfo("CRenderState",CBase);
 
 	/** 
 	 * Applies state

@@ -26,22 +26,22 @@
 
 #include <ivf/IvfGlobalState.h>
 
-CIvfSceneBase::CIvfSceneBase()
+CSceneBase::CSceneBase()
 {
-	m_view = new CIvfCamera();
-	m_composite = new CIvfComposite();
-	m_preComposite = new CIvfComposite();
-	m_postComposite = new CIvfComposite();
+	m_view = new CCamera();
+	m_composite = new CComposite();
+	m_preComposite = new CComposite();
+	m_postComposite = new CComposite();
 
-	m_culling = new CIvfCulling();
+	m_culling = new CCulling();
 	m_culling->setComposite(m_composite);
 	m_culling->setCullView(m_view);
 
-	m_selection = new CIvfBufferSelection();
+	m_selection = new CBufferSelection();
 	m_selection->setView(m_view);
 	m_selection->setComposite(m_composite);
 
-	m_lighting = CIvfLighting::getInstance();
+	m_lighting = CLighting::getInstance();
 
 	m_lightMode = LM_LOCAL;
 	m_stereoMode = SM_NONE;
@@ -59,68 +59,68 @@ CIvfSceneBase::CIvfSceneBase()
     m_shadowColor[2] = 0.35;
 }
 
-CIvfSceneBase::~CIvfSceneBase()
+CSceneBase::~CSceneBase()
 {
 }
 
 
 
-void CIvfSceneBase::setMultipass(bool flag)
+void CSceneBase::setMultipass(bool flag)
 {
 	m_multiPass = flag;
 }
 
-bool CIvfSceneBase::getMultipass()
+bool CSceneBase::getMultipass()
 {
 	return m_multiPass;
 }
 
-void CIvfSceneBase::setPasses(int passes)
+void CSceneBase::setPasses(int passes)
 {
 	m_nPasses = passes;
 }
 
-int CIvfSceneBase::getPasses()
+int CSceneBase::getPasses()
 {
 	return m_nPasses;
 }
 
-void CIvfSceneBase::defaultLocalLighting(int pass)
+void CSceneBase::defaultLocalLighting(int pass)
 {
 	if (m_lightMode == LM_LOCAL)
 		if (m_lighting != NULL)
 			m_lighting->render();
 }
 
-void CIvfSceneBase::doLocalLighting(int pass)
+void CSceneBase::doLocalLighting(int pass)
 {
 	defaultLocalLighting(pass);
 }
 
-void CIvfSceneBase::defaultViewSetup(int pass)
+void CSceneBase::defaultViewSetup(int pass)
 {
 	if (m_view!=NULL)
 		m_view->render();
 }
 
-void CIvfSceneBase::doViewSetup(int pass)
+void CSceneBase::doViewSetup(int pass)
 {
 	defaultViewSetup(pass);
 }
 
-void CIvfSceneBase::defaultWorldLighting(int pass)
+void CSceneBase::defaultWorldLighting(int pass)
 {
 	if (m_lightMode == LM_WORLD)
 		if (m_lighting != NULL)
 			m_lighting->render();
 }
 
-void CIvfSceneBase::doWorldLighting(int pass)
+void CSceneBase::doWorldLighting(int pass)
 {
 	defaultWorldLighting(pass);
 }
 
-void CIvfSceneBase::defaultSceneRender(int pass)
+void CSceneBase::defaultSceneRender(int pass)
 {
 	m_preComposite->render();
 	m_composite->render();
@@ -133,25 +133,25 @@ void CIvfSceneBase::defaultSceneRender(int pass)
         glPushAttrib(GL_ENABLE_BIT);
         glDisable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
-        CIvfGlobalState::getInstance()->disableColorOutput();
-        CIvfGlobalState::getInstance()->disableTextureRendering();
+        CGlobalState::getInstance()->disableColorOutput();
+        CGlobalState::getInstance()->disableTextureRendering();
         glColor3d(m_shadowColor[0], m_shadowColor[1], m_shadowColor[2]);
         m_preComposite->render();
         m_composite->render();
         m_postComposite->render();
-        CIvfGlobalState::getInstance()->enableColorOutput();
-        CIvfGlobalState::getInstance()->enableTextureRendering();
+        CGlobalState::getInstance()->enableColorOutput();
+        CGlobalState::getInstance()->enableTextureRendering();
         glPopAttrib();
         glPopMatrix();
     }
 }
 
-void CIvfSceneBase::doRender(int pass)
+void CSceneBase::doRender(int pass)
 {
 	defaultSceneRender(pass);
 }
 
-void CIvfSceneBase::doViewAndRender(int pass)
+void CSceneBase::doViewAndRender(int pass)
 {
 	doLocalLighting(pass);
 	doViewSetup(pass);
@@ -159,7 +159,7 @@ void CIvfSceneBase::doViewAndRender(int pass)
 	doRender(pass);
 }
 
-void CIvfSceneBase::defaultRendering()
+void CSceneBase::defaultRendering()
 {
 	if (m_multiPass)
 	{
@@ -185,7 +185,7 @@ void CIvfSceneBase::defaultRendering()
 		doViewAndRender(0);
 }
 
-void CIvfSceneBase::doMultipass(int pass)
+void CSceneBase::doMultipass(int pass)
 {
 	doLocalLighting(pass);
 	doViewSetup(pass);
@@ -193,7 +193,7 @@ void CIvfSceneBase::doMultipass(int pass)
 	doRender(pass);
 }
 
-void CIvfSceneBase::doCreateGeometry()
+void CSceneBase::doCreateGeometry()
 {
 	if (m_useCulling)
 		m_culling->cull();
@@ -205,8 +205,8 @@ void CIvfSceneBase::doCreateGeometry()
 	case SM_ANAGLYPH:
 		if (m_view->isClass("CIvfCamera"))
 		{
-			CIvfView* view = m_view;
-			CIvfCamera* camera = (CIvfCamera*)view;
+			CView* view = m_view;
+			CCamera* camera = (CCamera*)view;
 
 			glPushMatrix();
 
@@ -229,7 +229,7 @@ void CIvfSceneBase::doCreateGeometry()
 				if (m_lighting != NULL)
 					m_lighting->render();
 
-			camera->setStereoEye(CIvfCamera::SE_LEFT);
+			camera->setStereoEye(CCamera::SE_LEFT);
 			camera->initialize();
 
 			camera->render();
@@ -266,7 +266,7 @@ void CIvfSceneBase::doCreateGeometry()
 				if (m_lighting != NULL)
 					m_lighting->render();
 
-			camera->setStereoEye(CIvfCamera::SE_RIGHT);
+			camera->setStereoEye(CCamera::SE_RIGHT);
 			camera->initialize();
 
 			camera->render();
@@ -288,8 +288,8 @@ void CIvfSceneBase::doCreateGeometry()
 	case SM_QUAD_BUFFER:
 		if (m_view->isClass("CIvfCamera"))
 		{
-			CIvfView* view = m_view;
-			CIvfCamera* camera = (CIvfCamera*)view;
+			CView* view = m_view;
+			CCamera* camera = (CCamera*)view;
 
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
@@ -300,7 +300,7 @@ void CIvfSceneBase::doCreateGeometry()
 				if (m_lighting != NULL)
 					m_lighting->render();
 
-			camera->setStereoEye(CIvfCamera::SE_LEFT);
+			camera->setStereoEye(CCamera::SE_LEFT);
 			camera->initialize();
 
 			camera->render();
@@ -323,7 +323,7 @@ void CIvfSceneBase::doCreateGeometry()
 				if (m_lighting != NULL)
 					m_lighting->render();
 
-			camera->setStereoEye(CIvfCamera::SE_RIGHT);
+			camera->setStereoEye(CCamera::SE_RIGHT);
 			camera->initialize();
 
 			camera->render();
@@ -344,27 +344,27 @@ void CIvfSceneBase::doCreateGeometry()
 }
 
 
-void CIvfSceneBase::setLightMode(TLightMode mode)
+void CSceneBase::setLightMode(TLightMode mode)
 {
 	m_lightMode = mode;
 }
 
-CIvfSceneBase::TLightMode CIvfSceneBase::getLightMode()
+CSceneBase::TLightMode CSceneBase::getLightMode()
 {
 	return m_lightMode;
 }
 
-void CIvfSceneBase::setCamera(CIvfCamera *camera)
+void CSceneBase::setCamera(CCamera *camera)
 {
 	this->setView(camera);
 }
 
-CIvfComposite* CIvfSceneBase::getComposite()
+CComposite* CSceneBase::getComposite()
 {
 	return m_composite;
 }
 
-void CIvfSceneBase::setUseCulling(bool flag)
+void CSceneBase::setUseCulling(bool flag)
 {
 	m_useCulling = flag;
 
@@ -372,12 +372,12 @@ void CIvfSceneBase::setUseCulling(bool flag)
 		m_composite->initBoundingSphere();
 }
 
-bool CIvfSceneBase::getUseCulling()
+bool CSceneBase::getUseCulling()
 {
 	return m_useCulling;
 }
 
-void CIvfSceneBase::addChild(CIvfShape *shape)
+void CSceneBase::addChild(CShape *shape)
 {
 	if (m_useCulling)
 		shape->initBoundingSphere();
@@ -386,33 +386,33 @@ void CIvfSceneBase::addChild(CIvfShape *shape)
 	m_dirty = true;
 }
 
-CIvfShape* CIvfSceneBase::removeChild(int idx)
+CShape* CSceneBase::removeChild(int idx)
 {
 	return m_composite->removeChild(idx);
 	m_dirty = true;
 }
 
-CIvfShape* CIvfSceneBase::removeChild(CIvfShape *shape)
+CShape* CSceneBase::removeChild(CShape *shape)
 {
 	return m_composite->removeShape(shape);
 	m_dirty = true;
 }
 
-void CIvfSceneBase::deleteAll()
+void CSceneBase::deleteAll()
 {
 	m_composite->deleteAll();
 	m_dirty = true;
     this->doPostClear();
 }
 
-void CIvfSceneBase::clear()
+void CSceneBase::clear()
 {
 	m_composite->clear();
 	m_dirty = true;
     this->doPostClear();
 }
 
-int CIvfSceneBase::pick(int x, int y)
+int CSceneBase::pick(int x, int y)
 {
 	if (m_dirty)
 		updateSelection();
@@ -420,76 +420,76 @@ int CIvfSceneBase::pick(int x, int y)
 	return m_selection->pick(x, y);
 }
 
-void CIvfSceneBase::updateSelection()
+void CSceneBase::updateSelection()
 {
 	m_selection->update();
 }
 
-CIvfShape* CIvfSceneBase::getSelectedShape()
+CShape* CSceneBase::getSelectedShape()
 {
 	return m_selection->getSelectedShape();
 }
 
-void CIvfSceneBase::setView(CIvfView *view)
+void CSceneBase::setView(CView *view)
 {
 	m_view = view;
 	m_culling->setCullView(m_view);
 	m_selection->setView(m_view);
 }
 
-CIvfView* CIvfSceneBase::getView()
+CView* CSceneBase::getView()
 {
 	return m_view;
 }
 
-CIvfCamera* CIvfSceneBase::getCamera()
+CCamera* CSceneBase::getCamera()
 {
-	CIvfView* view = m_view;
+	CView* view = m_view;
 
 	if (m_view->isClass("CIvfCamera"))
-		return (CIvfCamera*) view;
+		return (CCamera*) view;
 	else
 		return NULL;
 }
 
-CIvfComposite* CIvfSceneBase::getPostComposite()
+CComposite* CSceneBase::getPostComposite()
 {
 	return m_postComposite;
 }
 
-CIvfComposite* CIvfSceneBase::getPreComposite()
+CComposite* CSceneBase::getPreComposite()
 {
 	return m_preComposite;
 }
 
-void CIvfSceneBase::doResize(int width, int height)
+void CSceneBase::doResize(int width, int height)
 {
 	m_view->setViewPort(width, height);
 	m_view->initialize();
 }
 
-void CIvfSceneBase::doPostClear()
+void CSceneBase::doPostClear()
 {
     
 }
 
 
-void CIvfSceneBase::setStereoMode(TStereoMode mode)
+void CSceneBase::setStereoMode(TStereoMode mode)
 {
 	m_stereoMode = mode;
 
 	if (m_view->isClass("CIvfCamera"))
 	{
-		CIvfView* view = m_view;
-		CIvfCamera* camera = (CIvfCamera*)view;
+		CView* view = m_view;
+		CCamera* camera = (CCamera*)view;
 
 		switch (m_stereoMode) {
 		case SM_NONE:
-			CIvfGlobalState::getInstance()->disableGreyscaleRendering();
+			CGlobalState::getInstance()->disableGreyscaleRendering();
 			camera->setStereo(false);
 			break;
 		case SM_ANAGLYPH:
-			CIvfGlobalState::getInstance()->enableGreyscaleRendering();
+			CGlobalState::getInstance()->enableGreyscaleRendering();
 		case SM_QUAD_BUFFER:
 			camera->setStereo(true);
 			break;
@@ -500,47 +500,47 @@ void CIvfSceneBase::setStereoMode(TStereoMode mode)
 	}
 }
 
-CIvfShape* CIvfSceneBase::removeShape(CIvfShape *shape)
+CShape* CSceneBase::removeShape(CShape *shape)
 {
 	return m_composite->removeShape(shape);
 }
 
-CIvfShape* CIvfSceneBase::getSelectedShape(int idx)
+CShape* CSceneBase::getSelectedShape(int idx)
 {
 	return m_selection->getSelectedShape(idx);
 }
 
-int CIvfSceneBase::getSelectionSize()
+int CSceneBase::getSelectionSize()
 {
 	return m_selection->getSize();
 }
 
-CIvfSelectedShapesVector& CIvfSceneBase::getSelectedShapes()
+CIvfSelectedShapesVector& CSceneBase::getSelectedShapes()
 {
 	return m_selection->getSelectedShapes();
 }
 
-void CIvfSceneBase::setAnaglyphColorPair(TAnaglyphColorPair colorPair)
+void CSceneBase::setAnaglyphColorPair(TAnaglyphColorPair colorPair)
 {
 	m_colorPair = colorPair;
 }
 
-CIvfSceneBase::TAnaglyphColorPair CIvfSceneBase::getAnaglyphColorPair()
+CSceneBase::TAnaglyphColorPair CSceneBase::getAnaglyphColorPair()
 {
 	return m_colorPair;
 }
 
-void CIvfSceneBase::setMultipassEvent(CIvfMultipassEvent* evt)
+void CSceneBase::setMultipassEvent(CMultipassEvent* evt)
 {
 	m_multipassEvent = evt;
 }
 
-void CIvfSceneBase::setRenderFlatShadow(bool flag)
+void CSceneBase::setRenderFlatShadow(bool flag)
 {
     m_renderFlatShadow = flag;
 }
 
-void CIvfSceneBase::setShadowColor(double red, double green, double blue)
+void CSceneBase::setShadowColor(double red, double green, double blue)
 {
     m_shadowColor[0] = red;
     m_shadowColor[1] = green;

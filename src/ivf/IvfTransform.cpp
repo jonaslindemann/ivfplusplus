@@ -23,14 +23,14 @@
 
 
 // ------------------------------------------------------------
-CIvfTransform::CIvfTransform()
-:CIvfComposite()
+CTransform::CTransform()
+:CComposite()
 {
 
 }
 
 // ------------------------------------------------------------
-CIvfTransform::~CIvfTransform()
+CTransform::~CTransform()
 {
 
 }

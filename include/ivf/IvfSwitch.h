@@ -27,7 +27,7 @@
 
 #include <ivf/IvfComposite.h>
 
-IvfSmartPointer(CIvfSwitch);
+IvfSmartPointer(CSwitch);
 
 /**
  * Switch node
@@ -37,15 +37,15 @@ IvfSmartPointer(CIvfSwitch);
  * currentChild property.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfSwitch : public CIvfComposite {
+class IVF_API CSwitch : public CComposite {
 public:
 	/** Constructor */
-	CIvfSwitch ();
+	CSwitch ();
 
 	/** Destructor */
-	virtual ~CIvfSwitch ();
+	virtual ~CSwitch ();
 
-	IvfClassInfo("CIvfSwitch",CIvfComposite);
+	IvfClassInfo("CSwitch",CComposite);
 
 	/** Set current visible child */
 	void setCurrentChild(int child);

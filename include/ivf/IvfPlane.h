@@ -27,12 +27,12 @@
 
 #include <ivf/IvfShape.h>
 
-class CIvfPlane : public CIvfShape {
+class CPlane : public CShape {
 private:
 
 public:
-	CIvfPlane();
-	virtual ~CIvfPlane();
+	CPlane();
+	virtual ~CPlane();
 };
 
 #endif 

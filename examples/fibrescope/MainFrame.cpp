@@ -8,7 +8,7 @@ static bool g_playing = false;
 void timer_callback(void * v) {
   if (g_playing)
   {
-  	CIvfCustomWidget* widget = (CIvfCustomWidget*)v;
+  	CCustomWidget* widget = (CCustomWidget*)v;
   	widget->nextStep();
   	g_mainFrame->sldTimeStep->value(widget->getTimeStep());
   }
@@ -16,7 +16,7 @@ void timer_callback(void * v) {
 }
 
 void idle_callback(void* p) {
-  CIvfCustomWidget* widget = (CIvfCustomWidget*)p;
+  CCustomWidget* widget = (CCustomWidget*)p;
   widget->nextStep();
 }
 
@@ -323,35 +323,35 @@ void CMainFrame::cb_mnuOptionFibreNetworkFibreLighting(Fl_Menu_* o, void* v) {
 }
 
 void CMainFrame::cb_mnuOptionsStereoNone_i(Fl_Menu_*, void*) {
-  ivfCustomWidget->setStereoMode(CIvfCustomWidget::SM_NONE);
+  ivfCustomWidget->setStereoMode(CCustomWidget::SM_NONE);
 }
 void CMainFrame::cb_mnuOptionsStereoNone(Fl_Menu_* o, void* v) {
   ((CMainFrame*)(o->parent()->user_data()))->cb_mnuOptionsStereoNone_i(o,v);
 }
 
 void CMainFrame::cb_mnuOptionsStereoAnaglyph_i(Fl_Menu_*, void*) {
-  ivfCustomWidget->setStereoMode(CIvfCustomWidget::SM_ANAGLYPH);
+  ivfCustomWidget->setStereoMode(CCustomWidget::SM_ANAGLYPH);
 }
 void CMainFrame::cb_mnuOptionsStereoAnaglyph(Fl_Menu_* o, void* v) {
   ((CMainFrame*)(o->parent()->user_data()))->cb_mnuOptionsStereoAnaglyph_i(o,v);
 }
 
 void CMainFrame::cb_mnuOptionsStereoQuadBuffer_i(Fl_Menu_*, void*) {
-  ivfCustomWidget->setStereoMode(CIvfCustomWidget::SM_QUAD_BUFFER);
+  ivfCustomWidget->setStereoMode(CCustomWidget::SM_QUAD_BUFFER);
 }
 void CMainFrame::cb_mnuOptionsStereoQuadBuffer(Fl_Menu_* o, void* v) {
   ((CMainFrame*)(o->parent()->user_data()))->cb_mnuOptionsStereoQuadBuffer_i(o,v);
 }
 
 void CMainFrame::cb_mnuOptionsViewModeExaminer_i(Fl_Menu_*, void*) {
-  ivfCustomWidget->setViewMode(CIvfCustomWidget::VM_EXAMINER);
+  ivfCustomWidget->setViewMode(CCustomWidget::VM_EXAMINER);
 }
 void CMainFrame::cb_mnuOptionsViewModeExaminer(Fl_Menu_* o, void* v) {
   ((CMainFrame*)(o->parent()->user_data()))->cb_mnuOptionsViewModeExaminer_i(o,v);
 }
 
 void CMainFrame::cb_mnuOptionsViewModeFly_i(Fl_Menu_*, void*) {
-  ivfCustomWidget->setViewMode(CIvfCustomWidget::VM_FLY);
+  ivfCustomWidget->setViewMode(CCustomWidget::VM_FLY);
 }
 void CMainFrame::cb_mnuOptionsViewModeFly(Fl_Menu_* o, void* v) {
   ((CMainFrame*)(o->parent()->user_data()))->cb_mnuOptionsViewModeFly_i(o,v);
@@ -1484,7 +1484,7 @@ CMainFrame::CMainFrame() {
       mnuMain->textsize(12);
       mnuMain->menu(menu_mnuMain);
     } // Fl_Menu_Bar* mnuMain
-    { ivfCustomWidget = new CIvfCustomWidget(33, 58, 559, 469);
+    { ivfCustomWidget = new CCustomWidget(33, 58, 559, 469);
       ivfCustomWidget->box(FL_DOWN_BOX);
       ivfCustomWidget->color(FL_BACKGROUND_COLOR);
       ivfCustomWidget->selection_color(FL_BACKGROUND_COLOR);
@@ -1495,7 +1495,7 @@ CMainFrame::CMainFrame() {
       ivfCustomWidget->align(Fl_Align(FL_ALIGN_CENTER));
       ivfCustomWidget->when(FL_WHEN_CHANGED);
       Fl_Group::current()->resizable(ivfCustomWidget);
-    } // CIvfCustomWidget* ivfCustomWidget
+    } // CCustomWidget* ivfCustomWidget
     { scrTop = new Fl_Scroll(0, 25, 683, 32);
       scrTop->box(FL_ENGRAVED_BOX);
       { sldTimeStep = new Fl_Value_Slider(224, 30, 135, 22, "Step");

@@ -25,23 +25,23 @@
 #include <ivfimage/IvfSgiImage.h>
 #include <ivf/ivfconfig.h>
 
-CIvfSgiImage::CIvfSgiImage()
+CSgiImage::CSgiImage()
 {
 	m_alphaChannel = false;
 }
 
-CIvfSgiImage::CIvfSgiImage(const char *name)
-:CIvfFileImage(name)
+CSgiImage::CSgiImage(const char *name)
+:CFileImage(name)
 {
 	m_alphaChannel = false;
 }
 
-CIvfSgiImage::~CIvfSgiImage()
+CSgiImage::~CSgiImage()
 {
 
 }
 
-void CIvfSgiImage::expandrow(unsigned char *optr, unsigned char *iptr, int z)
+void CSgiImage::expandrow(unsigned char *optr, unsigned char *iptr, int z)
 {
 	unsigned char pixel, count;
 
@@ -73,7 +73,7 @@ void CIvfSgiImage::expandrow(unsigned char *optr, unsigned char *iptr, int z)
 	}
 }
 
-void CIvfSgiImage::convertLong(GLuint *array, unsigned int length)
+void CSgiImage::convertLong(GLuint *array, unsigned int length)
 {
     unsigned long b1, b2, b3, b4;
     unsigned char *ptr;
@@ -88,7 +88,7 @@ void CIvfSgiImage::convertLong(GLuint *array, unsigned int length)
     }
 }
 
-bool CIvfSgiImage::read()
+bool CSgiImage::read()
 {
 	unsigned char buf[80];
 	unsigned long i, j, k;
@@ -271,7 +271,7 @@ bool CIvfSgiImage::read()
 }
 
 
-unsigned short CIvfSgiImage::getshort(FILE *inf)
+unsigned short CSgiImage::getshort(FILE *inf)
 {
 	unsigned char buf[2];
 	size_t s;
@@ -280,7 +280,7 @@ unsigned short CIvfSgiImage::getshort(FILE *inf)
 	return (buf[0]<<8)+(buf[1]<<0);
 }
 
-unsigned long CIvfSgiImage::getlong(FILE *inf)
+unsigned long CSgiImage::getlong(FILE *inf)
 {
 	unsigned char buf[4];
 	size_t s;
@@ -289,7 +289,7 @@ unsigned long CIvfSgiImage::getlong(FILE *inf)
 	return (buf[0]<<24)+(buf[1]<<16)+(buf[2]<<8)+(buf[3]<<0);
 }
 
-unsigned char CIvfSgiImage::getbyte(FILE *inf)
+unsigned char CSgiImage::getbyte(FILE *inf)
 {
 	unsigned char buf[1];
 	size_t s;
@@ -298,7 +298,7 @@ unsigned char CIvfSgiImage::getbyte(FILE *inf)
 	return buf[0]<<0;
 }
 
-void CIvfSgiImage::setAlphaChannel(bool flag)
+void CSgiImage::setAlphaChannel(bool flag)
 {
 	m_alphaChannel = flag;
 }

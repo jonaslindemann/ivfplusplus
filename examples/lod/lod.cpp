@@ -34,7 +34,7 @@ using namespace std;
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class CExampleWindow: public CGlutBase {
 private:
 
 	// Camera movement state variables
@@ -51,15 +51,15 @@ private:
 
 	// Ivf++ object declarations
 
-	CIvfCameraPtr		m_camera;
-	CIvfLightPtr		m_light;
-	CIvfCompositePtr	m_scene;
+	CCameraPtr		m_camera;
+	CLightPtr		m_light;
+	CCompositePtr	m_scene;
 
-	CIvfLODPtr			m_lod1;
-	CIvfLODPtr			m_lod2;
-	CIvfLODPtr			m_lod3;
-	CIvfLODPtr			m_lod4;
-	CIvfSwitchPtr		m_switch;
+	CLODPtr			m_lod1;
+	CLODPtr			m_lod2;
+	CLODPtr			m_lod3;
+	CLODPtr			m_lod4;
+	CSwitchPtr		m_switch;
 
 	double m_lodNear;
 	double m_lodFar;
@@ -67,7 +67,7 @@ private:
 	void updateLOD();
 public:
 	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+		:CGlutBase(X, Y, W, H) {};
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -100,41 +100,41 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(0.0, 5.0, 20.0);
 
 	// Create a materials
 
-	CIvfMaterialPtr material = new CIvfMaterial();
+	CMaterialPtr material = new CMaterial();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene
 
-	m_scene = new CIvfComposite();
+	m_scene = new CComposite();
 
 	// Create four spheres with different complexity
 
-	CIvfSpherePtr sphereDetailed = new CIvfSphere();
+	CSpherePtr sphereDetailed = new CSphere();
 	sphereDetailed->setSlices(12);
 	sphereDetailed->setStacks(12);
 	
-	CIvfSpherePtr sphereNormal = new CIvfSphere();
+	CSpherePtr sphereNormal = new CSphere();
 	sphereNormal->setSlices(10);
 	sphereNormal->setStacks(8);
 
-	CIvfSpherePtr sphereSmall = new CIvfSphere();
+	CSpherePtr sphereSmall = new CSphere();
 	sphereSmall->setSlices(8);
 	sphereSmall->setStacks(6);
 	
-	CIvfSpherePtr sphereTiny = new CIvfSphere();
+	CSpherePtr sphereTiny = new CSphere();
 	sphereTiny->setSlices(6);
 	sphereTiny->setStacks(4);
 
 	// Create LOD objects
 
-	m_lod1 = new CIvfLOD();
+	m_lod1 = new CLOD();
 	m_lod1->addChild(sphereDetailed);
 	m_lod1->addChild(sphereNormal);
 	m_lod1->addChild(sphereSmall);
@@ -145,7 +145,7 @@ void CExampleWindow::onInit(int width, int height)
 	m_lod1->setLimits(m_lodNear, m_lodFar);
 	m_scene->addChild(m_lod1);
 	
-	m_lod2 = new CIvfLOD();
+	m_lod2 = new CLOD();
 	m_lod2->addChild(sphereDetailed);
 	m_lod2->addChild(sphereNormal);
 	m_lod2->addChild(sphereSmall);
@@ -156,7 +156,7 @@ void CExampleWindow::onInit(int width, int height)
 	m_lod2->setLimits(m_lodNear, m_lodFar);
 	m_scene->addChild(m_lod2);
 
-	m_lod3 = new CIvfLOD();
+	m_lod3 = new CLOD();
 	m_lod3->addChild(sphereDetailed);
 	m_lod3->addChild(sphereNormal);
 	m_lod3->addChild(sphereSmall);
@@ -167,7 +167,7 @@ void CExampleWindow::onInit(int width, int height)
 	m_lod3->setLimits(m_lodNear, m_lodFar);
 	m_scene->addChild(m_lod3);
 
-	m_lod4 = new CIvfLOD();
+	m_lod4 = new CLOD();
 	m_lod4->addChild(sphereDetailed);
 	m_lod4->addChild(sphereNormal);
 	m_lod4->addChild(sphereSmall);
@@ -180,12 +180,12 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a switch object
 
-	CIvfCubePtr cube = new CIvfCube();
+	CCubePtr cube = new CCube();
 	cube->setMaterial(material);
-	CIvfCylinderPtr cylinder = new CIvfCylinder();
+	CCylinderPtr cylinder = new CCylinder();
 	cylinder->setMaterial(material);
 	
-	m_switch = new CIvfSwitch();
+	m_switch = new CSwitch();
 	m_switch->addChild(cube);
 	m_switch->addChild(cylinder);
 
@@ -193,7 +193,7 @@ void CExampleWindow::onInit(int width, int height)
 	
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 	
 	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
@@ -249,7 +249,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
+		if (getModifierKey() == CWidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -333,7 +333,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window

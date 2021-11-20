@@ -24,7 +24,7 @@
 
 #include <ivfwidget/IvfMouseViewHandler.h>
 
-CIvfMouseViewHandler::CIvfMouseViewHandler(CIvfWidgetBase* widget, CIvfCamera* camera)
+CMouseViewHandler::CMouseViewHandler(CWidgetBase* widget, CCamera* camera)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -54,7 +54,7 @@ CIvfMouseViewHandler::CIvfMouseViewHandler(CIvfWidgetBase* widget, CIvfCamera* c
 	m_widget->addResizeEvent(this);
 }
 
-CIvfMouseViewHandler::~CIvfMouseViewHandler()
+CMouseViewHandler::~CMouseViewHandler()
 {
 	m_widget->removeMouseMoveEvent(this);
 	m_widget->removeMouseDownEvent(this);
@@ -62,13 +62,13 @@ CIvfMouseViewHandler::~CIvfMouseViewHandler()
 	m_widget->removeResizeEvent(this);
 }
 
-void CIvfMouseViewHandler::doMouseDown(int x, int y)
+void CMouseViewHandler::doMouseDown(int x, int y)
 {
 	m_beginX = x;
 	m_beginY = y;
 }
 
-void CIvfMouseViewHandler::doMouseMove(int x, int y)
+void CMouseViewHandler::doMouseMove(int x, int y)
 {
 	if (m_widget!=NULL)
 	{
@@ -123,7 +123,7 @@ void CIvfMouseViewHandler::doMouseMove(int x, int y)
 	}
 }
 
-void CIvfMouseViewHandler::doMouseUp(int x, int y)
+void CMouseViewHandler::doMouseUp(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -133,45 +133,45 @@ void CIvfMouseViewHandler::doMouseUp(int x, int y)
 	m_zoomY = 0.0;
 }
 
-void CIvfMouseViewHandler::setPanScalefactor(double factor)
+void CMouseViewHandler::setPanScalefactor(double factor)
 {
 	m_panScalefactor = factor;
 }
 
-void CIvfMouseViewHandler::setZoomScalefactor(double factor)
+void CMouseViewHandler::setZoomScalefactor(double factor)
 {
 	m_zoomScalefactor = factor;
 }
 
-double CIvfMouseViewHandler::getPanScalefactor()
+double CMouseViewHandler::getPanScalefactor()
 {
 	return m_panScalefactor;
 }
 
-double CIvfMouseViewHandler::getZoomScalefactor()
+double CMouseViewHandler::getZoomScalefactor()
 {
 	return m_zoomScalefactor;
 }
 
-void CIvfMouseViewHandler::onMouseDown(int x, int y)
+void CMouseViewHandler::onMouseDown(int x, int y)
 {
 	if (isActive())
 		doMouseDown(x, y);
 }
 
-void CIvfMouseViewHandler::onMouseMove(int x, int y)
+void CMouseViewHandler::onMouseMove(int x, int y)
 {
 	if (isActive())
 		doMouseMove(x, y);
 }
 
-void CIvfMouseViewHandler::onMouseUp(int x, int y)
+void CMouseViewHandler::onMouseUp(int x, int y)
 {
 	if (isActive())
 		doMouseUp(x, y);
 }
 
-void CIvfMouseViewHandler::onResize(int width, int height)
+void CMouseViewHandler::onResize(int width, int height)
 {
 	m_width = width;
 	m_height = height;
@@ -180,7 +180,7 @@ void CIvfMouseViewHandler::onResize(int width, int height)
 		doResize(width, height);
 }
 
-void CIvfMouseViewHandler::doResize(int width, int height)
+void CMouseViewHandler::doResize(int width, int height)
 {
 	if (m_autoScale)
 	{
@@ -188,91 +188,91 @@ void CIvfMouseViewHandler::doResize(int width, int height)
 	}
 }
 
-void CIvfMouseViewHandler::setAutoScale(bool flag)
+void CMouseViewHandler::setAutoScale(bool flag)
 {
 	m_autoScale = flag;
 }
 
-bool CIvfMouseViewHandler::getAutoScale()
+bool CMouseViewHandler::getAutoScale()
 {
 	return m_autoScale;
 }
 
-void CIvfMouseViewHandler::setAutoScaleBias(double bias)
+void CMouseViewHandler::setAutoScaleBias(double bias)
 {
 	m_autoScaleBias = bias;
 }
 
-double CIvfMouseViewHandler::getAutoScaleBias()
+double CMouseViewHandler::getAutoScaleBias()
 {
 	return m_autoScaleBias;
 }
 
-void CIvfMouseViewHandler::calcAutoScale()
+void CMouseViewHandler::calcAutoScale()
 {
-	CIvfVec3d target = m_camera->getTarget();
-	CIvfVec3d eye = m_camera->getPosition();
-	CIvfVec3d eyeTarget = target-eye;
+	CVec3d target = m_camera->getTarget();
+	CVec3d eye = m_camera->getPosition();
+	CVec3d eyeTarget = target-eye;
 
 	m_panScalefactor = m_autoScaleBias*eyeTarget.length()/m_width;
 	m_zoomScalefactor = m_autoScaleBias*eyeTarget.length()*m_autoScaleBias/m_width;
 	m_rotateScalefactor = 4.0/m_width;
 }
 
-void CIvfMouseViewHandler::setKeyHandling(TKeyHandling keyHandling)
+void CMouseViewHandler::setKeyHandling(TKeyHandling keyHandling)
 {
 	m_keyHandling = keyHandling;
 }
 
-CIvfMouseViewHandler::TKeyHandling CIvfMouseViewHandler::getKeyHandling()
+CMouseViewHandler::TKeyHandling CMouseViewHandler::getKeyHandling()
 {
 	return m_keyHandling;
 }
 
-bool CIvfMouseViewHandler::isRotating()
+bool CMouseViewHandler::isRotating()
 {
 	switch (m_keyHandling) {
 	case KH_NORMAL:
 		return m_widget->isLeftButtonDown();
 	case KH_MIDDLE_BUTTON:
 		return (m_widget->isMiddleButtonDown() && 
-			((m_widget->getModifierKey()!=CIvfWidgetBase::MT_SHIFT)
-			 &&(m_widget->getModifierKey()!=CIvfWidgetBase::MT_CTRL)));
+			((m_widget->getModifierKey()!=CWidgetBase::MT_SHIFT)
+			 &&(m_widget->getModifierKey()!=CWidgetBase::MT_CTRL)));
 	default:
 		return false;
 	}
 }
 
-bool CIvfMouseViewHandler::isZoom()
+bool CMouseViewHandler::isZoom()
 {
 	switch (m_keyHandling) {
 	case KH_NORMAL:
 		return m_widget->isRightButtonDown()&&
-			(m_widget->getModifierKey()==CIvfWidgetBase::MT_SHIFT);
+			(m_widget->getModifierKey()==CWidgetBase::MT_SHIFT);
 	case KH_MIDDLE_BUTTON:
 		return (m_widget->isMiddleButtonDown() && 
-			((m_widget->getModifierKey()==CIvfWidgetBase::MT_SHIFT)
-			 &&(m_widget->getModifierKey()!=CIvfWidgetBase::MT_CTRL)));
+			((m_widget->getModifierKey()==CWidgetBase::MT_SHIFT)
+			 &&(m_widget->getModifierKey()!=CWidgetBase::MT_CTRL)));
 	default:
 		return false;
 	}
 }
 
-bool CIvfMouseViewHandler::isPan()
+bool CMouseViewHandler::isPan()
 {
 	switch (m_keyHandling) {
 	case KH_NORMAL:
 		return m_widget->isRightButtonDown();
 	case KH_MIDDLE_BUTTON:
 		return (m_widget->isMiddleButtonDown() && 
-			((m_widget->getModifierKey()!=CIvfWidgetBase::MT_SHIFT)
-			 &&(m_widget->getModifierKey()==CIvfWidgetBase::MT_CTRL)));
+			((m_widget->getModifierKey()!=CWidgetBase::MT_SHIFT)
+			 &&(m_widget->getModifierKey()==CWidgetBase::MT_CTRL)));
 	default:
 		return false;
 	}
 }
 
-bool CIvfMouseViewHandler::isZoomOrPan()
+bool CMouseViewHandler::isZoomOrPan()
 {
 	return isZoom()||isPan();
 }

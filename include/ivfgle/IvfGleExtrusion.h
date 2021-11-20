@@ -34,20 +34,20 @@
 #include <ivfgle/IvfGleColorArray.h>
 #include <ivfgle/IvfGleContour.h>
 
-IvfSmartPointer(CIvfGleExtrusion);
+IvfSmartPointer(CGleExtrusion);
 
-class IVFGLE_API CIvfGleExtrusion: public CIvfGleExtrudedBase {
+class IVFGLE_API CGleExtrusion: public CGleExtrudedBase {
 private:
-	CIvfGleContourPtr	 m_contour;
+	CGleContourPtr	 m_contour;
 	gleDouble			 m_up[3];
 public:
-	CIvfGleExtrusion();
+	CGleExtrusion();
 
-	IvfClassInfo("CIvfGleExtrusion", CIvfShape);
+	IvfClassInfo("CGleExtrusion", CShape);
 
-	void setContour(CIvfGleContour* contour);
+	void setContour(CGleContour* contour);
 	void setContourUp(double vx, double vy, double vz);
-	void setContourUp(CIvfVec3d& vec);
+	void setContourUp(CVec3d& vec);
 protected:
 	virtual void doCreateGeometry();
 };

@@ -22,7 +22,7 @@
 // Written by Jonas Lindemann
 //
 
-// IvfFileBase.cpp: implementation of the CIvfFileBase class.
+// IvfFileBase.cpp: implementation of the CFileBase class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -32,31 +32,31 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CIvfFileBase::CIvfFileBase()
+CFileBase::CFileBase()
 {
 	m_fileName = "";
 }
 
-CIvfFileBase::~CIvfFileBase()
+CFileBase::~CFileBase()
 {
 }
 
-void CIvfFileBase::setFileName(const std::string& fileName)
+void CFileBase::setFileName(const std::string& fileName)
 {
 	m_fileName = fileName;
 }
 
-CIvfShape* CIvfFileBase::getShape()
+CShape* CFileBase::getShape()
 {
 	return m_shape;
 }
 
-const std::string CIvfFileBase::getFileName()
+const std::string CFileBase::getFileName()
 {
 	return m_fileName.c_str();
 }
 
-void CIvfFileBase::setShape(CIvfShape *shape)
+void CFileBase::setShape(CShape *shape)
 {
 	m_shape = shape;
 }

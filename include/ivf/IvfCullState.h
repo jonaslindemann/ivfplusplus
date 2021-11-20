@@ -27,14 +27,14 @@
 
 #include <ivf/IvfRenderState.h>
 
-IvfSmartPointer(CIvfCullState);
+IvfSmartPointer(CCullState);
 
 /**
  * Culling state class
  * 
  * Sets the polygon culling state for objects
  */
-class IVF_API CIvfCullState : public CIvfRenderState {
+class IVF_API CCullState : public CRenderState {
 public:
 	enum TCullFace {
 		CF_FRONT,
@@ -46,12 +46,12 @@ private:
 	TCullFace m_cullFace;
 public:
 	/** CIvfCullState constructor */
-	CIvfCullState();
+	CCullState();
 
 	/** CIvfCullState destructor */
-	virtual ~CIvfCullState();
+	virtual ~CCullState();
 
-	IvfClassInfo("CIvfCullState",CIvfRenderState);
+	IvfClassInfo("CIvfCullState",CRenderState);
 
 	/** Sets the face to be culled */
 	void setCullFace(TCullFace face);

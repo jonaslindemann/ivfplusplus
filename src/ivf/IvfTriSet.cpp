@@ -25,23 +25,23 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CIvfTriSet::CIvfTriSet()
+CTriSet::CTriSet()
 {
 	m_useColor = false;
 	m_drawInterval = 1;
 }
 
-CIvfTriSet::~CIvfTriSet()
+CTriSet::~CTriSet()
 {
 
 }
 
-void CIvfTriSet::doCreateGeometry()
+void CTriSet::doCreateGeometry()
 {
-	CIvfIndex* coordIdx;
-	CIvfIndex* colorIdx;
-	CIvfIndex* normalIdx;
-	CIvfIndex* textureIdx;
+	CIndex* coordIdx;
+	CIndex* colorIdx;
+	CIndex* normalIdx;
+	CIndex* textureIdx;
 	long i, j;
 
 	glPushAttrib(GL_COLOR_MATERIAL);
@@ -125,32 +125,32 @@ void CIvfTriSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CIvfTriSet::setUseColor(bool flag)
+void CTriSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CIvfTriSet::getUseColor()
+bool CTriSet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CIvfTriSet::calcNormal(CIvfIndex *idx)
+void CTriSet::calcNormal(CIndex *idx)
 {
 	long i;
-	CIvfVec3d* p1;
-	CIvfVec3d* p2;
-	CIvfVec3d* p3;
-	CIvfVec3d u;
-	CIvfVec3d v;
-	CIvfIndex* normalIdx;
+	CVec3d* p1;
+	CVec3d* p2;
+	CVec3d* p3;
+	CVec3d u;
+	CVec3d v;
+	CIndex* normalIdx;
 	//double n[3];
 
-	normalIdx = new CIvfIndex();
+	normalIdx = new CIndex();
 
 	for (i=0; i<idx->getSize(); i+=3)
 	{
-		CIvfVec3d* normal = new CIvfVec3d();
+		CVec3d* normal = new CVec3d();
 
 		p1 = m_coordSet[idx->getIndex(i)];
 		p2 = m_coordSet[idx->getIndex(i+1)];
@@ -182,12 +182,12 @@ void CIvfTriSet::calcNormal(CIvfIndex *idx)
 }
 
 
-void CIvfTriSet::updateVertexNormals()
+void CTriSet::updateVertexNormals()
 {
 	long i, j;
-	CIvfVec3d* vertexNormal;
-	CIvfVec3d* normal;
-	CIvfVec3d averageNormal;
+	CVec3d* vertexNormal;
+	CVec3d* normal;
+	CVec3d averageNormal;
 	double sx, sy, sz;
 	double nx, ny, nz;
 
@@ -218,7 +218,7 @@ void CIvfTriSet::updateVertexNormals()
 	}
 }
 
-void CIvfTriSet::setDrawInterval(int interval)
+void CTriSet::setDrawInterval(int interval)
 {
 	m_drawInterval = interval;
 }

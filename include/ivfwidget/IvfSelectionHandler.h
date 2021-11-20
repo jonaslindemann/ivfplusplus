@@ -32,7 +32,7 @@
 #include <ivf/IvfBufferSelection.h>
 
 /** Single selection event class */
-class IVFWIDGET_API CIvfSingleSelectionEvent : public CIvfEventBase {
+class IVFWIDGET_API CSingleSelectionEvent : public CEventBase {
 public:
 	/**
 	 * Single select method
@@ -40,11 +40,11 @@ public:
 	 * This method is called when a selection has been made
 	 * i.e. the user has has clicked in the viewport..
 	 */
-	virtual void onSelect(CIvfShape* shape) {};
+	virtual void onSelect(CShape* shape) {};
 };
 
 /** Multiple selection event class */
-class IVFWIDGET_API CIvfMultipleSelectionEvent : public CIvfEventBase {
+class IVFWIDGET_API CMultipleSelectionEvent : public CEventBase {
 public:
 	/**
 	 * Multiple selection method
@@ -52,76 +52,76 @@ public:
 	 * This method is called when a multiple selection has
 	 * been made, i.e. a selection containing all objects
 	 * under the cursor.
-	 * @param shapes STL vector<CIvfShape*> containing the
+	 * @param shapes STL vector<CShape*> containing the
 	 * objects located under the cursor position.
 	 */
 	virtual void onSelectMultiple(CIvfSelectedShapesVector& shapes) {};
 };
 
 /** Highlight event class */
-class IVFWIDGET_API CIvfHighlightEvent : public CIvfEventBase {
+class IVFWIDGET_API CHighlightEvent : public CEventBase {
 public:
 	/**
 	 * Highlight event method
 	 *
 	 * This method is called when the mouse is over
 	 * an object, to handle highlighting.
-	 * @param shape Reference to CIvfShape derived class
+	 * @param shape Reference to CShape derived class
 	 * currently under the cursor.
 	 */
-	virtual void onHighlight(CIvfShape* shape) {};
+	virtual void onHighlight(CShape* shape) {};
 };
 
-IvfSmartPointer(CIvfSelectionHandler);
+IvfSmartPointer(CSelectionHandler);
 
 /**
  * Selection handler
  *
  * This class automatically handles OpenGL buffer selection.
  * It can fire 3 kinds of events: onSelect which can be
- * assigned to handle a simple selection of a single CIvfShape
+ * assigned to handle a simple selection of a single CShape
  * instance. onMultipleSelect which handles a selection with all
  * objects located under the cursor. onHighlight for implementing
  * highlighting of object under the cursor.
  */
-class IVFWIDGET_API CIvfSelectionHandler : public CIvfHandlerBase,
-	CIvfMouseDownEvent,
-	CIvfMouseMoveEvent,
-	CIvfMouseUpEvent
+class IVFWIDGET_API CSelectionHandler : public CHandlerBase,
+	CMouseDownEvent,
+	CMouseMoveEvent,
+	CMouseUpEvent
 {
 private:
-	CIvfWidgetBase* m_widget;
-	CIvfScenePtr m_scene;
-	CIvfShapePtr m_oldShape;
-	CIvfBufferSelectionPtr m_selection;
-	CIvfSingleSelectionEvent* m_singleSelectionEvent;
-	CIvfMultipleSelectionEvent* m_multipleSelectionEvent;
-	CIvfHighlightEvent* m_highlightEvent;
+	CWidgetBase* m_widget;
+	CScenePtr m_scene;
+	CShapePtr m_oldShape;
+	CBufferSelectionPtr m_selection;
+	CSingleSelectionEvent* m_singleSelectionEvent;
+	CMultipleSelectionEvent* m_multipleSelectionEvent;
+	CHighlightEvent* m_highlightEvent;
 
-	void dispatchSingleSelectionEvent(CIvfShape* shape);
+	void dispatchSingleSelectionEvent(CShape* shape);
 	void dispatchMultipleSelectionEvent(CIvfSelectedShapesVector& selectedShapes);
-	void dispatchHighlightEvent(CIvfShape* shape);
+	void dispatchHighlightEvent(CShape* shape);
 public:
 	/**
 	 * Class constructor
 	 *
-	 * @param widget Reference to a CIvfWidgetBase instance.
-	 * @param scene Reference to a CIvfScene instance containing
+	 * @param widget Reference to a CWidgetBase instance.
+	 * @param scene Reference to a CScene instance containing
 	 * the complete scene graph setup.
 	 */
-	CIvfSelectionHandler(CIvfWidgetBase* widget, CIvfScene* scene);
-	virtual ~CIvfSelectionHandler();
+	CSelectionHandler(CWidgetBase* widget, CScene* scene);
+	virtual ~CSelectionHandler();
 
-	IvfClassInfo("CIvfSelectionHandler",CIvfHandlerBase);
+	IvfClassInfo("CSelectionHandler",CHandlerBase);
 
 	/** Assign single selection event */
-	void setSingleSelectionEvent(CIvfSingleSelectionEvent* event);
+	void setSingleSelectionEvent(CSingleSelectionEvent* event);
 
 	/** Assign multiple selection event */
-	void setMultipleSelectionEvent(CIvfMultipleSelectionEvent* event);
+	void setMultipleSelectionEvent(CMultipleSelectionEvent* event);
 
 	/** Assign highlight event */
-	void setHighlightEvent(CIvfHighlightEvent* event);
+	void setHighlightEvent(CHighlightEvent* event);
 
 	virtual void doMouseUp(int x, int y);
 	virtual void doMouseMove(int x, int y);

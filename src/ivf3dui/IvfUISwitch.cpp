@@ -26,16 +26,16 @@
 
 #include <ivf/IvfSphere.h>
 
-CIvfUISwitch::CIvfUISwitch()
+CUISwitch::CUISwitch()
 {
-	CIvfMaterialPtr greenMaterial = new CIvfMaterial();
+	CMaterialPtr greenMaterial = new CMaterial();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 
-	CIvfMaterialPtr grayMaterial = new CIvfMaterial();
+	CMaterialPtr grayMaterial = new CMaterial();
 	grayMaterial->setDiffuseColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-	CIvfSpherePtr sphereOn = new CIvfSphere();
-	CIvfSpherePtr sphereOff = new CIvfSphere();
+	CSpherePtr sphereOn = new CSphere();
+	CSpherePtr sphereOff = new CSphere();
 
 	sphereOn->setMaterial(greenMaterial);
 	sphereOff->setMaterial(grayMaterial);
@@ -43,39 +43,39 @@ CIvfUISwitch::CIvfUISwitch()
 	this->setOnShape(sphereOn);
 	this->setOffShape(sphereOff);
 
-	m_onShape->setState(CIvfGLBase::OS_OFF);
+	m_onShape->setState(CGLBase::OS_OFF);
 }
 
-CIvfUISwitch::~CIvfUISwitch()
+CUISwitch::~CUISwitch()
 {
 
 }
 
-void CIvfUISwitch::doStateChange(bool state)
+void CUISwitch::doStateChange(bool state)
 {
 	if (state)
 	{
-		if (m_onShape!=NULL) m_onShape->setState(CIvfGLBase::OS_ON);
-		if (m_offShape!=NULL) m_offShape->setState(CIvfGLBase::OS_OFF);
+		if (m_onShape!=NULL) m_onShape->setState(CGLBase::OS_ON);
+		if (m_offShape!=NULL) m_offShape->setState(CGLBase::OS_OFF);
 	}
 	else
 	{
-		if (m_onShape!=NULL) m_onShape->setState(CIvfGLBase::OS_OFF);
-		if (m_offShape!=NULL) m_offShape->setState(CIvfGLBase::OS_ON);
+		if (m_onShape!=NULL) m_onShape->setState(CGLBase::OS_OFF);
+		if (m_offShape!=NULL) m_offShape->setState(CGLBase::OS_ON);
 	}
 }
 
-void CIvfUISwitch::setOnShape(CIvfShape *shape)
+void CUISwitch::setOnShape(CShape *shape)
 {
-	CIvfShapePtr oldShape = this->removeShape(m_onShape);
+	CShapePtr oldShape = this->removeShape(m_onShape);
 	m_onShape = shape;
 	this->addChild(m_onShape);
 
-	CIvfMaterialPtr material = m_onShape->getMaterial();
+	CMaterialPtr material = m_onShape->getMaterial();
 
 	if (material!=NULL)
 	{
-		CIvfMaterialPtr hlMaterial = new CIvfMaterial();
+		CMaterialPtr hlMaterial = new CMaterial();
 		hlMaterial->assignFrom(material);
 		hlMaterial->brightnessDiffuse(0.2);
 		hlMaterial->brightnessAmbient(0.2);
@@ -85,17 +85,17 @@ void CIvfUISwitch::setOnShape(CIvfShape *shape)
 	doStateChange(getState());
 }
 
-void CIvfUISwitch::setOffShape(CIvfShape *shape)
+void CUISwitch::setOffShape(CShape *shape)
 {
-	CIvfShapePtr oldShape = this->removeShape(m_offShape);
+	CShapePtr oldShape = this->removeShape(m_offShape);
 	m_offShape = shape;
 	this->addChild(m_offShape);
 
-	CIvfMaterialPtr material = m_offShape->getMaterial();
+	CMaterialPtr material = m_offShape->getMaterial();
 
 	if (material!=NULL)
 	{
-		CIvfMaterialPtr hlMaterial = new CIvfMaterial();
+		CMaterialPtr hlMaterial = new CMaterial();
 		hlMaterial->assignFrom(material);
 		hlMaterial->brightnessDiffuse(0.2);
 		hlMaterial->brightnessAmbient(0.2);

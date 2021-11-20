@@ -27,17 +27,17 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CIvfColorMap::CIvfColorMap()
+CColorMap::CColorMap()
 {
 
 }
 
-CIvfColorMap::~CIvfColorMap()
+CColorMap::~CColorMap()
 {
 	this->clear();
 }
 
-void CIvfColorMap::open(const std::string& fname)
+void CColorMap::open(const std::string& fname)
 {
 	using namespace std;
 
@@ -45,7 +45,7 @@ void CIvfColorMap::open(const std::string& fname)
 	int nColors;
 	int i;
 	float r, g, b;
-	CIvfColorPtr color;
+	CColorPtr color;
 
 	// Clear previous color map
 
@@ -62,7 +62,7 @@ void CIvfColorMap::open(const std::string& fname)
 	for (i=0; i<nColors; i++)
 	{
 		f >> r >> g >> b;
-		color = new CIvfColor();
+		color = new CColor();
 		color->setColor(r, g, b);
 		m_colors.push_back(color);
 	}
@@ -72,18 +72,18 @@ void CIvfColorMap::open(const std::string& fname)
 	f.close();
 }
 
-void CIvfColorMap::clear()
+void CColorMap::clear()
 {
 	m_colors.clear();
 }
 
-void CIvfColorMap::getColor(double value, float &r, float &g, float &b)
+void CColorMap::getColor(double value, float &r, float &g, float &b)
 {
 	if (m_colors.size()>0)
 	{
 		double clampedValue;
 		int colorIndex;
-		CIvfColor* color;
+		CColor* color;
 
 		// Clamp value
 

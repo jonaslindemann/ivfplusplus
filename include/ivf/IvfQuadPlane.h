@@ -29,7 +29,7 @@
 
 #include <ivfmath/IvfPlane.h>
 
-IvfSmartPointer(CIvfQuadPlane);
+IvfSmartPointer(CQuadPlane);
 
 /**
  * Quad plane class
@@ -40,7 +40,7 @@ IvfSmartPointer(CIvfQuadPlane);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfQuadPlane : public CIvfQuadSet {
+class IVF_API CQuadPlane : public CQuadSet {
 public:
 	enum TPlaneOrientation {
 		PO_XY,
@@ -56,13 +56,13 @@ private:
 	TPlaneOrientation m_planeOrientation;
 	void updateTextureCoords();
 public:
-	/** CIvfQuadPlane constructor */
-	CIvfQuadPlane();
+	/** CQuadPlane constructor */
+	CQuadPlane();
 
-	/** CIvfQuadPlane destructor */
-	virtual ~CIvfQuadPlane();
+	/** CQuadPlane destructor */
+	virtual ~CQuadPlane();
 
-	IvfClassInfo("CIvfQuadPlane",CIvfQuadSet);
+	IvfClassInfo("CQuadPlane",CQuadSet);
 
 	/** Flips texture coordinates */
 	void flipVert();
@@ -80,7 +80,7 @@ public:
 	 *
 	 * Calculates ratio and modifies the plane size
 	 */
-	void setTexture(CIvfTexture* texture);
+	void setTexture(CTexture* texture);
 
 	/**
 	 * Set size of plane

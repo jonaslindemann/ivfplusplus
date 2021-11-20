@@ -24,14 +24,14 @@
 
 #include <ivf/IvfWorkspace.h>
 
-CIvfWorkspace::CIvfWorkspace()
+CWorkspace::CWorkspace()
 {
-    m_rootPlane = new CIvfConstructionPlane();
+    m_rootPlane = new CConstructionPlane();
     m_rootPlane->setSize(10.0, 10.0);
     m_rootPlane->disableCursor();
 
     if (this->getView()->isClass("CIvfCamera"))
-        m_rootPlane->setCamera((CIvfCamera*)this->getView());
+        m_rootPlane->setCamera((CCamera*)this->getView());
 
     m_workplanes.push_back(m_rootPlane);
 
@@ -45,21 +45,21 @@ CIvfWorkspace::CIvfWorkspace()
     //this->addChild(m_currentPlane->getCursor());
 }
 
-CIvfWorkspace::~CIvfWorkspace()
+CWorkspace::~CWorkspace()
 {
     clearPlanes();
     delete m_rootPlane;
 }
 
-void CIvfWorkspace::addPlane(CIvfConstructionPlane *plane)
+void CWorkspace::addPlane(CConstructionPlane *plane)
 {
     m_workplanes.push_back(plane);
     if (this->getView()->isClass("CIvfCamera"))
-        plane->setCamera((CIvfCamera*)this->getView());
+        plane->setCamera((CCamera*)this->getView());
     plane->addReference();
 }
 
-void CIvfWorkspace::clearPlanes()
+void CWorkspace::clearPlanes()
 {
     int i;
 
@@ -67,7 +67,7 @@ void CIvfWorkspace::clearPlanes()
     {
         if (i != 0)
         {
-            CIvfConstructionPlane* plane = m_workplanes[i];
+            CConstructionPlane* plane = m_workplanes[i];
             plane->deleteReference();
 
             if (!plane->referenced())
@@ -78,7 +78,7 @@ void CIvfWorkspace::clearPlanes()
     m_workplanes.push_back(m_rootPlane);
 }
 
-void CIvfWorkspace::setCurrentPlane(int idx)
+void CWorkspace::setCurrentPlane(int idx)
 {
     if ((idx >= 0) && (idx < (int)m_workplanes.size()))
     {
@@ -90,7 +90,7 @@ void CIvfWorkspace::setCurrentPlane(int idx)
     }
 }
 
-void CIvfWorkspace::nextPlane()
+void CWorkspace::nextPlane()
 {
     m_currentPlane->deactivate();
     m_currentPlane->unlockCursor();
@@ -104,12 +104,12 @@ void CIvfWorkspace::nextPlane()
     m_currentPlane->activate();
 }
 
-CIvfConstructionPlane* CIvfWorkspace::getCurrentPlane()
+CConstructionPlane* CWorkspace::getCurrentPlane()
 {
     return m_currentPlane;
 }
 
-void CIvfWorkspace::prevPlane()
+void CWorkspace::prevPlane()
 {
     m_currentPlane->deactivate();
     m_currentPlane->unlockCursor();
@@ -123,14 +123,14 @@ void CIvfWorkspace::prevPlane()
     m_currentPlane->activate();
 }
 
-void CIvfWorkspace::updateCursor(int x, int y)
+void CWorkspace::updateCursor(int x, int y)
 {
     m_currentPlane->updateCursor(x, y);
 }
 
-void CIvfWorkspace::doCreateGeometry()
+void CWorkspace::doCreateGeometry()
 {
-    CIvfSceneBase::doCreateGeometry();
+    CSceneBase::doCreateGeometry();
 
     if (m_usePlanes)
     {
@@ -145,7 +145,7 @@ void CIvfWorkspace::doCreateGeometry()
     if ((m_useCursor)&&(!m_hideCursor))
     {
         double x, y, z, w, h;
-        CIvfVec3d pos = m_currentPlane->getCursorPosition();
+        CVec3d pos = m_currentPlane->getCursorPosition();
         pos.getComponents(x, y, z);
 
         w = m_currentPlane->getWidth();
@@ -195,36 +195,36 @@ void CIvfWorkspace::doCreateGeometry()
     }
 }
 
-bool CIvfWorkspace::isCursorLocked()
+bool CWorkspace::isCursorLocked()
 {
     return m_currentPlane->isCursorLocked();
 }
 
-void CIvfWorkspace::lockCursor()
+void CWorkspace::lockCursor()
 {
     m_currentPlane->lockCursor();
 }
 
-void CIvfWorkspace::unlockCursor()
+void CWorkspace::unlockCursor()
 {
     m_currentPlane->unlockCursor();
 }
 
-CIvfVec3d& CIvfWorkspace::getCursorPosition()
+CVec3d& CWorkspace::getCursorPosition()
 {
-    CIvfVec3d& r = ivfGetTempVec3d();
+    CVec3d& r = ivfGetTempVec3d();
     r = m_currentPlane->getCursorPosition();
     return r;
 }
 
-void CIvfWorkspace::setView(CIvfView *view)
+void CWorkspace::setView(CView *view)
 {
-    CIvfSceneBase::setView(view);
+    CSceneBase::setView(view);
     if (view->isClass("CIvfCamera"))
-        m_currentPlane->setCamera((CIvfCamera*)view);
+        m_currentPlane->setCamera((CCamera*)view);
 }
 
-void CIvfWorkspace::setRelativeCursorSize(double size)
+void CWorkspace::setRelativeCursorSize(double size)
 {
     int i;
 
@@ -232,17 +232,17 @@ void CIvfWorkspace::setRelativeCursorSize(double size)
         m_workplanes[i]->setRelativeCursorSize(size);
 }
 
-void CIvfWorkspace::setWorkspaceSize(double size)
+void CWorkspace::setWorkspaceSize(double size)
 {
     m_rootPlane->setSize(size, size);
 }
 
-void CIvfWorkspace::updateSizes()
+void CWorkspace::updateSizes()
 {
     m_currentPlane->updateSizes();
 }
 
-void CIvfWorkspace::setRelativeAxisSize(double size)
+void CWorkspace::setRelativeAxisSize(double size)
 {
     int i;
 
@@ -250,93 +250,93 @@ void CIvfWorkspace::setRelativeAxisSize(double size)
         m_workplanes[i]->setRelativeAxisSize(size);
 }
 
-void CIvfWorkspace::setUsePlanes(bool flag)
+void CWorkspace::setUsePlanes(bool flag)
 {
     m_usePlanes = flag;
 }
 
-bool CIvfWorkspace::getUsePlanes()
+bool CWorkspace::getUsePlanes()
 {
     return m_usePlanes;
 }
 
-void CIvfWorkspace::setUseCursor(bool flag)
+void CWorkspace::setUseCursor(bool flag)
 {
     m_useCursor = flag;
 }
 
-void CIvfWorkspace::setCursorShape(CIvfShape * shape)
+void CWorkspace::setCursorShape(CShape * shape)
 {
     m_cursorShape = shape;
 }
 
-CIvfShape * CIvfWorkspace::cursorShape()
+CShape * CWorkspace::cursorShape()
 {
     return m_cursorShape;
 }
 
-void CIvfWorkspace::setUseCursorShape(bool flag)
+void CWorkspace::setUseCursorShape(bool flag)
 {
     m_useCursorShape = flag;
 }
 
-bool CIvfWorkspace::useCursorShape()
+bool CWorkspace::useCursorShape()
 {
     return m_useCursorShape;
 }
 
-bool CIvfWorkspace::getUseCursor()
+bool CWorkspace::getUseCursor()
 {
     return m_useCursor;
 }
 
-double CIvfWorkspace::getWorkspaceSize()
+double CWorkspace::getWorkspaceSize()
 {
     return m_rootPlane->getWidth();
 }
 
-void CIvfWorkspace::setSize(double size)
+void CWorkspace::setSize(double size)
 {
     m_rootPlane->setSize(size, size);
 }
 
-double CIvfWorkspace::getSize()
+double CWorkspace::getSize()
 {
     return m_rootPlane->getWidth();
 }
 
-void CIvfWorkspace::enableCursor()
+void CWorkspace::enableCursor()
 {
     m_useCursor = true;
 }
 
-void CIvfWorkspace::disableCursor()
+void CWorkspace::disableCursor()
 {
     m_useCursor = false;
 }
 
-void CIvfWorkspace::enableCursorShape()
+void CWorkspace::enableCursorShape()
 {
     m_useCursorShape = true;
 }
 
-void CIvfWorkspace::disableCursorShape()
+void CWorkspace::disableCursorShape()
 {
     m_useCursorShape = false;
 }
 
-void CIvfWorkspace::hideCursor()
+void CWorkspace::hideCursor()
 {
     m_hideCursor = true;
 }
 
-void CIvfWorkspace::showCursor()
+void CWorkspace::showCursor()
 {
     m_hideCursor = false;
 }
 
 
-void CIvfWorkspace::doPostClear()
+void CWorkspace::doPostClear()
 {
     this->addChild(m_currentPlane->getCursor());
 }

@@ -27,7 +27,7 @@
 
 #include <ivf/IvfCone.h>
 
-IvfSmartPointer(CIvfCylinder);
+IvfSmartPointer(CCylinder);
 
 /**
  * Cylinder shape class
@@ -37,15 +37,15 @@ IvfSmartPointer(CIvfCylinder);
  * have the same methods.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfCylinder : public CIvfCone {
+class IVF_API CCylinder : public CCone {
 public:
 	/** CIvfCylinder constructor. */
-	CIvfCylinder ();
+	CCylinder ();
 
 	/** CIvfCylinder destructor. */
-	virtual ~CIvfCylinder ();
+	virtual ~CCylinder ();
 
-	IvfClassInfo("CIvfCylinder",CIvfCone);
+	IvfClassInfo("CIvfCylinder",CCone);
 
 	/** Set cylinder radius */
 	void	setRadius (const double radius);

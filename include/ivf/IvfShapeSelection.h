@@ -31,37 +31,37 @@
 
 #include <vector>
 
-typedef std::vector<CIvfShapePtr> CIvfShapeSelectionVector;
-typedef std::vector<CIvfShapePtr>::iterator CIvfShapeSelectionVectorIterator;
+typedef std::vector<CShapePtr> CShapeSelectionVector;
+typedef std::vector<CShapePtr>::iterator CShapeSelectionVectorIterator;
 
-IvfSmartPointer(CIvfShapeSelection);
+IvfSmartPointer(CShapeSelection);
 
-class IVF_API CIvfShapeSelection : public CIvfShape {
+class IVF_API CShapeSelection : public CShape {
 private:
-	CIvfShapeSelectionVector m_selection;	
-	CIvfMaterialPtr m_hlMaterial;
-	std::set<CIvfShape*> m_selectionSet;
+	CShapeSelectionVector m_selection;	
+	CMaterialPtr m_hlMaterial;
+	std::set<CShape*> m_selectionSet;
 	double m_offset[3];
 public:
-	void setHighlightMaterial(CIvfMaterial* material);
-	CIvfShapeSelection();
-	virtual ~CIvfShapeSelection();
+	void setHighlightMaterial(CMaterial* material);
+	CShapeSelection();
+	virtual ~CShapeSelection();
 
-	IvfClassInfo("CIvfShapeSelection",CIvfShape);
+	IvfClassInfo("CShapeSelection",CShape);
 
-	void add(CIvfShape* shape);
+	void add(CShape* shape);
 	void clear();
-	CIvfShape* getShape(int idx);
+	CShape* getShape(int idx);
 	int getSize();
-	void remove(CIvfShape* shape);
+	void remove(CShape* shape);
 
-	bool contains(CIvfShape* shape);
-	void assignFrom(CIvfShapeSelection* selection);
+	bool contains(CShape* shape);
+	void assignFrom(CShapeSelection* selection);
 	void moveShapes(double dx, double dy, double dz);
-	void addTo(CIvfComposite* composite);
+	void addTo(CComposite* composite);
 	void setOffset(double dx, double dy, double dz);
 
-	void getSelection(CIvfShapeSelectionVector& vector);
+	void getSelection(CShapeSelectionVector& vector);
 protected:
 	virtual void doCreateGeometry();
 };

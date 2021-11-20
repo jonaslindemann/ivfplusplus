@@ -27,7 +27,7 @@
 
 #include <ivf/IvfExtrusion.h>
 
-IvfSmartPointer(CIvfTubeExtrusion);
+IvfSmartPointer(CTubeExtrusion);
 
 /**
  * Tube extrusion primitive
@@ -35,15 +35,15 @@ IvfSmartPointer(CIvfTubeExtrusion);
  * Sweeps a circular section along a spine.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfTubeExtrusion : public CIvfExtrusion {
+class IVF_API CTubeExtrusion : public CExtrusion {
 public:
 	/** Constructor */
-	CIvfTubeExtrusion ();
+	CTubeExtrusion ();
 
 	/** Destructor */
-	virtual ~CIvfTubeExtrusion ();
+	virtual ~CTubeExtrusion ();
 
-	IvfClassInfo("CIvfTubeExtrusion",CIvfExtrusion);
+	IvfClassInfo("CTubeExtrusion",CExtrusion);
 
 	/**
 	 * Set section sides

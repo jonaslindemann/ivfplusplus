@@ -21,7 +21,7 @@
 
 #include <ivfctl/IvfRotateController.h>
 
-CIvfRotateController::CIvfRotateController()
+CRotateController::CRotateController()
 {
 	m_rotationSpeed[0] = 0;
 	m_rotationSpeed[1] = 0;
@@ -31,12 +31,12 @@ CIvfRotateController::CIvfRotateController()
 	m_axis.setComponents(0.0, 0.0, 1.0);
 }
 
-CIvfRotateController::~CIvfRotateController()
+CRotateController::~CRotateController()
 {
 
 }
 
-void CIvfRotateController::setRotationSpeed(double vx, double vy, double vz)
+void CRotateController::setRotationSpeed(double vx, double vy, double vz)
 {
 	m_rotationSpeed[0] = vx;
 	m_rotationSpeed[1] = vy;
@@ -44,16 +44,16 @@ void CIvfRotateController::setRotationSpeed(double vx, double vy, double vz)
 	m_useAxis = false;
 }
 
-void CIvfRotateController::getRotationSpeed(double &vx, double &vy, double &vz)
+void CRotateController::getRotationSpeed(double &vx, double &vy, double &vz)
 {
 	vx = m_rotationSpeed[0];
 	vy = m_rotationSpeed[1];
 	vz = m_rotationSpeed[2];
 }
 
-void CIvfRotateController::doUpdate(double dt)
+void CRotateController::doUpdate(double dt)
 {
-	CIvfShape* shape = this->getShape();
+	CShape* shape = this->getShape();
 
 	if (shape!=NULL)
 	{	
@@ -76,7 +76,7 @@ void CIvfRotateController::doUpdate(double dt)
 	}
 }
 
-void CIvfRotateController::setRotationSpeed(double v)
+void CRotateController::setRotationSpeed(double v)
 {
 	m_rotationSpeed[0] = v;
 	m_useAxis = true;

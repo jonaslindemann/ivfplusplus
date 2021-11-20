@@ -27,7 +27,7 @@
 
 #include <ivf/IvfQuadSet.h>
 
-IvfSmartPointer(CIvfBrick);
+IvfSmartPointer(CBrick);
 
 /**
  * Brick shape class
@@ -37,15 +37,15 @@ IvfSmartPointer(CIvfBrick);
  * 
  * @author Jonas Lindemann
  */
-class IVF_API CIvfBrick : public CIvfQuadSet {
+class IVF_API CBrick : public CQuadSet {
 public:
 	/** CIvfBrick constructor */
-	CIvfBrick ();
+	CBrick ();
 
 	/** CIvfBrick destructor */
-	virtual ~CIvfBrick ();
+	virtual ~CBrick ();
 
-	IvfClassInfo("CIvfBrick",CIvfQuadSet);
+	IvfClassInfo("CIvfBrick",CQuadSet);
 
 	/**
 	 * Set brick size (2 points)
@@ -55,7 +55,7 @@ public:
 	 * @param p1 CIvfPoint instance specifying the first corner of the brick.
 	 * @param p2 CIvfPoint instance specifying the opposite corner of the brick.
 	 */
-	void setSize(CIvfPoint3d* p1, CIvfPoint3d* p2);
+	void setSize(CPoint3d* p1, CPoint3d* p2);
 
 	/**
 	 * Set brick size

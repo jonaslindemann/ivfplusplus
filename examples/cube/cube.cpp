@@ -24,14 +24,14 @@
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class CExampleWindow: public CGlutBase {
 private:
-	CIvfCamera* m_camera;
-	CIvfCube*   m_cube;
-	CIvfLight*  m_light;
+	CCamera* m_camera;
+	CCube*   m_cube;
+	CLight*  m_light;
 public:
 	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+		:CGlutBase(X, Y, W, H) {};
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -46,24 +46,24 @@ void CExampleWindow::onInit(int width, int height)
 {
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(2.0, 2.0, 2.0);
 
 	// Create a material
 
-	CIvfMaterialPtr material = new CIvfMaterial();
+	CMaterialPtr material = new CMaterial();
 	material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
 	// Create a cube
 	
-	m_cube = new CIvfCube();
+	m_cube = new CCube();
 	m_cube->setMaterial(material);
 	
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 
 	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH);
 
 	// Create a window

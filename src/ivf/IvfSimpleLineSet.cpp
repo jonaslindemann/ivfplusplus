@@ -19,7 +19,7 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfSimpleLineSet
+// Implementation of: public class CSimpleLineSet
 
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfSimpleLineSet.h>
@@ -27,8 +27,8 @@
 
 
 // ------------------------------------------------------------
-CIvfSimpleLineSet::CIvfSimpleLineSet ()
-		:CIvfShape()
+CSimpleLineSet::CSimpleLineSet ()
+		:CShape()
 {
 	m_nCoords = 0;
 	m_nCoordIndex = 0;
@@ -39,7 +39,7 @@ CIvfSimpleLineSet::CIvfSimpleLineSet ()
 }
 
 // ------------------------------------------------------------
-CIvfSimpleLineSet::~CIvfSimpleLineSet ()
+CSimpleLineSet::~CSimpleLineSet ()
 {
 	if (m_coordIndex!=NULL)
 		delete [] m_coordIndex;
@@ -50,7 +50,7 @@ CIvfSimpleLineSet::~CIvfSimpleLineSet ()
 }
 
 // ------------------------------------------------------------
-void CIvfSimpleLineSet::doCreateGeometry()
+void CSimpleLineSet::doCreateGeometry()
 {
 	int i;
 	glPushAttrib(GL_LIGHTING);
@@ -78,7 +78,7 @@ void CIvfSimpleLineSet::doCreateGeometry()
 }
 
 // ------------------------------------------------------------
-void CIvfSimpleLineSet::setCoordSize(int n)
+void CSimpleLineSet::setCoordSize(int n)
 {
 	m_nCoords = n;
 	if (m_coords!=NULL)
@@ -87,7 +87,7 @@ void CIvfSimpleLineSet::setCoordSize(int n)
 }
 
 // ------------------------------------------------------------
-void CIvfSimpleLineSet::setLineSize(int n)
+void CSimpleLineSet::setLineSize(int n)
 {
 	m_nCoordIndex = n;
 	if (m_coordIndex!=NULL)
@@ -96,7 +96,7 @@ void CIvfSimpleLineSet::setLineSize(int n)
 }
 
 // ------------------------------------------------------------
-void CIvfSimpleLineSet::setCoord(int n, double x, double y, double z)
+void CSimpleLineSet::setCoord(int n, double x, double y, double z)
 {
 	if (m_coords!=NULL)
 	{
@@ -110,7 +110,7 @@ void CIvfSimpleLineSet::setCoord(int n, double x, double y, double z)
 }
 
 // ------------------------------------------------------------
-void CIvfSimpleLineSet::setLineIndex(int n, int idx)
+void CSimpleLineSet::setLineIndex(int n, int idx)
 {
 	if (m_coordIndex!=NULL)
 	{
@@ -122,7 +122,7 @@ void CIvfSimpleLineSet::setLineIndex(int n, int idx)
 }
 
 // ------------------------------------------------------------
-void CIvfSimpleLineSet::setColorSize(int n)
+void CSimpleLineSet::setColorSize(int n)
 {
 	m_nColors = n;
 	if (m_colors!=NULL)
@@ -131,7 +131,7 @@ void CIvfSimpleLineSet::setColorSize(int n)
 }
 
 // ------------------------------------------------------------
-void CIvfSimpleLineSet::setColor(int n, double red, double green, double blue)
+void CSimpleLineSet::setColor(int n, double red, double green, double blue)
 {
 	if (m_colors!=NULL)
 	{

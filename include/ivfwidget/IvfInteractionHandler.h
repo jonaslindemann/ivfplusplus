@@ -34,91 +34,91 @@
 #include <ivf3dui/IvfUIInteractiveBase.h>
 
 /** Shape down event class */
-class IVFWIDGET_API CIvfShapeDownEvent : public CIvfEventBase {
+class IVFWIDGET_API CShapeDownEvent : public CEventBase {
 public:
 	/**
 	 * Shape click method
 	 *
 	 * This event method is called when the user
 	 * has clicked on a shape.
-	 * @param shape CIvfShape reference to the shape
+	 * @param shape CShape reference to the shape
 	 * under the mouse.
 	 */
-	virtual void onShapeDown(CIvfShape* shape) {};
+	virtual void onShapeDown(CShape* shape) {};
 };
 
 /** Shape click event class */
-class IVFWIDGET_API CIvfShapeClickEvent : public CIvfEventBase {
+class IVFWIDGET_API CShapeClickEvent : public CEventBase {
 public:
 	/**
 	 * Shape click method
 	 *
 	 * This event method is called when the user
 	 * has clicked on a shape.
-	 * @param shape CIvfShape reference to the shape
+	 * @param shape CShape reference to the shape
 	 * under the mouse.
 	 */
-	virtual void onShapeClick(CIvfShape* shape) {};
+	virtual void onShapeClick(CShape* shape) {};
 };
 
 /** Shape up event class */
-class IVFWIDGET_API CIvfShapeUpEvent : public CIvfEventBase {
+class IVFWIDGET_API CShapeUpEvent : public CEventBase {
 public:
 	/**
 	 * Shape up method
 	 *
 	 * This event method is called when the user
 	 * releases the mouse button.
-	 * @param shape CIvfShape reference to the shape
+	 * @param shape CShape reference to the shape
 	 * under the mouse.
 	 */
-	virtual void onShapeUp(CIvfShape* shape) {};
+	virtual void onShapeUp(CShape* shape) {};
 };
 
 /** Shape enter event class */
-class IVFWIDGET_API CIvfShapeEnterEvent : public CIvfEventBase {
+class IVFWIDGET_API CShapeEnterEvent : public CEventBase {
 public:
 	/**
 	 * Shape enter method
 	 *
 	 * This event method is called when the first
 	 * time the mouse enters over a shape.
-	 * @param shape CIvfShape reference to the shape
+	 * @param shape CShape reference to the shape
 	 * under the mouse.
 	 */
-	virtual void onShapeEnter(CIvfShape* shape) {};
+	virtual void onShapeEnter(CShape* shape) {};
 };
 
 /** Shape over event class */
-class IVFWIDGET_API CIvfShapeOverEvent : public CIvfEventBase {
+class IVFWIDGET_API CShapeOverEvent : public CEventBase {
 public:
 	/**
 	 * Shape over method
 	 *
 	 * This method is called when the mouse is over
 	 * a specific shape.
-	 * @param shape CIvfShape reference to the shape
+	 * @param shape CShape reference to the shape
 	 * under the mouse.
 	 */
-	virtual void onShapeOver(CIvfShape* shape) {};
+	virtual void onShapeOver(CShape* shape) {};
 };
 
 /** Shape leave event class */
-class IVFWIDGET_API CIvfShapeLeaveEvent : public CIvfEventBase {
+class IVFWIDGET_API CShapeLeaveEvent : public CEventBase {
 public:
 	/**
 	 * Shape leave method
 	 *
 	 * This event method is called when the mouse
 	 * leaves a shape.
-	 * @param shape CIvfShape reference to the shape
+	 * @param shape CShape reference to the shape
 	 * under the mouse.
 	 */
-	virtual void onShapeLeave(CIvfShape* shape) {};
+	virtual void onShapeLeave(CShape* shape) {};
 };
 
 /** Shape drag event class */
-class IVFWIDGET_API CIvfShapeDragEvent : public CIvfEventBase {
+class IVFWIDGET_API CShapeDragEvent : public CEventBase {
 public:
 	/**
 	 * Shape drag method
@@ -126,14 +126,14 @@ public:
 	 * This event method is called when the user drags
 	 * the mouse over the shape (holds the mouse button
 	 * down and moves the mouse).
-	 * @param shape CIvfShape reference to the shape
+	 * @param shape CShape reference to the shape
 	 * under the mouse.
 	 */
-	virtual void onShapeDrag(CIvfShape* shape) {};
+	virtual void onShapeDrag(CShape* shape) {};
 };
 
 /** Control enter event class */
-class IVFWIDGET_API CIvfControlEnterEvent : public CIvfEventBase {
+class IVFWIDGET_API CControlEnterEvent : public CEventBase {
 public:
 	/**
 	 * Control enter method
@@ -143,11 +143,11 @@ public:
 	 * @param shape CIvfControl reference to the control
 	 * under the mouse.
 	 */
-	virtual void onControlEnter(CIvfUIInteractiveBase* uiControl) {};
+	virtual void onControlEnter(CUIInteractiveBase* uiControl) {};
 };
 
 /** Control over event class */
-class IVFWIDGET_API CIvfControlOverEvent : public CIvfEventBase {
+class IVFWIDGET_API CControlOverEvent : public CEventBase {
 public:
 	/**
 	 * Control over method
@@ -157,11 +157,11 @@ public:
 	 * @param shape CIvfControl reference to the control
 	 * under the mouse.
 	 */
-	 virtual void onControlOver(CIvfUIInteractiveBase* uiControl) {};
+	 virtual void onControlOver(CUIInteractiveBase* uiControl) {};
 };
 
 /** Control leave event class */
-class IVFWIDGET_API CIvfControlLeaveEvent : public CIvfEventBase {
+class IVFWIDGET_API CControlLeaveEvent : public CEventBase {
 public:
 	/**
 	 * Control over method
@@ -171,11 +171,11 @@ public:
 	 * @param shape CIvfControl reference to the control
 	 * under the mouse.
 	 */
-	virtual void onControlLeave(CIvfUIInteractiveBase* uiControl) {};
+	virtual void onControlLeave(CUIInteractiveBase* uiControl) {};
 };
 
 /** Control drag event class */
-class IVFWIDGET_API CIvfControlDragEvent : public CIvfEventBase {
+class IVFWIDGET_API CControlDragEvent : public CEventBase {
 public:
 	/**
 	 * Control over method
@@ -186,11 +186,11 @@ public:
 	 * @param shape CIvfControl reference to the control
 	 * under the mouse.
 	 */
-	virtual void onControlDrag(CIvfUIInteractiveBase* uiControl) {};
+	virtual void onControlDrag(CUIInteractiveBase* uiControl) {};
 };
 
 /** Control up event class */
-class IVFWIDGET_API CIvfControlUpEvent : public CIvfEventBase {
+class IVFWIDGET_API CControlUpEvent : public CEventBase {
 public:
 	/**
 	 * Control up method
@@ -200,11 +200,11 @@ public:
 	 * @param shape CIvfControl reference to the control
 	 * under the mouse.
 	 */
-	 virtual void onControlUp(CIvfUIInteractiveBase* uiControl) {};
+	 virtual void onControlUp(CUIInteractiveBase* uiControl) {};
 };
 
 /** Control click event class */
-class IVFWIDGET_API CIvfControlClickEvent : public CIvfEventBase {
+class IVFWIDGET_API CControlClickEvent : public CEventBase {
 public:
 	/**
 	 * Control click method
@@ -214,11 +214,11 @@ public:
 	 * @param shape CIvfControl reference to the control
 	 * under the mouse.
 	 */
-	virtual void onControlClick(CIvfUIInteractiveBase* uiControl) {};
+	virtual void onControlClick(CUIInteractiveBase* uiControl) {};
 };
 
 /** Control down event class */
-class IVFWIDGET_API CIvfControlDownEvent : public CIvfEventBase {
+class IVFWIDGET_API CControlDownEvent : public CEventBase {
 public:
 	/**
 	 * Control down method
@@ -228,113 +228,113 @@ public:
 	 * @param shape CIvfControl reference to the control
 	 * under the mouse.
 	 */
-	virtual void onControlDown(CIvfUIInteractiveBase* uiControl) {};
+	virtual void onControlDown(CUIInteractiveBase* uiControl) {};
 };
 
-IvfSmartPointer(CIvfInteractionHandler);
+IvfSmartPointer(CInteractionHandler);
 
 /**
  * 3D user interface interaction handler
  *
  * This handler implements 3D user interface interaction
  * for CIvfWidgetBased classes using the ivf3dui library.
- * The handler supports two kinds of interaction, CIvfShape
+ * The handler supports two kinds of interaction, CShape
  * based interaction and interaction with CIvfControl derived
  * controls. CIvfControl classes are specialised 3D user
  * interface controls, which support visual responses to
  * user interaction.
  */
-class IVFWIDGET_API CIvfInteractionHandler : public CIvfHandlerBase,
-	CIvfMouseDownEvent,
-	CIvfMouseMoveEvent,
-	CIvfMouseUpEvent
+class IVFWIDGET_API CInteractionHandler : public CHandlerBase,
+	CMouseDownEvent,
+	CMouseMoveEvent,
+	CMouseUpEvent
 {
 private:
-	CIvfWidgetBase* m_widget;
-	CIvfScenePtr m_scene;
-	CIvfShapePtr m_oldShape;
-	CIvfBufferSelectionPtr m_selection;
+	CWidgetBase* m_widget;
+	CScenePtr m_scene;
+	CShapePtr m_oldShape;
+	CBufferSelectionPtr m_selection;
 
-	CIvfShapePtr m_lastShape;
-	CIvfShapePtr m_currentShape;
+	CShapePtr m_lastShape;
+	CShapePtr m_currentShape;
 
-	CIvfUIInteractiveBasePtr m_lastControl;
-	CIvfUIInteractiveBasePtr m_currentControl;
+	CUIInteractiveBasePtr m_lastControl;
+	CUIInteractiveBasePtr m_currentControl;
 
 	int	m_lastPos[2];
 
-	CIvfShapeDownEvent*		m_shapeDownEvent;
-	CIvfShapeClickEvent*	m_shapeClickEvent;
-	CIvfShapeUpEvent*		m_shapeUpEvent;
-	CIvfShapeEnterEvent*	m_shapeEnterEvent;
-	CIvfShapeOverEvent*		m_shapeOverEvent;
-	CIvfShapeLeaveEvent*	m_shapeLeaveEvent;
-	CIvfShapeDragEvent*		m_shapeDragEvent;
+	CShapeDownEvent*		m_shapeDownEvent;
+	CShapeClickEvent*	m_shapeClickEvent;
+	CShapeUpEvent*		m_shapeUpEvent;
+	CShapeEnterEvent*	m_shapeEnterEvent;
+	CShapeOverEvent*		m_shapeOverEvent;
+	CShapeLeaveEvent*	m_shapeLeaveEvent;
+	CShapeDragEvent*		m_shapeDragEvent;
 
-	CIvfControlEnterEvent*	m_controlEnterEvent;
-	CIvfControlOverEvent*	m_controlOverEvent;
-	CIvfControlLeaveEvent*	m_controlLeaveEvent;
-	CIvfControlDragEvent*	m_controlDragEvent;
-	CIvfControlUpEvent*		m_controlUpEvent;
-	CIvfControlClickEvent*	m_controlClickEvent;
-	CIvfControlDownEvent*	m_controlDownEvent;
+	CControlEnterEvent*	m_controlEnterEvent;
+	CControlOverEvent*	m_controlOverEvent;
+	CControlLeaveEvent*	m_controlLeaveEvent;
+	CControlDragEvent*	m_controlDragEvent;
+	CControlUpEvent*		m_controlUpEvent;
+	CControlClickEvent*	m_controlClickEvent;
+	CControlDownEvent*	m_controlDownEvent;
 public:
 	/**
 	 * Class constructor
 	 *
-	 * @param widget reference to CIvfWidgetBase derived class.
-	 * @param scene refercne to a CIvfScene derived class containing
-	 * the user interface elements, both CIvfShape and CIvfControl
+	 * @param widget reference to CWidgetBase derived class.
+	 * @param scene refercne to a CScene derived class containing
+	 * the user interface elements, both CShape and CIvfControl
 	 * derived.
 	 */
-	CIvfInteractionHandler(CIvfWidgetBase* widget, CIvfScene* scene);
+	CInteractionHandler(CWidgetBase* widget, CScene* scene);
 
 	/** Class destructor */
-	virtual ~CIvfInteractionHandler();
+	virtual ~CInteractionHandler();
 
-	IvfClassInfo("CIvfInteractionHandler",CIvfHandlerBase);
+	IvfClassInfo("CInteractionHandler",CHandlerBase);
 
 	/** Assign control drag event to handler */
-	void setControlDragEvent(CIvfControlDragEvent* event);
+	void setControlDragEvent(CControlDragEvent* event);
 
 	/** Assign control enter event to handler */
-	void setControlEnterEvent(CIvfControlEnterEvent* event);
+	void setControlEnterEvent(CControlEnterEvent* event);
 
 	/** Assign control leave event to handler */
-	void setControlLeaveEvent(CIvfControlLeaveEvent* event);
+	void setControlLeaveEvent(CControlLeaveEvent* event);
 
 	/** Assign control over event to handler */
-	void setControlOverEvent(CIvfControlOverEvent* event);
+	void setControlOverEvent(CControlOverEvent* event);
 
 	/** Assign control click event to handler */
-	void setControlClickEvent(CIvfControlClickEvent* event);
+	void setControlClickEvent(CControlClickEvent* event);
 
 	/** Assign control up event to handler */
-	void setControlUpEvent(CIvfControlUpEvent* event);
+	void setControlUpEvent(CControlUpEvent* event);
 
 	/** Assign control down event to handler */
-	void setControlDownEvent(CIvfControlDownEvent* event);
+	void setControlDownEvent(CControlDownEvent* event);
 
 	/** Assign shape drag event to handler */
-	void setShapeDragEvent(CIvfShapeDragEvent* event);
+	void setShapeDragEvent(CShapeDragEvent* event);
 
 	/** Assign shape enter event to handler */
-	void setShapeEnterEvent(CIvfShapeEnterEvent* event);
+	void setShapeEnterEvent(CShapeEnterEvent* event);
 
 	/** Assign shape over event to handler */
-	void setShapeOverEvent(CIvfShapeOverEvent* event);
+	void setShapeOverEvent(CShapeOverEvent* event);
 
 	/** Assign shape leave event to handler */
-	void setShapeLeaveEvent(CIvfShapeLeaveEvent* event);
+	void setShapeLeaveEvent(CShapeLeaveEvent* event);
 
 	/** Assign shape click event to handler */
-	void setShapeClickEvent(CIvfShapeClickEvent* event);
+	void setShapeClickEvent(CShapeClickEvent* event);
 
 	/** Assign shape up event to handler */
-	void setShapeUpEvent(CIvfShapeUpEvent* event);
+	void setShapeUpEvent(CShapeUpEvent* event);
 
 	/** Assign shape down event to handler */
-	void setShapeDownEvent(CIvfShapeDownEvent* event);
+	void setShapeDownEvent(CShapeDownEvent* event);
 
 	virtual void doMouseUp(int x, int y);
 	virtual void doMouseMove(int x, int y);
@@ -347,7 +347,7 @@ public:
 	virtual void onMouseDown(int x, int y);
 };
 /** \example manip.cpp
- * This example illustrates how to use the CIvfInteractionHandler
+ * This example illustrates how to use the CInteractionHandler
  * class.
  */
 

@@ -27,7 +27,7 @@
 #include <ivf/IvfCamera.h>
 #include <ivfmath/IvfSpline3d.h>
 
-IvfSmartPointer(CIvfCameraController);
+IvfSmartPointer(CCameraController);
 
 /**
  * Camera controller
@@ -35,7 +35,7 @@ IvfSmartPointer(CIvfCameraController);
  * Controller for controlling a camera along both a position path and
  * target path.
  */
-class IVFCTL_API CIvfCameraController : public CIvfController {
+class IVFCTL_API CCameraController : public CController {
 public:
 	enum TEndAction {
 		EA_STOP,
@@ -50,8 +50,8 @@ public:
 		SA_DEACTIVATE
 	};
 private:
-	CIvfSpline3dPtr m_path;
-	CIvfSpline3dPtr m_targetPath;
+	CSpline3dPtr m_path;
+	CSpline3dPtr m_targetPath;
 	
 	double m_v0;
 	double m_a0;
@@ -75,35 +75,35 @@ private:
 	TEndAction m_targetEndAction;
 	TStartAction m_targetStartAction;
 
-	CIvfCameraPtr m_camera;
+	CCameraPtr m_camera;
 public:
-	/** CIvfCameraController constructor */
-	CIvfCameraController();
+	/** CCameraController constructor */
+	CCameraController();
 
-	/** CIvfCameraController destructor */
-	virtual ~CIvfCameraController();
+	/** CCameraController destructor */
+	virtual ~CCameraController();
 
 	/** Set path controlling camera position */
-	void setPath(CIvfSpline3d* spline);
+	void setPath(CSpline3d* spline);
 
 	/** Return path controlling camera position */
-	CIvfSpline3d* getPath();
+	CSpline3d* getPath();
 
 	/** 
 	 * Set path controlling camera target 
 	 *
 	 * If target path is not set the camera target is used.
 	 */
-	void setTargetPath(CIvfSpline3d* spline);
+	void setTargetPath(CSpline3d* spline);
 
 	/** Return path controlling camera target */
-	CIvfSpline3d* getTargetPath();
+	CSpline3d* getTargetPath();
 	
 	/** Set camera to be controller */
-	void setCamera(CIvfCamera* camera);
+	void setCamera(CCamera* camera);
 
 	/** Return controlled camera */
-	CIvfCamera* getCamera();
+	CCamera* getCamera();
 
 	/** 
 	 * Set initial position on curve

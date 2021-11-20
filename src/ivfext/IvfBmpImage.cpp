@@ -42,26 +42,26 @@ enum ftype {MB=19778}; // magic number identifies a bmp file; actually chars 'B'
 enum ncol { BW=1, IA, RGB, RGBA};
 
 
-CIvfBmpImage::CIvfBmpImage()
+CBmpImage::CBmpImage()
 {
 	imageData = NULL;
 	m_alphaChannel = false;
 }
 
-CIvfBmpImage::CIvfBmpImage(const std::string& name)
-:CIvfFileImage(name)
+CBmpImage::CBmpImage(const std::string& name)
+:CFileImage(name)
 {
 	imageData = NULL;
 	m_alphaChannel = false;
 }
 
-CIvfBmpImage::~CIvfBmpImage()
+CBmpImage::~CBmpImage()
 {
 
 }
 
 
-bool CIvfBmpImage::read()
+bool CBmpImage::read()
 {
 	FILE* inf;
 
@@ -84,13 +84,13 @@ bool CIvfBmpImage::read()
 
 
 
-void CIvfBmpImage::setAlphaChannel(bool flag)
+void CBmpImage::setAlphaChannel(bool flag)
 {
 	m_alphaChannel = flag;
 }
 
 /* byte order workarounds *sigh* */
-void CIvfBmpImage::swapbyte(long *i)
+void CBmpImage::swapbyte(long *i)
 {
     char *vv=(char *)i;
     char tmp=vv[0];
@@ -101,7 +101,7 @@ void CIvfBmpImage::swapbyte(long *i)
     vv[2]=tmp;
 }
 
-void CIvfBmpImage::swapbyte(unsigned long *i)
+void CBmpImage::swapbyte(unsigned long *i)
 {
     char *vv=(char *)i;
     char tmp=vv[0];
@@ -111,7 +111,7 @@ void CIvfBmpImage::swapbyte(unsigned long *i)
     vv[1]=vv[2];
     vv[2]=tmp;
 }
-void CIvfBmpImage::swapbyte(float *i)
+void CBmpImage::swapbyte(float *i)
 {
     char *vv=(char *)i;
     char tmp=vv[0];
@@ -123,7 +123,7 @@ void CIvfBmpImage::swapbyte(float *i)
 }
 
 
-void CIvfBmpImage::swapbyte(unsigned short *i)
+void CBmpImage::swapbyte(unsigned short *i)
 {
     char *vv=(char *)i;
     char tmp=vv[0];
@@ -131,7 +131,7 @@ void CIvfBmpImage::swapbyte(unsigned short *i)
     vv[1]=tmp;
 }
 
-void CIvfBmpImage::swapbyte(short *i)
+void CBmpImage::swapbyte(short *i)
 {
     char *vv=(char *)i;
     char tmp=vv[0];
@@ -139,7 +139,7 @@ void CIvfBmpImage::swapbyte(short *i)
     vv[1]=tmp;
 }
 
-unsigned char *CIvfBmpImage::bmp_load(const char *filename,
+unsigned char *CBmpImage::bmp_load(const char *filename,
                                       int *width_ret,
                                       int *height_ret,
                                       int *numComponents_ret)

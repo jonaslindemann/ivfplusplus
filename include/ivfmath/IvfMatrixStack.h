@@ -29,7 +29,7 @@
 
 #define IVF_MATRIX_STACK_SIZE 32
 
-IvfSmartPointer(CIvfMatrixStack);
+IvfSmartPointer(CMatrixStack);
 
 /**
  * Matrix stack class
@@ -40,24 +40,24 @@ IvfSmartPointer(CIvfMatrixStack);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfMatrixStack : public CIvfMathBase {
+class IVFMATH_API CMatrixStack : public CMathBase {
 private:
 
 	int m_currentMatrix;
 
-	CIvfMat4d m_matrixStack[IVF_MATRIX_STACK_SIZE];
-	CIvfMat4d m_translateMatrix;
-	CIvfMat4d m_rotateMatrix;
+	CMat4d m_matrixStack[IVF_MATRIX_STACK_SIZE];
+	CMat4d m_translateMatrix;
+	CMat4d m_rotateMatrix;
 
 	void initialize();
 public:
-	/** CIvfMatrixStack constructor */
-	CIvfMatrixStack();
+	/** CMatrixStack constructor */
+	CMatrixStack();
 
-	/** CIvfMatrixStack destructor */
-	virtual ~CIvfMatrixStack();
+	/** CMatrixStack destructor */
+	virtual ~CMatrixStack();
 
-	IvfClassInfo("CIvfMatrixStack",CIvfMathBase);
+	IvfClassInfo("CMatrixStack",CMathBase);
 
 	/** Pushes the current matrix on to the stack */
 	void pushMatrix();

@@ -3,24 +3,24 @@
 
 #include <ivf/IvfTubeExtrusion.h>
 
-IvfSmartPointer(CIvfCircularTube);
+IvfSmartPointer(CCircularTube);
 
-class CIvfCircularTube : public CIvfTubeExtrusion {
+class CCircularTube : public CTubeExtrusion {
 private:
 	double	m_radius;
 	double	m_startAngle;
 	double	m_endAngle;
 	int		m_calcPoints;
 
-	CIvfVec3d m_startVector;
-	CIvfVec3d m_endVector;
-	CIvfVec3d m_startPos;
-	CIvfVec3d m_endPos;
+	CVec3d m_startVector;
+	CVec3d m_endVector;
+	CVec3d m_startPos;
+	CVec3d m_endPos;
 
 	void initSpine();
 public:
-	CIvfCircularTube();
-	virtual ~CIvfCircularTube();
+	CCircularTube();
+	virtual ~CCircularTube();
 
 	void setCalculationPoints(int numberOfPoints);
 	int getCalculationPoints();
@@ -34,11 +34,11 @@ public:
 	void setCircleRadius(double radius);
 	double getCircleRadius();
 
-	CIvfVec3d& getEndVector();
-	CIvfVec3d& getStartVector();
+	CVec3d& getEndVector();
+	CVec3d& getStartVector();
 
-	CIvfVec3d& getEndPosition();
-	CIvfVec3d& getStartPosition();
+	CVec3d& getEndPosition();
+	CVec3d& getStartPosition();
 
 	virtual void refresh();
 };

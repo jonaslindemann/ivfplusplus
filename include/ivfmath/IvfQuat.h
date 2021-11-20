@@ -28,51 +28,51 @@
 #include <ivfmath/IvfMathBase.h>
 #include <ivfmath/IvfVec3d.h>
 
-IvfSmartPointer(CIvfQuat);
+IvfSmartPointer(CQuat);
 
 /**
  * Quaternion class
  *
  * Interface not finished
  */
-class IVFMATH_API CIvfQuat : public CIvfMathBase {
+class IVFMATH_API CQuat : public CMathBase {
 private:
-	CIvfVec3d m_q;
+	CVec3d m_q;
 	double m_qw;
 public:
-	/** CIvfQuat constructor */
-	CIvfQuat();
+	/** CQuat constructor */
+	CQuat();
 	
-	/** CIvfQuat copy constructor */
-	CIvfQuat(CIvfQuat& v);
+	/** CQuat copy constructor */
+	CQuat(CQuat& v);
 
-	/** CIvfQuat destructor */
-	virtual ~CIvfQuat();
+	/** CQuat destructor */
+	virtual ~CQuat();
 
-	IvfClassInfo("CIvfQuat",CIvfMathBase);
+	IvfClassInfo("CQuat",CMathBase);
 
 	void getComponents(double &qx, double &qy, double &qz, double &qw);
 	void setComponents(double qx, double qy, double qz, double qw);
 
-	CIvfVec3d& getVectorPart();
+	CVec3d& getVectorPart();
 	double getRealPart();
 
 	void getAxisAngle(double& vx, double& vy, double &vz, double &angle);
 	void setFromAxisAngle(double vx, double vy, double vz, double angle);
 	void setRealPart(double value);
-	CIvfQuat& inv();
+	CQuat& inv();
 	double norm();
 	void identity();
-	CIvfQuat& conjugate();
+	CQuat& conjugate();
 
-	CIvfQuat& operator=(CIvfQuat& a);
-	CIvfQuat& operator*(CIvfQuat& a);
-	CIvfQuat& operator*(double b);
-	CIvfQuat& operator/(double b);
-	CIvfQuat& operator+(CIvfQuat& a);
-	CIvfQuat& operator-(CIvfQuat& a);
+	CQuat& operator=(CQuat& a);
+	CQuat& operator*(CQuat& a);
+	CQuat& operator*(double b);
+	CQuat& operator/(double b);
+	CQuat& operator+(CQuat& a);
+	CQuat& operator-(CQuat& a);
 };
 
-CIvfQuat& ivfGetTempQuat();
+CQuat& ivfGetTempQuat();
 
 #endif 

@@ -19,15 +19,15 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfOldGrid
+// Implementation of: public class COldGrid
 
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfOldGrid.h>
 
 
 // ------------------------------------------------------------
-CIvfOldGrid::CIvfOldGrid ()
-		:CIvfSimpleLineSet()
+COldGrid::COldGrid ()
+		:CSimpleLineSet()
 		//TODO: check and complete member initialisation list!
 {
 	m_rows = 200;
@@ -51,12 +51,12 @@ CIvfOldGrid::CIvfOldGrid ()
 }
 
 // ------------------------------------------------------------
-CIvfOldGrid::~CIvfOldGrid ()
+COldGrid::~COldGrid ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfOldGrid::setSize(GLint rows, GLint cols)
+void COldGrid::setSize(GLint rows, GLint cols)
 {
 	m_rows = rows;
 	m_cols = cols;
@@ -67,7 +67,7 @@ void CIvfOldGrid::setSize(GLint rows, GLint cols)
 }
 
 // ------------------------------------------------------------
-void CIvfOldGrid::setUnits(GLdouble x, GLdouble y)
+void COldGrid::setUnits(GLdouble x, GLdouble y)
 {
 	m_xUnit = x;
 	m_yUnit = y;
@@ -77,7 +77,7 @@ void CIvfOldGrid::setUnits(GLdouble x, GLdouble y)
 }
 
 // ------------------------------------------------------------
-void CIvfOldGrid::createGrid()
+void COldGrid::createGrid()
 {
 	int i;
 	int k;
@@ -148,13 +148,13 @@ void CIvfOldGrid::createGrid()
 }
 
 // ------------------------------------------------------------
-void CIvfOldGrid::setMark(int x, int y)
+void COldGrid::setMark(int x, int y)
 {
 	m_xMark = x;
 	m_yMark = y;
 }
 
-void CIvfOldGrid::doUpdateBoundingSphere()
+void COldGrid::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{

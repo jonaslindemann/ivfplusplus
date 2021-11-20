@@ -29,7 +29,7 @@
 #include <ivf/IvfGLBase.h>
 #include <ivf/IvfOldLight.h>
 
-IvfSmartPointer(CIvfOldLightModel);
+IvfSmartPointer(COldLightModel);
 
 /**
 * Light model class
@@ -37,16 +37,16 @@ IvfSmartPointer(CIvfOldLightModel);
 * Contains all scene lighting info 
 * @author Carl-Johan Lejdfors
 */
-class IVF_API CIvfOldLightModel : public CIvfGLBase {
+class IVF_API COldLightModel : public CGLBase {
 public:
-	void deleteLight(CIvfOldLight* light);
+	void deleteLight(COldLight* light);
 	/** Constructor */
-	CIvfOldLightModel();
+	COldLightModel();
 
 	/** Destructor */
-	~CIvfOldLightModel(); 
+	~COldLightModel(); 
 
-	IvfClassInfo("CIvfOldLightModel",CIvfGLBase);
+	IvfClassInfo("COldLightModel",CGLBase);
 
 	/** Set environment ambient lighting components */
 	void setAmbient( GLfloat r, GLfloat g, 
@@ -85,17 +85,17 @@ public:
 	 * the light model, it is owned by the light model instance and
 	 * is deleted if not needed anymore.
 	 */
-	void addLight( CIvfOldLight *light );
+	void addLight( COldLight *light );
 
 	/** Removes a light from the light model */
-	CIvfOldLight* removeLight( int index );
+	COldLight* removeLight( int index );
 
 	/** Deletes a light from the model */
 	void deleteLight( int index );
 	
 	/** Returns the i:th light*/
-	CIvfOldLight* getLight( int i );
-	const CIvfOldLight* getLight( int i ) const;
+	COldLight* getLight( int i );
+	const COldLight* getLight( int i ) const;
 	
 	/** Returns the total number of lights */
 	int getNoLights() const;
@@ -111,12 +111,12 @@ public:
 
 	void deleteAll();
 protected:
-	CIvfOldLightModel& operator = ( const CIvfOldLightModel& );
-	CIvfOldLightModel( const CIvfOldLightModel& );
+	COldLightModel& operator = ( const COldLightModel& );
+	COldLightModel( const COldLightModel& );
 	
 private:
 	bool m_usereference;
-	std::vector<CIvfOldLight*> m_lights;
+	std::vector<COldLight*> m_lights;
 	
 	GLfloat m_ambient[4];
 	GLint m_local[1], m_twoside[1];

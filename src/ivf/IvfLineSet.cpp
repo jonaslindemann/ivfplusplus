@@ -24,23 +24,23 @@
 
 #include <ivf/IvfLineSet.h>
 
-CIvfLineSet::CIvfLineSet()
+CLineSet::CLineSet()
 {
 	m_useColor = false;
 	m_useAlpha = false;
 	m_lineWidth = 1.0;
 }
 
-CIvfLineSet::~CIvfLineSet()
+CLineSet::~CLineSet()
 {
 
 }
 
-void CIvfLineSet::doCreateGeometry()
+void CLineSet::doCreateGeometry()
 {
-	CIvfIndex* coordIdx;
-	CIvfIndex* colorIdx;
-	CIvfIndex* textureIdx;
+	CIndex* coordIdx;
+	CIndex* colorIdx;
+	CIndex* textureIdx;
 
 	long i, j;
 	float oldWidth[1];
@@ -81,11 +81,11 @@ void CIvfLineSet::doCreateGeometry()
 					glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 			}
 			else
-				if (CIvfShape::getMaterial()!=NULL)
-					CIvfShape::getMaterial()->render();
+				if (CShape::getMaterial()!=NULL)
+					CShape::getMaterial()->render();
 				else
-					if (CIvfShape::getMaterial()!=NULL)
-						CIvfShape::getMaterial()->render();
+					if (CShape::getMaterial()!=NULL)
+						CShape::getMaterial()->render();
 					else
 						glColor3f(1.0f, 1.0f, 1.0f);
 
@@ -102,32 +102,32 @@ void CIvfLineSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CIvfLineSet::setUseColor(bool flag)
+void CLineSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CIvfLineSet::getUseColor()
+bool CLineSet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CIvfLineSet::setUseAlpha(bool flag)
+void CLineSet::setUseAlpha(bool flag)
 {
 	m_useAlpha = flag;
 }
 
-bool CIvfLineSet::getUseAlpha()
+bool CLineSet::getUseAlpha()
 {
 	return m_useAlpha;
 }
 
-void CIvfLineSet::setLineWidth(float width)
+void CLineSet::setLineWidth(float width)
 {
 	m_lineWidth = width;
 }
 
-float CIvfLineSet::getLineWidth()
+float CLineSet::getLineWidth()
 {
 	return m_lineWidth;
 }

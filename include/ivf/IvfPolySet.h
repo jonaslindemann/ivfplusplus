@@ -27,7 +27,7 @@
 
 #include <ivf/IvfGLPrimitive.h>
 
-IvfSmartPointer(CIvfPolySet);
+IvfSmartPointer(CPolySet);
 
 /**
  * Poly set class
@@ -38,17 +38,17 @@ IvfSmartPointer(CIvfPolySet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfPolySet : public CIvfGLPrimitive {
+class IVF_API CPolySet : public CGLPrimitive {
 private:
 	bool m_useColor;
 public:
-	/** CIvfPolySet constructor */
-	CIvfPolySet();
+	/** CPolySet constructor */
+	CPolySet();
 
-	/** CIvfPolySet destructor */
-	virtual ~CIvfPolySet();
+	/** CPolySet destructor */
+	virtual ~CPolySet();
 
-	IvfClassInfo("CIvfPolySet",CIvfGLPrimitive);
+	IvfClassInfo("CPolySet",CGLPrimitive);
 
 	/** Enable or disable the use of color values when rendering */
 	void setUseColor(bool flag);
@@ -57,7 +57,7 @@ public:
 	bool getUseColor();
 protected:
 	virtual void updateVertexNormals();
-	virtual void calcNormal(CIvfIndex* idx);
+	virtual void calcNormal(CIndex* idx);
 	void doCreateGeometry();
 };
 /** \example advgeom.cpp */

@@ -26,28 +26,28 @@
 
 
 // ------------------------------------------------------------
-CIvfCube::CIvfCube ()
-		:CIvfBrick()
+CCube::CCube ()
+		:CBrick()
 		//TODO: check and complete member initialisation list!
 {
 }
 
 // ------------------------------------------------------------
-CIvfCube::~CIvfCube ()
+CCube::~CCube ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfCube::setSize (const double length)
+void CCube::setSize (const double length)
 {
-	CIvfBrick::setSize(length,length,length);
+	CBrick::setSize(length,length,length);
 }
 
 // ------------------------------------------------------------
-void CIvfCube::getSize (double &length)
+void CCube::getSize (double &length)
 {
 	double dval;
-	CIvfBrick::getSize(dval,dval,dval);
+	CBrick::getSize(dval,dval,dval);
 	length = dval;
 }
 

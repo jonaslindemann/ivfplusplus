@@ -33,7 +33,7 @@
 #include <ivfmath/IvfVec3d.h>
 #include <ivfmath/IvfQuat.h>
 
-IvfSmartPointer(CIvfShape);
+IvfSmartPointer(CShape);
 
 #define IVF_NONAME			999999
 #define IVF_NO_ENUM         999998
@@ -43,16 +43,16 @@ IvfSmartPointer(CIvfShape);
 /**
  * Abstract shape class with material and position.
  *
- * CIvfShape implements a CIvfGLBase with a material and a position.
- * Methods for moving, and rotation are implemented. The CIvfShape
+ * CShape implements a CIvfGLBase with a material and a position.
+ * Methods for moving, and rotation are implemented. The CShape
  * also has a special material and state for a highlight effect.
- * CIvfShape should be considered an abstract class. Classes derived 
- * from CIvfShape should override the doCreateGeometry, 
+ * CShape should be considered an abstract class. Classes derived 
+ * from CShape should override the doCreateGeometry, 
  * doCreateSelect methods.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfShape : public CIvfGLBase {
+class IVF_API CShape : public CGLBase {
 public:
 	enum THighlightState {
 		HS_ON,
@@ -67,13 +67,13 @@ public:
 	void disableHighlight();
 	void enableHighlight();
 	void setHighlightType(THighlightType type);
-	/** CIvfShape constructor */
-	CIvfShape ();
+	/** CShape constructor */
+	CShape ();
 
-	/** CIvfShape destructor */
-	virtual ~CIvfShape ();
+	/** CShape destructor */
+	virtual ~CShape ();
 
-	IvfClassInfo("CIvfShape",CIvfGLBase);
+	IvfClassInfo("CShape",CGLBase);
 
 	/** Force object refresh */
 	virtual void refresh();
@@ -123,59 +123,59 @@ public:
 	 * Assign a CIvfPoint the position of the object.
 	 * @param point Reference to a CIvfPoint instance.
 	 */
-	void assignPointTo(CIvfPoint3d* point);
+	void assignPointTo(CPoint3d* point);
 
 	/**
 	 * Assigns the position of the object to a 
-	 * CIvfShape instance.
-	 * @param shape Reference to a CIvfShape instance.
+	 * CShape instance.
+	 * @param shape Reference to a CShape instance.
 	 */
-	void assignPositionTo(CIvfShape* shape);
+	void assignPositionTo(CShape* shape);
 
 	/**
 	 * Assign highlight material
 	 *
 	 * Assigns the material used to highlight the object. 
-	 * The CIvfShape class increases the reference count of the
+	 * The CShape class increases the reference count of the
 	 * material when it is assigned to the class. When the
 	 * destructor of the class is called the reference count is 
 	 * decreased. If the material is not referenced it is deleted.
-	 * @param material Reference of a CIvfMaterial instance.
+	 * @param material Reference of a CMaterial instance.
 	 */
-	void setHighlightMaterial(CIvfMaterial* material);
+	void setHighlightMaterial(CMaterial* material);
 	
 	/** Returns the used highlight material */
-	CIvfMaterial* getHightlightMaterial();
+	CMaterial* getHightlightMaterial();
 
 	/**
 	 * Assign material
 	 *
 	 * Assigns the default material to the object. 
-	 * The CIvfShape class increases the reference count of the
+	 * The CShape class increases the reference count of the
 	 * material when it is assigned to the class. When the
 	 * destructor of the class is called the reference count is 
 	 * decreased. If the material is not referenced it is deleted.
-	 * @param material Reference of a CIvfMaterial instance.
+	 * @param material Reference of a CMaterial instance.
 	 */
-	void setMaterial (CIvfMaterial* material);
+	void setMaterial (CMaterial* material);
 
 	/** Returns the used material */
-	virtual CIvfMaterial* getMaterial ();
+	virtual CMaterial* getMaterial ();
 	
 	/**
 	 * Assign texture
 	 *
 	 * Assigns the default texture to the object. 
-	 * The CIvfShape class increases the reference count of the
+	 * The CShape class increases the reference count of the
 	 * texture when it is assigned to the class. When the
 	 * destructor of the class is called the reference count is 
 	 * decreased. If the texture is not referenced it is deleted.
-	 * @param texture Reference of a CIvfTexture instance.
+	 * @param texture Reference of a CTexture instance.
 	 */
-	void setTexture(CIvfTexture* texture);
+	void setTexture(CTexture* texture);
 
 	/** Returns used texture */
-	CIvfTexture* getTexture();
+	CTexture* getTexture();
 
 	/** 
 	 * Set the quaternion rotation of the object.
@@ -189,8 +189,8 @@ public:
 	 */
 	void setRotationQuat(double vx, double vy, double vz, double theta);
 
-	/** Sets the rotation of the object specified by an CIvfQuat. */
-	void setRotation(CIvfQuat& q);
+	/** Sets the rotation of the object specified by an CQuat. */
+	void setRotation(CQuat& q);
 
 	/** Return quaternion rotation of the object */
 	void getRotationQuat(double &vx, double &vy, double &vz, double &theta);
@@ -217,7 +217,7 @@ public:
 	 * Sets the position of the object int the global coordinate system.
 	 * @param shape Shape used to retrieve position from.
 	 */
-	virtual void setPosition (CIvfShape* shape);
+	virtual void setPosition (CShape* shape);
 	
 	/**
 	 * Position of object
@@ -225,7 +225,7 @@ public:
 	 * Sets the position of the object int the global coordinate system.
 	 * @param point Point used to retrieve position from.
 	 */
-	virtual void setPosition (CIvfPoint3d* point);
+	virtual void setPosition (CPoint3d* point);
 
 	/**
 	 * Position of object
@@ -233,7 +233,7 @@ public:
 	 * Sets the position of the object int the global coordinate system.
 	 * @param pos Point used to retrieve position from.
 	 */
-	virtual void setPosition(CIvfPoint3d& pos);
+	virtual void setPosition(CPoint3d& pos);
 
 	/**
 	 * Position of object
@@ -241,19 +241,19 @@ public:
 	 * Sets the position of the object int the global coordinate system.
 	 * @param pos Point used to retrieve position from.
 	 */
-	virtual void setPosition(CIvfVec3d& pos);
+	virtual void setPosition(CVec3d& pos);
 
 	/** Return position of object */
 	virtual void getPosition (double &x, double &y, double &z);
 
 	/** Return position of object */
-	virtual void getPosition (CIvfShape* shape);
+	virtual void getPosition (CShape* shape);
 
 	/** Return position of object */
-	virtual void getPosition (CIvfPoint3d* point);
+	virtual void getPosition (CPoint3d* point);
 
 	/** Return position of object */
-	virtual CIvfVec3d& getPosition();
+	virtual CVec3d& getPosition();
 
 	/**
 	 * Object scale
@@ -269,7 +269,7 @@ public:
 	void getScale (double &xScale, double &yScale, double &zScale);
 
 	/** Set material for selection */
-	void setSelectMaterial(CIvfMaterial* material);
+	void setSelectMaterial(CMaterial* material);
 
 	/** Enable/disable normalization of normals */
 	void setNormalize(bool flag);
@@ -281,15 +281,15 @@ private:
 	int m_selectState;
 	THighlightState m_highlight;
 	THighlightType  m_highlightType;
-	CIvfMaterialPtr m_highlightMaterial;
-	CIvfMaterialPtr m_selectMaterial;
+	CMaterialPtr m_highlightMaterial;
+	CMaterialPtr m_selectMaterial;
 	GLuint m_objectName;
 	double	m_position[3];
 	double	m_scale[3];
 	double	m_rotation[3];
 	double  m_rotQuat[4];
-	CIvfMaterialPtr	m_material;
-	CIvfTexturePtr    m_texture;
+	CMaterialPtr	m_material;
+	CTexturePtr    m_texture;
 	bool m_normalize;
 protected:
 	/** Forces an object recalculation. */

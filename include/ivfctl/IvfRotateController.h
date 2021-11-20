@@ -26,7 +26,7 @@
 
 #include <ivfmath/IvfVec3d.h>
 
-IvfSmartPointer(CIvfRotateController);
+IvfSmartPointer(CRotateController);
 
 /**
  * Rotation controller class
@@ -35,19 +35,19 @@ IvfSmartPointer(CIvfRotateController);
  * around a given axis using a specified speed or by specifying
  * a rotation speed around the three main axes
  */
-class IVFCTL_API CIvfRotateController : public CIvfController {
+class IVFCTL_API CRotateController : public CController {
 private:
 	double m_rotationSpeed[3];
-	CIvfVec3d m_axis;
+	CVec3d m_axis;
 	bool m_useAxis;
 public:
-	/** CIvfRotateController constructor */
-	CIvfRotateController();
+	/** CRotateController constructor */
+	CRotateController();
 
-	/** CIvfRotateController destructor */
-	virtual ~CIvfRotateController();
+	/** CRotateController destructor */
+	virtual ~CRotateController();
 
-	IvfClassInfo("CIvfRotateController",CIvfController);
+	IvfClassInfo("CRotateController",CController);
 
 	/** Set rotation speeds around x, y and z axes */
 	void setRotationSpeed(double vx, double vy, double vz);

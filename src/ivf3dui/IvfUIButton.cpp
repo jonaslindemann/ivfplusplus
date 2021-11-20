@@ -24,31 +24,31 @@
 
 #include <ivf3dui/IvfUIButton.h>
 
-CIvfUIButton::CIvfUIButton()
+CUIButton::CUIButton()
 {
 	m_visualAction = VA_SCALED;
 	m_movementDirection.setComponents(0.0, 0.0, 1.0);
 	m_movementDistance = 0.2;
 
-	m_movementXfm = new CIvfTransform();
+	m_movementXfm = new CTransform();
 	m_movementXfm->setUseName(false);
 
 	this->addChild(m_movementXfm);
 }
 
-CIvfUIButton::~CIvfUIButton()
+CUIButton::~CUIButton()
 {
 	
 }
 
-void CIvfUIButton::doControlOver(CIvfVec3d vec)
+void CUIButton::doControlOver(CVec3d vec)
 {
 	switch (m_visualAction) {
 	case VA_SCALED:
 		
 		break;
 	case VA_MOVING:
-		m_movementXfm->setHighlightComposite(CIvfShape::HS_ON);
+		m_movementXfm->setHighlightComposite(CShape::HS_ON);
 		break;
 	case VA_SHAPES:
 		
@@ -59,9 +59,9 @@ void CIvfUIButton::doControlOver(CIvfVec3d vec)
 	}
 }
 
-void CIvfUIButton::doControlLeave(CIvfVec3d vec)
+void CUIButton::doControlLeave(CVec3d vec)
 {
-	m_movementXfm->setHighlightComposite(CIvfShape::HS_OFF);
+	m_movementXfm->setHighlightComposite(CShape::HS_OFF);
 	switch (getType()) {
 	case BT_NORMAL:
 		setState(BS_UP);
@@ -75,7 +75,7 @@ void CIvfUIButton::doControlLeave(CIvfVec3d vec)
 	}
 }
 
-void CIvfUIButton::doControlDown(CIvfVec3d vec, int button)
+void CUIButton::doControlDown(CVec3d vec, int button)
 {
 	switch (getType()) {
 	case BT_NORMAL:
@@ -94,7 +94,7 @@ void CIvfUIButton::doControlDown(CIvfVec3d vec, int button)
 
 }
 
-void CIvfUIButton::doControlUp(CIvfVec3d vec)
+void CUIButton::doControlUp(CVec3d vec)
 {
 	switch (getType()) {
 	case BT_NORMAL:
@@ -110,17 +110,17 @@ void CIvfUIButton::doControlUp(CIvfVec3d vec)
 	
 }
 
-void CIvfUIButton::setUpShape(CIvfShape *shape)
+void CUIButton::setUpShape(CShape *shape)
 {
-	CIvfShapePtr oldShape = this->removeShape(m_upShape);
+	CShapePtr oldShape = this->removeShape(m_upShape);
 	m_upShape = shape;
 	this->addChild(m_upShape);
 	
-	CIvfMaterialPtr material = m_upShape->getMaterial();
+	CMaterialPtr material = m_upShape->getMaterial();
 	
 	if (material!=NULL)
 	{
-		CIvfMaterialPtr hlMaterial = new CIvfMaterial();
+		CMaterialPtr hlMaterial = new CMaterial();
 		hlMaterial->assignFrom(material);
 		hlMaterial->brightnessDiffuse(0.2);
 		hlMaterial->brightnessAmbient(0.2);
@@ -128,17 +128,17 @@ void CIvfUIButton::setUpShape(CIvfShape *shape)
 	}
 }
 
-void CIvfUIButton::setDownShape(CIvfShape *shape)
+void CUIButton::setDownShape(CShape *shape)
 {
-	CIvfShapePtr oldShape = this->removeShape(m_downShape);
+	CShapePtr oldShape = this->removeShape(m_downShape);
 	m_downShape = shape;
 	this->addChild(m_upShape);
 	
-	CIvfMaterialPtr material = m_downShape->getMaterial();
+	CMaterialPtr material = m_downShape->getMaterial();
 	
 	if (material!=NULL)
 	{
-		CIvfMaterialPtr hlMaterial = new CIvfMaterial();
+		CMaterialPtr hlMaterial = new CMaterial();
 		hlMaterial->assignFrom(material);
 		hlMaterial->brightnessDiffuse(0.2);
 		hlMaterial->brightnessAmbient(0.2);
@@ -146,11 +146,11 @@ void CIvfUIButton::setDownShape(CIvfShape *shape)
 	}
 }
 
-void CIvfUIButton::setVisualAction(TVisualAction action)
+void CUIButton::setVisualAction(TVisualAction action)
 {
 	m_visualAction = action;
 	
-	CIvfShapePtr oldShape = this->removeShape(m_downShape);
+	CShapePtr oldShape = this->removeShape(m_downShape);
 	oldShape = this->removeShape(m_upShape);
 	oldShape = this->removeShape(m_movementXfm);
 	
@@ -166,8 +166,8 @@ void CIvfUIButton::setVisualAction(TVisualAction action)
 		{
 			this->addChild(m_downShape);
 			this->addChild(m_upShape);
-			m_downShape->setState(CIvfGLBase::OS_OFF);
-			m_upShape->setState(CIvfGLBase::OS_ON);
+			m_downShape->setState(CGLBase::OS_OFF);
+			m_upShape->setState(CGLBase::OS_ON);
 		}
 		break;
 	default:
@@ -176,14 +176,14 @@ void CIvfUIButton::setVisualAction(TVisualAction action)
 	}
 }
 
-void CIvfUIButton::setMovementDirection(CIvfVec3d vec)
+void CUIButton::setMovementDirection(CVec3d vec)
 {
 	m_movementDirection = vec;
 }
 
-void CIvfUIButton::setShape(CIvfShape *shape)
+void CUIButton::setShape(CShape *shape)
 {
-	CIvfShapePtr oldShape = this->removeShape(m_downShape);
+	CShapePtr oldShape = this->removeShape(m_downShape);
 	oldShape = this->removeShape(m_upShape);
 	m_shape = shape;
 	m_shape->setUseName(false);
@@ -193,11 +193,11 @@ void CIvfUIButton::setShape(CIvfShape *shape)
 	m_movementXfm->addChild(m_shape);
 	m_movementXfm->setMaterial(m_shape->getMaterial());
 
-	CIvfMaterialPtr material = m_shape->getMaterial();
+	CMaterialPtr material = m_shape->getMaterial();
 	
 	if (material!=NULL)
 	{
-		CIvfMaterialPtr hlMaterial = new CIvfMaterial();
+		CMaterialPtr hlMaterial = new CMaterial();
 		hlMaterial->assignFrom(material);
 		hlMaterial->brightnessDiffuse(0.5);
 		hlMaterial->brightnessAmbient(0.5);
@@ -205,25 +205,25 @@ void CIvfUIButton::setShape(CIvfShape *shape)
 	}
 }
 
-void CIvfUIButton::setMovementDistance(double dist)
+void CUIButton::setMovementDistance(double dist)
 {
 	m_movementDistance = dist;
 }
 
-double CIvfUIButton::getMovementDistance()
+double CUIButton::getMovementDistance()
 {
 	return m_movementDistance;
 }
 
-void CIvfUIButton::setMovementDirection(double vx, double vy, double vz)
+void CUIButton::setMovementDirection(double vx, double vy, double vz)
 {
-	CIvfVec3d vec;
+	CVec3d vec;
 	vec.setComponents(vx, vy, vz);
 	vec.normalize();
 	setMovementDirection(vec);
 }
 
-void CIvfUIButton::visualDown()
+void CUIButton::visualDown()
 {
 	switch (m_visualAction) {
 	case VA_SCALED:
@@ -233,7 +233,7 @@ void CIvfUIButton::visualDown()
 	case VA_MOVING:
 		if (m_shape!=NULL)
 		{
-			CIvfVec3d pos = m_movementXfm->getPosition();
+			CVec3d pos = m_movementXfm->getPosition();
 			m_originalPosition = pos;
 			pos = pos + m_movementDistance*m_movementDirection;
 			m_movementXfm->setPosition(pos);
@@ -242,8 +242,8 @@ void CIvfUIButton::visualDown()
 	case VA_SHAPES:
 		if ((m_downShape!=NULL)&&(m_upShape!=NULL))
 		{
-			m_downShape->setState(CIvfGLBase::OS_ON);
-			m_upShape->setState(CIvfGLBase::OS_OFF);
+			m_downShape->setState(CGLBase::OS_ON);
+			m_upShape->setState(CGLBase::OS_OFF);
 		}
 		break;
 	default:
@@ -252,7 +252,7 @@ void CIvfUIButton::visualDown()
 	}
 }
 
-void CIvfUIButton::visualUp()
+void CUIButton::visualUp()
 {
 	switch (m_visualAction) {
 	case VA_SCALED:
@@ -268,8 +268,8 @@ void CIvfUIButton::visualUp()
 	case VA_SHAPES:
 		if ((m_downShape!=NULL)&&(m_upShape!=NULL))
 		{
-			m_downShape->setState(CIvfGLBase::OS_OFF);
-			m_upShape->setState(CIvfGLBase::OS_ON);
+			m_downShape->setState(CGLBase::OS_OFF);
+			m_upShape->setState(CGLBase::OS_ON);
 		}
 		break;
 	default:
@@ -278,7 +278,7 @@ void CIvfUIButton::visualUp()
 	}
 }
 
-void CIvfUIButton::visualRestore()
+void CUIButton::visualRestore()
 {
 	switch (m_visualAction) {
 	case VA_SCALED:
@@ -294,8 +294,8 @@ void CIvfUIButton::visualRestore()
 	case VA_SHAPES:
 		if ((m_downShape!=NULL)&&(m_upShape!=NULL))
 		{
-			m_downShape->setState(CIvfGLBase::OS_OFF);
-			m_upShape->setState(CIvfGLBase::OS_ON);
+			m_downShape->setState(CGLBase::OS_OFF);
+			m_upShape->setState(CGLBase::OS_ON);
 		}
 		break;
 	default:
@@ -304,7 +304,7 @@ void CIvfUIButton::visualRestore()
 	}	
 }
 
-void CIvfUIButton::doStateChange()
+void CUIButton::doStateChange()
 {
 	if (getState()==BS_DOWN)
 		visualDown();

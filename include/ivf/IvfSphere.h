@@ -28,21 +28,21 @@
 #include <ivf/IvfShape.h>
 #include <ivf/IvfSelectionBox.h>
 
-IvfSmartPointer(CIvfSphere);
+IvfSmartPointer(CSphere);
 
 /**
  * Sphere primitive
  * @author Jonas Lindemann
  */
-class IVF_API CIvfSphere : public CIvfShape {
+class IVF_API CSphere : public CShape {
 public:
 	/** Constructor */
-	CIvfSphere ();
+	CSphere ();
 
 	/** Destructor */
-	virtual ~CIvfSphere ();
+	virtual ~CSphere ();
 
-	IvfClassInfo("CIvfSphere",CIvfShape);
+	IvfClassInfo("CSphere",CShape);
 
 	/** Set sphere radius */
 	void setRadius (double radius);
@@ -67,7 +67,7 @@ public:
 
 private:
 	void updateSelectBox();
-	CIvfSelectionBox* m_selectionBox;
+	CSelectionBox* m_selectionBox;
 	int m_stacks;
 	int m_slices;
 	double	m_radius;

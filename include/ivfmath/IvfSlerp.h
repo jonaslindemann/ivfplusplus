@@ -30,24 +30,24 @@
 #include <ivfmath/IvfMathBase.h>
 #include <ivfmath/IvfSlerpSegment.h>
 
-IvfSmartPointer(CIvfSlerp);
+IvfSmartPointer(CSlerp);
 
 /**
  * Slerp class
  *
  * Interface not finished
  */
-class IVFMATH_API CIvfSlerp : public CIvfMathBase {
+class IVFMATH_API CSlerp : public CMathBase {
 private:
-	std::vector<CIvfSlerpSegment*> m_segments;
-	std::vector<CIvfQuat*> m_quats;
+	std::vector<CSlerpSegment*> m_segments;
+	std::vector<CQuat*> m_quats;
 	int m_size;
 	void initSlerp();
 public:
-	CIvfSlerp();
-	virtual ~CIvfSlerp();
+	CSlerp();
+	virtual ~CSlerp();
 
-	IvfClassInfo("CIvfSlerp",CIvfMathBase);
+	IvfClassInfo("CSlerp",CMathBase);
 
 	void clear();
 	void update();
@@ -55,10 +55,10 @@ public:
 	void setSize(int size);
 	int getSize();
 	
-	void setQuat(int idx, CIvfQuat& q);
+	void setQuat(int idx, CQuat& q);
 	void setQuatAxisAngle(int idx, double vx, double vy, double vz, double angle);
-	CIvfQuat& getQuat(int idx);
-	CIvfQuat& getQuat(double t);
+	CQuat& getQuat(int idx);
+	CQuat& getQuat(double t);
 };
 
 #endif 

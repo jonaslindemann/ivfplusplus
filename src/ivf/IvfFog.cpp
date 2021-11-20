@@ -26,42 +26,42 @@
 
 #include <ivf/IvfGL.h>
 
-CIvfFog* CIvfFog::m_instance = 0;
-CIvfSingletonDestroyer<CIvfFog> CIvfFog::m_destroyer;
+CFog* CFog::m_instance = 0;
+CSingletonDestroyer<CFog> CFog::m_destroyer;
 
-CIvfFog* CIvfFog::getInstance () 
+CFog* CFog::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CIvfFog(); 
+		m_instance = new CFog(); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CIvfFog::CIvfFog()
+CFog::CFog()
 {
 
 }
 
-void CIvfFog::enable()
+void CFog::enable()
 {
 	glEnable(GL_FOG);
 }
 
-void CIvfFog::disable()
+void CFog::disable()
 {
 	glDisable(GL_FOG);
 }
 
-bool CIvfFog::isEnabled()
+bool CFog::isEnabled()
 {
 	GLboolean fogEnabled;
 	glGetBooleanv(GL_FOG, &fogEnabled);
 	return fogEnabled;
 }
 
-void CIvfFog::setType(TFogType type)
+void CFog::setType(TFogType type)
 {
 	switch (type) {
 	case FT_LINEAR:
@@ -79,7 +79,7 @@ void CIvfFog::setType(TFogType type)
 	}
 }
 
-CIvfFog::TFogType CIvfFog::getType()
+CFog::TFogType CFog::getType()
 {
 	GLint fogMode;
 	glGetIntegerv(GL_FOG_MODE, &fogMode);
@@ -99,43 +99,43 @@ CIvfFog::TFogType CIvfFog::getType()
 	}
 }
 
-void CIvfFog::setLimits(double start, double end)
+void CFog::setLimits(double start, double end)
 {
 	glFogf(GL_FOG_START, (GLfloat)start);
 	glFogf(GL_FOG_END, (GLfloat)end);
 }
 
-void CIvfFog::setStart(double start)
+void CFog::setStart(double start)
 {
 	glFogf(GL_FOG_START, (GLfloat)start);
 }
 
-void CIvfFog::setEnd(double end)
+void CFog::setEnd(double end)
 {
 	glFogf(GL_FOG_END, (GLfloat)end);
 }
 
-double CIvfFog::getStart()
+double CFog::getStart()
 {
 	GLfloat fogStart;
 	glGetFloatv(GL_FOG_START, &fogStart);
 	return fogStart;
 }
 
-double CIvfFog::getEnd()
+double CFog::getEnd()
 {
 	GLfloat fogEnd;
 	glGetFloatv(GL_FOG_END, &fogEnd);
 	return fogEnd;
 }
 
-void CIvfFog::getLimits(double &start, double &end)
+void CFog::getLimits(double &start, double &end)
 {
 	start = getStart();
 	end = getEnd();
 }
 
-void CIvfFog::setColor(float red, float green, float blue, float alpha)
+void CFog::setColor(float red, float green, float blue, float alpha)
 {
 	m_fogColor[0] = red;
 	m_fogColor[1] = green;
@@ -145,7 +145,7 @@ void CIvfFog::setColor(float red, float green, float blue, float alpha)
 	glFogfv(GL_FOG_COLOR, m_fogColor);
 }
 
-void CIvfFog::getColor(float &red, float &green, float &blue, float &alpha)
+void CFog::getColor(float &red, float &green, float &blue, float &alpha)
 {
 	GLfloat fogColor[4];
 	glGetFloatv(GL_FOG_COLOR, fogColor);
@@ -155,12 +155,12 @@ void CIvfFog::getColor(float &red, float &green, float &blue, float &alpha)
 	alpha = fogColor[3];
 }
 
-void CIvfFog::setDensity(double density)
+void CFog::setDensity(double density)
 {
 	glFogf(GL_FOG_END, (GLfloat)density);
 }
 
-double CIvfFog::getDensity()
+double CFog::getDensity()
 {
 	GLfloat fogEnd;
 	glGetFloatv(GL_FOG_END, &fogEnd);

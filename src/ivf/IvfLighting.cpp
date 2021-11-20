@@ -26,26 +26,26 @@
 
 #include <ivf/IvfGL.h>
 
-CIvfLighting* CIvfLighting::m_instance = 0;
-CIvfSingletonDestroyer<CIvfLighting> CIvfLighting::m_destroyer;
+CLighting* CLighting::m_instance = 0;
+CSingletonDestroyer<CLighting> CLighting::m_destroyer;
 
-CIvfLighting* CIvfLighting::getInstance () 
+CLighting* CLighting::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CIvfLighting(); 
+		m_instance = new CLighting(); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CIvfLighting::CIvfLighting() 
+CLighting::CLighting() 
 { 
     int i;
 
 	for (i=0; i<8; i++)
 	{
-		CIvfLight* light = new CIvfLight();
+		CLight* light = new CLight();
 		light->addReference();
 		light->setNumber(i);
 		m_lights.push_back(light);
@@ -57,51 +57,51 @@ CIvfLighting::CIvfLighting()
 	m_ambient[3] = 1.0f;
 }
 
-CIvfLighting::~CIvfLighting() 
+CLighting::~CLighting() 
 { 
     int i;
 
 	for (i=0; i<8; i++)
 	{
-		CIvfLight* light = m_lights[i];
+		CLight* light = m_lights[i];
 		delete light;
 	}
 }
 
-void CIvfLighting::enable()
+void CLighting::enable()
 {
 	glEnable(GL_LIGHTING);
 }
 
-void CIvfLighting::disable()
+void CLighting::disable()
 {
 	glDisable(GL_LIGHTING);
 }
 
-void CIvfLighting::setLocalViewer(bool flag)
+void CLighting::setLocalViewer(bool flag)
 {
 	m_local[0] = ( flag ) ? 1 : 0;
 	glLightModeliv( GL_LIGHT_MODEL_LOCAL_VIEWER, m_local );
 
 }
 
-bool CIvfLighting::getLocalViewer()
+bool CLighting::getLocalViewer()
 {
 	return m_local;
 }
 
-void CIvfLighting::setTwoSide(bool flag)
+void CLighting::setTwoSide(bool flag)
 {
 	m_twoside[0] = ( flag ) ? 1 : 0;
 	glLightModeliv( GL_LIGHT_MODEL_TWO_SIDE, m_twoside );
 }
 
-bool CIvfLighting::getTwoSide()
+bool CLighting::getTwoSide()
 {
 	return m_twoside;
 }
 
-void CIvfLighting::setAmbientColor(float red, float green, float blue, float alpha)
+void CLighting::setAmbientColor(float red, float green, float blue, float alpha)
 {
 	m_ambient[0] = red;
 	m_ambient[1] = green;
@@ -110,12 +110,12 @@ void CIvfLighting::setAmbientColor(float red, float green, float blue, float alp
 	glLightModelfv( GL_LIGHT_MODEL_AMBIENT, m_ambient );
 }
 
-int CIvfLighting::getSize()
+int CLighting::getSize()
 {
 	return 8;
 }
 
-CIvfLight* CIvfLighting::getLight(int idx)
+CLight* CLighting::getLight(int idx)
 {
 	if ((idx>=0) && (idx<this->getSize()))
 	{
@@ -125,7 +125,7 @@ CIvfLight* CIvfLighting::getLight(int idx)
 		return NULL;
 }
 
-void CIvfLighting::enableLights()
+void CLighting::enableLights()
 {
     int i;
 
@@ -133,7 +133,7 @@ void CIvfLighting::enableLights()
 		m_lights[i]->enable();
 }
 
-void CIvfLighting::disableLights()
+void CLighting::disableLights()
 {
     int i;
 
@@ -141,7 +141,7 @@ void CIvfLighting::disableLights()
 		m_lights[i]->disable();
 }
 
-void CIvfLighting::render()
+void CLighting::render()
 {
 	int i;
 
@@ -150,24 +150,24 @@ void CIvfLighting::render()
 			m_lights[i]->render();
 }
 
-bool CIvfLighting::isEnabled()
+bool CLighting::isEnabled()
 {
 	GLboolean lightEnabled;
 	glGetBooleanv(GL_LIGHTING, &lightEnabled);
 	return (bool)lightEnabled;
 }
 
-void CIvfLighting::saveState()
+void CLighting::saveState()
 {
 	glPushAttrib(GL_LIGHTING);
 }
 
-void CIvfLighting::restoreState()
+void CLighting::restoreState()
 {
 	glPopAttrib();
 }
 
-void CIvfLighting::saveEnabledState()
+void CLighting::saveEnabledState()
 {
 	m_enabled.clear();
 
@@ -175,12 +175,12 @@ void CIvfLighting::saveEnabledState()
 
 	for (i=0; i<8; i++)
 	{
-		CIvfLightPtr light = this->getLight(i);
+		CLightPtr light = this->getLight(i);
 		m_enabled.push_back(light->isEnabled());	
 	}
 }
 
-void CIvfLighting::restoreEnabledState()
+void CLighting::restoreEnabledState()
 {
 	if (m_enabled.size()>0)
 	{
@@ -188,7 +188,7 @@ void CIvfLighting::restoreEnabledState()
 	
 		for (i=0; i<8; i++)
 		{
-			CIvfLightPtr light = this->getLight(i);
+			CLightPtr light = this->getLight(i);
 			if (m_enabled[i])
 				light->enable();
 			else

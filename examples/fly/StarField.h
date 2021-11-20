@@ -9,24 +9,24 @@
 
 IvfSmartPointer(CStarField);
 
-class CStarField : public CIvfShape {
+class CStarField : public CShape {
 private:
-	//CIvfPointSet* m_stars;
-	CIvfQuadSetPtr m_texturedStars;
-	CIvfQuadSetPtr m_planets;
-	CIvfPointSetPtr m_pointStars;
-	CIvfSpherePtr m_nebulaSphere;
-	CIvfCameraPtr m_camera;
+	//CPointSet* m_stars;
+	CQuadSetPtr m_texturedStars;
+	CQuadSetPtr m_planets;
+	CPointSetPtr m_pointStars;
+	CSpherePtr m_nebulaSphere;
+	CCameraPtr m_camera;
 
 	void initializeStars();
 	void getPolarVectors(
 		double alfa,  double beta,
-		CIvfVec3d &normal, CIvfVec3d &s, CIvfVec3d &t);
+		CVec3d &normal, CVec3d &s, CVec3d &t);
 public:
-	CStarField(CIvfCamera* camera);
+	CStarField(CCamera* camera);
 	virtual ~CStarField();
 
-	void setCamera(CIvfCamera* camera);
+	void setCamera(CCamera* camera);
 protected:
 	virtual void doCreateGeometry();
 };

@@ -29,18 +29,18 @@
 
 #include <GL/gle.h>
 
-IvfSmartPointer(CIvfGleScalarArray);
+IvfSmartPointer(CGleScalarArray);
 
-class IVFGLE_API CIvfGleScalarArray: public CIvfBase {
+class IVFGLE_API CGleScalarArray: public CBase {
 private:
 	int m_size;
 	gleDouble* m_scalars;
 public:
-	CIvfGleScalarArray();
-	CIvfGleScalarArray(int size);
-	virtual ~CIvfGleScalarArray();
+	CGleScalarArray();
+	CGleScalarArray(int size);
+	virtual ~CGleScalarArray();
 
-	IvfClassInfo("CIvfGleScalarArray", CIvfBase);
+	IvfClassInfo("CGleScalarArray", CBase);
 
 	void setSize(int size);
 	int getSize();

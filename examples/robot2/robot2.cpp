@@ -30,7 +30,7 @@
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class CExampleWindow: public CGlutBase {
 private:
 
 	// Camera movement state variables
@@ -45,9 +45,9 @@ private:
 	double m_zoomX;
 	double m_zoomY;
 
-	CIvfCameraPtr		m_camera;
-	CIvfLightPtr		m_light;
-	CIvfCompositePtr  m_scene;
+	CCameraPtr		m_camera;
+	CLightPtr		m_light;
+	CCompositePtr  m_scene;
 
 	// Robot state variables
 
@@ -58,17 +58,17 @@ private:
 
 	// Robot arm transforms
 
-	CIvfTransformPtr  m_part1;
-	CIvfTransformPtr  m_part2;
-	CIvfTransformPtr  m_part3;
-	CIvfTransformPtr  m_arm;
+	CTransformPtr  m_part1;
+	CTransformPtr  m_part2;
+	CTransformPtr  m_part3;
+	CTransformPtr  m_arm;
 
 	// Routine for updating the arm
 
 	void updateArm();
 public:
 	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+		:CGlutBase(X, Y, W, H) {};
 
 
 	virtual void onInit(int width, int height);
@@ -103,44 +103,44 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(0.0, 5.0, 5.0);
 
 	// Create a materials
 
-	CIvfMaterialPtr redMaterial = new CIvfMaterial();
+	CMaterialPtr redMaterial = new CMaterial();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
-	CIvfMaterialPtr greenMaterial = new CIvfMaterial();
+	CMaterialPtr greenMaterial = new CMaterial();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 	
-	CIvfMaterialPtr blueMaterial = new CIvfMaterial();
+	CMaterialPtr blueMaterial = new CMaterial();
 	blueMaterial->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	blueMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	blueMaterial->setAmbientColor(0.0f, 0.0f, 0.5f, 1.0f);
 
-	CIvfMaterialPtr yellowMaterial = new CIvfMaterial();
+	CMaterialPtr yellowMaterial = new CMaterial();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene composite
 
-	m_scene = new CIvfComposite();
+	m_scene = new CComposite();
 
 	// Create robot base
 
-	CIvfCylinderPtr lowerBase = new CIvfCylinder();
+	CCylinderPtr lowerBase = new CCylinder();
 	lowerBase->setHeight(0.2);
 	lowerBase->setSlices(20);
 	lowerBase->setMaterial(yellowMaterial);
 	m_scene->addChild(lowerBase);
 
-	CIvfCylinderPtr upperBase = new CIvfCylinder();
+	CCylinderPtr upperBase = new CCylinder();
 	upperBase->setHeight(0.3);
 	upperBase->setRadius(0.5);
 	upperBase->setSlices(20);
@@ -150,14 +150,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create part1
 
-	m_part1 = new CIvfTransform();
+	m_part1 = new CTransform();
 
-	CIvfSpherePtr sphere = new CIvfSphere();
+	CSpherePtr sphere = new CSphere();
 	sphere->setRadius(0.1);
 	sphere->setMaterial(redMaterial);
 	m_part1->addChild(sphere);
 
-	CIvfCylinderPtr cylinder = new CIvfCylinder();
+	CCylinderPtr cylinder = new CCylinder();
 	cylinder->setRadius(0.1);
 	cylinder->setHeight(1.0);
 	cylinder->setMaterial(greenMaterial);
@@ -169,14 +169,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create part2
 
-	m_part2 = new CIvfTransform();
+	m_part2 = new CTransform();
 
-	sphere = new CIvfSphere();
+	sphere = new CSphere();
 	sphere->setRadius(0.1);
 	sphere->setMaterial(redMaterial);
 	m_part2->addChild(sphere);
 
-	cylinder = new CIvfCylinder();
+	cylinder = new CCylinder();
 	cylinder->setRadius(0.1);
 	cylinder->setHeight(1.0);
 	cylinder->setMaterial(greenMaterial);
@@ -188,14 +188,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create part3
 
-	m_part3 = new CIvfTransform();
+	m_part3 = new CTransform();
 
-	sphere = new CIvfSphere();
+	sphere = new CSphere();
 	sphere->setRadius(0.1);
 	sphere->setMaterial(redMaterial);
 	m_part3->addChild(sphere);
 
-	cylinder = new CIvfCylinder();
+	cylinder = new CCylinder();
 	cylinder->setRadius(0.1);
 	cylinder->setHeight(1.0);
 	cylinder->setMaterial(greenMaterial);
@@ -207,29 +207,29 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create complete arm
 
-	m_arm = new CIvfTransform();
+	m_arm = new CTransform();
 	m_arm->addChild(m_part3);
 	m_arm->setPosition(0.0, 0.1+0.4, 0.0);
 	m_arm->setRotationQuat(0.0, 1.0, 0.0, m_alfa);
 
 	m_scene->addChild(m_arm);
 
-	CIvfAxisPtr axis = new CIvfAxis();
+	CAxisPtr axis = new CAxis();
 	axis->setSize(1.5);
 	m_scene->addChild(axis);
 	
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 
 	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
-	CIvfRasterizationPtr rasterOps = CIvfRasterization::getInstance();
+	CRasterizationPtr rasterOps = CRasterization::getInstance();
 	rasterOps->enableCullFace();
-	rasterOps->setCullFace(CIvfRasterization::CF_BACK);
+	rasterOps->setCullFace(CRasterization::CF_BACK);
 }
 
 // ------------------------------------------------------------
@@ -329,7 +329,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 	
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
+		if (getModifierKey() == CWidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -380,7 +380,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window

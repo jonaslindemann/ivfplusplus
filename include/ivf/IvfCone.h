@@ -28,7 +28,7 @@
 #include <ivf/IvfShape.h>
 #include <ivf/IvfSelectionBox.h>
 
-IvfSmartPointer(CIvfCone);
+IvfSmartPointer(CCone);
 
 /**
  * Cone shape class 
@@ -39,15 +39,15 @@ IvfSmartPointer(CIvfCone);
  * many slices and stacks the cone should consist of.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfCone : public CIvfShape {
+class IVF_API CCone : public CShape {
 public:
 	/** CIvfCone constructor. */
-	CIvfCone ();
+	CCone ();
 
 	/** CIvfCone destructor. */
-	virtual ~CIvfCone ();
+	virtual ~CCone ();
 
-	IvfClassInfo("CIvfCone",CIvfShape);
+	IvfClassInfo("CIvfCone",CShape);
 
 	/** Set top radius */
 	void setTopRadius (const double radius);
@@ -99,7 +99,7 @@ public:
 	void doUpdateBoundingSphere();
 private:
 	void updateSelectBox();
-	CIvfSelectionBox* m_selectionBox;
+	CSelectionBox* m_selectionBox;
 	int m_stacks;
 	int m_slices;
 	double	m_height;

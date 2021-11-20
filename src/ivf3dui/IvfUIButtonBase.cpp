@@ -26,35 +26,35 @@
 
 #include <ivf3dui/IvfUIButtonGroup.h>
 
-CIvfUIButtonBase::CIvfUIButtonBase()
+CUIButtonBase::CUIButtonBase()
 {
 	m_type = BT_NORMAL;
 	m_state = BS_UP;
 }
 
-CIvfUIButtonBase::~CIvfUIButtonBase()
+CUIButtonBase::~CUIButtonBase()
 {
 	
 }
 
-void CIvfUIButtonBase::setType(TButtonType type)
+void CUIButtonBase::setType(TButtonType type)
 {
 	m_type = type;
 }
 
-CIvfUIButtonBase::TButtonType CIvfUIButtonBase::getType()
+CUIButtonBase::TButtonType CUIButtonBase::getType()
 {
 	return m_type;
 }
 
-void CIvfUIButtonBase::setState(TButtonState state)
+void CUIButtonBase::setState(TButtonState state)
 {
 	if (this->getParentControl()!=NULL)
 	{
 		if (state==BS_DOWN)
 		{
-			CIvfUIBase* parent = this->getParentControl();
-			CIvfUIButtonGroup* group = (CIvfUIButtonGroup*)parent;
+			CUIBase* parent = this->getParentControl();
+			CUIButtonGroup* group = (CUIButtonGroup*)parent;
 			group->updateState(this);
 			m_state = state;
 			doStateChange();
@@ -67,17 +67,17 @@ void CIvfUIButtonBase::setState(TButtonState state)
 	}
 }
 
-CIvfUIButtonBase::TButtonState CIvfUIButtonBase::getState()
+CUIButtonBase::TButtonState CUIButtonBase::getState()
 {
 	return m_state;
 }
 
-void CIvfUIButtonBase::doStateChange()
+void CUIButtonBase::doStateChange()
 {
 	
 }
 
-void CIvfUIButtonBase::groupUpdateState(TButtonState state)
+void CUIButtonBase::groupUpdateState(TButtonState state)
 {
 	m_state = state;
 	doStateChange();

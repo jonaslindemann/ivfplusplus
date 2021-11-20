@@ -26,64 +26,64 @@
 
 #include <ivf/IvfTransform.h>
 
-CIvfMultiply::CIvfMultiply()
+CMultiply::CMultiply()
 {
 
 }
 
-void CIvfMultiply::setShape(CIvfShape* shape)
+void CMultiply::setShape(CShape* shape)
 {
 	m_shape = shape;
 }
 
-CIvfShape* CIvfMultiply::getShape()
+CShape* CMultiply::getShape()
 {
 	return m_shape;
 }
 
-void CIvfMultiply::setOffsets(double dx, double dy, double dz)
+void CMultiply::setOffsets(double dx, double dy, double dz)
 {
 	m_offsets[0] = dx;
 	m_offsets[1] = dy;
 	m_offsets[2] = dz;
 }
 
-void CIvfMultiply::getOffsets(double &dx, double &dy, double &dz)
+void CMultiply::getOffsets(double &dx, double &dy, double &dz)
 {
 	dx = m_offsets[0];
 	dy = m_offsets[1];
 	dz = m_offsets[2];
 }
 
-void CIvfMultiply::setRepeat(int x, int y, int z)
+void CMultiply::setRepeat(int x, int y, int z)
 {
 	m_repeat[0] = x;
 	m_repeat[1] = y;
 	m_repeat[2] = z;
 }
 
-void CIvfMultiply::getRepeat(int &x, int &y, int &z)
+void CMultiply::getRepeat(int &x, int &y, int &z)
 {
 	x = m_repeat[0];
 	y = m_repeat[1];
 	z = m_repeat[2];
 }
 
-void CIvfMultiply::setStartIndices(int i, int j, int k)
+void CMultiply::setStartIndices(int i, int j, int k)
 {
 	m_startIndices[0] = i;
 	m_startIndices[1] = j;
 	m_startIndices[2] = k;
 }
 
-void CIvfMultiply::getStartIndices(int &i, int &j, int &k)
+void CMultiply::getStartIndices(int &i, int &j, int &k)
 {
 	i = m_startIndices[0];
 	j = m_startIndices[1];
 	k = m_startIndices[2];
 }
 
-void CIvfMultiply::doCreateGeometry()
+void CMultiply::doCreateGeometry()
 {
 	if (m_shape!=NULL)
 	{
@@ -97,7 +97,7 @@ void CIvfMultiply::doCreateGeometry()
 		int jmax = j0 + m_repeat[1] - 1;
 		int kmax = k0 + m_repeat[2] - 1;
 
-		CIvfTransformPtr xfm = new CIvfTransform();
+		CTransformPtr xfm = new CTransform();
 		xfm->addChild(m_shape);
 
 		for (i=i0; i<=imax; i++)
@@ -115,7 +115,7 @@ void CIvfMultiply::doCreateGeometry()
 	}
 }
 
-void CIvfMultiply::refresh()
+void CMultiply::refresh()
 {
 	if (m_shape!=NULL)
 		m_shape->refresh();

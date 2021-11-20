@@ -28,7 +28,7 @@
 	if (event!=NULL) \
 		event->eventMethod(shape); 
 
-CIvfInteractionHandler::CIvfInteractionHandler(CIvfWidgetBase* widget, CIvfScene* scene)
+CInteractionHandler::CInteractionHandler(CWidgetBase* widget, CScene* scene)
 {
 	m_widget = widget;
 	m_scene = scene;
@@ -57,16 +57,16 @@ CIvfInteractionHandler::CIvfInteractionHandler(CIvfWidgetBase* widget, CIvfScene
 	m_lastPos[1] = -1;
 }
 
-CIvfInteractionHandler::~CIvfInteractionHandler()
+CInteractionHandler::~CInteractionHandler()
 {
 	m_widget->removeMouseMoveEvent(this);
 	m_widget->removeMouseDownEvent(this);
 	m_widget->removeMouseUpEvent(this);
 }
 
-void CIvfInteractionHandler::doMouseUp(int x, int y)
+void CInteractionHandler::doMouseUp(int x, int y)
 {
-	CIvfVec3d vec;
+	CVec3d vec;
 
 	vec = m_scene->getCamera()->pickVector(x, y);
 
@@ -90,9 +90,9 @@ void CIvfInteractionHandler::doMouseUp(int x, int y)
 	m_lastPos[1] = y;
 }
 
-void CIvfInteractionHandler::doMouseMove(int x, int y)
+void CInteractionHandler::doMouseMove(int x, int y)
 {
-	CIvfVec3d vec;
+	CVec3d vec;
 
 	vec = m_scene->getCamera()->pickVector(x, y);
 
@@ -111,10 +111,10 @@ void CIvfInteractionHandler::doMouseMove(int x, int y)
 
 			if (m_currentShape!=NULL)
 			{
-				if (m_currentShape->isClass("CIvfUIInteractiveBase"))
+				if (m_currentShape->isClass("CUIInteractiveBase"))
 				{
-					CIvfShape* temp = m_currentShape;
-					m_currentControl = (CIvfUIInteractiveBase*)temp;
+					CShape* temp = m_currentShape;
+					m_currentControl = (CUIInteractiveBase*)temp;
 					m_currentShape = NULL;
 					m_lastShape = NULL;
 				}
@@ -166,13 +166,13 @@ void CIvfInteractionHandler::doMouseMove(int x, int y)
 	m_lastPos[1] = y;
 }
 
-void CIvfInteractionHandler::doMouseDown(int x, int y)
+void CInteractionHandler::doMouseDown(int x, int y)
 {
 	m_lastPos[0] = x;
 	m_lastPos[1] = y;
 	m_scene->pick(x, y);
 
-	CIvfVec3d vec;
+	CVec3d vec;
 
 	vec = m_scene->getCamera()->pickVector(x, y);
 
@@ -180,10 +180,10 @@ void CIvfInteractionHandler::doMouseDown(int x, int y)
 
 	if (m_currentShape!=NULL)
 	{
-		if (m_currentShape->isClass("CIvfUIInteractiveBase"))
+		if (m_currentShape->isClass("CUIInteractiveBase"))
 		{
-			CIvfShape* temp = m_currentShape;
-			m_currentControl = (CIvfUIInteractiveBase*)temp;
+			CShape* temp = m_currentShape;
+			m_currentControl = (CUIInteractiveBase*)temp;
 			m_currentShape = NULL;
 			m_lastShape = NULL;
 		}
@@ -202,19 +202,19 @@ void CIvfInteractionHandler::doMouseDown(int x, int y)
 	}
 }
 
-void CIvfInteractionHandler::onMouseDown(int x, int y)
+void CInteractionHandler::onMouseDown(int x, int y)
 {
 	if (isActive())
 		doMouseDown(x, y);
 }
 
-void CIvfInteractionHandler::onMouseUp(int x, int y)
+void CInteractionHandler::onMouseUp(int x, int y)
 {
 	if (isActive())
 		doMouseUp(x, y);
 }
 
-void CIvfInteractionHandler::onMouseMove(int x, int y)
+void CInteractionHandler::onMouseMove(int x, int y)
 {
 	if (isActive())
 		doMouseMove(x, y);
@@ -222,72 +222,72 @@ void CIvfInteractionHandler::onMouseMove(int x, int y)
 
 
 
-void CIvfInteractionHandler::setShapeDownEvent(CIvfShapeDownEvent *event)
+void CInteractionHandler::setShapeDownEvent(CShapeDownEvent *event)
 {
 	m_shapeDownEvent = event;
 }
 
-void CIvfInteractionHandler::setShapeUpEvent(CIvfShapeUpEvent *event)
+void CInteractionHandler::setShapeUpEvent(CShapeUpEvent *event)
 {
 	m_shapeUpEvent = event;
 }
 
-void CIvfInteractionHandler::setShapeClickEvent(CIvfShapeClickEvent *event)
+void CInteractionHandler::setShapeClickEvent(CShapeClickEvent *event)
 {	
 	m_shapeClickEvent = event;
 }
 
-void CIvfInteractionHandler::setShapeOverEvent(CIvfShapeOverEvent *event)
+void CInteractionHandler::setShapeOverEvent(CShapeOverEvent *event)
 {
 	m_shapeOverEvent = event;
 }
 
-void CIvfInteractionHandler::setShapeLeaveEvent(CIvfShapeLeaveEvent *event)
+void CInteractionHandler::setShapeLeaveEvent(CShapeLeaveEvent *event)
 {
 	m_shapeLeaveEvent = event;
 }
 
-void CIvfInteractionHandler::setShapeDragEvent(CIvfShapeDragEvent *event)
+void CInteractionHandler::setShapeDragEvent(CShapeDragEvent *event)
 {
 	m_shapeDragEvent = event;
 }
 
-void CIvfInteractionHandler::setControlDownEvent(CIvfControlDownEvent *event)
+void CInteractionHandler::setControlDownEvent(CControlDownEvent *event)
 {
 	m_controlDownEvent = event;
 }
 
-void CIvfInteractionHandler::setControlUpEvent(CIvfControlUpEvent *event)
+void CInteractionHandler::setControlUpEvent(CControlUpEvent *event)
 {
 	m_controlUpEvent = event;
 }
 
-void CIvfInteractionHandler::setControlClickEvent(CIvfControlClickEvent *event)
+void CInteractionHandler::setControlClickEvent(CControlClickEvent *event)
 {
 	m_controlClickEvent = event;
 }
 
-void CIvfInteractionHandler::setControlOverEvent(CIvfControlOverEvent *event)
+void CInteractionHandler::setControlOverEvent(CControlOverEvent *event)
 {
 	m_controlOverEvent = event;
 }
 
-void CIvfInteractionHandler::setControlLeaveEvent(CIvfControlLeaveEvent *event)
+void CInteractionHandler::setControlLeaveEvent(CControlLeaveEvent *event)
 {
 	m_controlLeaveEvent = event;
 }
 
-void CIvfInteractionHandler::setControlDragEvent(CIvfControlDragEvent *event)
+void CInteractionHandler::setControlDragEvent(CControlDragEvent *event)
 {
 	m_controlDragEvent = event;
 }
 
-void CIvfInteractionHandler::setShapeEnterEvent(CIvfShapeEnterEvent *event)
+void CInteractionHandler::setShapeEnterEvent(CShapeEnterEvent *event)
 {
 	m_shapeEnterEvent = event;
 }
 
-void CIvfInteractionHandler::setControlEnterEvent(CIvfControlEnterEvent *event)
+void CInteractionHandler::setControlEnterEvent(CControlEnterEvent *event)
 {
 	m_controlEnterEvent = event;
 }

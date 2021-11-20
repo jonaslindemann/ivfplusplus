@@ -26,20 +26,20 @@
 #include <ivf/IvfLighting.h>
 #include <ivf/IvfBlending.h>
 
-GLUquadricObj* CIvfConnectionPoint::m_qobj = NULL;
-CIvfMaterial* CIvfConnectionPoint::m_material = NULL;
+GLUquadricObj* CConnectionPoint::m_qobj = NULL;
+CMaterial* CConnectionPoint::m_material = NULL;
 
-CIvfConnectionPoint::CIvfConnectionPoint()
+CConnectionPoint::CConnectionPoint()
 {
 	m_discreteTime = NULL;
-	m_coords = new CIvfCoordHist();
+	m_coords = new CCoordHist();
 	m_useColor = true;
 	m_camera = NULL;
 	m_connectionRadius = 1.0;
 
 	if (m_material==NULL)
 	{
-		m_material = new CIvfMaterial();
+		m_material = new CMaterial();
 		m_material->addReference();
 		m_material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 		m_material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -56,7 +56,7 @@ CIvfConnectionPoint::CIvfConnectionPoint()
 	//this->setMaterial(m_material);
 }
 
-CIvfConnectionPoint::~CIvfConnectionPoint()
+CConnectionPoint::~CConnectionPoint()
 {
 	if (m_qobj!=NULL)
 	{
@@ -65,21 +65,21 @@ CIvfConnectionPoint::~CIvfConnectionPoint()
 	}
 }
 
-void CIvfConnectionPoint::setDiscreteTime(CIvfDiscreteTime *discreteTime)
+void CConnectionPoint::setDiscreteTime(CDiscreteTime *discreteTime)
 {
 	m_discreteTime = discreteTime;
 	m_coords->setDiscreteTime(m_discreteTime);
 }
 
-CIvfCoordHist* CIvfConnectionPoint::getCoordHist()
+CCoordHist* CConnectionPoint::getCoordHist()
 {
 	return m_coords;
 }
 
-void CIvfConnectionPoint::doCreateGeometry()
+void CConnectionPoint::doCreateGeometry()
 {
-	CIvfCoordListPtr coordList = m_coords->getList();
-	CIvfCoordListPtr undeformedList = m_coords->getList(0);
+	CCoordListPtr coordList = m_coords->getList();
+	CCoordListPtr undeformedList = m_coords->getList(0);
 	float r1, g1, b1;
 	float r, g, b;
 	double u1[3];
@@ -87,12 +87,12 @@ void CIvfConnectionPoint::doCreateGeometry()
 	double radius;
 	double scale;
 
-	CIvfBlendingPtr blending = CIvfBlending::getInstance();
+	CBlendingPtr blending = CBlending::getInstance();
 
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 	lighting->enable();
 
 	radius = m_connectionRadius;
@@ -101,7 +101,7 @@ void CIvfConnectionPoint::doCreateGeometry()
 
 	coordList->getCoord(0, p1[0], p1[1], p1[2]);
 
-	CIvfUserSettingsPtr userSettings = CIvfUserSettings::getInstance();
+	CUserSettingsPtr userSettings = CUserSettings::getInstance();
 	scale = userSettings->getScaleFactor();
 
 	if (undeformedList!=coordList)
@@ -198,33 +198,33 @@ void CIvfConnectionPoint::doCreateGeometry()
 	glPopMatrix();
 }
 
-void CIvfConnectionPoint::setUseColor(bool flag)
+void CConnectionPoint::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-void CIvfConnectionPoint::saveToStream(ostream &out)
+void CConnectionPoint::saveToStream(ostream &out)
 {
 	m_coords->saveToStream(out);
 }
 
-void CIvfConnectionPoint::readFromStream(istream &in)
+void CConnectionPoint::readFromStream(istream &in)
 {
 	m_coords->readFromStream(in);
 }
 
-void CIvfConnectionPoint::setCamera(CIvfCamera *camera)
+void CConnectionPoint::setCamera(CCamera *camera)
 {
 	m_camera = camera;
 }
 
-void CIvfConnectionPoint::setRadius(double radius)
+void CConnectionPoint::setRadius(double radius)
 {
 	m_connectionRadius = radius;
 }
 
 
-void CIvfConnectionPoint::colorScale(double t, float &r, float &g, float &b)
+void CConnectionPoint::colorScale(double t, float &r, float &g, float &b)
 {
 	if (t<0)
 		t=0;

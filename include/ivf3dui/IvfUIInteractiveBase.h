@@ -31,25 +31,25 @@
 
 #include <ivfmath/IvfVec3d.h>
 
-IvfSmartPointer(CIvfUIInteractiveBase);
+IvfSmartPointer(CUIInteractiveBase);
 
-class IVF3DUI_API CIvfUIInteractiveBase : public CIvfUIBase {
+class IVF3DUI_API CUIInteractiveBase : public CUIBase {
 private:
 
 public:
-	CIvfUIInteractiveBase();
-	virtual ~CIvfUIInteractiveBase();
+	CUIInteractiveBase();
+	virtual ~CUIInteractiveBase();
 
-	IvfClassInfo("CIvfUIInteractiveBase",CIvfUIBase);
+	IvfClassInfo("CUIInteractiveBase",CUIBase);
 
-	void addChild(CIvfShape* shape);
+	void addChild(CShape* shape);
 
-	virtual void doControlDown(CIvfVec3d vec, int button);
-	virtual void doControlOver(CIvfVec3d vec);
-	virtual void doControlLeave(CIvfVec3d vec);
-	virtual void doControlUp(CIvfVec3d vec);
-	virtual void doControlDrag(CIvfVec3d vec, int button);
-	virtual void doControlClick(CIvfVec3d vec, int button);
+	virtual void doControlDown(CVec3d vec, int button);
+	virtual void doControlOver(CVec3d vec);
+	virtual void doControlLeave(CVec3d vec);
+	virtual void doControlUp(CVec3d vec);
+	virtual void doControlDrag(CVec3d vec, int button);
+	virtual void doControlClick(CVec3d vec, int button);
 };
 
 #endif 

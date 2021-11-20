@@ -24,18 +24,18 @@
 
 #include <ivf/IvfLightingState.h>
 
-CIvfLightingState::CIvfLightingState()
+CLightingState::CLightingState()
 {
 	m_lightingState = true;
-	m_lighting = CIvfLighting::getInstance();
+	m_lighting = CLighting::getInstance();
 }
 
-CIvfLightingState::~CIvfLightingState()
+CLightingState::~CLightingState()
 {
 
 }
 
-void CIvfLightingState::doState()
+void CLightingState::doState()
 {
 	if (m_lightingState)
 		m_lighting->enable();
@@ -43,23 +43,23 @@ void CIvfLightingState::doState()
 		m_lighting->disable();
 }
 
-void CIvfLightingState::doSaveState()
+void CLightingState::doSaveState()
 {
 	m_lighting->saveState();
 }
 
-void CIvfLightingState::doRestoreState()
+void CLightingState::doRestoreState()
 {
 	m_lighting->restoreState();
 }
 
 
-void CIvfLightingState::setLighting(bool flag)
+void CLightingState::setLighting(bool flag)
 {
 	m_lightingState = flag;
 }
 
-bool CIvfLightingState::getLighting()
+bool CLightingState::getLighting()
 {
 	return m_lightingState;
 }

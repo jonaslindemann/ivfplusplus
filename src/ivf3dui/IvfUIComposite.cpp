@@ -24,23 +24,23 @@
 
 #include <ivf3dui/IvfUIComposite.h>
 
-CIvfUIComposite::CIvfUIComposite()
+CUIComposite::CUIComposite()
 {
 
 }
 
-CIvfUIComposite::~CIvfUIComposite()
+CUIComposite::~CUIComposite()
 {
 
 }
 
-void CIvfUIComposite::addChild(CIvfShape *shape)
+void CUIComposite::addChild(CShape *shape)
 {
 	shape->setUseName(false);
-	CIvfComposite::addChild(shape);
+	CComposite::addChild(shape);
 }
 
-void CIvfUIComposite::setHighlight(THighlightState state)
+void CUIComposite::setHighlight(THighlightState state)
 {
-	CIvfShape::setHighlight(state);
+	CShape::setHighlight(state);
 }

@@ -21,9 +21,9 @@
 
 #include <ivfctl/IvfPathController.h>
 
-CIvfPathController::CIvfPathController()
+CPathController::CPathController()
 {
-	m_path = new CIvfSpline3d();
+	m_path = new CSpline3d();
 	
 	m_t = 0.0;
 	m_v = 0.0;
@@ -36,23 +36,23 @@ CIvfPathController::CIvfPathController()
 	m_startAction = SA_STOP;
 }
 
-CIvfPathController::~CIvfPathController()
+CPathController::~CPathController()
 {
 }
 
-void CIvfPathController::setPath(CIvfSpline3d *spline)
+void CPathController::setPath(CSpline3d *spline)
 {
 	m_path = spline;
 }
 
-CIvfSpline3d* CIvfPathController::getPath()
+CSpline3d* CPathController::getPath()
 {
 	return m_path;
 }
 
-void CIvfPathController::doUpdate(double dt)
+void CPathController::doUpdate(double dt)
 {
-	CIvfShape* shape = this->getShape();
+	CShape* shape = this->getShape();
 	if (shape!=NULL)
 	{
 		double x, y, z;
@@ -119,12 +119,12 @@ void CIvfPathController::doUpdate(double dt)
 	}
 }
 
-void CIvfPathController::doReset()
+void CPathController::doReset()
 {
 	m_t = m_t0;
 	m_v = m_v0;
 
-	CIvfShape* shape = this->getShape();
+	CShape* shape = this->getShape();
 	if (shape!=NULL)
 	{
 		double x, y, z;
@@ -136,30 +136,30 @@ void CIvfPathController::doReset()
 	}
 }
 
-void CIvfPathController::setInitialPos(double t)
+void CPathController::setInitialPos(double t)
 {
 	m_t0 = t;
 	doReset();
 }
 
-void CIvfPathController::setInitialSpeed(double v)
+void CPathController::setInitialSpeed(double v)
 {
 	m_v0 = v;
 	doReset();
 }
 
-void CIvfPathController::setInitialAcceleration(double a)
+void CPathController::setInitialAcceleration(double a)
 {
 	m_a0 = a;
 	doReset();
 }
 
-void CIvfPathController::setEndActionType(TEndAction action)
+void CPathController::setEndActionType(TEndAction action)
 {
 	m_endAction = action;
 }
 
-void CIvfPathController::setStartActionType(TStartAction action)
+void CPathController::setStartActionType(TStartAction action)
 {
 	m_startAction = action;
 }

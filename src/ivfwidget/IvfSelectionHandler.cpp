@@ -24,7 +24,7 @@
 
 #include <ivfwidget/IvfSelectionHandler.h>
 
-CIvfSelectionHandler::CIvfSelectionHandler(CIvfWidgetBase* widget, CIvfScene* scene)
+CSelectionHandler::CSelectionHandler(CWidgetBase* widget, CScene* scene)
 {
 	m_widget = widget;
 	m_scene = scene;
@@ -38,14 +38,14 @@ CIvfSelectionHandler::CIvfSelectionHandler(CIvfWidgetBase* widget, CIvfScene* sc
 	m_highlightEvent = NULL;
 }
 
-CIvfSelectionHandler::~CIvfSelectionHandler()
+CSelectionHandler::~CSelectionHandler()
 {
 	m_widget->removeMouseMoveEvent(this);
 	m_widget->removeMouseDownEvent(this);
 	m_widget->removeMouseUpEvent(this);
 }
 
-void CIvfSelectionHandler::doMouseDown(int x, int y)
+void CSelectionHandler::doMouseDown(int x, int y)
 {
 	m_scene->pick(x, y);
 	dispatchSingleSelectionEvent(m_scene->getSelectedShape());
@@ -53,7 +53,7 @@ void CIvfSelectionHandler::doMouseDown(int x, int y)
 		dispatchMultipleSelectionEvent(m_scene->getSelectedShapes());
 }
 
-void CIvfSelectionHandler::doMouseMove(int x, int y)
+void CSelectionHandler::doMouseMove(int x, int y)
 {
 	m_scene->pick(x, y);
 
@@ -63,8 +63,8 @@ void CIvfSelectionHandler::doMouseMove(int x, int y)
 		{
 			if (m_oldShape!=NULL)
 				if (m_oldShape!=m_scene->getSelectedShape())
-					m_oldShape->setHighlight(CIvfShape::HS_OFF);
-			m_scene->getSelectedShape()->setHighlight(CIvfShape::HS_ON);
+					m_oldShape->setHighlight(CShape::HS_OFF);
+			m_scene->getSelectedShape()->setHighlight(CShape::HS_ON);
 			m_oldShape = m_scene->getSelectedShape();
 		}
 		else
@@ -77,7 +77,7 @@ void CIvfSelectionHandler::doMouseMove(int x, int y)
 		if (m_highlightEvent==NULL)
 		{
 			if (m_oldShape!=NULL)
-				m_oldShape->setHighlight(CIvfShape::HS_OFF);
+				m_oldShape->setHighlight(CShape::HS_OFF);
 		}
 		else
 		{
@@ -87,57 +87,57 @@ void CIvfSelectionHandler::doMouseMove(int x, int y)
 	m_widget->redraw();
 }
 
-void CIvfSelectionHandler::doMouseUp(int x, int y)
+void CSelectionHandler::doMouseUp(int x, int y)
 {
 
 }
 
-void CIvfSelectionHandler::onMouseDown(int x, int y)
+void CSelectionHandler::onMouseDown(int x, int y)
 {
 	if (isActive())
 		doMouseDown(x, y);
 }
 
-void CIvfSelectionHandler::onMouseUp(int x, int y)
+void CSelectionHandler::onMouseUp(int x, int y)
 {
 	if (isActive())
 		doMouseUp(x, y);
 }
 
-void CIvfSelectionHandler::onMouseMove(int x, int y)
+void CSelectionHandler::onMouseMove(int x, int y)
 {
 	if (isActive())
 		doMouseMove(x, y);
 }
 
-void CIvfSelectionHandler::dispatchSingleSelectionEvent(CIvfShape *shape)
+void CSelectionHandler::dispatchSingleSelectionEvent(CShape *shape)
 {
 	if (m_singleSelectionEvent!=NULL)
 		m_singleSelectionEvent->onSelect(shape);
 }
 
-void CIvfSelectionHandler::dispatchHighlightEvent(CIvfShape* shape)
+void CSelectionHandler::dispatchHighlightEvent(CShape* shape)
 {
 	if (m_highlightEvent!=NULL)
 		m_highlightEvent->onHighlight(shape);
 }
 
-void CIvfSelectionHandler::setSingleSelectionEvent(CIvfSingleSelectionEvent *event)
+void CSelectionHandler::setSingleSelectionEvent(CSingleSelectionEvent *event)
 {
 	m_singleSelectionEvent = event;
 }
 
-void CIvfSelectionHandler::setMultipleSelectionEvent(CIvfMultipleSelectionEvent *event)
+void CSelectionHandler::setMultipleSelectionEvent(CMultipleSelectionEvent *event)
 {
 	m_multipleSelectionEvent = event;
 }
 
-void CIvfSelectionHandler::setHighlightEvent(CIvfHighlightEvent* event)
+void CSelectionHandler::setHighlightEvent(CHighlightEvent* event)
 {
 	m_highlightEvent = event;
 }
 
-void CIvfSelectionHandler::dispatchMultipleSelectionEvent(CIvfSelectedShapesVector &selectedShapes)
+void CSelectionHandler::dispatchMultipleSelectionEvent(CIvfSelectedShapesVector &selectedShapes)
 {
 	if (m_multipleSelectionEvent!=NULL)
 		m_multipleSelectionEvent->onSelectMultiple(selectedShapes);

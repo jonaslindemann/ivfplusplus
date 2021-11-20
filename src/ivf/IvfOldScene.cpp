@@ -19,27 +19,27 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfOldScene
+// Implementation of: public class COldScene
 
 #include <ivf/IvfOldScene.h>
 
 // ------------------------------------------------------------
-CIvfOldScene::CIvfOldScene ()
-		:CIvfSelectComposite()
+COldScene::COldScene ()
+		:CSelectComposite()
 {
-	CIvfCamera* camera = new CIvfCamera();
+	CCamera* camera = new CCamera();
 	this->setCamera(camera);
 
-	m_world = new CIvfCoordinateSystem();
+	m_world = new CCoordinateSystem();
 	m_world->addReference();
-	m_cursor = new CIvfCursor();
+	m_cursor = new CCursor();
 	m_cursor->addReference();
 	m_tempShape = NULL;
 	m_transparentShape = NULL;
 	m_objectSize = 1;
 	m_cursorLocked = false;
 
-	m_lighting = CIvfLighting::getInstance();
+	m_lighting = CLighting::getInstance();
 
 	m_showGrid = true;
 	m_showCursor = true;
@@ -49,7 +49,7 @@ CIvfOldScene::CIvfOldScene ()
 }
 
 // ------------------------------------------------------------
-CIvfOldScene::~CIvfOldScene ()
+COldScene::~COldScene ()
 {
 	if (m_cursor!=NULL)
 		m_cursor->deleteReference();
@@ -63,33 +63,33 @@ CIvfOldScene::~CIvfOldScene ()
 }
 
 // ------------------------------------------------------------
-void CIvfOldScene::setCamera(CIvfCamera * camera)
+void COldScene::setCamera(CCamera * camera)
 {
-	CIvfSelectComposite::setCamera(camera);
+	CSelectComposite::setCamera(camera);
 }
 
 // ------------------------------------------------------------
-CIvfCamera* CIvfOldScene::getCamera()
+CCamera* COldScene::getCamera()
 {
-	return (CIvfCamera*) CIvfSelectComposite::getCamera();
+	return (CCamera*) CSelectComposite::getCamera();
 }
 
 // ------------------------------------------------------------
-void CIvfOldScene::setView(CIvfView *view)
+void COldScene::setView(CView *view)
 {
-	CIvfSelectComposite::setCamera(view);
+	CSelectComposite::setCamera(view);
 }
 
 // ------------------------------------------------------------
-CIvfView* CIvfOldScene::getView()
+CView* COldScene::getView()
 {
-	return CIvfSelectComposite::getCamera();
+	return CSelectComposite::getCamera();
 }
 
 // ------------------------------------------------------------
-void CIvfOldScene::doCreateGeometry()
+void COldScene::doCreateGeometry()
 {
-	CIvfSelectComposite::doCreateGeometry();
+	CSelectComposite::doCreateGeometry();
 
 	if (m_showGrid)
 		if (m_world!=NULL)
@@ -143,25 +143,25 @@ void CIvfOldScene::doCreateGeometry()
 		m_transparentShape->render();
 }
 
-void CIvfOldScene::doBeginTransform()
+void COldScene::doBeginTransform()
 {
 	glPushMatrix();
 	if (m_lightMode == IVF_LIGHT_LOCAL)
 		if (m_lighting != NULL)
 			m_lighting->render();
-	CIvfSelectComposite::doBeginTransform();
+	CSelectComposite::doBeginTransform();
 	if (m_lightMode == IVF_LIGHT_WORLD)
 		if (m_lighting != NULL)
 			m_lighting->render();
 }
 
-void CIvfOldScene::doEndTransform()
+void COldScene::doEndTransform()
 {
-		CIvfSelectComposite::doEndTransform();
+		CSelectComposite::doEndTransform();
 	glPopMatrix();
 }
 
-void CIvfOldScene::setWorldSystem(CIvfCoordinateSystem * world)
+void COldScene::setWorldSystem(CCoordinateSystem * world)
 {
 	if (m_world!=NULL)
 	{
@@ -175,12 +175,12 @@ void CIvfOldScene::setWorldSystem(CIvfCoordinateSystem * world)
 	m_world->addReference();
 }
 
-CIvfCoordinateSystem* CIvfOldScene::getWorldSystem()
+CCoordinateSystem* COldScene::getWorldSystem()
 {
 	return m_world;
 }
 
-void CIvfOldScene::setCursor(CIvfCursor * cursor)
+void COldScene::setCursor(CCursor * cursor)
 {
 	if (m_cursor!=NULL)
 	{
@@ -193,14 +193,14 @@ void CIvfOldScene::setCursor(CIvfCursor * cursor)
 	m_cursor->addReference();
 }
 
-CIvfCursor* CIvfOldScene::getCursor()
+CCursor* COldScene::getCursor()
 {
 	return m_cursor;
 }
 
 //end changes
 
-void CIvfOldScene::updateCursor(int x, int y)
+void COldScene::updateCursor(int x, int y)
 {
 	double i, j, k;
 	double ix, iy, iz;
@@ -209,7 +209,7 @@ void CIvfOldScene::updateCursor(int x, int y)
 	int viewWidth, viewHeight;
 	double dy;
 
-	CIvfCamera* camera = (CIvfCamera*) getCamera();
+	CCamera* camera = (CCamera*) getCamera();
 
 	if ((m_cursor!=NULL)&&
 		(camera!=NULL)&&
@@ -288,44 +288,44 @@ void CIvfOldScene::updateCursor(int x, int y)
 	m_cursorY = y;
 }
 
-void CIvfOldScene::setTempShape(CIvfShape * shape)
+void COldScene::setTempShape(CShape * shape)
 {
 	m_tempShape = shape;
 }
 
-CIvfShape* CIvfOldScene::getTempShape()
+CShape* COldScene::getTempShape()
 {
 	return m_tempShape;
 }
 
-void CIvfOldScene::lockCursor()
+void COldScene::lockCursor()
 {
 	m_cursorLocked = true;
 	m_cursorStartX = m_cursorX;
 	m_cursorStartY = m_cursorY;
 }
 
-void CIvfOldScene::unlockCursor()
+void COldScene::unlockCursor()
 {
 	m_cursorLocked = false;
 }
 
-int CIvfOldScene::isCursorLocked()
+int COldScene::isCursorLocked()
 {
 	return m_cursorLocked;
 }
 
-void CIvfOldScene::setObjectSize(double size)
+void COldScene::setObjectSize(double size)
 {
 	m_objectSize = size;
 }
 
-void CIvfOldScene::setNodeSize(double size)
+void COldScene::setNodeSize(double size)
 {
 	//g_nodeSize = size;
 }
 
-void CIvfOldScene::setWorkspace(double size)
+void COldScene::setWorkspace(double size)
 {
 	m_world->setWorkspace(size);
 	double snapUnit = m_world->getSnapUnit();
@@ -333,57 +333,57 @@ void CIvfOldScene::setWorkspace(double size)
 	this->setObjectSize(size/10.0f);
 }
 
-void CIvfOldScene::setTransparentShape(CIvfShape *shape)
+void COldScene::setTransparentShape(CShape *shape)
 {
 	m_transparentShape = shape;
 }
 
-void CIvfOldScene::setShowGrid(bool flag)
+void COldScene::setShowGrid(bool flag)
 {
 	m_showGrid = flag;
 }
 
-void CIvfOldScene::setShowCursor(bool flag)
+void COldScene::setShowCursor(bool flag)
 {
 	m_showCursor = flag;
 }
 
-bool CIvfOldScene::getShowGrid()
+bool COldScene::getShowGrid()
 {
 	return m_showGrid;
 }
 
-bool CIvfOldScene::getShowCursor()
+bool COldScene::getShowCursor()
 {
 	return m_showCursor;
 }
 
-void CIvfOldScene::setTempRenderStyle(int style)
+void COldScene::setTempRenderStyle(int style)
 {
 	m_tempRenderStyle = style;
 }
 
-int CIvfOldScene::getTempRenderStyle()
+int COldScene::getTempRenderStyle()
 {
 	return m_tempRenderStyle;
 }
 
-void CIvfOldScene::setSnapToGrid(bool flag)
+void COldScene::setSnapToGrid(bool flag)
 {
 	m_snapToGrid = flag;
 }
 
-bool CIvfOldScene::getSnapToGrid()
+bool COldScene::getSnapToGrid()
 {
 	return m_snapToGrid;
 }
 
-void CIvfOldScene::setLightMode(int mode)
+void COldScene::setLightMode(int mode)
 {
 	m_lightMode = mode;
 }
 
-int CIvfOldScene::getLightMode()
+int COldScene::getLightMode()
 {
 	return m_lightMode;
 }

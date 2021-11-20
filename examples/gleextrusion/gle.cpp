@@ -34,24 +34,24 @@ using namespace std;
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase,
-	CIvfInitEvent,
-	CIvfInitContextEvent,
-	CIvfResizeEvent,
-	CIvfRenderEvent,
-	CIvfClearEvent,
-	CIvfKeyboardEvent
+class CExampleWindow: public CGlutBase,
+	CInitEvent,
+	CInitContextEvent,
+	CResizeEvent,
+	CRenderEvent,
+	CClearEvent,
+	CKeyboardEvent
 {
 private:
 
-	CIvfScenePtr m_scene;
+	CScenePtr m_scene;
 
-	CIvfSwitchPtr m_gleShapes;
+	CSwitchPtr m_gleShapes;
 
-	CIvfLightingPtr m_lighting;
+	CLightingPtr m_lighting;
 
-	CIvfMouseViewHandlerPtr m_mouseViewHandler;
-	CIvfSceneHandlerPtr m_sceneHandler;
+	CMouseViewHandlerPtr m_mouseViewHandler;
+	CSceneHandlerPtr m_sceneHandler;
 
 public:
 	CExampleWindow(int X, int Y, int W, int H);
@@ -67,7 +67,7 @@ public:
 // ------------------------------------------------------------
 
 CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-	:CIvfGlutBase(X, Y, W, H)
+	:CGlutBase(X, Y, W, H)
 {
 	addInitEvent(this);
 	addInitContextEvent(this);
@@ -85,19 +85,19 @@ void CExampleWindow::onInit(int width, int height)
 {
 	// Setup a simple scene
 
-	m_scene = new CIvfScene();
+	m_scene = new CScene();
 	m_scene->getCamera()->setPosition(3.0, 3.0, 3.0);
 
-	m_gleShapes = new CIvfSwitch();
+	m_gleShapes = new CSwitch();
 
-	CIvfMaterialPtr material = new CIvfMaterial();
+	CMaterialPtr material = new CMaterial();
 	material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	material->setColorMaterial(false);
 
 	////////////////////////////////////////////////////////////////////
 	// Testing GLE classes
 
-	CIvfGlePtr gle = CIvfGle::getInstance();
+	CGlePtr gle = CGle::getInstance();
 	gle->setNumSides(20);
 	gle->setJoinStyle(TUBE_JN_ANGLE|TUBE_NORM_EDGE);
 
@@ -110,10 +110,10 @@ void CExampleWindow::onInit(int width, int height)
 	double deltaX = 4*M_PI/(nPoints-1);
 	int i;
 
-	CIvfGleColorArrayPtr colorArray = new CIvfGleColorArray(nPoints+2);
-	CIvfGleCoordArrayPtr coordArray = new CIvfGleCoordArray(nPoints+2);
-	CIvfGleScalarArrayPtr radiusArray = new CIvfGleScalarArray(nPoints+2);
-	CIvfGleScalarArrayPtr twistArray = new CIvfGleScalarArray(nPoints+2);
+	CGleColorArrayPtr colorArray = new CGleColorArray(nPoints+2);
+	CGleCoordArrayPtr coordArray = new CGleCoordArray(nPoints+2);
+	CGleScalarArrayPtr radiusArray = new CGleScalarArray(nPoints+2);
+	CGleScalarArrayPtr twistArray = new CGleScalarArray(nPoints+2);
 
 	for (i=0; i<nPoints; i++)
 	{
@@ -127,7 +127,7 @@ void CExampleWindow::onInit(int width, int height)
 	
 	coordArray->calcFirstAndLast();
 
-	CIvfGlePolyCylinderPtr polyCylinder = new CIvfGlePolyCylinder();
+	CGlePolyCylinderPtr polyCylinder = new CGlePolyCylinder();
 	polyCylinder->setPoints(coordArray);
 	polyCylinder->setColors(colorArray);
 	polyCylinder->setMaterial(material);
@@ -137,7 +137,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Testing poly cone
 
-	CIvfGlePolyConePtr polyCone = new CIvfGlePolyCone();
+	CGlePolyConePtr polyCone = new CGlePolyCone();
 	polyCone->setPoints(coordArray);
 	polyCone->setColors(colorArray);
 	polyCone->setRadius(radiusArray);
@@ -148,7 +148,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Test extrusion
 
-	CIvfGleContourPtr contourArray = new CIvfGleContour(5);
+	CGleContourPtr contourArray = new CGleContour(5);
 	contourArray->setCoord(0, -0.2, -0.2);
 	contourArray->setCoord(1,  0.2, -0.2);
 	contourArray->setCoord(2,  0.2,  0.2);
@@ -156,7 +156,7 @@ void CExampleWindow::onInit(int width, int height)
 	contourArray->setCoord(4, -0.2, -0.2);
 	contourArray->calcNormals();
 
-	CIvfGleExtrusionPtr extrusion = new CIvfGleExtrusion();
+	CGleExtrusionPtr extrusion = new CGleExtrusion();
 	extrusion->setPoints(coordArray);
 	extrusion->setColors(colorArray);
 	extrusion->setContour(contourArray);
@@ -168,7 +168,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Test twist extrusion
 
-	CIvfGleTwistExtrusionPtr twistExtrusion = new CIvfGleTwistExtrusion();
+	CGleTwistExtrusionPtr twistExtrusion = new CGleTwistExtrusion();
 	twistExtrusion->setPoints(coordArray);
 	twistExtrusion->setColors(colorArray);
 	twistExtrusion->setContour(contourArray);
@@ -181,7 +181,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Test spiral
 
-	CIvfGleSpiralPtr spiral = new CIvfGleSpiral();
+	CGleSpiralPtr spiral = new CGleSpiral();
 	spiral->setContour(contourArray);
 	spiral->setContourUp(0.0, 1.0, 0.0);
 	spiral->setMaterial(material);
@@ -190,19 +190,19 @@ void CExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(m_gleShapes);
 
-	CIvfAxisPtr axis = new CIvfAxis();
+	CAxisPtr axis = new CAxis();
 	m_scene->addChild(axis);
 
 	// Setup OpenGL
 
-	m_lighting = CIvfLighting::getInstance();
+	m_lighting = CLighting::getInstance();
 	m_lighting->enable();
 	m_lighting->getLight(0)->enable();
 
 	// Create handlers
 
-	m_mouseViewHandler = new CIvfMouseViewHandler(this, m_scene->getCamera());
-	m_sceneHandler = new CIvfSceneHandler(this, m_scene);
+	m_mouseViewHandler = new CMouseViewHandler(this, m_scene->getCamera());
+	m_sceneHandler = new CSceneHandler(this, m_scene);
 }
 
 void CExampleWindow::onKeyboard(int key, int x, int y)
@@ -236,7 +236,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
     
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
     
 	// Create a window

@@ -28,25 +28,25 @@
 #include <ivf/IvfSceneBase.h>
 #include <ivf/IvfConstructionPlane.h>
 
-IvfSmartPointer(CIvfWorkspace);
+IvfSmartPointer(CWorkspace);
 
 /**
  * Workspace class
  *
- * The CIvfWorkspace class implements a complete scene
+ * The CWorkspace class implements a complete scene
  * class with construction plane management. Use updateCursor()
  * and updateSizes() to update cursor and gui element sizes in 
  * response to mouse moves and camera changes.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfWorkspace : public CIvfSceneBase {
+class IVF_API CWorkspace : public CSceneBase {
 private:
-	std::vector<CIvfConstructionPlane*> m_workplanes;
-	CIvfConstructionPlane* m_currentPlane;
-	CIvfConstructionPlane* m_rootPlane;
+	std::vector<CConstructionPlane*> m_workplanes;
+	CConstructionPlane* m_currentPlane;
+	CConstructionPlane* m_rootPlane;
 
-    CIvfShapePtr m_cursorShape;
+    CShapePtr m_cursorShape;
 
 	int m_currentPlaneIdx;
 	bool m_usePlanes;
@@ -55,16 +55,16 @@ private:
     bool m_hideCursor;
 
 public:
-	/** CIvfWorkspace constructor */
-	CIvfWorkspace();
+	/** CWorkspace constructor */
+	CWorkspace();
 
-	/** CIvfWorkspace destructor */
-	virtual ~CIvfWorkspace();
+	/** CWorkspace destructor */
+	virtual ~CWorkspace();
 
-	IvfClassInfo("CIvfWorkspace",CIvfSceneBase);
+	IvfClassInfo("CWorkspace",CSceneBase);
 
 	/** Add a construction plane */
-	void addPlane(CIvfConstructionPlane* plane);
+	void addPlane(CConstructionPlane* plane);
 
 	/** Clear all construction planes */
 	void clearPlanes();
@@ -105,7 +105,7 @@ public:
 	bool isCursorLocked();
 
 	/** Set view used (required) */
-	virtual void setView(CIvfView* view);
+	virtual void setView(CView* view);
 
 	/** Set size of workspace */
 	void setWorkspaceSize(double size);
@@ -117,10 +117,10 @@ public:
 	void setRelativeCursorSize(double size);
 
 	/** Return current construction plane */
-	CIvfConstructionPlane* getCurrentPlane();
+	CConstructionPlane* getCurrentPlane();
 
 	/** Return global cursor position */
-	CIvfVec3d& getCursorPosition();
+	CVec3d& getCursorPosition();
 
 	bool getUsePlanes();
 	void setUsePlanes(bool flag);
@@ -136,8 +136,8 @@ public:
     bool getUseCursor();
     void setUseCursor(bool flag);
 
-    void setCursorShape(CIvfShape* shape);
-    CIvfShape* cursorShape();
+    void setCursorShape(CShape* shape);
+    CShape* cursorShape();
     void setUseCursorShape(bool flag);
     bool useCursorShape();
 

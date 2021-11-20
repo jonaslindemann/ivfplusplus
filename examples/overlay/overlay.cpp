@@ -30,18 +30,18 @@
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase,
-	CIvfInitEvent,
-	CIvfRenderEvent,
-	CIvfOverlayEvent,
-	CIvfResizeEvent
+class CExampleWindow: public CGlutBase,
+	CInitEvent,
+	CRenderEvent,
+	COverlayEvent,
+	CResizeEvent
 {
 private:
-	CIvfCameraPtr		m_camera;
-	CIvfCompositePtr	m_scene;
-	CIvfLightPtr		m_light;
+	CCameraPtr		m_camera;
+	CCompositePtr	m_scene;
+	CLightPtr		m_light;
 	
-	CIvfMouseViewHandlerPtr m_mouseViewHandler;
+	CMouseViewHandlerPtr m_mouseViewHandler;
 
 	double m_angleX;
 	double m_angleY;
@@ -67,7 +67,7 @@ public:
 // ------------------------------------------------------------
 
 CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-:CIvfGlutBase(X, Y, W, H)
+:CGlutBase(X, Y, W, H)
 {
 	this->addInitEvent(this);
 	this->addRenderEvent(this);
@@ -88,42 +88,42 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(0.0, 5.0, 5.0);
 
 	// Create a materials
 
-	CIvfMaterialPtr yellowMaterial = new CIvfMaterial();
+	CMaterialPtr yellowMaterial = new CMaterial();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene composite
 
-	m_scene = new CIvfComposite();
+	m_scene = new CComposite();
 
-	CIvfCubePtr cube = new CIvfCube();
+	CCubePtr cube = new CCube();
 	
 	cube->setMaterial(yellowMaterial);
 	m_scene->addChild(cube);
 
 	// First point
 	
-	CIvfAxisPtr axis = new CIvfAxis();
+	CAxisPtr axis = new CAxis();
 	m_scene->addChild(axis);
 	
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 
-	m_light = new CIvfLight();
+	m_light = new CLight();
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
 	this->setUseOverlay(true);
 	
-	m_mouseViewHandler = new CIvfMouseViewHandler(this, m_camera);
+	m_mouseViewHandler = new CMouseViewHandler(this, m_camera);
 	m_mouseViewHandler->activate();
 	
 }
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_DEPTH|IVF_MULTISAMPLE|IVF_RGBA);
 
 	// Create a window

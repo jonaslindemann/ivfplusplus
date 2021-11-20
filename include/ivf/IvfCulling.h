@@ -32,7 +32,7 @@
 #include <ivfmath/IvfMatrixStack.h>
 #include <ivfmath/IvfViewFrustum.h>
 
-IvfSmartPointer(CIvfCulling);
+IvfSmartPointer(CCulling);
 
 /**
  * Scene culling class
@@ -65,23 +65,23 @@ IvfSmartPointer(CIvfCulling);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfCulling : public CIvfBase {
+class IVF_API CCulling : public CBase {
 private:
-	CIvfCompositePtr m_composite;
-	CIvfMatrixStackPtr m_matrixStack;
-	CIvfViewFrustumPtr m_frustum;
-	CIvfViewPtr m_cullView;
+	CCompositePtr m_composite;
+	CMatrixStackPtr m_matrixStack;
+	CViewFrustumPtr m_frustum;
+	CViewPtr m_cullView;
 	int m_cullCount;
-	bool intersectFrustum(CIvfBoundingSphere* bSphere);
-	void cullChildren(CIvfShape* shape);
+	bool intersectFrustum(CBoundingSphere* bSphere);
+	void cullChildren(CShape* shape);
 public:
 	/** CIvfCulling constructor */
-	CIvfCulling();
+	CCulling();
 
 	/** CIvfCulling destructor */
-	virtual ~CIvfCulling();
+	virtual ~CCulling();
 
-	IvfClassInfo("CIvfCulling",CIvfBase);
+	IvfClassInfo("CIvfCulling",CBase);
 
 	/** 
 	 * Initiates the cull operation
@@ -96,10 +96,10 @@ public:
 	void cull();
 	
 	/** Sets the composite to be culled (required) */
-	void setComposite(CIvfComposite* composite);
+	void setComposite(CComposite* composite);
 
 	/** Sets the view used to cull the composite (required) */
-	void setCullView(CIvfView* view);
+	void setCullView(CView* view);
 
 	/** Returns the number of objects culled */
 	int getCullCount();

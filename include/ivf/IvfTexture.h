@@ -28,7 +28,7 @@
 #include <ivf/IvfGLBase.h>
 #include <ivf/IvfImage.h>
 
-IvfSmartPointer(CIvfTexture);
+IvfSmartPointer(CTexture);
 
 /**
  * OpenGL texture definition
@@ -40,11 +40,11 @@ IvfSmartPointer(CIvfTexture);
  * texture is used is shown below:
  *
  * \code
- * CIvfJpegImage* image = new CIvfJpegImage();
+ * CJpegImage* image = new CJpegImage();
  * image->setFileName("textures/architecture8.jpg");
  * image->read();
  * 
- * CIvfTexture* texture = new CIvfTexture();
+ * CTexture* texture = new CTexture();
  * texture->setImage(image);
  * texture->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
  * texture->setGenerateMipmaps(true);
@@ -52,22 +52,22 @@ IvfSmartPointer(CIvfTexture);
  * .
  * .
  * 
- * CIvfSphere* sphere = new CIvfSphere();
+ * CSphere* sphere = new CSphere();
  * sphere->setMaterial(...)
  * sphere->setTexture(texture);
  * \endcode
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfTexture : public CIvfGLBase {
+class IVF_API CTexture : public CGLBase {
 public:
 	/** Constructor */
-	CIvfTexture ();
+	CTexture ();
 
 	/** Destructor */
-	virtual ~CIvfTexture ();
+	virtual ~CTexture ();
 
-	IvfClassInfo("CIvfTexture",CIvfGLBase);
+	IvfClassInfo("CTexture",CGLBase);
 
 	/** 
 	 * Set texture environment color (Obsolete! Use setEnvColor() instead)
@@ -193,7 +193,7 @@ public:
 	 * Assigns an image to the texture. An image can be loaded using 
 	 * the ivfimage library. 
 	 */
-	void setImage(CIvfImage* image);
+	void setImage(CImage* image);
 	
 	/**
 	 * Set raw image map
@@ -299,7 +299,7 @@ private:
 	bool m_bound;
 	bool m_generateName;
 	bool m_loadImages;
-	CIvfImagePtr m_ivfImage;
+	CImagePtr m_ivfImage;
 	void* m_imageMap;
 	int m_width;
 	int m_height;
@@ -311,7 +311,7 @@ private:
 	bool m_active;
 };
 /** \example textures.cpp
- * This is an example of how to use the CIvfTexture class.
+ * This is an example of how to use the CTexture class.
  */
 
 #endif

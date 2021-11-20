@@ -27,10 +27,10 @@
 
 const int ivfMaxTempQuat = 32;
 
-CIvfQuat& ivfGetTempQuat()
+CQuat& ivfGetTempQuat()
 {
 	static int nBuf = 0;
-	static CIvfQuat buf[ivfMaxTempQuat];
+	static CQuat buf[ivfMaxTempQuat];
 	
 	if (nBuf==ivfMaxTempQuat) nBuf = 0;
 
@@ -39,13 +39,13 @@ CIvfQuat& ivfGetTempQuat()
 	return buf[nBuf++];
 }
 
-CIvfQuat::CIvfQuat()
+CQuat::CQuat()
 {
 	m_q.setComponents(0.0, 0.0, 0.0);
 	m_qw = 1.0;
 }
 
-CIvfQuat::CIvfQuat(CIvfQuat& v)
+CQuat::CQuat(CQuat& v)
 {
 	double qx, qy, qz, qw;
 
@@ -54,24 +54,24 @@ CIvfQuat::CIvfQuat(CIvfQuat& v)
 	m_qw = qw;
 }
 
-CIvfQuat::~CIvfQuat()
+CQuat::~CQuat()
 {
 
 }
 
-void CIvfQuat::setComponents(double qx, double qy, double qz, double qw)
+void CQuat::setComponents(double qx, double qy, double qz, double qw)
 {
 	m_q.setComponents(qx, qy, qz);
 	m_qw = qw;
 }
 
-void CIvfQuat::getComponents(double &qx, double &qy, double &qz, double &qw)
+void CQuat::getComponents(double &qx, double &qy, double &qz, double &qw)
 {
 	m_q.getComponents(qx, qy, qz);
 	qw = m_qw;
 }
 
-CIvfQuat& CIvfQuat::operator=(CIvfQuat& a)
+CQuat& CQuat::operator=(CQuat& a)
 {
 	double ax, ay, az, aw;
 	a.getComponents(ax, ay, az, aw);
@@ -80,11 +80,11 @@ CIvfQuat& CIvfQuat::operator=(CIvfQuat& a)
 	return *this;
 }
 
-CIvfQuat& CIvfQuat::operator *(CIvfQuat& a)
+CQuat& CQuat::operator *(CQuat& a)
 {
-	CIvfQuat& r = ivfGetTempQuat();
+	CQuat& r = ivfGetTempQuat();
 
-	CIvfVec3d& av = a.getVectorPart();
+	CVec3d& av = a.getVectorPart();
 	double* u = m_q.getComponents();
 	double* v = a.getVectorPart().getComponents();
 
@@ -94,18 +94,18 @@ CIvfQuat& CIvfQuat::operator *(CIvfQuat& a)
 	return r;
 }
 
-CIvfQuat& CIvfQuat::operator *(double a)
+CQuat& CQuat::operator *(double a)
 {
-	CIvfQuat& r = ivfGetTempQuat();
+	CQuat& r = ivfGetTempQuat();
 
 	r.getVectorPart() = m_q * a;
 	r.setRealPart(m_qw*a);
 	return r;
 }
 
-CIvfQuat& CIvfQuat::operator/(double b)
+CQuat& CQuat::operator/(double b)
 {
-	CIvfQuat& r = ivfGetTempQuat();
+	CQuat& r = ivfGetTempQuat();
 
 	double k = 1.0/b;
 	r.getVectorPart() = m_q * k;
@@ -113,11 +113,11 @@ CIvfQuat& CIvfQuat::operator/(double b)
 	return r;
 }
 
-CIvfQuat& CIvfQuat::operator +(CIvfQuat& a)
+CQuat& CQuat::operator +(CQuat& a)
 {
-	CIvfQuat& r = ivfGetTempQuat();
+	CQuat& r = ivfGetTempQuat();
 
-	CIvfVec3d& av = a.getVectorPart();
+	CVec3d& av = a.getVectorPart();
 
 	r.getVectorPart() = m_q + av;
 	r.setRealPart(m_qw + a.getRealPart());
@@ -125,11 +125,11 @@ CIvfQuat& CIvfQuat::operator +(CIvfQuat& a)
 	return r;
 }
 
-CIvfQuat& CIvfQuat::operator -(CIvfQuat& a)
+CQuat& CQuat::operator -(CQuat& a)
 {
-	CIvfQuat& r = ivfGetTempQuat();
+	CQuat& r = ivfGetTempQuat();
 
-	CIvfVec3d& av = a.getVectorPart();
+	CVec3d& av = a.getVectorPart();
 
 	r.getVectorPart() = m_q - av;
 	r.setRealPart(m_qw - a.getRealPart());
@@ -137,19 +137,19 @@ CIvfQuat& CIvfQuat::operator -(CIvfQuat& a)
 	 return r;
 }
 
-CIvfVec3d& CIvfQuat::getVectorPart()
+CVec3d& CQuat::getVectorPart()
 {
 	return m_q;
 }
 
-double CIvfQuat::getRealPart()
+double CQuat::getRealPart()
 {
 	return m_qw;
 }
 
-CIvfQuat& CIvfQuat::conjugate()
+CQuat& CQuat::conjugate()
 {
-	CIvfQuat& r = ivfGetTempQuat();
+	CQuat& r = ivfGetTempQuat();
 
 	double qx, qy, qz;
 
@@ -159,34 +159,34 @@ CIvfQuat& CIvfQuat::conjugate()
 	return r;
 }
 
-void CIvfQuat::identity()
+void CQuat::identity()
 {
 	m_q.setComponents(0.0, 0.0, 0.0);
 	m_qw = 1.0;
 }
 
-double CIvfQuat::norm()
+double CQuat::norm()
 {
 	double qx, qy, qz;
 	m_q.getComponents(qx, qy, qz);
 	return pow(qx,2) + pow(qy,2) + pow(qz,2) + pow(m_qw,2);
 }
 
-CIvfQuat& CIvfQuat::inv()
+CQuat& CQuat::inv()
 {
-	CIvfQuat& r = ivfGetTempQuat();
+	CQuat& r = ivfGetTempQuat();
 
 	r = this->conjugate()/this->norm();
 
 	return r;
 }
 
-void CIvfQuat::setRealPart(double value)
+void CQuat::setRealPart(double value)
 {
 	m_qw = value;
 }
 
-void CIvfQuat::setFromAxisAngle(double vx, double vy, double vz, double angle)
+void CQuat::setFromAxisAngle(double vx, double vy, double vz, double angle)
 {
 	double x, y, z;
 	/*
@@ -216,7 +216,7 @@ void CIvfQuat::setFromAxisAngle(double vx, double vy, double vz, double angle)
 }
 
 
-void CIvfQuat::getAxisAngle(double &vx, double &vy, double &vz, double &angle)
+void CQuat::getAxisAngle(double &vx, double &vy, double &vz, double &angle)
 {
 	double x, y, z;
 	double s;

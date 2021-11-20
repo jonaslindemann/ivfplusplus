@@ -23,20 +23,20 @@
 
 #include "IvfUserSettings.h"
 
-CIvfUserSettings* CIvfUserSettings::m_instance = 0;
-CIvfSingletonDestroyer<CIvfUserSettings> CIvfUserSettings::m_destroyer;
+CUserSettings* CUserSettings::m_instance = 0;
+CSingletonDestroyer<CUserSettings> CUserSettings::m_destroyer;
 
-CIvfUserSettings* CIvfUserSettings::getInstance () 
+CUserSettings* CUserSettings::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CIvfUserSettings(); 
+		m_instance = new CUserSettings(); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CIvfUserSettings::CIvfUserSettings()
+CUserSettings::CUserSettings()
 {
 	m_scaleFactor = 1.0;
 	m_showUsage = false;
@@ -54,176 +54,176 @@ CIvfUserSettings::CIvfUserSettings()
 	m_fibreLighting = false;
 }
 
-CIvfUserSettings::~CIvfUserSettings()
+CUserSettings::~CUserSettings()
 {
 
 }
 
-void CIvfUserSettings::setScaleFactor(double factor)
+void CUserSettings::setScaleFactor(double factor)
 {
 	m_scaleFactor = factor;
 }
 
-double CIvfUserSettings::getScaleFactor()
+double CUserSettings::getScaleFactor()
 {
 	return m_scaleFactor;
 }
 
-void CIvfUserSettings::setShowUsage(bool flag)
+void CUserSettings::setShowUsage(bool flag)
 {
 	m_showUsage = flag;
 }
 
-bool CIvfUserSettings::getShowUsage()
+bool CUserSettings::getShowUsage()
 {
 	return m_showUsage;
 }
 
-void CIvfUserSettings::setConnectionMaterial(CIvfMaterial *material)
+void CUserSettings::setConnectionMaterial(CMaterial *material)
 {
 	m_connectionMaterial = material;
 }
 
-CIvfMaterial* CIvfUserSettings::getConnectionMaterial()
+CMaterial* CUserSettings::getConnectionMaterial()
 {
 	return m_connectionMaterial;
 }
 
-void CIvfUserSettings::setColorMap(CIvfColorMap *colorMap)
+void CUserSettings::setColorMap(CColorMap *colorMap)
 {
 	m_colorMap = colorMap;
 }
 
-CIvfColorMap* CIvfUserSettings::getColorMap()
+CColorMap* CUserSettings::getColorMap()
 {
 	return m_colorMap;
 }
 
-void CIvfUserSettings::setConnectionSize(double size)
+void CUserSettings::setConnectionSize(double size)
 {
 	m_connectionSize = size;
 }
 
-double CIvfUserSettings::getConnectionSize()
+double CUserSettings::getConnectionSize()
 {
 	return m_connectionSize;
 }
 
-void CIvfUserSettings::setEnlargeUsage(bool flag)
+void CUserSettings::setEnlargeUsage(bool flag)
 {
 	m_enlargeUsage = flag;
 }
 
-bool CIvfUserSettings::getEnlargeUsage()
+bool CUserSettings::getEnlargeUsage()
 {
 	return m_enlargeUsage;
 }
 
-void CIvfUserSettings::setTextureScale(float scale)
+void CUserSettings::setTextureScale(float scale)
 {
 	m_textureScale = scale;
 }
 
-float CIvfUserSettings::getTextureScale()
+float CUserSettings::getTextureScale()
 {
 	return m_textureScale;
 }
 
-void CIvfUserSettings::setFibreRadius(double radius)
+void CUserSettings::setFibreRadius(double radius)
 {
 	m_fibreRadius = radius;
 }
 
-double CIvfUserSettings::getFibreRadius()
+double CUserSettings::getFibreRadius()
 {
 	return m_fibreRadius;
 }
 
-void CIvfUserSettings::setExtrusionSides(int sides)
+void CUserSettings::setExtrusionSides(int sides)
 {
 	m_fibreSides = sides;
 }
 
-int CIvfUserSettings::getExtrusionSides()
+int CUserSettings::getExtrusionSides()
 {
 	return m_fibreSides;
 }
 
-void CIvfUserSettings::setCamera(CIvfCamera *camera)
+void CUserSettings::setCamera(CCamera *camera)
 {
 	m_camera = camera;
 }
 
-CIvfCamera* CIvfUserSettings::getCamera()
+CCamera* CUserSettings::getCamera()
 {
 	return m_camera;
 }
 
-void CIvfUserSettings::setRepresentation(int rep)
+void CUserSettings::setRepresentation(int rep)
 {
 	m_fibreRep = rep;
 }
 
-int CIvfUserSettings::getRepresentation()
+int CUserSettings::getRepresentation()
 {
 	return m_fibreRep;
 }
 
-void CIvfUserSettings::setBlendFibres(bool flag)
+void CUserSettings::setBlendFibres(bool flag)
 {
 	m_blendFibres = flag;
 }
 
-bool CIvfUserSettings::getBlendFibres(void)
+bool CUserSettings::getBlendFibres(void)
 {
 	return m_blendFibres;
 }
 
-void CIvfUserSettings::addHighlightPoint(double x, double y, double z, double radius)
+void CUserSettings::addHighlightPoint(double x, double y, double z, double radius)
 {
-	CIvfVec3dPtr point = new CIvfVec3d(x, y, z);
-	m_highlightPoints.push_back(CIvfVec3dPtr(point));
+	CVec3dPtr point = new CVec3d(x, y, z);
+	m_highlightPoints.push_back(CVec3dPtr(point));
 	m_highlightRadius.push_back(radius);
 }
 
-void CIvfUserSettings::getHighlightPoint(int idx, double &x, double &y, double &z, double &radius)
+void CUserSettings::getHighlightPoint(int idx, double &x, double &y, double &z, double &radius)
 {
 	if ((idx>=0) && (idx<m_highlightPoints.size()))
 	{
-		CIvfVec3dPtr point;
+		CVec3dPtr point;
 		point = m_highlightPoints[idx];
 		radius = m_highlightRadius[idx];
 		point->getComponents(x, y, z);
 	}
 }
 
-int CIvfUserSettings::getHighlightPointSize()
+int CUserSettings::getHighlightPointSize()
 {
 	return m_highlightPoints.size();
 }
 
-void CIvfUserSettings::clearHighlightPoints()
+void CUserSettings::clearHighlightPoints()
 {
 	m_highlightPoints.clear();
 	m_highlightRadius.clear();
 }
 
-void CIvfUserSettings::setBreakageLimit(double limit)
+void CUserSettings::setBreakageLimit(double limit)
 {
 	m_breakageLimit = limit;
 }
 
-double CIvfUserSettings::getBreakageLimit()
+double CUserSettings::getBreakageLimit()
 {
 	return m_breakageLimit;
 }
 
-void CIvfUserSettings::setFibreLighting(bool flag)
+void CUserSettings::setFibreLighting(bool flag)
 {
 	m_fibreLighting = flag;
 }
 
-bool CIvfUserSettings::getFibreLighting()
+bool CUserSettings::getFibreLighting()
 {
 	return m_fibreLighting;
 }

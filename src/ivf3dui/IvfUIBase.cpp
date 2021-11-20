@@ -24,7 +24,7 @@
 
 #include <ivf3dui/IvfUIBase.h>
 
-CIvfUIBase::CIvfUIBase()
+CUIBase::CUIBase()
 {
 	m_id = -1;
 	m_enabled = true;
@@ -32,55 +32,55 @@ CIvfUIBase::CIvfUIBase()
 	setUseName(false);
 }
 
-CIvfUIBase::~CIvfUIBase()
+CUIBase::~CUIBase()
 {
 
 }
 
-void CIvfUIBase::setId(int id)
+void CUIBase::setId(int id)
 {
 	m_id = id;
 }
 
-int CIvfUIBase::getId()
+int CUIBase::getId()
 {
 	return m_id;
 }
 
 
 
-void CIvfUIBase::enable()
+void CUIBase::enable()
 {
 	m_enabled = true;
 }
 
-void CIvfUIBase::disable()
+void CUIBase::disable()
 {
 	m_enabled = false;
 }
 
-bool CIvfUIBase::isEnabled()
+bool CUIBase::isEnabled()
 {
 	return m_enabled;
 }
 
 
-void CIvfUIBase::doChangeState(bool enabled)
+void CUIBase::doChangeState(bool enabled)
 {
 	
 }
 
-void CIvfUIBase::setParentControl(CIvfUIBase *parent)
+void CUIBase::setParentControl(CUIBase *parent)
 {
 	m_parent = parent;
 }
 
-CIvfUIBase* CIvfUIBase::getParentControl()
+CUIBase* CUIBase::getParentControl()
 {
 	return m_parent;
 }
 
-bool CIvfUIBase::haveParent()
+bool CUIBase::haveParent()
 {
 	return m_parent!=NULL;
 }

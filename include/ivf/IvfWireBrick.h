@@ -27,7 +27,7 @@
 
 #include <ivf/IvfBrick.h>
 
-IvfSmartPointer(CIvfWireBrick);
+IvfSmartPointer(CWireBrick);
 
 /**
  * Wireframe brick primitive
@@ -35,15 +35,15 @@ IvfSmartPointer(CIvfWireBrick);
  * Wireframe representation of a IvfBrick class
  * @author Jonas Lindemann
  */
-class IVF_API CIvfWireBrick : public CIvfBrick {
+class IVF_API CWireBrick : public CBrick {
 public:
 	/** Constructor */
-	CIvfWireBrick ();
+	CWireBrick ();
 
 	/** Destructor */
-	virtual ~CIvfWireBrick ();
+	virtual ~CWireBrick ();
 
-	IvfClassInfo("CIvfWireBrick",CIvfBrick);
+	IvfClassInfo("CWireBrick",CBrick);
 protected:
 	virtual void doCreateGeometry();
 };

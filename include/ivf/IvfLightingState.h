@@ -28,7 +28,7 @@
 #include <ivf/IvfRenderState.h>
 #include <ivf/IvfLighting.h>
 
-IvfSmartPointer(CIvfLightingState);
+IvfSmartPointer(CLightingState);
 
 /**
  * Lighting state class
@@ -37,18 +37,18 @@ IvfSmartPointer(CIvfLightingState);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfLightingState : public CIvfRenderState {
+class IVF_API CLightingState : public CRenderState {
 private:
 	bool m_lightingState;
-	CIvfLighting* m_lighting;
+	CLighting* m_lighting;
 public:
-	/** CIvfLightingState constructor */
-	CIvfLightingState();
+	/** CLightingState constructor */
+	CLightingState();
 
-	/** CIvfLightingState destructor */
-	virtual ~CIvfLightingState();
+	/** CLightingState destructor */
+	virtual ~CLightingState();
 
-	IvfClassInfo("CIvfLightingState",CIvfRenderState);
+	IvfClassInfo("CLightingState",CRenderState);
 
 	/** Lighting flag (enabled = true) */
 	void setLighting(bool flag);

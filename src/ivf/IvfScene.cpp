@@ -24,12 +24,12 @@
 
 #include <ivf/IvfScene.h>
 
-CIvfScene::CIvfScene()
+CScene::CScene()
 {
 
 }
 
-CIvfScene::~CIvfScene()
+CScene::~CScene()
 {
 
 }

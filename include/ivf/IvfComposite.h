@@ -28,7 +28,7 @@
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfShape.h>
 
-IvfSmartPointer(CIvfComposite);
+IvfSmartPointer(CComposite);
 
 /**
  * Composite shape class.
@@ -44,7 +44,7 @@ IvfSmartPointer(CIvfComposite);
  *
  *     m_scene = new CIvfComposite();
  *
- *     CIvfSphere* sphere = new CIvfSphere();
+ *     CSphere* sphere = new CSphere();
  *     sphere->setPosition(3.0, 0.0, 0.0);
  *     CIvfCube* cube = new CIvfCube();
  *     cube->setPosition(-3.0, 0.0, 0.0);
@@ -74,15 +74,15 @@ IvfSmartPointer(CIvfComposite);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfComposite : public CIvfShape {
+class IVF_API CComposite : public CShape {
 public:
 	/** CIvfComposite constructor. */
-	CIvfComposite ();
+	CComposite ();
 
 	/** CIvfComposite destructor. */
-	virtual ~CIvfComposite ();
+	virtual ~CComposite ();
 
-	IvfClassInfo("CIvfComposite",CIvfShape);
+	IvfClassInfo("CIvfComposite",CShape);
 
 	/** Force object refresh */
 	virtual void refresh();
@@ -154,26 +154,26 @@ public:
 	 * @param index Index of child to be removed (zero based)
 	 * @returns Reference to removed object.
 	 */
-	virtual CIvfShape* removeChild(int index);
+	virtual CShape* removeChild(int index);
 
 	/**
 	 * Removes child shape
 	 *
-	 * Remove specified CIvfShape instance, dereferences it
+	 * Remove specified CShape instance, dereferences it
 	 * and returns a reference.
 	 * @param removeShape Reference of object to remove
 	 * @returns Reference to removed object. Returns NULL if
 	 * object was not found.
 	 */
-	virtual CIvfShape* removeShape(CIvfShape* removeShape);
+	virtual CShape* removeShape(CShape* removeShape);
 
 	/**
 	 * Add child
 	 *
-	 * Adds a CIvfShape object to the composite object.
-	 * @param shape CIvfShape object to be added.
+	 * Adds a CShape object to the composite object.
+	 * @param shape CShape object to be added.
 	 */
-	virtual void addChild(CIvfShape* shape);
+	virtual void addChild(CShape* shape);
 
 	/**
 	 * Delete child
@@ -189,10 +189,10 @@ public:
 	 *
 	 * Returns a reference to the child at a given position.
 	 * @param index Index of child to be returned (zero based)
-	 * @returns Reference to a CIvfShape object. If invalid index
+	 * @returns Reference to a CShape object. If invalid index
 	 * NULL is returned.
 	 */
-	CIvfShape* getChild(int index);
+	CShape* getChild(int index);
 
 	/**
 	 * Clear composite object
@@ -222,15 +222,15 @@ public:
 	 * in conjunction with the AC3D file reader which assigns
 	 * names to each shape.
 	 */
-	CIvfShape* findShape(const std::string& name);
+	CShape* findShape(const std::string& name);
 
 private:
-	CIvfShape* compositeFind(CIvfComposite* composite, const std::string& name);
+	CShape* compositeFind(CComposite* composite, const std::string& name);
 	bool m_useReference;
 	int m_renderInterval;
-	std::vector<CIvfShape*> m_children;
+	std::vector<CShape*> m_children;
 protected:
-	void compositeRemove(CIvfComposite* composite, CIvfShape* deleteChild);
+	void compositeRemove(CComposite* composite, CShape* deleteChild);
 	virtual void doCreateGeometry();
 };
 /** \example placement.cpp

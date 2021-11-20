@@ -26,7 +26,7 @@
 
 #include <ivf/IvfLighting.h>
 
-CIvfRuler::CIvfRuler()
+CRuler::CRuler()
 {
 	m_startPoint.setComponents(0.0, 0.0, 0.0);
 	m_endPoint.setComponents(0.0, 1.0, 0.0);
@@ -34,42 +34,42 @@ CIvfRuler::CIvfRuler()
 	initRuler();
 }
 
-CIvfRuler::~CIvfRuler()
+CRuler::~CRuler()
 {
 
 }
 
-void CIvfRuler::setStartPoint(CIvfVec3d &startPoint)
+void CRuler::setStartPoint(CVec3d &startPoint)
 {
 	m_startPoint = startPoint;
 	initRuler();
 }
 
-void CIvfRuler::setEndPoint(CIvfVec3d &endPoint)
+void CRuler::setEndPoint(CVec3d &endPoint)
 {
 	m_endPoint = endPoint;
 	initRuler();
 }
 
-void CIvfRuler::initRuler()
+void CRuler::initRuler()
 {
 	m_direction = m_endPoint - m_startPoint;
 	m_length = m_direction.length();
 	m_direction.normalize();
 }
 
-void CIvfRuler::doCreateGeometry()
+void CRuler::doCreateGeometry()
 {
 	int i, nSteps;
 	double x, y, z;
-	CIvfVec3d p;
-	bool oldLightingState = CIvfLighting::getInstance()->isEnabled();
+	CVec3d p;
+	bool oldLightingState = CLighting::getInstance()->isEnabled();
 
 	nSteps = (int)(m_length/m_tickStep);
 
 	glLineWidth(1.0);
 
-	CIvfLighting::getInstance()->disable();
+	CLighting::getInstance()->disable();
 	glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
 	glBegin(GL_LINES);
 	glVertex3dv(m_startPoint.getComponents());
@@ -96,24 +96,24 @@ void CIvfRuler::doCreateGeometry()
 	glEnable(GL_DEPTH_TEST);
 	glLineWidth(0.0);
 	if (oldLightingState)
-		CIvfLighting::getInstance()->enable();
+		CLighting::getInstance()->enable();
 	else
-		CIvfLighting::getInstance()->disable();
+		CLighting::getInstance()->disable();
 }
 
-void CIvfRuler::setStartPoint(double x, double y, double z)
+void CRuler::setStartPoint(double x, double y, double z)
 {
 	m_startPoint.setComponents(x, y, z);
 	initRuler();
 }
 
-void CIvfRuler::setEndPoint(double x, double y, double z)
+void CRuler::setEndPoint(double x, double y, double z)
 {
 	m_endPoint.setComponents(x, y, z);
 	initRuler();
 }
 
-void CIvfRuler::setTickStep(double tickStep)
+void CRuler::setTickStep(double tickStep)
 {
 	m_tickStep = tickStep;
 }

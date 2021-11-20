@@ -22,7 +22,7 @@
 // Written by Jonas Lindemann
 //
 
-// IvfSelectOrtho.cpp: implementation of the CIvfSelectOrtho class.
+// IvfSelectOrtho.cpp: implementation of the CSelectOrtho class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -32,22 +32,22 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CIvfSelectOrtho::CIvfSelectOrtho()
+CSelectOrtho::CSelectOrtho()
 {
 
 }
 
-CIvfSelectOrtho::~CIvfSelectOrtho()
+CSelectOrtho::~CSelectOrtho()
 {
 
 }
 
-void CIvfSelectOrtho::customView()
+void CSelectOrtho::customView()
 {
 	glOrtho(0.0, m_width, m_height, 0.0, 0.0, 1.0);
 }
 
-void CIvfSelectOrtho::initializeSelect(int x, int y, int w, int h)
+void CSelectOrtho::initializeSelect(int x, int y, int w, int h)
 {
 	GLint viewport[4];
 	viewport[0] = 0;
@@ -58,13 +58,13 @@ void CIvfSelectOrtho::initializeSelect(int x, int y, int w, int h)
 	this->customView();
 }
 
-void CIvfSelectOrtho::setViewport(int width, int height)
+void CSelectOrtho::setViewport(int width, int height)
 {
 	m_width = width;
 	m_height = height;
 }
 
-void CIvfSelectOrtho::getViewport(int &width, int &height)
+void CSelectOrtho::getViewport(int &width, int &height)
 {
 	width = m_width;
 	height = m_height;

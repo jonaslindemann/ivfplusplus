@@ -24,19 +24,19 @@
 
 #include <ivf/IvfBufferSelection.h>
 
-CIvfBufferSelection::CIvfBufferSelection()
+CBufferSelection::CBufferSelection()
 {
 	m_composite = NULL;
 	m_selectedShape = NULL;
 	m_camera = NULL;
 }
 
-CIvfBufferSelection::~CIvfBufferSelection()
+CBufferSelection::~CBufferSelection()
 {
 
 }
 
-int CIvfBufferSelection::pick(int x, int y)
+int CBufferSelection::pick(int x, int y)
 {
 	m_selectedShapes.clear();
 	m_selectedShape = NULL;
@@ -79,24 +79,24 @@ int CIvfBufferSelection::pick(int x, int y)
 	return -1;
 }
 
-void CIvfBufferSelection::setComposite(CIvfComposite *composite)
+void CBufferSelection::setComposite(CComposite *composite)
 {
 	m_composite = composite;
 	update();
 }
 
-CIvfComposite* CIvfBufferSelection::getComposite()
+CComposite* CBufferSelection::getComposite()
 {
 	return m_composite;
 }
 
-void CIvfBufferSelection::update()
+void CBufferSelection::update()
 {
 	m_allObjects.clear();
 	nameChildren(m_composite);
 }
 
-void CIvfBufferSelection::nameChildren(CIvfShape *shape)
+void CBufferSelection::nameChildren(CShape *shape)
 {
 	// Recursively name all children
 
@@ -106,10 +106,10 @@ void CIvfBufferSelection::nameChildren(CIvfShape *shape)
 	{
 		// Name all children of composite
 
-		CIvfComposite* composite = (CIvfComposite*) shape;
+		CComposite* composite = (CComposite*) shape;
 		for (i = 0; i<composite->getSize(); i++)
 		{
-			CIvfShape* child = composite->getChild(i);
+			CShape* child = composite->getChild(i);
 			nameChildren(child);
 		}
 
@@ -130,7 +130,7 @@ void CIvfBufferSelection::nameChildren(CIvfShape *shape)
 	}
 }
 
-CIvfShape* CIvfBufferSelection::getSelectedShape()
+CShape* CBufferSelection::getSelectedShape()
 {
 	/*
 	if (m_selectedShapes.size()>0)
@@ -141,17 +141,17 @@ CIvfShape* CIvfBufferSelection::getSelectedShape()
 	return m_selectedShape;
 }
 
-void CIvfBufferSelection::setView(CIvfView *view)
+void CBufferSelection::setView(CView *view)
 {
 	m_camera = view;
 }
 
-CIvfView* CIvfBufferSelection::getView()
+CView* CBufferSelection::getView()
 {
 	return m_camera;
 }
 
-void CIvfBufferSelection::processHits(GLint hits, GLuint buffer[])
+void CBufferSelection::processHits(GLint hits, GLuint buffer[])
 {
 	GLuint depth = ~0;
 	unsigned int i, getThisName, j;
@@ -194,12 +194,12 @@ void CIvfBufferSelection::processHits(GLint hits, GLuint buffer[])
 	}
 }
 
-int CIvfBufferSelection::getSize()
+int CBufferSelection::getSize()
 {
 	return m_selectedShapes.size();
 }
 
-CIvfShape* CIvfBufferSelection::getSelectedShape(int idx)
+CShape* CBufferSelection::getSelectedShape(int idx)
 {
 	if ((idx>=0)&&(idx<(int)m_selectedShapes.size()))
 		return m_selectedShapes[idx];
@@ -207,7 +207,7 @@ CIvfShape* CIvfBufferSelection::getSelectedShape(int idx)
 		return 0;
 }
 
-CIvfSelectedShapesVector& CIvfBufferSelection::getSelectedShapes()
+CIvfSelectedShapesVector& CBufferSelection::getSelectedShapes()
 {
 	return m_selectedShapes;
 }

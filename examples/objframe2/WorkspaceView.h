@@ -78,23 +78,23 @@ IvfSmartPointer(CWorkspaceView);
 // Window class definition
 // ------------------------------------------------------------
 
-class CWorkspaceView: public CIvfFltkBase,
-	CIvfKeyboardEvent,
-	CIvfCreateShapeEvent,
-	CIvfSingleSelectionEvent,
-	CIvfMouseDownEvent,
-	CIvfMouseUpEvent,
-	CIvfModifierDownEvent,
-	CIvfModifierUpEvent,
-	CIvfHighlightEvent,
-	CIvfMenuItemEvent,
-	CIvfMoveSelectionEvent,
-	CIvfMouseMove3dEvent,
-	CIvfCopyShapeEvent,
-	CIvfFinishCopyEvent,
-	CIvfFinishMoveEvent,
-	CIvfCursorUpdateEvent,
-	CIvfMouseMoveEvent
+class CWorkspaceView: public CFltkBase,
+	CKeyboardEvent,
+	CCreateShapeEvent,
+	CSingleSelectionEvent,
+	CMouseDownEvent,
+	CMouseUpEvent,
+	CModifierDownEvent,
+	CModifierUpEvent,
+	CHighlightEvent,
+	CMenuItemEvent,
+	CMoveSelectionEvent,
+	CMouseMove3dEvent,
+	CCopyShapeEvent,
+	CFinishCopyEvent,
+	CFinishMoveEvent,
+	CCursorUpdateEvent,
+	CMouseMoveEvent
 {
 public:
 	enum TViewMode {
@@ -119,35 +119,35 @@ public:
 		ST_CREATE_LOADS
 	};
 private:
-	CIvfCameraPtr					m_camera;
-	CIvfLightPtr					m_light;
-	CIvfScenePtr					m_scene;
-	CIvfMaterialPtr					m_nodeMaterial;
-	CIvfMaterialPtr					m_lineMaterial;
-	CIvfMaterialPtr					m_vectorMaterial;
-	CIvfMaterialPtr					m_movementMaterial;
+	CCameraPtr					m_camera;
+	CLightPtr					m_light;
+	CScenePtr					m_scene;
+	CMaterialPtr					m_nodeMaterial;
+	CMaterialPtr					m_lineMaterial;
+	CMaterialPtr					m_vectorMaterial;
+	CMaterialPtr					m_movementMaterial;
 
-	CIvfShapeStdPtr					m_oldShape;
-	CIvfShapeSelectionPtr			m_selection;
-	CIvfShapeSelectionPtr			m_lineSelection;
+	CShapeStdPtr					m_oldShape;
+	CShapeSelectionPtr			m_selection;
+	CShapeSelectionPtr			m_lineSelection;
 
-	CIvfNodeCursorPtr				m_selectionCursor;
-	CIvfNodeCursorPtr				m_movementCursor;
-	CIvfExtrArrowPtr				m_loadCursor;
-	CIvfVectorCursorPtr				m_vectorCursor;
+	CNodeCursorPtr				m_selectionCursor;
+	CNodeCursorPtr				m_movementCursor;
+	CExtrArrowPtr				m_loadCursor;
+	CVectorCursorPtr				m_vectorCursor;
 
-	CIvfShapeStdPtr					m_moveShape;
+	CShapeStdPtr					m_moveShape;
 
-	CIvfCompositePtr				m_nodes;
-	CIvfCompositePtr				m_lines;
-	CIvfCompositePtr				m_vectors;
+	CCompositePtr				m_nodes;
+	CCompositePtr				m_lines;
+	CCompositePtr				m_vectors;
 
-	CIvfCompositePtr				m_movementShapes;
+	CCompositePtr				m_movementShapes;
 
-	CIvfMouseViewHandlerPtr			m_mouseViewHandler;
-	CIvfSceneHandlerPtr				m_sceneHandler;
-	CIvfShapePlacementHandlerPtr	m_shapePlacementHandler;
-	CIvfSelectionHandlerPtr			m_selectionHandler;
+	CMouseViewHandlerPtr			m_mouseViewHandler;
+	CSceneHandlerPtr				m_sceneHandler;
+	CShapePlacementHandlerPtr	m_shapePlacementHandler;
+	CSelectionHandlerPtr			m_selectionHandler;
 
 	TViewMode						m_viewMode;
 	TViewMode						m_savedViewMode;
@@ -175,7 +175,7 @@ public:
 	void open(const char* filename);
 	void save();
 
-	CIvfShapeSelection* getSelection();
+	CShapeSelection* getSelection();
 
 	void createScenario(TScenarioType scenarioType);
 	void createSimpleStructure(int rows, int cols, int stacks);
@@ -187,12 +187,12 @@ public:
 
 	virtual void onInit(int width, int height);
 	virtual void onKeyboard(int key, int x, int y);
-	virtual void onFunctionKey(CIvfWidgetBase::TFunctionKey key, int x, int y);
+	virtual void onFunctionKey(CWidgetBase::TFunctionKey key, int x, int y);
 
-	virtual void onCreateShapeEvent(double x, double y, double z, CIvfShapePtr& shape);
+	virtual void onCreateShapeEvent(double x, double y, double z, CShapePtr& shape);
 
-	virtual void onSelect(CIvfShape* shape);
-	virtual void onHighlight(CIvfShape* shape);
+	virtual void onSelect(CShape* shape);
+	virtual void onHighlight(CShape* shape);
 
 	virtual void onMouseDown(int x, int y);
 	virtual void onMouseMove(int x, int y);
@@ -202,7 +202,7 @@ public:
 	virtual void onModifierUp();
 
 	virtual bool onMoveSelection();
-	virtual void onCopyShape(double x, double y, double z, CIvfShapePtr& shape, CIvfShapePtr& newShape);
+	virtual void onCopyShape(double x, double y, double z, CShapePtr& shape, CShapePtr& newShape);
 	virtual void onFinishCopy();
 	virtual void onFinishMove();
 

@@ -21,22 +21,22 @@
 
 #include <ivfmath/IvfSplineSegment3d.h>
 
-CIvfSplineSegment3d::CIvfSplineSegment3d()
+CSplineSegment3d::CSplineSegment3d()
 {
-	m_p1 = new CIvfVec3d();
+	m_p1 = new CVec3d();
 	m_p1->addReference();
-	m_p2 = new CIvfVec3d();
+	m_p2 = new CVec3d();
 	m_p2->addReference();
 
-	m_t1 = new CIvfVec3d();
-	m_t2 = new CIvfVec3d();
-	m_p = new CIvfVec3d();
-	m_t = new CIvfVec3d();
+	m_t1 = new CVec3d();
+	m_t2 = new CVec3d();
+	m_p = new CVec3d();
+	m_t = new CVec3d();
 	m_bias[0] = 1.0;
 	m_bias[1] = 1.0;
 }
 
-CIvfSplineSegment3d::~CIvfSplineSegment3d()
+CSplineSegment3d::~CSplineSegment3d()
 {
 	m_p1->deleteReference();	
 	m_p2->deleteReference();	
@@ -54,19 +54,19 @@ CIvfSplineSegment3d::~CIvfSplineSegment3d()
 }
 
 /**  */
-CIvfVec3d* CIvfSplineSegment3d::getStartPoint()
+CVec3d* CSplineSegment3d::getStartPoint()
 {
 	return m_p1;
 }
 
 /**  */
-CIvfVec3d* CIvfSplineSegment3d::getEndPoint()
+CVec3d* CSplineSegment3d::getEndPoint()
 {
 	return m_p2;
 }
 
 /**  */
-CIvfVec3d* CIvfSplineSegment3d::getPosition(double t)
+CVec3d* CSplineSegment3d::getPosition(double t)
 {
 	if ((m_p1!=NULL)&&(m_p2!=NULL))
 	{
@@ -80,64 +80,64 @@ CIvfVec3d* CIvfSplineSegment3d::getPosition(double t)
 }
 
 /**  */
-CIvfVec3d* CIvfSplineSegment3d::getStartDirection()
+CVec3d* CSplineSegment3d::getStartDirection()
 {
 	return m_t1;
 }
 
 /**  */
-CIvfVec3d* CIvfSplineSegment3d::getEndDirection()
+CVec3d* CSplineSegment3d::getEndDirection()
 {
 	return m_t2;
 }
 
 /**  */
-double CIvfSplineSegment3d::h0(double t)
+double CSplineSegment3d::h0(double t)
 {
 	return 2*pow(t,3)-3*pow(t,2)+1.0;
 }
 
 /**  */
-double CIvfSplineSegment3d::h1(double t)
+double CSplineSegment3d::h1(double t)
 {
 	return -2*pow(t,3)+3*pow(t,2);
 }
 
 /**  */
-double CIvfSplineSegment3d::h2(double t)
+double CSplineSegment3d::h2(double t)
 {
 	return pow(t,3)-2*pow(t,2)+t;
 }
 
 /**  */
-double CIvfSplineSegment3d::h3(double t)
+double CSplineSegment3d::h3(double t)
 {
 	return pow(t,3)-pow(t,2);
 }
 
 /**  */
-void CIvfSplineSegment3d::setStartBias(double bias)
+void CSplineSegment3d::setStartBias(double bias)
 {
 	m_bias[0] = bias;
 }
 /**  */
-void CIvfSplineSegment3d::setEndBias(double bias)
+void CSplineSegment3d::setEndBias(double bias)
 {
 	m_bias[1] = bias;
 }
 /**  */
-double CIvfSplineSegment3d::getStartBias()
+double CSplineSegment3d::getStartBias()
 {
 	return m_bias[0];
 }
 /**  */
-double CIvfSplineSegment3d::getEndBias()
+double CSplineSegment3d::getEndBias()
 {
 	return m_bias[1];
 }
 
 /** Set start point of spline */
-void CIvfSplineSegment3d::setStartPoint(CIvfVec3d* point)
+void CSplineSegment3d::setStartPoint(CVec3d* point)
 {
 	m_p1->deleteReference();	
 	if (!m_p1->referenced())
@@ -148,7 +148,7 @@ void CIvfSplineSegment3d::setStartPoint(CIvfVec3d* point)
 }
 
 /** Set endpoint of spline */
-void CIvfSplineSegment3d::setEndPoint(CIvfVec3d* point)
+void CSplineSegment3d::setEndPoint(CVec3d* point)
 {
 	m_p2->deleteReference();	
 	if (!m_p2->referenced())
@@ -158,27 +158,27 @@ void CIvfSplineSegment3d::setEndPoint(CIvfVec3d* point)
 	m_p2->addReference();
 }
 
-double CIvfSplineSegment3d::dh0(double t)
+double CSplineSegment3d::dh0(double t)
 {
 	return 6.0*pow(t,2)-6.0*t;
 }
 
-double CIvfSplineSegment3d::dh1(double t)
+double CSplineSegment3d::dh1(double t)
 {
 	return -6.0*pow(t,2)+6.0*t;
 }
 
-double CIvfSplineSegment3d::dh2(double t)
+double CSplineSegment3d::dh2(double t)
 {
 	return 3.0*pow(t,2)-4.0*t+1.0;
 }
 
-double CIvfSplineSegment3d::dh3(double t)
+double CSplineSegment3d::dh3(double t)
 {
 	return 3.0*pow(t,2)-2.0*t;
 }
 
-CIvfVec3d* CIvfSplineSegment3d::getTangent(double t)
+CVec3d* CSplineSegment3d::getTangent(double t)
 {
 	if ((m_p1!=NULL)&&(m_p2!=NULL))
 	{
@@ -191,9 +191,9 @@ CIvfVec3d* CIvfSplineSegment3d::getTangent(double t)
 	return m_t;
 }
 
-double CIvfSplineSegment3d::getSpeed(double t)
+double CSplineSegment3d::getSpeed(double t)
 {
-	CIvfVec3d* vec;
+	CVec3d* vec;
 	vec = this->getTangent(t);
 	return vec->length();
 }

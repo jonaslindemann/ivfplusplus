@@ -26,38 +26,38 @@
 
 #include <ivf/IvfGL.h>
 
-CIvfPolyState::CIvfPolyState()
+CPolyState::CPolyState()
 {
 	m_face = TF_FRONT_AND_BACK;
 	m_mode = PM_FILL;
 }
 
-CIvfPolyState::~CIvfPolyState()
+CPolyState::~CPolyState()
 {
 
 }
 
-void CIvfPolyState::setFace(TTargetFace face)
+void CPolyState::setFace(TTargetFace face)
 {
 	m_face = face;
 }
 
-CIvfPolyState::TTargetFace CIvfPolyState::getFace()
+CPolyState::TTargetFace CPolyState::getFace()
 {
 	return m_face;
 }
 
-void CIvfPolyState::setMode(TPolygonMode mode)
+void CPolyState::setMode(TPolygonMode mode)
 {
 	m_mode = mode;
 }
 
-CIvfPolyState::TPolygonMode CIvfPolyState::getMode()
+CPolyState::TPolygonMode CPolyState::getMode()
 {
 	return m_mode;
 }
 
-void CIvfPolyState::doState()
+void CPolyState::doState()
 {
 	GLenum face, mode;
 
@@ -94,14 +94,14 @@ void CIvfPolyState::doState()
 	glPolygonMode(face, mode);
 }
 
-void CIvfPolyState::doSaveState()
+void CPolyState::doSaveState()
 {
 	GLint value[2];
 	glGetIntegerv(GL_POLYGON_MODE, value);
 	m_oldMode = value[0];
 }
 
-void CIvfPolyState::doRestoreState()
+void CPolyState::doRestoreState()
 {
 	GLenum face;
 

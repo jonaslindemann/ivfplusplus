@@ -27,26 +27,26 @@
 
 #include <ivf/IvfBase.h>
 
-IvfSmartPointer(CIvfViewport);
+IvfSmartPointer(CViewport);
 
 /**
  * View port definition class
  *
  * This class defines a viewport in OpenGL. Used
- * together with CIvfView derived classes.
+ * together with CView derived classes.
  */
-class IVF_API CIvfViewport : public CIvfBase {
+class IVF_API CViewport : public CBase {
 private:
 	int m_pos[2];
 	int m_size[2];
 public:
 	/** Class constructor */
-	CIvfViewport();
+	CViewport();
 
 	/** Class destructor */
-	virtual ~CIvfViewport();
+	virtual ~CViewport();
 
-	IvfClassInfo("CIvfViewport",CIvfBase);
+	IvfClassInfo("CViewport",CBase);
 
 	/** Applies the current viewport */
 	void apply();

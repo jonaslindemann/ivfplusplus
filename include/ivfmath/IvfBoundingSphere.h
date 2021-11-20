@@ -24,28 +24,28 @@
 
 #include <ivfmath/IvfMathBase.h>
 
-IvfSmartPointer(CIvfBoundingSphere);
+IvfSmartPointer(CBoundingSphere);
 
 /**
  * Bounding sphere class
  * 
- * CIvfBoundingSphere defines a bounding sphere used together 
+ * CBoundingSphere defines a bounding sphere used together 
  * with the CIvfCulledScene class.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfBoundingSphere : public CIvfMathBase {
+class IVFMATH_API CBoundingSphere : public CMathBase {
 private:
 	double m_radius;
 	double m_globalPos[3];
 public:
 	/** CIvfBounding sphere constructor */
-	CIvfBoundingSphere();
+	CBoundingSphere();
 
 	/** CIvfBounding sphere destructor */
-	virtual ~CIvfBoundingSphere();
+	virtual ~CBoundingSphere();
 
-	IvfClassInfo("CIvfBoundingSphere",CIvfMathBase);
+	IvfClassInfo("CBoundingSphere",CMathBase);
 
 	/** Set the bounding sphere radius. */
 	void setRadius(double radius);

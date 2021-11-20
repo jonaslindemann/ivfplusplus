@@ -29,7 +29,7 @@
 
 #include <ivf/ivfconfig.h>
 
-CIvfDiscreteTime::CIvfDiscreteTime()
+CDiscreteTime::CDiscreteTime()
 {
 	m_time = 0;
 	m_startTime = 0;
@@ -39,39 +39,39 @@ CIvfDiscreteTime::CIvfDiscreteTime()
 	m_loop = false;
 }
 
-CIvfDiscreteTime::~CIvfDiscreteTime()
+CDiscreteTime::~CDiscreteTime()
 {
 
 }
 
-long CIvfDiscreteTime::getCurrentTime()
+long CDiscreteTime::getCurrentTime()
 {
 	return m_time;
 }
 
-void CIvfDiscreteTime::setInterval(long startTime, long endTime)
+void CDiscreteTime::setInterval(long startTime, long endTime)
 {
 	m_startTime = startTime;
 	m_endTime = endTime;
 	m_time = m_startTime;
 }
 
-void CIvfDiscreteTime::next()
+void CDiscreteTime::next()
 {
 	this->checkStep(m_time + m_step);
 }
 
-void CIvfDiscreteTime::rewind()
+void CDiscreteTime::rewind()
 {
 	m_time = m_startTime;
 }
 
-void CIvfDiscreteTime::previous()
+void CDiscreteTime::previous()
 {
 	this->checkStep(m_time - m_step);
 }
 
-void CIvfDiscreteTime::setTime(long time)
+void CDiscreteTime::setTime(long time)
 {
 	if (time>=m_startTime)
 	{
@@ -85,31 +85,31 @@ void CIvfDiscreteTime::setTime(long time)
 	}
 }
 
-void CIvfDiscreteTime::setEndAction(int action)
+void CDiscreteTime::setEndAction(int action)
 {
 	m_endAction = action;
 	m_time = 0;
 	m_step = 1;
 }
 
-void CIvfDiscreteTime::last()
+void CDiscreteTime::last()
 {
 	m_time = m_endTime;
 }
 
-void CIvfDiscreteTime::setLoop(bool flag)
+void CDiscreteTime::setLoop(bool flag)
 {
 	m_loop = flag;
 }
 
-void CIvfDiscreteTime::reset()
+void CDiscreteTime::reset()
 {
 	m_time = 0;
 	m_step = 1;
 	m_loop = false;
 }
 
-void CIvfDiscreteTime::checkStep(int testStep)
+void CDiscreteTime::checkStep(int testStep)
 {
 	if (testStep<m_startTime)
 	{

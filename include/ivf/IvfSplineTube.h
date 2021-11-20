@@ -29,32 +29,32 @@
 
 #include <ivf/IvfTubeExtrusion.h>
 
-IvfSmartPointer(CIvfSplineTube);
+IvfSmartPointer(CSplineTube);
 
 /**
  * Spline extrusion class
  * 
- * Implements a extrusion using a CIvfSpline3d spine
+ * Implements a extrusion using a CSpline3d spine
  */
-class IVF_API CIvfSplineTube : public CIvfTubeExtrusion {
+class IVF_API CSplineTube : public CTubeExtrusion {
 private:
 	double m_resolution;
-	CIvfSpline3dPtr m_spline;
+	CSpline3dPtr m_spline;
 public:
-	/** CIvfSplineTube constructor */
-	CIvfSplineTube();
+	/** CSplineTube constructor */
+	CSplineTube();
 
-	/** CIvfSplineTube destructor */
-	virtual ~CIvfSplineTube();
+	/** CSplineTube destructor */
+	virtual ~CSplineTube();
 
-	IvfClassInfo("CIvfSplineTube",CIvfTubeExtrusion);
+	IvfClassInfo("CSplineTube",CTubeExtrusion);
 
 	/** Set the number of sides in the circular section */
 	void setSides(int sides);
 
 	/** Sets the spline used as a spine */
-	void setSpline(CIvfSpline3d* spline);
-	CIvfSpline3d* getSpline();
+	void setSpline(CSpline3d* spline);
+	CSpline3d* getSpline();
 
 	/** Set the precision when creating the polyline representation */
 	void setPrecision(double resolution);

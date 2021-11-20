@@ -30,14 +30,14 @@
 #include <ivf/IvfGLPrimitive.h>
 #include <ivf/IvfColor.h>
 
-IvfSmartPointer(CIvfColorMap);
+IvfSmartPointer(CColorMap);
 
-class CIvfColorMap : public CIvfBase {
+class CColorMap : public CBase {
 private:
-	std::vector<CIvfColorPtr> m_colors;
+	std::vector<CColorPtr> m_colors;
 public:
-	CIvfColorMap();
-	virtual ~CIvfColorMap();
+	CColorMap();
+	virtual ~CColorMap();
 
 	void open(const std::string& fname);
 	void clear();

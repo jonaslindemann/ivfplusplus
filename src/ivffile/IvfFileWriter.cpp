@@ -24,18 +24,18 @@
 
 #include <ivffile/IvfFileWriter.h>
 
-CIvfFileWriter::CIvfFileWriter()
+CFileWriter::CFileWriter()
 {
 
 }
 
-CIvfFileWriter::~CIvfFileWriter()
+CFileWriter::~CFileWriter()
 {
 
 }
 
 
-void CIvfFileWriter::write()
+void CFileWriter::write()
 {
 
 }

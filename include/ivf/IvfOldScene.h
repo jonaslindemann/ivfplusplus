@@ -39,7 +39,7 @@ using namespace std;
 
 #include <ivfmath/IvfPoint3d.h>
 
-IvfSmartPointer(CIvfOldScene);
+IvfSmartPointer(COldScene);
 
 #define IVF_TEMP_SOLID 0
 #define IVF_TEMP_WIREFRAME 1
@@ -55,21 +55,21 @@ IvfSmartPointer(CIvfOldScene);
  * and selection. 
  * @author Jonas Lindemann
  */
-class IVF_API CIvfOldScene : public CIvfSelectComposite {
+class IVF_API COldScene : public CSelectComposite {
 public:
 	/** Constructor */
-	CIvfOldScene ();
+	COldScene ();
 
 	/** Destructor */
-	virtual ~CIvfOldScene ();
+	virtual ~COldScene ();
 
-	IvfClassInfo("CIvfOldScene",CIvfSelectComposite);
+	IvfClassInfo("COldScene",CSelectComposite);
 
-	void setCamera(CIvfCamera * camera);
-	CIvfCamera* getCamera();
+	void setCamera(CCamera * camera);
+	CCamera* getCamera();
 	
-	CIvfView* getView();
-	void setView(CIvfView* view);
+	CView* getView();
+	void setView(CView* view);
 
 	/** 
 	 * Set current coordinate system object
@@ -79,10 +79,10 @@ public:
 	 * If the coordiate system object is not referenced
 	 * by any other objects it will be deleted by IvfScene.
 	 */
-	void setWorldSystem(CIvfCoordinateSystem* world);
+	void setWorldSystem(CCoordinateSystem* world);
 
 	/** Return coordinate system object */
-	CIvfCoordinateSystem* getWorldSystem();
+	CCoordinateSystem* getWorldSystem();
 
 	/**
 	 * Set cursor object
@@ -91,8 +91,8 @@ public:
 	 * cursor. If the cursor is not referenced it will
 	 * be deleted.
 	 */
-	void setCursor(CIvfCursor* cursor);
-	CIvfCursor* getCursor();
+	void setCursor(CCursor* cursor);
+	CCursor* getCursor();
 
 	//changes Calle Lejdfors 990803
 
@@ -106,10 +106,10 @@ public:
 	 * scene graph and can be used to draw outlines of 
 	 * objects that is to be placed in the scene.
 	 */
-	void setTempShape(CIvfShape* shape);
+	void setTempShape(CShape* shape);
 
 	/** Return temporary shape */
-	CIvfShape* getTempShape();
+	CShape* getTempShape();
 
 	/** 
 	 * Set temporary drawing style
@@ -178,7 +178,7 @@ public:
 	 * rendering stage of the scene and is not contained
 	 * in the scene graph.
 	 */
-	void setTransparentShape(CIvfShape* shape);
+	void setTransparentShape(CShape* shape);
 
 	/** Enable/disable cursor */
 	void setShowCursor(bool flag);
@@ -193,7 +193,7 @@ public:
 	bool getShowGrid();
 
 private:
-	CIvfPoint3d m_pointOnPlane;
+	CPoint3d m_pointOnPlane;
 	double m_objectSize;
 	int m_cursorStartY;
 	int m_cursorStartX;
@@ -204,11 +204,11 @@ private:
 	bool m_showCursor;
 	bool m_cursorLocked;
 	bool m_snapToGrid;
-	CIvfShape* m_tempShape;
-	CIvfShape* m_transparentShape;
-	CIvfCursor* m_cursor;
-	CIvfCoordinateSystem* m_world;
-	CIvfLighting* m_lighting;
+	CShape* m_tempShape;
+	CShape* m_transparentShape;
+	CCursor* m_cursor;
+	CCoordinateSystem* m_world;
+	CLighting* m_lighting;
 	int m_lightMode;
 	//end changes
 

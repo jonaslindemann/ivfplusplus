@@ -19,20 +19,20 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfNode
+// Implementation of: public class CNode
 
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfNode.h>
 
 // ------------------------------------------------------------
-CIvfNode::CIvfNode ()
-		:CIvfShape()
+CNode::CNode ()
+		:CShape()
 		//TODO: check and complete member initialisation list!
 {
 	m_nodeSize = 0.2;
 
-	m_sphereShape = new CIvfSphere();
-	m_cubeShape = new CIvfCube();
+	m_sphereShape = new CSphere();
+	m_cubeShape = new CCube();
 
 	m_sphereShape->setRadius(0.2);
 	m_cubeShape->setSize(0.2);
@@ -42,7 +42,7 @@ CIvfNode::CIvfNode ()
 	m_nodeShape = m_cubeShape;
 	m_nodeType = NT_CUBE;
 
-	m_selectionBox = new CIvfSelectionBox();
+	m_selectionBox = new CSelectionBox();
 	m_selectionBox->setUseName(false);
 	/*
 	m_pBC = NULL;
@@ -52,13 +52,13 @@ CIvfNode::CIvfNode ()
 }
 
 // ------------------------------------------------------------
-CIvfNode::~CIvfNode ()
+CNode::~CNode ()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfNode::doCreateGeometry()
+void CNode::doCreateGeometry()
 {
 	m_sphereShape->setRadius(m_nodeSize);
 	m_cubeShape->setSize(m_nodeSize);
@@ -68,27 +68,27 @@ void CIvfNode::doCreateGeometry()
 }
 
 // ------------------------------------------------------------
-void CIvfNode::doCreateSelect()
+void CNode::doCreateSelect()
 {
 	m_selectionBox->setSize(m_nodeSize, m_nodeSize, m_nodeSize);
 	m_selectionBox->render();
 }
 
 // ------------------------------------------------------------
-void CIvfNode::setSize(double size)
+void CNode::setSize(double size)
 {
 	m_nodeSize = size;
 	doUpdateBoundingSphere();
 }
 
 // ------------------------------------------------------------
-double CIvfNode::getSize()
+double CNode::getSize()
 {
 	return m_nodeSize;
 }
 
 // ------------------------------------------------------------
-void CIvfNode::setType(TNodeType nodeType)
+void CNode::setType(TNodeType nodeType)
 {
 	m_nodeType = nodeType;
 	switch (m_nodeType) {
@@ -108,12 +108,12 @@ void CIvfNode::setType(TNodeType nodeType)
 }
 
 // ------------------------------------------------------------
-CIvfNode::TNodeType CIvfNode::getNodeType()
+CNode::TNodeType CNode::getNodeType()
 {
 	return m_nodeType;
 }
 
-void CIvfNode::doUpdateBoundingSphere()
+void CNode::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{

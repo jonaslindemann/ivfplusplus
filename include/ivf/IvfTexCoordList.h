@@ -30,18 +30,18 @@
 
 #include <ivfmath/IvfVec3d.h>
 
-IvfSmartPointer(CIvfTexCoordList);
+IvfSmartPointer(CTexCoordList);
 
 /**
  * Normal list class
  *
- * Maintains a list of texture coords for use with the CIvfVertexElements class.
+ * Maintains a list of texture coords for use with the CVertexElements class.
  * The list is initially 1024 elements and the size is doubled if exceeding
  * 1024. 
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfTexCoordList : public CIvfBase {
+class IVF_API CTexCoordList : public CBase {
 private:
 	GLfloat* m_vertices;
 	long m_allocSize;
@@ -49,13 +49,13 @@ private:
 	long m_blockSize;
 	long m_next;
 public:
-	/** CIvfTexCoordList constructor */
-	CIvfTexCoordList();
+	/** CTexCoordList constructor */
+	CTexCoordList();
 
-	/** CIvfTexCoordList destructor */
-	virtual ~CIvfTexCoordList();
+	/** CTexCoordList destructor */
+	virtual ~CTexCoordList();
 
-	IvfClassInfo("CIvfTexCoordList",CIvfBase);
+	IvfClassInfo("CTexCoordList",CBase);
 
 	/** Add a texture coordinate */
 	void add(double s, double t);

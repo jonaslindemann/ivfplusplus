@@ -30,11 +30,11 @@
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class CExampleWindow: public CGlutBase {
 private:
-	CIvfCameraPtr		m_camera;
-	CIvfCompositePtr	m_scene;
-	CIvfLightPtr		m_light;
+	CCameraPtr		m_camera;
+	CCompositePtr	m_scene;
+	CLightPtr		m_light;
 
 	double m_angleX;
 	double m_angleY;
@@ -66,7 +66,7 @@ public:
 // ------------------------------------------------------------
 
 CExampleWindow::CExampleWindow(int X, int Y, int W, int H, bool fullScreen)
-		:CIvfGlutBase(X, Y, W, H, fullScreen) 
+		:CGlutBase(X, Y, W, H, fullScreen) 
 {
 
 }
@@ -88,7 +88,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(-0.0, 3.0, 5.0);
 	m_camera->setTarget(-0.0, 0.0, 0.0);
 
@@ -96,15 +96,15 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create scene
 
-	m_scene = new CIvfComposite();
+	m_scene = new CComposite();
 
 	// Create a file reader
 
-	CIvfAc3DReaderPtr acReader = new CIvfAc3DReader();
+	CAc3DReaderPtr acReader = new CAc3DReader();
 
 	// Set parameters
 
-	acReader->setFileName("models/ivf.ac");
+	acReader->setFileName("data/models/ivf.ac");
 	//acReader->setScaling(1.0);
 
 	// Read file
@@ -117,7 +117,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Retrieve poly set
 
-	CIvfShapePtr shape = acReader->getShape();
+	CShapePtr shape = acReader->getShape();
 	shape->initBoundingSphere();
 	std::cout << shape->getBoundingSphere()->getRadius() << std::endl;
 
@@ -128,7 +128,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
@@ -138,7 +138,7 @@ void CExampleWindow::onInit(int width, int height)
 	m_light->enable();
 
 	/*
-	CIvfDxfWriterPtr dxfWriter = new CIvfDxfWriter();
+	CIvfDxfWriterPtr dxfWriter = new CDxfWriter();
 	dxfWriter->setFileName("models/ac3dreader.dxf");
 	dxfWriter->setShape(m_scene);
 	dxfWriter->write();
@@ -199,7 +199,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
+		if (getModifierKey() == CWidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -265,7 +265,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 	// Create a window
 

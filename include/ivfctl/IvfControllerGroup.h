@@ -24,7 +24,7 @@
 
 #include <ivfctl/IvfController.h>
 
-IvfSmartPointer(CIvfControllerGroup);
+IvfSmartPointer(CControllerGroup);
 
 /**
  * Group controller class
@@ -32,25 +32,25 @@ IvfSmartPointer(CIvfControllerGroup);
  * This controller handles a set of controllers as a single
  * controller
  */
-class IVFCTL_API CIvfControllerGroup : public CIvfController {
+class IVFCTL_API CControllerGroup : public CController {
 private:
-	std::vector<CIvfController*> m_controllers;
+	std::vector<CController*> m_controllers;
 public:
-	/** CIvfControllerGroup constructor */
-	CIvfControllerGroup();
+	/** CControllerGroup constructor */
+	CControllerGroup();
 
-	/** CIvfControllerGroup destructor */
-	virtual ~CIvfControllerGroup();
+	/** CControllerGroup destructor */
+	virtual ~CControllerGroup();
 
-	IvfClassInfo("CIvfControllerGroup",CIvfController);
+	IvfClassInfo("CControllerGroup",CController);
 
 	/** Add a controller to the controller group */
-	void addChild(CIvfController* controller);
+	void addChild(CController* controller);
 
 	void clear();
 	
 	virtual void doUpdate(double dt);
-	virtual void doAction(CIvfAction* action);
+	virtual void doAction(CAction* action);
 	virtual void doReset();
 };
 

@@ -24,12 +24,12 @@
 
 #include <ivfgle/IvfGlePolyCone.h>
 
-CIvfGlePolyCone::CIvfGlePolyCone()
+CGlePolyCone::CGlePolyCone()
 {
 
 }
 
-void CIvfGlePolyCone::doCreateGeometry()
+void CGlePolyCone::doCreateGeometry()
 {
 	if ((m_pointArray!=NULL)&&(m_radius!=NULL)&&(m_colorArray==NULL))
 	{
@@ -69,7 +69,7 @@ void CIvfGlePolyCone::doCreateGeometry()
 	}
 }
 
-void CIvfGlePolyCone::setRadius(CIvfGleScalarArray *array)
+void CGlePolyCone::setRadius(CGleScalarArray *array)
 {
 	m_radius = array;
 }

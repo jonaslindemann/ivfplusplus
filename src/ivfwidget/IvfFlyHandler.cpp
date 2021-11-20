@@ -24,7 +24,7 @@
 
 #include <ivfwidget/IvfFlyHandler.h>
 
-CIvfFlyHandler::CIvfFlyHandler(CIvfWidgetBase* widget, CIvfCamera* camera)
+CFlyHandler::CFlyHandler(CWidgetBase* widget, CCamera* camera)
 {
 	m_mouseDelta[0] = 0;
 	m_mouseDelta[1] = 0;
@@ -52,7 +52,7 @@ CIvfFlyHandler::CIvfFlyHandler(CIvfWidgetBase* widget, CIvfCamera* camera)
 	m_widget->addMouseMoveEvent(this);
 }
 
-CIvfFlyHandler::~CIvfFlyHandler()
+CFlyHandler::~CFlyHandler()
 {
 	m_widget->removeKeyboardEvent(this);
 	m_widget->removeMouseDownEvent(this);
@@ -60,13 +60,13 @@ CIvfFlyHandler::~CIvfFlyHandler()
 	m_widget->removeMouseMoveEvent(this);
 }
 
-void CIvfFlyHandler::doMouseDown(int x, int y)
+void CFlyHandler::doMouseDown(int x, int y)
 {
 	m_mouseDownPos[0] = x;
 	m_mouseDownPos[1] = y;
 }
 
-void CIvfFlyHandler::doMouseMove(int x, int y)
+void CFlyHandler::doMouseMove(int x, int y)
 {
 	if (m_widget!=NULL)
 	{
@@ -84,13 +84,13 @@ void CIvfFlyHandler::doMouseMove(int x, int y)
 	}
 }
 
-void CIvfFlyHandler::doMouseUp(int x, int y)
+void CFlyHandler::doMouseUp(int x, int y)
 {
 	m_mouseDelta[0] = 0;
 	m_mouseDelta[1] = 0;
 }
 
-void CIvfFlyHandler::doKeyboard(int key, int x, int y)
+void CFlyHandler::doKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'w':
@@ -140,7 +140,7 @@ void CIvfFlyHandler::doKeyboard(int key, int x, int y)
 
 }
 
-void CIvfFlyHandler::update()
+void CFlyHandler::update()
 {
 	if (m_widget!=NULL)
 	{
@@ -156,14 +156,14 @@ void CIvfFlyHandler::update()
 			m_dt = m_widget->elapsedTime()-m_t;
 			m_t = m_widget->elapsedTime();
 			
-			if (m_widget->getModifierKey()==CIvfWidgetBase::MT_NONE)
+			if (m_widget->getModifierKey()==CWidgetBase::MT_NONE)
 			{
 				if (m_widget->isLeftButtonDown())
 					m_camera->turn(m_mouseDelta[1]*m_mouseSensitivity*m_dt, m_mouseDelta[0]*m_mouseSensitivity*m_dt, 0.0);
 				if (m_widget->isRightButtonDown())
 					m_camera->turn(m_mouseDelta[1]*m_mouseSensitivity*m_dt, 0.0, -m_mouseDelta[0]*m_mouseSensitivity*m_dt);
 			}
-			if (m_widget->getModifierKey()==CIvfWidgetBase::MT_SHIFT)
+			if (m_widget->getModifierKey()==CWidgetBase::MT_SHIFT)
 			{
 				m_verticalSpeed = -m_mouseDelta[1]*m_mouseSensitivity*m_dt;
 				m_horisontalSpeed = -m_mouseDelta[0]*m_mouseSensitivity*m_dt;
@@ -184,79 +184,79 @@ void CIvfFlyHandler::update()
 }
 
 
-void CIvfFlyHandler::setMouseSensitivity(double value)
+void CFlyHandler::setMouseSensitivity(double value)
 {
 	m_mouseSensitivity = value;
 }
 
-double CIvfFlyHandler::getMouseSensitivity()
+double CFlyHandler::getMouseSensitivity()
 {
 	return m_mouseSensitivity;
 }
 
-void CIvfFlyHandler::setMaxSpeed(double speed)
+void CFlyHandler::setMaxSpeed(double speed)
 {
 	m_maxSpeed = speed;
 }
 
-void CIvfFlyHandler::setSpeedStep(double step)
+void CFlyHandler::setSpeedStep(double step)
 {
 	m_speedStep = step;
 }
 
-double CIvfFlyHandler::getSpeedStep()
+double CFlyHandler::getSpeedStep()
 {
 	return m_speedStep;
 }
 
-double CIvfFlyHandler::getMaxSpeed()
+double CFlyHandler::getMaxSpeed()
 {
 	return m_maxSpeed;
 }
 
-void CIvfFlyHandler::setRedraw(bool flag)
+void CFlyHandler::setRedraw(bool flag)
 {
 	m_doRedraw = flag;
 }
 
-void CIvfFlyHandler::doRedraw()
+void CFlyHandler::doRedraw()
 {
 	if (m_doRedraw)
 		m_widget->redraw();
 }
 
-void CIvfFlyHandler::onMouseMove(int x, int y)
+void CFlyHandler::onMouseMove(int x, int y)
 {
 	if (isActive())
 		doMouseMove(x, y);
 }
 
-void CIvfFlyHandler::onMouseDown(int x, int y)
+void CFlyHandler::onMouseDown(int x, int y)
 {
 	if (isActive())
 		doMouseDown(x, y);
 }
 
-void CIvfFlyHandler::onMouseUp(int x, int y)
+void CFlyHandler::onMouseUp(int x, int y)
 {
 	if (isActive())
 		doMouseUp(x, y);
 }
 
-void CIvfFlyHandler::onKeyboard(int key, int x, int y)
+void CFlyHandler::onKeyboard(int key, int x, int y)
 {
 	if (isActive())
 		doKeyboard(key, x, y);
 }
 
-void CIvfFlyHandler::doActivate()
+void CFlyHandler::doActivate()
 {
 	if (m_camera!=NULL)
-		m_camera->setType(CIvfCamera::CT_FLY);
+		m_camera->setType(CCamera::CT_FLY);
 }
 
-void CIvfFlyHandler::doDeactivate()
+void CFlyHandler::doDeactivate()
 {
 	if (m_camera!=NULL)
-		m_camera->setType(CIvfCamera::CT_NORMAL);
+		m_camera->setType(CCamera::CT_NORMAL);
 }

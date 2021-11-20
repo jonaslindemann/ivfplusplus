@@ -24,36 +24,36 @@
 
 #include <ivf/IvfRenderState.h>
 
-CIvfRenderState::CIvfRenderState()
+CRenderState::CRenderState()
 {
 
 }
 
-CIvfRenderState::~CIvfRenderState()
+CRenderState::~CRenderState()
 {
 
 }
 
-void CIvfRenderState::apply()
+void CRenderState::apply()
 {
 	doSaveState();
 	doState();
 }
 
-void CIvfRenderState::remove()
+void CRenderState::remove()
 {
 	doRestoreState();
 }
 
-void CIvfRenderState::doState()
+void CRenderState::doState()
 {
 
 }
 
-void CIvfRenderState::doSaveState()
+void CRenderState::doSaveState()
 {
 }
 
-void CIvfRenderState::doRestoreState()
+void CRenderState::doRestoreState()
 {
 }

@@ -19,34 +19,34 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfSwitch
+// Implementation of: public class CSwitch
 
 #include <ivf/IvfSwitch.h>
 
 // ------------------------------------------------------------
-CIvfSwitch::CIvfSwitch ()
-		:CIvfComposite()
+CSwitch::CSwitch ()
+		:CComposite()
 {
 	m_currentChild = 0;
 }
 
 // ------------------------------------------------------------
-CIvfSwitch::~CIvfSwitch ()
+CSwitch::~CSwitch ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfSwitch::doCreateGeometry()
+void CSwitch::doCreateGeometry()
 {
 	if (this->getSize()>0)
 	{
-		CIvfShape* shape = this->getChild(m_currentChild);
+		CShape* shape = this->getChild(m_currentChild);
 		shape->render();
 	}
 }
 
 // ------------------------------------------------------------
-void CIvfSwitch::setCurrentChild(int child)
+void CSwitch::setCurrentChild(int child)
 {
 	if ((m_currentChild>=0)&&(m_currentChild<this->getSize()))
 	{
@@ -55,13 +55,13 @@ void CIvfSwitch::setCurrentChild(int child)
 }
 
 // ------------------------------------------------------------
-int CIvfSwitch::getCurrentChild()
+int CSwitch::getCurrentChild()
 {
 	return m_currentChild;
 }
 
 // ------------------------------------------------------------
-void CIvfSwitch::cycleForward()
+void CSwitch::cycleForward()
 {
 	if (m_currentChild<this->getSize()-1)
 		m_currentChild++;
@@ -70,7 +70,7 @@ void CIvfSwitch::cycleForward()
 }
 
 // ------------------------------------------------------------
-void CIvfSwitch::cycleBackwards()
+void CSwitch::cycleBackwards()
 {
 	if (m_currentChild>0)
 		m_currentChild--;

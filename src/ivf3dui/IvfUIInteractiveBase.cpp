@@ -24,49 +24,49 @@
 
 #include <ivf3dui/IvfUIInteractiveBase.h>
 
-CIvfUIInteractiveBase::CIvfUIInteractiveBase()
-:CIvfUIBase()
+CUIInteractiveBase::CUIInteractiveBase()
+:CUIBase()
 {
 	setUseName(true);
 }
 
-CIvfUIInteractiveBase::~CIvfUIInteractiveBase()
+CUIInteractiveBase::~CUIInteractiveBase()
 {
 
 }
 
-void CIvfUIInteractiveBase::addChild(CIvfShape *shape)
+void CUIInteractiveBase::addChild(CShape *shape)
 {
 	shape->setUseName(false);
-	CIvfComposite::addChild(shape);
+	CComposite::addChild(shape);
 }
 
-void CIvfUIInteractiveBase::doControlDown(CIvfVec3d vec, int button)
+void CUIInteractiveBase::doControlDown(CVec3d vec, int button)
 {
 
 }
 
-void CIvfUIInteractiveBase::doControlOver(CIvfVec3d vec)
+void CUIInteractiveBase::doControlOver(CVec3d vec)
 {
 
 }
 
-void CIvfUIInteractiveBase::doControlUp(CIvfVec3d vec)
+void CUIInteractiveBase::doControlUp(CVec3d vec)
 {
 
 }
 
-void CIvfUIInteractiveBase::doControlDrag(CIvfVec3d vec, int button)
+void CUIInteractiveBase::doControlDrag(CVec3d vec, int button)
 {
 
 }
 
-void CIvfUIInteractiveBase::doControlClick(CIvfVec3d vec, int button)
+void CUIInteractiveBase::doControlClick(CVec3d vec, int button)
 {
 
 }
 
-void CIvfUIInteractiveBase::doControlLeave(CIvfVec3d vec)
+void CUIInteractiveBase::doControlLeave(CVec3d vec)
 {
 
 }

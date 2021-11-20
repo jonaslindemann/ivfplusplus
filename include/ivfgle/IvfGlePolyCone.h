@@ -32,17 +32,17 @@
 #include <ivfgle/IvfGleScalarArray.h>
 #include <ivfgle/IvfGleExtrudedBase.h>
 
-IvfSmartPointer(CIvfGlePolyCone);
+IvfSmartPointer(CGlePolyCone);
 
-class IVFGLE_API CIvfGlePolyCone: public CIvfGleExtrudedBase {
+class IVFGLE_API CGlePolyCone: public CGleExtrudedBase {
 private:
-	CIvfGleScalarArrayPtr m_radius;
+	CGleScalarArrayPtr m_radius;
 public:
-	CIvfGlePolyCone();
+	CGlePolyCone();
 
-	void setRadius(CIvfGleScalarArray* array);
+	void setRadius(CGleScalarArray* array);
 
-	IvfClassInfo("CIvfGlePolyCone", CIvfShape);
+	IvfClassInfo("CGlePolyCone", CShape);
 protected:
 	virtual void doCreateGeometry();
 };

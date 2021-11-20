@@ -24,13 +24,13 @@
 
 #include <ivfgle/IvfGleColorArray.h>
 
-CIvfGleColorArray::CIvfGleColorArray()
+CGleColorArray::CGleColorArray()
 {
 	m_colors = NULL;
 	m_size = 0;
 }
 
-CIvfGleColorArray::CIvfGleColorArray(int size)
+CGleColorArray::CGleColorArray(int size)
 {
 	m_colors = NULL;
 	m_size = 0;
@@ -38,13 +38,13 @@ CIvfGleColorArray::CIvfGleColorArray(int size)
 	setSize(size);
 }
 
-CIvfGleColorArray::~CIvfGleColorArray()
+CGleColorArray::~CGleColorArray()
 {
 	if (m_colors!=NULL)
 		delete [] m_colors;
 }
 
-void CIvfGleColorArray::setSize(int size)
+void CGleColorArray::setSize(int size)
 {
 	// Delete previous spine colors/colors if any
 	
@@ -60,7 +60,7 @@ void CIvfGleColorArray::setSize(int size)
 	m_colors = new float[m_size][3];
 }
 
-void CIvfGleColorArray::setColor(int idx, float r, float g, float b)
+void CGleColorArray::setColor(int idx, float r, float g, float b)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -70,7 +70,7 @@ void CIvfGleColorArray::setColor(int idx, float r, float g, float b)
 	}
 }
 
-void CIvfGleColorArray::getColor(int idx, float &r, float &g, float &b)
+void CGleColorArray::getColor(int idx, float &r, float &g, float &b)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -80,12 +80,12 @@ void CIvfGleColorArray::getColor(int idx, float &r, float &g, float &b)
 	}
 }
 
-int CIvfGleColorArray::getSize()
+int CGleColorArray::getSize()
 {
 	return m_size;
 }
 
-void* CIvfGleColorArray::getData()
+void* CGleColorArray::getData()
 {
 	if (m_colors!=NULL)
 		return &m_colors[0];

@@ -52,7 +52,7 @@
 #define PFR_BLUE    5
 #define PFR_OTHER   6
 
-IvfSmartPointer(CIvfPolyReader);
+IvfSmartPointer(CPolyReader);
 
 /**
  * Base class for a POLY reader
@@ -63,7 +63,7 @@ IvfSmartPointer(CIvfPolyReader);
  *
  * @author Jonas Lindemann
  */
-class IVFFILE_API CIvfPolyReader : public CIvfFileReader {
+class IVFFILE_API CPolyReader : public CFileReader {
 private:
 	std::string m_row;
 	int m_nFaces;
@@ -89,13 +89,13 @@ private:
 	bool readVertices(std::istream &in);
 	bool readData(std::istream &in);
 public:
-	/** CIvfPolyReader constructor */
-	CIvfPolyReader();
+	/** CPolyReader constructor */
+	CPolyReader();
 
-	/** CIvfPolyReader destructor */
-	virtual ~CIvfPolyReader();
+	/** CPolyReader destructor */
+	virtual ~CPolyReader();
 
-	IvfClassInfo("CIvfPolyReader",CIvfFileReader);
+	IvfClassInfo("CPolyReader",CFileReader);
 
 	/** Reads POLY file */
 	virtual void read();

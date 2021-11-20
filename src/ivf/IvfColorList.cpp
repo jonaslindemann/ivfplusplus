@@ -24,7 +24,7 @@
 
 #include <ivf/IvfColorList.h>
 
-CIvfColorList::CIvfColorList()
+CColorList::CColorList()
 {
 	m_size = 0;
 	m_blockSize = 1024;
@@ -34,19 +34,19 @@ CIvfColorList::CIvfColorList()
 	m_next = 0;
 }
 
-CIvfColorList::~CIvfColorList()
+CColorList::~CColorList()
 {
 	delete [] m_color;
 }
 
-void CIvfColorList::add(float red, float green, float blue)
+void CColorList::add(float red, float green, float blue)
 {
 	add(red);
 	add(green);
 	add(blue);
 }
 
-void CIvfColorList::add(float comp)
+void CColorList::add(float comp)
 {
 	if (m_next==m_allocSize)
 	{
@@ -68,12 +68,12 @@ void CIvfColorList::add(float comp)
 	m_next++;
 }
 
-int CIvfColorList::getSize()
+int CColorList::getSize()
 {
 	return m_next / 3;
 }
 
-void CIvfColorList::getColor(int idx, float &x, float &y, float &z)
+void CColorList::getColor(int idx, float &x, float &y, float &z)
 {
 	if ((idx>=0)&&(idx<m_next/3))
 	{
@@ -83,7 +83,7 @@ void CIvfColorList::getColor(int idx, float &x, float &y, float &z)
 	}
 }
 
-float CIvfColorList::getComp(int idx)
+float CColorList::getComp(int idx)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{
@@ -93,27 +93,27 @@ float CIvfColorList::getComp(int idx)
 		return -1.0;
 }
 
-void* CIvfColorList::getData()
+void* CColorList::getData()
 {
 	return (void*)m_color;
 }
 
-GLenum CIvfColorList::getDataType()
+GLenum CColorList::getDataType()
 {
 	return GL_FLOAT;
 }
 
-GLsizei CIvfColorList::getStride()
+GLsizei CColorList::getStride()
 {
 	return 3*sizeof(GLfloat);
 }
 
-GLint CIvfColorList::getCompSize()
+GLint CColorList::getCompSize()
 {
 	return 3;
 }
 
-void CIvfColorList::clear()
+void CColorList::clear()
 {
 	delete [] m_color;
 

@@ -49,12 +49,12 @@
 
 #include <ivfwidget/IvfWorkspaceWidget.h>
 
-IvfSmartPointer(CIvfFltkWorkspace);
+IvfSmartPointer(CFltkWorkspace);
 
 /**
  * Fltk Workspace widget class
  */
-class IVFFLTK_API CIvfFltkWorkspace : public Fl_Gl_Window, public CIvfWorkspaceWidget {
+class IVFFLTK_API CFltkWorkspace : public Fl_Gl_Window, public CWorkspaceWidget {
 private:
 protected:
 	virtual void doRedraw();
@@ -86,9 +86,9 @@ public:
 	 * @param H Widget height.
 	 * @param L Widget title (optional)
 	 */
-	CIvfFltkWorkspace(int X, int Y, int W, int H, const char *L=0);
+	CFltkWorkspace(int X, int Y, int W, int H, const char *L=0);
 
-	IvfClassInfo("CIvfFltkWorkspace",CIvfWorkspaceWidget);
+	IvfClassInfo("CFltkWorkspace",CWorkspaceWidget);
 };
 
 #endif 

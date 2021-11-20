@@ -24,13 +24,13 @@
 
 #include <ivfgle/IvfGleScalarArray.h>
 
-CIvfGleScalarArray::CIvfGleScalarArray()
+CGleScalarArray::CGleScalarArray()
 {
 	m_scalars = NULL;
 	m_size = 0;
 }
 
-CIvfGleScalarArray::CIvfGleScalarArray(int size)
+CGleScalarArray::CGleScalarArray(int size)
 {
 	m_scalars = NULL;
 	m_size = 0;
@@ -38,13 +38,13 @@ CIvfGleScalarArray::CIvfGleScalarArray(int size)
 	setSize(size);
 }
 
-CIvfGleScalarArray::~CIvfGleScalarArray()
+CGleScalarArray::~CGleScalarArray()
 {
 	if (m_scalars!=NULL)
 		delete [] m_scalars;
 }
 
-void CIvfGleScalarArray::setSize(int size)
+void CGleScalarArray::setSize(int size)
 {
 	// Delete previous spine coords/colors if any
 	
@@ -60,13 +60,13 @@ void CIvfGleScalarArray::setSize(int size)
 	m_scalars = new gleDouble[m_size];
 }
 
-void CIvfGleScalarArray::setValue(int idx, double value)
+void CGleScalarArray::setValue(int idx, double value)
 {
 	if ((idx>=0)&&(idx<m_size))
 		m_scalars[idx] = value;
 }
 
-double CIvfGleScalarArray::getValue(int idx)
+double CGleScalarArray::getValue(int idx)
 {
 	if ((idx>=0)&&(idx<m_size))
 		return m_scalars[idx];
@@ -74,12 +74,12 @@ double CIvfGleScalarArray::getValue(int idx)
 		return 0.0;
 }
 
-int CIvfGleScalarArray::getSize()
+int CGleScalarArray::getSize()
 {
 	return m_size;
 }
 
-gleDouble* CIvfGleScalarArray::getData()
+gleDouble* CGleScalarArray::getData()
 {
 	if (m_scalars!=NULL)
 		return m_scalars;

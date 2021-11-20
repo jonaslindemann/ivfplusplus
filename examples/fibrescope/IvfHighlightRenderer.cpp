@@ -2,7 +2,7 @@
 
 #include "IvfUserSettings.h"
 
-CIvfHighlightRenderer::CIvfHighlightRenderer()
+CHighlightRenderer::CHighlightRenderer()
 {
 	// Add construction code here
 
@@ -13,16 +13,16 @@ CIvfHighlightRenderer::CIvfHighlightRenderer()
 	gluQuadricNormals(m_qobj, GLU_SMOOTH);
 }
 
-CIvfHighlightRenderer::~CIvfHighlightRenderer()
+CHighlightRenderer::~CHighlightRenderer()
 {
 	gluDeleteQuadric(m_qobj);
 }
 
 
-void CIvfHighlightRenderer::doCreateGeometry()
+void CHighlightRenderer::doCreateGeometry()
 {
-	CIvfUserSettingsPtr userSettings = CIvfUserSettings::getInstance();
-	CIvfMaterialPtr material = new CIvfMaterial();
+	CUserSettingsPtr userSettings = CUserSettings::getInstance();
+	CMaterialPtr material = new CMaterial();
 	material->setDiffuseColor(0.1f, 0.1f, 0.1f, 1.0f);
 	material->setAmbientColor(0.1f, 0.1f, 0.1f, 1.0f);
 

@@ -31,7 +31,7 @@
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class CExampleWindow: public CGlutBase {
 private:
 
 	// Camera movement state variables
@@ -46,18 +46,18 @@ private:
 	double m_zoomX;
 	double m_zoomY;
 
-	CIvfCameraPtr		m_camera;
-	CIvfCompositePtr	m_scene;
-	CIvfLightPtr		m_light;
+	CCameraPtr		m_camera;
+	CCompositePtr	m_scene;
+	CLightPtr		m_light;
 
-	CIvfViewportPtr		m_upperLeft;
-	CIvfViewportPtr		m_upperRight;
-	CIvfViewportPtr		m_lowerLeft;
-	CIvfViewportPtr		m_lowerRight;
+	CViewportPtr		m_upperLeft;
+	CViewportPtr		m_upperRight;
+	CViewportPtr		m_lowerLeft;
+	CViewportPtr		m_lowerRight;
 
 public:
 	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+		:CGlutBase(X, Y, W, H) {};
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -87,72 +87,72 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(0.0, 4.0, 9.0);
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 
 	// Setup viewports
 
-	m_upperLeft = new CIvfViewport();
-	m_upperRight = new CIvfViewport();
-	m_lowerLeft = new CIvfViewport();
-	m_lowerRight = new CIvfViewport();
+	m_upperLeft = new CViewport();
+	m_upperRight = new CViewport();
+	m_lowerLeft = new CViewport();
+	m_lowerRight = new CViewport();
 
 	// Create a materials
 
-	CIvfMaterialPtr redMaterial = new CIvfMaterial();
+	CMaterialPtr redMaterial = new CMaterial();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
-	CIvfMaterialPtr greenMaterial = new CIvfMaterial();
+	CMaterialPtr greenMaterial = new CMaterial();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 	
-	CIvfMaterialPtr blueMaterial = new CIvfMaterial();
+	CMaterialPtr blueMaterial = new CMaterial();
 	blueMaterial->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	blueMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	blueMaterial->setAmbientColor(0.0f, 0.0f, 0.5f, 1.0f);
 
-	CIvfMaterialPtr yellowMaterial = new CIvfMaterial();
+	CMaterialPtr yellowMaterial = new CMaterial();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene composite
 
-	m_scene = new CIvfComposite();
+	m_scene = new CComposite();
 
 	// Create objects
 	
-	CIvfCubePtr cube = new CIvfCube();
+	CCubePtr cube = new CCube();
 	cube->setMaterial(redMaterial);
 	cube->setPosition(2.0, 0.0, 2.0);
 	m_scene->addChild(cube);
 
-	CIvfSpherePtr sphere = new CIvfSphere();
+	CSpherePtr sphere = new CSphere();
 	sphere->setMaterial(greenMaterial);
 	sphere->setPosition(-2.0, 0.0, 2.0);
 	m_scene->addChild(sphere);
 
-	CIvfCylinderPtr cylinder = new CIvfCylinder();
+	CCylinderPtr cylinder = new CCylinder();
 	cylinder->setMaterial(blueMaterial);
 	cylinder->setPosition(-2.0, 0.0, -2.0);
 	m_scene->addChild(cylinder);
 
-	CIvfConePtr cone = new CIvfCone();
+	CConePtr cone = new CCone();
 	cone->setMaterial(yellowMaterial);
 	cone->setPosition(2.0, 0.0, -2.0);
 	cone->setRotationQuat(0.0, 0.0, 1.0, 45.0);
 	m_scene->addChild(cone);
 
-	CIvfAxisPtr axis = new CIvfAxis();
+	CAxisPtr axis = new CAxis();
 	m_scene->addChild(axis);
 	
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 
 	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
@@ -231,7 +231,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
     if (this->isRightButtonDown())
     {
-		if (this->getModifierKey()==CIvfWidgetBase::MT_SHIFT)
+		if (this->getModifierKey()==CWidgetBase::MT_SHIFT)
 		{
             m_zoomX = (x - m_beginX);
             m_zoomY = (y - m_beginY);
@@ -272,7 +272,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window

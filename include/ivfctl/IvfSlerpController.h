@@ -28,7 +28,7 @@
 
 #include <ivfctl/IvfController.h>
 
-IvfSmartPointer(CIvfSlerpController);
+IvfSmartPointer(CSlerpController);
 
 /**
  * Spherical linear rotation interpolater (SLERP) controller class
@@ -36,7 +36,7 @@ IvfSmartPointer(CIvfSlerpController);
  * Controls the rotation of an object using the rotations given by
  * a set of quaternions.
  */
-class IVFCTL_API CIvfSlerpController : public CIvfController {
+class IVFCTL_API CSlerpController : public CController {
 private:
 public:
 	enum TEndAction {
@@ -52,8 +52,8 @@ public:
 		SA_DEACTIVATE
 	};
 private:
-	CIvfSlerpPtr m_slerp;
-	CIvfQuat m_q;
+	CSlerpPtr m_slerp;
+	CQuat m_q;
 	double m_v0;
 	double m_a0;
 	double m_t0;
@@ -62,17 +62,17 @@ private:
 	TEndAction m_endAction;
 	TStartAction m_startAction;
 public:
-	/** CIvfSlerpController constructor */
-	CIvfSlerpController();
+	/** CSlerpController constructor */
+	CSlerpController();
 
-	/** CIvfSlerpController destructor */
-	virtual ~CIvfSlerpController();
+	/** CSlerpController destructor */
+	virtual ~CSlerpController();
 
 	/** Set instance of slerp class used when interpolating */
-	void setSlerp(CIvfSlerp* slerp);
+	void setSlerp(CSlerp* slerp);
 
-	/** Return CIvfSlerp class */
-	CIvfSlerp* getSlerp();
+	/** Return CSlerp class */
+	CSlerp* getSlerp();
 	/** 
 	 * Set initial position on slerp
 	 *

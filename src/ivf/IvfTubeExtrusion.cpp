@@ -19,7 +19,7 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfTubeExtrusion
+// Implementation of: public class CTubeExtrusion
 
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfTubeExtrusion.h>
@@ -27,8 +27,8 @@
 
 
 // ------------------------------------------------------------
-CIvfTubeExtrusion::CIvfTubeExtrusion ()
-		:CIvfExtrusion()
+CTubeExtrusion::CTubeExtrusion ()
+		:CExtrusion()
 		//TODO: check and complete member initialisation list!
 {
 	m_calcFirstLast = TRUE;
@@ -37,38 +37,38 @@ CIvfTubeExtrusion::CIvfTubeExtrusion ()
 }
 
 // ------------------------------------------------------------
-CIvfTubeExtrusion::~CIvfTubeExtrusion ()
+CTubeExtrusion::~CTubeExtrusion ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfTubeExtrusion::refresh()
+void CTubeExtrusion::refresh()
 {
 	initExtrusion();
 }
 
 // ------------------------------------------------------------
-void CIvfTubeExtrusion::setCalcFirstLast(int flag)
+void CTubeExtrusion::setCalcFirstLast(int flag)
 {
 	m_calcFirstLast = flag;
 }
 
 // ------------------------------------------------------------
-void CIvfTubeExtrusion::setSides(long n)
+void CTubeExtrusion::setSides(long n)
 {
 	m_nSides = n;
 	initExtrusion();
 }
 
 // ------------------------------------------------------------
-void CIvfTubeExtrusion::setRadius(double radius)
+void CTubeExtrusion::setRadius(double radius)
 {
 	m_radius = radius;
 	initExtrusion();
 }
 
 // ------------------------------------------------------------
-void CIvfTubeExtrusion::initExtrusion()
+void CTubeExtrusion::initExtrusion()
 {
 	int i, nSides;
 	double r, angle, x, y;
@@ -94,8 +94,8 @@ void CIvfTubeExtrusion::initExtrusion()
 	if (m_calcFirstLast==TRUE)
 	{
 		
-		CIvfVec3d p1, p2;
-		CIvfVec3d v1;
+		CVec3d p1, p2;
+		CVec3d v1;
 		double x, y, z, ex, ey, ez;
 		
 		this->getSpineCoord(1, x, y, z);

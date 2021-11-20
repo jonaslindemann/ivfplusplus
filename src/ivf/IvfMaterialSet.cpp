@@ -25,27 +25,27 @@
 #include <ivf/IvfMaterialSet.h>
 
 
-CIvfMaterialSet::CIvfMaterialSet()
+CMaterialSet::CMaterialSet()
 {
 
 }
 
-CIvfMaterialSet::~CIvfMaterialSet()
+CMaterialSet::~CMaterialSet()
 {
 	clear();
 }
 
-void CIvfMaterialSet::addMaterial(CIvfMaterial *material)
+void CMaterialSet::addMaterial(CMaterial *material)
 {
-	m_materials.push_back(CIvfMaterialPtr(material));
+	m_materials.push_back(CMaterialPtr(material));
 }
 
-void CIvfMaterialSet::clear()
+void CMaterialSet::clear()
 {
 	m_materials.clear();
 }
 
-CIvfMaterial* CIvfMaterialSet::getMaterial(int pos)
+CMaterial* CMaterialSet::getMaterial(int pos)
 {
 	if ( (pos>=0)&&(pos<(int)m_materials.size()) )
 		return m_materials[pos];
@@ -53,7 +53,7 @@ CIvfMaterial* CIvfMaterialSet::getMaterial(int pos)
 		return NULL;
 }
 
-int CIvfMaterialSet::getSize()
+int CMaterialSet::getSize()
 {
 	return m_materials.size();
 }

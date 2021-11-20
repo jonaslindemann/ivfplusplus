@@ -21,15 +21,15 @@
 
 #include <ivfmath/IvfSlerpSegment.h>
 
-CIvfSlerpSegment::CIvfSlerpSegment()
+CSlerpSegment::CSlerpSegment()
 {
-	m_q1 = new CIvfQuat();
+	m_q1 = new CQuat();
 	m_q1->addReference();
-	m_q2 = new CIvfQuat();
+	m_q2 = new CQuat();
 	m_q2->addReference();
 }
 
-CIvfSlerpSegment::~CIvfSlerpSegment()
+CSlerpSegment::~CSlerpSegment()
 {
 	if (m_q1!=NULL)
 	{
@@ -46,9 +46,9 @@ CIvfSlerpSegment::~CIvfSlerpSegment()
 	}
 }
 
-CIvfQuat& CIvfSlerpSegment::getQuat(double t)
+CQuat& CSlerpSegment::getQuat(double t)
 {
-	CIvfQuat& s = ivfGetTempQuat();
+	CQuat& s = ivfGetTempQuat();
 	double k1, k2;
 
 	if ((t>=0.0)&&(t<=1.0))
@@ -71,7 +71,7 @@ CIvfQuat& CIvfSlerpSegment::getQuat(double t)
 	}
 }
 
-void CIvfSlerpSegment::initSlerp()
+void CSlerpSegment::initSlerp()
 {
 	double qx, qy, qz, qw;
 	double rx, ry, rz, rw;
@@ -81,7 +81,7 @@ void CIvfSlerpSegment::initSlerp()
 	m_theta = acos(qx*rx + qy*ry + qz*rz + qw*rw);
 }
 
-const void CIvfSlerpSegment::setStartQuat(CIvfQuat* q)
+const void CSlerpSegment::setStartQuat(CQuat* q)
 {
 	if (m_q1!=NULL)
 	{
@@ -95,7 +95,7 @@ const void CIvfSlerpSegment::setStartQuat(CIvfQuat* q)
 	initSlerp();
 }
 
-const void CIvfSlerpSegment::setEndQuat(CIvfQuat* q)
+const void CSlerpSegment::setEndQuat(CQuat* q)
 {
 	if (m_q2!=NULL)
 	{
@@ -109,7 +109,7 @@ const void CIvfSlerpSegment::setEndQuat(CIvfQuat* q)
 	initSlerp();
 }
 
-void CIvfSlerpSegment::update()
+void CSlerpSegment::update()
 {
 	initSlerp();
 }

@@ -24,39 +24,39 @@
 
 #include <ivfwidget/IvfHandlerBase.h>
 
-CIvfHandlerBase::CIvfHandlerBase()
+CHandlerBase::CHandlerBase()
 {
 	m_active = true;
 }
 
-CIvfHandlerBase::~CIvfHandlerBase()
+CHandlerBase::~CHandlerBase()
 {
 
 }
 
-void CIvfHandlerBase::activate()
+void CHandlerBase::activate()
 {
 	m_active = true;
 	doActivate();
 }
 
-void CIvfHandlerBase::deactivate()
+void CHandlerBase::deactivate()
 {
 	m_active = false;
 	doDeactivate();
 }
 
-bool CIvfHandlerBase::isActive()
+bool CHandlerBase::isActive()
 {
 	return m_active;
 }
 
-void CIvfHandlerBase::doActivate()
+void CHandlerBase::doActivate()
 {
 
 }
 
-void CIvfHandlerBase::doDeactivate()
+void CHandlerBase::doDeactivate()
 {
 
 }

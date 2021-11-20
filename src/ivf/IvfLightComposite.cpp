@@ -24,17 +24,17 @@
 
 #include <ivf/IvfLightComposite.h>
 
-CIvfLightComposite::CIvfLightComposite()
+CLightComposite::CLightComposite()
 {
 	m_light = NULL;
 }
 
-CIvfLightComposite::~CIvfLightComposite()
+CLightComposite::~CLightComposite()
 {
 
 }
 
-void CIvfLightComposite::doCreateGeometry()
+void CLightComposite::doCreateGeometry()
 {
 	if (m_light!=NULL)
 	{
@@ -43,10 +43,10 @@ void CIvfLightComposite::doCreateGeometry()
 		m_light->setPosition(x, y, z);
 		m_light->render();
 	}
-	CIvfComposite::doCreateGeometry();
+	CComposite::doCreateGeometry();
 }
 
-void CIvfLightComposite::setLight(CIvfOldLight *light)
+void CLightComposite::setLight(COldLight *light)
 {
 	m_light = light;
 }

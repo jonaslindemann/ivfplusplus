@@ -29,18 +29,18 @@
 
 #include <ivf/IvfGL.h>
 
-IvfSmartPointer(CIvfNormalList);
+IvfSmartPointer(CNormalList);
 
 /**
  * Normal list class
  *
- * Maintains a list of normals for use with the CIvfVertexElements class.
+ * Maintains a list of normals for use with the CVertexElements class.
  * The list is initially 1024 elements and the size is doubled if exceeding
  * 1024.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfNormalList : public CIvfBase {
+class IVF_API CNormalList : public CBase {
 private:
 	GLfloat* m_normals;
 	long m_allocSize;
@@ -48,13 +48,13 @@ private:
 	long m_blockSize;
 	long m_next;
 public:
-	/** CIvfNormalList constructor */
-	CIvfNormalList();
+	/** CNormalList constructor */
+	CNormalList();
 
-	/** CIvfNormalList destructor */
-	virtual ~CIvfNormalList();
+	/** CNormalList destructor */
+	virtual ~CNormalList();
 
-	IvfClassInfo("CIvfNormalList",CIvfBase);
+	IvfClassInfo("CNormalList",CBase);
 
 	/** Add a normal to the list */
 	void add(double x, double y, double z);

@@ -27,14 +27,14 @@
 
 #include <ivf3dui/IvfUIInteractiveBase.h>
 
-IvfSmartPointer(CIvfUISwitchBase);
+IvfSmartPointer(CUISwitchBase);
 
-class IVF3DUI_API CIvfUISwitchBase : public CIvfUIInteractiveBase {
+class IVF3DUI_API CUISwitchBase : public CUIInteractiveBase {
 private:
 	bool m_state;
 public:
-	CIvfUISwitchBase();
-	virtual ~CIvfUISwitchBase();
+	CUISwitchBase();
+	virtual ~CUISwitchBase();
 
 	void on();
 	void off();
@@ -45,13 +45,13 @@ public:
 	void setState(bool state);
 	bool getState();
 
-	IvfClassInfo("CIvfUISwitchBase",CIvfUIInteractiveBase);
+	IvfClassInfo("CUISwitchBase",CUIInteractiveBase);
 
-	virtual void doControlClick(CIvfVec3d vec, int button);
-	virtual void doControlOver(CIvfVec3d vec);
-	virtual void doControlLeave(CIvfVec3d vec);
-	virtual void doControlUp(CIvfVec3d vec);
-	virtual void doControlDown(CIvfVec3d vec, int button);
+	virtual void doControlClick(CVec3d vec, int button);
+	virtual void doControlOver(CVec3d vec);
+	virtual void doControlLeave(CVec3d vec);
+	virtual void doControlUp(CVec3d vec);
+	virtual void doControlDown(CVec3d vec, int button);
 	virtual void doStateChange(bool state);
 };
 

@@ -42,14 +42,14 @@
 namespace std {};
 using namespace std;
 
-CIvfCustomWidget::CIvfCustomWidget(int X, int Y, int W, int H, const char *L)
-:CIvfFltkBase(X, Y, W, H)
+CCustomWidget::CCustomWidget(int X, int Y, int W, int H, const char *L)
+:CFltkBase(X, Y, W, H)
 {
 	sldProgress = NULL;
 	outMessage = NULL;
 }
 
-void CIvfCustomWidget::onInit(int width, int height)
+void CCustomWidget::onInit(int width, int height)
 {
 	// Set up widget / workspace
 
@@ -71,39 +71,39 @@ void CIvfCustomWidget::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 	
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(-0.0, 3.0, 5.0);
 	m_camera->setTarget(0.0, 0.0, 0.0);
 	m_camera->setEyeSeparation(0.01);
 	m_camera->setPerspective(45.0, 1.0, 100.0);
 	m_camera->setStereo(true);
-	m_camera->setType(CIvfCamera::CT_FLY);
+	m_camera->setType(CCamera::CT_FLY);
 
 	// Create scene
 	
-	m_scene = new CIvfScene();
+	m_scene = new CScene();
 	m_scene->setView(m_camera);
-	m_scene->setStereoMode(CIvfSceneBase::SM_NONE);
-	m_scene->setLightMode(CIvfSceneBase::LM_LOCAL);
-	m_scene->setAnaglyphColorPair(CIvfScene::CP_RED_CYAN);
+	m_scene->setStereoMode(CSceneBase::SM_NONE);
+	m_scene->setLightMode(CSceneBase::LM_LOCAL);
+	m_scene->setAnaglyphColorPair(CScene::CP_RED_CYAN);
 
 	// Initialize mouse handler
 	
-	m_mouseViewHandler = new CIvfMouseViewHandler(this, m_camera);
+	m_mouseViewHandler = new CMouseViewHandler(this, m_camera);
 	m_mouseViewHandler->activate();
 
 	// Initialize fly handler
 	
-	m_flyHandler = new CIvfFlyHandler(this, m_camera);
+	m_flyHandler = new CFlyHandler(this, m_camera);
 	m_flyHandler->deactivate();
 
 	// Initialize scene handler
 
-	m_sceneHandler = new CIvfSceneHandler(this, m_scene);
+	m_sceneHandler = new CSceneHandler(this, m_scene);
 
 	// Create a light
 	
-	m_lighting = CIvfLighting::getInstance();
+	m_lighting = CLighting::getInstance();
 	m_lighting->enable();
 	
 	m_light = m_lighting->getLight(0);
@@ -114,87 +114,87 @@ void CIvfCustomWidget::onInit(int width, int height)
 	
 	// Define material palette
 
-	CIvfMaterialPtr material;
+	CMaterialPtr material;
 	
-	material = new CIvfMaterial();
+	material = new CMaterial();
 	material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CIvfMaterialPtr(material));
+	m_meshMaterials.push_back(CMaterialPtr(material));
 	
-	material = new CIvfMaterial();
+	material = new CMaterial();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.3f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CIvfMaterialPtr(material));
+	m_meshMaterials.push_back(CMaterialPtr(material));
 
-	material = new CIvfMaterial();
+	material = new CMaterial();
 	material->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.3f, 0.3f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CIvfMaterialPtr(material));
+	m_meshMaterials.push_back(CMaterialPtr(material));
 	
-	material = new CIvfMaterial();
+	material = new CMaterial();
 	material->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.0f, 0.3f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CIvfMaterialPtr(material));
+	m_meshMaterials.push_back(CMaterialPtr(material));
 	
-	material = new CIvfMaterial();
+	material = new CMaterial();
 	material->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.3f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CIvfMaterialPtr(material));
+	m_meshMaterials.push_back(CMaterialPtr(material));
 	
-	material = new CIvfMaterial();
+	material = new CMaterial();
 	material->setDiffuseColor(0.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.3f, 0.3f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CIvfMaterialPtr(material));
+	m_meshMaterials.push_back(CMaterialPtr(material));
 	
-	material = new CIvfMaterial();
+	material = new CMaterial();
 	material->setDiffuseColor(0.8f, 0.8f, 0.8f, 1.0f);
 	material->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CIvfMaterialPtr(material));
+	m_meshMaterials.push_back(CMaterialPtr(material));
 
-	material = new CIvfMaterial();
+	material = new CMaterial();
 	material->setDiffuseColor(0.5f, 0.5f, 0.5f, 1.0f);
 	material->setAmbientColor(0.1f, 0.1f, 0.1f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CIvfMaterialPtr(material));
+	m_meshMaterials.push_back(CMaterialPtr(material));
 
-	material = new CIvfMaterial();
+	material = new CMaterial();
 	material->setDiffuseColor(0.2f, 0.2f, 0.2f, 1.0f);
 	material->setAmbientColor(0.1f, 0.1f, 0.1f, 1.0f);
 	material->setSpecularColor(0.5f, 0.5f, 0.5f, 1.0f);
-	m_meshMaterials.push_back(CIvfMaterialPtr(material));
+	m_meshMaterials.push_back(CMaterialPtr(material));
 
-	m_discreteTime = new CIvfDiscreteTime();
+	m_discreteTime = new CDiscreteTime();
 
 	// Create a color map object
 
-	m_colorMap = new CIvfColorMap();
+	m_colorMap = new CColorMap();
 	m_colorMap->open("colormaps/colormap1.map");
 
 	// Create user settings object 
 
-	m_userSettings = CIvfUserSettings::getInstance();
+	m_userSettings = CUserSettings::getInstance();
 	m_userSettings->setConnectionMaterial(m_meshMaterials[4]);
 	m_userSettings->setColorMap(m_colorMap);
 	m_userSettings->setFibreLighting(true);
 
 	// Highlight renderer
 
-	m_highlightRenderer = new CIvfHighlightRenderer();
+	m_highlightRenderer = new CHighlightRenderer();
 	
 	// Load default fibre texture
 
-	CIvfSgiImage* image = new CIvfSgiImage();
+	CSgiImage* image = new CSgiImage();
 	image->setFileName("textures/tex01.rgb");
 	image->read();
 	
-	m_fibreTexture = new CIvfTexture();
+	m_fibreTexture = new CTexture();
 	m_fibreTexture->setImage(image);
 	m_fibreTexture->setGenerateMipmaps(true);
 	m_fibreTexture->setTextureMode(GL_MODULATE);
@@ -209,13 +209,13 @@ void CIvfCustomWidget::onInit(int width, int height)
 	m_count = 0;
 	m_renderingInterval = 1;
 
-	CIvfAxisPtr axis = new CIvfAxis();
+	CAxisPtr axis = new CAxis();
 	m_scene->addChild(axis);
 
-	m_lighting = CIvfLighting::getInstance();
-	m_fog = CIvfFog::getInstance();
-	m_pixelOps = CIvfPixelOps::getInstance();
-	m_blending = CIvfBlending::getInstance();
+	m_lighting = CLighting::getInstance();
+	m_fog = CFog::getInstance();
+	m_pixelOps = CPixelOps::getInstance();
+	m_blending = CBlending::getInstance();
 
 	this->setUseOverlay(false);
 
@@ -224,17 +224,17 @@ void CIvfCustomWidget::onInit(int width, int height)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::onDestroy()
+void CCustomWidget::onDestroy()
 {
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setWorkspace(double size)
+void CCustomWidget::setWorkspace(double size)
 {
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::readMesh(char *name)
+void CCustomWidget::readMesh(char *name)
 {
 	// Loads a fibre network 
 
@@ -270,13 +270,13 @@ void CIvfCustomWidget::readMesh(char *name)
 	
 	vector<int> nFibreCoords;
 	
-	CIvfFibrePtr fibre;
-	CIvfCoordHistPtr coordHist;
+	CFibrePtr fibre;
+	CCoordHistPtr coordHist;
 
-	CIvfCoordListPtr coordList;
-	CIvfCoordListPtr undeformedList;
+	CCoordListPtr coordList;
+	CCoordListPtr undeformedList;
 	
-	CIvfConnectionPointPtr connectionPoint;
+	CConnectionPointPtr connectionPoint;
 
 	fstream f;
 	f.open(name, ios::in);
@@ -291,7 +291,7 @@ void CIvfCustomWidget::readMesh(char *name)
 	if (m_boundingVolume!=NULL)
 		m_scene->removeShape(m_boundingVolume);
 	
-	m_fibres = new CIvfFibreComposite();
+	m_fibres = new CFibreComposite();
 	m_fibres->setTexture(m_fibreTexture);
 	
 	if (m_connections!=NULL)
@@ -303,7 +303,7 @@ void CIvfCustomWidget::readMesh(char *name)
 	m_sigX.clear();
 	m_epsX.clear();
 	
-	m_connections = new CIvfComposite();
+	m_connections = new CComposite();
 	
 	// Wire cube coordinates
 	
@@ -353,14 +353,14 @@ void CIvfCustomWidget::readMesh(char *name)
 		// Create fibre object
 
 		
-		fibre = new CIvfFibre();
+		fibre = new CFibre();
 		fibre->setDiscreteTime(m_discreteTime);
 		coordHist = fibre->getCoordHist();
 
 		if ((m_representation==FIBRE_BAND1)||(m_representation==FIBRE_BAND2))
-			coordList = (CIvfCoordList*) new CIvfVectorCoordList();
+			coordList = (CCoordList*) new CVectorCoordList();
 		else
-			coordList = (CIvfCoordList*) new CIvfArrayCoordList();
+			coordList = (CCoordList*) new CArrayCoordList();
 
 		coordHist->addList(coordList);
 		
@@ -422,7 +422,7 @@ void CIvfCustomWidget::readMesh(char *name)
 
 	// Create a bounding volume
 
-	m_boundingVolume = new CIvfLineSet();
+	m_boundingVolume = new CLineSet();
 	m_boundingVolume->addCoord(minX, minY, minZ);
 	m_boundingVolume->addCoord(maxX, minY, minZ);
 	m_boundingVolume->addCoord(minX, minY, maxZ);
@@ -440,7 +440,7 @@ void CIvfCustomWidget::readMesh(char *name)
 	m_boundingVolume->addColor(1.0f, 1.0f, 1.0f);
 	m_boundingVolume->addColor(1.0f, 1.0f, 1.0f);
 
-	CIvfIndex* coordIdx = new CIvfIndex();
+	CIndex* coordIdx = new CIndex();
 	int zero = 0;
 	coordIdx->add(zero,1);
 	coordIdx->add(1,3);
@@ -455,7 +455,7 @@ void CIvfCustomWidget::readMesh(char *name)
 	coordIdx->add(7,6);
 	coordIdx->add(6,4);
 
-	CIvfIndex* colorIdx = new CIvfIndex();
+	CIndex* colorIdx = new CIndex();
 	colorIdx->assignFrom(coordIdx);
 
 	m_boundingVolume->addCoordIndex(coordIdx);
@@ -476,14 +476,14 @@ void CIvfCustomWidget::readMesh(char *name)
 
 		for (j=0; j<nFibres; j++)
 		{
-			fibre = (CIvfFibre*)m_fibres->getChild(j);
+			fibre = (CFibre*)m_fibres->getChild(j);
 			coordHist = fibre->getCoordHist();
-			undeformedList = (CIvfCoordList*)coordHist->getList(0);
+			undeformedList = (CCoordList*)coordHist->getList(0);
 
 			if ((m_representation==FIBRE_BAND1)||(m_representation==FIBRE_BAND2))
-				coordList = (CIvfCoordList*) new CIvfVectorCoordList();
+				coordList = (CCoordList*) new CVectorCoordList();
 			else
-				coordList = (CIvfCoordList*) new CIvfArrayCoordList();
+				coordList = (CCoordList*) new CArrayCoordList();
 
 			if (m_representation==FIBRE_EXTRUSION)
 				coordList->addCoord(0.0, 0.0, 0.0);
@@ -537,11 +537,11 @@ void CIvfCustomWidget::readMesh(char *name)
 			Fl::flush();
 			// Create bPoint object
 			
-			connectionPoint = new CIvfConnectionPoint();
+			connectionPoint = new CConnectionPoint();
 			connectionPoint->setDiscreteTime(m_discreteTime);
 			connectionPoint->setRadius(connectionRadius);
 			coordHist = connectionPoint->getCoordHist();
-			coordList = new CIvfVectorCoordList();
+			coordList = new CVectorCoordList();
 			coordHist->addList(coordList);
 			
 			// Read initial connection point coordinates
@@ -561,9 +561,9 @@ void CIvfCustomWidget::readMesh(char *name)
 		{
 			for (j=0; j<nNodes; j++)
 			{
-				connectionPoint = (CIvfConnectionPoint*)m_connections->getChild(j);
+				connectionPoint = (CConnectionPoint*)m_connections->getChild(j);
 				coordHist = connectionPoint->getCoordHist();
-				coordList = new CIvfVectorCoordList();
+				coordList = new CVectorCoordList();
 				f >> dx >> dy >> dz >> usage;
 				coordList->addCoord(dx, dy, dz, usage, usage, usage);
 				coordHist->addList(coordList);
@@ -662,7 +662,7 @@ void CIvfCustomWidget::readMesh(char *name)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::open()
+void CCustomWidget::open()
 {
 	// Open a fibre network 
 
@@ -699,7 +699,7 @@ void CIvfCustomWidget::open()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setTimeStep(int step)
+void CCustomWidget::setTimeStep(int step)
 {
 	// Set current timestep
 
@@ -708,7 +708,7 @@ void CIvfCustomWidget::setTimeStep(int step)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setScaleFactor(double factor)
+void CCustomWidget::setScaleFactor(double factor)
 {
 	// Set fibre scale factor 
 
@@ -719,7 +719,7 @@ void CIvfCustomWidget::setScaleFactor(double factor)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::nextStep()
+void CCustomWidget::nextStep()
 {
 	// Go to next step
 
@@ -740,7 +740,7 @@ void CIvfCustomWidget::nextStep()
 }
 
 // ----------------------------------------------------------------------
-int CIvfCustomWidget::getTimeStep()
+int CCustomWidget::getTimeStep()
 {
 	// Return time step
 
@@ -748,7 +748,7 @@ int CIvfCustomWidget::getTimeStep()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setColor(int color)
+void CCustomWidget::setColor(int color)
 {
 	// Set fibre color
 
@@ -760,7 +760,7 @@ void CIvfCustomWidget::setColor(int color)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::clearAll()
+void CCustomWidget::clearAll()
 {
 	// Remove fibres from scene
 
@@ -780,54 +780,54 @@ void CIvfCustomWidget::clearAll()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setFogNear(double fogNear)
+void CCustomWidget::setFogNear(double fogNear)
 {
 	// Set fog near limit
 	m_fogNear = fogNear;
 
-	CIvfFog* fog = CIvfFog::getInstance();
+	CFog* fog = CFog::getInstance();
 	fog->setStart(m_fogNear);
 
 	this->redraw();
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setFogFar(double fogFar)
+void CCustomWidget::setFogFar(double fogFar)
 {
 	// Set far fog limit
 
 	m_fogFar = fogFar;
 
-	CIvfFog* fog = CIvfFog::getInstance();
+	CFog* fog = CFog::getInstance();
 	fog->setEnd(m_fogFar);
 
 	this->redraw();
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::onInitContext(int width, int height)
+void CCustomWidget::onInitContext(int width, int height)
 {
 	// Initialize OpenGL
 
-	CIvfFltkBase::onInitContext(width, height);
+	CFltkBase::onInitContext(width, height);
 
 	m_lighting->setTwoSide(true);
 	m_lighting->enable();
 
 	if (m_representation==FIBRE_EXTRUSION)
-		CIvfRasterization::getInstance()->enableCullFace();
+		CRasterization::getInstance()->enableCullFace();
 	else
-		CIvfRasterization::getInstance()->disableCullFace();
+		CRasterization::getInstance()->disableCullFace();
 
 
-	CIvfLight* light = m_lighting->getLight(0);
-	light->setType(CIvfLight::LT_DIRECTIONAL);
+	CLight* light = m_lighting->getLight(0);
+	light->setType(CLight::LT_DIRECTIONAL);
 	light->setDirection(0.0, 0.0, 1.0);
 	light->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	light->setAmbientColor(0.5f, 0.5f, 0.5f, 1.0f); 
 	light->enable();
 
-	m_fog->setType(CIvfFog::FT_LINEAR);
+	m_fog->setType(CFog::FT_LINEAR);
 	m_fog->setLimits(m_fogNear, m_fogFar);
 	m_fog->setColor(0.0f, 0.0f, 0.0f, 1.0f);
 	m_fog->enable();
@@ -836,7 +836,7 @@ void CIvfCustomWidget::onInitContext(int width, int height)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setScaling(double scaling)
+void CCustomWidget::setScaling(double scaling)
 {
 	// Set fibre displacement scale
 
@@ -846,7 +846,7 @@ void CIvfCustomWidget::setScaling(double scaling)
 }
 
 // ----------------------------------------------------------------------
-double CIvfCustomWidget::getScaling()
+double CCustomWidget::getScaling()
 {
 	// Return scale factor
 
@@ -854,7 +854,7 @@ double CIvfCustomWidget::getScaling()
 }
 
 // ----------------------------------------------------------------------
-int CIvfCustomWidget::getSteps()
+int CCustomWidget::getSteps()
 {
 	// Return number of time steps
 
@@ -862,7 +862,7 @@ int CIvfCustomWidget::getSteps()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::rewind()
+void CCustomWidget::rewind()
 {
 	// Goto first timestep
 
@@ -871,7 +871,7 @@ void CIvfCustomWidget::rewind()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::last()
+void CCustomWidget::last()
 {
 	// Goto last timestep 
 
@@ -880,7 +880,7 @@ void CIvfCustomWidget::last()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setLoop(bool flag)
+void CCustomWidget::setLoop(bool flag)
 {
 	// Set loop flag
 
@@ -888,7 +888,7 @@ void CIvfCustomWidget::setLoop(bool flag)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setReverse(bool flag)
+void CCustomWidget::setReverse(bool flag)
 {
 	// Set reverse flag
 
@@ -899,19 +899,19 @@ void CIvfCustomWidget::setReverse(bool flag)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setShowConnections(bool flag)
+void CCustomWidget::setShowConnections(bool flag)
 {
 	// Turn on/off connections
 
 	if ((flag)&&(m_connections!=NULL))
-		m_connections->setState(CIvfGLBase::OS_ON);
+		m_connections->setState(CGLBase::OS_ON);
 	else
-		m_connections->setState(CIvfGLBase::OS_OFF);		
+		m_connections->setState(CGLBase::OS_OFF);		
 	this->redraw();
 }		
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setShowUsage(bool flag)
+void CCustomWidget::setShowUsage(bool flag)
 {
 	// Turn on/off usage information
 
@@ -921,7 +921,7 @@ void CIvfCustomWidget::setShowUsage(bool flag)
 
 
 // ----------------------------------------------------------------------
-double CIvfCustomWidget::getFogFar()
+double CCustomWidget::getFogFar()
 {
 	// Return far fog limit
 
@@ -929,7 +929,7 @@ double CIvfCustomWidget::getFogFar()
 }
 
 // ----------------------------------------------------------------------
-double CIvfCustomWidget::getFogNear()
+double CCustomWidget::getFogNear()
 {
 	// Return fog near limit
 
@@ -937,7 +937,7 @@ double CIvfCustomWidget::getFogNear()
 }
 
 // ----------------------------------------------------------------------
-double CIvfCustomWidget::getScaleFactor()
+double CCustomWidget::getScaleFactor()
 {
 	// return fibre scale factor
 
@@ -945,7 +945,7 @@ double CIvfCustomWidget::getScaleFactor()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::onOverlay()
+void CCustomWidget::onOverlay()
 {
 	// Draw stress diagram in an overlay
 
@@ -996,7 +996,7 @@ void CIvfCustomWidget::onOverlay()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setShowStressDiagram(bool flag)
+void CCustomWidget::setShowStressDiagram(bool flag)
 {
 	// Turn on/off stress diagram
 
@@ -1004,7 +1004,7 @@ void CIvfCustomWidget::setShowStressDiagram(bool flag)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setWidgets(Fl_Output *output, Fl_Slider *slider, Fl_Window* window)
+void CCustomWidget::setWidgets(Fl_Output *output, Fl_Slider *slider, Fl_Window* window)
 {
 	// Assign progress and message widgets
 
@@ -1014,7 +1014,7 @@ void CIvfCustomWidget::setWidgets(Fl_Output *output, Fl_Slider *slider, Fl_Windo
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setColorMap(int map)
+void CCustomWidget::setColorMap(int map)
 {
 	char filename[40];
 	sprintf(filename,"colormaps/colormap%d.map",map+1);
@@ -1023,41 +1023,41 @@ void CIvfCustomWidget::setColorMap(int map)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setConnectionSize(double size)
+void CCustomWidget::setConnectionSize(double size)
 {
 	m_userSettings->setConnectionSize(size);
 	this->redraw();
 }
 
 // ----------------------------------------------------------------------
-double CIvfCustomWidget::getConnectionSize()
+double CCustomWidget::getConnectionSize()
 {
 	return m_userSettings->getConnectionSize();
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setEnlargeUsage(bool flag)
+void CCustomWidget::setEnlargeUsage(bool flag)
 {
 	m_userSettings->setEnlargeUsage(flag);
 }
 
 // ----------------------------------------------------------------------
-bool CIvfCustomWidget::getEnlargeUsage()
+bool CCustomWidget::getEnlargeUsage()
 {
 	return m_userSettings->getEnlargeUsage();
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setTexture(int texture)
+void CCustomWidget::setTexture(int texture)
 {
 	char filename[40];
 	sprintf(filename,"textures/tex%d.rgb",texture+1);
 
-	CIvfSgiImage* image = new CIvfSgiImage();
+	CSgiImage* image = new CSgiImage();
 	image->setFileName(filename);
 	image->read();
 
-	CIvfTexture* newTexture = new CIvfTexture();
+	CTexture* newTexture = new CTexture();
 	newTexture->addReference();
 	//newTexture->load(filename);
 	newTexture->setImage(image);
@@ -1070,13 +1070,13 @@ void CIvfCustomWidget::setTexture(int texture)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setRepresentation(int representation)
+void CCustomWidget::setRepresentation(int representation)
 {
 	m_representation = representation;
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setSectionSides(int sides)
+void CCustomWidget::setSectionSides(int sides)
 {
 	m_fibreSides = sides;
 	m_userSettings->setExtrusionSides(sides);
@@ -1085,7 +1085,7 @@ void CIvfCustomWidget::setSectionSides(int sides)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setRenderingInterval(int interval)
+void CCustomWidget::setRenderingInterval(int interval)
 {
 	m_renderingInterval = interval;
 	m_fibres->setRenderInterval(m_renderingInterval);
@@ -1093,7 +1093,7 @@ void CIvfCustomWidget::setRenderingInterval(int interval)
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::storeCamera()
+void CCustomWidget::storeCamera()
 {
 	fstream f;
 	double xp, yp, zp;
@@ -1113,7 +1113,7 @@ void CIvfCustomWidget::storeCamera()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::loadCamera()
+void CCustomWidget::loadCamera()
 {
 	fstream f;
 	double xp, yp, zp;
@@ -1131,14 +1131,14 @@ void CIvfCustomWidget::loadCamera()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::setTextureScale(float scale)
+void CCustomWidget::setTextureScale(float scale)
 {
 	m_userSettings->setTextureScale(scale);
 	this->redraw();	
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::openCSV()
+void CCustomWidget::openCSV()
 {
 	// Open a fibre network 
 
@@ -1175,7 +1175,7 @@ void CIvfCustomWidget::openCSV()
 }
 
 // ----------------------------------------------------------------------
-void CIvfCustomWidget::readMeshCSV(char *name)
+void CCustomWidget::readMeshCSV(char *name)
 {
 	// Loads a fibre network 
 
@@ -1195,10 +1195,10 @@ void CIvfCustomWidget::readMeshCSV(char *name)
 	
 	vector<int> nFibreCoords;
 	
-	CIvfFibre* fibre;
-	CIvfCoordHist* coordHist;
+	CFibre* fibre;
+	CCoordHist* coordHist;
 
-	CIvfCoordList* coordList;
+	CCoordList* coordList;
 	
 	fstream f;
 	f.open(name, ios::in);
@@ -1222,7 +1222,7 @@ void CIvfCustomWidget::readMeshCSV(char *name)
 		m_boundingVolume = NULL;
 	}
 	
-	m_fibres = new CIvfFibreComposite();
+	m_fibres = new CFibreComposite();
 	m_fibres->setTexture(m_fibreTexture);
 	
 	if (m_connections!=NULL)
@@ -1234,7 +1234,7 @@ void CIvfCustomWidget::readMeshCSV(char *name)
 	m_sigX.clear();
 	m_epsX.clear();
 	
-	//m_connections = new CIvfComposite();
+	//m_connections = new CComposite();
 
 	m_timeSteps = 0;
 	
@@ -1305,14 +1305,14 @@ void CIvfCustomWidget::readMeshCSV(char *name)
 
 		// Create fibre object
 		
-		fibre = new CIvfFibre();
+		fibre = new CFibre();
 		fibre->setDiscreteTime(m_discreteTime);
 		coordHist = fibre->getCoordHist();
 
 		if ((m_representation==FIBRE_BAND1)||(m_representation==FIBRE_BAND2))
-			coordList = (CIvfCoordList*) new CIvfVectorCoordList();
+			coordList = (CCoordList*) new CVectorCoordList();
 		else
-			coordList = (CIvfCoordList*) new CIvfArrayCoordList();
+			coordList = (CCoordList*) new CArrayCoordList();
 
 		coordHist->addList(coordList);
 		
@@ -1356,7 +1356,7 @@ void CIvfCustomWidget::readMeshCSV(char *name)
 
 	// Create a bounding volume
 
-	m_boundingVolume = new CIvfLineSet();
+	m_boundingVolume = new CLineSet();
 	m_boundingVolume->addCoord(minX, minZ, minY);
 	m_boundingVolume->addCoord(maxX, minZ, minY);
 	m_boundingVolume->addCoord(minX, maxZ, minY);
@@ -1374,7 +1374,7 @@ void CIvfCustomWidget::readMeshCSV(char *name)
 	m_boundingVolume->addColor(1.0f, 1.0f, 1.0f);
 	m_boundingVolume->addColor(1.0f, 1.0f, 1.0f);
 
-	CIvfIndex* coordIdx = new CIvfIndex();
+	CIndex* coordIdx = new CIndex();
 	int zero = 0;
 	coordIdx->add(zero,1);
 	coordIdx->add(1,3);
@@ -1389,7 +1389,7 @@ void CIvfCustomWidget::readMeshCSV(char *name)
 	coordIdx->add(7,6);
 	coordIdx->add(6,4);
 
-	CIvfIndex* colorIdx = new CIvfIndex();
+	CIndex* colorIdx = new CIndex();
 	colorIdx->assignFrom(coordIdx);
 
 	m_boundingVolume->addCoordIndex(coordIdx);
@@ -1436,7 +1436,7 @@ void CIvfCustomWidget::readMeshCSV(char *name)
 	m_camera->setPerspective(45.0, 5.0, width*10.0);
 	m_camera->setPosition(0.0, 0.0, width*2);
 	//m_camera->setPosition(0.0, 0.0, 0.0);
-	CIvfVec3d forward;
+	CVec3d forward;
 	forward.setComponents(0.0, 0.0, -1.0);
 	m_camera->setForwardVector(forward);
 
@@ -1467,27 +1467,27 @@ void CIvfCustomWidget::readMeshCSV(char *name)
 	this->redraw();
 }
 
-void CIvfCustomWidget::setStereoMode(TStereoMode mode)
+void CCustomWidget::setStereoMode(TStereoMode mode)
 {
 	m_stereoMode = mode;
 	switch (mode) {
 	case SM_NONE:
-		m_scene->setStereoMode(CIvfSceneBase::SM_NONE);
+		m_scene->setStereoMode(CSceneBase::SM_NONE);
 		break;
 	case SM_ANAGLYPH:
-		m_scene->setStereoMode(CIvfSceneBase::SM_ANAGLYPH);
+		m_scene->setStereoMode(CSceneBase::SM_ANAGLYPH);
 		break;
 	case SM_QUAD_BUFFER:
-		m_scene->setStereoMode(CIvfSceneBase::SM_QUAD_BUFFER);
+		m_scene->setStereoMode(CSceneBase::SM_QUAD_BUFFER);
 		break;
 	default:
-		m_scene->setStereoMode(CIvfSceneBase::SM_NONE);
+		m_scene->setStereoMode(CSceneBase::SM_NONE);
 		break;
 	}
 	redraw();
 }
 
-void CIvfCustomWidget::enableFullscreen()
+void CCustomWidget::enableFullscreen()
 {
 	if (wndMain!=NULL)
 	{
@@ -1506,7 +1506,7 @@ void CIvfCustomWidget::enableFullscreen()
 	}	
 }
 
-void CIvfCustomWidget::disableFullscreen()
+void CCustomWidget::disableFullscreen()
 {
 	if (wndMain!=NULL)
 	{
@@ -1515,7 +1515,7 @@ void CIvfCustomWidget::disableFullscreen()
 	}
 }
 
-void CIvfCustomWidget::onKeyboard(int key, int x, int y)
+void CCustomWidget::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'q':
@@ -1527,19 +1527,19 @@ void CIvfCustomWidget::onKeyboard(int key, int x, int y)
 	}
 }
 
-bool CIvfCustomWidget::onTimeout()
+bool CCustomWidget::onTimeout()
 {
 	m_flyHandler->update();
 	return true;
 }
 
-void CIvfCustomWidget::onClear()
+void CCustomWidget::onClear()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void CIvfCustomWidget::readMeshNEF(char *name)
+void CCustomWidget::readMeshNEF(char *name)
 {
 	// Loads a fibre network Niklas Edlind Format (NEF)
 
@@ -1556,10 +1556,10 @@ void CIvfCustomWidget::readMeshNEF(char *name)
 
 	vector<int> nFibreCoords;
 	
-	CIvfFibre* fibre;
-	CIvfCoordHist* coordHist;
+	CFibre* fibre;
+	CCoordHist* coordHist;
 
-	CIvfCoordList* coordList;
+	CCoordList* coordList;
 	
 	fstream f;
 	f.open(name, ios::in);
@@ -1583,7 +1583,7 @@ void CIvfCustomWidget::readMeshNEF(char *name)
 		m_boundingVolume = NULL;
 	}
 	
-	m_fibres = new CIvfFibreComposite();
+	m_fibres = new CFibreComposite();
 
 	// Read fibres
 
@@ -1606,15 +1606,15 @@ void CIvfCustomWidget::readMeshNEF(char *name)
 		
 		nPointsPerSegment = (int)value;
 
-		fibre = new CIvfFibre();
+		fibre = new CFibre();
 		fibre->setDiscreteTime(m_discreteTime);
 
 		coordHist = fibre->getCoordHist();
 
 		if ((m_representation==FIBRE_BAND1)||(m_representation==FIBRE_BAND2))
-			coordList = (CIvfCoordList*) new CIvfVectorCoordList();
+			coordList = (CCoordList*) new CVectorCoordList();
 		else
-			coordList = (CIvfCoordList*) new CIvfArrayCoordList();
+			coordList = (CCoordList*) new CArrayCoordList();
 
 		coordHist->addList(coordList);
 
@@ -1677,7 +1677,7 @@ void CIvfCustomWidget::readMeshNEF(char *name)
 	cout << "Min y = " << minY << " Max y = " << maxY << endl;
 	cout << "Min z = " << minZ << " Max z = " << maxZ << endl;
 
-	m_boundingVolume = new CIvfLineSet();
+	m_boundingVolume = new CLineSet();
 	m_boundingVolume->addCoord(minX, minY, minZ);
 	m_boundingVolume->addCoord(maxX, minY, minZ);
 	m_boundingVolume->addCoord(minX, maxY, minZ);
@@ -1695,7 +1695,7 @@ void CIvfCustomWidget::readMeshNEF(char *name)
 	m_boundingVolume->addColor(1.0f, 1.0f, 0.0f);
 	m_boundingVolume->addColor(1.0f, 1.0f, 0.0f);
 
-	CIvfIndexPtr coordIdx = new CIvfIndex();
+	CIndexPtr coordIdx = new CIndex();
 	int zero = 0;
 	coordIdx->add(zero,1);
 	coordIdx->add(1,3);
@@ -1710,7 +1710,7 @@ void CIvfCustomWidget::readMeshNEF(char *name)
 	coordIdx->add(7,6);
 	coordIdx->add(6,4);
 
-	CIvfIndexPtr colorIdx = new CIvfIndex();
+	CIndexPtr colorIdx = new CIndex();
 	colorIdx->assignFrom(coordIdx);
 
 	m_boundingVolume->addCoordIndex(coordIdx);
@@ -1748,7 +1748,7 @@ void CIvfCustomWidget::readMeshNEF(char *name)
 	m_camera->setPerspective(45.0, 5.0, width*10.0);
 	m_camera->setPosition(0.0, 0.0, width*2);
 
-	CIvfVec3d forward;
+	CVec3d forward;
 	forward.setComponents(0.0, 0.0, -1.0);
 	m_camera->setForwardVector(forward);
 	m_camera->initialize();
@@ -1774,7 +1774,7 @@ void CIvfCustomWidget::readMeshNEF(char *name)
 
 	//this->setColor(4);
 
-	m_multiply = new CIvfMultiply();
+	m_multiply = new CMultiply();
 	m_multiply->setShape(m_fibres);
 	m_multiply->setRepeat(3, 1, 3);
 	m_multiply->setOffsets(width, height, depth);
@@ -1786,7 +1786,7 @@ void CIvfCustomWidget::readMeshNEF(char *name)
 	this->redraw();
 }
 
-void CIvfCustomWidget::openNEF()
+void CCustomWidget::openNEF()
 {
 	// Open a fibre network 
 
@@ -1822,7 +1822,7 @@ void CIvfCustomWidget::openNEF()
 	}
 }
 
-void CIvfCustomWidget::setViewMode(TViewMode mode)
+void CCustomWidget::setViewMode(TViewMode mode)
 {
 	m_viewMode = mode;
 
@@ -1846,7 +1846,7 @@ void CIvfCustomWidget::setViewMode(TViewMode mode)
 	redraw();
 }
 
-void CIvfCustomWidget::setUseDisplayLists(bool flag)
+void CCustomWidget::setUseDisplayLists(bool flag)
 {
 	m_useDisplayLists = flag;
 	//m_scene->getComposite()->setUselist(flag);
@@ -1855,12 +1855,12 @@ void CIvfCustomWidget::setUseDisplayLists(bool flag)
 	redraw();
 }
 
-bool CIvfCustomWidget::getUseDisplayLists()
+bool CCustomWidget::getUseDisplayLists()
 {
 	return m_useDisplayLists;
 }
 
-void CIvfCustomWidget::setVertexNormalFollowPath(bool flag)
+void CCustomWidget::setVertexNormalFollowPath(bool flag)
 {
 	m_vertexFollowPath = flag;
 	if (m_vertexFollowPath)
@@ -1871,12 +1871,12 @@ void CIvfCustomWidget::setVertexNormalFollowPath(bool flag)
 	redraw();
 }
 
-bool CIvfCustomWidget::getVertexNormalFollowPath()
+bool CCustomWidget::getVertexNormalFollowPath()
 {
 	return m_vertexFollowPath;
 }
 
-void CIvfCustomWidget::setExtrusionTextureMode(int mode)
+void CCustomWidget::setExtrusionTextureMode(int mode)
 {
 	switch (mode) {
 	case 0:
@@ -1924,35 +1924,35 @@ void CIvfCustomWidget::setExtrusionTextureMode(int mode)
 	}
 }
 
-void CIvfCustomWidget::setBlendFibres(bool flag)
+void CCustomWidget::setBlendFibres(bool flag)
 {
 	m_userSettings->setBlendFibres(flag);	
 	redraw();
 }
 
-bool CIvfCustomWidget::getBlendFibres()
+bool CCustomWidget::getBlendFibres()
 {
 	return m_userSettings->getBlendFibres();
 }
 
-void CIvfCustomWidget::setBreakageLimit(double limit)
+void CCustomWidget::setBreakageLimit(double limit)
 {
 	m_userSettings->setBreakageLimit(limit);
 	redraw();
 }
 
-double CIvfCustomWidget::getBreakageLimit()
+double CCustomWidget::getBreakageLimit()
 {
 	return m_userSettings->getBreakageLimit();
 }
 
-void CIvfCustomWidget::setFibreLighting(bool flag)
+void CCustomWidget::setFibreLighting(bool flag)
 {
 	m_userSettings->setFibreLighting(flag);
 	redraw();
 }
 
-bool CIvfCustomWidget::getFibreLighting()
+bool CCustomWidget::getFibreLighting()
 {
 	return m_userSettings->getFibreLighting();
 }

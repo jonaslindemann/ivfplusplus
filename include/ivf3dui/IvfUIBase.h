@@ -30,7 +30,7 @@
 
 #include <ivf/IvfComposite.h>
 
-IvfSmartPointer(CIvfUIBase)
+IvfSmartPointer(CUIBase)
 
 /**
  * Base user interface class
@@ -40,21 +40,21 @@ IvfSmartPointer(CIvfUIBase)
  *
  * @author Jonas Lindemann
  */
-class IVF3DUI_API CIvfUIBase : public CIvfComposite {
+class IVF3DUI_API CUIBase : public CComposite {
 public:
 
 private:
 	int m_id;
 	bool m_enabled;
-	CIvfUIBasePtr m_parent;
+	CUIBasePtr m_parent;
 public:
-	/** CIvfUIBase constructor */
-	CIvfUIBase();
+	/** CUIBase constructor */
+	CUIBase();
 
-	/** CIvfUIBase destructor */
-	virtual ~CIvfUIBase();
+	/** CUIBase destructor */
+	virtual ~CUIBase();
 
-	IvfClassInfo("CIvfUIBase",CIvfComposite);
+	IvfClassInfo("CUIBase",CComposite);
 
 	void enable();
 	void disable();
@@ -66,10 +66,10 @@ public:
 	/** Return button id */
 	int getId();
 
-	void setParentControl(CIvfUIBase* parent);
+	void setParentControl(CUIBase* parent);
 
 	bool haveParent();
-	CIvfUIBase* getParentControl();
+	CUIBase* getParentControl();
 
 	virtual void doChangeState(bool enabled);
 };

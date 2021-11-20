@@ -25,21 +25,21 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CIvfQuadStripSet::CIvfQuadStripSet()
+CQuadStripSet::CQuadStripSet()
 {
 	m_useColor = false;
 }
 
-CIvfQuadStripSet::~CIvfQuadStripSet()
+CQuadStripSet::~CQuadStripSet()
 {
 
 }
 
-void CIvfQuadStripSet::doCreateGeometry()
+void CQuadStripSet::doCreateGeometry()
 {
-	CIvfIndex* coordIdx;
-	CIvfIndex* colorIdx;
-	CIvfIndex* textureIdx;
+	CIndex* coordIdx;
+	CIndex* colorIdx;
+	CIndex* textureIdx;
 	long i, j;
 
 	glPushAttrib(GL_COLOR_MATERIAL);
@@ -81,34 +81,34 @@ void CIvfQuadStripSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CIvfQuadStripSet::setUseColor(bool flag)
+void CQuadStripSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CIvfQuadStripSet::getUseColor()
+bool CQuadStripSet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CIvfQuadStripSet::calcNormal(CIvfIndex *idx)
+void CQuadStripSet::calcNormal(CIndex *idx)
 {
 	long i;
-	CIvfVec3d* p1;
-	CIvfVec3d* p2;
-	CIvfVec3d* p3;
-	CIvfVec3d u;
-	CIvfVec3d v;
-	CIvfIndex* normalIdx;
+	CVec3d* p1;
+	CVec3d* p2;
+	CVec3d* p3;
+	CVec3d u;
+	CVec3d v;
+	CIndex* normalIdx;
 	//double n[3];
 	bool evenPoint = true;
 
-	normalIdx = new CIvfIndex();
+	normalIdx = new CIndex();
 
 
 	for (i=0; i<idx->getSize()-2; i+=2)
 	{
-		CIvfVec3d* normal = new CIvfVec3d();
+		CVec3d* normal = new CVec3d();
 
 		p1 = m_coordSet[idx->getIndex(i)];
 		p2 = m_coordSet[idx->getIndex(i+1)];
@@ -143,12 +143,12 @@ void CIvfQuadStripSet::calcNormal(CIvfIndex *idx)
 }
 
 
-void CIvfQuadStripSet::updateVertexNormals()
+void CQuadStripSet::updateVertexNormals()
 {
 	long i, j;
-	CIvfVec3d* vertexNormal;
-	CIvfVec3d* normal;
-	CIvfVec3d averageNormal;
+	CVec3d* vertexNormal;
+	CVec3d* normal;
+	CVec3d averageNormal;
 	double sx, sy, sz;
 	double nx, ny, nz;
 

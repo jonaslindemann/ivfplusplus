@@ -27,22 +27,22 @@
 
 #include <ivf/IvfSelectComposite.h>
 
-IvfSmartPointer(CIvfSelectOrtho);
+IvfSmartPointer(CSelectOrtho);
 
 /**
  * Ortho selection
  *
  * ....
  */
-class IVF_API CIvfSelectOrtho : public CIvfSelectComposite {
+class IVF_API CSelectOrtho : public CSelectComposite {
 private:
 	int m_width;
 	int m_height;
 public:
-	CIvfSelectOrtho();
-	virtual ~CIvfSelectOrtho();
+	CSelectOrtho();
+	virtual ~CSelectOrtho();
 
-	IvfClassInfo("CIvfSelectOrtho",CIvfSelectComposite);
+	IvfClassInfo("CSelectOrtho",CSelectComposite);
 
 	void initializeSelect(int x, int y, int w, int h);
 	void customView();

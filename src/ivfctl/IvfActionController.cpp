@@ -24,26 +24,26 @@
 
 #include <ivfctl/IvfActionController.h>
 
-CIvfActionController::CIvfActionController()
+CActionController::CActionController()
 {
 	m_actionIter = m_actionList.end();
 	m_time = 0.0;
 	m_tolerance = 1e-10;
 }
 
-CIvfActionController::~CIvfActionController()
+CActionController::~CActionController()
 {
 
 }
 
-void CIvfActionController::addAction(CIvfAction *action)
+void CActionController::addAction(CAction *action)
 {
 	m_actionList.insert(action);
 	action->addReference();
 	m_actionIter = m_actionList.begin();
 }
 
-void CIvfActionController::clear()
+void CActionController::clear()
 {
 	CActionsIter ai;
 
@@ -58,12 +58,12 @@ void CIvfActionController::clear()
 	m_actionIter = m_actionList.end();
 }
 
-void CIvfActionController::doUpdate(double dt)
+void CActionController::doUpdate(double dt)
 {
 	if (m_actionIter!=m_actionList.end())
 	{
-		CIvfAction* nextAction = (*m_actionIter);
-		CIvfAction* prevAction;
+		CAction* nextAction = (*m_actionIter);
+		CAction* prevAction;
 
 		if (nextAction!=NULL)
 		{
@@ -93,21 +93,21 @@ void CIvfActionController::doUpdate(double dt)
 		}
 	}
 	
-	CIvfControllerGroup::doUpdate(dt);
+	CControllerGroup::doUpdate(dt);
 	m_time += dt;
 }
 
-void CIvfActionController::doReset()
+void CActionController::doReset()
 {
 	m_time = 0.0;
 }
 
-void CIvfActionController::setTolerance(double tol)
+void CActionController::setTolerance(double tol)
 {
 	m_tolerance = tol;
 }
 
-void CIvfActionController::doActivate()
+void CActionController::doActivate()
 {
 	//m_time = 0.0;
 }

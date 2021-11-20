@@ -21,22 +21,22 @@
 
 #include <ivf/IvfQuadSet.h>
 
-CIvfQuadSet::CIvfQuadSet()
+CQuadSet::CQuadSet()
 {
 	m_useColor = false;
 }
 
-CIvfQuadSet::~CIvfQuadSet()
+CQuadSet::~CQuadSet()
 {
 
 }
 
-void CIvfQuadSet::doCreateGeometry()
+void CQuadSet::doCreateGeometry()
 {
-	CIvfIndex* coordIdx;
-	CIvfIndex* colorIdx;
-	CIvfIndex* normalIdx;
-	CIvfIndex* textureIdx;
+	CIndex* coordIdx;
+	CIndex* colorIdx;
+	CIndex* normalIdx;
+	CIndex* textureIdx;
 
 	long i, j;
 
@@ -123,32 +123,32 @@ void CIvfQuadSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CIvfQuadSet::setUseColor(bool flag)
+void CQuadSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CIvfQuadSet::getUseColor()
+bool CQuadSet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CIvfQuadSet::calcNormal(CIvfIndex *idx)
+void CQuadSet::calcNormal(CIndex *idx)
 {
 	long i;
-	CIvfVec3d* p1;
-	CIvfVec3d* p2;
-	CIvfVec3d* p3;
-	CIvfVec3d u;
-	CIvfVec3d v;
-	CIvfIndex* normalIdx;
+	CVec3d* p1;
+	CVec3d* p2;
+	CVec3d* p3;
+	CVec3d u;
+	CVec3d v;
+	CIndex* normalIdx;
 	//double n[3];
 
-	normalIdx = new CIvfIndex();
+	normalIdx = new CIndex();
 
 	for (i=0; i<idx->getSize(); i+=4)
 	{
-		CIvfVec3d* normal = new CIvfVec3d();
+		CVec3d* normal = new CVec3d();
 
 		p1 = m_coordSet[idx->getIndex(i)];
 		p2 = m_coordSet[idx->getIndex(i+1)];
@@ -181,12 +181,12 @@ void CIvfQuadSet::calcNormal(CIvfIndex *idx)
 }
 
 
-void CIvfQuadSet::updateVertexNormals()
+void CQuadSet::updateVertexNormals()
 {
 	long i, j;
-	CIvfVec3d* vertexNormal;
-	CIvfVec3d* normal;
-	CIvfVec3d averageNormal;
+	CVec3d* vertexNormal;
+	CVec3d* normal;
+	CVec3d averageNormal;
 	double sx, sy, sz;
 	double nx, ny, nz;
 

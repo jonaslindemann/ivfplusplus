@@ -28,7 +28,7 @@
 #include <ivf/IvfBase.h>
 #include <ivfdef/IvfSingletonDestroyer.h>
 
-IvfStdPointer(CIvfFog);
+IvfStdPointer(CFog);
 
 /**
  * Fog singleton class
@@ -47,7 +47,7 @@ IvfStdPointer(CIvfFog);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfFog : public CIvfBase {
+class IVF_API CFog : public CBase {
 public:
 	enum TFogType {
 		FT_LINEAR,
@@ -55,17 +55,17 @@ public:
 		FT_EXP2
 	};	
 private:
-	static CIvfFog* m_instance;
-	static CIvfSingletonDestroyer<CIvfFog> m_destroyer;
+	static CFog* m_instance;
+	static CSingletonDestroyer<CFog> m_destroyer;
 	float m_fogColor[4];
 	double m_fogStart;
 	double m_fogEnd;
 	TFogType m_type;
 public:
 	/** Returns the blending singleton */
-	static CIvfFog* getInstance();
+	static CFog* getInstance();
 
-	IvfClassInfo("CIvfFog",CIvfBase);
+	IvfClassInfo("CIvfFog",CBase);
 
 	/** Enable fog */
 	void enable();
@@ -123,8 +123,8 @@ public:
 	/** Returns fog color */
 	void getColor(float &red, float &green, float &blue, float &alpha);
 protected:
-	CIvfFog();
-	friend class CIvfSingletonDestroyer<CIvfFog>;
+	CFog();
+	friend class CSingletonDestroyer<CFog>;
 };
 
 #endif 

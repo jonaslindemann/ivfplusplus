@@ -22,7 +22,7 @@
 // Written by Jonas Lindemann
 //
 
-// IvfAction.cpp: implementation of the CIvfAction class.
+// IvfAction.cpp: implementation of the CAction class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -34,7 +34,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CIvfAction::CIvfAction()
+CAction::CAction()
 {
 	m_time = 0.0;
 	m_actionType = 0;
@@ -43,57 +43,57 @@ CIvfAction::CIvfAction()
 	m_target = NULL;
 }
 
-CIvfAction::~CIvfAction()
+CAction::~CAction()
 {
 
 }
 
-void CIvfAction::setTime(double time)
+void CAction::setTime(double time)
 {
 	m_time = time;
 }
 
-void CIvfAction::setDoubleParam(double param)
+void CAction::setDoubleParam(double param)
 {
 	m_dParam = param;
 }
 
-void CIvfAction::setIntParam(int param)
+void CAction::setIntParam(int param)
 {
 	m_iParam = param;
 }
 
-double CIvfAction::getTime()
+double CAction::getTime()
 {
 	return m_time;
 }
 
-double CIvfAction::getDoubleParam()
+double CAction::getDoubleParam()
 {
 	return m_dParam;
 }
 
-int CIvfAction::getIntParam()
+int CAction::getIntParam()
 {
 	return m_iParam;
 }
 
-void CIvfAction::setActionType(int type)
+void CAction::setActionType(int type)
 {
 	m_actionType = type;
 }
 
-int CIvfAction::getActionType()
+int CAction::getActionType()
 {
 	return m_actionType;
 }
 
-void CIvfAction::setTarget(CIvfController *controller)
+void CAction::setTarget(CController *controller)
 {
 	m_target = controller;
 }
 
-CIvfController* CIvfAction::getTarget()
+CController* CAction::getTarget()
 {
 	return m_target;
 }

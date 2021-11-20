@@ -29,18 +29,18 @@
 
 #include <ivf/IvfIndexBase.h>
 
-IvfSmartPointer(CIvfVertexIndex);
+IvfSmartPointer(CVertexIndex);
 
 /**
  * Vertex index list class
  *
- * Maintains a list of vertex indices for use with the CIvfVertexElements class.
+ * Maintains a list of vertex indices for use with the CVertexElements class.
  * The list is initially 1024 elements and the size is doubled if exceeding
  * 1024. 
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfVertexIndex : public CIvfIndexBase {
+class IVF_API CVertexIndex : public CIndexBase {
 private:
 	GLuint* m_index;
 	long m_allocSize;
@@ -48,13 +48,13 @@ private:
 	long m_blockSize;
 	long m_next;
 public:
-	/** CIvfVertexIndex constructor */
-	CIvfVertexIndex();
+	/** CVertexIndex constructor */
+	CVertexIndex();
 
-	/** CIvfVertexIndex destructor */
-	virtual ~CIvfVertexIndex();
+	/** CVertexIndex destructor */
+	virtual ~CVertexIndex();
 
-	IvfClassInfo("CIvfVertexIndex",CIvfIndexBase);
+	IvfClassInfo("CVertexIndex",CIndexBase);
 
 	/** Return value at position */
 	long getIndex(long pos);
@@ -96,10 +96,10 @@ public:
 	void createConstant(long value, long size);
 
 	/** Assigns values from another index */
-	void assignFrom(CIvfIndexBase* idx);
+	void assignFrom(CIndexBase* idx);
 
 	/** Assigns \em idx the values of this index */
-	void assignTo(CIvfIndexBase* idx);
+	void assignTo(CIndexBase* idx);
 
 	/** Add values from array \em i to this index */ 
 	void addArray(long* i, long size);

@@ -21,18 +21,18 @@
 
 #include <ivfmath/IvfCurveSegment3d.h>
 
-CIvfCurveSegment3d::CIvfCurveSegment3d()
+CCurveSegment3d::CCurveSegment3d()
 {
 
 }
 
-CIvfCurveSegment3d::~CIvfCurveSegment3d()
+CCurveSegment3d::~CCurveSegment3d()
 {
 	
 }
 
 /** Set start position of curve */
-void CIvfCurveSegment3d::setStartPosition(double t0)
+void CCurveSegment3d::setStartPosition(double t0)
 {
 	m_t0 = t0;	
 }

@@ -39,13 +39,13 @@ using namespace std;
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class CExampleWindow: public CGlutBase {
 private:
-	CIvfCameraPtr		m_camera;
-	CIvfCompositePtr  m_scene;
-	CIvfLightPtr		m_light;
-	CIvfSolidLinePtr  m_solidLine;
-	CIvfTexturePtr	m_coloredTexture;
+	CCameraPtr		m_camera;
+	CCompositePtr  m_scene;
+	CLightPtr		m_light;
+	CSolidLinePtr  m_solidLine;
+	CTexturePtr	m_coloredTexture;
 
 	double m_angleX;
 	double m_angleY;
@@ -62,7 +62,7 @@ private:
 
 public:
 	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+		:CGlutBase(X, Y, W, H) {};
 
 	void setTextureMode(int mode);
 
@@ -96,43 +96,43 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(0.0, 0.0, 6.0);
 
 	// Create a materials
 
-	CIvfMaterialPtr material = new CIvfMaterial();
+	CMaterialPtr material = new CMaterial();
 	material->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 	// Create scene composite
 
-	m_scene = new CIvfComposite();
+	m_scene = new CComposite();
 
 	// Create images
 
-	CIvfSgiImagePtr image1 = new CIvfSgiImage();
-	image1->setFileName("images/cars1.rgb");
+	CSgiImagePtr image1 = new CSgiImage();
+	image1->setFileName("data/images/cars1.rgb");
 	image1->read();
 
-	CIvfJpegImagePtr image2 = new CIvfJpegImage();
-	image2->setFileName("images/architecture8.jpg");
+	CJpegImagePtr image2 = new CJpegImage();
+	image2->setFileName("data/images/architecture8.jpg");
 	image2->read();
 
-	CIvfPngImagePtr image3 = new CIvfPngImage();
-	image3->setFileName("images/ivf.png");
+	CPngImagePtr image3 = new CPngImage();
+	image3->setFileName("data/images/ivf.png");
 	image3->read();
 
-	CIvfJpegImagePtr image4 = new CIvfJpegImage();
-	image4->setFileName("images/road2.jpg");
+	CJpegImagePtr image4 = new CJpegImage();
+	image4->setFileName("data/images/road2.jpg");
 	image4->read();
 
-	CIvfJpegImagePtr image5 = new CIvfJpegImage();
-	image5->setFileName("images/architecture9.jpg");
+	CJpegImagePtr image5 = new CJpegImage();
+	image5->setFileName("data/images/architecture9.jpg");
 	image5->read();
 
-	CIvfImagePtr image6 = new CIvfImage();
+	CImagePtr image6 = new CImage();
 	image6->setSize(4,4);
     
     for (int i=0; i<4; i++)
@@ -145,42 +145,42 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a texture
 
-	CIvfTexturePtr texture1 = new CIvfTexture();
+	CTexturePtr texture1 = new CTexture();
 	texture1->setImage(image1);
 	texture1->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 	texture1->setGenerateMipmaps(true);
 
-	CIvfTexturePtr texture2 = new CIvfTexture();
+	CTexturePtr texture2 = new CTexture();
 	texture2->setImage(image2);
 	texture2->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 	texture2->setGenerateMipmaps(true);
 
-	CIvfTexturePtr texture3 = new CIvfTexture();
+	CTexturePtr texture3 = new CTexture();
 	texture3->setImage(image3);
 	texture3->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 	texture3->setGenerateMipmaps(true);
 
-	CIvfTexturePtr texture4 = new CIvfTexture();
+	CTexturePtr texture4 = new CTexture();
 	texture4->setImage(image4);
 	texture4->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 	texture4->setGenerateMipmaps(true);
 
-	CIvfTexturePtr texture5 = new CIvfTexture();
+	CTexturePtr texture5 = new CTexture();
 	texture5->setImage(image6);
 	texture5->setFilters(GL_NEAREST, GL_NEAREST);
 	texture5->setGenerateMipmaps(false);
 
-	m_coloredTexture = new CIvfTexture();
+	m_coloredTexture = new CTexture();
 	m_coloredTexture->setFilters(GL_NEAREST, GL_NEAREST);
 	m_coloredTexture->setImage(image6);
 
-	CIvfNodePtr node1 = new CIvfNode();
-	CIvfNodePtr node2 = new CIvfNode();
+	CNodePtr node1 = new CNode();
+	CNodePtr node2 = new CNode();
 
 	node1->setPosition(-2.0, -0.5, 0.0);
 	node2->setPosition( 2.0, 0.5, 0.0);
 
-	m_solidLine = new CIvfSolidLine();
+	m_solidLine = new CSolidLine();
 	m_solidLine->setNodes(node1, node2);
     m_solidLine->setSides(12);
 	m_solidLine->setMaterial(material);
@@ -196,7 +196,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a quad plane
 
-	CIvfQuadPlanePtr quadPlane = new CIvfQuadPlane();
+	CQuadPlanePtr quadPlane = new CQuadPlane();
 	quadPlane->setSize(1.8, 1.8);;
 	quadPlane->setMaterial(material);
 
@@ -204,27 +204,27 @@ void CExampleWindow::onInit(int width, int height)
 	// 5 different transforms and assigning
 	// the textures to these instead.
 
-	CIvfTransformPtr xfrm1 = new CIvfTransform();
+	CTransformPtr xfrm1 = new CTransform();
 	xfrm1->addChild(quadPlane);
 	xfrm1->setPosition(-1.2, -1.2, 0.0);
 	xfrm1->setTexture(texture1);
 
-	CIvfTransformPtr xfrm2 = new CIvfTransform();
+	CTransformPtr xfrm2 = new CTransform();
 	xfrm2->addChild(quadPlane);
 	xfrm2->setPosition(1.2, -1.2, 0.0);
 	xfrm2->setTexture(texture2);
 
-	CIvfTransformPtr xfrm3 = new CIvfTransform();
+	CTransformPtr xfrm3 = new CTransform();
 	xfrm3->addChild(quadPlane);
 	xfrm3->setPosition(0.0, 0.0, -3.0);
 	xfrm3->setTexture(texture3);
 
-	CIvfTransformPtr xfrm4 = new CIvfTransform();
+	CTransformPtr xfrm4 = new CTransform();
 	xfrm4->addChild(quadPlane);
 	xfrm4->setPosition(1.2, 1.2, 0.0);
 	xfrm4->setTexture(texture4);
 
-	CIvfTransformPtr xfrm5 = new CIvfTransform();
+	CTransformPtr xfrm5 = new CTransform();
 	xfrm5->addChild(quadPlane);
 	xfrm5->setPosition(-1.2, 1.2, 0.0);
 	xfrm5->setTexture(texture5);
@@ -237,10 +237,10 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	CLightingPtr lighting = CLighting::getInstance();
 
 	m_light = lighting->getLight(0);
-	m_light->setType(CIvfLight::LT_DIRECTIONAL);
+	m_light->setType(CLight::LT_DIRECTIONAL);
 	m_light->setDirection(1.0, 1.0, 1.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
@@ -334,7 +334,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
+		if (getModifierKey() == CWidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -419,7 +419,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window

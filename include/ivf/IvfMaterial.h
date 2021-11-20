@@ -27,27 +27,27 @@
 
 #include <ivf/IvfGLBase.h>
 
-IvfSmartPointer(CIvfMaterial);
+IvfSmartPointer(CMaterial);
 
 /**
  * OpenGL material definition.
  *
  * CIvfMateral contains a material definition as used in OpenGL.
- * The class is used by classes derived from the CIvfShape class.
+ * The class is used by classes derived from the CShape class.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfMaterial : public CIvfGLBase {
+class IVF_API CMaterial : public CGLBase {
 public:
 	bool getColorMaterial();
 	void setColorMaterial(bool flag);
-	/** CIvfMaterial constructor */
-	CIvfMaterial ();
+	/** CMaterial constructor */
+	CMaterial ();
 
-	/** CIvfMaterial destructor */
-	virtual ~CIvfMaterial ();
+	/** CMaterial destructor */
+	virtual ~CMaterial ();
 
-	IvfClassInfo("CIvfMaterial",CIvfGLBase);
+	IvfClassInfo("CMaterial",CGLBase);
 
 	/**
 	 * Sets the shininess property.
@@ -127,7 +127,7 @@ public:
 	void multiplyAmbient(double factor);
 	void multiplyDiffuse(double factor);
 	void multiplySpecular(double factor);
-	void assignFrom(CIvfMaterial* material);
+	void assignFrom(CMaterial* material);
 	void brightnessEmission(double factor);
 	void brightnessAmbient(double factor);
 	void brightnessDiffuse(double factor);

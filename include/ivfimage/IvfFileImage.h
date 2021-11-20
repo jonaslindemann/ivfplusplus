@@ -27,7 +27,7 @@
 
 #include <ivf/IvfImage.h>
 
-IvfSmartPointer(CIvfFileImage);
+IvfSmartPointer(CFileImage);
 
 /**
  * Image file loader base class
@@ -40,20 +40,20 @@ IvfSmartPointer(CIvfFileImage);
  *
  * @author Jonas Lindemann
  */
-class IVFIMAGE_API CIvfFileImage : public CIvfImage {
+class IVFIMAGE_API CFileImage : public CImage {
 private:
 	std::string m_fileName;
 public:
-	/** CIvfFileImage constructor */
-	CIvfFileImage();
+	/** CFileImage constructor */
+	CFileImage();
 
-	/** CIvfFileImage constructor */
-	CIvfFileImage(const std::string& name);
+	/** CFileImage constructor */
+	CFileImage(const std::string& name);
 
-	/** CIvfFileImage destructor */
-	virtual ~CIvfFileImage();
+	/** CFileImage destructor */
+	virtual ~CFileImage();
 
-	IvfClassInfo("CIvfFileImage",CIvfImage);
+	IvfClassInfo("CFileImage",CImage);
 
 	/** Set filename of file to load */
 	void setFileName(const std::string& name);

@@ -25,7 +25,7 @@
 #include <ivfctl/IvfController.h>
 #include <ivfmath/IvfFunctions.h>
 
-IvfSmartPointer(CIvfColorController);
+IvfSmartPointer(CColorController);
 
 /**
  * Color controller class
@@ -33,7 +33,7 @@ IvfSmartPointer(CIvfColorController);
  * This controller controls the color component of the
  * controlled object
  */
-class IVFCTL_API CIvfColorController : public CIvfController {
+class IVFCTL_API CColorController : public CController {
 public:
 	enum TColorMode {
 		CM_DIFFUSE,
@@ -42,20 +42,20 @@ public:
 		CM_EMISSION
 	};
 private:
-	CIvfFunction2dPtr m_redFunc;
-	CIvfFunction2dPtr m_greenFunc;
-	CIvfFunction2dPtr m_blueFunc;
-	CIvfFunction2dPtr m_alphaFunc;
+	CFunction2dPtr m_redFunc;
+	CFunction2dPtr m_greenFunc;
+	CFunction2dPtr m_blueFunc;
+	CFunction2dPtr m_alphaFunc;
 	double m_time;
 	TColorMode m_colorMode;
 public:
-	/** CIvfColorController constructor */
-	CIvfColorController();
+	/** CColorController constructor */
+	CColorController();
 
-	/** CIvfColorController */
-	virtual ~CIvfColorController();
+	/** CColorController */
+	virtual ~CColorController();
 
-	IvfClassInfo("CIvfColorController",CIvfController);
+	IvfClassInfo("CColorController",CController);
 
 	/** 
 	 * Set color mode
@@ -71,14 +71,14 @@ public:
 	/** 
 	 * Set the function controlling the red color
 	 *
-	 * \param func CIvfFunction2d derived class controlling the 
+	 * \param func CFunction2d derived class controlling the 
 	 * color value over time. Max value of the function should be
 	 * 1.0.
 	 */
-	void setRedFunction(CIvfFunction2d* func);
-	void setGreenFunction(CIvfFunction2d* func);
-	void setBlueFunction(CIvfFunction2d* func);
-	void setAlphaFunction(CIvfFunction2d* func);
+	void setRedFunction(CFunction2d* func);
+	void setGreenFunction(CFunction2d* func);
+	void setBlueFunction(CFunction2d* func);
+	void setAlphaFunction(CFunction2d* func);
 
 	virtual void doUpdate(double dt);
 	virtual void doReset();

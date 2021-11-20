@@ -205,12 +205,12 @@
 
 #define IvfSmartPointer(classname) \
 	class classname; \
-	typedef CIvfPointer<classname> classname##Ptr; \
+	typedef CPointer<classname> classname##Ptr; \
 	typedef classname* classname##StdPtr;
 
 #define IvfSmartPointerRefBase(classname,refbase) \
 	class classname; \
-	typedef CIvfPointerRefBase<classname,refbase> classname##Ptr; \
+	typedef CPointerRefBase<classname,refbase> classname##Ptr; \
 	typedef classname* classname##StdPtr;
 
 #define IvfClassInfo(ivfclassname,ivfparent) \

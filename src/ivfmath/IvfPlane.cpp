@@ -23,7 +23,7 @@
 
 #include <ivfmath/IvfPlane.h>
 
-CIvfPlane::CIvfPlane()
+CPlane::CPlane()
 {
 	m_normal[0] = 0.0;
 	m_normal[1] = 0.0;
@@ -32,12 +32,12 @@ CIvfPlane::CIvfPlane()
 	m_distance = 0.0;
 }
 
-CIvfPlane::~CIvfPlane()
+CPlane::~CPlane()
 {
 
 }
 
-void CIvfPlane::setNormal(double vx, double vy, double vz)
+void CPlane::setNormal(double vx, double vy, double vz)
 {
 	double l;
 
@@ -48,24 +48,24 @@ void CIvfPlane::setNormal(double vx, double vy, double vz)
 	m_normal[2] = vz/l;
 }
 
-void CIvfPlane::getNormal(double &vx, double &vy, double &vz)
+void CPlane::getNormal(double &vx, double &vy, double &vz)
 {
 	vx = m_normal[0];
 	vy = m_normal[1];
 	vz = m_normal[2];
 }
 
-void CIvfPlane::setDistance(double d)
+void CPlane::setDistance(double d)
 {
 	m_distance = d;
 }
 
-double CIvfPlane::getDistance()
+double CPlane::getDistance()
 {
 	return m_distance;
 }
 
-bool CIvfPlane::isInFront(double x, double y, double z)
+bool CPlane::isInFront(double x, double y, double z)
 {
 	if ( (m_normal[0]*x + 
 		m_normal[1]*y + 
@@ -75,7 +75,7 @@ bool CIvfPlane::isInFront(double x, double y, double z)
 		return false;
 }
 
-bool CIvfPlane::isSphereInFront(double x, double y, double z, double radius)
+bool CPlane::isSphereInFront(double x, double y, double z, double radius)
 {
 	double distanceFromPlane;
 
@@ -108,7 +108,7 @@ bool CIvfPlane::isSphereInFront(double x, double y, double z, double radius)
 	*/
 }
 
-void CIvfPlane::normalFromVectors(double *v1, double *v2)
+void CPlane::normalFromVectors(double *v1, double *v2)
 {
 	m_normal[0] = v1[1] * v2[2] - v1[2] * v2[1];
 	m_normal[1] = v1[2] * v2[0] - v1[0] * v2[2];
@@ -117,12 +117,12 @@ void CIvfPlane::normalFromVectors(double *v1, double *v2)
 	this->setNormal(m_normal[0], m_normal[1], m_normal[2]);
 }
 
-void CIvfPlane::distanceFromPoint(double x, double y, double z)
+void CPlane::distanceFromPoint(double x, double y, double z)
 {
 	m_distance = -(m_normal[0]*x + m_normal[1]*y + m_normal[2]*z);
 }
 
-void CIvfPlane::intersect(
+void CPlane::intersect(
   double x0, double y0, double z0, 
   double vx, double vy, double vz, 
   double &x, double &y, double &z)

@@ -24,17 +24,17 @@
 
 #include <ivf/IvfVertexElements.h>
 
-CIvfVertexElements::CIvfVertexElements()
+CVertexElements::CVertexElements()
 {
 	m_glPrimitive = GL_QUADS;
 }
 
-CIvfVertexElements::~CIvfVertexElements()
+CVertexElements::~CVertexElements()
 {
 
 }
 
-void CIvfVertexElements::doCreateGeometry()
+void CVertexElements::doCreateGeometry()
 {
     /* set up the array data */
 	if (m_colors)
@@ -68,27 +68,27 @@ void CIvfVertexElements::doCreateGeometry()
 		glDisableClientState( GL_NORMAL_ARRAY );
 }
 
-void CIvfVertexElements::setIndices(CIvfVertexIndex *index)
+void CVertexElements::setIndices(CVertexIndex *index)
 {
 	m_indices = index;
 }
 
-void CIvfVertexElements::setVertices(CIvfVertexList *vertices)
+void CVertexElements::setVertices(CVertexList *vertices)
 {
 	m_vertices = vertices;
 }
 
-void CIvfVertexElements::setColors(CIvfColorList *colors)
+void CVertexElements::setColors(CColorList *colors)
 {
 	m_colors = colors;
 }
 
-void CIvfVertexElements::setNormals(CIvfNormalList *normals)
+void CVertexElements::setNormals(CNormalList *normals)
 {
 	m_normals = normals;
 }
 
-void CIvfVertexElements::setPrimitive(TPrimitiveType primitive)
+void CVertexElements::setPrimitive(TPrimitiveType primitive)
 {
 	switch (primitive) {
 	case PT_POINTS:
@@ -127,7 +127,7 @@ void CIvfVertexElements::setPrimitive(TPrimitiveType primitive)
 	}
 }
 
-CIvfVertexElements::TPrimitiveType CIvfVertexElements::getPrimitive()
+CVertexElements::TPrimitiveType CVertexElements::getPrimitive()
 {
 	switch (m_glPrimitive) {
 	case GL_POINTS:

@@ -57,22 +57,22 @@
 
 using namespace std;
 
-CIvfAc3DReader::CIvfAc3DReader()
+CAc3DReader::CAc3DReader()
 {
 	m_currentPolySet = NULL;
-	m_materialSet = new CIvfMaterialSet();
+	m_materialSet = new CMaterialSet();
 	//m_materialSet->addReference();
 
-	m_lighting = CIvfLighting::getInstance();
+	m_lighting = CLighting::getInstance();
 	m_lightCount = 0;
 }
 
-CIvfAc3DReader::~CIvfAc3DReader()
+CAc3DReader::~CAc3DReader()
 {
 	//m_materialSet->deleteReference();
 }
 
-void CIvfAc3DReader::read()
+void CAc3DReader::read()
 {
 	// Initiate max min calc
 
@@ -99,41 +99,41 @@ void CIvfAc3DReader::read()
 
 	if (!m_inputFile)
 	{
-		IvfLog("CIvfAc3DReader: File invalid.");
+		IvfLog("CAc3DReader: File invalid.");
 		return;
 	}
 	else
-		IvfLog("CIvfAc3DReader: File ok.");
+		IvfLog("CAc3DReader: File ok.");
 
 	// Read and check header
 
 	if (!checkHeader(m_inputFile))
 	{
-		IvfLog("CIvfAc3DReader: Invalid header or unsupported type.");
+		IvfLog("CAc3DReader: Invalid header or unsupported type.");
 		m_inputFile.close();
 		return;
 	}
 	else
-		IvfLog("CIvfAc3DReader: Header ok.");
+		IvfLog("CAc3DReader: Header ok.");
 
 	// Read data
 
 	if (!readData(m_inputFile))
 	{
-		IvfLog("CIvfAc3DReader: Invalid data.");
+		IvfLog("CAc3DReader: Invalid data.");
 		return;
 	}
 	else
-		IvfLog("CIvfAc3DReader: data ok.");
+		IvfLog("CAc3DReader: data ok.");
 
-	IvfLog("CIvfAc3DReader: " << m_surfacesRead << " surfaces read.");
+	IvfLog("CAc3DReader: " << m_surfacesRead << " surfaces read.");
 
 	m_inputFile.close();
 
 	//m_currentPolySet->setUseVertexNormals(true);
 }
 
-bool CIvfAc3DReader::checkHeader(istream &in)
+bool CAc3DReader::checkHeader(istream &in)
 {
 	getLine(m_row);
 
@@ -148,7 +148,7 @@ bool CIvfAc3DReader::checkHeader(istream &in)
 		return false;
 }
 
-bool CIvfAc3DReader::readData(istream &in)
+bool CAc3DReader::readData(istream &in)
 {
 	int keyword;
 	int optionalKeyword;
@@ -251,7 +251,7 @@ bool CIvfAc3DReader::readData(istream &in)
 	return true;
 }
 
-int CIvfAc3DReader::getKeyword(string &row)
+int CAc3DReader::getKeyword(string &row)
 {
 	if (find("OBJECT", row))
 		return KW_OBJECT;
@@ -271,7 +271,7 @@ int CIvfAc3DReader::getKeyword(string &row)
 	return KW_ERROR;
 }
 
-int CIvfAc3DReader::getOptionalKeyword(string &row)
+int CAc3DReader::getOptionalKeyword(string &row)
 {
 	if (find("name", row))
 		return OKW_NAME;
@@ -318,7 +318,7 @@ int CIvfAc3DReader::getOptionalKeyword(string &row)
 	return OKW_ERROR;
 }
 
-bool CIvfAc3DReader::parseObject(string &row)
+bool CAc3DReader::parseObject(string &row)
 {
 	using namespace std;
 
@@ -331,8 +331,8 @@ bool CIvfAc3DReader::parseObject(string &row)
 
 	if (find("world",row))
 	{
-		IvfLog("CIvfAc3DReader: World object found.");
-		m_world = new CIvfComposite();
+		IvfLog("CAc3DReader: World object found.");
+		m_world = new CComposite();
 		this->setShape(m_world);
 		m_currentGroup = m_world;
 		m_currentShape = m_world;
@@ -342,7 +342,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 	}
 	else if (find("poly", row))
 	{
-		IvfLog("CIvfAc3DReader: Poly object found.");
+		IvfLog("CAc3DReader: Poly object found.");
 
 		m_currentTextureIndex = 0;
 
@@ -355,7 +355,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 
 		m_currentLineStripSet = NULL;
 
-		m_currentPolySet = new CIvfPolySet();
+		m_currentPolySet = new CPolySet();
 		//m_currentPolySet->setUseVertexNormals(true);
 		m_currentPolySet->setMaterialSet(m_materialSet);
 		m_currentShape = m_currentPolySet;
@@ -365,7 +365,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 	else if (find("group", row))
 	{
 
-		IvfLog("CIvfAc3DReader: Group object found.");
+		IvfLog("CAc3DReader: Group object found.");
 		m_currentObject = OT_GROUP;
 
 		while (!haveMoreChildren())
@@ -375,7 +375,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 		}
 		decChild();
 
-		CIvfComposite* group = new CIvfComposite();
+		CComposite* group = new CComposite();
 		m_currentGroup->addChild(group);
 
 		pushGroup(group);
@@ -392,7 +392,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 			m_lightCount++;
 		else
 			m_lightCount = m_lighting->getSize()-1;
-		m_currentLight->setType(CIvfLight::LT_POINT);
+		m_currentLight->setType(CLight::LT_POINT);
 		m_currentLight->enable();
 	}
 	else
@@ -401,7 +401,7 @@ bool CIvfAc3DReader::parseObject(string &row)
 	return true;
 }
 
-bool CIvfAc3DReader::parseMaterial(string &row)
+bool CAc3DReader::parseMaterial(string &row)
 {
 	int pos1, pos2;
 	float fValue1, fValue2, fValue3;
@@ -412,13 +412,13 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 
 	string params;
 
-	IvfLog("CIvfAc3DReader: Found material.");
+	IvfLog("CAc3DReader: Found material.");
 
 	//
 	// Create material
 	//
 
-	CIvfMaterial* material = new CIvfMaterial();
+	CMaterial* material = new CMaterial();
 	m_materialSet->addMaterial(material);
 
 	//
@@ -554,7 +554,7 @@ bool CIvfAc3DReader::parseMaterial(string &row)
 	return true;
 }
 
-bool CIvfAc3DReader::parseSurf(string &row)
+bool CAc3DReader::parseSurf(string &row)
 {
 	using namespace std;
 
@@ -587,7 +587,7 @@ bool CIvfAc3DReader::parseSurf(string &row)
 	return true;
 }
 
-bool CIvfAc3DReader::parseName(string &row)
+bool CAc3DReader::parseName(string &row)
 {
 	using namespace std;
 
@@ -607,7 +607,7 @@ bool CIvfAc3DReader::parseName(string &row)
 	if (m_currentObject!=OT_LIGHT)
 	{
 
-		IvfLog("CIvfAc3DReader: name = " << m_currentName.c_str());
+		IvfLog("CAc3DReader: name = " << m_currentName.c_str());
 
 		if (m_currentShape!=NULL)
 			m_currentShape->setName(m_currentName.c_str());
@@ -618,7 +618,7 @@ bool CIvfAc3DReader::parseName(string &row)
 	return true;
 }
 
-bool CIvfAc3DReader::parseTexrep(string &row)
+bool CAc3DReader::parseTexrep(string &row)
 {
 	using namespace std;
 
@@ -640,12 +640,12 @@ bool CIvfAc3DReader::parseTexrep(string &row)
 	return true;
 }
 
-bool CIvfAc3DReader::parseData(string &row)
+bool CAc3DReader::parseData(string &row)
 {
 	return true;
 }
 
-bool CIvfAc3DReader::parseTexture(string &row)
+bool CAc3DReader::parseTexture(string &row)
 {
 	using namespace std;
 
@@ -685,11 +685,11 @@ bool CIvfAc3DReader::parseTexture(string &row)
 
 	params = prefixDir+params;
 
-	CIvfPngImage* image = new CIvfPngImage();
+	CPngImage* image = new CPngImage();
 	image->setFileName(params.c_str());
 	image->read();
 
-	CIvfTexture* texture = new CIvfTexture();
+	CTexture* texture = new CTexture();
 	texture->setImage(image);
 	texture->setTextureMode(GL_MODULATE);
 	texture->setGenerateMipmaps(true);
@@ -699,17 +699,17 @@ bool CIvfAc3DReader::parseTexture(string &row)
 
 	m_lastTexture = texture;
 
-	IvfLog("CIvfAc3DReader: texture = " << params.c_str());
+	IvfLog("CAc3DReader: texture = " << params.c_str());
 
 	return true;
 }
 
-bool CIvfAc3DReader::parseRot(string &row)
+bool CAc3DReader::parseRot(string &row)
 {
 	return true;
 }
 
-bool CIvfAc3DReader::parseLoc(string &row)
+bool CAc3DReader::parseLoc(string &row)
 {
 	using namespace std;
 
@@ -728,12 +728,12 @@ bool CIvfAc3DReader::parseLoc(string &row)
 	return true;
 }
 
-bool CIvfAc3DReader::parseUrl(string &row)
+bool CAc3DReader::parseUrl(string &row)
 {
 	return true;
 }
 
-bool CIvfAc3DReader::parseNumvert(string &row, istream &in)
+bool CAc3DReader::parseNumvert(string &row, istream &in)
 {
 	using namespace std;
 
@@ -757,14 +757,14 @@ bool CIvfAc3DReader::parseNumvert(string &row, istream &in)
 		m_currentPolySet->addCoord(x, y, z);
 	}
 
-	IvfLog("CIvfAc3DReader: " << nVerts << " vertices read.");
+	IvfLog("CAc3DReader: " << nVerts << " vertices read.");
 
 	m_haveGeometry = true;
 
 	return true;
 }
 
-bool CIvfAc3DReader::parseNumsurf(string &row)
+bool CAc3DReader::parseNumsurf(string &row)
 {
 	using namespace std;
 
@@ -780,7 +780,7 @@ bool CIvfAc3DReader::parseNumsurf(string &row)
 	return true;
 }
 
-bool CIvfAc3DReader::parseMat(string &row)
+bool CAc3DReader::parseMat(string &row)
 {
 	using namespace std;
 
@@ -805,7 +805,7 @@ bool CIvfAc3DReader::parseMat(string &row)
 	return true;
 }
 
-bool CIvfAc3DReader::parseRefs(string &row, istream &in)
+bool CAc3DReader::parseRefs(string &row, istream &in)
 {
 	using namespace std;
 
@@ -816,8 +816,8 @@ bool CIvfAc3DReader::parseRefs(string &row, istream &in)
 	double s, t;
 	double x, y, z;
 
-	CIvfIndex* textureIndex;
-	CIvfIndex* idx;
+	CIndex* textureIndex;
+	CIndex* idx;
 
 	params = row.substr(5);
 
@@ -827,18 +827,18 @@ bool CIvfAc3DReader::parseRefs(string &row, istream &in)
 
 	if (m_surfaceType==ST_POLY)
 	{
-		idx = new CIvfIndex();
-		textureIndex = new CIvfIndex();
+		idx = new CIndex();
+		textureIndex = new CIndex();
 	}
 	else
 	{
-		// Default shape is a CIvfPolySet. Now we want a
-		// CIvfLineStripSet, so we have to convert the
+		// Default shape is a CPolySet. Now we want a
+		// CLineStripSet, so we have to convert the
 		// polyset to a line strip set.
 
-		idx = new CIvfIndex();
+		idx = new CIndex();
 
-		m_currentLineStripSet = new CIvfLineStripSet();
+		m_currentLineStripSet = new CLineStripSet();
 		m_currentShape = m_currentLineStripSet;
 
 		m_currentLineStripSet->setName(m_currentPolySet->getName());
@@ -878,7 +878,7 @@ bool CIvfAc3DReader::parseRefs(string &row, istream &in)
 			m_currentPolySet->addMaterialIndex(m_currentMaterialIdx);
 		}
 		else
-			IvfLog("CIvfAc3DReader: Topology not supported. (refs " << nVertices << " )");
+			IvfLog("CAc3DReader: Topology not supported. (refs " << nVertices << " )");
 	}
 	else
 	{
@@ -899,7 +899,7 @@ bool CIvfAc3DReader::parseRefs(string &row, istream &in)
 	return true;
 }
 
-bool CIvfAc3DReader::parseKids(string &row)
+bool CAc3DReader::parseKids(string &row)
 {
 	using namespace std;
 
@@ -920,7 +920,7 @@ bool CIvfAc3DReader::parseKids(string &row)
 
 		if (m_currentObject == OT_POLY)
 		{
-			CIvfComposite* group = new CIvfComposite();
+			CComposite* group = new CComposite();
 			m_currentGroup->addChild(group);
 
 			pushGroup(group);
@@ -972,7 +972,7 @@ bool CIvfAc3DReader::parseKids(string &row)
 	return true;
 }
 
-void CIvfAc3DReader::clearVertexList()
+void CAc3DReader::clearVertexList()
 {
 	//int i;
 
@@ -981,13 +981,13 @@ void CIvfAc3DReader::clearVertexList()
 	/*
 	for (i=0; i<m_vertexList.size(); i++)
 	{
-		CIvfVec3d* vec3d = m_vertexList[i];
+		CVec3d* vec3d = m_vertexList[i];
 		delete vec3d;
 	}
 	*/
 }
 
-void CIvfAc3DReader::pushGroup(CIvfComposite *group)
+void CAc3DReader::pushGroup(CComposite *group)
 {
 	//IvfLog("-->");
 	if (m_groupStack[m_currentLevel]==NULL)
@@ -999,7 +999,7 @@ void CIvfAc3DReader::pushGroup(CIvfComposite *group)
 	}
 }
 
-void CIvfAc3DReader::popGroup()
+void CAc3DReader::popGroup()
 {
 	//IvfLog("<--");
 	m_groupStack[m_currentLevel]=NULL;
@@ -1008,22 +1008,22 @@ void CIvfAc3DReader::popGroup()
 		m_currentLevel--;
 }
 
-CIvfComposite* CIvfAc3DReader::currentGroup()
+CComposite* CAc3DReader::currentGroup()
 {
 	return m_groupStack[m_currentLevel];
 }
 
-void CIvfAc3DReader::decChild()
+void CAc3DReader::decChild()
 {
 	m_childStack[m_currentLevel]--;
 }
 
-bool CIvfAc3DReader::haveMoreChildren()
+bool CAc3DReader::haveMoreChildren()
 {
 	return m_childStack[m_currentLevel]>0;
 }
 
-void CIvfAc3DReader::initGroupStack()
+void CAc3DReader::initGroupStack()
 {
 	m_currentGroup = m_world;
 	m_currentLevel = 0;

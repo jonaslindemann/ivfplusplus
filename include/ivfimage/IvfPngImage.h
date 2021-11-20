@@ -27,7 +27,7 @@
 
 #include <ivfimage/IvfFileImage.h>
 
-IvfSmartPointer(CIvfPngImage);
+IvfSmartPointer(CPngImage);
 
 /**
  * PNG file loader 
@@ -37,17 +37,17 @@ IvfSmartPointer(CIvfPngImage);
  *
  * @author Jonas Lindemann
  */
-class IVFIMAGE_API CIvfPngImage : public CIvfFileImage {
+class IVFIMAGE_API CPngImage : public CFileImage {
 private:
 
 public:
-	/** CIvfPngImage constructor */
-	CIvfPngImage();
+	/** CPngImage constructor */
+	CPngImage();
 
-	/** CIvfPngImage destructor */
-	virtual ~CIvfPngImage();
+	/** CPngImage destructor */
+	virtual ~CPngImage();
 
-	IvfClassInfo("CIvfPngImage",CIvfFileImage);
+	IvfClassInfo("CPngImage",CFileImage);
 
 	/** Reads PNG image */
 	virtual bool read();

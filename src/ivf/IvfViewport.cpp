@@ -26,7 +26,7 @@
 
 #include <ivf/IvfGL.h>
 
-CIvfViewport::CIvfViewport()
+CViewport::CViewport()
 {
 	m_pos[0] = 0;
 	m_pos[1] = 0;
@@ -34,41 +34,41 @@ CIvfViewport::CIvfViewport()
 	m_size[1] = 100;
 }
 
-CIvfViewport::~CIvfViewport()
+CViewport::~CViewport()
 {
 
 }
 
-void CIvfViewport::setPosition(int x, int y)
+void CViewport::setPosition(int x, int y)
 {
 	m_pos[0] = x;
 	m_pos[1] = y;
 }
 
-void CIvfViewport::setSize(int width, int height)
+void CViewport::setSize(int width, int height)
 {
 	m_size[0] = width;
 	m_size[1] = height;
 }
 
-void CIvfViewport::getPosition(int &x, int &y)
+void CViewport::getPosition(int &x, int &y)
 {
 	x = m_pos[0];
 	y = m_pos[1];
 }
 
-void CIvfViewport::getSize(int &width, int &height)
+void CViewport::getSize(int &width, int &height)
 {
 	width = m_size[0];
 	height = m_size[1];
 }
 
-void CIvfViewport::apply()
+void CViewport::apply()
 {
 	glViewport(m_pos[0], m_pos[1], m_size[0], m_size[1]);
 }
 
-double CIvfViewport::getAspect()
+double CViewport::getAspect()
 {
 	if (m_size[1]==0)		  
 		return m_size[0]-m_pos[0];

@@ -29,110 +29,110 @@
 // ------------------------------------------------------------
 // ------------------------------------------------------------
 
-CIvfGLPrimitive::CIvfGLPrimitive()
+CGLPrimitive::CGLPrimitive()
 {
 	m_useVertexNormals = false;
-	m_materialSet = new CIvfMaterialSet();
+	m_materialSet = new CMaterialSet();
 }
 
-CIvfGLPrimitive::~CIvfGLPrimitive()
+CGLPrimitive::~CGLPrimitive()
 {
 	this->clear();
 }
 
-void CIvfGLPrimitive::addCoord(double x, double y, double z)
+void CGLPrimitive::addCoord(double x, double y, double z)
 {
-	CIvfVec3d* point = new CIvfVec3d();
-	CIvfIndex* vertexIndex = new CIvfIndex();
-	CIvfVec3d* vertexNormal = new CIvfVec3d();
+	CVec3d* point = new CVec3d();
+	CIndex* vertexIndex = new CIndex();
+	CVec3d* vertexNormal = new CVec3d();
 	point->setComponents(x, y, z);
 	m_coordSet.push_back(point);
 	m_vertexNormalIndexSet.push_back(vertexIndex);
 	m_vertexNormalSet.push_back(vertexNormal);
 }
 
-void CIvfGLPrimitive::addCoord(CIvfVec3d &coord)
+void CGLPrimitive::addCoord(CVec3d &coord)
 {
-	CIvfVec3d* point = new CIvfVec3d();
+	CVec3d* point = new CVec3d();
 	(*point) = coord;
-	CIvfIndex* vertexIndex = new CIvfIndex();
-	CIvfVec3d* vertexNormal = new CIvfVec3d();
+	CIndex* vertexIndex = new CIndex();
+	CVec3d* vertexNormal = new CVec3d();
 	m_coordSet.push_back(point);
 	m_vertexNormalIndexSet.push_back(vertexIndex);
 	m_vertexNormalSet.push_back(vertexNormal);
 }
 
-void CIvfGLPrimitive::addColor(float red, float green, float blue)
+void CGLPrimitive::addColor(float red, float green, float blue)
 {
-	CIvfColor* color = new CIvfColor();
+	CColor* color = new CColor();
 	color->setColor(red, green, blue);
 	m_colorSet.push_back(color);
 }
 
-void CIvfGLPrimitive::addNormal(double n1, double n2, double n3)
+void CGLPrimitive::addNormal(double n1, double n2, double n3)
 {
-	CIvfVec3d* vector = new CIvfVec3d();
+	CVec3d* vector = new CVec3d();
 	vector->setComponents(n1, n2, n3);
 	vector->normalize();
 	m_normalSet.push_back(vector);
 }
 
-void CIvfGLPrimitive::addTextureCoord(double s, double t)
+void CGLPrimitive::addTextureCoord(double s, double t)
 {
-	CIvfVec3d* point = new CIvfVec3d();
+	CVec3d* point = new CVec3d();
 	point->setComponents(s, t, 0.0);
 	m_textureCoordSet.push_back(point);
 }
 
-void CIvfGLPrimitive::addMaterial(CIvfMaterial *material)
+void CGLPrimitive::addMaterial(CMaterial *material)
 {
 	m_materialSet->addMaterial(material);
 }
 
-long CIvfGLPrimitive::getCoordSetSize()
+long CGLPrimitive::getCoordSetSize()
 {
 	return m_coordSet.size();
 }
 
-long CIvfGLPrimitive::getColorSetSize()
+long CGLPrimitive::getColorSetSize()
 {
 	return m_colorSet.size();
 }
 
-long CIvfGLPrimitive::getNormalSetSize()
+long CGLPrimitive::getNormalSetSize()
 {
 	return m_normalSet.size();
 }
 
-long CIvfGLPrimitive::getTextureCoordSetSize()
+long CGLPrimitive::getTextureCoordSetSize()
 {
 	return m_textureCoordSet.size();;
 }
 
-int CIvfGLPrimitive::getMaterialSetSize()
+int CGLPrimitive::getMaterialSetSize()
 {
 	return m_materialSet->getSize();
 }
 
-void CIvfGLPrimitive::getCoord(long pos, double &x, double &y, double &z)
+void CGLPrimitive::getCoord(long pos, double &x, double &y, double &z)
 {
 	if ( (pos>=0)&&(pos<(int)m_coordSet.size()) )
 		m_coordSet[pos]->getComponents(x, y, z);
 }
 
-void CIvfGLPrimitive::getColor(long pos, float &red, float &green, float &blue)
+void CGLPrimitive::getColor(long pos, float &red, float &green, float &blue)
 {
 	if ( (pos>=0)&&(pos<(int)m_colorSet.size()) )
 		m_colorSet[pos]->getColor(red, green, blue);
 }
 
-void CIvfGLPrimitive::getNormal(long pos, double &n1, double &n2, double &n3)
+void CGLPrimitive::getNormal(long pos, double &n1, double &n2, double &n3)
 {
 	if ( (pos>=0)&&(pos<(int)m_normalSet.size()) )
 		m_normalSet[pos]->getComponents(n1, n2, n3);
 }
 
-CIvfMaterial* CIvfGLPrimitive::getMaterialAt(int pos)
+CMaterial* CGLPrimitive::getMaterialAt(int pos)
 {
 	if ( (pos>=0)&&(pos<m_materialSet->getSize()) )
 		return m_materialSet->getMaterial(pos);
@@ -140,7 +140,7 @@ CIvfMaterial* CIvfGLPrimitive::getMaterialAt(int pos)
 		return NULL;
 }
 
-void CIvfGLPrimitive::getTextureCoord(long pos, double &s, double &t)
+void CGLPrimitive::getTextureCoord(long pos, double &s, double &t)
 {
 	double trash;
 
@@ -148,29 +148,29 @@ void CIvfGLPrimitive::getTextureCoord(long pos, double &s, double &t)
 		m_textureCoordSet[pos]->getComponents(s, t, trash);
 }
 
-void CIvfGLPrimitive::addCoordIndex(CIvfIndex* index)
+void CGLPrimitive::addCoordIndex(CIndex* index)
 {
-	m_coordIndexSet.push_back(CIvfIndexPtr(index));
+	m_coordIndexSet.push_back(CIndexPtr(index));
 	this->calcNormal(index);
 }
 
-void CIvfGLPrimitive::addColorIndex(CIvfIndex* index)
+void CGLPrimitive::addColorIndex(CIndex* index)
 {
-	m_colorIndexSet.push_back(CIvfIndexPtr(index));
+	m_colorIndexSet.push_back(CIndexPtr(index));
 }
 
-void CIvfGLPrimitive::addNormalIndex(CIvfIndex* index)
+void CGLPrimitive::addNormalIndex(CIndex* index)
 {
-	m_normalIndexSet.push_back(CIvfIndexPtr(index));
+	m_normalIndexSet.push_back(CIndexPtr(index));
 }
 
-void CIvfGLPrimitive::addTextureIndex(CIvfIndex* index)
+void CGLPrimitive::addTextureIndex(CIndex* index)
 {
-	m_textureIndexSet.push_back(CIvfIndexPtr(index));
+	m_textureIndexSet.push_back(CIndexPtr(index));
 }
 
 
-CIvfIndex* CIvfGLPrimitive::getCoordIndex(long pos)
+CIndex* CGLPrimitive::getCoordIndex(long pos)
 {
 	if ( (pos>=0)&&(pos<(int)m_coordIndexSet.size()) )
 		return m_coordIndexSet[pos];
@@ -178,7 +178,7 @@ CIvfIndex* CIvfGLPrimitive::getCoordIndex(long pos)
 		return NULL;
 }
 
-CIvfIndex* CIvfGLPrimitive::getColorIndex(long pos)
+CIndex* CGLPrimitive::getColorIndex(long pos)
 {
 	if ( (pos>=0)&&(pos<(int)m_colorIndexSet.size()) )
 		return m_colorIndexSet[pos];
@@ -186,7 +186,7 @@ CIvfIndex* CIvfGLPrimitive::getColorIndex(long pos)
 		return NULL;
 }
 
-CIvfIndex* CIvfGLPrimitive::getNormalIndex(long pos)
+CIndex* CGLPrimitive::getNormalIndex(long pos)
 {
 	if ( (pos>=0)&&(pos<(int)m_normalIndexSet.size()) )
 		return m_normalIndexSet[pos];
@@ -194,7 +194,7 @@ CIvfIndex* CIvfGLPrimitive::getNormalIndex(long pos)
 		return NULL;
 }
 
-CIvfIndex* CIvfGLPrimitive::getTextureIndex(long pos)
+CIndex* CGLPrimitive::getTextureIndex(long pos)
 {
 	if ( (pos>=0)&&(pos<(int)m_textureIndexSet.size()) )
 		return m_textureIndexSet[pos];
@@ -202,30 +202,30 @@ CIvfIndex* CIvfGLPrimitive::getTextureIndex(long pos)
 		return NULL;
 }
 
-void CIvfGLPrimitive::setUseVertexNormals(bool flag)
+void CGLPrimitive::setUseVertexNormals(bool flag)
 {
 	m_useVertexNormals = flag;
 
 	this->updateVertexNormals();
 }
 
-void CIvfGLPrimitive::updateVertexNormals()
+void CGLPrimitive::updateVertexNormals()
 {
 
 }
 
-bool CIvfGLPrimitive::getUseVertexNormals()
+bool CGLPrimitive::getUseVertexNormals()
 {
 	return m_useVertexNormals;
 }
 
 
-void CIvfGLPrimitive::calcNormal(CIvfIndex *idx)
+void CGLPrimitive::calcNormal(CIndex *idx)
 {
 
 }
 
-void CIvfGLPrimitive::clearCoord()
+void CGLPrimitive::clearCoord()
 {
 	long i;
 	for (i=0; i<(int)m_coordSet.size(); i++)
@@ -239,19 +239,19 @@ void CIvfGLPrimitive::clearCoord()
 	m_vertexNormalIndexSet.clear();
 }
 
-void CIvfGLPrimitive::clearCoordIndex()
+void CGLPrimitive::clearCoordIndex()
 {
 	m_coordIndexSet.clear();
 }
 
-void CIvfGLPrimitive::clearTextureCoord()
+void CGLPrimitive::clearTextureCoord()
 {
 	long i;
 	for (i=0; i<(int)m_coordSet.size(); i++)
 		delete m_textureCoordSet[i];
 }
 
-void CIvfGLPrimitive::clear()
+void CGLPrimitive::clear()
 {
 	long i;
 	for (i=0; i<(int)m_coordSet.size(); i++)
@@ -283,25 +283,25 @@ void CIvfGLPrimitive::clear()
 	m_textureIndexSet.clear();
 }
 
-void CIvfGLPrimitive::setCoord(int pos, double x, double y, double z)
+void CGLPrimitive::setCoord(int pos, double x, double y, double z)
 {
 	if ( (pos>=0)&&(pos<(int)m_coordSet.size()) )
 		m_coordSet[pos]->setComponents(x, y, z);
 }
 
-void CIvfGLPrimitive::setColor(int pos, float red, float green, float blue)
+void CGLPrimitive::setColor(int pos, float red, float green, float blue)
 {
 	if ( (pos>=0)&&(pos<(int)m_colorSet.size()) )
 		m_colorSet[pos]->setColor(red, green, blue);
 }
 
-void CIvfGLPrimitive::setTextureCoord(int pos, double s, double t)
+void CGLPrimitive::setTextureCoord(int pos, double s, double t)
 {
 	if ( (pos>=0)&&(pos<(int)m_textureCoordSet.size()) )
 		m_textureCoordSet[pos]->setComponents(s, t, 0.0);
 }
 
-void CIvfGLPrimitive::refresh()
+void CGLPrimitive::refresh()
 {
 	int i;
 
@@ -320,26 +320,26 @@ void CIvfGLPrimitive::refresh()
 		this->updateVertexNormals();
 }
 
-void CIvfGLPrimitive::invertNormals()
+void CGLPrimitive::invertNormals()
 {
 	int i;
 	for (i=0; i<(int)m_normalSet.size(); i++)
 	{
-		CIvfVec3d* normal = m_normalSet[i];
+		CVec3d* normal = m_normalSet[i];
 		normal->negate();
 	}
 }
 
 
-void CIvfGLPrimitive::addColor(float red, float green, float blue, float alfa)
+void CGLPrimitive::addColor(float red, float green, float blue, float alfa)
 {
-	CIvfColor* color = new CIvfColor();
+	CColor* color = new CColor();
 	color->setColor(red, green, blue);
 	color->setAlfa(alfa);
 	m_colorSet.push_back(color);
 }
 
-void CIvfGLPrimitive::setColor(int pos, float red, float green, float blue, float alfa)
+void CGLPrimitive::setColor(int pos, float red, float green, float blue, float alfa)
 {
 	if ( (pos>=0)&&(pos<(int)m_colorSet.size()) )
 	{
@@ -348,7 +348,7 @@ void CIvfGLPrimitive::setColor(int pos, float red, float green, float blue, floa
 	}
 }
 
-void CIvfGLPrimitive::setAlfa(int pos, float alfa)
+void CGLPrimitive::setAlfa(int pos, float alfa)
 {
 	if ( (pos>=0)&&(pos<(int)m_colorSet.size()) )
 	{
@@ -356,7 +356,7 @@ void CIvfGLPrimitive::setAlfa(int pos, float alfa)
 	}
 }
 
-void CIvfGLPrimitive::getColor(int pos, float &red, float &green, float &blue, float &alfa)
+void CGLPrimitive::getColor(int pos, float &red, float &green, float &blue, float &alfa)
 {
 	if ( (pos>=0)&&(pos<(int)m_colorSet.size()) )
 	{
@@ -365,7 +365,7 @@ void CIvfGLPrimitive::getColor(int pos, float &red, float &green, float &blue, f
 	}
 }
 
-float CIvfGLPrimitive::getAlfa(int pos)
+float CGLPrimitive::getAlfa(int pos)
 {
 	if ( (pos>=0)&&(pos<(int)m_colorSet.size()) )
 		return m_colorSet[pos]->getAlfa();
@@ -373,7 +373,7 @@ float CIvfGLPrimitive::getAlfa(int pos)
 		return 0.0f;
 }
 
-void CIvfGLPrimitive::doUpdateBoundingSphere()
+void CGLPrimitive::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{
@@ -389,7 +389,7 @@ void CIvfGLPrimitive::doUpdateBoundingSphere()
 
 		for (i=0; i<(int)m_coordSet.size(); i++)
 		{
-			CIvfVec3d* point = m_coordSet[i];
+			CVec3d* point = m_coordSet[i];
 			point->getComponents(x, y, z);
 			if (x>maxSize[0])
 				maxSize[0] = x;
@@ -418,12 +418,12 @@ void CIvfGLPrimitive::doUpdateBoundingSphere()
 	}
 }
 
-void CIvfGLPrimitive::addMaterialIndex(int idx)
+void CGLPrimitive::addMaterialIndex(int idx)
 {
 	m_materialIndexSet.push_back(idx);
 }
 
-int CIvfGLPrimitive::getMaterialIndex(int pos)
+int CGLPrimitive::getMaterialIndex(int pos)
 {
 	if ( (pos>=0)&&(pos<(int)m_materialIndexSet.size()) )
 		return m_materialIndexSet[pos];
@@ -431,28 +431,28 @@ int CIvfGLPrimitive::getMaterialIndex(int pos)
 		return -1;
 }
 
-void CIvfGLPrimitive::clearMaterialIndex()
+void CGLPrimitive::clearMaterialIndex()
 {
 	m_materialIndexSet.clear();
 }
 
-void CIvfGLPrimitive::setMaterialSet(CIvfMaterialSet *materialSet)
+void CGLPrimitive::setMaterialSet(CMaterialSet *materialSet)
 {
 	m_materialSet = materialSet;
 }
 
-CIvfMaterialSet* CIvfGLPrimitive::getMaterialSet()
+CMaterialSet* CGLPrimitive::getMaterialSet()
 {
 	return m_materialSet;
 }
 
-void CIvfGLPrimitive::clearMaterial()
+void CGLPrimitive::clearMaterial()
 {
 	m_materialSet->clear();
 }
 
 
-int CIvfGLPrimitive::getCoordIndexSetSize()
+int CGLPrimitive::getCoordIndexSetSize()
 {
 	return m_coordIndexSet.size();
 }

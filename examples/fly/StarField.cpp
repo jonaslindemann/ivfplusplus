@@ -6,25 +6,25 @@
 
 #include <time.h>
 
-CStarField::CStarField(CIvfCamera* camera)
+CStarField::CStarField(CCamera* camera)
 {
-	m_texturedStars = new CIvfQuadSet();
+	m_texturedStars = new CQuadSet();
 	m_texturedStars->setUseColor(false);
 
-	m_pointStars = new CIvfPointSet();
+	m_pointStars = new CPointSet();
 	m_pointStars->setUseColor(true);
 
-	m_nebulaSphere = new CIvfSphere();
+	m_nebulaSphere = new CSphere();
 	m_nebulaSphere->setRadius(61.0);
 
-	m_planets = new CIvfQuadSet();
+	m_planets = new CQuadSet();
 	m_planets->setUseColor(false);
 
-	CIvfSgiImagePtr image = new CIvfSgiImage();
-	image->setFileName("images/nebula02.rgb");
+	CSgiImagePtr image = new CSgiImage();
+	image->setFileName("data/images/nebula02.rgb");
 	image->read();
 
-	CIvfTexturePtr texture = new CIvfTexture();
+	CTexturePtr texture = new CTexture();
 	texture->setImage(image);
 	//texture->load("textures/nebula02.rgb");
 	m_nebulaSphere->setTexture(texture);
@@ -72,14 +72,14 @@ void CStarField::initializeStars()
 {
 	int i;
 
-	CIvfVec3d p1;
-	CIvfVec3d p2;
-	CIvfVec3d p3;
-	CIvfVec3d p4;
-	CIvfVec3d pos;
-	CIvfVec3d normal;
-	CIvfVec3d s;
-	CIvfVec3d t;
+	CVec3d p1;
+	CVec3d p2;
+	CVec3d p3;
+	CVec3d p4;
+	CVec3d pos;
+	CVec3d normal;
+	CVec3d s;
+	CVec3d t;
 
 	double x, y, z;
 	double alfa, beta;
@@ -93,11 +93,11 @@ void CStarField::initializeStars()
 
 	m_texturedStars->clear();
 
-	CIvfSgiImagePtr image = new CIvfSgiImage();
-	image->setFileName("images/star02.rgb");
+	CSgiImagePtr image = new CSgiImage();
+	image->setFileName("data/images/star02.rgb");
 	image->read();
 
-	CIvfTexturePtr texture = new CIvfTexture();
+	CTexturePtr texture = new CTexture();
 	texture->setImage(image);
 	texture->setTextureMode(GL_DECAL);
 
@@ -132,11 +132,11 @@ void CStarField::initializeStars()
 		m_texturedStars->addTextureCoord(0.0, 1.0);
 	}
 
-	CIvfIndexPtr idx = new CIvfIndex();
+	CIndexPtr idx = new CIndex();
 	idx->createLinear(0, nTexturedStars*4);
 	m_texturedStars->addCoordIndex(idx);
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 	idx->createLinear(0, nTexturedStars*4);
 	m_texturedStars->addTextureIndex(idx);
 
@@ -155,23 +155,23 @@ void CStarField::initializeStars()
 		m_pointStars->addColor(c * 0.8f, c * 0.8f,  c);
 	}
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 	idx->createLinear(0, nPointStars);
 	m_pointStars->addCoordIndex(idx);
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 	idx->createLinear(0, nPointStars);
 	m_pointStars->addColorIndex(idx);
 
-	image = new CIvfSgiImage();
-	image->setFileName("images/planet01.rgb");
+	image = new CSgiImage();
+	image->setFileName("data/images/planet01.rgb");
 	image->setAlphaChannel(true);
 	image->read();
 	image->createAlphaMask(255,0,0,255);
 	image->replaceColor(255, 255, 255, 0, 0, 0);
 	image->setInternalFormat(GL_RGB10_A2);
 
-	texture = new CIvfTexture();
+	texture = new CTexture();
 	texture->setImage(image);
 	texture->setTextureMode(GL_BLEND);
 
@@ -202,21 +202,21 @@ void CStarField::initializeStars()
 		m_planets->addTextureCoord(0.0, 1.0);
 	}
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 	idx->createLinear(0, nPlanets*4);
 	m_planets->addCoordIndex(idx);
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 	idx->createLinear(0, nPlanets*4);
 	m_planets->addTextureIndex(idx);
 }
 
-void CStarField::setCamera(CIvfCamera *camera)
+void CStarField::setCamera(CCamera *camera)
 {
 	m_camera = camera;
 }
 
-void CStarField::getPolarVectors(double alfa, double beta, CIvfVec3d &normal, CIvfVec3d &s, CIvfVec3d &t)
+void CStarField::getPolarVectors(double alfa, double beta, CVec3d &normal, CVec3d &s, CVec3d &t)
 {
 	double x, y, z;
 

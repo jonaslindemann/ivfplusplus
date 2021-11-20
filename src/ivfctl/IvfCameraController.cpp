@@ -24,10 +24,10 @@
 
 #include <ivfctl/IvfCameraController.h>
 
-CIvfCameraController::CIvfCameraController()
+CCameraController::CCameraController()
 {
-	m_path = new CIvfSpline3d();
-	m_targetPath = new CIvfSpline3d();
+	m_path = new CSpline3d();
+	m_targetPath = new CSpline3d();
 	
 	m_t = 0.0;
 	m_v = 0.0;
@@ -55,7 +55,7 @@ CIvfCameraController::CIvfCameraController()
 	m_camera = NULL;
 }
 
-CIvfCameraController::~CIvfCameraController()
+CCameraController::~CCameraController()
 {
 	/*
 	if (m_path!=NULL)
@@ -74,7 +74,7 @@ CIvfCameraController::~CIvfCameraController()
 	*/
 }
 
-void CIvfCameraController::setPath(CIvfSpline3d *spline)
+void CCameraController::setPath(CSpline3d *spline)
 {
 	m_path = spline;
 	/*
@@ -90,12 +90,12 @@ void CIvfCameraController::setPath(CIvfSpline3d *spline)
 	*/
 }
 
-CIvfSpline3d* CIvfCameraController::getPath()
+CSpline3d* CCameraController::getPath()
 {
 	return m_path;
 }
 
-void CIvfCameraController::doUpdate(double dt)
+void CCameraController::doUpdate(double dt)
 {
 	if (m_camera!=NULL)
 	{
@@ -227,9 +227,9 @@ void CIvfCameraController::doUpdate(double dt)
 		{
 			if (m_followPath)
 			{
-				CIvfVec3d p0;
-				CIvfVec3d p1;
-				CIvfVec3d forward;
+				CVec3d p0;
+				CVec3d p1;
+				CVec3d forward;
 				p0 = m_path->getPosition(m_t);
 				//p1 = m_path->getPosition(m_t + m_v*dt + pow(m_a0,2)*dt*0.5);
 				p1 = m_path->getPosition(m_t+0.3);
@@ -241,7 +241,7 @@ void CIvfCameraController::doUpdate(double dt)
 	}
 }
 
-void CIvfCameraController::doReset()
+void CCameraController::doReset()
 {
 	m_t = m_t0;
 	m_v = m_v0;
@@ -267,45 +267,45 @@ void CIvfCameraController::doReset()
 	}
 }
 
-void CIvfCameraController::setInitialPos(double t)
+void CCameraController::setInitialPos(double t)
 {
 	m_t0 = t;
 	doReset();
 }
 
-void CIvfCameraController::setInitialSpeed(double v)
+void CCameraController::setInitialSpeed(double v)
 {
 	m_v0 = v;
 	doReset();
 }
 
-void CIvfCameraController::setInitialAcceleration(double a)
+void CCameraController::setInitialAcceleration(double a)
 {
 	m_a0 = a;
 	doReset();
 }
 
-void CIvfCameraController::setEndActionType(TEndAction action)
+void CCameraController::setEndActionType(TEndAction action)
 {
 	m_endAction = action;
 }
 
-void CIvfCameraController::setStartActionType(TStartAction action)
+void CCameraController::setStartActionType(TStartAction action)
 {
 	m_startAction = action;
 }
 
-void CIvfCameraController::setCamera(CIvfCamera *camera)
+void CCameraController::setCamera(CCamera *camera)
 {
 	m_camera = camera;
 }
 
-CIvfCamera* CIvfCameraController::getCamera()
+CCamera* CCameraController::getCamera()
 {
 	return m_camera;
 }
 
-void CIvfCameraController::setTargetPath(CIvfSpline3d *spline)
+void CCameraController::setTargetPath(CSpline3d *spline)
 {
 	m_targetPath = spline;
 	/*
@@ -323,55 +323,55 @@ void CIvfCameraController::setTargetPath(CIvfSpline3d *spline)
 	m_useTargetPath = true;
 }
 
-void CIvfCameraController::setUseTargetPath(bool flag)
+void CCameraController::setUseTargetPath(bool flag)
 {
 	m_useTargetPath = true;
 }
 
-bool CIvfCameraController::getUseTargetPath()
+bool CCameraController::getUseTargetPath()
 {
 	return m_useTargetPath;
 }
 
-CIvfSpline3d* CIvfCameraController::getTargetPath()
+CSpline3d* CCameraController::getTargetPath()
 {
 	return m_targetPath;
 }
 
-void CIvfCameraController::setInitialTargetPos(double t)
+void CCameraController::setInitialTargetPos(double t)
 {
 	m_target_t0 = t;
 	doReset();
 }
 
-void CIvfCameraController::setInitialTargetSpeed(double v)
+void CCameraController::setInitialTargetSpeed(double v)
 {
 	m_target_v0 = v;
 	doReset();
 }
 
-void CIvfCameraController::setInitialTargetAcceleration(double a)
+void CCameraController::setInitialTargetAcceleration(double a)
 {
 	m_target_a0 = a;
 	doReset();
 }
 
-void CIvfCameraController::setTargetStartActionType(TStartAction action)
+void CCameraController::setTargetStartActionType(TStartAction action)
 {
 	m_targetStartAction = action;
 }
 
-void CIvfCameraController::setTargetEndActionType(TEndAction action)
+void CCameraController::setTargetEndActionType(TEndAction action)
 {
 	m_targetEndAction = action;
 }
 
-void CIvfCameraController::setFollowPath(bool flag)
+void CCameraController::setFollowPath(bool flag)
 {
 	m_followPath = flag;
 	if (m_camera!=NULL)
 		if (m_followPath)
-			m_camera->setType(CIvfCamera::CT_FREE_ORIENTATION);
+			m_camera->setType(CCamera::CT_FREE_ORIENTATION);
 		else
-			m_camera->setType(CIvfCamera::CT_NORMAL);
+			m_camera->setType(CCamera::CT_NORMAL);
 }

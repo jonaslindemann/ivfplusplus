@@ -24,34 +24,34 @@
 #include <ivf/IvfCursor.h>
 
 // ------------------------------------------------------------
-CIvfCursor::CIvfCursor ()
-		:CIvfComposite()
+CCursor::CCursor ()
+		:CComposite()
 {
 	m_cursorType = CT_SOLID_CURSOR;
 	m_size = 1.0;
     m_thickness = 0.05;
 
-	m_xMaterial = new CIvfMaterial();
+	m_xMaterial = new CMaterial();
 	m_xMaterial->setDiffuseColor(1.0, 1.0, 0.0, 1.0);
 	m_xMaterial->setAmbientColor(0.5, 0.5, 0.0, 1.0);
 
-	m_yMaterial = new CIvfMaterial();
+	m_yMaterial = new CMaterial();
 	m_yMaterial->setDiffuseColor(1.0, 1.0, 0.0, 1.0);
 	m_yMaterial->setAmbientColor(0.5, 0.5, 0.0, 1.0);
 
-	m_zMaterial = new CIvfMaterial();
+	m_zMaterial = new CMaterial();
 	m_zMaterial->setDiffuseColor(1.0, 1.0, 0.0, 1.0);
 	m_zMaterial->setAmbientColor(0.5, 0.5, 0.0, 1.0);
 
-	m_xBrick = new CIvfBrick();
+	m_xBrick = new CBrick();
 	m_xBrick->setSize(m_size, m_size*m_thickness, m_size*m_thickness);
 	m_xBrick->setMaterial(m_xMaterial);
 
-	m_yBrick = new CIvfBrick();
+	m_yBrick = new CBrick();
 	m_yBrick->setSize(m_size*m_thickness, m_size, m_size*m_thickness);
 	m_yBrick->setMaterial(m_yMaterial);
 
-	m_zBrick = new CIvfBrick();
+	m_zBrick = new CBrick();
 	m_zBrick->setSize(m_size*m_thickness, m_size*m_thickness, m_size);
 	m_zBrick->setMaterial(m_zMaterial);
 
@@ -61,12 +61,12 @@ CIvfCursor::CIvfCursor ()
 }
 
 // ------------------------------------------------------------
-CIvfCursor::~CIvfCursor ()
+CCursor::~CCursor ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfCursor::setSize(double size)
+void CCursor::setSize(double size)
 {
 	m_size = size;
 	m_xBrick->setSize(m_size, m_size*m_thickness, m_size*m_thickness);
@@ -75,7 +75,7 @@ void CIvfCursor::setSize(double size)
 }
 
 // ------------------------------------------------------------
-void CIvfCursor::setThickness(double thickness)
+void CCursor::setThickness(double thickness)
 {
     m_thickness = thickness;
 	m_xBrick->setSize(m_size, m_size*m_thickness, m_size*m_thickness);
@@ -84,16 +84,16 @@ void CIvfCursor::setThickness(double thickness)
 }
 
 // ------------------------------------------------------------
-void CIvfCursor::setCursorType(TCursorType type)
+void CCursor::setCursorType(TCursorType type)
 {
 	m_cursorType = type;
 }
 
 // ------------------------------------------------------------
-void CIvfCursor::doCreateGeometry()
+void CCursor::doCreateGeometry()
 {
 	if (this->getCursorType() == CT_SOLID_CURSOR)
-		CIvfComposite::doCreateGeometry();
+		CComposite::doCreateGeometry();
 	else
 	{
 		glPushAttrib(GL_LIGHTING);
@@ -116,7 +116,7 @@ void CIvfCursor::doCreateGeometry()
 }
 
 // ------------------------------------------------------------
-int CIvfCursor::getCursorType()
+int CCursor::getCursorType()
 {
 	return m_cursorType;
 }

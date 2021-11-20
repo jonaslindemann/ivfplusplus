@@ -31,14 +31,14 @@
 #include <ivf/IvfArrow.h>
 #include <ivf/IvfQuadPlane.h>
 
-IvfSmartPointer(CIvfNodeCursor);
+IvfSmartPointer(CNodeCursor);
 
 /**
  * Node cursor class
  *
  * Implements a special cursor for manipulating nodes
  */
-class IVF_API CIvfNodeCursor : public CIvfShape {
+class IVF_API CNodeCursor : public CShape {
 public:
 	enum TCursorType {
 		CT_XZ,
@@ -62,33 +62,33 @@ private:
 	TCursorDirection m_cursorDirection;
 	TCursorArrowType m_cursorArrowType;
 
-	CIvfArrowPtr m_arrow;
+	CArrowPtr m_arrow;
 	
-	CIvfTransformPtr m_arrowXZ1;
-	CIvfTransformPtr m_arrowXZ2;
-	CIvfTransformPtr m_arrowXZ3;
-	CIvfTransformPtr m_arrowXZ4;
+	CTransformPtr m_arrowXZ1;
+	CTransformPtr m_arrowXZ2;
+	CTransformPtr m_arrowXZ3;
+	CTransformPtr m_arrowXZ4;
 
-	CIvfTransformPtr m_arrowY1;
-	CIvfTransformPtr m_arrowY2;
+	CTransformPtr m_arrowY1;
+	CTransformPtr m_arrowY2;
 
-	CIvfCompositePtr m_cursorShape;
+	CCompositePtr m_cursorShape;
 
-	CIvfShapePtr	 m_nodeShape;
+	CShapePtr	 m_nodeShape;
 
-	CIvfQuadPlanePtr	m_plane;
+	CQuadPlanePtr	m_plane;
 
 	bool			m_usePlane;
 
 	void initCursor();
 public:
 	/** Class constructor */
-	CIvfNodeCursor();
+	CNodeCursor();
 
 	/** Class destructor */
-	virtual ~CIvfNodeCursor();
+	virtual ~CNodeCursor();
 
-	IvfClassInfo("CIvfNodeCursor",CIvfShape);
+	IvfClassInfo("CNodeCursor",CShape);
 
 	/** Set size of cursor */
 	void setSize(double size);
@@ -100,10 +100,10 @@ public:
 	void setType(TCursorType type);
 
 	/** Set shape used at center of cursor */
-	void setShape(CIvfShape* shape);
+	void setShape(CShape* shape);
 
 	/** Return shape at center of cursor */
-	CIvfShape* getShape();
+	CShape* getShape();
 
 	/** Enable/disable special plane helper object */
 	void setUsePlaneHelper(bool flag);

@@ -24,7 +24,7 @@
 
 #include <ivfwidget/IvfSceneHandler.h>
 
-CIvfSceneHandler::CIvfSceneHandler(CIvfWidgetBase* widget, CIvfScene* scene)
+CSceneHandler::CSceneHandler(CWidgetBase* widget, CScene* scene)
 {
 	m_widget = widget;
 	m_scene = scene;
@@ -33,13 +33,13 @@ CIvfSceneHandler::CIvfSceneHandler(CIvfWidgetBase* widget, CIvfScene* scene)
 	m_widget->addRenderEvent(this);
 }
 
-CIvfSceneHandler::~CIvfSceneHandler()
+CSceneHandler::~CSceneHandler()
 {
 	m_widget->removeResizeEvent(this);
 	m_widget->removeRenderEvent(this);
 }
 
-void CIvfSceneHandler::onResize(int width, int height)
+void CSceneHandler::onResize(int width, int height)
 {
 	if (m_scene!=NULL)
 	{
@@ -48,7 +48,7 @@ void CIvfSceneHandler::onResize(int width, int height)
 	}
 }
 
-void CIvfSceneHandler::onRender()
+void CSceneHandler::onRender()
 {
 	if (m_scene!=NULL)
 		m_scene->render();

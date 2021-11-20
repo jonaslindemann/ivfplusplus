@@ -22,8 +22,8 @@
 #include <ivf/IvfSelectComposite.h>
 
 // ------------------------------------------------------------
-CIvfSelectComposite::CIvfSelectComposite ()
-		:CIvfComposite()
+CSelectComposite::CSelectComposite ()
+		:CComposite()
 {
 	m_camera = NULL;
 	m_childCount = 0;
@@ -33,7 +33,7 @@ CIvfSelectComposite::CIvfSelectComposite ()
 }
 
 // ------------------------------------------------------------
-CIvfSelectComposite::~CIvfSelectComposite ()
+CSelectComposite::~CSelectComposite ()
 {
 	if (m_camera!=NULL)
 		m_camera->deleteReference();
@@ -43,7 +43,7 @@ CIvfSelectComposite::~CIvfSelectComposite ()
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::setCamera(CIvfView * camera)
+void CSelectComposite::setCamera(CView * camera)
 {
 	if (m_camera!=NULL)
 	{
@@ -56,19 +56,19 @@ void CIvfSelectComposite::setCamera(CIvfView * camera)
 }
 
 // ------------------------------------------------------------
-CIvfView* CIvfSelectComposite::getCamera()
+CView* CSelectComposite::getCamera()
 {
 	return m_camera;
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::doCreateGeometry()
+void CSelectComposite::doCreateGeometry()
 {
-	CIvfComposite::doCreateGeometry();
+	CComposite::doCreateGeometry();
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::doBeginTransform()
+void CSelectComposite::doBeginTransform()
 {
 	glPushMatrix();
 	if (m_renderCamera)
@@ -79,18 +79,18 @@ void CIvfSelectComposite::doBeginTransform()
 			if (m_useCustomTransform)
 				this->customView();
 	}
-	CIvfShape::doBeginTransform();
+	CShape::doBeginTransform();
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::doEndTransform()
+void CSelectComposite::doEndTransform()
 {
-		CIvfShape::doEndTransform();
+		CShape::doEndTransform();
 	glPopMatrix();
 }
 
 // ------------------------------------------------------------
-GLint CIvfSelectComposite::pick(int x, int y)
+GLint CSelectComposite::pick(int x, int y)
 {
 	m_selectedShape = NULL;
 
@@ -133,7 +133,7 @@ GLint CIvfSelectComposite::pick(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::processHits(GLint hits, GLuint buffer [ ])
+void CSelectComposite::processHits(GLint hits, GLuint buffer [ ])
 {
 	GLuint depth = ~0;
 	unsigned int i, getThisName;
@@ -177,7 +177,7 @@ void CIvfSelectComposite::processHits(GLint hits, GLuint buffer [ ])
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::nameChildren(CIvfShape* shape)
+void CSelectComposite::nameChildren(CShape* shape)
 {
 	// Recursively name all children
 
@@ -187,10 +187,10 @@ void CIvfSelectComposite::nameChildren(CIvfShape* shape)
 	{
 		// Name all children of composite
 
-		CIvfComposite* composite = (CIvfComposite*) shape;
+		CComposite* composite = (CComposite*) shape;
 		for (i = 0; i<composite->getSize(); i++)
 		{
-			CIvfShape* child = composite->getChild(i);
+			CShape* child = composite->getChild(i);
 			nameChildren(child);
 		}
 
@@ -212,17 +212,17 @@ void CIvfSelectComposite::nameChildren(CIvfShape* shape)
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::addChild(CIvfShape * shape)
+void CSelectComposite::addChild(CShape * shape)
 {
-	CIvfComposite::addChild(shape);
+	CComposite::addChild(shape);
 	nameChildren(shape);
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::deleteChild(int index)
+void CSelectComposite::deleteChild(int index)
 {
 	//int i, count;
-	CIvfComposite::deleteChild(index);
+	CComposite::deleteChild(index);
 
 	// Renumber shapes
 
@@ -230,11 +230,11 @@ void CIvfSelectComposite::deleteChild(int index)
 }
 
 // ------------------------------------------------------------
-CIvfShape* CIvfSelectComposite::removeChild(int index)
+CShape* CSelectComposite::removeChild(int index)
 {
 	//int i, count;
-	CIvfShape* removedChild;
-	removedChild = CIvfComposite::removeChild(index);
+	CShape* removedChild;
+	removedChild = CComposite::removeChild(index);
 
 	// Renumber shapes
 
@@ -244,46 +244,46 @@ CIvfShape* CIvfSelectComposite::removeChild(int index)
 }
 
 // ------------------------------------------------------------
-CIvfShape* CIvfSelectComposite::getSelectedShape()
+CShape* CSelectComposite::getSelectedShape()
 {
 	return m_selectedShape;
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::renameChildren()
+void CSelectComposite::renameChildren()
 {
 	m_allObjects.clear();
 	nameChildren(this);
 }
 
 // ------------------------------------------------------------
-CIvfShape* CIvfSelectComposite::removeShape(CIvfShape *removeShape)
+CShape* CSelectComposite::removeShape(CShape *removeShape)
 {
-	CIvfComposite::compositeRemove(this, removeShape);
+	CComposite::compositeRemove(this, removeShape);
 	renameChildren();
 	return removeShape;
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::initializeSelect(int x, int y, int w, int h)
+void CSelectComposite::initializeSelect(int x, int y, int w, int h)
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::customView()
+void CSelectComposite::customView()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::setUseCustomTransform(bool flag)
+void CSelectComposite::setUseCustomTransform(bool flag)
 {
 	m_useCustomTransform = flag;
 }
 
 // ------------------------------------------------------------
-void CIvfSelectComposite::setRenderCamera(bool flag)
+void CSelectComposite::setRenderCamera(bool flag)
 {
 	m_renderCamera = flag;
 }

@@ -39,8 +39,8 @@ int ivfGetGLEJoinStyle()
 }
 
 // ------------------------------------------------------------
-CIvfExtrusion::CIvfExtrusion ()
-:CIvfShape()
+CExtrusion::CExtrusion ()
+:CShape()
 {
 	m_sectionCoords = NULL;
 	m_sectionNormals = NULL;
@@ -64,7 +64,7 @@ CIvfExtrusion::CIvfExtrusion ()
 }
 
 // ------------------------------------------------------------
-CIvfExtrusion::~CIvfExtrusion ()
+CExtrusion::~CExtrusion ()
 {
 
 	// Clean up
@@ -86,7 +86,7 @@ CIvfExtrusion::~CIvfExtrusion ()
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::doCreateGeometry()
+void CExtrusion::doCreateGeometry()
 {
 	if ( (m_spineStart>=0)&&(m_spineEnd>0) )
 		m_spineDelta = m_spineEnd-m_spineStart + 1;
@@ -149,7 +149,7 @@ void CIvfExtrusion::doCreateGeometry()
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setSpineSize(int size)
+void CExtrusion::setSpineSize(int size)
 {
 	// Delete previous spine coords/colors if any
 
@@ -174,7 +174,7 @@ void CIvfExtrusion::setSpineSize(int size)
 
 	// initialize spine color array
 
-	CIvfMaterial* material;
+	CMaterial* material;
 	float color[3], alfa;
 
 	material = this->getMaterial();
@@ -199,7 +199,7 @@ void CIvfExtrusion::setSpineSize(int size)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setSectionSize(int size)
+void CExtrusion::setSectionSize(int size)
 {
 	// Delete previous section/normal arrays
 
@@ -224,18 +224,18 @@ void CIvfExtrusion::setSectionSize(int size)
 	m_selectSectionNormals = new gleDouble[m_sectionSize][2];
 }
 
-int CIvfExtrusion::getSpineSize()
+int CExtrusion::getSpineSize()
 {
 	return m_spineSize;
 }
 
-int CIvfExtrusion::getSectionSize()
+int CExtrusion::getSectionSize()
 {
 	return m_sectionSize;
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setSectionCoord(int pos, double x, double y)
+void CExtrusion::setSectionCoord(int pos, double x, double y)
 {
 	if (m_sectionCoords!=NULL)
 	{
@@ -250,7 +250,7 @@ void CIvfExtrusion::setSectionCoord(int pos, double x, double y)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setSectionNormal(int pos, double x, double y)
+void CExtrusion::setSectionNormal(int pos, double x, double y)
 {
 	if (m_sectionNormals!=NULL)
 	{
@@ -265,7 +265,7 @@ void CIvfExtrusion::setSectionNormal(int pos, double x, double y)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setSpineCoord(int pos, double x, double y, double z)
+void CExtrusion::setSpineCoord(int pos, double x, double y, double z)
 {
 	if (m_spineCoords!=NULL)
 	{
@@ -279,7 +279,7 @@ void CIvfExtrusion::setSpineCoord(int pos, double x, double y, double z)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::getSectionCoord(int pos, double &x, double &y)
+void CExtrusion::getSectionCoord(int pos, double &x, double &y)
 {
 	if (m_sectionCoords!=NULL)
 	{
@@ -292,7 +292,7 @@ void CIvfExtrusion::getSectionCoord(int pos, double &x, double &y)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::getSectionNormal(int pos, double &x, double &y)
+void CExtrusion::getSectionNormal(int pos, double &x, double &y)
 {
 	if (m_sectionNormals!=NULL)
 	{
@@ -305,7 +305,7 @@ void CIvfExtrusion::getSectionNormal(int pos, double &x, double &y)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::getSpineCoord(int pos, double &x, double &y, double &z)
+void CExtrusion::getSpineCoord(int pos, double &x, double &y, double &z)
 {
 	if (m_spineCoords!=NULL)
 	{
@@ -319,7 +319,7 @@ void CIvfExtrusion::getSpineCoord(int pos, double &x, double &y, double &z)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setSpineColor(int pos, float red, float green, float blue)
+void CExtrusion::setSpineColor(int pos, float red, float green, float blue)
 {
 	if (m_spineColors!=NULL)
 	{
@@ -333,7 +333,7 @@ void CIvfExtrusion::setSpineColor(int pos, float red, float green, float blue)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::getSpineColor(int pos, float &red, float &green, float &blue)
+void CExtrusion::getSpineColor(int pos, float &red, float &green, float &blue)
 {
 	if (m_spineColors!=NULL)
 	{
@@ -347,20 +347,20 @@ void CIvfExtrusion::getSpineColor(int pos, float &red, float &green, float &blue
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setUseColor(bool flag)
+void CExtrusion::setUseColor(bool flag)
 {
 	m_useColors = flag;
 }
 
 // ------------------------------------------------------------
-bool CIvfExtrusion::getUseColor()
+bool CExtrusion::getUseColor()
 {
 	return m_useColors;
 }
 
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setUpVector(double x, double y, double z)
+void CExtrusion::setUpVector(double x, double y, double z)
 {
 	m_upVector[0] = x;
 	m_upVector[1] = y;
@@ -368,7 +368,7 @@ void CIvfExtrusion::setUpVector(double x, double y, double z)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::doCreateSelect()
+void CExtrusion::doCreateSelect()
 {
     gleTextureMode(m_textureMode);
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
@@ -421,20 +421,20 @@ void CIvfExtrusion::doCreateSelect()
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setSelectScale(double scale)
+void CExtrusion::setSelectScale(double scale)
 {
 	m_selectScale = scale;
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setTextureMode(int mode)
+void CExtrusion::setTextureMode(int mode)
 {
     m_textureMode = mode;
 	gleTextureMode(mode);
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setUseTwist(bool flag)
+void CExtrusion::setUseTwist(bool flag)
 {
 	m_useTwist = flag;
 	if (m_spineCoords!=NULL)
@@ -459,13 +459,13 @@ void CIvfExtrusion::setUseTwist(bool flag)
 }
 
 // ------------------------------------------------------------
-bool CIvfExtrusion::getUseTwist()
+bool CExtrusion::getUseTwist()
 {
 	return m_useTwist;
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::setSpineTwist(int pos, double twist)
+void CExtrusion::setSpineTwist(int pos, double twist)
 {
 	if (m_twist!=NULL)
 	{
@@ -477,7 +477,7 @@ void CIvfExtrusion::setSpineTwist(int pos, double twist)
 }
 
 // ------------------------------------------------------------
-void CIvfExtrusion::getSpineTwist(int pos, double &twist)
+void CExtrusion::getSpineTwist(int pos, double &twist)
 {
 	if (m_twist!=NULL)
 	{
@@ -488,18 +488,18 @@ void CIvfExtrusion::getSpineTwist(int pos, double &twist)
 	}
 }
 
-void CIvfExtrusion::setStartEnd(int startIdx, int endIdx)
+void CExtrusion::setStartEnd(int startIdx, int endIdx)
 {
 	m_spineStart = startIdx;
 	m_spineEnd = endIdx;
 }
 
-void CIvfExtrusion::setJoinStyle(int style)
+void CExtrusion::setJoinStyle(int style)
 {
 	ivfSetGLEJoinStyle(style);
 }
 
-void CIvfExtrusion::doUpdateBoundingSphere()
+void CExtrusion::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{

@@ -24,33 +24,33 @@
 #include <ivf/IvfAxis.h>
 
 // ------------------------------------------------------------
-CIvfAxis::CIvfAxis ()
-		:CIvfComposite()
+CAxis::CAxis ()
+		:CComposite()
 		//TODO: check and complete member initialisation list!
 {
 	m_axisType = IVF_AXIS_STD;
-	m_xArrow = new CIvfArrow();
-	m_yArrow = new CIvfArrow();
-	m_zArrow = new CIvfArrow();
+	m_xArrow = new CArrow();
+	m_yArrow = new CArrow();
+	m_zArrow = new CArrow();
 
 	this->setSize(1.0);
 
 	m_xArrow->setRotationQuat(0.0, 0.0, 1.0, -90.0);
 	m_zArrow->setRotationQuat(1.0, 0.0, 0.0, 90.0);
 
-	m_xMaterial = new CIvfMaterial();
+	m_xMaterial = new CMaterial();
 	m_xMaterial->setSpecularColor(1.0, 1.0, 1.0, 1.0);
 	m_xMaterial->setDiffuseColor(1.0, 0.0, 0.0, 1.0);
 	m_xMaterial->setAmbientColor(0.5, 0.0, 0.0, 1.0);
 	m_xArrow->setMaterial(m_xMaterial);
 
-	m_yMaterial = new CIvfMaterial();
+	m_yMaterial = new CMaterial();
 	m_yMaterial->setSpecularColor(1.0, 1.0, 1.0, 1.0);
 	m_yMaterial->setDiffuseColor(0.0, 1.0, 0.0, 1.0);
 	m_yMaterial->setAmbientColor(0.0, 0.5, 0.0, 1.0);
 	m_yArrow->setMaterial(m_yMaterial);
 
-	m_zMaterial = new CIvfMaterial();
+	m_zMaterial = new CMaterial();
 	m_zMaterial->setSpecularColor(1.0, 1.0, 1.0, 1.0);
 	m_zMaterial->setDiffuseColor(0.0, 0.0, 1.0, 1.0);
 	m_zMaterial->setAmbientColor(0.0, 0.0, 0.5, 1.0);
@@ -62,12 +62,12 @@ CIvfAxis::CIvfAxis ()
 }
 
 // ------------------------------------------------------------
-CIvfAxis::~CIvfAxis ()
+CAxis::~CAxis ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfAxis::setAxisType(int type)
+void CAxis::setAxisType(int type)
 {
 	m_axisType = type;
 
@@ -89,7 +89,7 @@ void CIvfAxis::setAxisType(int type)
 
 
 // ------------------------------------------------------------
-void CIvfAxis::setSize(double size)
+void CAxis::setSize(double size)
 {
 	m_size = size;
 	m_xArrow->setPosition(size/2.0, 0.0, 0.0);
@@ -105,7 +105,7 @@ void CIvfAxis::setSize(double size)
 }
 
 // ------------------------------------------------------------
-void CIvfAxis::setArrowMaterial(CIvfMaterial *material)
+void CAxis::setArrowMaterial(CMaterial *material)
 {
 	m_xArrow->setMaterial(material);
 	m_yArrow->setMaterial(material);

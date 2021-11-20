@@ -33,22 +33,22 @@
 #include <ivfgle/IvfGleColorArray.h>
 #include <ivfgle/IvfGleContour.h>
 
-IvfSmartPointer(CIvfGleSpiral);
+IvfSmartPointer(CGleSpiral);
 
-class IVFGLE_API CIvfGleSpiral: public CIvfShape {
+class IVFGLE_API CGleSpiral: public CShape {
 private:
-	CIvfGleContourPtr	 m_contour;
+	CGleContourPtr	 m_contour;
 	gleDouble			 m_up[3];
 	gleDouble			 m_startXfm[2][3];
 	gleDouble			 m_xfmTheta[2][3];
 public:
-	CIvfGleSpiral();
+	CGleSpiral();
 
-	IvfClassInfo("CIvfGleSpiral", CIvfShape);
+	IvfClassInfo("CGleSpiral", CShape);
 
-	void setContour(CIvfGleContour* contour);
+	void setContour(CGleContour* contour);
 	void setContourUp(double vx, double vy, double vz);
-	void setContourUp(CIvfVec3d& vec);
+	void setContourUp(CVec3d& vec);
 protected:
 	virtual void doCreateGeometry();
 };

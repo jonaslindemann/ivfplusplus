@@ -31,9 +31,9 @@
 
 #include <ivf/IvfTransform.h>
 
-IvfSmartPointer(CIvfUIButton);
+IvfSmartPointer(CUIButton);
 
-class IVF3DUI_API CIvfUIButton : public CIvfUIButtonBase {
+class IVF3DUI_API CUIButton : public CUIButtonBase {
 public:
 	enum TVisualAction {
 		VA_SCALED,
@@ -42,39 +42,39 @@ public:
 	};
 private:
 	TVisualAction m_visualAction;
-	CIvfVec3d m_movementDirection;
-	CIvfVec3d m_originalPosition;
+	CVec3d m_movementDirection;
+	CVec3d m_originalPosition;
 	double m_movementDistance;
 
-	CIvfShapePtr m_upShape;
-	CIvfShapePtr m_downShape;
-	CIvfShapePtr m_shape;
+	CShapePtr m_upShape;
+	CShapePtr m_downShape;
+	CShapePtr m_shape;
 
-	CIvfTransformPtr m_movementXfm;
+	CTransformPtr m_movementXfm;
 
 	void visualUp();
 	void visualDown();
 	void visualRestore();
 
 public:
-	CIvfUIButton();
-	virtual ~CIvfUIButton();
+	CUIButton();
+	virtual ~CUIButton();
 
-	IvfClassInfo("CIvfUIButton",CIvfUIButtonBase);
+	IvfClassInfo("CUIButton",CUIButtonBase);
 
-	void setDownShape(CIvfShape* shape);
-	void setUpShape(CIvfShape* shape);
-	void setShape(CIvfShape* shape);
-	void setMovementDirection(CIvfVec3d vec);
+	void setDownShape(CShape* shape);
+	void setUpShape(CShape* shape);
+	void setShape(CShape* shape);
+	void setMovementDirection(CVec3d vec);
 	void setVisualAction(TVisualAction action);
 	double getMovementDistance();
 	void setMovementDistance(double dist);
 	void setMovementDirection(double vx, double vy, double vz);
 
-	virtual void doControlLeave(CIvfVec3d vec);
-	virtual void doControlOver(CIvfVec3d vec);
-	virtual void doControlDown(CIvfVec3d vec, int button);
-	virtual void doControlUp(CIvfVec3d vec);
+	virtual void doControlLeave(CVec3d vec);
+	virtual void doControlOver(CVec3d vec);
+	virtual void doControlDown(CVec3d vec, int button);
+	virtual void doControlUp(CVec3d vec);
 
 	virtual void doStateChange();
 };

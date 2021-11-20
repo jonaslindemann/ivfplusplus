@@ -24,32 +24,32 @@
 
 #include <ivfimage/IvfFileImage.h>
 
-CIvfFileImage::CIvfFileImage()
+CFileImage::CFileImage()
 {
 	m_fileName = "";
 }
 
-CIvfFileImage::CIvfFileImage(const std::string& name)
+CFileImage::CFileImage(const std::string& name)
 {
 	m_fileName = name;
 }
 
-CIvfFileImage::~CIvfFileImage()
+CFileImage::~CFileImage()
 {
 
 }
 
-void CIvfFileImage::setFileName(const std::string& name)
+void CFileImage::setFileName(const std::string& name)
 {
     m_fileName = name;
 }
 
-const std::string CIvfFileImage::getFileName()
+const std::string CFileImage::getFileName()
 {
 	return m_fileName;
 }
 
-bool CIvfFileImage::read()
+bool CFileImage::read()
 {
 	return true;
 }

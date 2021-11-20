@@ -32,17 +32,17 @@
 #endif
 #endif
 
-CIvfPngImage::CIvfPngImage()
+CPngImage::CPngImage()
 {
 
 }
 
-CIvfPngImage::~CIvfPngImage()
+CPngImage::~CPngImage()
 {
 
 }
 
-bool CIvfPngImage::read()
+bool CPngImage::read()
 {
 #ifdef IVF_HAVE_PNG
 

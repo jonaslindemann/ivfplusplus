@@ -21,8 +21,8 @@
 // Comments and suggestions to jonas.lindemann@byggmek.lth.se
 //
 
-#ifndef _CIvfCustomWidget_h_
-#define _CIvfCustomWidget_h_
+#ifndef _CCustomWidget_h_
+#define _CCustomWidget_h_
 
 #include <ivf/ivfconfig.h>
 
@@ -57,11 +57,11 @@
 #include <FL/Fl_Slider.H>
 #include <FL/Fl_Output.H>
 
-class CIvfCustomWidget : public CIvfFltkBase,
-	CIvfInitEvent,
-	CIvfKeyboardEvent,
-	CIvfTimeoutEvent,
-	CIvfClearEvent {
+class CCustomWidget : public CFltkBase,
+	CInitEvent,
+	CKeyboardEvent,
+	CTimeoutEvent,
+	CClearEvent {
 public:
 	enum TStereoMode {
 		SM_NONE,
@@ -87,35 +87,35 @@ private:
 	int								m_count;
 	int								m_renderingInterval;
 
-	CIvfCompositePtr				m_connections;
-	CIvfMaterialPtr					m_currentMaterial;
-	CIvfWireBrickPtr				m_origBox;
-	CIvfTexturePtr					m_fibreTexture;
-	CIvfLineSetPtr					m_boundingVolume;
+	CCompositePtr				m_connections;
+	CMaterialPtr					m_currentMaterial;
+	CWireBrickPtr				m_origBox;
+	CTexturePtr					m_fibreTexture;
+	CLineSetPtr					m_boundingVolume;
 
-	CIvfCameraPtr					m_camera;
-	CIvfLightPtr					m_light;
-	CIvfScenePtr					m_scene;
-	CIvfMouseViewHandlerPtr			m_mouseViewHandler;
-	CIvfFlyHandlerPtr				m_flyHandler;
-	CIvfSceneHandlerPtr				m_sceneHandler;
+	CCameraPtr					m_camera;
+	CLightPtr					m_light;
+	CScenePtr					m_scene;
+	CMouseViewHandlerPtr			m_mouseViewHandler;
+	CFlyHandlerPtr				m_flyHandler;
+	CSceneHandlerPtr				m_sceneHandler;
 
-	CIvfLightingPtr					m_lighting;
-	CIvfFogPtr						m_fog;
-	CIvfPixelOpsPtr					m_pixelOps;
-	CIvfBlendingPtr					m_blending;
+	CLightingPtr					m_lighting;
+	CFogPtr						m_fog;
+	CPixelOpsPtr					m_pixelOps;
+	CBlendingPtr					m_blending;
 
-	CIvfFibreCompositePtr			m_fibres;
-	CIvfMultiplyPtr					m_multiply;
+	CFibreCompositePtr			m_fibres;
+	CMultiplyPtr					m_multiply;
 
-	CIvfDiscreteTimePtr				m_discreteTime;
-	CIvfUserSettingsPtr				m_userSettings;
+	CDiscreteTimePtr				m_discreteTime;
+	CUserSettingsPtr				m_userSettings;
 
-	CIvfHighlightRendererPtr		m_highlightRenderer;
+	CHighlightRendererPtr		m_highlightRenderer;
 	
-	std::vector<CIvfMaterialPtr>	m_meshMaterials;
+	std::vector<CMaterialPtr>	m_meshMaterials;
 	
-	CIvfColorMapPtr					m_colorMap;
+	CColorMapPtr					m_colorMap;
 
 	std::vector<double>				m_sigX;
 	std::vector<double>				m_epsX;
@@ -143,7 +143,7 @@ private:
 
 public:
 		void setExtrusionTextureMode(int mode);
-	CIvfCustomWidget(int X, int Y, int W, int H, const char *L=0);
+	CCustomWidget(int X, int Y, int W, int H, const char *L=0);
 	
 	// Implemented widget methods
 

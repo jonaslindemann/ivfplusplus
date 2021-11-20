@@ -21,7 +21,7 @@
 
 #include <ivfctl/IvfController.h>
 
-CIvfController::CIvfController()
+CController::CController()
 {
 	m_active = false;
 	m_controlledShape = NULL;
@@ -30,7 +30,7 @@ CIvfController::CIvfController()
 	m_light = NULL;
 }
 
-CIvfController::~CIvfController()
+CController::~CController()
 {
 	if (m_startAction!=NULL)
 	{
@@ -47,24 +47,24 @@ CIvfController::~CIvfController()
 	}
 }
 
-void CIvfController::activate()
+void CController::activate()
 {
 	m_active = true;
 	doActivate();
 }
 
-void CIvfController::deactivate()
+void CController::deactivate()
 {
 	m_active = false;
 	doDeactivate();
 }
 
-bool CIvfController::isActive()
+bool CController::isActive()
 {
 	return m_active;
 }
 
-void CIvfController::setShape(CIvfShape *shape)
+void CController::setShape(CShape *shape)
 {
 	m_controlledShape = shape;
 
@@ -96,12 +96,12 @@ void CIvfController::setShape(CIvfShape *shape)
 	);
 }
 
-CIvfShape* CIvfController::getShape()
+CShape* CController::getShape()
 {
 	return m_controlledShape;
 }
 
-void CIvfController::reset()
+void CController::reset()
 {
 	if (m_controlledShape!=NULL)
 	{
@@ -146,30 +146,30 @@ void CIvfController::reset()
 	doReset();
 }
 
-void CIvfController::update(double dt)
+void CController::update(double dt)
 {
 	if (m_active)
 		doUpdate(dt);
 }
 
-void CIvfController::doUpdate(double dt)
+void CController::doUpdate(double dt)
 {
 
 }
 
-void CIvfController::doReset()
+void CController::doReset()
 {
 
 }
 
-void CIvfController::action(CIvfAction* action)
+void CController::action(CAction* action)
 {
 	this->doAction(action);
 }
 
-void CIvfController::doAction(CIvfAction* action)
+void CController::doAction(CAction* action)
 {
-	CIvfController* target = action->getTarget();
+	CController* target = action->getTarget();
 	if ((target==this)||(target==NULL))
 	{
 		switch (action->getActionType()) {
@@ -188,17 +188,17 @@ void CIvfController::doAction(CIvfAction* action)
 	}
 }
 
-void CIvfController::doActivate()
+void CController::doActivate()
 {
 
 }
 
-void CIvfController::doDeactivate()
+void CController::doDeactivate()
 {
 
 }
 
-void CIvfController::setStartAction(CIvfAction *action)
+void CController::setStartAction(CAction *action)
 {
 	if (m_startAction!=NULL)
 	{
@@ -210,7 +210,7 @@ void CIvfController::setStartAction(CIvfAction *action)
 	m_startAction->addReference();
 }
 
-void CIvfController::setEndAction(CIvfAction *action)
+void CController::setEndAction(CAction *action)
 {
 	if (m_endAction!=NULL)
 	{
@@ -222,30 +222,30 @@ void CIvfController::setEndAction(CIvfAction *action)
 	m_endAction->addReference();
 }
 
-void CIvfController::doStartAction()
+void CController::doStartAction()
 {
 	if (m_startAction!=NULL)
 	{
-		CIvfController* target = m_startAction->getTarget();
+		CController* target = m_startAction->getTarget();
 		target->action(m_startAction);
 	}
 }
 
-void CIvfController::doEndAction()
+void CController::doEndAction()
 {
 	if (m_endAction!=NULL)
 	{
-		CIvfController* target = m_endAction->getTarget();
+		CController* target = m_endAction->getTarget();
 		target->action(m_endAction);
 	}
 }
 
-void CIvfController::setLight(CIvfLight *light)
+void CController::setLight(CLight *light)
 {
 	m_light = light;
 }
 
-CIvfLight* CIvfController::getLight()
+CLight* CController::getLight()
 {
 	return m_light;
 }

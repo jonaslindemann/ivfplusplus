@@ -26,8 +26,8 @@
 #include <ivf/IvfCoordinateSystem.h>
 
 // ------------------------------------------------------------
-CIvfCoordinateSystem::CIvfCoordinateSystem ()
-  : CIvfComposite()
+CCoordinateSystem::CCoordinateSystem ()
+  : CComposite()
 {
 	//setClassName("CIvfCoordinateSystem");
 	m_vx = 0.0;
@@ -43,11 +43,11 @@ CIvfCoordinateSystem::CIvfCoordinateSystem ()
 	//  	m_pointTransformed.SetSize(4,1);
 
 	/*
-	m_grid = new CIvfOldGrid();
+	m_grid = new COldGrid();
 	m_axis = new CIvfAxis();
 	*/
 
-	m_grid = new CIvfGrid();
+	m_grid = new CGrid();
 
 	setSnapUnit(1.0);
 	addChild(m_grid);
@@ -56,12 +56,12 @@ CIvfCoordinateSystem::CIvfCoordinateSystem ()
 }
 
 // ------------------------------------------------------------
-CIvfCoordinateSystem::~CIvfCoordinateSystem ()
+CCoordinateSystem::~CCoordinateSystem ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::setRotation(double vx, double vy, double vz, double theta)
+void CCoordinateSystem::setRotation(double vx, double vy, double vz, double theta)
 {
 	m_vx = vx;
 	m_vy = vy;
@@ -73,7 +73,7 @@ void CIvfCoordinateSystem::setRotation(double vx, double vy, double vz, double t
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::setTranslation(double tx, double ty, double tz)
+void CCoordinateSystem::setTranslation(double tx, double ty, double tz)
 {
 	m_tx = tx;
 	m_ty = ty;
@@ -84,7 +84,7 @@ void CIvfCoordinateSystem::setTranslation(double tx, double ty, double tz)
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::getRotation(double & vx, double & vy, double & vz, double & theta)
+void CCoordinateSystem::getRotation(double & vx, double & vy, double & vz, double & theta)
 {
 	vx = m_vx;
 	vy = m_vy;
@@ -93,7 +93,7 @@ void CIvfCoordinateSystem::getRotation(double & vx, double & vy, double & vz, do
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::getTranslation(double & tx, double & ty, double & tz)
+void CCoordinateSystem::getTranslation(double & tx, double & ty, double & tz)
 {
 	tx = m_tx;
 	ty = m_ty;
@@ -101,7 +101,7 @@ void CIvfCoordinateSystem::getTranslation(double & tx, double & ty, double & tz)
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::transform(double wx, double wy, double wz, double & sx, double & sy, double & sz)
+void CCoordinateSystem::transform(double wx, double wy, double wz, double & sx, double & sy, double & sz)
 {
 	m_pointWorld.setComponents(wx-m_tx, wy-m_ty, wz-m_tz, 1.0);
 	m_pointTransformed = m_transformationMatrix * m_pointWorld;
@@ -109,7 +109,7 @@ void CIvfCoordinateSystem::transform(double wx, double wy, double wz, double & s
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::calcMatrix()
+void CCoordinateSystem::calcMatrix()
 {
 	double x, y, z;
 
@@ -128,7 +128,7 @@ void CIvfCoordinateSystem::calcMatrix()
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::transformWorld(double sx, double sy, double sz, double & wx, double & wy, double & wz)
+void CCoordinateSystem::transformWorld(double sx, double sy, double sz, double & wx, double & wy, double & wz)
 {
 	m_pointTransformed.setComponents(sx, sy, sz, 1.0);
 	m_pointWorld = m_inversionMatrix * m_pointTransformed;
@@ -139,7 +139,7 @@ void CIvfCoordinateSystem::transformWorld(double sx, double sy, double sz, doubl
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::intersect(double x0, double y0, double z0, double i, double j, double k, double &x, double &y, double &z)
+void CCoordinateSystem::intersect(double x0, double y0, double z0, double i, double j, double k, double &x, double &y, double &z)
 {
 	double a, b, c, d;
 	double t;
@@ -158,13 +158,13 @@ void CIvfCoordinateSystem::intersect(double x0, double y0, double z0, double i, 
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::alignShape(CIvfShape * shape)
+void CCoordinateSystem::alignShape(CShape * shape)
 {
 	shape->setRotationQuat(m_vx, m_vy, m_vz, m_theta);
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::setSnapUnit(double unit)
+void CCoordinateSystem::setSnapUnit(double unit)
 {
 	m_snapUnit = unit;
 
@@ -176,13 +176,13 @@ void CIvfCoordinateSystem::setSnapUnit(double unit)
 }
 
 // ------------------------------------------------------------
-double CIvfCoordinateSystem::getSnapUnit()
+double CCoordinateSystem::getSnapUnit()
 {
 	return m_snapUnit;
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::snap(double & x, double & y, double & z)
+void CCoordinateSystem::snap(double & x, double & y, double & z)
 {
 	if (x>0)
 		x = (double)((long)((x + (m_snapUnit/2)) / m_snapUnit) * m_snapUnit);
@@ -201,7 +201,7 @@ void CIvfCoordinateSystem::snap(double & x, double & y, double & z)
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::transform(CIvfPoint3d * point)
+void CCoordinateSystem::transform(CPoint3d * point)
 {
 	double x, y, z;
 	point->getComponents(x, y, z);
@@ -210,7 +210,7 @@ void CIvfCoordinateSystem::transform(CIvfPoint3d * point)
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::transformWorld(CIvfPoint3d * point)
+void CCoordinateSystem::transformWorld(CPoint3d * point)
 {
 	double x, y, z;
 	point->getComponents(x, y, z);
@@ -219,19 +219,19 @@ void CIvfCoordinateSystem::transformWorld(CIvfPoint3d * point)
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::setDrawSubDivision(bool flag)
+void CCoordinateSystem::setDrawSubDivision(bool flag)
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::setAxisType(int type)
+void CCoordinateSystem::setAxisType(int type)
 {
 	//m_axis->setAxisType(type);
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::setWorkspace(double size)
+void CCoordinateSystem::setWorkspace(double size)
 {
 	m_snapUnit = size/200.0;
 
@@ -247,30 +247,30 @@ void CIvfCoordinateSystem::setWorkspace(double size)
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::setGridState(TObjectState state)
+void CCoordinateSystem::setGridState(TObjectState state)
 {
 	m_grid->setState(state);
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::setAxisState(TObjectState state)
+void CCoordinateSystem::setAxisState(TObjectState state)
 {
 	//m_axis->setState(state);
 }
 
 // ------------------------------------------------------------
-void CIvfCoordinateSystem::setTempYTranslation(double value)
+void CCoordinateSystem::setTempYTranslation(double value)
 {
 	m_tempYTranslation = value;	
 }
 
 // ------------------------------------------------------------
-CIvfAxis* CIvfCoordinateSystem::getAxisShape()
+CAxis* CCoordinateSystem::getAxisShape()
 {
 	return m_grid->getAxisShape();
 }
 
-CIvfGrid* CIvfCoordinateSystem::getGrid()
+CGrid* CCoordinateSystem::getGrid()
 {
 	return m_grid;
 }

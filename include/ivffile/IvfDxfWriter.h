@@ -28,19 +28,19 @@
 #include <ivffile/IvfFileWriter.h>
 #include <ivfmath/IvfMatrixStack.h>
 
-IvfSmartPointer(CIvfDxfWriter);
+IvfSmartPointer(CDxfWriter);
 
 /**
 * File export base class
 */
-class IVFFILE_API CIvfDxfWriter : public CIvfFileWriter {
+class IVFFILE_API CDxfWriter : public CFileWriter {
 private:
 	std::fstream m_file;
-	CIvfMatrixStackPtr m_matrixStack;
+	CMatrixStackPtr m_matrixStack;
 	std::string m_currentLayer;
 	int m_currentColor;
 protected:
-	void processShape(CIvfShape* shape);
+	void processShape(CShape* shape);
 
 	void dxfTag(int number, const std::string& value);
 	void dxfInt(int number, int value);
@@ -95,12 +95,12 @@ protected:
 	void setCurrentLayer(const std::string& layerName);
 	void setCurrentColor(int color);
 public:
-	CIvfDxfWriter();
-	virtual ~CIvfDxfWriter();
+	CDxfWriter();
+	virtual ~CDxfWriter();
 
 	void write();
 
-	IvfClassInfo("CIvfDxfWriter",CIvfFileWriter);
+	IvfClassInfo("CDxfWriter",CFileWriter);
 };
 
 #endif

@@ -24,12 +24,12 @@
 
 #include <ivfgle/IvfGleTwistExtrusion.h>
 
-CIvfGleTwistExtrusion::CIvfGleTwistExtrusion()
+CGleTwistExtrusion::CGleTwistExtrusion()
 {
 	// Add construction code here
 }
 
-void CIvfGleTwistExtrusion::doCreateGeometry()
+void CGleTwistExtrusion::doCreateGeometry()
 {
 	if (m_contour==NULL)
 		return;
@@ -93,29 +93,29 @@ void CIvfGleTwistExtrusion::doCreateGeometry()
 	}
 }
 
-void CIvfGleTwistExtrusion::setPoints(CIvfGleCoordArray *array)
+void CGleTwistExtrusion::setPoints(CGleCoordArray *array)
 {
 	m_pointArray = array;
 }
 
-void CIvfGleTwistExtrusion::setColors(CIvfGleColorArray *array)
+void CGleTwistExtrusion::setColors(CGleColorArray *array)
 {
 	m_colorArray = array;
 }
 
-void CIvfGleTwistExtrusion::setContour(CIvfGleContour *contour)
+void CGleTwistExtrusion::setContour(CGleContour *contour)
 {
 	m_contour = contour;
 }
 
-void CIvfGleTwistExtrusion::setContourUp(double vx, double vy, double vz)
+void CGleTwistExtrusion::setContourUp(double vx, double vy, double vz)
 {
 	m_up[0] = vx;
 	m_up[1] = vy;
 	m_up[2] = vz;
 }
 
-void CIvfGleTwistExtrusion::setContourUp(CIvfVec3d &vec)
+void CGleTwistExtrusion::setContourUp(CVec3d &vec)
 {
 	double vx, vy, vz;
 	vec.getComponents(vx, vy, vz);
@@ -125,7 +125,7 @@ void CIvfGleTwistExtrusion::setContourUp(CIvfVec3d &vec)
 
 }
 
-void CIvfGleTwistExtrusion::setTwist(CIvfGleScalarArray *array)
+void CGleTwistExtrusion::setTwist(CGleScalarArray *array)
 {
 	m_twistArray = array;
 }

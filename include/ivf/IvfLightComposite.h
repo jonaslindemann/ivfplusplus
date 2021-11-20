@@ -28,25 +28,25 @@
 #include <ivf/IvfComposite.h>
 #include <ivf/IvfOldLight.h>
 
-IvfSmartPointer(CIvfLightComposite);
+IvfSmartPointer(CLightComposite);
 
 /**
  * Composite class with attached light
  *
  * Implements a composite that has a light
- * attached to it. OBSOLETE see CIvfLight
+ * attached to it. OBSOLETE see CLight
  */
-class IVF_API CIvfLightComposite : public CIvfComposite {
+class IVF_API CLightComposite : public CComposite {
 private:
-	CIvfOldLight* m_light;
+	COldLight* m_light;
 public:
-	CIvfLightComposite();
+	CLightComposite();
 
-	virtual ~CIvfLightComposite();
+	virtual ~CLightComposite();
 
-	IvfClassInfo("CIvfLightComposite",CIvfComposite);
+	IvfClassInfo("CLightComposite",CComposite);
 
-	void setLight(CIvfOldLight* light);
+	void setLight(COldLight* light);
 
 protected:
 	virtual void doCreateGeometry();

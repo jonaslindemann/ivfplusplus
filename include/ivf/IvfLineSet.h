@@ -27,7 +27,7 @@
 
 #include <ivf/IvfGLPrimitive.h>
 
-IvfSmartPointer(CIvfLineSet);
+IvfSmartPointer(CLineSet);
 
 /**
  * LineSet class
@@ -36,7 +36,7 @@ IvfSmartPointer(CIvfLineSet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfLineSet : public CIvfGLPrimitive {
+class IVF_API CLineSet : public CGLPrimitive {
 private:
 	bool m_useColor;
 	bool m_useAlpha;
@@ -44,13 +44,13 @@ private:
 protected:
 	virtual void doCreateGeometry();
 public:
-	/** CIvfLineSet constructor */
-	CIvfLineSet();
+	/** CLineSet constructor */
+	CLineSet();
 
-	/** CIvfLineSet destructor */
-	virtual ~CIvfLineSet();
+	/** CLineSet destructor */
+	virtual ~CLineSet();
 
-	IvfClassInfo("CIvfLineSet",CIvfGLPrimitive);
+	IvfClassInfo("CLineSet",CGLPrimitive);
 
 	/** Enable usage of color set */
 	void setUseColor(bool flag);

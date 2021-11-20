@@ -27,24 +27,24 @@
 
 #include <ivf/IvfWireBrick.h>
 
-IvfSmartPointer(CIvfSelectionBox);
+IvfSmartPointer(CSelectionBox);
 
 /**
  * Selection box class
  *
- * CIvfSelectionBox implements a selection box
+ * CSelectionBox implements a selection box
  * used to mark objects as selected.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfSelectionBox : public CIvfWireBrick {
+class IVF_API CSelectionBox : public CWireBrick {
 public:
-	/** CIvfSelectionBox constructor */
-	CIvfSelectionBox ();
+	/** CSelectionBox constructor */
+	CSelectionBox ();
 
-	/** CIvfSelectionBox destructor */
-	virtual ~CIvfSelectionBox ();
+	/** CSelectionBox destructor */
+	virtual ~CSelectionBox ();
 
-	IvfClassInfo("CIvfSelectionBox",CIvfWireBrick);
+	IvfClassInfo("CSelectionBox",CWireBrick);
 protected:
 	virtual void doCreateGeometry();
 private:

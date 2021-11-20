@@ -27,20 +27,20 @@
 
 #include <ivffile/IvfFileBase.h>
 
-IvfSmartPointer(CIvfFileWriter);
+IvfSmartPointer(CFileWriter);
 
 /**
  * File export base class
  */
-class IVFFILE_API CIvfFileWriter : public CIvfFileBase {
+class IVFFILE_API CFileWriter : public CFileBase {
 private:
 
 public:
 	void write();
-	CIvfFileWriter();
-	virtual ~CIvfFileWriter();
+	CFileWriter();
+	virtual ~CFileWriter();
 
-	IvfClassInfo("CIvfFileWriter",CIvfFileBase);
+	IvfClassInfo("CFileWriter",CFileBase);
 };
 
 #endif 

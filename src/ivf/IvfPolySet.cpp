@@ -22,22 +22,22 @@
 #include <ivf/IvfPolySet.h>
 #include <ivf/IvfGlobalState.h>
 
-CIvfPolySet::CIvfPolySet()
+CPolySet::CPolySet()
 {
 	m_useColor = false;
 }
 
-CIvfPolySet::~CIvfPolySet()
+CPolySet::~CPolySet()
 {
 
 }
 
-void CIvfPolySet::doCreateGeometry()
+void CPolySet::doCreateGeometry()
 {
-	CIvfIndex* coordIdx;
-	CIvfIndex* colorIdx;
-	CIvfIndex* normalIdx;
-	CIvfIndex* textureIdx;
+	CIndex* coordIdx;
+	CIndex* colorIdx;
+	CIndex* normalIdx;
+	CIndex* textureIdx;
 	int topoHop = 4;
 
 	long i, j;
@@ -52,10 +52,10 @@ void CIvfPolySet::doCreateGeometry()
 	{
 		if (!m_useColor)
 		{
-			if (CIvfGlobalState::getInstance()->isMaterialRenderingEnabled())
+			if (CGlobalState::getInstance()->isMaterialRenderingEnabled())
 			{
 				int idx = this->getMaterialIndex(i);
-				CIvfMaterial* material;
+				CMaterial* material;
 
 				if (idx>=0)
 				{
@@ -154,35 +154,35 @@ void CIvfPolySet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CIvfPolySet::setUseColor(bool flag)
+void CPolySet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CIvfPolySet::getUseColor()
+bool CPolySet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CIvfPolySet::calcNormal(CIvfIndex *idx)
+void CPolySet::calcNormal(CIndex *idx)
 {
 	long i;
-	CIvfVec3d* p1;
-	CIvfVec3d* p2;
-	CIvfVec3d* p3;
-	CIvfVec3d u;
-	CIvfVec3d v;
-	CIvfIndex* normalIdx;
-	CIvfVec3d n;
+	CVec3d* p1;
+	CVec3d* p2;
+	CVec3d* p3;
+	CVec3d u;
+	CVec3d v;
+	CIndex* normalIdx;
+	CVec3d n;
 	//double n[3];
 
-	normalIdx = new CIvfIndex();
+	normalIdx = new CIndex();
 
 	if (idx->getTopology()==IVF_IDX_QUADS)
 	{
 		for (i=0; i<idx->getSize(); i+=4)
 		{
-			CIvfVec3d* normal = new CIvfVec3d();
+			CVec3d* normal = new CVec3d();
 
 			p1 = m_coordSet[idx->getIndex(i)];
 			p2 = m_coordSet[idx->getIndex(i+1)];
@@ -216,7 +216,7 @@ void CIvfPolySet::calcNormal(CIvfIndex *idx)
 	{
 		for (i=0; i<idx->getSize(); i+=3)
 		{
-			CIvfVec3d* normal = new CIvfVec3d();
+			CVec3d* normal = new CVec3d();
 
 			p1 = m_coordSet[idx->getIndex(i)];
 			p2 = m_coordSet[idx->getIndex(i+1)];
@@ -249,12 +249,12 @@ void CIvfPolySet::calcNormal(CIvfIndex *idx)
 }
 
 
-void CIvfPolySet::updateVertexNormals()
+void CPolySet::updateVertexNormals()
 {
 	long i, j;
-	CIvfVec3d* vertexNormal;
-	CIvfVec3d* normal;
-	CIvfVec3d averageNormal;
+	CVec3d* vertexNormal;
+	CVec3d* normal;
+	CVec3d averageNormal;
 	double sx, sy, sz;
 	double nx, ny, nz;
 

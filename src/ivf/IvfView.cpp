@@ -25,30 +25,30 @@
 #include <ivf/ivfconfig.h>
 
 // ------------------------------------------------------------
-CIvfView::CIvfView()
+CView::CView()
 {
 	//setViewPort(0, 0, 640,480);
 	m_selectTransform = true;
 
-	m_viewport = new CIvfViewport();
+	m_viewport = new CViewport();
 	m_viewport->setPosition(0,0);
 	m_viewport->setSize(640,480);
 }
 
 // ------------------------------------------------------------
-CIvfView::~CIvfView()
+CView::~CView()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfView::doBeginTransform()
+void CView::doBeginTransform()
 {
 	this->viewTransform();
 }
 
 // ------------------------------------------------------------
-void CIvfView::initialize()
+void CView::initialize()
 {
 	m_viewport->apply();
 	//glViewport(m_viewX, m_viewY, m_viewWidth, m_viewHeight);
@@ -60,7 +60,7 @@ void CIvfView::initialize()
 }
 
 // ------------------------------------------------------------
-void CIvfView::setViewPort(int width, int height)
+void CView::setViewPort(int width, int height)
 {
 	m_viewport->setSize(width, height);
 
@@ -76,7 +76,7 @@ void CIvfView::setViewPort(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CIvfView::setViewPort(int tx, int ty, int tw, int th)
+void CView::setViewPort(int tx, int ty, int tw, int th)
 {
 	m_viewport->setPosition(tx, ty);
 	m_viewport->setSize(tw, th);
@@ -95,13 +95,13 @@ void CIvfView::setViewPort(int tx, int ty, int tw, int th)
 }
 
 // ------------------------------------------------------------
-double CIvfView::getAspect()
+double CView::getAspect()
 {
 	return m_viewport->getAspect();
 }
 
 // ------------------------------------------------------------
-void CIvfView::initializeSelect(int x, int y, int w, int h)
+void CView::initializeSelect(int x, int y, int w, int h)
 {
 	GLint viewport[4];
 	int viewX, viewY, viewWidth, viewHeight;
@@ -120,7 +120,7 @@ void CIvfView::initializeSelect(int x, int y, int w, int h)
 }
 
 // ------------------------------------------------------------
-void CIvfView::getViewPort(int & w, int & h)
+void CView::getViewPort(int & w, int & h)
 {
 	m_viewport->getSize(w, h);
 	/*
@@ -130,7 +130,7 @@ void CIvfView::getViewPort(int & w, int & h)
 }
 
 // ------------------------------------------------------------
-void CIvfView::getViewPort(int &tx, int &ty, int &tw, int &th)
+void CView::getViewPort(int &tx, int &ty, int &tw, int &th)
 {
 	m_viewport->getPosition(tx, ty);
 	m_viewport->getSize(tw, th);
@@ -149,36 +149,36 @@ void CIvfView::getViewPort(int &tx, int &ty, int &tw, int &th)
 }
 
 // ------------------------------------------------------------
-void CIvfView::projectionTransform()
+void CView::projectionTransform()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfView::viewTransform()
+void CView::viewTransform()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfView::getViewFrustum(CIvfViewFrustum *frustum)
+void CView::getViewFrustum(CViewFrustum *frustum)
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfView::setSelectTransform(bool flag)
+void CView::setSelectTransform(bool flag)
 {
 	m_selectTransform = flag;
 }
 
 // ------------------------------------------------------------
-CIvfViewport* CIvfView::getViewport()
+CViewport* CView::getViewport()
 {
 	return m_viewport;
 }
 
-void CIvfView::setViewport(CIvfViewport *viewport)
+void CView::setViewport(CViewport *viewport)
 {
 	m_viewport = viewport;
 }

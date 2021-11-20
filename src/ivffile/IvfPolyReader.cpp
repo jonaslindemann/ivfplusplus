@@ -45,19 +45,19 @@
 using namespace std;
 
 // ------------------------------------------------------------
-CIvfPolyReader::CIvfPolyReader()
+CPolyReader::CPolyReader()
 {
 }
 
 // ------------------------------------------------------------
-CIvfPolyReader::~CIvfPolyReader()
+CPolyReader::~CPolyReader()
 {
 
 }
 
 
 // ------------------------------------------------------------
-int CIvfPolyReader::getKeyword(string &row)
+int CPolyReader::getKeyword(string &row)
 {
 	if (find("comment", row))
 		return KW_COMMENT;
@@ -75,7 +75,7 @@ int CIvfPolyReader::getKeyword(string &row)
 }
 
 // ------------------------------------------------------------
-int CIvfPolyReader::getDatatype(string &row, int &pos, int &size)
+int CPolyReader::getDatatype(string &row, int &pos, int &size)
 {
 
 	if (findPos("int8", row, pos))
@@ -154,7 +154,7 @@ int CIvfPolyReader::getDatatype(string &row, int &pos, int &size)
 }
 
 // ------------------------------------------------------------
-int CIvfPolyReader::getElementType(string &row)
+int CPolyReader::getElementType(string &row)
 {
 	if (find("face", row))
 		return KW_FACE;
@@ -169,7 +169,7 @@ int CIvfPolyReader::getElementType(string &row)
 }
 
 // ------------------------------------------------------------
-bool CIvfPolyReader::checkHeader(istream &in)
+bool CPolyReader::checkHeader(istream &in)
 {
 	getLine(m_row);
 
@@ -196,7 +196,7 @@ bool CIvfPolyReader::checkHeader(istream &in)
 }
 
 // ------------------------------------------------------------
-bool CIvfPolyReader::parseElement(string &row)
+bool CPolyReader::parseElement(string &row)
 {
 	using namespace std;
 
@@ -246,7 +246,7 @@ bool CIvfPolyReader::parseElement(string &row)
 }
 
 // ------------------------------------------------------------
-bool CIvfPolyReader::parseComment(string &row)
+bool CPolyReader::parseComment(string &row)
 {
 	using namespace std;
 
@@ -256,7 +256,7 @@ bool CIvfPolyReader::parseComment(string &row)
 }
 
 // ------------------------------------------------------------
-bool CIvfPolyReader::parseProperty(string &row)
+bool CPolyReader::parseProperty(string &row)
 {
 	using namespace std;
 
@@ -319,7 +319,7 @@ bool CIvfPolyReader::parseProperty(string &row)
 }
 
 // ------------------------------------------------------------
-bool CIvfPolyReader::parseHeader(istream &in)
+bool CPolyReader::parseHeader(istream &in)
 {
 	bool done;
 	bool error;
@@ -358,7 +358,7 @@ bool CIvfPolyReader::parseHeader(istream &in)
 	return !error;
 }
 
-bool CIvfPolyReader::readVertices(istream &in)
+bool CPolyReader::readVertices(istream &in)
 {
 	int i, j;
 	long ivalue;
@@ -366,7 +366,7 @@ bool CIvfPolyReader::readVertices(istream &in)
 
 	double x, y, z;
 
-	CIvfPolySet* polySet = (CIvfPolySet*) this->getShape();
+	CPolySet* polySet = (CPolySet*) this->getShape();
 
 	cout << "PolyFileReader: Reading vertices." << endl;
 
@@ -410,7 +410,7 @@ bool CIvfPolyReader::readVertices(istream &in)
 	return true;
 }
 
-bool CIvfPolyReader::readFaces(istream &in)
+bool CPolyReader::readFaces(istream &in)
 {
 	int i, j;
 	int nIndices;
@@ -419,8 +419,8 @@ bool CIvfPolyReader::readFaces(istream &in)
 
 	vector<long> indices;
 
-	CIvfPolySet* polySet = (CIvfPolySet*) this->getShape();
-	CIvfIndex* idx = NULL;
+	CPolySet* polySet = (CPolySet*) this->getShape();
+	CIndex* idx = NULL;
 
 	oldIndices = -1;
 
@@ -436,7 +436,7 @@ bool CIvfPolyReader::readFaces(istream &in)
 			if (idx!=NULL)
 				polySet->addCoordIndex(idx);
 
-			idx = new CIvfIndex();
+			idx = new CIndex();
 
 			if (nIndices==3)
 				idx->setTopology(IVF_IDX_TRIANGLES);
@@ -476,18 +476,18 @@ bool CIvfPolyReader::readFaces(istream &in)
 	return true;
 }
 
-bool CIvfPolyReader::readEdges(istream &in)
+bool CPolyReader::readEdges(istream &in)
 {
 	return true;
 }
 
 // ------------------------------------------------------------
-bool CIvfPolyReader::readData(istream &in)
+bool CPolyReader::readData(istream &in)
 {
 	unsigned int i;
 	int elementType;
 
-	CIvfShape* polySet = new CIvfPolySet();
+	CShape* polySet = new CPolySet();
 	this->setShape(polySet);
 
 	for (i=0; i<m_elementOrder.size(); i++)
@@ -515,7 +515,7 @@ bool CIvfPolyReader::readData(istream &in)
 }
 
 // ------------------------------------------------------------
-void CIvfPolyReader::read()
+void CPolyReader::read()
 {
 	// Initiate max min calc
 

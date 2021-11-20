@@ -33,7 +33,7 @@ using namespace std;
 
 IvfSmartPointer(CExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class CExampleWindow: public CGlutBase {
 private:
 
 	// Camera movement state variables
@@ -48,17 +48,17 @@ private:
 	double m_zoomX;
 	double m_zoomY;
 
-	CIvfCameraPtr		m_camera;
-	CIvfCompositePtr	m_scene;
-	CIvfLightPtr		m_light;
-	CIvfLightingPtr		m_lighting;
-	CIvfSpherePtr		m_lightSphere;
+	CCameraPtr		m_camera;
+	CCompositePtr	m_scene;
+	CLightPtr		m_light;
+	CLightingPtr		m_lighting;
+	CSpherePtr		m_lightSphere;
 
-	CIvfVec3d			m_direction;
+	CVec3d			m_direction;
 	double				m_speed;
 public:
 	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+		:CGlutBase(X, Y, W, H) {};
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -96,47 +96,47 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(0.0, 0.0, 9.0);
 	m_camera->setPerspective(60.0, 0.1, 40.0);
 
 	// Create a materials
 
-	CIvfMaterialPtr redMaterial = new CIvfMaterial();
+	CMaterialPtr redMaterial = new CMaterial();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
-	CIvfMaterialPtr greenMaterial = new CIvfMaterial();
+	CMaterialPtr greenMaterial = new CMaterial();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 	
-	CIvfMaterialPtr blueMaterial = new CIvfMaterial();
+	CMaterialPtr blueMaterial = new CMaterial();
 	blueMaterial->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	blueMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	blueMaterial->setAmbientColor(0.0f, 0.0f, 0.5f, 1.0f);
 
-	CIvfMaterialPtr yellowMaterial = new CIvfMaterial();
+	CMaterialPtr yellowMaterial = new CMaterial();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
-	CIvfMaterialPtr whiteMaterial = new CIvfMaterial();
+	CMaterialPtr whiteMaterial = new CMaterial();
 	whiteMaterial->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	whiteMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	whiteMaterial->setAmbientColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// Create scene composite
 
-	m_scene = new CIvfComposite();
+	m_scene = new CComposite();
 
 	// Create a sphere representing the light
 
-	CIvfLightingStatePtr lightState = new CIvfLightingState();
+	CLightingStatePtr lightState = new CLightingState();
 	lightState->setLighting(false);
 
-	m_lightSphere = new CIvfSphere();
+	m_lightSphere = new CSphere();
 	m_lightSphere->setMaterial(whiteMaterial);
 	m_lightSphere->setRadius(0.1);
 	m_lightSphere->setRenderState(lightState);
@@ -145,7 +145,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a sphere in the middle
 
-	CIvfSpherePtr sphere = new CIvfSphere();
+	CSpherePtr sphere = new CSphere();
 	sphere->setRadius(1.0);
 	sphere->setMaterial(redMaterial);
 	sphere->setStacks(12);
@@ -154,8 +154,8 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a room
 
-	CIvfMeshPtr floor = new CIvfMesh();
-	floor->setMeshType(CIvfMesh::MT_ORDER_2);
+	CMeshPtr floor = new CMesh();
+	floor->setMeshType(CMesh::MT_ORDER_2);
 	floor->setMeshResolution(30,30);
 	floor->createMesh(10.0, 10.0);
 	floor->setMaterial(redMaterial);
@@ -163,8 +163,8 @@ void CExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(floor);
 	
-	CIvfMeshPtr roof = new CIvfMesh();
-	roof->setMeshType(CIvfMesh::MT_ORDER_2);
+	CMeshPtr roof = new CMesh();
+	roof->setMeshType(CMesh::MT_ORDER_2);
 	roof->setMeshResolution(30,30);
 	roof->createMesh(10.0, 10.0);
 	roof->setMaterial(greenMaterial);
@@ -172,8 +172,8 @@ void CExampleWindow::onInit(int width, int height)
 	roof->setRotationQuat(0.0, 0.0, 1.0, 180.0f);
 	m_scene->addChild(roof);
 
-	CIvfMeshPtr wall1 = new CIvfMesh();
-	wall1->setMeshType(CIvfMesh::MT_ORDER_2);
+	CMeshPtr wall1 = new CMesh();
+	wall1->setMeshType(CMesh::MT_ORDER_2);
 	wall1->setMeshResolution(30,30);
 	wall1->createMesh(10.0, 6.0);
 	wall1->setMaterial(blueMaterial);
@@ -181,8 +181,8 @@ void CExampleWindow::onInit(int width, int height)
 	wall1->setRotationQuat(1.0, 0.0, 0.0, 90.0f);
 	m_scene->addChild(wall1);
 	
-	CIvfMeshPtr wall2 = new CIvfMesh();
-	wall2->setMeshType(CIvfMesh::MT_ORDER_2);
+	CMeshPtr wall2 = new CMesh();
+	wall2->setMeshType(CMesh::MT_ORDER_2);
 	wall2->setMeshResolution(30,30);
 	wall2->createMesh(10.0, 6.0);
 	wall2->setMaterial(blueMaterial);
@@ -190,8 +190,8 @@ void CExampleWindow::onInit(int width, int height)
 	wall2->setRotationQuat(1.0, 0.0, 0.0, -90.0f);
 	m_scene->addChild(wall2);
 
-	CIvfMeshPtr wall3 = new CIvfMesh();
-	wall3->setMeshType(CIvfMesh::MT_ORDER_2);
+	CMeshPtr wall3 = new CMesh();
+	wall3->setMeshType(CMesh::MT_ORDER_2);
 	wall3->setMeshResolution(30,30);
 	wall3->createMesh(6.0, 10.0);
 	wall3->setMaterial(yellowMaterial);
@@ -199,8 +199,8 @@ void CExampleWindow::onInit(int width, int height)
 	wall3->setRotationQuat(0.0, 0.0, 1.0, 90.0f);
 	m_scene->addChild(wall3);
 
-	CIvfMeshPtr wall4 = new CIvfMesh();
-	wall4->setMeshType(CIvfMesh::MT_ORDER_2);
+	CMeshPtr wall4 = new CMesh();
+	wall4->setMeshType(CMesh::MT_ORDER_2);
 	wall4->setMeshResolution(30,30);
 	wall4->createMesh(6.0, 10.0);
 	wall4->setMaterial(yellowMaterial);
@@ -210,10 +210,10 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a light
 
-	m_lighting = CIvfLighting::getInstance();
+	m_lighting = CLighting::getInstance();
 
 	m_light = m_lighting->getLight(0);
-	m_light->setType(CIvfLight::LT_POINT);
+	m_light->setType(CLight::LT_POINT);
 	m_light->setLightPosition(-2.0, 0.0, 2.0);
 	m_light->setSpotCutoff(70.0f);
 	m_light->setSpotExponent(20.0f);
@@ -221,9 +221,9 @@ void CExampleWindow::onInit(int width, int height)
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
-	CIvfRasterizationPtr rasterOps = CIvfRasterization::getInstance();
+	CRasterizationPtr rasterOps = CRasterization::getInstance();
 	rasterOps->enableCullFace();
-	rasterOps->setCullFace(CIvfRasterization::CF_BACK);
+	rasterOps->setCullFace(CRasterization::CF_BACK);
 
 	// Setup moving light
 
@@ -280,7 +280,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
     if (this->isRightButtonDown())
     {
-		if (this->getModifierKey()==CIvfWidgetBase::MT_SHIFT)
+		if (this->getModifierKey()==CWidgetBase::MT_SHIFT)
 		{
             m_zoomX = (x - m_beginX);
             m_zoomY = (y - m_beginY);
@@ -321,10 +321,10 @@ void CExampleWindow::onKeyboard(int key, int x, int y)
 
 	switch (key) {
 	case 'l':
-		if (m_light->getType()==CIvfLight::LT_POINT)
-			m_light->setType(CIvfLight::LT_SPOT);
+		if (m_light->getType()==CLight::LT_POINT)
+			m_light->setType(CLight::LT_SPOT);
 		else
-			m_light->setType(CIvfLight::LT_POINT);
+			m_light->setType(CLight::LT_POINT);
 		break;
 	case 'a':
 		angle = m_light->getSpotCutoff();
@@ -364,7 +364,7 @@ void CExampleWindow::onKeyboard(int key, int x, int y)
 // ------------------------------------------------------------
 bool CExampleWindow::onTimeout0()
 {
-	CIvfVec3d pos;
+	CVec3d pos;
 	double x, y, z;
 	double ex, ey, ez;
 	
@@ -403,7 +403,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window

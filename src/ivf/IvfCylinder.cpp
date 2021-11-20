@@ -26,27 +26,27 @@
 
 
 // ------------------------------------------------------------
-CIvfCylinder::CIvfCylinder ()
-		:CIvfCone()
+CCylinder::CCylinder ()
+		:CCone()
 		//TODO: check and complete member initialisation list!
 {
 	setRadius(1.0);
 }
 
 // ------------------------------------------------------------
-CIvfCylinder::~CIvfCylinder ()
+CCylinder::~CCylinder ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfCylinder::setRadius (const double radius)
+void CCylinder::setRadius (const double radius)
 {
 	setBottomRadius(radius);
 	setTopRadius(radius);
 }
 
 // ------------------------------------------------------------
-double CIvfCylinder::getRadius ()
+double CCylinder::getRadius ()
 {
 	return getBottomRadius();
 }

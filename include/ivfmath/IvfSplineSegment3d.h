@@ -31,18 +31,18 @@
  * 3d spline segment class
  *
  * Implements a 3d spline segment, used in conjunction with
- * the CIvfSpline3d class.
+ * the CSpline3d class.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfSplineSegment3d : public CIvfCurveSegment3d  {
+class IVFMATH_API CSplineSegment3d : public CCurveSegment3d  {
 private:
-	CIvfVec3d* m_p1;
-	CIvfVec3d* m_p2;
-	CIvfVec3d* m_p;
-	CIvfVec3d* m_t;
-	CIvfVec3d* m_t1;
-	CIvfVec3d* m_t2;
+	CVec3d* m_p1;
+	CVec3d* m_p2;
+	CVec3d* m_p;
+	CVec3d* m_t;
+	CVec3d* m_t1;
+	CVec3d* m_t2;
 	double m_bias[2];
 	
 	double h0(double t);
@@ -55,30 +55,30 @@ private:
 	double dh1(double t);
 	double dh0(double t);
 public:
-	/** CIvfSplineSegment3d constructor */
-	CIvfSplineSegment3d();
+	/** CSplineSegment3d constructor */
+	CSplineSegment3d();
 
-	/** CIvfSplineSegment3d destructor */
-	virtual ~CIvfSplineSegment3d();
+	/** CSplineSegment3d destructor */
+	virtual ~CSplineSegment3d();
 	
 	/** 
 	 * Get position on curve 
 	 *
 	 * @param t distance from curve start 0 <= t <= 1
 	 */
-	virtual CIvfVec3d* getPosition(double t);
+	virtual CVec3d* getPosition(double t);
 
 	/** Get curve start point */
-	virtual CIvfVec3d* getEndPoint();
+	virtual CVec3d* getEndPoint();
 
 	/** Get curve starting point */
-	virtual CIvfVec3d* getStartPoint();
+	virtual CVec3d* getStartPoint();
 	
 	/** Get curve end direction */
-	virtual CIvfVec3d* getEndDirection();
+	virtual CVec3d* getEndDirection();
 
 	/** Get curve start direction */
-	virtual CIvfVec3d* getStartDirection();
+	virtual CVec3d* getStartDirection();
 
 	/** Get curve end bias*/
 	double getEndBias();
@@ -93,10 +93,10 @@ public:
 	void setStartBias(double bias);
 
 	/** Set curve end point */
-  	void setEndPoint(CIvfVec3d* point);
+  	void setEndPoint(CVec3d* point);
 	
 	/** Set curve start point */
-	void setStartPoint(CIvfVec3d* point);
+	void setStartPoint(CVec3d* point);
 
 	/** 
 	 * Get curve speed
@@ -110,7 +110,7 @@ public:
 	 *
 	 * @param t distance from curve start 0.0 <= t <= 1.0
 	 */
-	virtual CIvfVec3d* getTangent(double t);
+	virtual CVec3d* getTangent(double t);
 };
 
 #endif

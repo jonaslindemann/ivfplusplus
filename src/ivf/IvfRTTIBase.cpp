@@ -24,30 +24,30 @@
 
 #include <ivf/IvfRTTIBase.h>
 
-CIvfRTTIBase::CIvfRTTIBase()
+CRTTIBase::CRTTIBase()
 {
 
 }
 
-CIvfRTTIBase::~CIvfRTTIBase()
+CRTTIBase::~CRTTIBase()
 {
 
 }
 
 // ------------------------------------------------------------
-const std::string CIvfRTTIBase::getClassNameThis()
+const std::string CRTTIBase::getClassNameThis()
 {
-	return "CIvfRTTIBase";
+	return "CRTTIBase";
 }
 
 // ------------------------------------------------------------
-const std::string CIvfRTTIBase::getClassName()
+const std::string CRTTIBase::getClassName()
 {
-	return "CIvfRTTIBase";
+	return "CRTTIBase";
 }
 
 // ------------------------------------------------------------
-bool CIvfRTTIBase::isClass(const std::string& name)
+bool CRTTIBase::isClass(const std::string& name)
 {
 	std::string className = this->getClassNameThis();
 

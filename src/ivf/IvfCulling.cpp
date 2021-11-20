@@ -24,31 +24,31 @@
 
 #include <ivf/IvfCulling.h>
 
-CIvfCulling::CIvfCulling()
+CCulling::CCulling()
 {
-	m_matrixStack = new CIvfMatrixStack();
-	m_frustum = new CIvfViewFrustum();
+	m_matrixStack = new CMatrixStack();
+	m_frustum = new CViewFrustum();
 	m_cullCount = 0;
 }
 
-CIvfCulling::~CIvfCulling()
+CCulling::~CCulling()
 {
 }
 
-void CIvfCulling::setComposite(CIvfComposite *composite)
+void CCulling::setComposite(CComposite *composite)
 {
 	m_composite = composite;
 	m_composite->initBoundingSphere();
 }
 
-void CIvfCulling::cull()
+void CCulling::cull()
 {
 	m_cullView->getViewFrustum(m_frustum);
 	m_cullCount = 0;
 	cullChildren(m_composite);
 }
 
-void CIvfCulling::cullChildren(CIvfShape *shape)
+void CCulling::cullChildren(CShape *shape)
 {
 	// Recursively cull children
 
@@ -59,7 +59,7 @@ void CIvfCulling::cullChildren(CIvfShape *shape)
 
 	if (shape->isClass("CIvfComposite"))
 	{
-		CIvfComposite* composite = (CIvfComposite*) shape;
+		CComposite* composite = (CComposite*) shape;
 
 		composite->getPosition(x, y, z);
 		m_matrixStack->getWorldCoordinate(x, y, z, wx, wy, wz);
@@ -87,7 +87,7 @@ void CIvfCulling::cullChildren(CIvfShape *shape)
 
 			for (i = 0; i<composite->getSize(); i++)
 			{
-				CIvfShape* child = composite->getChild(i);
+				CShape* child = composite->getChild(i);
 				cullChildren(child);
 			}
 			m_matrixStack->popMatrix();
@@ -119,17 +119,17 @@ void CIvfCulling::cullChildren(CIvfShape *shape)
 	}
 }
 
-bool CIvfCulling::intersectFrustum(CIvfBoundingSphere *bSphere)
+bool CCulling::intersectFrustum(CBoundingSphere *bSphere)
 {
 	return m_frustum->isInside(bSphere);
 }
 
-void CIvfCulling::setCullView(CIvfView *view)
+void CCulling::setCullView(CView *view)
 {
 	m_cullView = view;
 }
 
-int CIvfCulling::getCullCount()
+int CCulling::getCullCount()
 {
 	return m_cullCount;
 }

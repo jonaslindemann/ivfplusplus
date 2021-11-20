@@ -30,7 +30,7 @@
 
 #include <ivf/IvfScene.h>
 
-IvfSmartPointer(CIvfSceneHandler);
+IvfSmartPointer(CSceneHandler);
 
 /**
  * Scene handler
@@ -39,29 +39,29 @@ IvfSmartPointer(CIvfSceneHandler);
  * application by automatically handling rendering
  * and resizing for a scene based Ivf++ application.
  */
-class IVFWIDGET_API CIvfSceneHandler : public CIvfHandlerBase,
-	CIvfResizeEvent,
-	CIvfRenderEvent
+class IVFWIDGET_API CSceneHandler : public CHandlerBase,
+	CResizeEvent,
+	CRenderEvent
 {
 private:
-	CIvfWidgetBase* m_widget;
-	CIvfScenePtr m_scene;
+	CWidgetBase* m_widget;
+	CScenePtr m_scene;
 	bool m_multiPass;
 	bool m_nPasses;
 public:
 	/**
 	 * Class constructor
 	 *
-	 * @param widget Reference to a CIvfWidgetBase derived class.
-	 * @param scene Reference to a CIvfScene derived scene containing
+	 * @param widget Reference to a CWidgetBase derived class.
+	 * @param scene Reference to a CScene derived scene containing
 	 * the scene graph setup.
 	 */
-	CIvfSceneHandler(CIvfWidgetBase* widget, CIvfScene* scene);
+	CSceneHandler(CWidgetBase* widget, CScene* scene);
 
 	/** Class destructor */
-	virtual ~CIvfSceneHandler();
+	virtual ~CSceneHandler();
 
-	IvfClassInfo("CIvfSceneHandler",CIvfHandlerBase);
+	IvfClassInfo("CSceneHandler",CHandlerBase);
 
 	void onResize(int width, int height);
 	void onRender();

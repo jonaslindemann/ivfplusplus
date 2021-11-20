@@ -19,16 +19,16 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfOldLight
+// Implementation of: public class COldLight
 
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfOldLight.h>
 
-long CIvfOldLight::lightmask = 0;
+long COldLight::lightmask = 0;
 
 // ------------------------------------------------------------
-CIvfOldLight::CIvfOldLight() 
-: CIvfGLBase()
+COldLight::COldLight() 
+: CGLBase()
 {
 	m_lightn = -1;
 	
@@ -66,7 +66,7 @@ CIvfOldLight::CIvfOldLight()
 }
 
 // ------------------------------------------------------------
-CIvfOldLight::~CIvfOldLight()
+COldLight::~COldLight()
 {
 	if ( m_lightn != -1 ) 
 	{
@@ -75,7 +75,7 @@ CIvfOldLight::~CIvfOldLight()
 	}
 }
 
-CIvfOldLight& CIvfOldLight::operator = ( const CIvfOldLight &arg )
+COldLight& COldLight::operator = ( const COldLight &arg )
 {
 	GLfloat r,g,b,a;
 	
@@ -105,14 +105,14 @@ CIvfOldLight& CIvfOldLight::operator = ( const CIvfOldLight &arg )
 	return *this;
 }
 
-CIvfOldLight::operator void* ()
+COldLight::operator void* ()
 {
 	if ( m_lightn == -1 ) 
 		return 0;
 	return this;
 }
 
-void CIvfOldLight::setAmbient( const GLfloat r, const GLfloat g, 
+void COldLight::setAmbient( const GLfloat r, const GLfloat g, 
 						   const GLfloat b, const GLfloat a )
 {
 	m_ambient[0] = r;
@@ -121,7 +121,7 @@ void CIvfOldLight::setAmbient( const GLfloat r, const GLfloat g,
 	m_ambient[3] = a;
 }
 
-void CIvfOldLight::setDiffuse( const GLfloat r, const GLfloat g, 
+void COldLight::setDiffuse( const GLfloat r, const GLfloat g, 
 						   const GLfloat b, const GLfloat a )
 {
 	m_diffuse[0] = r;
@@ -130,7 +130,7 @@ void CIvfOldLight::setDiffuse( const GLfloat r, const GLfloat g,
 	m_diffuse[3] = a;
 }
 
-void CIvfOldLight::setSpecular( const GLfloat r, const GLfloat g, 
+void COldLight::setSpecular( const GLfloat r, const GLfloat g, 
 							const GLfloat b, const GLfloat a )
 {
 	m_specular[0] = r;
@@ -139,7 +139,7 @@ void CIvfOldLight::setSpecular( const GLfloat r, const GLfloat g,
 	m_specular[3] = a;
 }
 
-void CIvfOldLight::setPosition( const GLfloat x, const GLfloat y, const GLfloat z, const GLfloat w )
+void COldLight::setPosition( const GLfloat x, const GLfloat y, const GLfloat z, const GLfloat w )
 {
 	m_position[0] = x;
 	m_position[1] = y;
@@ -152,37 +152,37 @@ void CIvfOldLight::setPosition( const GLfloat x, const GLfloat y, const GLfloat 
 		m_lightType = LT_DIRECTIONAL;
 }
 
-void CIvfOldLight::setPosition( const GLfloat x, const GLfloat y, const GLfloat z)
+void COldLight::setPosition( const GLfloat x, const GLfloat y, const GLfloat z)
 {
 	m_position[0] = x;
 	m_position[1] = y;
 	m_position[2] = z;
 }
 
-void CIvfOldLight::setDirection( const GLfloat x, const GLfloat y, const GLfloat z)
+void COldLight::setDirection( const GLfloat x, const GLfloat y, const GLfloat z)
 {
 	m_position[0] = x;
 	m_position[1] = y;
 	m_position[2] = z;
 }
 
-void CIvfOldLight::setConstAtt( const GLint a )
+void COldLight::setConstAtt( const GLint a )
 {
 	m_constatt = a;
 }
 
-void CIvfOldLight::setLinAtt( const GLint a )
+void COldLight::setLinAtt( const GLint a )
 {
 	m_linatt = a;
 }
 
-void CIvfOldLight::setQuadAtt( const GLint a )
+void COldLight::setQuadAtt( const GLint a )
 {
 	m_quadatt = a;
 }
 
 
-void CIvfOldLight::getAmbient( GLfloat &r, GLfloat &g, GLfloat &b, GLfloat &a ) const
+void COldLight::getAmbient( GLfloat &r, GLfloat &g, GLfloat &b, GLfloat &a ) const
 {
 	r = m_ambient[0];
 	g = m_ambient[1];
@@ -190,7 +190,7 @@ void CIvfOldLight::getAmbient( GLfloat &r, GLfloat &g, GLfloat &b, GLfloat &a ) 
 	a = m_ambient[3];
 }
 
-void CIvfOldLight::getDiffuse( GLfloat &r, GLfloat &g, GLfloat &b, GLfloat &a ) const
+void COldLight::getDiffuse( GLfloat &r, GLfloat &g, GLfloat &b, GLfloat &a ) const
 {
 	r = m_diffuse[0];
 	g = m_diffuse[1];
@@ -198,7 +198,7 @@ void CIvfOldLight::getDiffuse( GLfloat &r, GLfloat &g, GLfloat &b, GLfloat &a ) 
 	a = m_diffuse[3];
 }
 
-void CIvfOldLight::getSpecular( GLfloat &r, GLfloat &g, GLfloat &b, GLfloat &a ) const
+void COldLight::getSpecular( GLfloat &r, GLfloat &g, GLfloat &b, GLfloat &a ) const
 {
 	r = m_specular[0];
 	g = m_specular[1];
@@ -206,7 +206,7 @@ void CIvfOldLight::getSpecular( GLfloat &r, GLfloat &g, GLfloat &b, GLfloat &a )
 	a = m_specular[3];
 }
 
-void CIvfOldLight::getPosition( GLfloat &x, GLfloat &y, GLfloat &z, GLfloat &w ) const
+void COldLight::getPosition( GLfloat &x, GLfloat &y, GLfloat &z, GLfloat &w ) const
 {
 	x = m_position[0];
 	y = m_position[1];
@@ -214,26 +214,26 @@ void CIvfOldLight::getPosition( GLfloat &x, GLfloat &y, GLfloat &z, GLfloat &w )
 	w = m_position[3];
 }
 
-void CIvfOldLight::getConstAtt( GLint &a ) const
+void COldLight::getConstAtt( GLint &a ) const
 {
 	a = m_constatt;
 }
 
-void CIvfOldLight::getLinAtt( GLint &a ) const
+void COldLight::getLinAtt( GLint &a ) const
 {
 	a = m_linatt;
 }
 
-void CIvfOldLight::getQuadAtt( GLint &a ) const
+void COldLight::getQuadAtt( GLint &a ) const
 {
 	a = m_quadatt;
 }
 
-void CIvfOldLight::render()
+void COldLight::render()
 {
 	if (m_active)
 	{
-		if ( CIvfGLBase::getState() == OS_OFF || m_lightn == -1 ) 
+		if ( CGLBase::getState() == OS_OFF || m_lightn == -1 ) 
 			return;
 		
 		GLenum light = GL_LIGHT0 + m_lightn;
@@ -273,51 +273,51 @@ void CIvfOldLight::render()
 	}
 }
 
-void CIvfOldLight::setType(TLightType lightType)
+void COldLight::setType(TLightType lightType)
 {
 	m_lightType = lightType;
 }
 
-void CIvfOldLight::setSpotCutoff(float cutoff)
+void COldLight::setSpotCutoff(float cutoff)
 {
 	m_spotCutoff = cutoff;
 }
 
-void CIvfOldLight::setSpotDirection(float ex, float ey, float ez)
+void COldLight::setSpotDirection(float ex, float ey, float ez)
 {
 	m_spotDirection[0] = ex;
 	m_spotDirection[1] = ey;
 	m_spotDirection[2] = ez;
 }
 
-void CIvfOldLight::setSpotExponent(float exponent)
+void COldLight::setSpotExponent(float exponent)
 {
 	m_spotExponent = exponent;
 }
 
-CIvfOldLight::TLightType CIvfOldLight::getType()
+COldLight::TLightType COldLight::getType()
 {
 	return m_lightType;
 }
 
-void CIvfOldLight::getSpotDirection(float &ex, float &ey, float &ez)
+void COldLight::getSpotDirection(float &ex, float &ey, float &ez)
 {
 	ex = m_spotDirection[0];
 	ey = m_spotDirection[1];
 	ez = m_spotDirection[2];
 }
 
-float CIvfOldLight::getSpotCutoff()
+float COldLight::getSpotCutoff()
 {
 	return m_spotCutoff;
 }
 
-float CIvfOldLight::getSpotExponent()
+float COldLight::getSpotExponent()
 {
 	return m_spotExponent;
 }
 
-void CIvfOldLight::activate()
+void COldLight::activate()
 {
 	if (!m_active)
 	{
@@ -335,7 +335,7 @@ void CIvfOldLight::activate()
 	}
 }
 
-void CIvfOldLight::deactivate()
+void COldLight::deactivate()
 {
 	if ( m_lightn != -1 ) 
 		lightmask = lightmask ^ (1 << m_lightn); 

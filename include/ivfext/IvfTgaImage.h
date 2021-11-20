@@ -27,14 +27,14 @@
 
 #include <ivfimage/IvfFileImage.h>
 
-IvfSmartPointer(CIvfTgaImage);
+IvfSmartPointer(CTgaImage);
 
 /**
  * TGA image loader class
  *
  * This class implements a TGA image loader
  */
-class IVFEXT_API CIvfTgaImage : public CIvfFileImage {
+class IVFEXT_API CTgaImage : public CFileImage {
 private:
 	bool m_alphaChannel;
 
@@ -76,16 +76,16 @@ bool LoadUncompressedTGA(Texture *, char *, FILE *);	// Load an Uncompressed fil
 bool LoadCompressedTGA(Texture *, char *, FILE *);		// Load a Compressed file
 
 public:
-	/** CIvfTgaImage constructor */
-	CIvfTgaImage();
+	/** CTgaImage constructor */
+	CTgaImage();
 
-	/** CIvfTgaImage constructor */
-	CIvfTgaImage(const std::string& name);
+	/** CTgaImage constructor */
+	CTgaImage(const std::string& name);
 
-	/** CIvfTgaImage destructor */
-	virtual ~CIvfTgaImage();
+	/** CTgaImage destructor */
+	virtual ~CTgaImage();
 
-	IvfClassInfo("CIvfTgaImage",CIvfFileImage);
+	IvfClassInfo("CTgaImage",CFileImage);
 
 	/** Reads Tga image */
 	virtual bool read();

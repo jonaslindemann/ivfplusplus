@@ -24,7 +24,7 @@
 
 #include <ivfwidget/IvfImUiHandler.h>
 
-CIvfImUiHandler::CIvfImUiHandler(CIvfWidgetBase* widget)
+CImUiHandler::CImUiHandler(CWidgetBase* widget)
 {
 	m_widget = widget;
 	m_guiEvent = 0;
@@ -36,7 +36,7 @@ CIvfImUiHandler::CIvfImUiHandler(CIvfWidgetBase* widget)
 	m_widget->setUseOverlay(true);
 }
 
-CIvfImUiHandler::~CIvfImUiHandler()
+CImUiHandler::~CImUiHandler()
 {
 	m_widget->removeMouseMoveEvent(this);
 	m_widget->removeMouseDownEvent(this);
@@ -45,67 +45,67 @@ CIvfImUiHandler::~CIvfImUiHandler()
 	m_widget->removeOverlayEvent(this);
 }
 
-void CIvfImUiHandler::setGuiEvent(CIvfGuiEvent* event)
+void CImUiHandler::setGuiEvent(CGuiEvent* event)
 {
 	m_guiEvent = event;
 }
 
-void CIvfImUiHandler::dispatchGuiEvent()
+void CImUiHandler::dispatchGuiEvent()
 {
 	if (m_guiEvent!=NULL)
 		m_guiEvent->onGui();
 }
 
-void CIvfImUiHandler::doMouseDown(int x, int y)
+void CImUiHandler::doMouseDown(int x, int y)
 {
 
 }
 
-void CIvfImUiHandler::doMouseMove(int x, int y)
+void CImUiHandler::doMouseMove(int x, int y)
 {
 
 }
 
-void CIvfImUiHandler::doMouseUp(int x, int y)
+void CImUiHandler::doMouseUp(int x, int y)
 {
 
 }
 
-void CIvfImUiHandler::doResize(int width, int height)
+void CImUiHandler::doResize(int width, int height)
 {
 
 }
 
-void CIvfImUiHandler::doOverlay()
+void CImUiHandler::doOverlay()
 {
 	dispatchGuiEvent();
 }
 
-void CIvfImUiHandler::onMouseDown(int x, int y)
+void CImUiHandler::onMouseDown(int x, int y)
 {
 	if (isActive())
 		doMouseDown(x, y);
 }
 
-void CIvfImUiHandler::onMouseMove(int x, int y)
+void CImUiHandler::onMouseMove(int x, int y)
 {
 	if (isActive())
 		doMouseMove(x, y);
 }
 
-void CIvfImUiHandler::onMouseUp(int x, int y)
+void CImUiHandler::onMouseUp(int x, int y)
 {
 	if (isActive())
 		doMouseUp(x, y);
 }
 
-void CIvfImUiHandler::onResize(int width, int height)
+void CImUiHandler::onResize(int width, int height)
 {
 	if (isActive())
 		doResize(width, height);
 }
 
-void CIvfImUiHandler::onOverlay()
+void CImUiHandler::onOverlay()
 {
 	if (isActive())
 		doOverlay();

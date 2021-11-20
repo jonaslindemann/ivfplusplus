@@ -27,23 +27,23 @@
 
 #include <ivf/IvfShape.h>
 
-IvfSmartPointer(CIvfMultiply);
+IvfSmartPointer(CMultiply);
 
-class IVF_API CIvfMultiply: public CIvfShape {
+class IVF_API CMultiply: public CShape {
 private:
-	CIvfShapePtr	m_shape;
+	CShapePtr	m_shape;
 	double			m_offsets[3];
 	int				m_repeat[3];
 	int				m_startIndices[3];
 public:
-	CIvfMultiply();
+	CMultiply();
 
-	IvfClassInfo("CIvfMultiply", CIvfShape);
+	IvfClassInfo("CMultiply", CShape);
 
 	virtual void refresh();
 
-	void setShape(CIvfShape* shape);
-	CIvfShape* getShape();
+	void setShape(CShape* shape);
+	CShape* getShape();
 
 	void setOffsets(double dx, double dy, double dz);
 	void getOffsets(double &dx, double &dy, double &dz);

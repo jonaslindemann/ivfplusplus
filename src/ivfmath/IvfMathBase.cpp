@@ -23,7 +23,7 @@
 #include <ivfmath/IvfMathBase.h>
 
 // ------------------------------------------------------------
-CIvfMathBase::CIvfMathBase()
+CMathBase::CMathBase()
 {
 	// Set initial reference count
 
@@ -31,26 +31,26 @@ CIvfMathBase::CIvfMathBase()
 }
 
 // ------------------------------------------------------------
-CIvfMathBase::~CIvfMathBase()
+CMathBase::~CMathBase()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfMathBase::addReference()
+void CMathBase::addReference()
 {
 	m_ref++;
 }
 
 // ------------------------------------------------------------
-void CIvfMathBase::deleteReference()
+void CMathBase::deleteReference()
 {
 	if (m_ref>0)
 		m_ref--;
 }
 
 // ------------------------------------------------------------
-bool CIvfMathBase::referenced()
+bool CMathBase::referenced()
 {
 	if (m_ref>0)
 		return true;
@@ -59,19 +59,19 @@ bool CIvfMathBase::referenced()
 }
 
 // ------------------------------------------------------------
-const std::string CIvfMathBase::getClassNameThis()
+const std::string CMathBase::getClassNameThis()
 {
-	return "CIvfMathBase";
+	return "CMathBase";
 }
 
 // ------------------------------------------------------------
-const std::string CIvfMathBase::getClassName()
+const std::string CMathBase::getClassName()
 {
-	return "CIvfMathBase";
+	return "CMathBase";
 }
 
 // ------------------------------------------------------------
-bool CIvfMathBase::isClass(const std::string& name)
+bool CMathBase::isClass(const std::string& name)
 {
 	std::string className = this->getClassNameThis();
 
@@ -87,7 +87,7 @@ bool CIvfMathBase::isClass(const std::string& name)
 }
 
 // ------------------------------------------------------------
-int CIvfMathBase::getRefCount()
+int CMathBase::getRefCount()
 {
 	return m_ref;
 }

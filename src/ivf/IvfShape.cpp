@@ -19,7 +19,7 @@
 // Please report all bugs and problems to "ivf@byggmek.lth.se".
 //
 
-// Implementation of: public class CIvfShape
+// Implementation of: public class CShape
 
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfShape.h>
@@ -27,8 +27,8 @@
 #include <ivf/IvfGlobalState.h>
 
 // ------------------------------------------------------------
-CIvfShape::CIvfShape ()
-		:CIvfGLBase()
+CShape::CShape ()
+		:CGLBase()
 		//TODO: check and complete member initialisation list!
 {
 	m_position[0] = 0.0;
@@ -46,11 +46,11 @@ CIvfShape::CIvfShape ()
 	m_rotQuat[3] = 0.0;
 	m_material = NULL;
 	m_texture = NULL;
-	m_highlightMaterial = new CIvfMaterial();
+	m_highlightMaterial = new CMaterial();
 	m_highlightMaterial->setDiffuseColor(1.0, 1.0, 1.0, 1.0);
 	m_highlightMaterial->setAmbientColor(0.5, 0.5, 0.5, 1.0);
 
-	m_selectMaterial = new CIvfMaterial();
+	m_selectMaterial = new CMaterial();
 	m_selectMaterial->setDiffuseColor(1.0, 0.8, 0.0, 1.0);
 	m_selectMaterial->setAmbientColor(0.6, 0.6, 0.0, 1.0);
 
@@ -62,12 +62,12 @@ CIvfShape::CIvfShape ()
 }
 
 // ------------------------------------------------------------
-CIvfShape::~CIvfShape ()
+CShape::~CShape ()
 {
 }
 
 // ------------------------------------------------------------
-void CIvfShape::setPosition (const double x, const double y, const double z)
+void CShape::setPosition (const double x, const double y, const double z)
 {
 	m_position[0] = x;
 	m_position[1] = y;
@@ -75,7 +75,7 @@ void CIvfShape::setPosition (const double x, const double y, const double z)
 }
 
 // ------------------------------------------------------------
-void CIvfShape::setPosition (CIvfShape* shape)
+void CShape::setPosition (CShape* shape)
 {
 	double x, y, z;
 	shape->getPosition(x, y, z);
@@ -85,7 +85,7 @@ void CIvfShape::setPosition (CIvfShape* shape)
 }
 
 // ------------------------------------------------------------
-void CIvfShape::setPosition (CIvfPoint3d* point)
+void CShape::setPosition (CPoint3d* point)
 {
 	double x, y, z;
 	point->getComponents(x, y, z);
@@ -95,7 +95,7 @@ void CIvfShape::setPosition (CIvfPoint3d* point)
 }
 
 // ------------------------------------------------------------
-void CIvfShape::setScale (const double xScale, const double yScale, const double zScale)
+void CShape::setScale (const double xScale, const double yScale, const double zScale)
 {
 	m_scale[0] = xScale;
 	m_scale[1] = yScale;
@@ -103,7 +103,7 @@ void CIvfShape::setScale (const double xScale, const double yScale, const double
 }
 
 // ------------------------------------------------------------
-void CIvfShape::setRotation (const double xRot, const double yRot, const double zRot)
+void CShape::setRotation (const double xRot, const double yRot, const double zRot)
 {
 	m_rotation[0] = xRot;
 	m_rotation[1] = yRot;
@@ -111,13 +111,13 @@ void CIvfShape::setRotation (const double xRot, const double yRot, const double 
 }
 
 // ------------------------------------------------------------
-void CIvfShape::setMaterial (CIvfMaterial* material)
+void CShape::setMaterial (CMaterial* material)
 {
 	m_material = material;
 }
 
 // ------------------------------------------------------------
-void CIvfShape::getPosition (double &x, double &y, double &z)
+void CShape::getPosition (double &x, double &y, double &z)
 {
 	x = m_position[0];
 	y = m_position[1];
@@ -125,19 +125,19 @@ void CIvfShape::getPosition (double &x, double &y, double &z)
 }
 
 // ------------------------------------------------------------
-void CIvfShape::getPosition (CIvfShape* shape)
+void CShape::getPosition (CShape* shape)
 {
 	shape->setPosition(m_position[0],m_position[1],m_position[2]);
 }
 
 // ------------------------------------------------------------
-void CIvfShape::getPosition (CIvfPoint3d* point)
+void CShape::getPosition (CPoint3d* point)
 {
 	point->setComponents(m_position[0],m_position[1],m_position[2]);
 }
 
 // ------------------------------------------------------------
-void CIvfShape::getScale (double &xScale, double &yScale, double &zScale)
+void CShape::getScale (double &xScale, double &yScale, double &zScale)
 {
 	xScale = m_scale[0];
 	yScale = m_scale[1];
@@ -145,7 +145,7 @@ void CIvfShape::getScale (double &xScale, double &yScale, double &zScale)
 }
 
 // ------------------------------------------------------------
-void CIvfShape::getRotation (double &xRot, double &yRot, double &zRot)
+void CShape::getRotation (double &xRot, double &yRot, double &zRot)
 {
 	xRot = m_rotation[0];
 	yRot = m_rotation[1];
@@ -153,15 +153,15 @@ void CIvfShape::getRotation (double &xRot, double &yRot, double &zRot)
 }
 
 // ------------------------------------------------------------
-CIvfMaterial* CIvfShape::getMaterial ()
+CMaterial* CShape::getMaterial ()
 {
 	return m_material;
 }
 
 
-void CIvfShape::doCreateMaterial()
+void CShape::doCreateMaterial()
 {
-	if (CIvfGlobalState::getInstance()->isMaterialRenderingEnabled())
+	if (CGlobalState::getInstance()->isMaterialRenderingEnabled())
 	{
 		if (this->getSelect()==SS_ON)
 		{
@@ -191,7 +191,7 @@ void CIvfShape::doCreateMaterial()
 	}
 }
 
-void CIvfShape::doBeginTransform()
+void CShape::doBeginTransform()
 {
 	if (m_renderName)
 		glLoadName(m_objectName);
@@ -221,7 +221,7 @@ void CIvfShape::doBeginTransform()
 
 	if (m_texture!=NULL)
 	{
-		if (CIvfGlobalState::getInstance()->isTextureRenderingEnabled())
+		if (CGlobalState::getInstance()->isTextureRenderingEnabled())
 		{
 			if (m_texture->isActive())
 			{
@@ -237,11 +237,11 @@ void CIvfShape::doBeginTransform()
 	}
 }
 
-void CIvfShape::doEndTransform()
+void CShape::doEndTransform()
 {
 	if (m_texture!=NULL)
 	{
-		if (CIvfGlobalState::getInstance()->isTextureRenderingEnabled())
+		if (CGlobalState::getInstance()->isTextureRenderingEnabled())
 		{
 			if (m_texture->isActive())
 			{
@@ -257,7 +257,7 @@ void CIvfShape::doEndTransform()
 		glDisable(GL_NORMALIZE);
 }
 
-void CIvfShape::setRotationQuat(double vx, double vy, double vz, double theta)
+void CShape::setRotationQuat(double vx, double vy, double vz, double theta)
 {
 	m_rotQuat[0] = vx;
 	m_rotQuat[1] = vy;
@@ -266,7 +266,7 @@ void CIvfShape::setRotationQuat(double vx, double vy, double vz, double theta)
 }
 
 // Modified JL
-void CIvfShape::getRotationQuat(double &vx, double &vy, double &vz, double &theta)
+void CShape::getRotationQuat(double &vx, double &vy, double &vz, double &theta)
 {
 	vx = m_rotQuat[0];
 	vy = m_rotQuat[1];
@@ -275,129 +275,129 @@ void CIvfShape::getRotationQuat(double &vx, double &vy, double &vz, double &thet
 }
 // End Modify JL
 
-void CIvfShape::assignPositionTo(CIvfShape * shape)
+void CShape::assignPositionTo(CShape * shape)
 {
 	shape->getPosition(m_position[0], m_position[1], m_position[2]);
 }
 
-void CIvfShape::setObjectName(GLuint name)
+void CShape::setObjectName(GLuint name)
 {
 	m_objectName = name;
 }
 
-GLuint CIvfShape::getObjectName()
+GLuint CShape::getObjectName()
 {
 	return m_objectName;
 }
 
-void CIvfShape::setHighlightMaterial(CIvfMaterial * material)
+void CShape::setHighlightMaterial(CMaterial * material)
 {
 	m_highlightMaterial = material;
 }
 
-CIvfMaterial* CIvfShape::getHightlightMaterial()
+CMaterial* CShape::getHightlightMaterial()
 {
 	return m_highlightMaterial;
 }
 
-void CIvfShape::setHighlight(THighlightState state)
+void CShape::setHighlight(THighlightState state)
 {
 	m_highlight = state;
 }
 
-void CIvfShape::assignPointTo(CIvfPoint3d* point)
+void CShape::assignPointTo(CPoint3d* point)
 {
 	point->setComponents(m_position[0], m_position[1], m_position[2]);
 }
 
-void CIvfShape::doCreateGeometry()
+void CShape::doCreateGeometry()
 {
 }
 
-void CIvfShape::doCreateSelect()
+void CShape::doCreateSelect()
 {
 }
 
-void CIvfShape::setUseName(bool flag)
+void CShape::setUseName(bool flag)
 {
 	m_renderName = flag;
 }
 
-bool CIvfShape::getUseName()
+bool CShape::getUseName()
 {
 	return m_renderName;
 }
 
-CIvfShape::THighlightState CIvfShape::getHighlight()
+CShape::THighlightState CShape::getHighlight()
 {
 	return m_highlight;
 }
 
-void CIvfShape::refresh()
+void CShape::refresh()
 {
 
 }
 
-void CIvfShape::setTexture(CIvfTexture *texture)
+void CShape::setTexture(CTexture *texture)
 {
 	m_texture = texture;
 }
 
-CIvfTexture* CIvfShape::getTexture()
+CTexture* CShape::getTexture()
 {
 	return m_texture;
 }
 
-void CIvfShape::setNormalize(bool flag)
+void CShape::setNormalize(bool flag)
 {
 	m_normalize = flag;
 }
 
-void CIvfShape::setSelectMaterial(CIvfMaterial *material)
+void CShape::setSelectMaterial(CMaterial *material)
 {
 	m_selectMaterial = material;
 }
 
-void CIvfShape::setPosition(CIvfVec3d &pos)
+void CShape::setPosition(CVec3d &pos)
 {
 	pos.getComponents(m_position);
 }
 
-void CIvfShape::setPosition(CIvfPoint3d &pos)
+void CShape::setPosition(CPoint3d &pos)
 {
 	pos.getComponents(m_position);
 }
 
-CIvfVec3d& CIvfShape::getPosition()
+CVec3d& CShape::getPosition()
 {
-	CIvfVec3d& pos = ivfGetTempVec3d();
+	CVec3d& pos = ivfGetTempVec3d();
 	pos.setComponents(m_position);
 	return pos;
 }
 
-void CIvfShape::setRotation(CIvfQuat &q)
+void CShape::setRotation(CQuat &q)
 {
 	double vx, vy, vz, angle;
 	q.getAxisAngle(vx, vy, vz, angle);
 	this->setRotationQuat(vx, vy, vz, angle*360.0/2.0/M_PI);
 }
 
-void CIvfShape::setHighlightType(THighlightType type)
+void CShape::setHighlightType(THighlightType type)
 {
 	m_highlightType = type;
 }
 
-void CIvfShape::enableHighlight()
+void CShape::enableHighlight()
 {
 	m_highlight = HS_ON;
 }
 
-void CIvfShape::disableHighlight()
+void CShape::disableHighlight()
 {
 	m_highlight = HS_OFF;
 }
 
-bool CIvfShape::isEnabledHighlight()
+bool CShape::isEnabledHighlight()
 {
 	return (m_highlight==HS_ON);
 }

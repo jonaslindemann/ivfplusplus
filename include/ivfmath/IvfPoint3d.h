@@ -24,7 +24,7 @@
 
 #include <ivfmath/IvfVec3d.h>
 
-IvfSmartPointer(CIvfPoint3d);
+IvfSmartPointer(CPoint3d);
 
 /**
  * Simple point class.
@@ -34,13 +34,13 @@ IvfSmartPointer(CIvfPoint3d);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfPoint3d : public CIvfVec3d {
+class IVFMATH_API CPoint3d : public CVec3d {
 private:
 public:
-	IvfClassInfo("CIvfPoint3d",CIvfVec3d);
+	IvfClassInfo("CPoint3d",CVec3d);
 };
 
-//class IVFMATH_API CIvfPojnt3d : public CIvfMathBase {
+//class IVFMATH_API CIvfPojnt3d : public CMathBase {
 //public:
 //	/** CIvfPojnt3d constructor. */
 //	CIvfPojnt3d ();

@@ -27,7 +27,7 @@
 
 #include <ivf/IvfGLPrimitive.h>
 
-IvfSmartPointer(CIvfPointSet);
+IvfSmartPointer(CPointSet);
 
 /**
  * Point set class
@@ -36,18 +36,18 @@ IvfSmartPointer(CIvfPointSet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfPointSet : public CIvfGLPrimitive {
+class IVF_API CPointSet : public CGLPrimitive {
 private:
 	bool m_useColor;
 	int m_pointSize;
 public:
-	/** CIvfPointSet constructor */
-	CIvfPointSet();
+	/** CPointSet constructor */
+	CPointSet();
 
-	/** CIvfPointSet destructor */
-	virtual ~CIvfPointSet();
+	/** CPointSet destructor */
+	virtual ~CPointSet();
 
-	IvfClassInfo("CIvfPointSet",CIvfGLPrimitive);
+	IvfClassInfo("CPointSet",CGLPrimitive);
 
 	/** Enable or disable the use of color values when rendering */
 	void setUseColor(bool flag);

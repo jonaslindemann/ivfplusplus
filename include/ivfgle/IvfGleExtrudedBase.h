@@ -30,23 +30,23 @@
 #include <ivfgle/IvfGleCoordArray.h>
 #include <ivfgle/IvfGleColorArray.h>
 
-IvfSmartPointer(CIvfGleExtrudedBase);
+IvfSmartPointer(CGleExtrudedBase);
 
-class IVFGLE_API CIvfGleExtrudedBase: public CIvfShape {
+class IVFGLE_API CGleExtrudedBase: public CShape {
 private:
 
 protected:
-	CIvfGleCoordArrayPtr m_pointArray;
-	CIvfGleColorArrayPtr m_colorArray;
+	CGleCoordArrayPtr m_pointArray;
+	CGleColorArrayPtr m_colorArray;
 public:
-	CIvfGleExtrudedBase();
+	CGleExtrudedBase();
 
-	IvfClassInfo("CIvfGleExtrudedBase", CIvfShape);
+	IvfClassInfo("CGleExtrudedBase", CShape);
 
-	void setColors(CIvfGleColorArray* array);
-	void setPoints(CIvfGleCoordArray* array);
-	CIvfGleColorArray* getColors(void);
-	CIvfGleCoordArray* getPoints(void);
+	void setColors(CGleColorArray* array);
+	void setPoints(CGleCoordArray* array);
+	CGleColorArray* getColors(void);
+	CGleCoordArray* getPoints(void);
 };
 
 #endif

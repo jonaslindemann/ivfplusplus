@@ -34,9 +34,9 @@
 #include <ivfgle/IvfGleTwistExtrusion.h>
 #include <ivfgle/IvfGleExtrusion.h>
 
-IvfSmartPointer(CIvfGleLine);
+IvfSmartPointer(CGleLine);
 
-class IVFGLE_API CIvfGleLine: public CIvfShape {
+class IVFGLE_API CGleLine: public CShape {
 public:
 	enum TLineRepresentation {
 		LR_EXTRUSION,
@@ -45,20 +45,20 @@ public:
 		LR_WIRE
 	};
 private:
-	CIvfVec3d m_startPoint;
-	CIvfVec3d m_endPoint;
+	CVec3d m_startPoint;
+	CVec3d m_endPoint;
 	TLineRepresentation m_lineRep;
 	void updateLine();
 public:
-	CIvfGleLine();
-	virtual ~CIvfGleLine();
+	CGleLine();
+	virtual ~CGleLine();
 
 	void setLineRepresentation(TLineRepresentation lineRep);
 	void setStartPoint(double x, double y, double z);
 	void setEndPoint(double x, double y, double z);
 	void setSections(int sections);
 
-	IvfClassInfo("CIvfGleLine", CIvfShape);
+	IvfClassInfo("CGleLine", CShape);
 };
 
 #endif

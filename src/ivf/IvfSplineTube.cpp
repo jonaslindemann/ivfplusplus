@@ -24,33 +24,33 @@
 
 #include <ivf/IvfSplineTube.h>
 
-CIvfSplineTube::CIvfSplineTube()
+CSplineTube::CSplineTube()
 {
 	m_spline = NULL;
 	m_resolution = 0.1;
 }
 
-CIvfSplineTube::~CIvfSplineTube()
+CSplineTube::~CSplineTube()
 {
 
 }
 
-void CIvfSplineTube::setSpline(CIvfSpline3d *spline)
+void CSplineTube::setSpline(CSpline3d *spline)
 {
 	m_spline = spline;
 }
 
-CIvfSpline3d* CIvfSplineTube::getSpline()
+CSpline3d* CSplineTube::getSpline()
 {
 	return m_spline;
 }
 
-void CIvfSplineTube::setPrecision(double resolution)
+void CSplineTube::setPrecision(double resolution)
 {
 	m_resolution = resolution;
 }
 
-void CIvfSplineTube::refresh()
+void CSplineTube::refresh()
 {
 	if (m_spline!=NULL)
 	{
@@ -60,7 +60,7 @@ void CIvfSplineTube::refresh()
 
 		double nPoints = (double)m_spline->getSize()/m_resolution;
 		int iPoints = (int)nPoints + 1;
-		CIvfVec3d p;
+		CVec3d p;
 		
 		setSpineSize(iPoints);
 
@@ -72,11 +72,11 @@ void CIvfSplineTube::refresh()
 			t+=m_resolution;
 		}
 	}
-	CIvfTubeExtrusion::refresh();
+	CTubeExtrusion::refresh();
 }
 
-void CIvfSplineTube::setSides(int sides)
+void CSplineTube::setSides(int sides)
 {
-	CIvfTubeExtrusion::setSides(sides);
+	CTubeExtrusion::setSides(sides);
 	this->refresh();
 }

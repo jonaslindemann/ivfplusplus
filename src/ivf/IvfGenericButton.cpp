@@ -24,18 +24,18 @@
 
 #include <ivf/IvfGenericButton.h>
 
-CIvfGenericButton::CIvfGenericButton()
+CGenericButton::CGenericButton()
 {
 	m_state = BS_NORMAL;
 	m_id = -1;
 }
 
-CIvfGenericButton::~CIvfGenericButton()
+CGenericButton::~CGenericButton()
 {
 
 }
 
-void CIvfGenericButton::setButtonState(TButtonState state)
+void CGenericButton::setButtonState(TButtonState state)
 {
 	m_state = state;
 
@@ -61,12 +61,12 @@ void CIvfGenericButton::setButtonState(TButtonState state)
 	}
 }
 
-void CIvfGenericButton::setId(int id)
+void CGenericButton::setId(int id)
 {
 	m_id = id;
 }
 
-int CIvfGenericButton::getId()
+int CGenericButton::getId()
 {
 	return m_id;
 }

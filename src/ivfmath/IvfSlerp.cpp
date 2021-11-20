@@ -21,16 +21,16 @@
 
 #include <ivfmath/IvfSlerp.h>
 
-CIvfSlerp::CIvfSlerp()
+CSlerp::CSlerp()
 {
 	m_size = -1;
 }
 
-CIvfSlerp::~CIvfSlerp()
+CSlerp::~CSlerp()
 {
 }
 
-void CIvfSlerp::setSize(int size)
+void CSlerp::setSize(int size)
 {
 	if (size>1)
 		m_size = size;
@@ -40,12 +40,12 @@ void CIvfSlerp::setSize(int size)
 	initSlerp();
 }
 
-int CIvfSlerp::getSize()
+int CSlerp::getSize()
 {
 	return m_quats.size();
 }
 
-void CIvfSlerp::clear()
+void CSlerp::clear()
 {
 	int i;
 
@@ -56,7 +56,7 @@ void CIvfSlerp::clear()
 	m_quats.clear();
 }
 
-void CIvfSlerp::initSlerp()
+void CSlerp::initSlerp()
 {
 	if (m_size>1)
 	{
@@ -68,7 +68,7 @@ void CIvfSlerp::initSlerp()
 
 		for (i=0; i<m_size; i++)
 		{
-			CIvfQuat* q = new CIvfQuat();
+			CQuat* q = new CQuat();
 			m_quats.push_back(q);
 		}
 
@@ -76,7 +76,7 @@ void CIvfSlerp::initSlerp()
 		
 		for (i=0; i<m_size-1 ; i++)
 		{
-			CIvfSlerpSegment* slerpSegment = new CIvfSlerpSegment();
+			CSlerpSegment* slerpSegment = new CSlerpSegment();
 			m_segments.push_back(slerpSegment);
 			slerpSegment->setStartQuat(m_quats[i]);
 			slerpSegment->setEndQuat(m_quats[i+1]);
@@ -85,7 +85,7 @@ void CIvfSlerp::initSlerp()
 }
 
 /** Retrieve specified point on spline. */
-CIvfQuat& CIvfSlerp::getQuat(int idx)
+CQuat& CSlerp::getQuat(int idx)
 {
 	if ((idx>=0)&&(idx<(int)m_quats.size()))
 		return *m_quats[idx];
@@ -94,7 +94,7 @@ CIvfQuat& CIvfSlerp::getQuat(int idx)
 }
 
 /** No descriptions */
-CIvfQuat& CIvfSlerp::getQuat(double t)
+CQuat& CSlerp::getQuat(double t)
 {
 	int segment = (int)t;
 
@@ -110,19 +110,19 @@ CIvfQuat& CIvfSlerp::getQuat(double t)
 }
 
 
-void CIvfSlerp::setQuat(int idx, CIvfQuat &q)
+void CSlerp::setQuat(int idx, CQuat &q)
 {
 	if ((idx>=0)&&(idx<(int)m_quats.size()))
 		*m_quats[idx] = q;
 }
 
-void CIvfSlerp::setQuatAxisAngle(int idx, double vx, double vy, double vz, double angle)
+void CSlerp::setQuatAxisAngle(int idx, double vx, double vy, double vz, double angle)
 {
 	if ((idx>=0)&&(idx<(int)m_quats.size()))
 		m_quats[idx]->setFromAxisAngle(vx, vy, vz, angle*2.0*M_PI/360.0);
 }
 
-void CIvfSlerp::update()
+void CSlerp::update()
 {
 	int i;
 

@@ -28,7 +28,7 @@
 #include <ivf/IvfBase.h>
 #include <ivfdef/IvfSingletonDestroyer.h>
 
-IvfStdPointer(CIvfBlending);
+IvfStdPointer(CBlending);
 
 /**
  * Blending singleton 
@@ -46,7 +46,7 @@ IvfStdPointer(CIvfBlending);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfBlending : public CIvfBase {
+class IVF_API CBlending : public CBase {
 public:
 	enum TBlendFactor {
 		BF_ZERO,
@@ -62,13 +62,13 @@ public:
 		BF_SRC_ALPHA_SATURATE
 	};
 private:
-	static CIvfBlending* m_instance;
-	static CIvfSingletonDestroyer<CIvfBlending> m_destroyer;
+	static CBlending* m_instance;
+	static CSingletonDestroyer<CBlending> m_destroyer;
 public:
 	/** Returns the blending singleton */
-	static CIvfBlending* getInstance();
+	static CBlending* getInstance();
 
-	IvfClassInfo("CIvfBlending",CIvfBase);
+	IvfClassInfo("CIvfBlending",CBase);
 
 	/** Enable blending */
 	void enable();
@@ -94,8 +94,8 @@ public:
 protected:
 
 	/** Protected constructor (do not use) */
-	CIvfBlending();
-	friend class CIvfSingletonDestroyer<CIvfBlending>;
+	CBlending();
+	friend class CSingletonDestroyer<CBlending>;
 };
 
 #endif 

@@ -1,5 +1,5 @@
-#ifndef _CIvfRotateCursor_h_
-#define _CIvfRotateCursor_h_
+#ifndef _CRotateCursor_h_
+#define _CRotateCursor_h_
 
 #include <ivf/IvfShape.h>
 #include <ivf/IvfTransform.h>
@@ -9,9 +9,9 @@
 
 #include "IvfCircularTube.h"
 
-IvfSmartPointer(CIvfVectorCursor);
+IvfSmartPointer(CVectorCursor);
 
-class CIvfVectorCursor : public CIvfShape {
+class CVectorCursor : public CShape {
 public:
 	enum TCursorType {
 		CT_VECTOR,
@@ -19,33 +19,33 @@ public:
 		CT_BETA
 	};
 private:
-	CIvfTransformPtr	m_cursor;
-	CIvfTransformPtr	m_alfaRotate;
-	CIvfTransformPtr	m_betaRotate;
-	CIvfTransformPtr	m_nonRotatingCursor;
-	CIvfTransformPtr	m_angleIndicators;
-	CIvfCircularTubePtr	m_circle1;
-	CIvfCircularTubePtr	m_circle2;
-	CIvfTransformPtr	m_spheres;
-	CIvfExtrArrowPtr	m_vectorIndicator;
+	CTransformPtr	m_cursor;
+	CTransformPtr	m_alfaRotate;
+	CTransformPtr	m_betaRotate;
+	CTransformPtr	m_nonRotatingCursor;
+	CTransformPtr	m_angleIndicators;
+	CCircularTubePtr	m_circle1;
+	CCircularTubePtr	m_circle2;
+	CTransformPtr	m_spheres;
+	CExtrArrowPtr	m_vectorIndicator;
 	TCursorType			m_cursorType;
 	double				m_alpha;
 	double				m_beta;
-	CIvfVec3d			m_vector;
+	CVec3d			m_vector;
 
-	CIvfTransformPtr m_spheres1;
-	CIvfTransformPtr m_spheres2;
+	CTransformPtr m_spheres1;
+	CTransformPtr m_spheres2;
 
 	void calcVector();
 public:
-	CIvfVec3d& getDirection();
+	CVec3d& getDirection();
 	void reset();
 	double getBeta();
 	double getAlpha();
-	CIvfVectorCursor();
-	virtual ~CIvfVectorCursor();
+	CVectorCursor();
+	virtual ~CVectorCursor();
 
-	IvfClassInfo("CIvfVectorCursor",CIvfShape);
+	IvfClassInfo("CVectorCursor",CShape);
 
 	void setType(TCursorType type);
 	void setBeta(double beta);

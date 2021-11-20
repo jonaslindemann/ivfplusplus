@@ -29,20 +29,20 @@
 
 #include <ivf3dui/IvfUISwitchBase.h>
 
-IvfSmartPointerRefBase(CIvfUISwitch,CIvfComposite);
+IvfSmartPointerRefBase(CUISwitch,CComposite);
 
-class IVF3DUI_API CIvfUISwitch : public CIvfUISwitchBase {
+class IVF3DUI_API CUISwitch : public CUISwitchBase {
 private:
-	CIvfShapePtr m_onShape;
-	CIvfShapePtr m_offShape;
+	CShapePtr m_onShape;
+	CShapePtr m_offShape;
 public:
-	CIvfUISwitch();
-	virtual ~CIvfUISwitch();
+	CUISwitch();
+	virtual ~CUISwitch();
 
-	IvfClassInfo("CIvfUISwitch",CIvfUISwitchBase);
+	IvfClassInfo("CUISwitch",CUISwitchBase);
 
-	void setOffShape(CIvfShape* shape);
-	void setOnShape(CIvfShape* shape);
+	void setOffShape(CShape* shape);
+	void setOnShape(CShape* shape);
 
 	virtual void doStateChange(bool state);
 };

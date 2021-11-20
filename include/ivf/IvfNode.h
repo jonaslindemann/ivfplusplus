@@ -29,17 +29,17 @@
 #include <ivf/IvfSphere.h>
 #include <ivf/IvfCube.h>
 
-IvfSmartPointer(CIvfNode);
+IvfSmartPointer(CNode);
 
 /**
  * Node shape class
  *
- * CIvfNode implements a geometric node. The node shape
+ * CNode implements a geometric node. The node shape
  * can represent a node as a sphere or a cube. The node class
- * is used by CIvfSolidLine.
+ * is used by CSolidLine.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfNode : public CIvfShape {
+class IVF_API CNode : public CShape {
 public:
 	enum TNodeType {
 		NT_SPHERE,
@@ -47,13 +47,13 @@ public:
 		NT_INVISIBLE
 	};
 public:
-	/** CIvfNode constructor */
-	CIvfNode ();
+	/** CNode constructor */
+	CNode ();
 
-	/** CIvfNode destructor */
-	virtual ~CIvfNode ();
+	/** CNode destructor */
+	virtual ~CNode ();
 
-	IvfClassInfo("CIvfNode",CIvfBase);
+	IvfClassInfo("CNode",CBase);
 	
 	/**
 	 * Set node size.
@@ -82,11 +82,11 @@ public:
 	virtual void doUpdateBoundingSphere();
 private:
 	double m_nodeSize;
-	CIvfSelectionBoxPtr m_selectionBox;
+	CSelectionBoxPtr m_selectionBox;
 	TNodeType m_nodeType;
-	CIvfShapePtr m_nodeShape;
-	CIvfCubePtr m_cubeShape;
-	CIvfSpherePtr m_sphereShape;
+	CShapePtr m_nodeShape;
+	CCubePtr m_cubeShape;
+	CSpherePtr m_sphereShape;
 protected:
 	virtual void doCreateSelect();
 	virtual void doCreateGeometry();

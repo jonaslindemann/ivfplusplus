@@ -29,30 +29,30 @@
 
 #include <ivf/ivfconfig.h>
 
-IvfSmartPointer(CIvfCoordList);
+IvfSmartPointer(CCoordList);
 
-class CIvfCoordList : public CIvfBase {
+class CCoordList : public CBase {
 private:
 
 public:
-	CIvfCoordList();
-	virtual ~CIvfCoordList();
+	CCoordList();
+	virtual ~CCoordList();
 
-	IvfClassInfo("CIvfCoordList",CIvfBase);
+	IvfClassInfo("CCoordList",CBase);
 
 	virtual void readFromStream(std::istream &in);
 	virtual void saveToStream(std::ostream &out);
 
 	virtual void addCoord(double x, double y, double z);
 	virtual void addCoord(double x, double y, double z, float r, float g, float b);
-	virtual void addCoord(CIvfVec3d* coord);
+	virtual void addCoord(CVec3d* coord);
 
 	virtual void setColor(long idx, float r, float g, float b);
 	virtual void getColor(long idx, float &r, float &g, float &b);
 	
 	virtual void setCoord(int idx, double x, double y, double z);
 	virtual void getCoord(long idx, double &x, double &y, double &z);
-	virtual CIvfVec3d* getCoord(long idx);
+	virtual CVec3d* getCoord(long idx);
 
 	virtual long getSize();
 	virtual void clear();

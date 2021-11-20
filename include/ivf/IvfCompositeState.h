@@ -29,28 +29,28 @@
 
 #include <ivf/IvfRenderState.h>
 
-IvfSmartPointer(CIvfCompositeState);
+IvfSmartPointer(CCompositeState);
 
 /**
  * Composite state class
  *
  * This class is used to manage a composite set of 
- * CIvfRenderState derived states.
+ * CRenderState derived states.
  */
-class IVF_API CIvfCompositeState : public CIvfRenderState {
+class IVF_API CCompositeState : public CRenderState {
 private:
-	std::vector<CIvfRenderState*> m_children;
+	std::vector<CRenderState*> m_children;
 public:
 	/** CIvfCompositeState constructor */
-	CIvfCompositeState();
+	CCompositeState();
 
 	/** CIvfCompositeState destructor */
-	virtual ~CIvfCompositeState();
+	virtual ~CCompositeState();
 
-	IvfClassInfo("CIvfCompositeState",CIvfRenderState);
+	IvfClassInfo("CIvfCompositeState",CRenderState);
 
-	/** Add CIvfRenderState derived state */
-	void addChild(CIvfRenderState* state);
+	/** Add CRenderState derived state */
+	void addChild(CRenderState* state);
 
 	/** Clear all states */
 	void clear();

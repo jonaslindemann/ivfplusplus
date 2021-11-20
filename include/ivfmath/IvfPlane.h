@@ -32,16 +32,16 @@
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfPlane : public CIvfMathBase {
+class IVFMATH_API CPlane : public CMathBase {
 private:
 	double m_normal[3];
 	double m_distance;
 public:
-	/** CIvfPlane constructor */
-	CIvfPlane();
+	/** CPlane constructor */
+	CPlane();
 
-	/** CIvfPlane destructor */
-	virtual ~CIvfPlane();
+	/** CPlane destructor */
+	virtual ~CPlane();
 
 	/** Set plane normal */
 	void setNormal(double vx, double vy, double vz);

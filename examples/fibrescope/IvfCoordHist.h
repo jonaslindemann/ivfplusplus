@@ -27,29 +27,30 @@
 #include <ivf/ivfconfig.h>
 
 #include <ivf/IvfBase.h>
+
 #include "IvfCoordList.h"
 #include "IvfDiscreteTime.h"
 
-IvfSmartPointer(CIvfCoordHist);
+IvfSmartPointer(CCoordHist);
 
-class CIvfCoordHist : public CIvfBase {
+class CCoordHist : public CBase {
 private:
-	std::vector<CIvfCoordListPtr> m_lists;
-	CIvfDiscreteTimePtr m_discreteTime;
+	std::vector<CCoordListPtr> m_lists;
+	CDiscreteTimePtr m_discreteTime;
 public:
-	CIvfCoordHist();
-	virtual ~CIvfCoordHist();
+	CCoordHist();
+	virtual ~CCoordHist();
 
 	void readFromStream(std::istream &in);
 	void saveToStream(std::ostream &out);
 
-	void addList(CIvfCoordList* list);
-	CIvfCoordList* getList(long idx);
-	CIvfCoordList* getList();
+	void addList(CCoordList* list);
+	CCoordList* getList(long idx);
+	CCoordList* getList();
 	long getSize();
 	void clear();
 
-	void setDiscreteTime(CIvfDiscreteTime* discreteTime);
+	void setDiscreteTime(CDiscreteTime* discreteTime);
 };
 
 #endif 

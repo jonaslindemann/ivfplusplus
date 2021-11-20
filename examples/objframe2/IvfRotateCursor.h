@@ -5,17 +5,17 @@
 
 #include <ivf/IvfSplineTube.h>
 
-IvfSmartPointer(CIvfRotateCursor);
+IvfSmartPointer(CRotateCursor);
 
-class CIvfRotateCursor : public CIvfShape {
+class CRotateCursor : public CShape {
 private:
-	CIvfSpline3dPtr m_spline;
-	CIvfSplineTubePtr m_splineTube;
+	CSpline3dPtr m_spline;
+	CSplineTubePtr m_splineTube;
 public:
-	CIvfRotateCursor();
-	virtual ~CIvfRotateCursor();
+	CRotateCursor();
+	virtual ~CRotateCursor();
 
-	IvfClassInfo("CIvfRotateCursor",CIvfShape);
+	IvfClassInfo("CRotateCursor",CShape);
 protected:
 	virtual void doCreateGeometry();
 };

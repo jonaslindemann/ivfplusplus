@@ -27,23 +27,23 @@
 
 #include <ivf/IvfShape.h>
 
-IvfSmartPointer(CIvfSimpleLineSet);
+IvfSmartPointer(CSimpleLineSet);
 
 /**
  * Line set shape class (obsolete)
  * 
- * CIvfSimpleLineSet implements a OpenGL line strip.
+ * CSimpleLineSet implements a OpenGL line strip.
  * @author Jonas Lindemann
  */
-class IVF_API CIvfSimpleLineSet : public CIvfShape {
+class IVF_API CSimpleLineSet : public CShape {
 public:
-	/** CIvfSimpleLineSet constructor */
-	CIvfSimpleLineSet ();
+	/** CSimpleLineSet constructor */
+	CSimpleLineSet ();
 
-	/** CIvfSimpleLineSet destructor */
-	virtual ~CIvfSimpleLineSet ();
+	/** CSimpleLineSet destructor */
+	virtual ~CSimpleLineSet ();
 
-	IvfClassInfo("CIvfSimpleLineSet",CIvfShape);
+	IvfClassInfo("CSimpleLineSet",CShape);
 
 	/** Set size of color list */
 	void setColorSize(int n);

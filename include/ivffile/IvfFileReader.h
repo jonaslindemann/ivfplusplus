@@ -29,7 +29,7 @@
 
 #include <ivf/IvfShape.h>
 
-IvfSmartPointer(CIvfFileReader);
+IvfSmartPointer(CFileReader);
 
 /**
  * Base class for a file reader
@@ -38,12 +38,12 @@ IvfSmartPointer(CIvfFileReader);
  * a text based 3d geometry file. It also serves as a
  * base class for file readers. File readers should 
  * override the read() method and assign imported 
- * geometry using the setShape() method in the CIvfFileBase
+ * geometry using the setShape() method in the CFileBase
  * class.
  *
  * @author Jonas Lindemann
  */
-class IVFFILE_API CIvfFileReader : public CIvfFileBase {
+class IVFFILE_API CFileReader : public CFileBase {
 private:
 	char m_rawRow[256];
 	double m_min[3];
@@ -51,13 +51,13 @@ private:
 	double m_scaleFactor;
 	bool m_reverseFace;
 public:
-	/** CIvfFileReader constructor */
-	CIvfFileReader();
+	/** CFileReader constructor */
+	CFileReader();
 
-	/** CIvfFileReader destructor */
-	virtual ~CIvfFileReader();
+	/** CFileReader destructor */
+	virtual ~CFileReader();
 
-	IvfClassInfo("CIvfFileReader",CIvfFileBase);
+	IvfClassInfo("CFileReader",CFileBase);
 
 	/** 
 	 * Returns min/max size of read geometry 

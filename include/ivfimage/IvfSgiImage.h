@@ -27,7 +27,7 @@
 
 #include <ivfimage/IvfFileImage.h>
 
-IvfSmartPointer(CIvfSgiImage);
+IvfSmartPointer(CSgiImage);
 
 /**
  * SGI file loader 
@@ -38,7 +38,7 @@ IvfSmartPointer(CIvfSgiImage);
  *
  * @author Jonas Lindemann
  */
-class IVFIMAGE_API CIvfSgiImage : public CIvfFileImage {
+class IVFIMAGE_API CSgiImage : public CFileImage {
 private:
 	bool m_alphaChannel;
 
@@ -48,16 +48,16 @@ private:
 	void expandrow(unsigned char *optr, unsigned char *iptr, int z);
 	void convertLong(GLuint *array, unsigned int length);
 public:
-	/** CIvfSgiImage constructor */
-	CIvfSgiImage();
+	/** CSgiImage constructor */
+	CSgiImage();
 
-	/** CIvfSgiImage constructor */
-	CIvfSgiImage(const char* name);
+	/** CSgiImage constructor */
+	CSgiImage(const char* name);
 
-	/** CIvfSgiImage destructor */
-	virtual ~CIvfSgiImage();
+	/** CSgiImage destructor */
+	virtual ~CSgiImage();
 
-	IvfClassInfo("CIvfSgiImage",CIvfFileImage);
+	IvfClassInfo("CSgiImage",CFileImage);
 
 	/** Reads sgi image */
 	virtual bool read();

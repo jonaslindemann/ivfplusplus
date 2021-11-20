@@ -26,51 +26,51 @@
 #include <ivfmath/IvfPlane.h>
 #include <ivfmath/IvfBoundingSphere.h>
 
-IvfSmartPointer(CIvfViewFrustum);
+IvfSmartPointer(CViewFrustum);
 
 /**
  * View frustum class
  * 
- * The CIvfViewFrustum implements a view frustum, which can 
+ * The CViewFrustum implements a view frustum, which can 
  * be used when culling a scene graph.
  */
-class IVFMATH_API CIvfViewFrustum : public CIvfMathBase {
+class IVFMATH_API CViewFrustum : public CMathBase {
 private:
-	CIvfPlane* m_near;
-	CIvfPlane* m_far;
-	CIvfPlane* m_left;
-	CIvfPlane* m_right;
-	CIvfPlane* m_top;
-	CIvfPlane* m_bottom;
+	CPlane* m_near;
+	CPlane* m_far;
+	CPlane* m_left;
+	CPlane* m_right;
+	CPlane* m_top;
+	CPlane* m_bottom;
 public:
-	/** CIvfViewFrustum constructor */
-	CIvfViewFrustum();
+	/** CViewFrustum constructor */
+	CViewFrustum();
 
 	/** CIvfViewFrustom destructor */
-	virtual ~CIvfViewFrustum();
+	virtual ~CViewFrustum();
 
-	IvfClassInfo("CIvfViewFrustum",CIvfMathBase);
+	IvfClassInfo("CViewFrustum",CMathBase);
 
 	/** Returns true if bounding sphere is inside frustum */
-	bool isInside(CIvfBoundingSphere* bSphere);
+	bool isInside(CBoundingSphere* bSphere);
 
 	/** Returns bottom plane */
-	CIvfPlane* getBottomPlane();
+	CPlane* getBottomPlane();
 
 	/** Returns top plane */
-	CIvfPlane* getTopPlane();
+	CPlane* getTopPlane();
 
 	/** Returns right plane */
-	CIvfPlane* getRightPlane();
+	CPlane* getRightPlane();
 
 	/** Returns left plane */
-	CIvfPlane* getLeftPlane();
+	CPlane* getLeftPlane();
 
 	/** Returns far plane */
-	CIvfPlane* getFarPlane();
+	CPlane* getFarPlane();
 
 	/** Returns near plane */
-	CIvfPlane* getNearPlane();
+	CPlane* getNearPlane();
 };
 
 #endif 

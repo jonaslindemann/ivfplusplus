@@ -27,7 +27,7 @@
 
 #include <ivf/IvfBase.h>
 
-IvfSmartPointer(CIvfColor);
+IvfSmartPointer(CColor);
 
 /**
  * Color class
@@ -35,17 +35,17 @@ IvfSmartPointer(CIvfColor);
  * Defines a (r,g,b,a) color class. Use to store colors in the
  * CIvfGLPrimitive derived classes.
  */
-class IVF_API CIvfColor : public CIvfBase {
+class IVF_API CColor : public CBase {
 private:
 	float m_color[4];
 public:
 	/** CIvfColor constructor */
-	CIvfColor();
+	CColor();
 
 	/** CIvfColor destructor */
-	~CIvfColor();
+	~CColor();
 
-	IvfClassInfo("CIvfColor",CIvfBase);
+	IvfClassInfo("CIvfColor",CBase);
 
 	/** Set color value */
 	void setColor(float red, float green, float blue);

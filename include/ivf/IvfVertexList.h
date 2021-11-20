@@ -30,18 +30,18 @@
 
 #include <ivfmath/IvfVec3d.h>
 
-IvfSmartPointer(CIvfVertexList);
+IvfSmartPointer(CVertexList);
 
 /**
  * Vertex list class
  *
- * Maintains a list of vertex coordinates for use with the CIvfVertexElements class.
+ * Maintains a list of vertex coordinates for use with the CVertexElements class.
  * The list is initially 1024 elements and the size is doubled if exceeding
  * 1024. 
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfVertexList : public CIvfBase {
+class IVF_API CVertexList : public CBase {
 private:
 	GLfloat* m_vertices;
 	long m_allocSize;
@@ -49,13 +49,13 @@ private:
 	long m_blockSize;
 	long m_next;
 public:
-	/** CIvfVertexList constructor */
-	CIvfVertexList();
+	/** CVertexList constructor */
+	CVertexList();
 
-	/** CIvfVertexList destructor */
-	virtual ~CIvfVertexList();
+	/** CVertexList destructor */
+	virtual ~CVertexList();
 
-	IvfClassInfo("CIvfVertexList",CIvfBase);
+	IvfClassInfo("CVertexList",CBase);
 
 	/** Add vertex coordinate */
 	void add(double x, double y, double z);
@@ -79,7 +79,7 @@ public:
 	 *
 	 * param idx should be between 0 to getSize()-1
 	 */
-	CIvfVec3d& getVertex(int idx);
+	CVec3d& getVertex(int idx);
 
 	/** Set size of vertex list */
 	void setSize(int size);

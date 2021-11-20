@@ -36,12 +36,12 @@
  * Ivf++. To implement in new classes use the
  * IvfClassInfo("ClassName",ParentClass) macro.
  */
-class IVF_API CIvfRTTIBase {
+class IVF_API CRTTIBase {
 private:
 
 public:
-	CIvfRTTIBase();
-	virtual ~CIvfRTTIBase();
+	CRTTIBase();
+	virtual ~CRTTIBase();
 
 	/**
 	 * Class name query.

@@ -47,12 +47,12 @@
 
 #include <ivfwidget/IvfWidgetBase.h>
 
-IvfSmartPointer(CIvfFltkBase);
+IvfSmartPointer(CFltkBase);
 
 /**
  * Basic fltk widget class
  */
-class IVFFLTK_API CIvfFltkBase : public Fl_Gl_Window, public CIvfWidgetBase {
+class IVFFLTK_API CFltkBase : public Fl_Gl_Window, public CWidgetBase {
 private:
 	/** 
 	 * Implements the FL_Gl_Window draw method
@@ -86,9 +86,9 @@ public:
 	 * @param H Widget height.
 	 * @param L Widget title (optional)
 	 */
-	CIvfFltkBase(int X, int Y, int W, int H, const char *L=0);
+	CFltkBase(int X, int Y, int W, int H, const char *L=0);
 
-	IvfClassInfo("CIvfFltkBase",CIvfWidgetBase);
+	IvfClassInfo("CFltkBase",CWidgetBase);
 
 	void redraw();
 

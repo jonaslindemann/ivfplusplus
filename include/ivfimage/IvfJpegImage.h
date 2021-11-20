@@ -27,7 +27,7 @@
 
 #include <ivfimage/IvfFileImage.h>
 
-IvfSmartPointer(CIvfJpegImage);
+IvfSmartPointer(CJpegImage);
 
 /**
  * Jpeg file loader 
@@ -37,17 +37,17 @@ IvfSmartPointer(CIvfJpegImage);
  *
  * @author Jonas Lindemann
  */
-class IVFIMAGE_API CIvfJpegImage : public CIvfFileImage {
+class IVFIMAGE_API CJpegImage : public CFileImage {
 private:
 
 public:
-	/** CIvfJpegImage constructor */
-	CIvfJpegImage();
+	/** CJpegImage constructor */
+	CJpegImage();
 
-	/** CIvfJpegImage destructor */
-	virtual ~CIvfJpegImage();
+	/** CJpegImage destructor */
+	virtual ~CJpegImage();
 
-	IvfClassInfo("CIvfJpegImage",CIvfFileImage);
+	IvfClassInfo("CJpegImage",CFileImage);
 
 	/** Reads jpeg image */
 	virtual bool read();

@@ -32,16 +32,16 @@
 #define IVF_ACTION_ACTIVATE			1
 #define IVF_ACTION_RESET			2
 
-IvfSmartPointer(CIvfController);
+IvfSmartPointer(CController);
 
 /**
  * Controller class
  *
  * Base class for the different controllers in Ivf++
  */
-class IVFCTL_API CIvfController : public CIvfBase {
+class IVFCTL_API CController : public CBase {
 private:
-	CIvfShape* m_controlledShape;	
+	CShape* m_controlledShape;	
 
 	bool m_active;
 
@@ -50,18 +50,18 @@ private:
 	double	m_initialRotation[3];
 	double  m_initialRotQuat[4];
 
-	CIvfAction* m_endAction;
-	CIvfAction* m_startAction;
+	CAction* m_endAction;
+	CAction* m_startAction;
 
-	CIvfLight* m_light;
+	CLight* m_light;
 public:
-	/** CIvfController constructor */
-	CIvfController();
+	/** CController constructor */
+	CController();
 
-	/** CIvfController destructor */
-	virtual ~CIvfController();
+	/** CController destructor */
+	virtual ~CController();
 
-	IvfClassInfo("CIvfController",CIvfBase);
+	IvfClassInfo("CController",CBase);
 
 	/** Make the controller active */
 	void activate();
@@ -87,19 +87,19 @@ public:
 	 *
 	 * \param action Action to be performed on the controller. Calls doAction on derived classes.
 	 */
-	void action(CIvfAction* action);
+	void action(CAction* action);
 
 	/** Set shape to be controller */
-	void setShape(CIvfShape* shape);
+	void setShape(CShape* shape);
 
 	/** Return controlled shape */
-	CIvfShape* getShape(); 
+	CShape* getShape(); 
 
 	/** Set light to be controlled */
-	void setLight(CIvfLight* light);
+	void setLight(CLight* light);
 
 	/** Retrieve controlled light */
-	CIvfLight* getLight();
+	CLight* getLight();
 
 	/** 
 	 * Set start action
@@ -107,7 +107,7 @@ public:
 	 * This action is performed when the controller has returned to
 	 * the starting state
 	 */
-	void setStartAction(CIvfAction* action);
+	void setStartAction(CAction* action);
 
 	/**
 	 * Set end action
@@ -115,7 +115,7 @@ public:
 	 * This action is performed when the controller has reached the
 	 * end position
 	 */
-	void setEndAction(CIvfAction* action);
+	void setEndAction(CAction* action);
 
 	/** 
 	 * Virtual update routine
@@ -126,7 +126,7 @@ public:
 	 */
 	virtual void doUpdate(double dt);
 	virtual void doReset();
-	virtual void doAction(CIvfAction* action);
+	virtual void doAction(CAction* action);
 	virtual void doDeactivate();
 	virtual void doActivate();
 	virtual void doEndAction();

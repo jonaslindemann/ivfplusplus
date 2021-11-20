@@ -27,20 +27,20 @@
 // ------------------------------------------------------------
 // ------------------------------------------------------------
 
-CIvfColor::CIvfColor()
+CColor::CColor()
 {
 	this->setColor(0.8f, 0.8f, 0.8f);
 	this->setAlfa(1.0);
 }
 
 // ------------------------------------------------------------
-CIvfColor::~CIvfColor()
+CColor::~CColor()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfColor::setColor(float red, float green, float blue)
+void CColor::setColor(float red, float green, float blue)
 {
 	m_color[0] = red;
 	m_color[1] = green;
@@ -48,7 +48,7 @@ void CIvfColor::setColor(float red, float green, float blue)
 }
 
 // ------------------------------------------------------------
-void CIvfColor::getColor(float &red, float &green, float &blue)
+void CColor::getColor(float &red, float &green, float &blue)
 {
 	red = m_color[0];
 	green = m_color[1];
@@ -56,19 +56,19 @@ void CIvfColor::getColor(float &red, float &green, float &blue)
 }
 
 // ------------------------------------------------------------
-const float* CIvfColor::getColor()
+const float* CColor::getColor()
 {
 	return &m_color[0];
 }
 
 // ------------------------------------------------------------
-void CIvfColor::setAlfa(float alfa)
+void CColor::setAlfa(float alfa)
 {
 	m_color[3] = alfa;
 }
 
 // ------------------------------------------------------------
-float CIvfColor::getAlfa()
+float CColor::getAlfa()
 {
 	return m_color[3];
 }

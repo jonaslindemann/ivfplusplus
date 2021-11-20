@@ -24,20 +24,20 @@
 
 #include <ivf/IvfGlobalState.h>
 
-CIvfGlobalState* CIvfGlobalState::m_instance = 0;
-CIvfSingletonDestroyer<CIvfGlobalState> CIvfGlobalState::m_destroyer;
+CGlobalState* CGlobalState::m_instance = 0;
+CSingletonDestroyer<CGlobalState> CGlobalState::m_destroyer;
 
-CIvfGlobalState* CIvfGlobalState::getInstance () 
+CGlobalState* CGlobalState::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CIvfGlobalState();
+		m_instance = new CGlobalState();
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CIvfGlobalState::CIvfGlobalState()
+CGlobalState::CGlobalState()
 {
 	m_renderMaterial = true;
 	m_renderTexture = true;
@@ -45,67 +45,67 @@ CIvfGlobalState::CIvfGlobalState()
     m_colorOutput = true;
 }
 
-CIvfGlobalState::~CIvfGlobalState()
+CGlobalState::~CGlobalState()
 {
 
 }
 
-void CIvfGlobalState::enableMaterialRendering()
+void CGlobalState::enableMaterialRendering()
 {
 	m_renderMaterial = true;
 }
 
-void CIvfGlobalState::disableMaterialRendering()
+void CGlobalState::disableMaterialRendering()
 {
 	m_renderMaterial = false;
 }
 
-bool CIvfGlobalState::isMaterialRenderingEnabled()
+bool CGlobalState::isMaterialRenderingEnabled()
 {
 	return m_renderMaterial;
 }
 
-void CIvfGlobalState::enableTextureRendering()
+void CGlobalState::enableTextureRendering()
 {
 	m_renderTexture = true;
 }
 
-void CIvfGlobalState::disableTextureRendering()
+void CGlobalState::disableTextureRendering()
 {
 	m_renderTexture = false;
 }
 
-bool CIvfGlobalState::isTextureRenderingEnabled()
+bool CGlobalState::isTextureRenderingEnabled()
 {
 	return m_renderTexture;
 }
 
-void CIvfGlobalState::enableGreyscaleRendering()
+void CGlobalState::enableGreyscaleRendering()
 {
 	m_renderGreyscale = true;
 }
 
-void CIvfGlobalState::disableGreyscaleRendering()
+void CGlobalState::disableGreyscaleRendering()
 {
 	m_renderGreyscale = false;
 }
 
-bool CIvfGlobalState::isGreyscaleRenderingEnabled()
+bool CGlobalState::isGreyscaleRenderingEnabled()
 {
 	return m_renderGreyscale;
 }
 
-void CIvfGlobalState::enableColorOutput()
+void CGlobalState::enableColorOutput()
 {
     m_colorOutput = true;
 }
 
-void CIvfGlobalState::disableColorOutput()
+void CGlobalState::disableColorOutput()
 {
     m_colorOutput = false;
 }
 
-bool CIvfGlobalState::isColorOutputEnabled()
+bool CGlobalState::isColorOutputEnabled()
 {
     return m_colorOutput;
 }

@@ -136,8 +136,8 @@ void tilePerspective(GLdouble fovy, GLdouble aspect,
 }
 
 // ------------------------------------------------------------
-CIvfCamera::CIvfCamera ()
-		:CIvfView()
+CCamera::CCamera ()
+		:CView()
 {
 	m_position.setComponents(0.0, 0.0, -10.0);
 	m_target.setComponents(0.0, 0.0, 0.0);
@@ -162,39 +162,39 @@ CIvfCamera::CIvfCamera ()
 }
 
 // ------------------------------------------------------------
-CIvfCamera::~CIvfCamera ()
+CCamera::~CCamera ()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::setPosition(GLdouble x, GLdouble y, GLdouble z)
+void CCamera::setPosition(GLdouble x, GLdouble y, GLdouble z)
 {
 	m_position.setComponents(x, y, z);
 	calcOrientation();
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::setTarget(GLdouble x, GLdouble y, GLdouble z)
+void CCamera::setTarget(GLdouble x, GLdouble y, GLdouble z)
 {
 	m_target.setComponents(x, y, z);
 	calcOrientation();
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::getTarget(GLdouble & x, GLdouble & y, GLdouble & z)
+void CCamera::getTarget(GLdouble & x, GLdouble & y, GLdouble & z)
 {
 	m_target.getComponents(x, y, z);
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::getPosition(GLdouble & x, GLdouble & y, GLdouble & z)
+void CCamera::getPosition(GLdouble & x, GLdouble & y, GLdouble & z)
 {
 	m_position.getComponents(x, y, z);
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::calcOrientation()
+void CCamera::calcOrientation()
 {
 	double cx, cy, cz;
 	double ax, ay, az;
@@ -222,31 +222,31 @@ void CIvfCamera::calcOrientation()
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::moveSideways(double d)
+void CCamera::moveSideways(double d)
 {
 	if (m_cameraType==CT_NORMAL)
 		calcOrientation();
 
-	CIvfVec3d direction;
+	CVec3d direction;
 	direction = m_sideways * d;
 	m_position += direction;
 	m_target += direction; 
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::moveVertical(double d)
+void CCamera::moveVertical(double d)
 {
 	if (m_cameraType==CT_NORMAL)
 		calcOrientation();
 	
-	CIvfVec3d direction;
+	CVec3d direction;
 	direction = m_up * d;
 	m_position += direction;
 	m_target += direction; 
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::moveDepth(double d)
+void CCamera::moveDepth(double d)
 {
 	double dx, dy, dz;
 	double xt, yt, zt;
@@ -271,7 +271,7 @@ void CIvfCamera::moveDepth(double d)
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::rotatePositionX(double angle)
+void CCamera::rotatePositionX(double angle)
 {
 	double px, py, pz;
 	double tx, ty, tz;
@@ -314,7 +314,7 @@ void CIvfCamera::rotatePositionX(double angle)
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::rotatePositionY(double angle)
+void CCamera::rotatePositionY(double angle)
 {
 	double px, py, pz;
 	double tx, ty, tz;
@@ -349,13 +349,13 @@ void CIvfCamera::rotatePositionY(double angle)
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::getForwardVector(double & vx, double & vy, double & vz)
+void CCamera::getForwardVector(double & vx, double & vy, double & vz)
 {
 	m_forward.getComponents(vx,vy,vz);	
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::pickVector(int sx, int sy, double & vx, double & vy, double & vz)
+void CCamera::pickVector(int sx, int sy, double & vx, double & vy, double & vz)
 {
 	double xx, yy;
 	double px, py, pz;
@@ -364,8 +364,8 @@ void CIvfCamera::pickVector(int sx, int sy, double & vx, double & vy, double & v
 	int x, y, w, h;
 	double fov;
 
-	CIvfVec3d  planePoint;
-	CIvfVec3d  pickVector;
+	CVec3d  planePoint;
+	CVec3d  pickVector;
 
 	fov = m_fov * 2.0 * M_PI / 360.0;
 
@@ -395,7 +395,7 @@ void CIvfCamera::pickVector(int sx, int sy, double & vx, double & vy, double & v
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::setPerspective(double fov, double zNear, double zFar)
+void CCamera::setPerspective(double fov, double zNear, double zFar)
 {
 	m_fov = fov;
 	m_zNear = zNear;
@@ -403,7 +403,7 @@ void CIvfCamera::setPerspective(double fov, double zNear, double zFar)
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::getPerspective(double & fov, double & zNear, double & zFar)
+void CCamera::getPerspective(double & fov, double & zNear, double & zFar)
 {
 	fov = m_fov;
 	zNear = m_zNear;
@@ -411,7 +411,7 @@ void CIvfCamera::getPerspective(double & fov, double & zNear, double & zFar)
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::rotateAbsolute(double alfa, double beta)
+void CCamera::rotateAbsolute(double alfa, double beta)
 {
 	double px, py, pz;
 	double tx, ty, tz;
@@ -442,7 +442,7 @@ void CIvfCamera::rotateAbsolute(double alfa, double beta)
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::getAbsoluteRotation(double &alfa, double &beta)
+void CCamera::getAbsoluteRotation(double &alfa, double &beta)
 {
 	double px, py, pz;
 	double tx, ty, tz;
@@ -463,13 +463,13 @@ void CIvfCamera::getAbsoluteRotation(double &alfa, double &beta)
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::getUpVector(double *v)
+void CCamera::getUpVector(double *v)
 {
 	m_up.getComponents(v[0],v[1],v[2]);	
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::projectionTransform()
+void CCamera::projectionTransform()
 {
 	if (m_stereo)
 		stereoTransform();
@@ -498,7 +498,7 @@ void CIvfCamera::projectionTransform()
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::viewTransform()
+void CCamera::viewTransform()
 {
 	GLdouble eyeX, eyeY, eyeZ;
 	GLdouble centerX, centerY, centerZ;
@@ -506,8 +506,8 @@ void CIvfCamera::viewTransform()
 
 	if (m_stereo)
 	{
-		CIvfVec3d pos;
-		CIvfVec3d target;
+		CVec3d pos;
+		CVec3d target;
 
 		pos = m_position;
 		target = m_target;
@@ -537,7 +537,7 @@ void CIvfCamera::viewTransform()
 			m_target.getComponents(centerX, centerY, centerZ);
 		else
 		{
-			CIvfVec3d center = m_position + m_forward;
+			CVec3d center = m_position + m_forward;
 			center.getComponents(centerX, centerY, centerZ);
 		}
 	}
@@ -559,7 +559,7 @@ void CIvfCamera::viewTransform()
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::getViewFrustum(CIvfViewFrustum *frustum)
+void CCamera::getViewFrustum(CViewFrustum *frustum)
 {
 	double x, y, z;
 	double v1[3];
@@ -575,12 +575,12 @@ void CIvfCamera::getViewFrustum(CIvfViewFrustum *frustum)
 
 	// Get all planes
 
-	CIvfPlane* nearPlane   = frustum->getNearPlane();
-	CIvfPlane* farPlane    = frustum->getFarPlane();
-	CIvfPlane* leftPlane   = frustum->getLeftPlane();
-	CIvfPlane* rightPlane  = frustum->getRightPlane();
-	CIvfPlane* topPlane    = frustum->getTopPlane();
-	CIvfPlane* bottomPlane = frustum->getBottomPlane();
+	CPlane* nearPlane   = frustum->getNearPlane();
+	CPlane* farPlane    = frustum->getFarPlane();
+	CPlane* leftPlane   = frustum->getLeftPlane();
+	CPlane* rightPlane  = frustum->getRightPlane();
+	CPlane* topPlane    = frustum->getTopPlane();
+	CPlane* bottomPlane = frustum->getBottomPlane();
 
 	// Get orientation vectors
 
@@ -649,7 +649,7 @@ void CIvfCamera::getViewFrustum(CIvfViewFrustum *frustum)
 
 
 // ------------------------------------------------------------
-void CIvfCamera::moveAbsoluteDepth(double d)
+void CCamera::moveAbsoluteDepth(double d)
 {
 	double dx, dy, dz;
 	double xt, yt, zt;
@@ -663,10 +663,10 @@ void CIvfCamera::moveAbsoluteDepth(double d)
 }
 
 // ------------------------------------------------------------
-CIvfVec3d& CIvfCamera::pickVector(int x, int y)
+CVec3d& CCamera::pickVector(int x, int y)
 {
 	double cx, cy, cz;
-	CIvfVec3d& v = ivfGetTempVec3d();
+	CVec3d& v = ivfGetTempVec3d();
 
 	pickVector(x, y, cx, cy, cz);
 	v.setComponents(cx, cy, cz);
@@ -675,13 +675,13 @@ CIvfVec3d& CIvfCamera::pickVector(int x, int y)
 }
 
 // ------------------------------------------------------------
-CIvfVec3d& CIvfCamera::getPosition()
+CVec3d& CCamera::getPosition()
 {
 	return m_position;
 }
 
 // ------------------------------------------------------------
-void CIvfCamera::setForwardVector(CIvfVec3d &vec)
+void CCamera::setForwardVector(CVec3d &vec)
 {
 	m_forward = vec;
 	m_forward.normalize();
@@ -693,7 +693,7 @@ void CIvfCamera::setForwardVector(CIvfVec3d &vec)
 // By Paul Bourke
 // http://astronomy.swin.edu.au/~pbourke/opengl/stereogl/
 
-void CIvfCamera::stereoTransform()
+void CCamera::stereoTransform()
 {
 
 	double znear, zfar, fov;
@@ -703,7 +703,7 @@ void CIvfCamera::stereoTransform()
 	double left, right, top, bottom;
 	double ratio = getAspect();
 	
-	CIvfVec3d r;
+	CVec3d r;
 
 	getPerspective(fov, znear, zfar);
 
@@ -732,42 +732,42 @@ void CIvfCamera::stereoTransform()
     glFrustum(left,right,bottom,top,znear,zfar);
 }
 
-void CIvfCamera::setStereo(bool flag)
+void CCamera::setStereo(bool flag)
 {
 	m_stereo = flag;
 }
 
-bool CIvfCamera::getStereo()
+bool CCamera::getStereo()
 {
 	return m_stereo;
 }
 
-void CIvfCamera::setStereoEye(TStereoEye eye)
+void CCamera::setStereoEye(TStereoEye eye)
 {
 	m_stereoEye = eye;
 }
 
-void CIvfCamera::setEyeSeparation(double separation)
+void CCamera::setEyeSeparation(double separation)
 {
 	m_eyeSeparation = separation;
 }
 
-double CIvfCamera::getEyeSeparation()
+double CCamera::getEyeSeparation()
 {
 	return m_eyeSeparation;
 }
 
-void CIvfCamera::setType(TCameraType type)
+void CCamera::setType(TCameraType type)
 {
 	m_cameraType = type;
 }
 
-CIvfCamera::TCameraType CIvfCamera::getType()
+CCamera::TCameraType CCamera::getType()
 {
 	return m_cameraType;
 }
 
-void CIvfCamera::turn(double dx, double dy, double dz)
+void CCamera::turn(double dx, double dy, double dz)
 {
 	m_forward.rotate(m_up, -dy);
 	m_sideways.rotate(m_up, -dy);
@@ -779,54 +779,54 @@ void CIvfCamera::turn(double dx, double dy, double dz)
 	m_sideways.rotate(m_forward, -dz);
 }
 
-void CIvfCamera::moveForward(double d)
+void CCamera::moveForward(double d)
 {
 	m_position = m_position + m_forward*d;
 }
 
-CIvfVec3d& CIvfCamera::getTarget()
+CVec3d& CCamera::getTarget()
 {
 	return m_target;
 }
 
-CIvfVec3d& CIvfCamera::getForwardVector()
+CVec3d& CCamera::getForwardVector()
 {
 	return m_forward;
 }
 
-void CIvfCamera::setTileRendering(bool flag)
+void CCamera::setTileRendering(bool flag)
 {
 	m_tileRendering = flag;
 }
 
-bool CIvfCamera::getTileRendering()
+bool CCamera::getTileRendering()
 {
 	return m_tileRendering;
 }
 
-void CIvfCamera::setJitter(bool flag)
+void CCamera::setJitter(bool flag)
 {
 	m_jitter = flag;
 }
 
-bool CIvfCamera::getJitter()
+bool CCamera::getJitter()
 {
 	return m_jitter;
 }
 
-void CIvfCamera::setJitterPixels(double dx, double dy)
+void CCamera::setJitterPixels(double dx, double dy)
 {
 	m_jitterX = dx;
 	m_jitterY = dy;
 }
 
-void CIvfCamera::getJitterPixels(double &dx, double &dy)
+void CCamera::getJitterPixels(double &dx, double &dy)
 {
 	dx = m_jitterX;
 	dy = m_jitterY;
 }
 
-void CIvfCamera::setTileRect(double left, double right, double bottom, double top)
+void CCamera::setTileRect(double left, double right, double bottom, double top)
 {
 	m_tileLeft = left;
 	m_tileRight = right;
@@ -834,7 +834,7 @@ void CIvfCamera::setTileRect(double left, double right, double bottom, double to
 	m_tileTop = top;
 }
 
-void CIvfCamera::getTileRect(double &left, double &right, double &bottom, double &top)
+void CCamera::getTileRect(double &left, double &right, double &bottom, double &top)
 {
 	left = m_tileLeft;
 	right = m_tileRight;

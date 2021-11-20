@@ -28,7 +28,7 @@
 
 #include <ivf/IvfGLBase.h>
 
-IvfSmartPointer(CIvfOldLight);
+IvfSmartPointer(COldLight);
 
 static size_t IVF_MAX_LIGHTS = 8;
 
@@ -41,7 +41,7 @@ static size_t IVF_MAX_LIGHTS = 8;
  *
  * @author Carl Johan Lejdfors
  */
-class IVF_API CIvfOldLight : public CIvfGLBase {
+class IVF_API COldLight : public CGLBase {
 public:
 	enum TLightType {
 		LT_POINT,
@@ -50,18 +50,18 @@ public:
 	};
 public:
 	/** Constructor */
-	CIvfOldLight();
+	COldLight();
 
 	/** Destructor */
-	virtual ~CIvfOldLight();
+	virtual ~COldLight();
 
 	/** Assignment operator */
-	CIvfOldLight& operator = ( const CIvfOldLight& ); 
+	COldLight& operator = ( const COldLight& ); 
 	
 	/** void* operator */
 	operator void*(); 
 
-	IvfClassInfo("CIvfOldLight",CIvfGLBase);
+	IvfClassInfo("COldLight",CGLBase);
 
 	/** Set ambient light components */
 	void setAmbient( const GLfloat r, const GLfloat g, 
@@ -166,7 +166,7 @@ public:
 	
 protected:
 	// disallow copying 
-	CIvfOldLight( const CIvfOldLight& );
+	COldLight( const COldLight& );
 	
 	static long lightmask; //available lights
 	
@@ -189,7 +189,7 @@ private:
 	bool m_active;
 };
 /** \example lighting.cpp
- * This is an example of how to use the CIvfOldLight and 
- * CIvfOldLightModel classes.
+ * This is an example of how to use the COldLight and 
+ * COldLightModel classes.
  */
 #endif /* IvfOldLight_H */

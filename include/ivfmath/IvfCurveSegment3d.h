@@ -28,7 +28,7 @@
 #include <ivfmath/IvfMathBase.h>
 #include <ivfmath/IvfVec3d.h>
 
-IvfSmartPointer(CIvfCurveSegment3d);
+IvfSmartPointer(CCurveSegment3d);
 
 /**
  * Abstract curve segment class
@@ -37,29 +37,29 @@ IvfSmartPointer(CIvfCurveSegment3d);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfCurveSegment3d : public CIvfMathBase {
+class IVFMATH_API CCurveSegment3d : public CMathBase {
 private:
 	double m_t0;
 public:
 	/** CIvfCurveSegment constructor */
-	CIvfCurveSegment3d();
+	CCurveSegment3d();
 
 	/** CIvfCurveSegment destructor */
-	virtual ~CIvfCurveSegment3d();
+	virtual ~CCurveSegment3d();
 
-	IvfClassInfo("CIvfCurveSegment3d",CIvfMathBase);
+	IvfClassInfo("CCurveSegment3d",CMathBase);
 
   	/** Set start position of curve */
 	void setStartPosition(double t0);
   	
 	/** Get point on curve */
-  	virtual CIvfVec3d* getPosition(double t)=0;
+  	virtual CVec3d* getPosition(double t)=0;
 	
 	/** Get start point on curve */
-  	virtual CIvfVec3d* getStartPoint()=0;
+  	virtual CVec3d* getStartPoint()=0;
 	
 	/** Get end point on curve */
-  	virtual CIvfVec3d* getEndPoint()=0;
+  	virtual CVec3d* getEndPoint()=0;
 };
 
 #endif

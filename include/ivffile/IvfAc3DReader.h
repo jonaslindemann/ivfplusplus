@@ -41,7 +41,7 @@
 #define OT_GROUP   2  
 #define OT_LIGHT   3
 
-IvfSmartPointer(CIvfAc3DReader);
+IvfSmartPointer(CAc3DReader);
 
 /**
  * Base class for a AC3D reader
@@ -52,7 +52,7 @@ IvfSmartPointer(CIvfAc3DReader);
  *
  * @author Jonas Lindemann
  */
-class IVFFILE_API CIvfAc3DReader : public CIvfFileReader {
+class IVFFILE_API CAc3DReader : public CFileReader {
 public:
 	enum TSurfaceType {
 		ST_POLY,
@@ -70,23 +70,23 @@ private:
 
 	TSurfaceType m_surfaceType;
 
-	CIvfCompositePtr m_world;
-	CIvfCompositePtr m_currentGroup;
-	CIvfMaterialPtr m_currentMaterial;
-	CIvfPolySetPtr m_currentPolySet;
-	CIvfLightPtr m_currentLight;
-	CIvfLineStripSetPtr m_currentLineStripSet;
-	CIvfIndexPtr m_currentIndex;
-	CIvfMaterialSetPtr m_materialSet;
-	CIvfShapePtr m_currentShape;
-	CIvfTexturePtr m_lastTexture;
-	CIvfLightingPtr m_lighting;
+	CCompositePtr m_world;
+	CCompositePtr m_currentGroup;
+	CMaterialPtr m_currentMaterial;
+	CPolySetPtr m_currentPolySet;
+	CLightPtr m_currentLight;
+	CLineStripSetPtr m_currentLineStripSet;
+	CIndexPtr m_currentIndex;
+	CMaterialSetPtr m_materialSet;
+	CShapePtr m_currentShape;
+	CTexturePtr m_lastTexture;
+	CLightingPtr m_lighting;
 
-	std::vector<CIvfVec3dPtr> m_vertexList;
+	std::vector<CVec3dPtr> m_vertexList;
 
 	int			    m_lightCount;
 
-	CIvfCompositePtr  m_groupStack[100];
+	CCompositePtr  m_groupStack[100];
 	int				m_childStack[100];
 	int				m_currentLevel;
 
@@ -128,18 +128,18 @@ private:
 
 	bool haveMoreChildren();
 	void decChild();
-	CIvfComposite* currentGroup();
+	CComposite* currentGroup();
 	void popGroup();
-	void pushGroup(CIvfComposite* group);
+	void pushGroup(CComposite* group);
 	void initGroupStack();
 public:
-	/** CIvfAc3DReader constructor */
-	CIvfAc3DReader();
+	/** CAc3DReader constructor */
+	CAc3DReader();
 
-	/** CIvfAc3DReader destructor */
-	virtual ~CIvfAc3DReader();
+	/** CAc3DReader destructor */
+	virtual ~CAc3DReader();
 
-	IvfClassInfo("CIvfAc3DReader",CIvfFileReader);
+	IvfClassInfo("CAc3DReader",CFileReader);
 
 	/** Reads AC3D file */
 	virtual void read();

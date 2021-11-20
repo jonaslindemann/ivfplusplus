@@ -28,29 +28,29 @@
 #include <ivf/IvfGL.h>
 #include <ivf/IvfRenderState.h>
 
-IvfSmartPointer(CIvfBlendState);
+IvfSmartPointer(CBlendState);
 
 /**
  * Blending state class
  *
  * Encapsulates a blending state. 
  */
-class IVF_API CIvfBlendState : public CIvfRenderState {
+class IVF_API CBlendState : public CRenderState {
 private:
 	GLenum m_sfactor;
 	GLenum m_dfactor;
 	GLboolean m_oldState;
 public:
 	/** CIvfBlendState constructor */
-	CIvfBlendState();
+	CBlendState();
 
 	/** CIvfBlendState constructor */
-	CIvfBlendState(GLenum sfactor, GLenum dfactor);
+	CBlendState(GLenum sfactor, GLenum dfactor);
 
 	/** CIvfBlendState destructor */
-	virtual ~CIvfBlendState();
+	virtual ~CBlendState();
 
-	IvfClassInfo("CIvfBlendState",CIvfRenderState);
+	IvfClassInfo("CIvfBlendState",CRenderState);
 
 	/** Sets the blend function factors */
 	void setFunction(GLenum sfactor, GLenum dfactor);

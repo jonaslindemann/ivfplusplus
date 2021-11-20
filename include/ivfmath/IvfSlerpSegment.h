@@ -33,21 +33,21 @@
  *
  * Interface not finished
  */
-class IVFMATH_API CIvfSlerpSegment : public CIvfMathBase {
+class IVFMATH_API CSlerpSegment : public CMathBase {
 private:
 	void initSlerp();
-	CIvfQuat* m_q1;
-	CIvfQuat* m_q2;
+	CQuat* m_q1;
+	CQuat* m_q2;
 	double m_theta;
 public:
 	void update();
-	CIvfSlerpSegment();
-	virtual ~CIvfSlerpSegment();
+	CSlerpSegment();
+	virtual ~CSlerpSegment();
 
-	const void setEndQuat(CIvfQuat* q);
-	const void setStartQuat(CIvfQuat* q);
+	const void setEndQuat(CQuat* q);
+	const void setStartQuat(CQuat* q);
 
-	CIvfQuat& getQuat(double t);
+	CQuat& getQuat(double t);
 };
 
 #endif 

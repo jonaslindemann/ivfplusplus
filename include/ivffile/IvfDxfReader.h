@@ -38,23 +38,23 @@
  *
  * @author Jonas Lindemann
  */
-class IVFFILE_API CIvfDxfReader : public CIvfFileReader {
+class IVFFILE_API CDxfReader : public CFileReader {
 private:
 	std::string m_row;
 	int m_faceCount;
-	CIvfIndex* m_idx;
+	CIndex* m_idx;
 	bool m_doubleFaces;
-	std::vector<CIvfIndex*> m_faceIndex;
+	std::vector<CIndex*> m_faceIndex;
 	void read3DFace(std::istream &in);
 	bool findKey(const char* heading, std::istream &in);
 	bool readData(std::istream &in);
 	bool checkHeader(std::istream &in);
 public:
-	/** CIvfDxfReader constructor */
-	CIvfDxfReader();
+	/** CDxfReader constructor */
+	CDxfReader();
 
-	/** CIvfDxfReader destructor */
-	virtual ~CIvfDxfReader();
+	/** CDxfReader destructor */
+	virtual ~CDxfReader();
 
 	void correctFaceNormals();
 

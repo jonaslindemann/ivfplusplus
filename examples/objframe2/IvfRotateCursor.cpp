@@ -1,8 +1,8 @@
 #include "IvfRotateCursor.h"
 
-CIvfRotateCursor::CIvfRotateCursor()
+CRotateCursor::CRotateCursor()
 {
-	m_spline = new CIvfSpline3d();
+	m_spline = new CSpline3d();
 	m_spline->setSize(3);
 	m_spline->getPoint(0)->setComponents(1.0, 0.0, 0.0);
 	m_spline->getPoint(1)->setComponents(cos(M_PI/4.0), 0.0, cos(M_PI/4.0));
@@ -11,17 +11,17 @@ CIvfRotateCursor::CIvfRotateCursor()
 	m_spline->setTangentWeight(2,0.0);
 	m_spline->update();
 
-	m_splineTube = new CIvfSplineTube();
+	m_splineTube = new CSplineTube();
 	m_splineTube->setSpline(m_spline);
 	m_splineTube->refresh();
 }
 
-CIvfRotateCursor::~CIvfRotateCursor()
+CRotateCursor::~CRotateCursor()
 {
 
 }
 
-void CIvfRotateCursor::doCreateGeometry()
+void CRotateCursor::doCreateGeometry()
 {
 	m_splineTube->render();
 }

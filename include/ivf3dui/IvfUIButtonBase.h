@@ -27,9 +27,9 @@
 
 #include <ivf3dui/IvfUIInteractiveBase.h>
 
-IvfSmartPointer(CIvfUIButtonBase);
+IvfSmartPointer(CUIButtonBase);
 
-class IVF3DUI_API CIvfUIButtonBase : public CIvfUIInteractiveBase {
+class IVF3DUI_API CUIButtonBase : public CUIInteractiveBase {
 public:
 	enum TButtonType {
 		BT_NORMAL,
@@ -46,10 +46,10 @@ private:
 	TButtonState m_state;
 public:
 	void groupUpdateState(TButtonState state);
-	CIvfUIButtonBase();
-	virtual ~CIvfUIButtonBase();
+	CUIButtonBase();
+	virtual ~CUIButtonBase();
 
-	IvfClassInfo("CIvfUIButtonBase",CIvfUIInteractiveBase);
+	IvfClassInfo("CUIButtonBase",CUIInteractiveBase);
 
 	void setState(TButtonState state);
 	TButtonType getType();

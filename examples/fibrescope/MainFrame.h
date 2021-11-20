@@ -298,7 +298,7 @@ private:
   inline void cb_mnuHelpAbout_i(Fl_Menu_*, void*);
   static void cb_mnuHelpAbout(Fl_Menu_*, void*);
 public:
-  CIvfCustomWidget *ivfCustomWidget;
+  CCustomWidget *ivfCustomWidget;
   Fl_Scroll *scrTop;
   Fl_Value_Slider *sldTimeStep;
 private:

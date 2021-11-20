@@ -21,21 +21,21 @@
 
 #include <ivf/IvfLineStripSet.h>
 
-CIvfLineStripSet::CIvfLineStripSet()
+CLineStripSet::CLineStripSet()
 {
 	m_useColor = false;
 	m_lineWidth = 1.0;
 }
 
-CIvfLineStripSet::~CIvfLineStripSet()
+CLineStripSet::~CLineStripSet()
 {
 
 }
 
-void CIvfLineStripSet::doCreateGeometry()
+void CLineStripSet::doCreateGeometry()
 {
-	CIvfIndex* coordIdx;
-	CIvfIndex* colorIdx;
+	CIndex* coordIdx;
+	CIndex* colorIdx;
 	long i, j;
 	float oldWidth[1];
 
@@ -77,23 +77,23 @@ void CIvfLineStripSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CIvfLineStripSet::setUseColor(bool flag)
+void CLineStripSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CIvfLineStripSet::getUseColor()
+bool CLineStripSet::getUseColor()
 {
 	return m_useColor;
 }
 
 
-void CIvfLineStripSet::setLineWidth(float width)
+void CLineStripSet::setLineWidth(float width)
 {
 	m_lineWidth = width;
 }
 
-float CIvfLineStripSet::getLineWidth()
+float CLineStripSet::getLineWidth()
 {
 	return m_lineWidth;
 }

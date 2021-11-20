@@ -27,16 +27,16 @@
 
 #include <ivf/IvfBase.h>
 
-IvfSmartPointer(CIvfGleColorArray);
+IvfSmartPointer(CGleColorArray);
 
-class IVFGLE_API CIvfGleColorArray: public CIvfBase {
+class IVFGLE_API CGleColorArray: public CBase {
 private:
 	int m_size;
 	float (*m_colors)[3];
 public:
-	CIvfGleColorArray();
-	CIvfGleColorArray(int size);
-	virtual ~CIvfGleColorArray();
+	CGleColorArray();
+	CGleColorArray(int size);
+	virtual ~CGleColorArray();
 
 	void setSize(int size);
 	int getSize();
@@ -46,7 +46,7 @@ public:
 
 	void* getData();
 
-	IvfClassInfo("CIvfGleColorArray", CIvfBase);
+	IvfClassInfo("CGleColorArray", CBase);
 };
 
 #endif

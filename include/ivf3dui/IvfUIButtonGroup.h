@@ -28,19 +28,19 @@
 #include <ivf3dui/IvfUIBase.h>
 #include <ivf3dui/IvfUIButtonBase.h>
 
-IvfSmartPointer(CIvfUIButtonGroup);
+IvfSmartPointer(CUIButtonGroup);
 
-class IVF3DUI_API CIvfUIButtonGroup : public CIvfUIBase {
+class IVF3DUI_API CUIButtonGroup : public CUIBase {
 private:
 
 public:
-	CIvfUIButtonGroup();
-	virtual ~CIvfUIButtonGroup();
+	CUIButtonGroup();
+	virtual ~CUIButtonGroup();
 
-	IvfClassInfo("CIvfUIButtonGroup", CIvfUIBase);
+	IvfClassInfo("CUIButtonGroup", CUIBase);
 
-	void addChild(CIvfUIButtonBase* button);
-	void updateState(CIvfUIButtonBase* button);
+	void addChild(CUIButtonBase* button);
+	void updateState(CUIButtonBase* button);
 };
 
 #endif 

@@ -34,19 +34,19 @@
 /**
  * User coordinate class.
  *
- * CIvfUcs3d implements a user defined coordinate system and
+ * CUcs3d implements a user defined coordinate system and
  * routines to convert to and from this. Coordinate snap is 
  * also implemented.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CIvfWorkPlane : public CIvfMathBase {
+class IVFMATH_API CWorkPlane : public CMathBase {
 private:
 	double m_snapUnit;
 
-	CIvfVec3d m_zAxis;
-	CIvfVec3d m_yAxis;
-	CIvfVec3d m_xAxis;
+	CVec3d m_zAxis;
+	CVec3d m_yAxis;
+	CVec3d m_xAxis;
 
 	double m_theta;
 	double m_vz;
@@ -56,23 +56,23 @@ private:
 	double m_tx;
 	double m_ty;
 
-	CIvfMat4d m_transformationMatrix;
-	CIvfMat4d m_inversionMatrix;
-	CIvfVec4d m_pointWorld;
-	CIvfVec4d m_pointTransformed;
+	CMat4d m_transformationMatrix;
+	CMat4d m_inversionMatrix;
+	CVec4d m_pointWorld;
+	CVec4d m_pointTransformed;
 
 public:
-	CIvfWorkPlane();
-	virtual ~CIvfWorkPlane();
+	CWorkPlane();
+	virtual ~CWorkPlane();
 
 	bool isClass(char* name);
 	void getClassName(char* name);
 
 	/** Transform point to world coordinate system */
-	void transformWorld(CIvfPoint3d* point);
+	void transformWorld(CPoint3d* point);
 
 	/** Transform point to local coordinate system */
-	void transform(CIvfPoint3d* point);
+	void transform(CPoint3d* point);
 
 	/** Transform (sx, sy, sz) to world coordinate system */
 	void transformWorld(double sx, double sy, double sz, double &wx, double &wy,  double &wz);

@@ -27,49 +27,49 @@
 // ------------------------------------------------------------
 // ------------------------------------------------------------
 
-CIvfIndexBase::CIvfIndexBase()
+CIndexBase::CIndexBase()
 {
 
 }
 
 // ------------------------------------------------------------
-CIvfIndexBase::~CIvfIndexBase()
+CIndexBase::~CIndexBase()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::addLast(long idx)
-{
-	addLast(idx);
-}
-
-// ------------------------------------------------------------
-void CIvfIndexBase::add(long idx)
+void CIndexBase::addLast(long idx)
 {
 	addLast(idx);
 }
 
 // ------------------------------------------------------------
-long CIvfIndexBase::getIndex(long pos)
+void CIndexBase::add(long idx)
+{
+	addLast(idx);
+}
+
+// ------------------------------------------------------------
+long CIndexBase::getIndex(long pos)
 {
 	return -1;
 }
 
 // ------------------------------------------------------------
-long CIvfIndexBase::getSize()
+long CIndexBase::getSize()
 {
 	return -1;
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::clear()
+void CIndexBase::clear()
 {
 	//m_indices.clear();
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::createLinear(long size)
+void CIndexBase::createLinear(long size)
 {
 	/*
 	long i;
@@ -80,14 +80,14 @@ void CIvfIndexBase::createLinear(long size)
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::add(long i1, long i2)
+void CIndexBase::add(long i1, long i2)
 {
 	this->add(i1);
 	this->add(i2);
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::add(long i1, long i2, long i3)
+void CIndexBase::add(long i1, long i2, long i3)
 {
 	this->add(i1);
 	this->add(i2);
@@ -95,7 +95,7 @@ void CIvfIndexBase::add(long i1, long i2, long i3)
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::add(long i1, long i2, long i3, long i4)
+void CIndexBase::add(long i1, long i2, long i3, long i4)
 {
 	this->add(i1);
 	this->add(i2);
@@ -104,7 +104,7 @@ void CIvfIndexBase::add(long i1, long i2, long i3, long i4)
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::addArray(long *i, long size)
+void CIndexBase::addArray(long *i, long size)
 {
 	/*
 	long j;
@@ -115,7 +115,7 @@ void CIvfIndexBase::addArray(long *i, long size)
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::assignFrom(CIvfIndexBase *idx)
+void CIndexBase::assignFrom(CIndexBase *idx)
 {
 	/*
 	long i;
@@ -128,14 +128,14 @@ void CIvfIndexBase::assignFrom(CIvfIndexBase *idx)
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::assignTo(CIvfIndexBase *idx)
+void CIndexBase::assignTo(CIndexBase *idx)
 {
 	idx->clear();
 	idx->assignFrom(this);
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::createLinear(long start, long size)
+void CIndexBase::createLinear(long start, long size)
 {
 	/*
 	long i;
@@ -146,7 +146,7 @@ void CIvfIndexBase::createLinear(long start, long size)
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::createConstant(long value, long size)
+void CIndexBase::createConstant(long value, long size)
 {
 	/*
 	long i;
@@ -157,7 +157,7 @@ void CIvfIndexBase::createConstant(long value, long size)
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::add(long i1, long i2, long i3, long i4, long i5)
+void CIndexBase::add(long i1, long i2, long i3, long i4, long i5)
 {
 	this->add(i1);
 	this->add(i2);
@@ -167,25 +167,25 @@ void CIvfIndexBase::add(long i1, long i2, long i3, long i4, long i5)
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::setTopology(int topology)
+void CIndexBase::setTopology(int topology)
 {
 	m_topology = topology;
 }
 
 // ------------------------------------------------------------
-int CIvfIndexBase::getTopology()
+int CIndexBase::getTopology()
 {
 	return m_topology;
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::setSize(int size)
+void CIndexBase::setSize(int size)
 {
 
 }
 
 // ------------------------------------------------------------
-void CIvfIndexBase::setIndex(long pos, long value)
+void CIndexBase::setIndex(long pos, long value)
 {
 
 }

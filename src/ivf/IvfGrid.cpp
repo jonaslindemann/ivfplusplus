@@ -24,19 +24,19 @@
 
 #include <ivf/IvfGrid.h>
 
-CIvfGrid::CIvfGrid()
+CGrid::CGrid()
 {
 	m_p1.setComponents(-1.0,  0.0, -1.0);
 	m_p2.setComponents( 1.0,  0.0,  1.0);
 
-	m_corners = new CIvfLineSet();
-	m_outline = new CIvfLineSet();
-	m_gridLines = new CIvfLineSet();
-	m_surface = new CIvfQuadSet();
-	m_axis = new CIvfAxis();
-    m_axis->setState(CIvfShape::OS_OFF);
-    m_corners->setState(CIvfShape::OS_OFF);
-    m_outline->setState(CIvfShape::OS_OFF);
+	m_corners = new CLineSet();
+	m_outline = new CLineSet();
+	m_gridLines = new CLineSet();
+	m_surface = new CQuadSet();
+	m_axis = new CAxis();
+    m_axis->setState(CShape::OS_OFF);
+    m_corners->setState(CShape::OS_OFF);
+    m_outline->setState(CShape::OS_OFF);
 
 	m_gridSpacing = 0.1;
 
@@ -48,7 +48,7 @@ CIvfGrid::CIvfGrid()
 
 	m_gridInterval = 1;
 
-	m_surfaceMaterial = new CIvfMaterial();
+	m_surfaceMaterial = new CMaterial();
 	m_surfaceMaterial->setDiffuseColor(0.3f, 0.3f, 0.3f, 0.2f);
 
 	m_cornerColor[0] = 0.8f; m_cornerColor[1] = 0.8f; m_cornerColor[2] = 0.8f; m_cornerColor[3] = 1.0f;
@@ -59,7 +59,7 @@ CIvfGrid::CIvfGrid()
 	initGrid();
 }
 
-CIvfGrid::~CIvfGrid()
+CGrid::~CGrid()
 {
 	delete m_corners;
 	delete m_outline;
@@ -68,7 +68,7 @@ CIvfGrid::~CIvfGrid()
 	delete m_axis;
 }
 
-void CIvfGrid::initGrid()
+void CGrid::initGrid()
 {
 	double x1, y1, z1;
 	double x2, y2, z2;
@@ -100,7 +100,7 @@ void CIvfGrid::initGrid()
 
 	m_corners->setLineWidth(2);
 
-	CIvfIndex* idx = new CIvfIndex();
+	CIndex* idx = new CIndex();
 	idx->add(0,1);
 	idx->add(0,2);
 	idx->add(3,4);
@@ -114,7 +114,7 @@ void CIvfGrid::initGrid()
 
 	m_corners->addColor(m_cornerColor[0], m_cornerColor[1], m_cornerColor[2], m_cornerColor[3]);
 
-	CIvfIndex* colorIdx = new CIvfIndex();
+	CIndex* colorIdx = new CIndex();
 	colorIdx->createConstant(0, idx->getSize());
 
 	m_corners->addColorIndex(colorIdx);
@@ -137,7 +137,7 @@ void CIvfGrid::initGrid()
 	m_outline->addCoord(x1, y1, z1+cs);
 	m_outline->addCoord(x1, y1, z2-cs);
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 
 	idx->add(0,1);
 	idx->add(2,3);
@@ -148,7 +148,7 @@ void CIvfGrid::initGrid()
 
 	m_outline->addColor(m_outlineColor[0], m_outlineColor[1], m_outlineColor[2], m_outlineColor[3]);
 
-	colorIdx = new CIvfIndex();
+	colorIdx = new CIndex();
 	colorIdx->createConstant(0, idx->getSize());
 
 	m_outline->addColorIndex(colorIdx);
@@ -163,7 +163,7 @@ void CIvfGrid::initGrid()
 	m_surface->addCoord(x2, y1, z1);
 	m_surface->addCoord(x1, y1, z1);
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 	idx->createLinear(0,4);
 
 	m_surface->addCoordIndex(idx);
@@ -185,14 +185,14 @@ void CIvfGrid::initGrid()
 	m_gridLines->addCoord(x1, y1, 0);
 	m_gridLines->addCoord(x2, y1, 0);
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 	idx->add(0,1);
 	idx->add(2,3);
 
 	m_gridLines->addColor(m_majorColor[0], m_majorColor[1], m_majorColor[2], m_majorColor[3]);
 	m_gridLines->addColor(m_minorColor[0], m_minorColor[1], m_minorColor[2], m_minorColor[3]);
 
-	colorIdx = new CIvfIndex();
+	colorIdx = new CIndex();
 	colorIdx->add(0,0);
 	colorIdx->add(0,0);
 
@@ -241,12 +241,12 @@ void CIvfGrid::initGrid()
 	m_gridLines->setUseColor(true);
 }
 
-void CIvfGrid::refresh()
+void CGrid::refresh()
 {
 	initGrid();
 }
 
-void CIvfGrid::doCreateGeometry()
+void CGrid::doCreateGeometry()
 {
 	if (m_useAxis) m_axis->render();
 	if (m_useSurface) m_surface->render();
@@ -255,48 +255,48 @@ void CIvfGrid::doCreateGeometry()
 	if (m_useGrid) m_gridLines->render();
 }
 
-bool CIvfGrid::isRoughly(double x, double value)
+bool CGrid::isRoughly(double x, double value)
 {
 	return (x>(value-0.00001))&&(x<(value+0.00001));
 }
 
-void CIvfGrid::setSize(double width, double height)
+void CGrid::setSize(double width, double height)
 {
 	m_p1.setComponents(-width/2.0, 0.0, -height/2.0);
 	m_p2.setComponents( width/2.0, 0.0,  height/2.0);
 }
 
-void CIvfGrid::setGridSpacing(double spacing)
+void CGrid::setGridSpacing(double spacing)
 {
 	m_gridSpacing = spacing;
 }
 
-void CIvfGrid::setUseCorners(bool flag)
+void CGrid::setUseCorners(bool flag)
 {
 	m_useCorners = flag;
 }
 
-void CIvfGrid::setUseOutline(bool flag)
+void CGrid::setUseOutline(bool flag)
 {
 	m_useOutline = flag;
 }
 
-void CIvfGrid::setUseGrid(bool flag)
+void CGrid::setUseGrid(bool flag)
 {
 	m_useGrid = flag;
 }
 
-void CIvfGrid::setUseAxis(bool flag)
+void CGrid::setUseAxis(bool flag)
 {
 	m_useAxis = flag;
 }
 
-void CIvfGrid::setUseSurface(bool flag)
+void CGrid::setUseSurface(bool flag)
 {
 	m_useSurface = flag;
 }
 
-void CIvfGrid::doUpdateBoundingSphere()
+void CGrid::doUpdateBoundingSphere()
 {
 	// This is very simple
 
@@ -309,45 +309,45 @@ void CIvfGrid::doUpdateBoundingSphere()
 	}
 }
 
-void CIvfGrid::setAxisSize(double size)
+void CGrid::setAxisSize(double size)
 {
 	m_axis->setSize(size);
 }
 
-CIvfAxis* CIvfGrid::getAxisShape()
+CAxis* CGrid::getAxisShape()
 {
 	return m_axis;
 }
 
 
-void CIvfGrid::setGridInterval(int interval)
+void CGrid::setGridInterval(int interval)
 {
 	m_gridInterval = interval;
 	initGrid();
 }
 
-void CIvfGrid::setCornerColor(float red, float green, float blue, float alpha)
+void CGrid::setCornerColor(float red, float green, float blue, float alpha)
 {
 	m_cornerColor[0] = red; m_cornerColor[1] = green; m_cornerColor[2] = blue; m_cornerColor[3] = alpha;
 }
 
-void CIvfGrid::setOutlineColor(float red, float green, float blue, float alpha)
+void CGrid::setOutlineColor(float red, float green, float blue, float alpha)
 {
 	m_outlineColor[0] = red; m_outlineColor[1] = green; m_outlineColor[2] = blue; m_outlineColor[3] = alpha;
 }
 
-void CIvfGrid::setSurfaceMaterial(CIvfMaterial* material)
+void CGrid::setSurfaceMaterial(CMaterial* material)
 {
 	m_surfaceMaterial = material;
 }
 
-void CIvfGrid::setMajorColor(float red, float green, float blue, float alpha)
+void CGrid::setMajorColor(float red, float green, float blue, float alpha)
 {
 	m_majorColor[0] = red; m_majorColor[1] = green; m_majorColor[2] = blue; m_majorColor[3] = alpha; 
 
 }
 
-void CIvfGrid::setMinorColor(float red, float green, float blue, float alpha)
+void CGrid::setMinorColor(float red, float green, float blue, float alpha)
 {
 	m_minorColor[0] = red; m_minorColor[1] = green; m_minorColor[2] = blue; m_minorColor[3] = alpha; 
 }

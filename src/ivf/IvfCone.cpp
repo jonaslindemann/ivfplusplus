@@ -29,8 +29,8 @@
 #define PI 3.141592653589793
 
 // ------------------------------------------------------------
-CIvfCone::CIvfCone ()
-		:CIvfShape()
+CCone::CCone ()
+		:CShape()
 		//TODO: check and complete member initialisation list!
 {
 	m_bottomRadius = 1.0;
@@ -38,18 +38,18 @@ CIvfCone::CIvfCone ()
 	m_height = 2.0;
 	m_slices = 8;
 	m_stacks = 1;
-	m_selectionBox = new CIvfSelectionBox();
+	m_selectionBox = new CSelectionBox();
 	updateSelectBox();
 }
 
 // ------------------------------------------------------------
-CIvfCone::~CIvfCone ()
+CCone::~CCone ()
 {
 	delete m_selectionBox;
 }
 
 // ------------------------------------------------------------
-void CIvfCone::setTopRadius (const double radius)
+void CCone::setTopRadius (const double radius)
 {
 	m_topRadius = radius;
 	doUpdateBoundingSphere();
@@ -57,14 +57,14 @@ void CIvfCone::setTopRadius (const double radius)
 }
 
 // ------------------------------------------------------------
-double CIvfCone::getTopRadius ()
+double CCone::getTopRadius ()
 {
 	return m_topRadius;
 	updateSelectBox();
 }
 
 // ------------------------------------------------------------
-void CIvfCone::setBottomRadius (const double radius)
+void CCone::setBottomRadius (const double radius)
 {
 	m_bottomRadius = radius;
 	doUpdateBoundingSphere();
@@ -72,13 +72,13 @@ void CIvfCone::setBottomRadius (const double radius)
 }
 
 // ------------------------------------------------------------
-double CIvfCone::getBottomRadius ()
+double CCone::getBottomRadius ()
 {
 	return m_bottomRadius;
 }
 
 // ------------------------------------------------------------
-void CIvfCone::setHeight (const double height)
+void CCone::setHeight (const double height)
 {
 	m_height = height;
 	doUpdateBoundingSphere();
@@ -86,32 +86,32 @@ void CIvfCone::setHeight (const double height)
 }
 
 // ------------------------------------------------------------
-double CIvfCone::getHeight ()
+double CCone::getHeight ()
 {
 	return m_height;
 }
 
-void CIvfCone::setSlices(int slices)
+void CCone::setSlices(int slices)
 {
 	m_slices = slices;
 }
 
-int CIvfCone::getSlices()
+int CCone::getSlices()
 {
 	return m_slices;
 }
 
-void CIvfCone::setStacks(int stacks)
+void CCone::setStacks(int stacks)
 {
 	m_stacks = stacks;
 }
 
-int CIvfCone::getStacks()
+int CCone::getStacks()
 {
 	return m_stacks;
 }
 
-void CIvfCone::doCreateGeometry()
+void CCone::doCreateGeometry()
 {
 	glPushMatrix();
 		glPushMatrix();
@@ -159,7 +159,7 @@ void CIvfCone::doCreateGeometry()
 }
 
 
-void CIvfCone::updateSelectBox()
+void CCone::updateSelectBox()
 {
 	if (m_bottomRadius>m_topRadius)
 		m_selectionBox->setSize(m_bottomRadius*2.0,m_height,m_bottomRadius*2.0);
@@ -167,12 +167,12 @@ void CIvfCone::updateSelectBox()
 		m_selectionBox->setSize(m_topRadius*2.0,m_height,m_topRadius*2.0);
 }
 
-void CIvfCone::doCreateSelect()
+void CCone::doCreateSelect()
 {
 	m_selectionBox->render();
 }
 
-void CIvfCone::doUpdateBoundingSphere()
+void CCone::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=NULL)
 	{

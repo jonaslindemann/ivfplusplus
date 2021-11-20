@@ -22,7 +22,7 @@
 #include <ivfctl/IvfColorController.h>
 
 
-CIvfColorController::CIvfColorController()
+CColorController::CColorController()
 {
 	m_redFunc = NULL;
 	m_greenFunc = NULL;
@@ -32,35 +32,35 @@ CIvfColorController::CIvfColorController()
 	m_colorMode = CM_DIFFUSE;
 }
 
-CIvfColorController::~CIvfColorController()
+CColorController::~CColorController()
 {
 }
 
-void CIvfColorController::setRedFunction(CIvfFunction2d *func)
+void CColorController::setRedFunction(CFunction2d *func)
 {
 	m_redFunc = func;
 }
 
-void CIvfColorController::setGreenFunction(CIvfFunction2d *func)
+void CColorController::setGreenFunction(CFunction2d *func)
 {
 	m_greenFunc = func;
 }
 
-void CIvfColorController::setBlueFunction(CIvfFunction2d *func)
+void CColorController::setBlueFunction(CFunction2d *func)
 {
 	m_blueFunc = func;
 }
 
-void CIvfColorController::doUpdate(double dt)
+void CColorController::doUpdate(double dt)
 {
 	float red, green, blue, alpha;
 
-	CIvfShape* shape = this->getShape();
+	CShape* shape = this->getShape();
 
 	if (shape==NULL)
 		return;
 
-	CIvfMaterial* material = shape->getMaterial();
+	CMaterial* material = shape->getMaterial();
 
 	if (material==NULL)
 		return;
@@ -116,22 +116,22 @@ void CIvfColorController::doUpdate(double dt)
 	m_time += dt;
 }
 
-void CIvfColorController::setAlphaFunction(CIvfFunction2d *func)
+void CColorController::setAlphaFunction(CFunction2d *func)
 {
 	m_alphaFunc = func;
 }
 
-void CIvfColorController::setColorMode(TColorMode mode)
+void CColorController::setColorMode(TColorMode mode)
 {
 	m_colorMode = mode;
 }
 
-CIvfColorController::TColorMode CIvfColorController::getColorMode()
+CColorController::TColorMode CColorController::getColorMode()
 {
 	return m_colorMode;
 }
 
-void CIvfColorController::doReset()
+void CColorController::doReset()
 {
 	m_time = 0.0;
 }

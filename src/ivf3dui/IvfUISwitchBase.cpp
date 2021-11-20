@@ -24,32 +24,32 @@
 
 #include <ivf3dui/IvfUISwitchBase.h>
 
-CIvfUISwitchBase::CIvfUISwitchBase()
+CUISwitchBase::CUISwitchBase()
 {
 	m_state = false;
 }
 
-CIvfUISwitchBase::~CIvfUISwitchBase()
+CUISwitchBase::~CUISwitchBase()
 {
 
 }
 
-void CIvfUISwitchBase::doControlClick(CIvfVec3d vec, int button)
+void CUISwitchBase::doControlClick(CVec3d vec, int button)
 {
 
 }
 
-void CIvfUISwitchBase::doControlOver(CIvfVec3d vec)
+void CUISwitchBase::doControlOver(CVec3d vec)
 {
-	this->setHighlight(CIvfShape::HS_ON);
+	this->setHighlight(CShape::HS_ON);
 }
 
-void CIvfUISwitchBase::doControlLeave(CIvfVec3d vec)
+void CUISwitchBase::doControlLeave(CVec3d vec)
 {
-	this->setHighlight(CIvfShape::HS_OFF);
+	this->setHighlight(CShape::HS_OFF);
 }
 
-void CIvfUISwitchBase::on()
+void CUISwitchBase::on()
 {
 	if (!m_state)
 	{
@@ -58,7 +58,7 @@ void CIvfUISwitchBase::on()
 	}
 }
 
-void CIvfUISwitchBase::off()
+void CUISwitchBase::off()
 {
 	if (m_state)
 	{
@@ -67,22 +67,22 @@ void CIvfUISwitchBase::off()
 	}
 }
 
-bool CIvfUISwitchBase::isOn()
+bool CUISwitchBase::isOn()
 {
 	return m_state;
 }
 
-bool CIvfUISwitchBase::isOff()
+bool CUISwitchBase::isOff()
 {
 	return !m_state;
 }
 
-bool CIvfUISwitchBase::getState()
+bool CUISwitchBase::getState()
 {
 	return m_state;
 }
 
-void CIvfUISwitchBase::setState(bool state)
+void CUISwitchBase::setState(bool state)
 {
 	if (m_state!=state)
 	{
@@ -91,18 +91,18 @@ void CIvfUISwitchBase::setState(bool state)
 	}
 }
 
-void CIvfUISwitchBase::doStateChange(bool state)
+void CUISwitchBase::doStateChange(bool state)
 {
 
 }
 
-void CIvfUISwitchBase::doControlDown(CIvfVec3d vec, int button)
+void CUISwitchBase::doControlDown(CVec3d vec, int button)
 {
 	setState(!m_state);
-	this->setHighlight(CIvfShape::HS_OFF);
+	this->setHighlight(CShape::HS_OFF);
 }
 
-void CIvfUISwitchBase::doControlUp(CIvfVec3d vec)
+void CUISwitchBase::doControlUp(CVec3d vec)
 {
 
 }

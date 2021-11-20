@@ -27,7 +27,7 @@
 
 #include <ivf/IvfSwitch.h>
 
-IvfSmartPointer(CIvfSwitch);
+IvfSmartPointer(CSwitch);
 
 /**
  * Base button class
@@ -37,7 +37,7 @@ IvfSmartPointer(CIvfSwitch);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfGenericButton : public CIvfSwitch {
+class IVF_API CGenericButton : public CSwitch {
 public:
 	enum TButtonState {
 		BS_NORMAL,
@@ -51,12 +51,12 @@ private:
 	int m_id;
 public:
 	/** CIvfGenericButton constructor */
-	CIvfGenericButton();
+	CGenericButton();
 
 	/** CIvfGenericButton destructor */
-	virtual ~CIvfGenericButton();
+	virtual ~CGenericButton();
 
-	IvfClassInfo("CIvfGenericButton",CIvfSwitch);
+	IvfClassInfo("CIvfGenericButton",CSwitch);
 
 	/** Set button id */
 	void setId(int id);

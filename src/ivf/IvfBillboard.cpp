@@ -22,19 +22,19 @@
 #include <ivf/ivfconfig.h>
 #include <ivf/IvfBillboard.h>
 
-CIvfBillboard::CIvfBillboard()
+CBillBoard::CBillBoard()
 {
 	m_camera = NULL;
 	m_alignObject = IVF_ALIGN_CAMERA;
 	this->setBillboardType(IVF_BILLBOARD_Y);
 }
 
-CIvfBillboard::~CIvfBillboard()
+CBillBoard::~CBillBoard()
 {
 
 }
 
-void CIvfBillboard::updateRotation()
+void CBillBoard::updateRotation()
 {
 	if (m_camera!=NULL)
 	{
@@ -78,49 +78,49 @@ void CIvfBillboard::updateRotation()
 	}
 }
 
-void CIvfBillboard::setCamera(CIvfCamera *camera)
+void CBillBoard::setCamera(CCamera *camera)
 {
 	m_camera = camera;
 }
 
-void CIvfBillboard::setBillboardType(int type)
+void CBillBoard::setBillboardType(int type)
 {
 	m_billboardType = type;
 }
 
-int CIvfBillboard::getBillboardType()
+int CBillBoard::getBillboardType()
 {
 	return m_billboardType;
 }
 
-void CIvfBillboard::doCreateGeometry()
+void CBillBoard::doCreateGeometry()
 {
 	this->updateRotation();
 	glPushMatrix();
 	glRotated(-m_angle1*180.0/M_PI+90, 0.0, 1.0, 0.0);
 	glPushMatrix();
 	glRotated(m_angle2*180.0/M_PI-90, 1.0, 0.0, 0.0);
-	CIvfComposite::doCreateGeometry();
+	CComposite::doCreateGeometry();
 	glPopMatrix();
 	glPopMatrix();
 }
 
 
-void CIvfBillboard::setVector(double vx, double vy, double vz)
+void CBillBoard::setVector(double vx, double vy, double vz)
 {
 	m_forward[0] = vx;
 	m_forward[1] = vy;
 	m_forward[2] = vz;
 }
 
-void CIvfBillboard::setVector(double *v)
+void CBillBoard::setVector(double *v)
 {
 	m_forward[0] = v[0];
 	m_forward[1] = v[1];
 	m_forward[2] = v[2];
 }
 
-void CIvfBillboard::setAlignObject(int objectType)
+void CBillBoard::setAlignObject(int objectType)
 {
 	m_alignObject = objectType;
 }

@@ -25,21 +25,21 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CIvfPointSet::CIvfPointSet()
+CPointSet::CPointSet()
 {
 	m_useColor = false;
 	m_pointSize = 1;
 }
 
-CIvfPointSet::~CIvfPointSet()
+CPointSet::~CPointSet()
 {
 
 }
 
-void CIvfPointSet::doCreateGeometry()
+void CPointSet::doCreateGeometry()
 {
-	CIvfIndex* coordIdx;
-	CIvfIndex* colorIdx;
+	CIndex* coordIdx;
+	CIndex* colorIdx;
 	long i, j;
 	int oldSize;
 
@@ -69,8 +69,8 @@ void CIvfPointSet::doCreateGeometry()
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 			else
-				if (CIvfShape::getMaterial()!=NULL)
-					CIvfShape::getMaterial()->render();
+				if (CShape::getMaterial()!=NULL)
+					CShape::getMaterial()->render();
 				else
 					glColor3f(1.0f, 1.0f, 1.0f);
 
@@ -84,22 +84,22 @@ void CIvfPointSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CIvfPointSet::setUseColor(bool flag)
+void CPointSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CIvfPointSet::getUseColor()
+bool CPointSet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CIvfPointSet::setPointSize(int size)
+void CPointSet::setPointSize(int size)
 {
 	m_pointSize = size;
 }
 
-int CIvfPointSet::getPointSize()
+int CPointSet::getPointSize()
 {
 	return m_pointSize;
 }

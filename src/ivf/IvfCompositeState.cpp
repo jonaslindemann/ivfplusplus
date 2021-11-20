@@ -26,68 +26,68 @@
 
 #include <ivf/IvfGL.h>
 
-CIvfCompositeState::CIvfCompositeState()
+CCompositeState::CCompositeState()
 {
 
 }
 
-CIvfCompositeState::~CIvfCompositeState()
+CCompositeState::~CCompositeState()
 {
 	clear();
 }
 
-void CIvfCompositeState::doSaveState()
+void CCompositeState::doSaveState()
 {
 	/*
 	int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CIvfRenderState* state = m_children[i];
+		CRenderState* state = m_children[i];
 		state->doSaveState();
 	}
 	*/
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 }
 
-void CIvfCompositeState::doState()
+void CCompositeState::doState()
 {
 	unsigned int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CIvfRenderState* state = m_children[i];
+		CRenderState* state = m_children[i];
 		state->doState();
 	}
 }
 
-void CIvfCompositeState::doRestoreState()
+void CCompositeState::doRestoreState()
 {
 	/*
 	int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CIvfRenderState* state = m_children[i];
+		CRenderState* state = m_children[i];
 		state->doRestoreState();
 	}
 	*/
 	glPopAttrib();
 }
 
-void CIvfCompositeState::addChild(CIvfRenderState *state)
+void CCompositeState::addChild(CRenderState *state)
 {
 	state->addReference();
 	m_children.push_back(state);
 }
 
-void CIvfCompositeState::clear()
+void CCompositeState::clear()
 {
 	unsigned int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CIvfRenderState* state = m_children[i];
+		CRenderState* state = m_children[i];
 		state->deleteReference();
 		if (!state->referenced())
 			delete state;

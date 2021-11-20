@@ -39,7 +39,7 @@ using namespace std;
 
 #include <ivfmath/IvfPoint3d.h>
 
-IvfSmartPointer(CIvfSelectComposite);
+IvfSmartPointer(CSelectComposite);
 
 /**
  * SelectComposite class
@@ -47,15 +47,15 @@ IvfSmartPointer(CIvfSelectComposite);
  * This class is used to handle selection in Ivf++. 
  * @author Jonas Lindemann
  */
-class IVF_API CIvfSelectComposite : public CIvfComposite {
+class IVF_API CSelectComposite : public CComposite {
 public:
 	/** Constructor */
-	CIvfSelectComposite ();
+	CSelectComposite ();
 
 	/** Destructor */
-	virtual ~CIvfSelectComposite ();
+	virtual ~CSelectComposite ();
 
-	IvfClassInfo("CIvfSelectComposite",CIvfComposite);
+	IvfClassInfo("CSelectComposite",CComposite);
 
 	/**
 	 * Set current camera object
@@ -66,13 +66,13 @@ public:
 	 * If the camera object is not referenced it will 
 	 * be deleted.
 	 */
-	void setCamera(CIvfView* camera);
+	void setCamera(CView* camera);
 
 	/** Returns the current camera object */
-	CIvfView* getCamera();
+	CView* getCamera();
 
 	/** Returns selected shape (NULL if none) */
-	CIvfShape* getSelectedShape();
+	CShape* getSelectedShape();
 
 	void setRenderCamera(bool flag);
 	void setUseCustomTransform(bool flag);
@@ -90,29 +90,29 @@ public:
 	GLint pick(int x, int y);
 
 	/** Add child to scene */
-	void addChild(CIvfShape* shape);
+	void addChild(CShape* shape);
 
 	/** Removes a specific child from the scene */
-	CIvfShape* removeChild(int index);
+	CShape* removeChild(int index);
 
 	/** Removes a specific shape from the scene */
-	CIvfShape* removeShape(CIvfShape *removeShape);
+	CShape* removeShape(CShape *removeShape);
 
 	/** Deletes a specific shape from the scene */
 	void deleteChild(int index);
 
 	void renameChildren();
 private:
-	CIvfShape* m_selectedShape;
+	CShape* m_selectedShape;
 	int m_childCount;
 	GLuint m_selectBuf[512];
-	CIvfView* m_camera;
-	vector<CIvfShape*> m_allObjects;
+	CView* m_camera;
+	vector<CShape*> m_allObjects;
 	bool m_useCustomTransform;
 	bool m_renderCamera;
 
-	void compositeRemove(CIvfComposite* composite, CIvfShape* deleteChild);
-	void nameChildren(CIvfShape* shape);
+	void compositeRemove(CComposite* composite, CShape* deleteChild);
+	void nameChildren(CShape* shape);
 protected:
 	void processHits(GLint hits, GLuint buffer[]);
 	virtual void doEndTransform();

@@ -24,30 +24,30 @@
 
 #include <ivf/IvfTexCoordList.h>
 
-CIvfTexCoordList::CIvfTexCoordList()
+CTexCoordList::CTexCoordList()
 {
 	m_allocSize = 1024;
 	m_vertices = new GLfloat[m_allocSize];
 	m_next = 0;
 }
 
-CIvfTexCoordList::~CIvfTexCoordList()
+CTexCoordList::~CTexCoordList()
 {
 	delete [] m_vertices;
 }
 
-void CIvfTexCoordList::add(double s, double t)
+void CTexCoordList::add(double s, double t)
 {
 	add(s);
 	add(t);
 }
 
-void CIvfTexCoordList::add(double comp)
+void CTexCoordList::add(double comp)
 {
 	if (m_next==m_allocSize)
 	{
 		m_allocSize = m_allocSize*2;
-		IvfDbg1("CIvfTexCoordList: Expanding to " << m_allocSize << " vertices. (allocated size)");
+		IvfDbg1("CTexCoordList: Expanding to " << m_allocSize << " vertices. (allocated size)");
 		GLfloat* newVertices = new GLfloat[m_allocSize];
 		
 		int i;
@@ -64,12 +64,12 @@ void CIvfTexCoordList::add(double comp)
 	m_next++;
 }
 
-int CIvfTexCoordList::getSize()
+int CTexCoordList::getSize()
 {
 	return m_next / 3;
 }
 
-void CIvfTexCoordList::getVertex(int idx, double &s, double &t)
+void CTexCoordList::getVertex(int idx, double &s, double &t)
 {
 	if ((idx>=0)&&(idx<m_next/2))
 	{
@@ -83,7 +83,7 @@ void CIvfTexCoordList::getVertex(int idx, double &s, double &t)
 	}
 }
 
-double CIvfTexCoordList::getComp(int idx)
+double CTexCoordList::getComp(int idx)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{
@@ -93,27 +93,27 @@ double CIvfTexCoordList::getComp(int idx)
 		return -1.0;
 }
 
-void* CIvfTexCoordList::getData()
+void* CTexCoordList::getData()
 {
 	return (void*)m_vertices;
 }
 
-GLenum CIvfTexCoordList::getDataType()
+GLenum CTexCoordList::getDataType()
 {
 	return GL_FLOAT;
 }
 
-GLsizei CIvfTexCoordList::getStride()
+GLsizei CTexCoordList::getStride()
 {
 	return 2*sizeof(GLfloat);
 }
 
-GLint CIvfTexCoordList::getCompSize()
+GLint CTexCoordList::getCompSize()
 {
 	return 2;
 }
 
-void CIvfTexCoordList::setSize(int size)
+void CTexCoordList::setSize(int size)
 {
 	delete [] m_vertices;
 
@@ -122,7 +122,7 @@ void CIvfTexCoordList::setSize(int size)
 	m_next = m_allocSize;
 }
 
-void CIvfTexCoordList::setVertex(int idx, double s, double t)
+void CTexCoordList::setVertex(int idx, double s, double t)
 {
 	if ((idx>=0)&&(idx<m_next/2))
 	{
@@ -136,7 +136,7 @@ void CIvfTexCoordList::setVertex(int idx, double s, double t)
 	}
 }
 
-void CIvfTexCoordList::setComp(int idx, double value)
+void CTexCoordList::setComp(int idx, double value)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{
@@ -144,7 +144,7 @@ void CIvfTexCoordList::setComp(int idx, double value)
 	}
 }
 
-void CIvfTexCoordList::clear()
+void CTexCoordList::clear()
 {
 	delete [] m_vertices;
 	m_allocSize = 1024;

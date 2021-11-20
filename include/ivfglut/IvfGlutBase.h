@@ -9,9 +9,9 @@
 #endif
 
 
-IvfSmartPointer(CIvfGlutBase)
+IvfSmartPointer(CGlutBase)
 
-class CIvfGlutBase : public CIvfWidgetBase {
+class CGlutBase : public CWidgetBase {
 private:
 	int m_id;
 	std::string m_caption;
@@ -25,8 +25,8 @@ private:
 	double		m_zeroTime;
 	bool		m_fullScreen;
 public:
-	CIvfGlutBase(int X, int Y, int W, int H, bool fullScreen = false);
-	virtual ~CIvfGlutBase();
+	CGlutBase(int X, int Y, int W, int H, bool fullScreen = false);
+	virtual ~CGlutBase();
 	
 	void create();
 	

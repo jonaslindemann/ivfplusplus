@@ -28,7 +28,7 @@
 #include <ivf/IvfBase.h>
 #include <ivf/IvfShape.h>
 
-IvfSmartPointer(CIvfFileBase);
+IvfSmartPointer(CFileBase);
 
 /**
  * Base class for file readers and writers
@@ -38,20 +38,20 @@ IvfSmartPointer(CIvfFileBase);
  *
  * @author Jonas Lindemann
  */
-class IVFFILE_API CIvfFileBase : public CIvfBase {
+class IVFFILE_API CFileBase : public CBase {
 private:
 	std::string	m_fileName;
-	CIvfShapePtr m_shape;
+	CShapePtr m_shape;
 protected:
 	std::fstream m_inputFile;
 public:
-	/** CIvfFileBase constructor */
-	CIvfFileBase();
+	/** CFileBase constructor */
+	CFileBase();
 
-	/** CIvfFileBase destructor */
-	virtual ~CIvfFileBase();
+	/** CFileBase destructor */
+	virtual ~CFileBase();
 
-	IvfClassInfo("CIvfFileBase",CIvfBase);
+	IvfClassInfo("CFileBase",CBase);
 
 	/** Sets the filename of the file to be read/written */
 	void setFileName(const std::string& fileName);
@@ -60,10 +60,10 @@ public:
 	const std::string getFileName();
 
 	/** Sets the shape to be exported to file */
-	void setShape(CIvfShape* shape);
+	void setShape(CShape* shape);
 
 	/** Returns the shape read */
-	CIvfShape* getShape();
+	CShape* getShape();
 };
 /** \example ac3dreader.cpp
  * This example shows how to read a AC3D file from file

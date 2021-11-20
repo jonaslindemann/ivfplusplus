@@ -25,26 +25,26 @@
 #include <ivfext/IvfTgaImage.h>
 #include <ivf/ivfconfig.h>
 
-CIvfTgaImage::CIvfTgaImage()
+CTgaImage::CTgaImage()
 {
 	m_alphaChannel = false;
 }
 
-CIvfTgaImage::CIvfTgaImage(const std::string& name)
-:CIvfFileImage(name)
+CTgaImage::CTgaImage(const std::string& name)
+:CFileImage(name)
 {
 
 	m_alphaChannel = false;
 }
 
 
-CIvfTgaImage::~CIvfTgaImage()
+CTgaImage::~CTgaImage()
 {
 
 }
 
 
-bool CIvfTgaImage::read()
+bool CTgaImage::read()
 {
 	FILE* inf;
 
@@ -69,13 +69,13 @@ bool CIvfTgaImage::read()
 
 
 
-void CIvfTgaImage::setAlphaChannel(bool flag)
+void CTgaImage::setAlphaChannel(bool flag)
 {
 	m_alphaChannel = flag;
 }
 
 
-bool CIvfTgaImage::LoadTGA(Texture * texture, char * filename)	// Load a TGA file
+bool CTgaImage::LoadTGA(Texture * texture, char * filename)	// Load a TGA file
 {
 	FILE * fTGA;												// File pointer to texture file
 	fTGA = fopen(filename, "rb");								// Open file for reading
@@ -114,7 +114,7 @@ bool CIvfTgaImage::LoadTGA(Texture * texture, char * filename)	// Load a TGA fil
 	return true;															// All went well, continue on
 }
 
-bool CIvfTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * fTGA)	// Load an uncompressed TGA (note, much of this code is based on NeHe's
+bool CTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * fTGA)	// Load an uncompressed TGA (note, much of this code is based on NeHe's
 {																			// TGA Loading code nehe.gamedev.net)
 	if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)					// Read TGA header
 	{
@@ -183,7 +183,7 @@ bool CIvfTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE 
 	return true;															// Return success
 }
 
-bool CIvfTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTGA)		// Load COMPRESSED TGAs
+bool CTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTGA)		// Load COMPRESSED TGAs
 {
 	if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)					// Attempt to read header
 	{

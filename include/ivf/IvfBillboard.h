@@ -28,7 +28,7 @@
 #include <ivf/IvfComposite.h>
 #include <ivf/IvfCamera.h>
 
-IvfSmartPointer(CIvfBillboard);
+IvfSmartPointer(CBillBoard);
 
 #define IVF_BILLBOARD_Y  0
 #define IVF_BILLBOARD_X  1
@@ -45,9 +45,9 @@ IvfSmartPointer(CIvfBillboard);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfBillboard : public CIvfComposite {
+class IVF_API CBillBoard : public CComposite {
 private:
-	CIvfCamera* m_camera;
+	CCamera* m_camera;
 	double m_angle1;
 	double m_angle2;
 	int m_billboardType;
@@ -56,15 +56,15 @@ private:
 	int m_alignObject;
 public:
 	/** CIvfBillboard constructor */
-	CIvfBillboard();
+	CBillBoard();
 	
 	/** CIvfBillboard destructor */
-	virtual ~CIvfBillboard();
+	virtual ~CBillBoard();
 
-	IvfClassInfo("CIvfBillboard",CIvfComposite);
+	IvfClassInfo("CIvfBillboard",CComposite);
 
 	/** Assign the camera used to align the object. */
-	void setCamera(CIvfCamera* camera);
+	void setCamera(CCamera* camera);
 
 	/** 
 	 * Set billboard type

@@ -32,7 +32,7 @@
 
 #include <ivfmath/IvfUcs3d.h>
 
-IvfSmartPointer(CIvfConstructionPlane);
+IvfSmartPointer(CConstructionPlane);
 
 /**
  * Construction plane class
@@ -44,14 +44,14 @@ IvfSmartPointer(CIvfConstructionPlane);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfConstructionPlane : public CIvfShape {
+class IVF_API CConstructionPlane : public CShape {
 private:
-	CIvfUcs3d* m_ucs;
-	CIvfGrid* m_grid;
-	CIvfCursor* m_cursor;
-	CIvfCamera* m_camera;
+	CUcs3d* m_ucs;
+	CGrid* m_grid;
+	CCursor* m_cursor;
+	CCamera* m_camera;
 
-	CIvfVec3d m_last;
+	CVec3d m_last;
 
 	double m_size[2];
 	bool m_cursorLocked;
@@ -77,12 +77,12 @@ private:
 	void updateCursorSize();
 public:
 	/** CIvfConstructionPlane constructor */
-	CIvfConstructionPlane();
+	CConstructionPlane();
 
 	/** CIvfConstructionPlane destructor */
-	virtual ~CIvfConstructionPlane();
+	virtual ~CConstructionPlane();
 
-	IvfClassInfo("CIvfConstructionPlane",CIvfShape);
+	IvfClassInfo("CIvfConstructionPlane",CShape);
 
 	/** 
 	 * Updates 3D cursor position
@@ -157,7 +157,7 @@ public:
 	 * The camera is used to map the x/y mouse coordinates to 
 	 * the coordinates on the construction plane. 
 	 */
-	void setCamera(CIvfCamera* camera);
+	void setCamera(CCamera* camera);
 
 	/**
 	 * Set position of construction plane
@@ -178,7 +178,7 @@ public:
 	void setRotationQuat(double vx, double vy, double vz, double theta);
 
 	/** Set cursor used */
-	void setCursor(CIvfCursor* cursor);
+	void setCursor(CCursor* cursor);
 
 	/**
 	 * Set relative axis size
@@ -217,13 +217,13 @@ public:
 	void setUpdateAxisSize(bool flag);
 
 	/** Returns the current cursor position in global coordinates */
-	CIvfVec3d& getCursorPosition();
+	CVec3d& getCursorPosition();
 
 	/** Returns position of construction plane */
 	void getPosition(double &x, double &y, double &z);
 
 	/** Returns used defined coordinates system */
-	CIvfUcs3d* getUcs();
+	CUcs3d* getUcs();
 
 	/** Sets grid spacing */
 	void setGridSpacing(double spacing);
@@ -231,11 +231,11 @@ public:
 	/** Updates bounding sphere for construction plane */
 	virtual void doUpdateBoundingSphere();
 
-	CIvfGrid* getGrid();
+	CGrid* getGrid();
 	double getDepth();
 	double getWidth();
     
-    CIvfCursor* getCursor();
+    CCursor* getCursor();
 protected:
 	virtual void doCreateGeometry();
 };

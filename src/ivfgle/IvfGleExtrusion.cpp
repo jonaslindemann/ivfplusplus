@@ -24,12 +24,12 @@
 
 #include <ivfgle/IvfGleExtrusion.h>
 
-CIvfGleExtrusion::CIvfGleExtrusion()
+CGleExtrusion::CGleExtrusion()
 {
 	// Add construction code here
 }
 
-void CIvfGleExtrusion::doCreateGeometry()
+void CGleExtrusion::doCreateGeometry()
 {
 	if (m_contour==NULL)
 		return;
@@ -91,19 +91,19 @@ void CIvfGleExtrusion::doCreateGeometry()
 	}
 }
 
-void CIvfGleExtrusion::setContour(CIvfGleContour *contour)
+void CGleExtrusion::setContour(CGleContour *contour)
 {
 	m_contour = contour;
 }
 
-void CIvfGleExtrusion::setContourUp(double vx, double vy, double vz)
+void CGleExtrusion::setContourUp(double vx, double vy, double vz)
 {
 	m_up[0] = vx;
 	m_up[1] = vy;
 	m_up[2] = vz;
 }
 
-void CIvfGleExtrusion::setContourUp(CIvfVec3d &vec)
+void CGleExtrusion::setContourUp(CVec3d &vec)
 {
 	double vx, vy, vz;
 	vec.getComponents(vx, vy, vz);

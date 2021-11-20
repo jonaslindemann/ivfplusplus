@@ -26,44 +26,44 @@
 #include <ivfctl/IvfAction.h>
 
 struct SActionCmp {
-    bool operator() (CIvfAction* a1, CIvfAction* a2) const {
+    bool operator() (CAction* a1, CAction* a2) const {
         return (a1->getTime()<a2->getTime());
     }
 };
 
-typedef std::multiset<CIvfAction*, SActionCmp> CActions;
-typedef std::multiset<CIvfAction*, SActionCmp>::iterator CActionsIter;
+typedef std::multiset<CAction*, SActionCmp> CActions;
+typedef std::multiset<CAction*, SActionCmp>::iterator CActionsIter;
 
-IvfSmartPointer(CIvfActionController);
+IvfSmartPointer(CActionController);
 
 /**
  * Action controller class
  *
  * Class for sequencing actions for controlling dynamic scenes
  */
-class IVFCTL_API CIvfActionController : public CIvfControllerGroup {
+class IVFCTL_API CActionController : public CControllerGroup {
 private:
-	std::multiset<CIvfAction*, SActionCmp> m_actionList;
-	std::multiset<CIvfAction*, SActionCmp>::iterator m_actionIter;
+	std::multiset<CAction*, SActionCmp> m_actionList;
+	std::multiset<CAction*, SActionCmp>::iterator m_actionIter;
 	std::vector<double> m_test;
 
 	double m_time;
 	double m_tolerance;
 public:
-	/** CIvfActionController constructor */
-	CIvfActionController();
+	/** CActionController constructor */
+	CActionController();
 
-	/** CIvfActionController destructor */
-	virtual ~CIvfActionController();
+	/** CActionController destructor */
+	virtual ~CActionController();
 
-	IvfClassInfo("CIvfActionController",CIvfControllerGroup);
+	IvfClassInfo("CActionController",CControllerGroup);
 
 	/** 
 	 * Add action to controller
 	 *
 	 * Actions will be sorted and executed in order
 	 */
-	void addAction(CIvfAction* action);
+	void addAction(CAction* action);
 
 	/** Clear (delete) all actions in controller */
 	void clear();
@@ -76,7 +76,7 @@ public:
 	virtual void doReset();
 };
 /** \example actionctl.cpp
- * This is an example of how to use the CIvfAction class, using the 
- * CIvfActionController class
+ * This is an example of how to use the CAction class, using the 
+ * CActionController class
  */
 #endif 

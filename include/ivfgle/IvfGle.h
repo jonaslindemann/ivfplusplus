@@ -28,17 +28,17 @@
 #include <ivf/IvfBase.h>
 #include <ivfdef/IvfSingletonDestroyer.h>
 
-IvfStdPointer(CIvfGle);
+IvfStdPointer(CGle);
 
-class IVFGLE_API CIvfGle: public CIvfBase {
+class IVFGLE_API CGle: public CBase {
 private:
-	static CIvfGle* m_instance;
-	static CIvfSingletonDestroyer<CIvfGle> m_destroyer;
+	static CGle* m_instance;
+	static CSingletonDestroyer<CGle> m_destroyer;
 public:
 	/** Returns the IvfGle singleton */
-	static CIvfGle* getInstance();
+	static CGle* getInstance();
 
-	IvfClassInfo("CIvfGle", CIvfBase);
+	IvfClassInfo("CGle", CBase);
 
 	void setNumSides(int sides);
 	int getNumSides();
@@ -47,7 +47,7 @@ public:
 	int getJoinStyle();
 protected:
 	/** Protected constructor (do not use) */
-	CIvfGle();
-	friend class CIvfSingletonDestroyer<CIvfGle>;
+	CGle();
+	friend class CSingletonDestroyer<CGle>;
 };
 #endif

@@ -27,7 +27,7 @@
 
 #include <ivf/IvfRenderState.h>
 
-IvfSmartPointer(CIvfPolyState);
+IvfSmartPointer(CPolyState);
 
 /**
  * Poly state class
@@ -35,7 +35,7 @@ IvfSmartPointer(CIvfPolyState);
  * This class encapsulates the OpenGL glPolygonMode() 
  * state function.
  */
-class IVF_API CIvfPolyState : public CIvfRenderState {
+class IVF_API CPolyState : public CRenderState {
 public:
 	enum TTargetFace {
 		TF_FRONT,
@@ -53,13 +53,13 @@ private:
 	int m_oldFace;
 	int m_oldMode;
 public:
-	/** CIvfPolyState constructor */
-	CIvfPolyState();
+	/** CPolyState constructor */
+	CPolyState();
 
-	/** CIvfPolyState destructor */
-	virtual ~CIvfPolyState();
+	/** CPolyState destructor */
+	virtual ~CPolyState();
 
-	IvfClassInfo("CIvfPolyState",CIvfRenderState);
+	IvfClassInfo("CPolyState",CRenderState);
 
 	/** 
 	 * Set target face 

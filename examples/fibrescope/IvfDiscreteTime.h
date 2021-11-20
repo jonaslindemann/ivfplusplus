@@ -30,9 +30,9 @@
 #define IVF_DT_STOP   1
 #define IVF_DT_REVERSE 2
 
-IvfSmartPointer(CIvfDiscreteTime);
+IvfSmartPointer(CDiscreteTime);
 
-class CIvfDiscreteTime : public CIvfBase {
+class CDiscreteTime : public CBase {
 private:
 	long m_time;
 	long m_startTime;
@@ -47,8 +47,8 @@ public:
 	void last();
 	void setEndAction(int action);
 	void setTime(long time);
-	CIvfDiscreteTime();
-	virtual ~CIvfDiscreteTime();
+	CDiscreteTime();
+	virtual ~CDiscreteTime();
 
 	void rewind();
 	void next();

@@ -26,40 +26,40 @@
 
 #include <GL/gle.h>
 
-CIvfGle* CIvfGle::m_instance = 0;
-CIvfSingletonDestroyer<CIvfGle> CIvfGle::m_destroyer;
+CGle* CGle::m_instance = 0;
+CSingletonDestroyer<CGle> CGle::m_destroyer;
 
-CIvfGle* CIvfGle::getInstance () 
+CGle* CGle::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CIvfGle(); 
+		m_instance = new CGle(); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CIvfGle::CIvfGle()
+CGle::CGle()
 {
 	// Add protected construction code here
 }
 
-void CIvfGle::setNumSides(int sides)
+void CGle::setNumSides(int sides)
 {
 	gleSetNumSides(sides);	
 }
 
-int CIvfGle::getNumSides()
+int CGle::getNumSides()
 {
 	return gleGetNumSides();	
 }
 
-void CIvfGle::setJoinStyle(int style)
+void CGle::setJoinStyle(int style)
 {
 	gleSetJoinStyle(style);
 }
 
-int CIvfGle::getJoinStyle()
+int CGle::getJoinStyle()
 {
 	return gleGetJoinStyle();
 }

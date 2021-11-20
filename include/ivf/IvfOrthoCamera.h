@@ -27,21 +27,21 @@
 
 #include <ivf/IvfView.h>
 
-IvfSmartPointer(CIvfOrthoCamera);
+IvfSmartPointer(COrthoCamera);
 
 /**
  * Ortho camera class
  *
  * Not yet implemented...
  */
-class IVF_API CIvfOrthoCamera : public CIvfView {
+class IVF_API COrthoCamera : public CView {
 private:
 
 public:
-	CIvfOrthoCamera();
-	virtual ~CIvfOrthoCamera();
+	COrthoCamera();
+	virtual ~COrthoCamera();
 
-	IvfClassInfo("CIvfOrthoCamera",CIvfView);
+	IvfClassInfo("COrthoCamera",CView);
 };
 
 #endif 

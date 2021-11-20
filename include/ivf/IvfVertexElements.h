@@ -33,14 +33,14 @@
 
 #include <ivf/IvfGL.h>
 
-IvfSmartPointer(CIvfVertexElements);
+IvfSmartPointer(CVertexElements);
 
 /**
  * Vertex element class
  *
  * Implements the OpenGL glDrawElements command
  */
-class IVF_API CIvfVertexElements : public CIvfShape {
+class IVF_API CVertexElements : public CShape {
 public:
 	enum TPrimitiveType {
 		PT_POINTS,
@@ -56,31 +56,31 @@ public:
 	};
 
 private:
-	CIvfVertexIndexPtr m_indices;
-	CIvfVertexListPtr  m_vertices;
-	CIvfColorListPtr   m_colors;
-	CIvfNormalListPtr  m_normals;
+	CVertexIndexPtr m_indices;
+	CVertexListPtr  m_vertices;
+	CColorListPtr   m_colors;
+	CNormalListPtr  m_normals;
 	GLenum			   m_glPrimitive;
 public:
-	/** CIvfVertexElements constructor */
-	CIvfVertexElements();
+	/** CVertexElements constructor */
+	CVertexElements();
 
-	/** CIvfVertexElements destructor */
-	virtual ~CIvfVertexElements();
+	/** CVertexElements destructor */
+	virtual ~CVertexElements();
 
-	IvfClassInfo("CIvfVertexElements",CIvfShape);
+	IvfClassInfo("CVertexElements",CShape);
 
 	/** Set index list */
-	void setIndices(CIvfVertexIndex* index);
+	void setIndices(CVertexIndex* index);
 
 	/** Set vertex list */
-	void setVertices(CIvfVertexList* vertices);
+	void setVertices(CVertexList* vertices);
 
 	/** Set color list */
-	void setColors(CIvfColorList* colors);
+	void setColors(CColorList* colors);
 
 	/** Set normal list */
-	void setNormals(CIvfNormalList* normals);
+	void setNormals(CNormalList* normals);
 
 	/** Set primitive type to be drawn */
 	void setPrimitive(TPrimitiveType primitive);

@@ -26,17 +26,17 @@
 
 #include <ivf/IvfPolySet.h>
 
-CIvfDxfReader::CIvfDxfReader()
+CDxfReader::CDxfReader()
 {
 	m_doubleFaces = false;
 }
 
-CIvfDxfReader::~CIvfDxfReader()
+CDxfReader::~CDxfReader()
 {
 
 }
 
-void CIvfDxfReader::read()
+void CDxfReader::read()
 {
 	// Initiate max min calc
 
@@ -87,7 +87,7 @@ void CIvfDxfReader::read()
 	m_inputFile.close();
 }
 
-bool CIvfDxfReader::checkHeader(std::istream &in)
+bool CDxfReader::checkHeader(std::istream &in)
 {
 	int pos;
 
@@ -101,12 +101,12 @@ bool CIvfDxfReader::checkHeader(std::istream &in)
 
 }
 
-bool CIvfDxfReader::readData(std::istream &in)
+bool CDxfReader::readData(std::istream &in)
 {
-	CIvfPolySet* polySet = new CIvfPolySet();
+	CPolySet* polySet = new CPolySet();
 	this->setShape(polySet);
 
-	m_idx = new CIvfIndex();
+	m_idx = new CIndex();
 	m_idx->setTopology(IVF_IDX_QUADS);
 
 	if (!findKey("ENTITIES", in))
@@ -125,7 +125,7 @@ bool CIvfDxfReader::readData(std::istream &in)
 	return true;
 }
 
-bool CIvfDxfReader::findKey(const char *heading, std::istream &in)
+bool CDxfReader::findKey(const char *heading, std::istream &in)
 {
 	int pos;
 
@@ -139,14 +139,14 @@ bool CIvfDxfReader::findKey(const char *heading, std::istream &in)
 	return false;
 }
 
-void CIvfDxfReader::read3DFace(std::istream &in)
+void CDxfReader::read3DFace(std::istream &in)
 {
 	double x, y, z;
 	double scaleFactor = getScaling();
 
 	std::vector<long> indices;
 
-	CIvfPolySet* polySet = (CIvfPolySet*) this->getShape();
+	CPolySet* polySet = (CPolySet*) this->getShape();
 
 
 	if (findKey("3DFACE", in))
@@ -185,11 +185,11 @@ void CIvfDxfReader::read3DFace(std::istream &in)
 	}
 }
 
-void CIvfDxfReader::setDoubleFaces(bool flag)
+void CDxfReader::setDoubleFaces(bool flag)
 {
 	m_doubleFaces = flag;
 }
 
-void CIvfDxfReader::correctFaceNormals()
+void CDxfReader::correctFaceNormals()
 {
 }

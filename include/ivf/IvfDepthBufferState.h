@@ -27,7 +27,7 @@
 
 #include <ivf/IvfRenderState.h>
 
-IvfSmartPointer(CIvfDepthBufferState);
+IvfSmartPointer(CDepthBufferState);
 
 /**
  * Depth buffer render state class
@@ -35,7 +35,7 @@ IvfSmartPointer(CIvfDepthBufferState);
  * Render state class for enabling/disabling
  * depth buffer test state. Default enabled.
  */
-class IVF_API CIvfDepthBufferState : public CIvfRenderState {
+class IVF_API CDepthBufferState : public CRenderState {
 public:
 	enum TDepthBufferState {
 		DS_ENABLED,
@@ -46,12 +46,12 @@ private:
 	TDepthBufferState m_oldState;
 public:
 	/** Class constructor */
-	CIvfDepthBufferState();
+	CDepthBufferState();
 
 	/** Class destructor */
-	virtual ~CIvfDepthBufferState();
+	virtual ~CDepthBufferState();
 
-	IvfClassInfo("CIvfDepthBufferState",CIvfRenderState);
+	IvfClassInfo("CIvfDepthBufferState",CRenderState);
 
 	/** Set depth test state, see TDepthBufferState */
 	void setState(TDepthBufferState state);

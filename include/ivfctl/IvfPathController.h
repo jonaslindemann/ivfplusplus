@@ -25,7 +25,7 @@
 #include <ivfctl/IvfController.h>
 #include <ivfmath/IvfSpline3d.h>
 
-IvfSmartPointer(CIvfPathController);
+IvfSmartPointer(CPathController);
 
 /**
  * Path controller class
@@ -34,7 +34,7 @@ IvfSmartPointer(CIvfPathController);
  * can bes set as well as actions at the start point and 
  * end point.
  */
-class IVFCTL_API CIvfPathController : public CIvfController {
+class IVFCTL_API CPathController : public CController {
 public:
 	enum TEndAction {
 		EA_STOP,
@@ -49,7 +49,7 @@ public:
 		SA_DEACTIVATE
 	};
 private:
-	CIvfSpline3dPtr m_path;
+	CSpline3dPtr m_path;
 	double m_v0;
 	double m_a0;
 	double m_t0;
@@ -58,19 +58,19 @@ private:
 	TEndAction m_endAction;
 	TStartAction m_startAction;
 public:
-	/** CIvfPathController contructor */
-	CIvfPathController();
+	/** CPathController contructor */
+	CPathController();
 
-	/** CIvfPathController destructor */
-	virtual ~CIvfPathController();
+	/** CPathController destructor */
+	virtual ~CPathController();
 
-	IvfClassInfo("CIvfPathController",CIvfController);
+	IvfClassInfo("CPathController",CController);
 
 	/** Set path controlling the movement */
-	void setPath(CIvfSpline3d* spline);
+	void setPath(CSpline3d* spline);
 
 	/** Return path */
-	CIvfSpline3d* getPath();
+	CSpline3d* getPath();
 	
 	/** 
 	 * Set initial position on path

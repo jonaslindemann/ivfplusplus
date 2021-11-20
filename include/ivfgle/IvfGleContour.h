@@ -29,19 +29,19 @@
 
 #include <GL/gle.h>
 
-IvfSmartPointer(CIvfGleContour);
+IvfSmartPointer(CGleContour);
 
-class IVFGLE_API CIvfGleContour: public CIvfBase {
+class IVFGLE_API CGleContour: public CBase {
 private:
 	int m_size;
 	gleDouble (*m_coords)[2];
 	gleDouble (*m_normals)[2];
 public:
-	CIvfGleContour();
-	CIvfGleContour(int size);
-	virtual ~CIvfGleContour();
+	CGleContour();
+	CGleContour(int size);
+	virtual ~CGleContour();
 
-	IvfClassInfo("CIvfGleContour", CIvfBase);
+	IvfClassInfo("CGleContour", CBase);
 
 	void calcNormals();
 

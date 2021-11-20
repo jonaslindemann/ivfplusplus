@@ -43,36 +43,36 @@
  * in an orderly fashion.
  */
 template <class T>
-class CIvfSingletonDestroyer {
+class CSingletonDestroyer {
 public:
 	/** Class constructor */
-	CIvfSingletonDestroyer(T* = 0);
+	CSingletonDestroyer(T* = 0);
 
 	/** Class destructor */
-	~CIvfSingletonDestroyer();
+	~CSingletonDestroyer();
 
 	void setSingleton(T*);
 private:
 	// Prevent users from making copies of a
-	// CIvfSingletonDestroyer to avoid double deletion:
-	CIvfSingletonDestroyer(const CIvfSingletonDestroyer<T>&);
-	CIvfSingletonDestroyer<T>& operator=(const CIvfSingletonDestroyer<T>&);
+	// CSingletonDestroyer to avoid double deletion:
+	CSingletonDestroyer(const CSingletonDestroyer<T>&);
+	CSingletonDestroyer<T>& operator=(const CSingletonDestroyer<T>&);
 private:
 	T* _T;
 };
 
 template <class T>
-CIvfSingletonDestroyer<T>::CIvfSingletonDestroyer (T* d) {
+CSingletonDestroyer<T>::CSingletonDestroyer (T* d) {
 	_T = d;
 }
 
 template <class T>
-CIvfSingletonDestroyer<T>::~CIvfSingletonDestroyer () {
+CSingletonDestroyer<T>::~CSingletonDestroyer () {
 	delete _T;
 }
 
 template <class T>
-void CIvfSingletonDestroyer<T>::setSingleton (T* d) {
+void CSingletonDestroyer<T>::setSingleton (T* d) {
 	_T = d;
 }
 

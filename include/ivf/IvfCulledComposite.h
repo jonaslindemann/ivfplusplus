@@ -31,32 +31,32 @@
 #include <ivfmath/IvfMatrixStack.h>
 #include <ivfmath/IvfViewFrustum.h>
 
-IvfSmartPointer(CIvfCulledComposite);
+IvfSmartPointer(CCulledComposite);
 
 /** Obsolete use CIvfCulling instead */
-class IVF_API CIvfCulledComposite : public CIvfComposite {
+class IVF_API CCulledComposite : public CComposite {
 private:
-	CIvfMatrixStack* m_matrixStack;
-	CIvfViewFrustum* m_frustum;
-	CIvfView* m_cullView;
+	CMatrixStack* m_matrixStack;
+	CViewFrustum* m_frustum;
+	CView* m_cullView;
 	int m_cullCount;
 	bool m_useCulling;
 
-	void cullChildren(CIvfShape* shape);
-	bool intersectFrustum(CIvfBoundingSphere *bSphere);
+	void cullChildren(CShape* shape);
+	bool intersectFrustum(CBoundingSphere *bSphere);
 public:
-	CIvfCulledComposite();
-	virtual ~CIvfCulledComposite();
+	CCulledComposite();
+	virtual ~CCulledComposite();
 
-	IvfClassInfo("CIvfCulledComposite",CIvfComposite);
+	IvfClassInfo("CIvfCulledComposite",CComposite);
 
-	void addChild(CIvfShape* shape);
+	void addChild(CShape* shape);
 
 	void setUseCulling(bool flag);
 	bool getUseCulling();
 	
-	void setCullView(CIvfView* view);
-	CIvfView* getCullView();
+	void setCullView(CView* view);
+	CView* getCullView();
 
 	int getCullCount();
 

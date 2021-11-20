@@ -22,17 +22,17 @@
 #include <ivfmath/IvfViewFrustum.h>
 #include <ivfmath/IvfBoundingSphere.h>
 
-CIvfViewFrustum::CIvfViewFrustum()
+CViewFrustum::CViewFrustum()
 {
-	m_near = new CIvfPlane();
-	m_far = new CIvfPlane();
-	m_left = new CIvfPlane();
-	m_right = new CIvfPlane();
-	m_top = new CIvfPlane();
-	m_bottom = new CIvfPlane();
+	m_near = new CPlane();
+	m_far = new CPlane();
+	m_left = new CPlane();
+	m_right = new CPlane();
+	m_top = new CPlane();
+	m_bottom = new CPlane();
 }
 
-CIvfViewFrustum::~CIvfViewFrustum()
+CViewFrustum::~CViewFrustum()
 {
 	delete m_near;
 	delete m_far;
@@ -42,37 +42,37 @@ CIvfViewFrustum::~CIvfViewFrustum()
 	delete m_bottom;
 }
 
-CIvfPlane* CIvfViewFrustum::getNearPlane()
+CPlane* CViewFrustum::getNearPlane()
 {
 	return m_near;
 }
 
-CIvfPlane* CIvfViewFrustum::getFarPlane()
+CPlane* CViewFrustum::getFarPlane()
 {
 	return m_far;
 }
 
-CIvfPlane* CIvfViewFrustum::getLeftPlane()
+CPlane* CViewFrustum::getLeftPlane()
 {
 	return m_left;
 }
 
-CIvfPlane* CIvfViewFrustum::getRightPlane()
+CPlane* CViewFrustum::getRightPlane()
 {
 	return m_right;
 }
 
-CIvfPlane* CIvfViewFrustum::getTopPlane()
+CPlane* CViewFrustum::getTopPlane()
 {
 	return m_top;
 }
 
-CIvfPlane* CIvfViewFrustum::getBottomPlane()
+CPlane* CViewFrustum::getBottomPlane()
 {
 	return m_bottom;
 }
 
-bool CIvfViewFrustum::isInside(CIvfBoundingSphere *bSphere)
+bool CViewFrustum::isInside(CBoundingSphere *bSphere)
 {
 	double x, y, z, radius;
 

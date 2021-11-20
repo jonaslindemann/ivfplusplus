@@ -27,7 +27,7 @@
 
 #include <ivf/IvfGLPrimitive.h>
 
-IvfSmartPointer(CIvfLineStripSet);
+IvfSmartPointer(CLineStripSet);
 
 /**
  * LineStripSet class
@@ -36,20 +36,20 @@ IvfSmartPointer(CIvfLineStripSet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfLineStripSet : public CIvfGLPrimitive {
+class IVF_API CLineStripSet : public CGLPrimitive {
 private:
 	bool m_useColor;
 	float m_lineWidth;
 protected:
 	virtual void doCreateGeometry();
 public:
-	/** CIvfLineStripSet constructor */
-	CIvfLineStripSet();
+	/** CLineStripSet constructor */
+	CLineStripSet();
 
-	/** CIvfLineStripSet destructor */
-	virtual ~CIvfLineStripSet();
+	/** CLineStripSet destructor */
+	virtual ~CLineStripSet();
 
-	IvfClassInfo("CIvfLineStripSet",CIvfGLPrimitive);
+	IvfClassInfo("CLineStripSet",CGLPrimitive);
 
 	/** Enables or disables the use of color values when rendering */
 	void setUseColor(bool flag);

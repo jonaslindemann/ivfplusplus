@@ -27,7 +27,7 @@
 
 #include <ivf/IvfGLPrimitive.h>
 
-IvfSmartPointer(CIvfTriStripSet);
+IvfSmartPointer(CTriStripSet);
 
 /**
  * Tri strip set class
@@ -36,17 +36,17 @@ IvfSmartPointer(CIvfTriStripSet);
  *
  * @autor Jonas Lindemann
  */
-class IVF_API CIvfTriStripSet : public CIvfGLPrimitive {
+class IVF_API CTriStripSet : public CGLPrimitive {
 private:
 	bool m_useColor;
 public:
-	/** CIvfTriStripSet constructor */
-	CIvfTriStripSet();
+	/** CTriStripSet constructor */
+	CTriStripSet();
 
-	/** CIvfTriStripSet destructor */
-	virtual ~CIvfTriStripSet();
+	/** CTriStripSet destructor */
+	virtual ~CTriStripSet();
 
-	IvfClassInfo("CIvfTriStripSet",CIvfGLPrimitive);
+	IvfClassInfo("CTriStripSet",CGLPrimitive);
 
 	/** Enable/disable usage of color values when rendering */
 	void setUseColor(bool flag);
@@ -55,7 +55,7 @@ public:
 	bool getUseColor();
 protected:
 	virtual void updateVertexNormals();
-	virtual void calcNormal(CIvfIndex* idx);
+	virtual void calcNormal(CIndex* idx);
 	virtual void doCreateGeometry();
 };
 /** \example advgeom.cpp */

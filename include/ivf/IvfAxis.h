@@ -28,7 +28,7 @@
 #include <ivf/IvfComposite.h>
 #include <ivf/IvfArrow.h>	
 
-IvfSmartPointer(CIvfAxis);
+IvfSmartPointer(CAxis);
 
 #define IVF_AXIS_STD    0
 #define IVF_AXIS_FLIPX  1
@@ -44,15 +44,15 @@ IvfSmartPointer(CIvfAxis);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfAxis : public CIvfComposite {
+class IVF_API CAxis : public CComposite {
 public:
 	/** CIvfAxis constructor. */
-	CIvfAxis ();
+	CAxis ();
 	
 	/** CIvfAxis destructor. */
-	virtual ~CIvfAxis ();
+	virtual ~CAxis ();
 
-	IvfClassInfo("CIvfAxis",CIvfComposite);
+	IvfClassInfo("CIvfAxis",CComposite);
 
 	/** Set axis type */
 	void setAxisType(int type);
@@ -61,15 +61,15 @@ public:
 	void setSize(double size);
 
 	/** Set or change material used for arrows */
-	void setArrowMaterial(CIvfMaterial* material);
+	void setArrowMaterial(CMaterial* material);
 private:
 	double m_size;
 	int m_axisType;
-	CIvfArrowPtr m_zArrow;
-	CIvfArrowPtr m_yArrow;
-	CIvfArrowPtr m_xArrow;
-	CIvfMaterialPtr m_zMaterial;
-	CIvfMaterialPtr m_yMaterial;
-	CIvfMaterialPtr m_xMaterial;
+	CArrowPtr m_zArrow;
+	CArrowPtr m_yArrow;
+	CArrowPtr m_xArrow;
+	CMaterialPtr m_zMaterial;
+	CMaterialPtr m_yMaterial;
+	CMaterialPtr m_xMaterial;
 };
 #endif

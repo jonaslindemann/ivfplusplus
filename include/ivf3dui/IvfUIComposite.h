@@ -27,19 +27,19 @@
 
 #include <ivf/IvfComposite.h>
 
-IvfSmartPointer(CIvfUIComposite);
+IvfSmartPointer(CUIComposite);
 
-class IVF3DUI_API CIvfUIComposite : public CIvfComposite {
+class IVF3DUI_API CUIComposite : public CComposite {
 private:
 
 public:
-	CIvfUIComposite();
-	virtual ~CIvfUIComposite();
+	CUIComposite();
+	virtual ~CUIComposite();
 
 	void setHighlight(THighlightState state);
-	void addChild(CIvfShape* shape);
+	void addChild(CShape* shape);
 
-	IvfClassInfo("CIvfUIComposite",CIvfComposite)
+	IvfClassInfo("CUIComposite",CComposite)
 
 };
 

@@ -24,7 +24,7 @@
 
 #include <ivfgle/IvfGleSpiral.h>
 
-CIvfGleSpiral::CIvfGleSpiral()
+CGleSpiral::CGleSpiral()
 {
 	int i, j;
 
@@ -39,7 +39,7 @@ CIvfGleSpiral::CIvfGleSpiral()
 	m_startXfm[1][1] = 1.0;
 }
 
-void CIvfGleSpiral::doCreateGeometry()
+void CGleSpiral::doCreateGeometry()
 {
 	if (m_contour==NULL)
 		return;
@@ -67,19 +67,19 @@ void CIvfGleSpiral::doCreateGeometry()
 	);
 }
 
-void CIvfGleSpiral::setContour(CIvfGleContour *contour)
+void CGleSpiral::setContour(CGleContour *contour)
 {
 	m_contour = contour;
 }
 
-void CIvfGleSpiral::setContourUp(double vx, double vy, double vz)
+void CGleSpiral::setContourUp(double vx, double vy, double vz)
 {
 	m_up[0] = vx;
 	m_up[1] = vy;
 	m_up[2] = vz;
 }
 
-void CIvfGleSpiral::setContourUp(CIvfVec3d &vec)
+void CGleSpiral::setContourUp(CVec3d &vec)
 {
 	double vx, vy, vz;
 	vec.getComponents(vx, vy, vz);

@@ -24,27 +24,27 @@
 
 #include <ivfgle/IvfGleExtrudedBase.h>
 
-CIvfGleExtrudedBase::CIvfGleExtrudedBase()
+CGleExtrudedBase::CGleExtrudedBase()
 {
 	// Add construction code here
 }
 
-void CIvfGleExtrudedBase::setPoints(CIvfGleCoordArray *array)
+void CGleExtrudedBase::setPoints(CGleCoordArray *array)
 {
 	m_pointArray = array;
 }
 
-void CIvfGleExtrudedBase::setColors(CIvfGleColorArray *array)
+void CGleExtrudedBase::setColors(CGleColorArray *array)
 {
 	m_colorArray = array;
 }
 
-CIvfGleColorArray* CIvfGleExtrudedBase::getColors(void)
+CGleColorArray* CGleExtrudedBase::getColors(void)
 {
 	return NULL;
 }
 
-CIvfGleCoordArray* CIvfGleExtrudedBase::getPoints(void)
+CGleCoordArray* CGleExtrudedBase::getPoints(void)
 {
 	return NULL;
 }

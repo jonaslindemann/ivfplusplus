@@ -32,7 +32,7 @@
 #include <ivf/IvfCulling.h>
 #include <ivf/IvfBufferSelection.h>
 
-class IVF_API CIvfMultipassEvent {
+class IVF_API CMultipassEvent {
 public:
 	/**
 	 * onMultipass method
@@ -40,7 +40,7 @@ public:
 	virtual void onMultipass(int pass) {};
 };
 
-IvfSmartPointer(CIvfSceneBase);
+IvfSmartPointer(CSceneBase);
 
 /**
  * Base class for managing a scene 
@@ -53,12 +53,12 @@ IvfSmartPointer(CIvfSceneBase);
  * {
  *	  // Create scene 
  *
- *	  m_scene = new CIvfSceneBase();
+ *	  m_scene = new CSceneBase();
  *	  m_scene->getCamera()->setPosition(0.0, 0.0, 8.0);
  *
  *	  // Create a light
  *
- *	  CIvfOldLight* light = new CIvfOldLight();
+ *	  COldLight* light = new COldLight();
  *	  light->setPosition(1.0, 1.0, 1.0, 0.0);
  *	  light->setAmbient(0.2f, 0.2f, 0.2f, 1.0f); 
  *
@@ -73,7 +73,7 @@ IvfSmartPointer(CIvfSceneBase);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CIvfSceneBase : public CIvfShape {
+class IVF_API CSceneBase : public CShape {
 public:
 	enum TLightMode {
 		LM_LOCAL,
@@ -92,14 +92,14 @@ public:
 		CP_RED_CYAN
 	};
 private:
-	CIvfMultipassEvent* m_multipassEvent;
-	CIvfCompositePtr m_preComposite;
-	CIvfCompositePtr m_composite;
-	CIvfCompositePtr m_postComposite;
-	CIvfViewPtr m_view;
-	CIvfLightingPtr m_lighting;
-	CIvfCullingPtr m_culling;
-	CIvfBufferSelectionPtr m_selection;
+	CMultipassEvent* m_multipassEvent;
+	CCompositePtr m_preComposite;
+	CCompositePtr m_composite;
+	CCompositePtr m_postComposite;
+	CViewPtr m_view;
+	CLightingPtr m_lighting;
+	CCullingPtr m_culling;
+	CBufferSelectionPtr m_selection;
 
 	TLightMode m_lightMode;
 	TStereoMode m_stereoMode;
@@ -129,22 +129,22 @@ public:
 	virtual void doViewAndRender(int pass);
 	virtual void doMultipass(int pass);
 
-	/** CIvfSceneBase constructor */
-	CIvfSceneBase();
+	/** CSceneBase constructor */
+	CSceneBase();
 
-	/** CIvfSceneBase destructor */
-	virtual ~CIvfSceneBase();
+	/** CSceneBase destructor */
+	virtual ~CSceneBase();
 
-	IvfClassInfo("CIvfSceneBase",CIvfShape);
+	IvfClassInfo("CSceneBase",CShape);
 
 	/** Set scene view (required) */
-	virtual void setView(CIvfView* view);
+	virtual void setView(CView* view);
 
 	/** Returns current view */
-	CIvfView* getView();
+	CView* getView();
 
 	/** Set camera (required) */
-	void setCamera(CIvfCamera* camera);
+	void setCamera(CCamera* camera);
 
 	/**
 	 * Set light mode
@@ -157,11 +157,11 @@ public:
 	/** Return light mode */
 	TLightMode getLightMode();
 
-	CIvfComposite* getPreComposite();
-	CIvfComposite* getPostComposite();
+	CComposite* getPreComposite();
+	CComposite* getPostComposite();
 
 	/** Return scene composite */
-	CIvfComposite* getComposite();
+	CComposite* getComposite();
 
 	/** Set culling state */
 	void setUseCulling(bool flag);
@@ -176,7 +176,7 @@ public:
 	void updateSelection();
 
 	/** Return selected shape, @see CIvfBufferSelection */
-	CIvfShape* getSelectedShape();
+	CShape* getSelectedShape();
 
 	/** Clear scene, @see CIvfComposite */
 	void clear();
@@ -185,15 +185,15 @@ public:
 	void deleteAll();
 
 	/** Remove child from scene, @see CIvfComposite */
-	CIvfShape* removeChild(CIvfShape* shape);
+	CShape* removeChild(CShape* shape);
 
 	/** Remove child from scene, @see CIvfComposite */
-	CIvfShape* removeChild(int idx);
+	CShape* removeChild(int idx);
 
 	/** Add child to scene, @see CIvfComposite */
-	void addChild(CIvfShape* shape);
+	void addChild(CShape* shape);
 
-	CIvfCamera* getCamera();
+	CCamera* getCamera();
 
 	void setStereoMode(TStereoMode mode);
 	void setAnaglyphColorPair(TAnaglyphColorPair colorPair);
@@ -201,8 +201,8 @@ public:
 
 	CIvfSelectedShapesVector& getSelectedShapes();
 	int getSelectionSize();
-	CIvfShape* getSelectedShape(int idx);
-	CIvfShape* removeShape(CIvfShape* shape);
+	CShape* getSelectedShape(int idx);
+	CShape* removeShape(CShape* shape);
 
 	void setMultipass(bool flag);
 	bool getMultipass();
@@ -210,7 +210,7 @@ public:
 	void setPasses(int passes);
 	int getPasses();
 
-	void setMultipassEvent(CIvfMultipassEvent* evt);
+	void setMultipassEvent(CMultipassEvent* evt);
     
     void setRenderFlatShadow(bool flag);
     void setShadowColor(double red, double green, double blue);

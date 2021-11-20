@@ -27,26 +27,26 @@
 
 #include <ivf/IvfSceneBase.h>
 
-IvfSmartPointer(CIvfScene);
+IvfSmartPointer(CScene);
 
 /**
  * Scene class
  *
  * This is the main scene class in Ivf++ which handles
  * all details of rendering a scene graph. For more
- * details see CIvfSceneBase.
+ * details see CSceneBase.
  */
-class IVF_API CIvfScene : public CIvfSceneBase {
+class IVF_API CScene : public CSceneBase {
 private:
 
 public:
 	/** Class constructor */
-	CIvfScene();
+	CScene();
 
 	/** Class destructor */
-	virtual ~CIvfScene();
+	virtual ~CScene();
 
-	IvfClassInfo("CIvfScene",CIvfSceneBase);
+	IvfClassInfo("CScene",CSceneBase);
 };
 
 #endif 

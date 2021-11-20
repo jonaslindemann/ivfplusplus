@@ -32,7 +32,7 @@
 //namespace std {};
 //using namespace std;
 
-IvfSmartPointer(CIvfIndex);
+IvfSmartPointer(CIndex);
 
 /**
  * Index class
@@ -40,17 +40,17 @@ IvfSmartPointer(CIvfIndex);
  * This class is used to define an index used in the 
  * CIvfGLPrimitive derived classes.
  */
-class IVF_API CIvfIndex : public CIvfIndexBase {
+class IVF_API CIndex : public CIndexBase {
 private:
 	std::vector<long> m_indices;
 public:
 	/** CIvfIndex constructor */
-	CIvfIndex();
+	CIndex();
 
 	/** CIvfIndex destructor */
-	virtual ~CIvfIndex();
+	virtual ~CIndex();
 
-	IvfClassInfo("CIvfIndex",CIvfIndexBase);
+	IvfClassInfo("CIvfIndex",CIndexBase);
 
 	/** Return value at position */
 	long getIndex(long pos);
@@ -86,10 +86,10 @@ public:
 	void createConstant(long value, long size);
 
 	/** Assigns values from another index */
-	void assignFrom(CIvfIndexBase* idx);
+	void assignFrom(CIndexBase* idx);
 
 	/** Assigns \em idx the values of this index */
-	void assignTo(CIvfIndexBase* idx);
+	void assignTo(CIndexBase* idx);
 
 	/** Add values from array \em i to this index */ 
 	void addArray(long* i, long size);

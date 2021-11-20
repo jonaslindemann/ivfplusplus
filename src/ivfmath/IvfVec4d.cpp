@@ -30,10 +30,10 @@
 
 const int ivfMaxTempVec4d = 32;
 
-CIvfVec4d& ivfGetTempVec4d()
+CVec4d& ivfGetTempVec4d()
 {
 	static int nBuf = 0;
-	static CIvfVec4d buf[ivfMaxTempVec4d];
+	static CVec4d buf[ivfMaxTempVec4d];
 	
 	if (nBuf==ivfMaxTempVec4d) nBuf = 0;
 	buf[nBuf].setComponents(0.0, 0.0, 0.0, 0.0);
@@ -41,12 +41,12 @@ CIvfVec4d& ivfGetTempVec4d()
 	return buf[nBuf++];
 }
 
-CIvfVec4d::CIvfVec4d()
+CVec4d::CVec4d()
 {
 	setComponents(0.0, 0.0, 0.0, 0.0);
 }
 
-CIvfVec4d::CIvfVec4d(double vx, double vy, double vz)
+CVec4d::CVec4d(double vx, double vy, double vz)
 {
 	m_vector[0] = vx;
 	m_vector[1] = vy;
@@ -54,7 +54,7 @@ CIvfVec4d::CIvfVec4d(double vx, double vy, double vz)
 	m_vector[3] = 0.0;
 }
 
-CIvfVec4d::CIvfVec4d(double vx, double vy, double vz, double vw)
+CVec4d::CVec4d(double vx, double vy, double vz, double vw)
 {
 	m_vector[0] = vx;
 	m_vector[1] = vy;
@@ -62,17 +62,17 @@ CIvfVec4d::CIvfVec4d(double vx, double vy, double vz, double vw)
 	m_vector[3] = vw;
 }
 
-CIvfVec4d::CIvfVec4d(CIvfVec4d& v)
+CVec4d::CVec4d(CVec4d& v)
 {
 	v.getComponents(m_vector);
 }
 
-CIvfVec4d::~CIvfVec4d()
+CVec4d::~CVec4d()
 {
 
 }
 
-void CIvfVec4d::setComponents(double vx, double vy, double vz)
+void CVec4d::setComponents(double vx, double vy, double vz)
 {
 	m_vector[0] = vx;
 	m_vector[1] = vy;
@@ -80,7 +80,7 @@ void CIvfVec4d::setComponents(double vx, double vy, double vz)
 	m_vector[3] = 0.0;
 }
 
-void CIvfVec4d::setComponents(double vx, double vy, double vz, double vw)
+void CVec4d::setComponents(double vx, double vy, double vz, double vw)
 {
 	m_vector[0] = vx;
 	m_vector[1] = vy;
@@ -88,14 +88,14 @@ void CIvfVec4d::setComponents(double vx, double vy, double vz, double vw)
 	m_vector[3] = vw;
 }
 
-void CIvfVec4d::getComponents(double &vx, double &vy, double &vz)
+void CVec4d::getComponents(double &vx, double &vy, double &vz)
 {
 	vx = m_vector[0];
 	vy = m_vector[1];
 	vz = m_vector[2];
 }
 
-void CIvfVec4d::getComponents(double &vx, double &vy, double &vz, double &vw)
+void CVec4d::getComponents(double &vx, double &vy, double &vz, double &vw)
 {
 	vx = m_vector[0];
 	vy = m_vector[1];
@@ -103,7 +103,7 @@ void CIvfVec4d::getComponents(double &vx, double &vy, double &vz, double &vw)
 	vw = m_vector[3];
 }
 
-void CIvfVec4d::setComponents(const double *v)
+void CVec4d::setComponents(const double *v)
 {
 	m_vector[0] = v[0];
 	m_vector[1] = v[1];
@@ -111,7 +111,7 @@ void CIvfVec4d::setComponents(const double *v)
 	m_vector[3] = v[3];
 }
 
-CIvfVec4d& CIvfVec4d::operator+=(CIvfVec4d& a)
+CVec4d& CVec4d::operator+=(CVec4d& a)
 {
 	m_vector[0] += a.m_vector[0];
 	m_vector[1] += a.m_vector[1];
@@ -120,7 +120,7 @@ CIvfVec4d& CIvfVec4d::operator+=(CIvfVec4d& a)
 	return *this;
 }
 
-CIvfVec4d& CIvfVec4d::operator=(CIvfVec4d& a)
+CVec4d& CVec4d::operator=(CVec4d& a)
 {
 	m_vector[0] = a.m_vector[0];
 	m_vector[1] = a.m_vector[1];
@@ -130,9 +130,9 @@ CIvfVec4d& CIvfVec4d::operator=(CIvfVec4d& a)
 }
 
 /*
-CIvfVec4d CIvfVec4d::operator=(CIvfVec4d& a)
+CVec4d CVec4d::operator=(CVec4d& a)
 {
-	CIvfVec4d r;
+	CVec4d r;
 	r.m_vector[0] = a.m_vector[0];
 	r.m_vector[1] = a.m_vector[1];
 	r.m_vector[2] = a.m_vector[2];
@@ -140,9 +140,9 @@ CIvfVec4d CIvfVec4d::operator=(CIvfVec4d& a)
 	return r;
 }
 
-CIvfVec4d CIvfVec4d::operator=(CIvfVec4d a)
+CVec4d CVec4d::operator=(CVec4d a)
 {
-	CIvfVec4d r;
+	CVec4d r;
 	r.m_vector[0] = a.m_vector[0];
 	r.m_vector[1] = a.m_vector[1];
 	r.m_vector[2] = a.m_vector[2];
@@ -151,7 +151,7 @@ CIvfVec4d CIvfVec4d::operator=(CIvfVec4d a)
 }
 */
 
-CIvfVec4d& CIvfVec4d::operator-=(CIvfVec4d& a)
+CVec4d& CVec4d::operator-=(CVec4d& a)
 {
 	m_vector[0] -= a.m_vector[0];
 	m_vector[1] -= a.m_vector[1];
@@ -160,21 +160,21 @@ CIvfVec4d& CIvfVec4d::operator-=(CIvfVec4d& a)
 	return *this;
 }
 
-CIvfVec4d& operator+(CIvfVec4d& a, CIvfVec4d& b)
+CVec4d& operator+(CVec4d& a, CVec4d& b)
 {
-	CIvfVec4d& r = ivfGetTempVec4d();
+	CVec4d& r = ivfGetTempVec4d();
 	r = a;	
 	return r += b;
 }
 
-CIvfVec4d& operator-(CIvfVec4d& a, CIvfVec4d& b)
+CVec4d& operator-(CVec4d& a, CVec4d& b)
 {
-	CIvfVec4d& r = ivfGetTempVec4d();
+	CVec4d& r = ivfGetTempVec4d();
 	r = a;
 	return r -= b;
 }
 
-double CIvfVec4d::operator[](const int idx)
+double CVec4d::operator[](const int idx)
 {
 	if ((idx>=0)&&(idx<4))
 		return m_vector[idx];
@@ -182,9 +182,9 @@ double CIvfVec4d::operator[](const int idx)
 		return 0.0;
 }
 
-CIvfVec4d& operator*(CIvfVec4d& a, CIvfVec4d& b)
+CVec4d& operator*(CVec4d& a, CVec4d& b)
 {
-	CIvfVec4d& r = ivfGetTempVec4d();
+	CVec4d& r = ivfGetTempVec4d();
 
 	double c1, c2, c3;
 
@@ -197,21 +197,21 @@ CIvfVec4d& operator*(CIvfVec4d& a, CIvfVec4d& b)
 	return r;
 }
 
-CIvfVec4d& operator*(CIvfVec4d& a, double b)
+CVec4d& operator*(CVec4d& a, double b)
 {
-	CIvfVec4d& r = ivfGetTempVec4d();
+	CVec4d& r = ivfGetTempVec4d();
 	r.setComponents(a[0]*b, a[1]*b, a[2]*b);
 	return r;
 }
 
-CIvfVec4d& operator*(double a, CIvfVec4d& b)
+CVec4d& operator*(double a, CVec4d& b)
 {
-	CIvfVec4d& r = ivfGetTempVec4d();
+	CVec4d& r = ivfGetTempVec4d();
 	r.setComponents(b[0]*a, b[1]*a, b[2]*a);
 	return r;
 }
 
-void CIvfVec4d::getComponents(double *v)
+void CVec4d::getComponents(double *v)
 {
 	v[0] = m_vector[0];
 	v[1] = m_vector[1];
@@ -219,12 +219,12 @@ void CIvfVec4d::getComponents(double *v)
 	v[3] = m_vector[3];
 }
 
-double CIvfVec4d::length()
+double CVec4d::length()
 {
 	return sqrt(pow(m_vector[0],2) + pow(m_vector[1],2) + pow(m_vector[2],2));
 }
 
-void CIvfVec4d::normalize()
+void CVec4d::normalize()
 {
 	double quote = 1.0/length();
 
@@ -234,7 +234,7 @@ void CIvfVec4d::normalize()
 }
 
 
-void CIvfVec4d::rotate(CIvfVec4d &axis, double angle)
+void CVec4d::rotate(CVec4d &axis, double angle)
 {
 	double cost = cos(angle*2*M_PI/360.0);
 	double sint = sin(angle*2*M_PI/360.0);
@@ -261,14 +261,14 @@ void CIvfVec4d::rotate(CIvfVec4d &axis, double angle)
 	m_vector[2] = rv[2];
 }
 
-void CIvfVec4d::getEulerAngles(double &pitch, double &heading)
+void CVec4d::getEulerAngles(double &pitch, double &heading)
 {
 	heading = atan2(m_vector[0], m_vector[2])*180.0/M_PI;
 	double t = sqrt(pow(m_vector[0],2)+pow(m_vector[2],2));
 	pitch = atan2(m_vector[1], t)*180.0/M_PI;
 }
 
-void CIvfVec4d::negate()
+void CVec4d::negate()
 {
 	m_vector[0] = - m_vector[0];
 	m_vector[1] = - m_vector[1];
@@ -276,23 +276,23 @@ void CIvfVec4d::negate()
 }
 
 
-void CIvfVec4d::setX(double value)
+void CVec4d::setX(double value)
 {
 	m_vector[0] = value;
 }
 
-void CIvfVec4d::setY(double value)
+void CVec4d::setY(double value)
 {
 	m_vector[1] = value;
 }
 
-void CIvfVec4d::setZ(double value)
+void CVec4d::setZ(double value)
 {
 	m_vector[2] = value;
 }
 
 #ifdef IVF_HAVE_IOSTREAM
-void CIvfVec4d::print(std::ostream &out)
+void CVec4d::print(std::ostream &out)
 {
 	using namespace std;
 

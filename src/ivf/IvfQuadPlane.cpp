@@ -21,8 +21,8 @@
 
 #include <ivf/IvfQuadPlane.h>
 
-CIvfQuadPlane::CIvfQuadPlane()
-:CIvfQuadSet()
+CQuadPlane::CQuadPlane()
+:CQuadSet()
 {
 	m_width = 1.0;
 	m_height = 1.0;
@@ -33,12 +33,12 @@ CIvfQuadPlane::CIvfQuadPlane()
 	this->initPlane();
 }
 
-CIvfQuadPlane::~CIvfQuadPlane()
+CQuadPlane::~CQuadPlane()
 {
 
 }
 
-void CIvfQuadPlane::setSize(double width, double height)
+void CQuadPlane::setSize(double width, double height)
 {
 	m_width = width;
 	m_height = height;
@@ -47,10 +47,10 @@ void CIvfQuadPlane::setSize(double width, double height)
 	this->initPlane();
 }
 
-void CIvfQuadPlane::setTexture(CIvfTexture *texture)
+void CQuadPlane::setTexture(CTexture *texture)
 {
 	int width, height;
-	CIvfShape::setTexture(texture);
+	CShape::setTexture(texture);
 	texture->getSize(width, height);
 	if ((width>0)&&(height>0))
 	{
@@ -59,18 +59,18 @@ void CIvfQuadPlane::setTexture(CIvfTexture *texture)
 	}
 }
 
-void CIvfQuadPlane::updateTextureCoords()
+void CQuadPlane::updateTextureCoords()
 {
 
 }
 
 
-void CIvfQuadPlane::setWidth(double width)
+void CQuadPlane::setWidth(double width)
 {
 	this->setSize(width, width/m_ratio);
 }
 
-void CIvfQuadPlane::flipVert()
+void CQuadPlane::flipVert()
 {
 	this->setTextureCoord(0, 0.0,m_textureRepeat[1]);
 	this->setTextureCoord(1, m_textureRepeat[0],m_textureRepeat[1]);
@@ -78,7 +78,7 @@ void CIvfQuadPlane::flipVert()
 	this->setTextureCoord(3, 0.0,0.0);
 }
 
-void CIvfQuadPlane::initPlane()
+void CQuadPlane::initPlane()
 {
 	this->clear();
 	
@@ -109,7 +109,7 @@ void CIvfQuadPlane::initPlane()
 		break;
 	};
 	
-	CIvfIndexPtr idx = new CIvfIndex();
+	CIndexPtr idx = new CIndex();
 	idx->createLinear(4);
 	this->addCoordIndex(idx);
 
@@ -118,18 +118,18 @@ void CIvfQuadPlane::initPlane()
 	this->addTextureCoord(m_textureRepeat[0],m_textureRepeat[1]);
 	this->addTextureCoord(0.0,m_textureRepeat[1]);
 
-	idx = new CIvfIndex();
+	idx = new CIndex();
 	idx->createLinear(4);
 	this->addTextureIndex(idx);
 }
 
-void CIvfQuadPlane::setOrientation(TPlaneOrientation orientation)
+void CQuadPlane::setOrientation(TPlaneOrientation orientation)
 {
 	m_planeOrientation = orientation;
 	this->initPlane();
 }
 
-void CIvfQuadPlane::setTextureRepeat(double xrepeat, double yrepeat)
+void CQuadPlane::setTextureRepeat(double xrepeat, double yrepeat)
 {
 	m_textureRepeat[0] = xrepeat;
 	m_textureRepeat[1] = yrepeat;

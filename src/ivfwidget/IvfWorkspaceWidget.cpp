@@ -26,19 +26,19 @@
 
 #include <ivf3dui/IvfUIInteractiveBase.h>
 
-CIvfWorkspaceWidget::CIvfWorkspaceWidget()
+CWorkspaceWidget::CWorkspaceWidget()
 {
 	
 }
 
-CIvfWorkspaceWidget::~CIvfWorkspaceWidget()
+CWorkspaceWidget::~CWorkspaceWidget()
 {
 	
 }
 
-void CIvfWorkspaceWidget::doInit(int width, int height)
+void CWorkspaceWidget::doInit(int width, int height)
 {
-	IvfDbg2("CIvfWorkspaceWidget::doInit: Start.");
+	IvfDbg2("CWorkspaceWidget::doInit: Start.");
 	
 	// Initialize variables
 	
@@ -55,36 +55,36 @@ void CIvfWorkspaceWidget::doInit(int width, int height)
 	
 	// Initialize Ivf++ camera
 	
-	m_camera = new CIvfCamera();
+	m_camera = new CCamera();
 	m_camera->setPosition(0.0, 8.0, 8.0);
 	
 	// Create scene composite
 	
-	m_workspace = new CIvfWorkspace();
+	m_workspace = new CWorkspace();
 	m_workspace->setCamera(m_camera);
 	m_workspace->setRelativeCursorSize(0.2);
 	m_workspace->setWorkspaceSize(10.0);
 	
 	// Setup lighting
 	
-	CIvfLighting* lighting = CIvfLighting::getInstance();
+	CLighting* lighting = CLighting::getInstance();
 	
-	CIvfLight* light = lighting->getLight(0);
+	CLight* light = lighting->getLight(0);
 	light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	light->enable();
 	
 	onInit(width, height);
 	
-	IvfDbg2("CIvfWorkspaceWidget::doInit: End.");
+	IvfDbg2("CWorkspaceWidget::doInit: End.");
 }
 
 // ------------------------------------------------------------
-void CIvfWorkspaceWidget::doResize(int width, int height)
+void CWorkspaceWidget::doResize(int width, int height)
 {
-	IvfDbg2("CIvfWorkspaceWidget::doResize: Start.");
+	IvfDbg2("CWorkspaceWidget::doResize: Start.");
 	
-	CIvfWidgetBase::doResize(width, height); // This must be here!
+	CWidgetBase::doResize(width, height); // This must be here!
 	
 	//m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -92,13 +92,13 @@ void CIvfWorkspaceWidget::doResize(int width, int height)
 	
 	onResize(width, height);
 	
-	IvfDbg2("CIvfWorkspaceWidget::doResize: End.");
+	IvfDbg2("CWorkspaceWidget::doResize: End.");
 }
 
 // ------------------------------------------------------------
-void CIvfWorkspaceWidget::doRender()
+void CWorkspaceWidget::doRender()
 {
-	IvfDbg2("CIvfWorkspaceWidget::doRender: Start.");
+	IvfDbg2("CWorkspaceWidget::doRender: Start.");
 	
 	m_camera->rotatePositionY(m_angleX/100.0);
 	m_camera->rotatePositionX(m_angleY/100.0);
@@ -114,28 +114,28 @@ void CIvfWorkspaceWidget::doRender()
 	
 	onRender();
 	
-	IvfDbg2("CIvfWorkspaceWidget::doRender: End.");
+	IvfDbg2("CWorkspaceWidget::doRender: End.");
 }
 
 // ------------------------------------------------------------
-void CIvfWorkspaceWidget::doDestroy()
+void CWorkspaceWidget::doDestroy()
 {
-	IvfDbg2("CIvfWorkspaceWidget::doDestroy: Start.");
+	IvfDbg2("CWorkspaceWidget::doDestroy: Start.");
 	onDestroy();
-	IvfDbg2("CIvfWorkspaceWidget::doDestroy: End.");
+	IvfDbg2("CWorkspaceWidget::doDestroy: End.");
 }
 
 // ------------------------------------------------------------
-void CIvfWorkspaceWidget::doMouseDown(int x, int y)
+void CWorkspaceWidget::doMouseDown(int x, int y)
 {
-	IvfDbg2("CIvfWorkspaceWidget::doMouseDown: Start.");
+	IvfDbg2("CWorkspaceWidget::doMouseDown: Start.");
 	
 	m_beginX = x;
 	m_beginY = y;
 	
-	CIvfVec3d vec;
-	CIvfShapePtr shape;
-	CIvfUIInteractiveBasePtr uiShape;
+	CVec3d vec;
+	CShapePtr shape;
+	CUIInteractiveBasePtr uiShape;
 	
 	if ( isLeftButtonDown() )
 	{
@@ -166,13 +166,13 @@ void CIvfWorkspaceWidget::doMouseDown(int x, int y)
 	
 	onMouseDown(x, y);
 	
-	IvfDbg2("CIvfWorkspaceWidget::doMouseDown: End.");
+	IvfDbg2("CWorkspaceWidget::doMouseDown: End.");
 }
 
 // ------------------------------------------------------------
-void CIvfWorkspaceWidget::doMouseMove(int x, int y)
+void CWorkspaceWidget::doMouseMove(int x, int y)
 {
-	IvfDbg2("CIvfWorkspaceWidget::doMouseMove: Start.");
+	IvfDbg2("CWorkspaceWidget::doMouseMove: Start.");
 	
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -200,7 +200,7 @@ void CIvfWorkspaceWidget::doMouseMove(int x, int y)
 		
 		if (isRightButtonDown())
 		{
-			if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
+			if (getModifierKey() == CWidgetBase::MT_SHIFT)
 			{
 				m_zoomX = (x - m_beginX);
 				m_zoomY = (y - m_beginY);
@@ -223,7 +223,7 @@ void CIvfWorkspaceWidget::doMouseMove(int x, int y)
 		{
 			m_workspace->updateCursor(x, y);
 			
-			CIvfVec3d pos;
+			CVec3d pos;
 			pos = m_workspace->getCursorPosition();
 			double wx, wy, wz;
 			pos.getComponents(wx, wy, wz);
@@ -238,11 +238,11 @@ void CIvfWorkspaceWidget::doMouseMove(int x, int y)
 		{
 			m_workspace->pick(x, y);
 			
-			CIvfShapePtr shape = m_workspace->getSelectedShape();
-			CIvfUIInteractiveBasePtr uiShape = queryUIShape(shape);
-			CIvfUIInteractiveBasePtr lastUIShape = queryUIShape(m_lastOver);
+			CShapePtr shape = m_workspace->getSelectedShape();
+			CUIInteractiveBasePtr uiShape = queryUIShape(shape);
+			CUIInteractiveBasePtr lastUIShape = queryUIShape(m_lastOver);
 			
-			CIvfVec3d vec;
+			CVec3d vec;
 			
 			if (uiShape==NULL)
 			{
@@ -307,11 +307,11 @@ void CIvfWorkspaceWidget::doMouseMove(int x, int y)
 			{
 				m_workspace->pick(x, y);
 				
-				CIvfShapePtr shape = m_workspace->getSelectedShape();
-				CIvfUIInteractiveBasePtr uiShape = queryUIShape(shape);
-				CIvfUIInteractiveBasePtr lastUIShape = queryUIShape(m_lastOver);
+				CShapePtr shape = m_workspace->getSelectedShape();
+				CUIInteractiveBasePtr uiShape = queryUIShape(shape);
+				CUIInteractiveBasePtr lastUIShape = queryUIShape(m_lastOver);
 				
-				CIvfVec3d vec;
+				CVec3d vec;
 				
 				if (uiShape==NULL)
 				{
@@ -375,13 +375,13 @@ void CIvfWorkspaceWidget::doMouseMove(int x, int y)
 	
 	onMouseMove(x, y);
 	
-	IvfDbg2("CIvfWorkspaceWidget::doMouseMove: End.");
+	IvfDbg2("CWorkspaceWidget::doMouseMove: End.");
 }
 
 // ------------------------------------------------------------
-void CIvfWorkspaceWidget::doMouseUp(int x, int y)
+void CWorkspaceWidget::doMouseUp(int x, int y)
 {
-	IvfDbg2("CIvfWorkspaceWidget::doMouseUp: Start.");
+	IvfDbg2("CWorkspaceWidget::doMouseUp: Start.");
 	
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -390,10 +390,10 @@ void CIvfWorkspaceWidget::doMouseUp(int x, int y)
 	m_zoomX = 0.0;
 	m_zoomY = 0.0;
 
-	CIvfVec3d vec;
-	CIvfShapePtr shape;
-	CIvfUIInteractiveBasePtr uiShape;
-	CIvfUIInteractiveBasePtr lastUIShape;
+	CVec3d vec;
+	CShapePtr shape;
+	CUIInteractiveBasePtr uiShape;
+	CUIInteractiveBasePtr lastUIShape;
 
 	switch (m_editMode) {
 	case EM_INTERACT:
@@ -432,136 +432,136 @@ void CIvfWorkspaceWidget::doMouseUp(int x, int y)
 	
 	onMouseUp(x, y);
 	
-	IvfDbg2("CIvfWorkspaceWidget::doMouseUp: End.");
+	IvfDbg2("CWorkspaceWidget::doMouseUp: End.");
 }
 
 // ------------------------------------------------------------
-void CIvfWorkspaceWidget::doKeyboard(int key, int x, int y)
+void CWorkspaceWidget::doKeyboard(int key, int x, int y)
 {
-	IvfDbg2("CIvfWorkspaceWidget::doKeyboard: Start.");
+	IvfDbg2("CWorkspaceWidget::doKeyboard: Start.");
 	
 	onKeyboard(key, x, y);
 	
-	IvfDbg2("CIvfWorkspaceWidget::doKeyboard: End.");
+	IvfDbg2("CWorkspaceWidget::doKeyboard: End.");
 }
 
-void CIvfWorkspaceWidget::addChild(CIvfShape *shape)
+void CWorkspaceWidget::addChild(CShape *shape)
 {
 	m_workspace->addChild(shape);
 }
 
-void CIvfWorkspaceWidget::setEditMode(TEditMode mode)
+void CWorkspaceWidget::setEditMode(TEditMode mode)
 {
 	m_editMode = mode;
 }
 
-CIvfWorkspaceWidget::TEditMode CIvfWorkspaceWidget::getEditMode()
+CWorkspaceWidget::TEditMode CWorkspaceWidget::getEditMode()
 {
 	return m_editMode;
 }
 
-void CIvfWorkspaceWidget::onCursor(double x, double y, double z)
+void CWorkspaceWidget::onCursor(double x, double y, double z)
 {
 	
 }
 
-CIvfCamera* CIvfWorkspaceWidget::getCamera()
+CCamera* CWorkspaceWidget::getCamera()
 {
 	return m_camera;
 }
 
-CIvfWorkspace* CIvfWorkspaceWidget::getWorkspace()
+CWorkspace* CWorkspaceWidget::getWorkspace()
 {
 	return m_workspace;
 }
 
-void CIvfWorkspaceWidget::onShapeDown(CIvfShape *shape)
+void CWorkspaceWidget::onShapeDown(CShape *shape)
 {
 	
 }
 
-void CIvfWorkspaceWidget::onShapeClick(CIvfShape *shape)
+void CWorkspaceWidget::onShapeClick(CShape *shape)
 {
 	
 }
 
-void CIvfWorkspaceWidget::onShapeUp(CIvfShape *shape)
+void CWorkspaceWidget::onShapeUp(CShape *shape)
 {
 	
 }
 
-void CIvfWorkspaceWidget::onShapeOver(CIvfShape *shape)
+void CWorkspaceWidget::onShapeOver(CShape *shape)
 {
 	
 }
 
-void CIvfWorkspaceWidget::onShapeLeave(CIvfShape *shape)
+void CWorkspaceWidget::onShapeLeave(CShape *shape)
 {
 	
 }
 
-void CIvfWorkspaceWidget::enableShapeOver()
+void CWorkspaceWidget::enableShapeOver()
 {
 	m_selectOver = true;
 }
 
-void CIvfWorkspaceWidget::disableShapeOver()
+void CWorkspaceWidget::disableShapeOver()
 {
 	m_selectOver = false;
 }
 
-bool CIvfWorkspaceWidget::isShapeOverEnabled()
+bool CWorkspaceWidget::isShapeOverEnabled()
 {
 	return m_selectOver;
 }
 
-void CIvfWorkspaceWidget::onShapeDrag(CIvfShape *shape)
+void CWorkspaceWidget::onShapeDrag(CShape *shape)
 {
 	
 }
 
-CIvfUIInteractiveBasePtr CIvfWorkspaceWidget::queryUIShape(CIvfShape *shape)
+CUIInteractiveBasePtr CWorkspaceWidget::queryUIShape(CShape *shape)
 {
-	CIvfUIInteractiveBasePtr uiShape;
+	CUIInteractiveBasePtr uiShape;
 
 	if (shape!=NULL)
 	{
-		if (shape->isClass("CIvfUIInteractiveBase"))
+		if (shape->isClass("CUIInteractiveBase"))
 		{
-			CIvfShape* s = shape;
-			uiShape = (CIvfUIInteractiveBase*)s;
+			CShape* s = shape;
+			uiShape = (CUIInteractiveBase*)s;
 		}
 	}
 
 	return uiShape;
 }
 
-void CIvfWorkspaceWidget::onControlOver(CIvfUIInteractiveBase *uiControl)
+void CWorkspaceWidget::onControlOver(CUIInteractiveBase *uiControl)
 {
 
 }
 
-void CIvfWorkspaceWidget::onControlLeave(CIvfUIInteractiveBase *uiControl)
+void CWorkspaceWidget::onControlLeave(CUIInteractiveBase *uiControl)
 {
 
 }
 
-void CIvfWorkspaceWidget::onControlDrag(CIvfUIInteractiveBase *uiControl)
+void CWorkspaceWidget::onControlDrag(CUIInteractiveBase *uiControl)
 {
 
 }
 
-void CIvfWorkspaceWidget::onControlDown(CIvfUIInteractiveBase *uiControl)
+void CWorkspaceWidget::onControlDown(CUIInteractiveBase *uiControl)
 {
 
 }
 
-void CIvfWorkspaceWidget::onControlClick(CIvfUIInteractiveBase *uiControl)
+void CWorkspaceWidget::onControlClick(CUIInteractiveBase *uiControl)
 {
 
 }
 
-void CIvfWorkspaceWidget::onControlUp(CIvfUIInteractiveBase *uiControl)
+void CWorkspaceWidget::onControlUp(CUIInteractiveBase *uiControl)
 {
 
 }

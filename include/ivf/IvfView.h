@@ -30,7 +30,7 @@
 
 #include <ivfmath/IvfViewFrustum.h>
 
-IvfSmartPointer(CIvfView);
+IvfSmartPointer(CView);
 
 /**
  * View abstract class
@@ -39,7 +39,7 @@ IvfSmartPointer(CIvfView);
  * cameras. The viewTransform and projectionTransform methods
  * should be overidden. 
  */
-class IVF_API CIvfView : public CIvfGLBase  {
+class IVF_API CView : public CGLBase  {
 private:
 	int m_viewX;
 	int m_viewY;
@@ -47,19 +47,19 @@ private:
 	int m_viewWidth;
 	double m_viewAspect;
 	
-	CIvfViewportPtr m_viewport;
+	CViewportPtr m_viewport;
 
 	bool m_selectTransform;
 public:
-	void setViewport(CIvfViewport* viewport);
-	CIvfViewport* getViewport();
-	/** CIvfView constructor */
-	CIvfView();
+	void setViewport(CViewport* viewport);
+	CViewport* getViewport();
+	/** CView constructor */
+	CView();
 
-	/** CIvfView destructor */
-	virtual ~CIvfView();
+	/** CView destructor */
+	virtual ~CView();
 
-	IvfClassInfo("CIvfView",CIvfGLBase);
+	IvfClassInfo("CView",CGLBase);
 
 	/**
 	 * Initialize perspective and viewport
@@ -98,7 +98,7 @@ public:
 	 * to reflect the currently used view frustum.
 	 * Method is overidden by descendant classes.
 	 */
-	virtual void getViewFrustum(CIvfViewFrustum* frustum);
+	virtual void getViewFrustum(CViewFrustum* frustum);
 
 	/** Returns view port dimension */
 	void getViewPort(int &w, int &h);
