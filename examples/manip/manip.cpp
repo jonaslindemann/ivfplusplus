@@ -11,32 +11,33 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfBrick.h>
-#include <ivf/IvfCube.h>
-#include <ivf/IvfSphere.h>
-#include <ivf/IvfCylinder.h>
-#include <ivf/IvfCone.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLight.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfLighting.h>
+#include <ivf/Camera.h>
+#include <ivf/Brick.h>
+#include <ivf/Cube.h>
+#include <ivf/Sphere.h>
+#include <ivf/Cylinder.h>
+#include <ivf/Cone.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Light.h>
+#include <ivf/Material.h>
+#include <ivf/Lighting.h>
 
-#include <ivfwidget/IvfMouseViewHandler.h>
-#include <ivfwidget/IvfSceneHandler.h>
-#include <ivfwidget/IvfInteractionHandler.h>
+#include <ivfwidget/MouseViewHandler.h>
+#include <ivfwidget/SceneHandler.h>
+#include <ivfwidget/InteractionHandler.h>
 
-#include <ivf3dui/IvfUIButton.h>
-#include <ivf3dui/IvfUISwitch.h>
-#include <ivf3dui/IvfUIButtonGroup.h>
-#include <ivf3dui/IvfUIComposite.h>
+#include <ivf3dui/UIButton.h>
+#include <ivf3dui/UISwitch.h>
+#include <ivf3dui/UIButtonGroup.h>
+#include <ivf3dui/UIComposite.h>
 
 using namespace std;
+using namespace ivf;
 
 #define VIEW_MODE			100
 #define INTERACTION_MODE	101

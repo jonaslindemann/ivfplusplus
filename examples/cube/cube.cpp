@@ -11,12 +11,14 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfCube.h>
+#include <ivf/Camera.h>
+#include <ivf/Lighting.h>
+#include <ivf/Cube.h>
+
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition

@@ -8,7 +8,7 @@ void timer_callback(void * v);
 void idle_callback(void* p);
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Menu_Bar.H>
-#include "IvfCustomWidget.h"
+#include "CustomWidget.h"
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Value_Slider.H>
 #include "Fl_HoverButton.h"

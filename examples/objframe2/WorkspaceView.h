@@ -1,39 +1,39 @@
 #ifndef _CWorkspaceView_h_
 #define _CWorkspaceView_h_
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfCube.h>
-#include <ivf/IvfSphere.h>
-#include <ivf/IvfCylinder.h>
-#include <ivf/IvfQuadPlane.h>
-#include <ivf/IvfGrid.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfGrid.h>
-#include <ivf/IvfGlobalState.h>
-#include <ivf/IvfScene.h>
-#include <ivf/IvfBlendState.h>
-#include <ivf/IvfNode.h>
-#include <ivf/IvfSolidLine.h>
-#include <ivf/IvfExtrArrow.h>
-#include <ivf/IvfNodeCursor.h>
-#include <ivf/IvfRuler.h>
-#include <ivf/IvfShapeSelection.h>
-#include <ivf/IvfPixelOps.h>
-#include <ivf/IvfCompositeState.h>
+#include <ivf/Camera.h>
+#include <ivf/Cube.h>
+#include <ivf/Sphere.h>
+#include <ivf/Cylinder.h>
+#include <ivf/QuadPlane.h>
+#include <ivf/Grid.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Lighting.h>
+#include <ivf/Material.h>
+#include <ivf/Grid.h>
+#include <ivf/GlobalState.h>
+#include <ivf/Scene.h>
+#include <ivf/BlendState.h>
+#include <ivf/Node.h>
+#include <ivf/SolidLine.h>
+#include <ivf/ExtrArrow.h>
+#include <ivf/NodeCursor.h>
+#include <ivf/Ruler.h>
+#include <ivf/ShapeSelection.h>
+#include <ivf/PixelOps.h>
+#include <ivf/CompositeState.h>
 
-#include <ivfwidget/IvfMouseViewHandler.h>
-#include <ivfwidget/IvfSceneHandler.h>
-#include <ivfwidget/IvfSelectionHandler.h>
-#include <ivfwidget/IvfCoordinateInputHandler.h>
-#include <ivfwidget/IvfShapePlacementHandler.h>
+#include <ivfwidget/MouseViewHandler.h>
+#include <ivfwidget/SceneHandler.h>
+#include <ivfwidget/SelectionHandler.h>
+#include <ivfwidget/CoordinateInputHandler.h>
+#include <ivfwidget/ShapePlacementHandler.h>
 
-#include <ivffltk/IvfFltkBase.h>
+#include <ivffltk/FltkBase.h>
 
-#include "IvfVectorCursor.h"
+#include "VectorCursor.h"
 
 enum TViewModeEvent {
 	VM_CREATE_SHAPES,
@@ -78,23 +78,23 @@ IvfSmartPointer(CWorkspaceView);
 // Window class definition
 // ------------------------------------------------------------
 
-class CWorkspaceView: public CFltkBase,
-	CKeyboardEvent,
-	CCreateShapeEvent,
-	CSingleSelectionEvent,
-	CMouseDownEvent,
-	CMouseUpEvent,
-	CModifierDownEvent,
-	CModifierUpEvent,
-	CHighlightEvent,
-	CMenuItemEvent,
-	CMoveSelectionEvent,
-	CMouseMove3dEvent,
-	CCopyShapeEvent,
-	CFinishCopyEvent,
-	CFinishMoveEvent,
-	CCursorUpdateEvent,
-	CMouseMoveEvent
+class CWorkspaceView: public ivf::CFltkBase,
+	ivf::CKeyboardEvent,
+	ivf::CCreateShapeEvent,
+	ivf::CSingleSelectionEvent,
+	ivf::CMouseDownEvent,
+	ivf::CMouseUpEvent,
+	ivf::CModifierDownEvent,
+	ivf::CModifierUpEvent,
+	ivf::CHighlightEvent,
+	ivf::CMenuItemEvent,
+	ivf::CMoveSelectionEvent,
+	ivf::CMouseMove3dEvent,
+	ivf::CCopyShapeEvent,
+	ivf::CFinishCopyEvent,
+	ivf::CFinishMoveEvent,
+	ivf::CCursorUpdateEvent,
+	ivf::CMouseMoveEvent
 {
 public:
 	enum TViewMode {
@@ -119,35 +119,35 @@ public:
 		ST_CREATE_LOADS
 	};
 private:
-	CCameraPtr					m_camera;
-	CLightPtr					m_light;
-	CScenePtr					m_scene;
-	CMaterialPtr					m_nodeMaterial;
-	CMaterialPtr					m_lineMaterial;
-	CMaterialPtr					m_vectorMaterial;
-	CMaterialPtr					m_movementMaterial;
+	ivf::CCameraPtr					m_camera;
+	ivf::CLightPtr					m_light;
+	ivf::CScenePtr					m_scene;
+	ivf::CMaterialPtr					m_nodeMaterial;
+	ivf::CMaterialPtr					m_lineMaterial;
+	ivf::CMaterialPtr					m_vectorMaterial;
+	ivf::CMaterialPtr					m_movementMaterial;
 
-	CShapeStdPtr					m_oldShape;
-	CShapeSelectionPtr			m_selection;
-	CShapeSelectionPtr			m_lineSelection;
+	ivf::CShapeStdPtr					m_oldShape;
+	ivf::CShapeSelectionPtr			m_selection;
+	ivf::CShapeSelectionPtr			m_lineSelection;
 
-	CNodeCursorPtr				m_selectionCursor;
-	CNodeCursorPtr				m_movementCursor;
-	CExtrArrowPtr				m_loadCursor;
+	ivf::CNodeCursorPtr				m_selectionCursor;
+	ivf::CNodeCursorPtr				m_movementCursor;
+	ivf::CExtrArrowPtr				m_loadCursor;
 	CVectorCursorPtr				m_vectorCursor;
 
-	CShapeStdPtr					m_moveShape;
+	ivf::CShapeStdPtr					m_moveShape;
 
-	CCompositePtr				m_nodes;
-	CCompositePtr				m_lines;
-	CCompositePtr				m_vectors;
+	ivf::CCompositePtr				m_nodes;
+	ivf::CCompositePtr				m_lines;
+	ivf::CCompositePtr				m_vectors;
 
-	CCompositePtr				m_movementShapes;
+	ivf::CCompositePtr				m_movementShapes;
 
-	CMouseViewHandlerPtr			m_mouseViewHandler;
-	CSceneHandlerPtr				m_sceneHandler;
-	CShapePlacementHandlerPtr	m_shapePlacementHandler;
-	CSelectionHandlerPtr			m_selectionHandler;
+	ivf::CMouseViewHandlerPtr			m_mouseViewHandler;
+	ivf::CSceneHandlerPtr				m_sceneHandler;
+	ivf::CShapePlacementHandlerPtr	m_shapePlacementHandler;
+	ivf::CSelectionHandlerPtr			m_selectionHandler;
 
 	TViewMode						m_viewMode;
 	TViewMode						m_savedViewMode;
@@ -175,7 +175,7 @@ public:
 	void open(const char* filename);
 	void save();
 
-	CShapeSelection* getSelection();
+	ivf::CShapeSelection* getSelection();
 
 	void createScenario(TScenarioType scenarioType);
 	void createSimpleStructure(int rows, int cols, int stacks);
@@ -189,10 +189,10 @@ public:
 	virtual void onKeyboard(int key, int x, int y);
 	virtual void onFunctionKey(CWidgetBase::TFunctionKey key, int x, int y);
 
-	virtual void onCreateShapeEvent(double x, double y, double z, CShapePtr& shape);
+	virtual void onCreateShapeEvent(double x, double y, double z, ivf::CShapePtr& shape);
 
-	virtual void onSelect(CShape* shape);
-	virtual void onHighlight(CShape* shape);
+	virtual void onSelect(ivf::CShape* shape);
+	virtual void onHighlight(ivf::CShape* shape);
 
 	virtual void onMouseDown(int x, int y);
 	virtual void onMouseMove(int x, int y);
@@ -202,7 +202,7 @@ public:
 	virtual void onModifierUp();
 
 	virtual bool onMoveSelection();
-	virtual void onCopyShape(double x, double y, double z, CShapePtr& shape, CShapePtr& newShape);
+	virtual void onCopyShape(double x, double y, double z, ivf::CShapePtr& shape, ivf::CShapePtr& newShape);
 	virtual void onFinishCopy();
 	virtual void onFinishMove();
 

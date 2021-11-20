@@ -11,35 +11,37 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfSphere.h>
-#include <ivf/IvfCylinder.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLighting.h> 
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfTexture.h>
+#include <ivf/Camera.h>
+#include <ivf/Sphere.h>
+#include <ivf/Cylinder.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Lighting.h> 
+#include <ivf/Material.h>
+#include <ivf/Texture.h>
 
 // CIvfGLPrimitive derived classes
 
-#include <ivf/IvfPointSet.h>
-#include <ivf/IvfLineSet.h>
-#include <ivf/IvfLineStripSet.h>
-#include <ivf/IvfTriSet.h>
-#include <ivf/IvfTriStripSet.h>
-#include <ivf/IvfQuadSet.h>
+#include <ivf/PointSet.h>
+#include <ivf/LineSet.h>
+#include <ivf/LineStripSet.h>
+#include <ivf/TriSet.h>
+#include <ivf/TriStripSet.h>
+#include <ivf/QuadSet.h>
 
 // From the image library
 
-#include <ivfimage/IvfPngImage.h>
+#include <ivfimage/PngImage.h>
 
 // From the file library
 
-#include <ivffile/IvfDxfWriter.h>
+#include <ivffile/DxfWriter.h>
+
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition

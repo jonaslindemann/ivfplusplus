@@ -1,5 +1,7 @@
 #include "IvfFlyCamera.h"
 
+using namespace ivf;
+
 CFlyCamera::CFlyCamera()
 {
 	setPosition(0.0, 0.0, 0.0);

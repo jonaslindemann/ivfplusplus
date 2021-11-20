@@ -11,16 +11,17 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfSphere.h>
-#include <ivf/IvfCulling.h>
+#include <ivf/Camera.h>
+#include <ivf/Transform.h>
+#include <ivf/Lighting.h>
+#include <ivf/Material.h>
+#include <ivf/Sphere.h>
+#include <ivf/Culling.h>
 
+using namespace ivf;
 using namespace std;
 
 // ------------------------------------------------------------

@@ -1,7 +1,9 @@
-#include <ivfmath/IvfVec3d.h>
-#include <ivfmath/IvfVec4d.h>
-#include <ivfmath/IvfMat3d.h>
-#include <ivfmath/IvfMat4d.h>
+#include <ivfmath/Vec3d.h>
+#include <ivfmath/Vec4d.h>
+#include <ivfmath/Mat3d.h>
+#include <ivfmath/Mat4d.h>
+
+using namespace ivf;
 
 int main(int argc, char* argv[])
 {

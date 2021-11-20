@@ -11,18 +11,20 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfdef/IvfDef.h>
+#include <ivfdef/Def.h>
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfLighting.h>
+#include <ivf/Camera.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Lighting.h>
 
-#include <ivffile/IvfAc3DReader.h>
-#include <ivffile/IvfDxfWriter.h>
+#include <ivffile/Ac3DReader.h>
+#include <ivffile/DxfWriter.h>
+
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition
@@ -70,8 +72,6 @@ CExampleWindow::CExampleWindow(int X, int Y, int W, int H, bool fullScreen)
 {
 
 }
-
-
 
 void CExampleWindow::onInit(int width, int height)
 {

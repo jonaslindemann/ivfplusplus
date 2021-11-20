@@ -11,21 +11,22 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfSphere.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfMesh.h>
-#include <ivf/IvfLightingState.h>
-#include <ivf/IvfRasterization.h>
+#include <ivf/Camera.h>
+#include <ivf/Sphere.h>
+#include <ivf/Composite.h>
+#include <ivf/Material.h>
+#include <ivf/Lighting.h>
+#include <ivf/Mesh.h>
+#include <ivf/LightingState.h>
+#include <ivf/Rasterization.h>
 
-#include <ivfmath/IvfVec3d.h>
+#include <ivfmath/Vec3d.h>
 
 using namespace std;
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition

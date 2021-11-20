@@ -11,21 +11,23 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLighting.h>
+#include <ivf/Camera.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Lighting.h>
 
-#include <ivffile/IvfAc3DReader.h>
+#include <ivffile/Ac3DReader.h>
 
-#include <ivfctl/IvfControllerGroup.h>
-#include <ivfctl/IvfRotateController.h>
-#include <ivfctl/IvfCameraController.h>
-#include <ivfctl/IvfSlerpController.h>
+#include <ivfctl/ControllerGroup.h>
+#include <ivfctl/RotateController.h>
+#include <ivfctl/CameraController.h>
+#include <ivfctl/SlerpController.h>
+
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition

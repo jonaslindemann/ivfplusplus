@@ -1,10 +1,12 @@
 #include "StarField.h"
 
-#include <ivfmath/IvfVec3d.h>
+#include <ivfmath/Vec3d.h>
 
-#include <ivfimage/IvfSgiImage.h>
+#include <ivfimage/SgiImage.h>
 
 #include <time.h>
+
+using namespace ivf;
 
 CStarField::CStarField(CCamera* camera)
 {

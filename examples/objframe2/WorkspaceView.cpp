@@ -1,6 +1,8 @@
 #include "WorkspaceView.h"
 
-#include <ivf/IvfDepthBufferState.h>
+#include <ivf/DepthBufferState.h>
+
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class implementation

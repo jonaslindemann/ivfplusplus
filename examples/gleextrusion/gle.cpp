@@ -2,31 +2,32 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivfwidget/IvfMouseViewHandler.h>
-#include <ivfwidget/IvfSceneHandler.h>
+#include <ivfwidget/MouseViewHandler.h>
+#include <ivfwidget/SceneHandler.h>
 
-#include <ivf/IvfScene.h>
-#include <ivf/IvfCube.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfSwitch.h>
-#include <ivf/IvfAxis.h>
+#include <ivf/Scene.h>
+#include <ivf/Cube.h>
+#include <ivf/Material.h>
+#include <ivf/Lighting.h>
+#include <ivf/Switch.h>
+#include <ivf/Axis.h>
 
-#include <ivfgle/IvfGleCoordArray.h>
-#include <ivfgle/IvfGleColorArray.h>
-#include <ivfgle/IvfGleScalarArray.h>
-#include <ivfgle/IvfGlePolyCylinder.h>
-#include <ivfgle/IvfGlePolyCone.h>
-#include <ivfgle/IvfGle.h>
-#include <ivfgle/IvfGleExtrusion.h>
-#include <ivfgle/IvfGleContour.h>
-#include <ivfgle/IvfGleTwistExtrusion.h>
-#include <ivfgle/IvfGleSpiral.h>
+#include <ivfgle/GleCoordArray.h>
+#include <ivfgle/GleColorArray.h>
+#include <ivfgle/GleScalarArray.h>
+#include <ivfgle/GlePolyCylinder.h>
+#include <ivfgle/GlePolyCone.h>
+#include <ivfgle/Gle.h>
+#include <ivfgle/GleExtrusion.h>
+#include <ivfgle/GleContour.h>
+#include <ivfgle/GleTwistExtrusion.h>
+#include <ivfgle/GleSpiral.h>
 
 using namespace std;
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition

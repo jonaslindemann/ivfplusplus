@@ -1,27 +1,27 @@
 #ifndef _CIvfFlyWidget_h_
 #define _CIvfFlyWidget_h_
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfScene.h>
+#include <ivf/Camera.h>
+#include <ivf/Scene.h>
 
-#include <ivfctl/IvfControllerGroup.h>
+#include <ivfctl/ControllerGroup.h>
 
-#include <ivfwidget/IvfFlyHandler.h>
+#include <ivfwidget/FlyHandler.h>
 
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutBase.h>
 
 #include "StarField.h"
 //#include "Joystick.h"
 
 IvfSmartPointer(CFlyWidget);
 
-class CFlyWidget : public CGlutBase {
+class CFlyWidget : public ivf::CGlutBase {
 private:
-	CCameraPtr			m_camera;
-	CScenePtr			m_scene;
-	CStarFieldPtr			m_starfield;
-	CControllerGroupPtr	m_controllers;
-	CFlyHandlerPtr		m_flyHandler;
+	ivf::CCameraPtr				m_camera;
+	ivf::CScenePtr				m_scene;
+	CStarFieldPtr				m_starfield;
+	ivf::CControllerGroupPtr	m_controllers;
+	ivf::CFlyHandlerPtr			m_flyHandler;
 
 	double m_t;
 	double m_dt;

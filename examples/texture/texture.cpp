@@ -11,27 +11,28 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfLight.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfTexture.h>
-#include <ivf/IvfQuadPlane.h>
-#include <ivf/IvfSolidLine.h>
+#include <ivf/Camera.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Lighting.h>
+#include <ivf/Light.h>
+#include <ivf/Material.h>
+#include <ivf/Texture.h>
+#include <ivf/QuadPlane.h>
+#include <ivf/SolidLine.h>
 
-#include <ivfimage/IvfSgiImage.h>
-#include <ivfimage/IvfJpegImage.h>
-#include <ivfimage/IvfPngImage.h>
+#include <ivfimage/SgiImage.h>
+#include <ivfimage/JpegImage.h>
+#include <ivfimage/PngImage.h>
 
 #include "perlinNoise.h"
 
 using namespace std;
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition

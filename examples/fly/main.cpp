@@ -1,7 +1,9 @@
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
 #include "IvfFlyWidget.h"
+
+using namespace ivf;
 
 int
 main(int argc, char **argv) 

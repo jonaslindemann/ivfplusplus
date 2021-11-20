@@ -1,17 +1,19 @@
 #include "IvfFlyWidget.h"
 
-#include <ivf/IvfCube.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfTransform.h>
+#include <ivf/Cube.h>
+#include <ivf/Lighting.h>
+#include <ivf/Material.h>
+#include <ivf/Transform.h>
 
-#include <ivfctl/IvfRotateController.h>
+#include <ivfctl/RotateController.h>
 
-#include <ivffile/IvfAc3DReader.h>
+#include <ivffile/Ac3DReader.h>
 
 //#include <Mmsystem.h>
 
 #include "StarField.h"
+
+using namespace ivf;
 
 CFlyWidget::CFlyWidget(int X, int Y, int W, int H, const char *L)
 :CGlutBase(X, Y, W, H)
