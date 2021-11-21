@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
 #include <ivfmath/Spline3d.h>
@@ -103,7 +103,7 @@ CVec3d* CSpline3d::getPoint(int idx)
 	if ((idx>=0)&&(idx<(int)m_points.size()))
 		return m_points[idx];
 	else
-		return NULL;
+		return nullptr;
 }
 /** No descriptions */
 void CSpline3d::updateSpline()

@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
 #include <ivfctl/Controller.h>
@@ -26,22 +26,22 @@ using namespace ivf;
 CController::CController()
 {
 	m_active = false;
-	m_controlledShape = NULL;
-	m_startAction = NULL;
-	m_endAction = NULL;
-	m_light = NULL;
+	m_controlledShape = nullptr;
+	m_startAction = nullptr;
+	m_endAction = nullptr;
+	m_light = nullptr;
 }
 
 CController::~CController()
 {
-	if (m_startAction!=NULL)
+	if (m_startAction!=nullptr)
 	{
 		m_startAction->deleteReference();
 		if (!m_startAction->referenced())
 			delete m_startAction;
 	}
 
-	if (m_endAction!=NULL)
+	if (m_endAction!=nullptr)
 	{
 		m_endAction->deleteReference();
 		if (!m_endAction->referenced())
@@ -105,7 +105,7 @@ CShape* CController::getShape()
 
 void CController::reset()
 {
-	if (m_controlledShape!=NULL)
+	if (m_controlledShape!=nullptr)
 	{
 		
 		// Reset controller to initial position
@@ -135,7 +135,7 @@ void CController::reset()
 			m_initialRotQuat[3]
 			);
 
-		if (m_light!=NULL)
+		if (m_light!=nullptr)
 		{
 			m_light->setPosition(
 				m_initialPosition[0],
@@ -172,7 +172,7 @@ void CController::action(CAction* action)
 void CController::doAction(CAction* action)
 {
 	CController* target = action->getTarget();
-	if ((target==this)||(target==NULL))
+	if ((target==this)||(target==nullptr))
 	{
 		switch (action->getActionType()) {
 		case IVF_ACTION_ACTIVATE:
@@ -202,7 +202,7 @@ void CController::doDeactivate()
 
 void CController::setStartAction(CAction *action)
 {
-	if (m_startAction!=NULL)
+	if (m_startAction!=nullptr)
 	{
 		m_startAction->deleteReference();
 		if (!m_startAction->referenced())
@@ -214,7 +214,7 @@ void CController::setStartAction(CAction *action)
 
 void CController::setEndAction(CAction *action)
 {
-	if (m_endAction!=NULL)
+	if (m_endAction!=nullptr)
 	{
 		m_endAction->deleteReference();
 		if (!m_endAction->referenced())
@@ -226,7 +226,7 @@ void CController::setEndAction(CAction *action)
 
 void CController::doStartAction()
 {
-	if (m_startAction!=NULL)
+	if (m_startAction!=nullptr)
 	{
 		CController* target = m_startAction->getTarget();
 		target->action(m_startAction);
@@ -235,7 +235,7 @@ void CController::doStartAction()
 
 void CController::doEndAction()
 {
-	if (m_endAction!=NULL)
+	if (m_endAction!=nullptr)
 	{
 		CController* target = m_endAction->getTarget();
 		target->action(m_endAction);

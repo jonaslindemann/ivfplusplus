@@ -41,6 +41,8 @@ public:
 	CCoordHist();
 	virtual ~CCoordHist();
 
+	IvfStdFactory(CCoordHist);
+
 	void readFromStream(std::istream &in);
 	void saveToStream(std::ostream &out);
 

@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -28,13 +28,13 @@ using namespace ivf;
 
 CGleCoordArray::CGleCoordArray()
 {
-	m_coords = NULL;
+	m_coords = nullptr;
 	m_size = 0;
 }
 
 CGleCoordArray::CGleCoordArray(int size)
 {
-	m_coords = NULL;
+	m_coords = nullptr;
 	m_size = 0;
 
 	setSize(size);
@@ -42,7 +42,7 @@ CGleCoordArray::CGleCoordArray(int size)
 
 CGleCoordArray::~CGleCoordArray()
 {
-	if (m_coords!=NULL)
+	if (m_coords!=nullptr)
 		delete [] m_coords;
 }
 
@@ -50,7 +50,7 @@ void CGleCoordArray::setSize(int size)
 {
 	// Delete previous spine coords/colors if any
 	
-	if (m_coords!=NULL)
+	if (m_coords!=nullptr)
 		delete [] m_coords;
 		
 	// Set new size
@@ -112,10 +112,10 @@ int CGleCoordArray::getSize()
 
 void* CGleCoordArray::getData()
 {
-	if (m_coords!=NULL)
+	if (m_coords!=nullptr)
 		return &m_coords[0];
 	else
-		return NULL;
+		return nullptr;
 }
 
 void CGleCoordArray::calcFirstAndLast()

@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -53,7 +53,7 @@ CSceneBase::CSceneBase()
 	m_nPasses = 1;
 	m_multiPass = false;
 
-	m_multipassEvent = NULL;
+	m_multipassEvent = nullptr;
     m_renderFlatShadow = false;
     m_shadowColor[0] = 0.35;
     m_shadowColor[1] = 0.35;
@@ -89,7 +89,7 @@ int CSceneBase::getPasses()
 void CSceneBase::defaultLocalLighting(int pass)
 {
 	if (m_lightMode == LM_LOCAL)
-		if (m_lighting != NULL)
+		if (m_lighting != nullptr)
 			m_lighting->render();
 }
 
@@ -100,7 +100,7 @@ void CSceneBase::doLocalLighting(int pass)
 
 void CSceneBase::defaultViewSetup(int pass)
 {
-	if (m_view!=NULL)
+	if (m_view!=nullptr)
 		m_view->render();
 }
 
@@ -112,7 +112,7 @@ void CSceneBase::doViewSetup(int pass)
 void CSceneBase::defaultWorldLighting(int pass)
 {
 	if (m_lightMode == LM_WORLD)
-		if (m_lighting != NULL)
+		if (m_lighting != nullptr)
 			m_lighting->render();
 }
 
@@ -172,7 +172,7 @@ void CSceneBase::defaultRendering()
 			glPushMatrix();
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
-			if (m_multipassEvent!=NULL)
+			if (m_multipassEvent!=nullptr)
 				m_multipassEvent->onMultipass(renderPass);
 			else
 				this->doMultipass(renderPass);	
@@ -227,7 +227,7 @@ void CSceneBase::doCreateGeometry()
 			}
 
 			if (m_lightMode == LM_LOCAL)
-				if (m_lighting != NULL)
+				if (m_lighting != nullptr)
 					m_lighting->render();
 
 			camera->setStereoEye(CCamera::SE_LEFT);
@@ -235,7 +235,7 @@ void CSceneBase::doCreateGeometry()
 
 			camera->render();
 			if (m_lightMode == LM_WORLD)
-				if (m_lighting != NULL)
+				if (m_lighting != nullptr)
 					m_lighting->render();
 
 			m_preComposite->render();
@@ -264,7 +264,7 @@ void CSceneBase::doCreateGeometry()
 			}
 
 			if (m_lightMode == LM_LOCAL)
-				if (m_lighting != NULL)
+				if (m_lighting != nullptr)
 					m_lighting->render();
 
 			camera->setStereoEye(CCamera::SE_RIGHT);
@@ -272,7 +272,7 @@ void CSceneBase::doCreateGeometry()
 
 			camera->render();
 			if (m_lightMode == LM_WORLD)
-				if (m_lighting != NULL)
+				if (m_lighting != nullptr)
 					m_lighting->render();
 
 			m_preComposite->render();
@@ -298,7 +298,7 @@ void CSceneBase::doCreateGeometry()
 			glPushMatrix();
 
 			if (m_lightMode == LM_LOCAL)
-				if (m_lighting != NULL)
+				if (m_lighting != nullptr)
 					m_lighting->render();
 
 			camera->setStereoEye(CCamera::SE_LEFT);
@@ -306,7 +306,7 @@ void CSceneBase::doCreateGeometry()
 
 			camera->render();
 			if (m_lightMode == LM_WORLD)
-				if (m_lighting != NULL)
+				if (m_lighting != nullptr)
 					m_lighting->render();
 
 			m_preComposite->render();
@@ -321,7 +321,7 @@ void CSceneBase::doCreateGeometry()
 			glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
 
 			if (m_lightMode == LM_LOCAL)
-				if (m_lighting != NULL)
+				if (m_lighting != nullptr)
 					m_lighting->render();
 
 			camera->setStereoEye(CCamera::SE_RIGHT);
@@ -329,7 +329,7 @@ void CSceneBase::doCreateGeometry()
 
 			camera->render();
 			if (m_lightMode == LM_WORLD)
-				if (m_lighting != NULL)
+				if (m_lighting != nullptr)
 					m_lighting->render();
 
 			m_preComposite->render();
@@ -450,7 +450,7 @@ CCamera* CSceneBase::getCamera()
 	if (m_view->isClass("CIvfCamera"))
 		return (CCamera*) view;
 	else
-		return NULL;
+		return nullptr;
 }
 
 CComposite* CSceneBase::getPostComposite()

@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -139,7 +139,7 @@ CMaterial* CGLPrimitive::getMaterialAt(int pos)
 	if ( (pos>=0)&&(pos<m_materialSet->getSize()) )
 		return m_materialSet->getMaterial(pos);
 	else
-		return NULL;
+		return nullptr;
 }
 
 void CGLPrimitive::getTextureCoord(long pos, double &s, double &t)
@@ -177,7 +177,7 @@ CIndex* CGLPrimitive::getCoordIndex(long pos)
 	if ( (pos>=0)&&(pos<(int)m_coordIndexSet.size()) )
 		return m_coordIndexSet[pos];
 	else
-		return NULL;
+		return nullptr;
 }
 
 CIndex* CGLPrimitive::getColorIndex(long pos)
@@ -185,7 +185,7 @@ CIndex* CGLPrimitive::getColorIndex(long pos)
 	if ( (pos>=0)&&(pos<(int)m_colorIndexSet.size()) )
 		return m_colorIndexSet[pos];
 	else
-		return NULL;
+		return nullptr;
 }
 
 CIndex* CGLPrimitive::getNormalIndex(long pos)
@@ -193,7 +193,7 @@ CIndex* CGLPrimitive::getNormalIndex(long pos)
 	if ( (pos>=0)&&(pos<(int)m_normalIndexSet.size()) )
 		return m_normalIndexSet[pos];
 	else
-		return NULL;
+		return nullptr;
 }
 
 CIndex* CGLPrimitive::getTextureIndex(long pos)
@@ -201,7 +201,7 @@ CIndex* CGLPrimitive::getTextureIndex(long pos)
 	if ( (pos>=0)&&(pos<(int)m_textureIndexSet.size()) )
 		return m_textureIndexSet[pos];
 	else
-		return NULL;
+		return nullptr;
 }
 
 void CGLPrimitive::setUseVertexNormals(bool flag)
@@ -377,7 +377,7 @@ float CGLPrimitive::getAlfa(int pos)
 
 void CGLPrimitive::doUpdateBoundingSphere()
 {
-	if (getBoundingSphere()!=NULL)
+	if (getBoundingSphere()!=nullptr)
 	{
 		int i;
 		double maxSize[3];

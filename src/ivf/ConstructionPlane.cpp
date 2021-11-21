@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -41,7 +41,7 @@ CConstructionPlane::CConstructionPlane()
 	m_relativeAxisSize = 0.05;
 	m_snapToGrid = true;
 	m_gridSpacing = 0.2;
-	m_camera = NULL;
+	m_camera = nullptr;
 
 	m_active = true;
 
@@ -103,7 +103,7 @@ void CConstructionPlane::setPosition(double x, double y, double z)
 
 void CConstructionPlane::updateCursor(int x, int y)
 {
-	if (m_camera!=NULL)
+	if (m_camera!=nullptr)
 	{
 
 		CVec3d pickVector;
@@ -217,7 +217,7 @@ void CConstructionPlane::updateCursor(int x, int y)
 
 void CConstructionPlane::setCamera(CCamera *camera)
 {
-	if (m_camera!=NULL)
+	if (m_camera!=nullptr)
 	{
 		m_camera->deleteReference();
 		if (!m_camera->referenced())
@@ -293,7 +293,7 @@ bool CConstructionPlane::isActive()
 
 void CConstructionPlane::doUpdateBoundingSphere()
 {
-	if (getBoundingSphere()!=NULL)
+	if (getBoundingSphere()!=nullptr)
 	{
 		m_grid->initBoundingSphere();
 		getBoundingSphere()->setRadius(m_grid->getBoundingSphere()->getRadius());
@@ -319,7 +319,7 @@ void CConstructionPlane::setUpdateCursorSize(bool flag)
 
 void CConstructionPlane::updateCursorSize()
 {
-	if (m_camera!=NULL)
+	if (m_camera!=nullptr)
 	{
 		if (m_updateCursorSize)
 		{
@@ -348,7 +348,7 @@ double CConstructionPlane::getRelativeCursorSize()
 
 void CConstructionPlane::updateAxisSize()
 {
-	if (m_camera!=NULL)
+	if (m_camera!=nullptr)
 	{
 		if (m_updateAxisSize)
 		{

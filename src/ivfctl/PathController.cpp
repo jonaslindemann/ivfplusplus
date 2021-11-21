@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
 #include <ivfctl/PathController.h>
@@ -55,14 +55,14 @@ CSpline3d* CPathController::getPath()
 void CPathController::doUpdate(double dt)
 {
 	CShape* shape = this->getShape();
-	if (shape!=NULL)
+	if (shape!=nullptr)
 	{
 		double x, y, z;
 
 		m_v += m_a0*dt;
 		m_t += m_v*dt + pow(m_a0,2)*dt*0.5;
 
-		if (m_path!=NULL)
+		if (m_path!=nullptr)
 			m_path->getPosition(m_t).getComponents(x, y, z);
 
 		if (m_t>(double)m_path->getSize()-1.0)
@@ -116,7 +116,7 @@ void CPathController::doUpdate(double dt)
 		}
 
 		shape->setPosition(x, y, z);
-		if (getLight()!=NULL)
+		if (getLight()!=nullptr)
 			getLight()->setPosition(x, y, z);
 	}
 }
@@ -127,11 +127,11 @@ void CPathController::doReset()
 	m_v = m_v0;
 
 	CShape* shape = this->getShape();
-	if (shape!=NULL)
+	if (shape!=nullptr)
 	{
 		double x, y, z;
 
-		if (m_path!=NULL)
+		if (m_path!=nullptr)
 			m_path->getPosition(m_t).getComponents(x, y, z);
 
 		shape->setPosition(x, y, z);

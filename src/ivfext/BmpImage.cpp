@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -45,14 +45,14 @@ enum ncol { BW=1, IA, RGB, RGBA};
 
 CBmpImage::CBmpImage()
 {
-	imageData = NULL;
+	imageData = nullptr;
 	m_alphaChannel = false;
 }
 
 CBmpImage::CBmpImage(const std::string& name)
 :CFileImage(name)
 {
-	imageData = NULL;
+	imageData = nullptr;
 	m_alphaChannel = false;
 }
 
@@ -156,7 +156,7 @@ unsigned char *CBmpImage::bmp_load(const char *filename,
     bmperror = ERROR_NO_FILE;
 
     FILE *fp = fopen(filename, "rb");
-    if (!fp) return NULL;
+    if (!fp) return nullptr;
 
     int ncolours;
     int ncomp=0;
@@ -177,7 +177,7 @@ unsigned char *CBmpImage::bmp_load(const char *filename,
     }
     if (hd.FileType == MB) {
         long infsize;    //size of BMPinfo in bytes
-        unsigned char *cols=NULL; // dynamic colour palette
+        unsigned char *cols=nullptr; // dynamic colour palette
         unsigned char *imbuff; // returned to sender & as read from the disk
         size_t s;
         s = fread((char *)&infsize, sizeof(long), 1, fp); // insert inside 'the file is bmp' clause
@@ -281,7 +281,7 @@ unsigned char *CBmpImage::bmp_load(const char *filename,
     else // else error in header
     {
         fclose(fp);
-        return NULL;
+        return nullptr;
     }
     *width_ret = inf.width;
     *height_ret = inf.height;

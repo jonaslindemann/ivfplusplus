@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -28,7 +28,7 @@ using namespace ivf;
 
 CImage::CImage()
 {
-	m_imageMap = NULL;
+	m_imageMap = nullptr;
 	m_size[0] = -1;
 	m_size[1] = -1;
 	m_channels = 3;
@@ -37,7 +37,7 @@ CImage::CImage()
 
 CImage::~CImage()
 {
-	if (m_imageMap!=NULL)
+	if (m_imageMap!=nullptr)
 		delete [] m_imageMap;
 }
 
@@ -79,7 +79,7 @@ void CImage::setSize(int width, int height)
 		m_size[1] = height;
 		m_ratio = width/height;
 
-		if (m_imageMap!=NULL)
+		if (m_imageMap!=nullptr)
 			delete [] m_imageMap;
 
 		m_imageMap = new GLubyte[m_size[0]*m_size[1]*m_channels];
@@ -98,7 +98,7 @@ int CImage::getHeight()
 
 void CImage::setImageMap(void* image)
 {
-	if (m_imageMap!=NULL)
+	if (m_imageMap!=nullptr)
 		delete [] m_imageMap;
 
 	m_imageMap =(unsigned char*) image;

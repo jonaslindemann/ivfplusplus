@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -44,13 +44,13 @@ int ivf::ivfGetGLEJoinStyle()
 CExtrusion::CExtrusion ()
 :CShape()
 {
-	m_sectionCoords = NULL;
-	m_sectionNormals = NULL;
-	m_selectSectionCoords = NULL;
-	m_selectSectionNormals = NULL;
-	m_spineColors = NULL;
-	m_spineCoords = NULL;
-	m_twist = NULL;
+	m_sectionCoords = nullptr;
+	m_sectionNormals = nullptr;
+	m_selectSectionCoords = nullptr;
+	m_selectSectionNormals = nullptr;
+	m_spineColors = nullptr;
+	m_spineCoords = nullptr;
+	m_twist = nullptr;
 	m_upVector[0] = 0.0;
 	m_upVector[1] = 1.0;
 	m_upVector[2] = 0.0;
@@ -71,19 +71,19 @@ CExtrusion::~CExtrusion ()
 
 	// Clean up
 
-	if (m_sectionCoords!=NULL)
+	if (m_sectionCoords!=nullptr)
 		delete [] m_sectionCoords;
-	if (m_sectionNormals!=NULL)
+	if (m_sectionNormals!=nullptr)
 		delete [] m_sectionNormals;
-	if (m_spineCoords!=NULL)
+	if (m_spineCoords!=nullptr)
 		delete [] m_spineCoords;
-	if (m_spineColors!=NULL)
+	if (m_spineColors!=nullptr)
 		delete [] m_spineColors;
-	if (m_selectSectionCoords!=NULL)
+	if (m_selectSectionCoords!=nullptr)
 		delete [] m_selectSectionCoords;
-	if (m_selectSectionNormals!=NULL)
+	if (m_selectSectionNormals!=nullptr)
 		delete [] m_selectSectionNormals;
-	if (m_twist!=NULL)
+	if (m_twist!=nullptr)
 		delete [] m_twist;
 }
 
@@ -95,17 +95,17 @@ void CExtrusion::doCreateGeometry()
 	else
 		m_spineDelta = m_spineSize;
 
-	if (m_sectionCoords==NULL)
+	if (m_sectionCoords==nullptr)
 		return;
 
-	if (m_sectionNormals==NULL)
+	if (m_sectionNormals==nullptr)
 		return;
 
-	if (m_spineCoords==NULL)
+	if (m_spineCoords==nullptr)
 		return;
 
 	if (m_useColors)
-		if (m_spineColors==NULL)
+		if (m_spineColors==nullptr)
 			return;
 
 	if (m_useColors)
@@ -137,7 +137,7 @@ void CExtrusion::doCreateGeometry()
 			m_upVector,
 			m_spineDelta,
 			&m_spineCoords[m_spineStart],
-			NULL);
+			nullptr);
 		else
 			gleTwistExtrusion (m_sectionSize,
 			m_sectionCoords,
@@ -145,7 +145,7 @@ void CExtrusion::doCreateGeometry()
 			m_upVector,
 			m_spineDelta,
 			&m_spineCoords[m_spineStart],
-			NULL,
+			nullptr,
 			m_twist);
 	}
 }
@@ -155,12 +155,12 @@ void CExtrusion::setSpineSize(int size)
 {
 	// Delete previous spine coords/colors if any
 
-	if (m_spineCoords!=NULL)
+	if (m_spineCoords!=nullptr)
 		delete [] m_spineCoords;
-	if (m_spineColors!=NULL)
+	if (m_spineColors!=nullptr)
 		delete [] m_spineColors;
 	if (m_useTwist)
-		if (m_twist!=NULL)
+		if (m_twist!=nullptr)
 			delete [] m_twist;
 
 	// Set new size
@@ -180,7 +180,7 @@ void CExtrusion::setSpineSize(int size)
 	float color[3], alfa;
 
 	material = this->getMaterial();
-	if (material!=NULL)
+	if (material!=nullptr)
 		material->getDiffuseColor(color[0], color[1], color[2], alfa);
 	else
 	{
@@ -205,13 +205,13 @@ void CExtrusion::setSectionSize(int size)
 {
 	// Delete previous section/normal arrays
 
-	if (m_sectionCoords!=NULL)
+	if (m_sectionCoords!=nullptr)
 		delete [] m_sectionCoords;
-	if (m_sectionNormals!=NULL)
+	if (m_sectionNormals!=nullptr)
 		delete [] m_sectionNormals;
-	if (m_selectSectionCoords!=NULL)
+	if (m_selectSectionCoords!=nullptr)
 		delete [] m_selectSectionCoords;
-	if (m_selectSectionNormals!=NULL)
+	if (m_selectSectionNormals!=nullptr)
 		delete [] m_selectSectionNormals;
 
 	// Set section size
@@ -239,7 +239,7 @@ int CExtrusion::getSectionSize()
 // ------------------------------------------------------------
 void CExtrusion::setSectionCoord(int pos, double x, double y)
 {
-	if (m_sectionCoords!=NULL)
+	if (m_sectionCoords!=nullptr)
 	{
 		if ((pos>=0)&&(pos<m_sectionSize))
 		{
@@ -254,7 +254,7 @@ void CExtrusion::setSectionCoord(int pos, double x, double y)
 // ------------------------------------------------------------
 void CExtrusion::setSectionNormal(int pos, double x, double y)
 {
-	if (m_sectionNormals!=NULL)
+	if (m_sectionNormals!=nullptr)
 	{
 		if ((pos>=0)&&(pos<m_sectionSize))
 		{
@@ -269,7 +269,7 @@ void CExtrusion::setSectionNormal(int pos, double x, double y)
 // ------------------------------------------------------------
 void CExtrusion::setSpineCoord(int pos, double x, double y, double z)
 {
-	if (m_spineCoords!=NULL)
+	if (m_spineCoords!=nullptr)
 	{
 		if ((pos>=0)&&(pos<m_spineSize))
 		{
@@ -283,7 +283,7 @@ void CExtrusion::setSpineCoord(int pos, double x, double y, double z)
 // ------------------------------------------------------------
 void CExtrusion::getSectionCoord(int pos, double &x, double &y)
 {
-	if (m_sectionCoords!=NULL)
+	if (m_sectionCoords!=nullptr)
 	{
 		if ((pos>=0)&&(pos<m_sectionSize))
 		{
@@ -296,7 +296,7 @@ void CExtrusion::getSectionCoord(int pos, double &x, double &y)
 // ------------------------------------------------------------
 void CExtrusion::getSectionNormal(int pos, double &x, double &y)
 {
-	if (m_sectionNormals!=NULL)
+	if (m_sectionNormals!=nullptr)
 	{
 		if ((pos>=0)&&(pos<m_sectionSize))
 		{
@@ -309,7 +309,7 @@ void CExtrusion::getSectionNormal(int pos, double &x, double &y)
 // ------------------------------------------------------------
 void CExtrusion::getSpineCoord(int pos, double &x, double &y, double &z)
 {
-	if (m_spineCoords!=NULL)
+	if (m_spineCoords!=nullptr)
 	{
 		if ((pos>=0)&&(pos<m_spineSize))
 		{
@@ -323,7 +323,7 @@ void CExtrusion::getSpineCoord(int pos, double &x, double &y, double &z)
 // ------------------------------------------------------------
 void CExtrusion::setSpineColor(int pos, float red, float green, float blue)
 {
-	if (m_spineColors!=NULL)
+	if (m_spineColors!=nullptr)
 	{
 		if ((pos>=0)&&(pos<m_spineSize))
 		{
@@ -337,7 +337,7 @@ void CExtrusion::setSpineColor(int pos, float red, float green, float blue)
 // ------------------------------------------------------------
 void CExtrusion::getSpineColor(int pos, float &red, float &green, float &blue)
 {
-	if (m_spineColors!=NULL)
+	if (m_spineColors!=nullptr)
 	{
 		if ((pos>=0)&&(pos<m_spineSize))
 		{
@@ -406,7 +406,7 @@ void CExtrusion::doCreateSelect()
 			m_upVector,
 			m_spineSize,
 			m_spineCoords,
-			NULL);
+			nullptr);
 		else
 			gleTwistExtrusion (m_sectionSize,
 			m_sectionCoords,
@@ -414,7 +414,7 @@ void CExtrusion::doCreateSelect()
 			m_upVector,
 			m_spineSize,
 			m_spineCoords,
-			NULL,
+			nullptr,
 			m_twist);
 	}
 	glPopAttrib();
@@ -439,11 +439,11 @@ void CExtrusion::setTextureMode(int mode)
 void CExtrusion::setUseTwist(bool flag)
 {
 	m_useTwist = flag;
-	if (m_spineCoords!=NULL)
+	if (m_spineCoords!=nullptr)
 	{
 		if (m_useTwist)
 		{
-			if (m_twist!=NULL)
+			if (m_twist!=nullptr)
 				delete [] m_twist;
 
 			m_twist = new gleDouble[m_spineSize];
@@ -452,10 +452,10 @@ void CExtrusion::setUseTwist(bool flag)
 		}
 		else
 		{
-			if (m_twist!=NULL)
+			if (m_twist!=nullptr)
 				delete [] m_twist;
 
-			m_twist=NULL;
+			m_twist=nullptr;
 		}
 	}
 }
@@ -469,7 +469,7 @@ bool CExtrusion::getUseTwist()
 // ------------------------------------------------------------
 void CExtrusion::setSpineTwist(int pos, double twist)
 {
-	if (m_twist!=NULL)
+	if (m_twist!=nullptr)
 	{
 		if ((pos>=0)&&(pos<m_spineSize))
 		{
@@ -481,7 +481,7 @@ void CExtrusion::setSpineTwist(int pos, double twist)
 // ------------------------------------------------------------
 void CExtrusion::getSpineTwist(int pos, double &twist)
 {
-	if (m_twist!=NULL)
+	if (m_twist!=nullptr)
 	{
 		if ((pos>=0)&&(pos<m_sectionSize))
 		{
@@ -503,7 +503,7 @@ void CExtrusion::setJoinStyle(int style)
 
 void CExtrusion::doUpdateBoundingSphere()
 {
-	if (getBoundingSphere()!=NULL)
+	if (getBoundingSphere()!=nullptr)
 	{
 		int i;
 		double maxSize[3];

@@ -265,7 +265,7 @@ draw_cut_style_cap_callback (int iloop,
  */
 
 static void 
-null_cap_callback (int iloop,
+NULL_cap_callback (int iloop,
                         double cap[][3], 
                         float face_color[3],
                         gleDouble cut_vector[3],
@@ -1240,7 +1240,7 @@ extrusion_round_or_cut_join (int ncp,	/* number of contour points */
       if (first_time) {
          first_time = FALSE;
          tmp_cap_callback = cap_callback;
-         cap_callback = null_cap_callback;
+         cap_callback = NULL_cap_callback;
          if (__TUBE_DRAW_CAP) {
             if (color_array != NULL) C3F (color_array[inext-1]);
             draw_angle_style_front_cap (ncp, bisector_0, 
@@ -1288,7 +1288,7 @@ extrusion_round_or_cut_join (int ncp,	/* number of contour points */
                if (color_array != NULL) C3F (color_array[inext]);
                draw_angle_style_back_cap (ncp, bisector_1, 
                                            (gleVector *) back_loop);
-               cap_callback = null_cap_callback;
+               cap_callback = NULL_cap_callback;
             }
          } else {
             /* restore ability to draw cap */
@@ -1344,7 +1344,7 @@ extrusion_round_or_cut_join (int ncp,	/* number of contour points */
                if (color_array != NULL) C3F (color_array[inext]);
                draw_angle_style_back_cap (ncp, bisector_1, 
                                          (gleDouble (*)[3]) back_loop);
-               cap_callback = null_cap_callback;
+               cap_callback = NULL_cap_callback;
             }
          } else {
             /* restore ability to draw cap */

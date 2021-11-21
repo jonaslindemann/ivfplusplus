@@ -259,7 +259,7 @@ void CExampleWindow::onInit(int width, int height)
 
 bool CExampleWindow::onTimeout()
 {
-	if (m_rotateShape!=NULL)
+	if (m_rotateShape!=nullptr)
 	{
 		double v1, v2, v3, angle;
 		m_rotateShape->getRotationQuat(v1, v2, v3, angle);
@@ -273,49 +273,49 @@ bool CExampleWindow::onTimeout()
 
 void CExampleWindow::onShapeDown(CShape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeDown: " << shape->getClassName() << endl;
 }
 
 void CExampleWindow::onShapeClick(CShape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeClick: " << shape->getClassName() << endl;
 }
 
 void CExampleWindow::onShapeUp(CShape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeUp: " << shape->getClassName() << endl;
 }
 
 void CExampleWindow::onShapeEnter(CShape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeEnter: " << shape->getClassName() << endl;
 }
 
 void CExampleWindow::onShapeOver(CShape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeOver: " << shape->getClassName() << endl;
 }
 
 void CExampleWindow::onShapeLeave(CShape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeLeave: " << shape->getClassName() << endl;
 }
 
 void CExampleWindow::onShapeDrag(CShape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeDrag: " << shape->getClassName() << endl;
 }
 
 void CExampleWindow::onControlClick(CUIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 	{
 		switch (uiControl->getId()) {
 		case 1001:
@@ -340,14 +340,14 @@ void CExampleWindow::onControlClick(CUIInteractiveBase *uiControl)
 
 void CExampleWindow::onControlOver(CUIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 		cout << "onControlOver: " << uiControl->getClassName() 
 		<< ", " << uiControl->getId() << endl;
 }
 
 void CExampleWindow::onControlDown(CUIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 	{
 		if (uiControl->getId()==1005)
 			m_rotateShape = m_xfm;
@@ -359,10 +359,10 @@ void CExampleWindow::onControlDown(CUIInteractiveBase *uiControl)
 
 void CExampleWindow::onControlUp(CUIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 	{
 		if (uiControl->getId()==1005)
-			m_rotateShape = NULL;
+			m_rotateShape = nullptr;
 
 		cout << "onControlUp: " << uiControl->getClassName()
 		<< ", " << uiControl->getId() << endl;
@@ -371,19 +371,19 @@ void CExampleWindow::onControlUp(CUIInteractiveBase *uiControl)
 
 void CExampleWindow::onControlDrag(CUIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 		cout << "onControlDrag: " << uiControl->getClassName() << endl;
 }
 
 void CExampleWindow::onControlLeave(CUIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 		cout << "onControlLeave: " << uiControl->getClassName() << endl;
 }
 
 void CExampleWindow::onControlEnter(CUIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 		cout << "onControlEnter: " << uiControl->getClassName() << endl;
 }
 

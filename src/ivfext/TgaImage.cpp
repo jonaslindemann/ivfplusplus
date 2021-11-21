@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -85,14 +85,14 @@ bool CTgaImage::LoadTGA(Texture * texture, char * filename)	// Load a TGA file
     GLubyte cTGAcompare[12] = {0,0,10,0,0,0,0,0,0,0,0,0};	// Compressed TGA Header
 
 
-	if(fTGA == NULL)											// If it didn't open....
+	if(fTGA == nullptr)											// If it didn't open....
 	{
 		return false;														// Exit function
 	}
 
 	if(fread(&tgaheader, sizeof(TGAHeader), 1, fTGA) == 0)					// Attempt to read 12 byte header from file
 	{
-		if(fTGA != NULL)													// Check to seeiffile is still open
+		if(fTGA != nullptr)													// Check to seeiffile is still open
 		{
 			fclose(fTGA);													// If it is, close it
 		}
@@ -119,7 +119,7 @@ bool CTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * f
 {																			// TGA Loading code nehe.gamedev.net)
 	if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)					// Read TGA header
 	{
-		if(fTGA != NULL)													// if file is still open
+		if(fTGA != nullptr)													// if file is still open
 		{
 			fclose(fTGA);													// Close it
 		}
@@ -135,7 +135,7 @@ bool CTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * f
 
 	if((texture->width <= 0) || (texture->height <= 0) || ((texture->bpp != 24) && (texture->bpp !=32)))	// Make sure all information is valid
 	{
-		if(fTGA != NULL)													// Check if file is still open
+		if(fTGA != nullptr)													// Check if file is still open
 		{
 			fclose(fTGA);													// If so, close it
 		}
@@ -157,7 +157,7 @@ bool CTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * f
 	tga.imageSize		= (tga.bytesPerPixel * tga.Width * tga.Height);		// Compute the total amout ofmemory needed to store data
 	texture->imageData	= (GLubyte *)malloc(tga.imageSize);					// Allocate that much memory
 
-	if(texture->imageData == NULL)											// If no space was allocated
+	if(texture->imageData == nullptr)											// If no space was allocated
 	{
 		fclose(fTGA);														// Close the file
 		return false;														// Return failed
@@ -165,7 +165,7 @@ bool CTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * f
 
 	if(fread(texture->imageData, 1, tga.imageSize, fTGA) != tga.imageSize)	// Attempt to read image data
 	{
-		if(texture->imageData != NULL)										// If imagedata has data in it
+		if(texture->imageData != nullptr)										// If imagedata has data in it
 		{
 			free(texture->imageData);										// Delete data from memory
 		}
@@ -188,7 +188,7 @@ bool CTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTG
 {
 	if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)					// Attempt to read header
 	{
-		if(fTGA != NULL)													// If file is open
+		if(fTGA != nullptr)													// If file is open
 		{
 			fclose(fTGA);													// Close it
 		}
@@ -204,7 +204,7 @@ bool CTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTG
 
 	if((texture->width <= 0) || (texture->height <= 0) || ((texture->bpp != 24) && (texture->bpp !=32)))	//Make sure all texture info is ok
 	{
-		if(fTGA != NULL)													// Check if file is open
+		if(fTGA != nullptr)													// Check if file is open
 		{
 			fclose(fTGA);													// Ifit is, close it
 		}
@@ -215,7 +215,7 @@ bool CTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTG
 	tga.imageSize		= (tga.bytesPerPixel * tga.Width * tga.Height);		// Compute amout of memory needed to store image
 	texture->imageData	= (GLubyte *)malloc(tga.imageSize);					// Allocate that much memory
 
-	if(texture->imageData == NULL)											// If it wasnt allocated correctly..
+	if(texture->imageData == nullptr)											// If it wasnt allocated correctly..
 	{
 		fclose(fTGA);														// Close file
 		return false;														// Return failed
@@ -232,11 +232,11 @@ bool CTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTG
 
 		if(fread(&chunkheader, sizeof(GLubyte), 1, fTGA) == 0)				// Read in the 1 byte header
 		{
-			if(fTGA != NULL)												// If file is open
+			if(fTGA != nullptr)												// If file is open
 			{
 				fclose(fTGA);												// Close file
 			}
-			if(texture->imageData != NULL)									// If there is stored image data
+			if(texture->imageData != nullptr)									// If there is stored image data
 			{
 				free(texture->imageData);									// Delete image data
 			}
@@ -251,17 +251,17 @@ bool CTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTG
 				if(fread(colorbuffer, 1, tga.bytesPerPixel, fTGA) != tga.bytesPerPixel) // Try to read 1 pixel
 				{
 
-					if(fTGA != NULL)													// See if file is open
+					if(fTGA != nullptr)													// See if file is open
 					{
 						fclose(fTGA);													// If so, close file
 					}
 
-					if(colorbuffer != NULL)												// See if colorbuffer has data in it
+					if(colorbuffer != nullptr)												// See if colorbuffer has data in it
 					{
 						free(colorbuffer);												// If so, delete it
 					}
 
-					if(texture->imageData != NULL)										// See if there is stored Image data
+					if(texture->imageData != nullptr)										// See if there is stored Image data
 					{
 						free(texture->imageData);										// If so, delete it too
 					}
@@ -284,17 +284,17 @@ bool CTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTG
 				if(currentpixel > pixelcount)											// Make sure we havent read too many pixels
 				{
 
-					if(fTGA != NULL)													// If there is a file open
+					if(fTGA != nullptr)													// If there is a file open
 					{
 						fclose(fTGA);													// Close file
 					}
 
-					if(colorbuffer != NULL)												// If there is data in colorbuffer
+					if(colorbuffer != nullptr)												// If there is data in colorbuffer
 					{
 						free(colorbuffer);												// Delete it
 					}
 
-					if(texture->imageData != NULL)										// If there is Image data
+					if(texture->imageData != nullptr)										// If there is Image data
 					{
 						free(texture->imageData);										// delete it
 					}
@@ -309,17 +309,17 @@ bool CTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTG
 			if(fread(colorbuffer, 1, tga.bytesPerPixel, fTGA) != tga.bytesPerPixel)		// Attempt to read following color values
 			{
 
-				if(fTGA != NULL)														// If thereis a file open
+				if(fTGA != nullptr)														// If thereis a file open
 				{
 					fclose(fTGA);														// Close it
 				}
 
-				if(colorbuffer != NULL)													// If there is data in the colorbuffer
+				if(colorbuffer != nullptr)													// If there is data in the colorbuffer
 				{
 					free(colorbuffer);													// delete it
 				}
 
-				if(texture->imageData != NULL)											// If thereis image data
+				if(texture->imageData != nullptr)											// If thereis image data
 				{
 					free(texture->imageData);											// delete it
 				}
@@ -344,17 +344,17 @@ bool CTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTG
 				if(currentpixel > pixelcount)											// Make sure we havent written too many pixels
 				{
 
-					if(fTGA != NULL)													// If there is a file open
+					if(fTGA != nullptr)													// If there is a file open
 					{
 						fclose(fTGA);													// Close file
 					}
 
-					if(colorbuffer != NULL)												// If there is data in colorbuffer
+					if(colorbuffer != nullptr)												// If there is data in colorbuffer
 					{
 						free(colorbuffer);												// Delete it
 					}
 
-					if(texture->imageData != NULL)										// If there is Image data
+					if(texture->imageData != nullptr)										// If there is Image data
 					{
 						free(texture->imageData);										// delete it
 					}

@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
 // Implementation of: public class CNode
@@ -47,9 +47,9 @@ CNode::CNode ()
 	m_selectionBox = new CSelectionBox();
 	m_selectionBox->setUseName(false);
 	/*
-	m_pBC = NULL;
-	m_pNodeForce = NULL;
-	m_pNodeMoment = NULL;
+	m_pBC = nullptr;
+	m_pNodeForce = nullptr;
+	m_pNodeMoment = nullptr;
 	*/
 }
 
@@ -101,7 +101,7 @@ void CNode::setType(TNodeType nodeType)
 		m_nodeShape = m_cubeShape;
 		break;
 	case NT_INVISIBLE:
-		m_nodeShape = NULL;
+		m_nodeShape = nullptr;
 		break;
 	default:
 		m_nodeShape = m_cubeShape;
@@ -117,7 +117,7 @@ CNode::TNodeType CNode::getNodeType()
 
 void CNode::doUpdateBoundingSphere()
 {
-	if (getBoundingSphere()!=NULL)
+	if (getBoundingSphere()!=nullptr)
 	{
 		double radius;
 		radius = sqrt(2.0*pow(m_nodeSize,2));

@@ -224,7 +224,7 @@ void CGlutApplication::runAppLoop(CGlutBase *window)
 	while (!finished)
 	{
 #ifdef __APPLE__
-		CGEventRef mouseWheelEv=CGEventCreateScrollWheelEvent(NULL,kCGScrollEventUnitPixel,1,(int32_t) 0);
+		CGEventRef mouseWheelEv=CGEventCreateScrollWheelEvent(nullptr,kCGScrollEventUnitPixel,1,(int32_t) 0);
 		CGEventPostToPSN(&m_psn,mouseWheelEv);
 		CFRelease(mouseWheelEv); 		
 		glutCheckLoop();

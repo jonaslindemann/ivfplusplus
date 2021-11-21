@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
 // Implementation of: public class CSimpleLineSet
@@ -33,19 +33,19 @@ CSimpleLineSet::CSimpleLineSet ()
 	m_nCoords = 0;
 	m_nCoordIndex = 0;
 	m_nColors = 0;
-	m_coords = NULL;
-	m_coordIndex = NULL;
-	m_colors = NULL;
+	m_coords = nullptr;
+	m_coordIndex = nullptr;
+	m_colors = nullptr;
 }
 
 // ------------------------------------------------------------
 CSimpleLineSet::~CSimpleLineSet ()
 {
-	if (m_coordIndex!=NULL)
+	if (m_coordIndex!=nullptr)
 		delete [] m_coordIndex;
-	if (m_coords!=NULL)
+	if (m_coords!=nullptr)
 		delete [] m_coords;
-	if (m_colors!=NULL)
+	if (m_colors!=nullptr)
 		delete [] m_colors;
 }
 
@@ -58,7 +58,7 @@ void CSimpleLineSet::doCreateGeometry()
 	glBegin(GL_LINE_STRIP);
 	for (i = 0; i<m_nCoordIndex; i++)
 	{
-		if ((m_colors!=NULL)&&(m_coordIndex[i]>=0))
+		if ((m_colors!=nullptr)&&(m_coordIndex[i]>=0))
 		{
 			glColor3d(
 				m_colors[ m_coordIndex[i] ][0],
@@ -81,7 +81,7 @@ void CSimpleLineSet::doCreateGeometry()
 void CSimpleLineSet::setCoordSize(int n)
 {
 	m_nCoords = n;
-	if (m_coords!=NULL)
+	if (m_coords!=nullptr)
 		delete [] m_coords;
 	m_coords = new double[m_nCoords][3];
 }
@@ -90,7 +90,7 @@ void CSimpleLineSet::setCoordSize(int n)
 void CSimpleLineSet::setLineSize(int n)
 {
 	m_nCoordIndex = n;
-	if (m_coordIndex!=NULL)
+	if (m_coordIndex!=nullptr)
 		delete [] m_coordIndex;
 	m_coordIndex = new int[m_nCoordIndex];
 }
@@ -98,7 +98,7 @@ void CSimpleLineSet::setLineSize(int n)
 // ------------------------------------------------------------
 void CSimpleLineSet::setCoord(int n, double x, double y, double z)
 {
-	if (m_coords!=NULL)
+	if (m_coords!=nullptr)
 	{
 		if (n<m_nCoords)
 		{
@@ -112,7 +112,7 @@ void CSimpleLineSet::setCoord(int n, double x, double y, double z)
 // ------------------------------------------------------------
 void CSimpleLineSet::setLineIndex(int n, int idx)
 {
-	if (m_coordIndex!=NULL)
+	if (m_coordIndex!=nullptr)
 	{
 		if (n<m_nCoordIndex)
 		{
@@ -125,7 +125,7 @@ void CSimpleLineSet::setLineIndex(int n, int idx)
 void CSimpleLineSet::setColorSize(int n)
 {
 	m_nColors = n;
-	if (m_colors!=NULL)
+	if (m_colors!=nullptr)
 		delete [] m_colors;
 	m_colors = new double[m_nColors][3];
 }
@@ -133,7 +133,7 @@ void CSimpleLineSet::setColorSize(int n)
 // ------------------------------------------------------------
 void CSimpleLineSet::setColor(int n, double red, double green, double blue)
 {
-	if (m_colors!=NULL)
+	if (m_colors!=nullptr)
 	{
 		if (n<m_nColors)
 		{

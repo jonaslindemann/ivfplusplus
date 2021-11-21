@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
 
@@ -33,8 +33,8 @@ CTexture::CTexture ()
 {
 	m_bound = false;
 	m_generateMipmaps = false;
-	m_imageMap = NULL;
-	m_ivfImage = NULL;
+	m_imageMap = nullptr;
+	m_ivfImage = nullptr;
 	m_wrapT = GL_REPEAT;
 	m_wrapS = GL_REPEAT;
 	m_textureMode = GL_DECAL;
@@ -104,7 +104,7 @@ void CTexture::bind()
 		return;
 	}
 
-	if (m_ivfImage!=NULL)
+	if (m_ivfImage!=nullptr)
 	{
 		if (!m_generateMipmaps)
 			glTexImage2D(GL_TEXTURE_2D, 0, m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(),
@@ -114,7 +114,7 @@ void CTexture::bind()
 			/*0,*/ m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
 	}
 
-	if (m_imageMap!=NULL)
+	if (m_imageMap!=nullptr)
 	{
 		if (!m_generateMipmaps)
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height,

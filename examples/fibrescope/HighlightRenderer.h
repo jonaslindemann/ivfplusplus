@@ -13,6 +13,7 @@ public:
 	virtual ~CHighlightRenderer();
 
 	IvfClassInfo("CHighlightRenderer", ivf::CShape);
+	IvfStdFactory(CHighlightRenderer);
 protected:
 	virtual void doCreateGeometry();
 };

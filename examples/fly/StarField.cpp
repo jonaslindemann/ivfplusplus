@@ -105,7 +105,7 @@ void CStarField::initializeStars()
 
 	m_texturedStars->setTexture(texture);
 
-	srand( (unsigned)time( NULL ) );
+	srand( (unsigned)time( nullptr ) );
 
 	for (i=0; i<nTexturedStars*4; i++)
 	{

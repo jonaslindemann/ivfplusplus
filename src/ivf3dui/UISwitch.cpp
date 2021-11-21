@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -57,13 +57,13 @@ void CUISwitch::doStateChange(bool state)
 {
 	if (state)
 	{
-		if (m_onShape!=NULL) m_onShape->setState(CGLBase::OS_ON);
-		if (m_offShape!=NULL) m_offShape->setState(CGLBase::OS_OFF);
+		if (m_onShape!=nullptr) m_onShape->setState(CGLBase::OS_ON);
+		if (m_offShape!=nullptr) m_offShape->setState(CGLBase::OS_OFF);
 	}
 	else
 	{
-		if (m_onShape!=NULL) m_onShape->setState(CGLBase::OS_OFF);
-		if (m_offShape!=NULL) m_offShape->setState(CGLBase::OS_ON);
+		if (m_onShape!=nullptr) m_onShape->setState(CGLBase::OS_OFF);
+		if (m_offShape!=nullptr) m_offShape->setState(CGLBase::OS_ON);
 	}
 }
 
@@ -75,7 +75,7 @@ void CUISwitch::setOnShape(CShape *shape)
 
 	CMaterialPtr material = m_onShape->getMaterial();
 
-	if (material!=NULL)
+	if (material!=nullptr)
 	{
 		CMaterialPtr hlMaterial = new CMaterial();
 		hlMaterial->assignFrom(material);
@@ -95,7 +95,7 @@ void CUISwitch::setOffShape(CShape *shape)
 
 	CMaterialPtr material = m_offShape->getMaterial();
 
-	if (material!=NULL)
+	if (material!=nullptr)
 	{
 		CMaterialPtr hlMaterial = new CMaterial();
 		hlMaterial->assignFrom(material);

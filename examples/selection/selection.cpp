@@ -158,7 +158,7 @@ void CExampleWindow::onMouseDown(int x, int y)
 	if (isLeftButtonDown())
 	{
 		m_selection->pick(x, y);
-		if (m_selection->getSelectedShape()!=NULL)
+		if (m_selection->getSelectedShape()!=nullptr)
 		{
 			m_selection->getSelectedShape()->setHighlight(CShape::HS_ON);
 			redraw();

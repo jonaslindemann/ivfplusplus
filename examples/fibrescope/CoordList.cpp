@@ -81,7 +81,7 @@ void CCoordList::getCoord(long idx, double &x, double &y, double &z)
 
 CVec3d* CCoordList::getCoord(long idx)
 {
-	return NULL;
+	return nullptr;
 }
 
 long CCoordList::getSize()

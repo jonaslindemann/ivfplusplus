@@ -11,9 +11,9 @@ using namespace ivf;
 CWorkspaceView::CWorkspaceView(int X, int Y, int W, int H, const char* L)
 :CFltkBase(X, Y, W, H, L) 
 {
-	m_viewModeChangeEvent = NULL;
-	m_coordinateEvent = NULL;
-	m_selectionChangedEvent = NULL;
+	m_viewModeChangeEvent = nullptr;
+	m_coordinateEvent = nullptr;
+	m_selectionChangedEvent = nullptr;
 }
 
 // ------------------------------------------------------------
@@ -23,8 +23,8 @@ void CWorkspaceView::onInit(int width, int height)
 	
 	m_viewMode = VM_CREATE_SHAPES;
 	m_nodeCount = 0;
-	m_oldShape = NULL;
-	m_moveShape = NULL;
+	m_oldShape = nullptr;
+	m_moveShape = nullptr;
 	
 	ivfSetGLEJoinStyle(TUBE_JN_CAP|TUBE_JN_ANGLE|TUBE_NORM_PATH_EDGE);
 	
@@ -284,8 +284,8 @@ void CWorkspaceView::deleteSelectedNodes()
 	m_selection->getSelection(vec);
 	m_selection->clear();
 	
-	m_moveShape = NULL;
-	m_oldShape = NULL;
+	m_moveShape = nullptr;
+	m_oldShape = nullptr;
 	
 	for (it=vec.begin(); it!=vec.end(); it++)
 	{
@@ -311,25 +311,25 @@ void CWorkspaceView::onKeyboard(int key, int x, int y)
 	switch (key) {
 	case 'n':
 		setViewMode(VM_CREATE_SHAPES);
-		if (m_viewModeChangeEvent!=NULL)
+		if (m_viewModeChangeEvent!=nullptr)
 			m_viewModeChangeEvent->onViewModeChange((TViewModeEvent)m_viewMode);
 		redraw();
 		break;
 	case 's':
 		setViewMode(VM_SELECT_SHAPES);
-		if (m_viewModeChangeEvent!=NULL)
+		if (m_viewModeChangeEvent!=nullptr)
 			m_viewModeChangeEvent->onViewModeChange((TViewModeEvent)m_viewMode);
 		redraw();
 		break;
 	case 'm':
 		setViewMode(VM_MOVE_SHAPES);
-		if (m_viewModeChangeEvent!=NULL)
+		if (m_viewModeChangeEvent!=nullptr)
 			m_viewModeChangeEvent->onViewModeChange((TViewModeEvent)m_viewMode);
 		redraw();
 		break;
 	case 'c':
 		setViewMode(VM_COPY_SHAPES);
-		if (m_viewModeChangeEvent!=NULL)
+		if (m_viewModeChangeEvent!=nullptr)
 			m_viewModeChangeEvent->onViewModeChange((TViewModeEvent)m_viewMode);
 		redraw();
 		break;
@@ -421,7 +421,7 @@ void CWorkspaceView::onSelect(CShape* shape)
 {
 	if (isLeftButtonDown())
 	{
-		if (shape!=NULL)
+		if (shape!=nullptr)
 		{
 			switch (m_viewMode) {
 			case VM_CREATE_LINES:
@@ -490,12 +490,12 @@ void CWorkspaceView::onSelect(CShape* shape)
 // ------------------------------------------------------------
 void CWorkspaceView::onHighlight(CShape* shape)
 {
-	m_moveShape = NULL;
+	m_moveShape = nullptr;
 	
-	if (m_oldShape!=NULL)
+	if (m_oldShape!=nullptr)
 		m_oldShape->disableHighlight();
 	
-	if (shape!=NULL)
+	if (shape!=nullptr)
 	{
 		switch (m_viewMode) {
 		case VM_SELECT_SHAPES:
@@ -579,7 +579,7 @@ void CWorkspaceView::onMouseDown(int x, int y)
 	{
 		if (m_viewMode==VM_MOVE_SHAPES)
 		{
-			if (isLeftButtonDown()&&m_moveShape!=NULL)
+			if (isLeftButtonDown()&&m_moveShape!=nullptr)
 			{
 				m_shapePlacementHandler->initiateMove(m_moveShape->getPosition());
 				m_moveShape->disableHighlight();
@@ -594,7 +594,7 @@ void CWorkspaceView::onMouseDown(int x, int y)
 		
 		if (m_viewMode==VM_COPY_SHAPES)
 		{
-			if (isLeftButtonDown()&&m_moveShape!=NULL)
+			if (isLeftButtonDown()&&m_moveShape!=nullptr)
 			{
 				m_shapePlacementHandler->initiateMove(m_moveShape->getPosition());
 				m_moveShape->disableHighlight();
@@ -715,7 +715,7 @@ void CWorkspaceView::onModifierUp()
 bool CWorkspaceView::onMoveSelection()
 {
 	setViewMode(VM_SELECT_SHAPES);
-	if (m_viewModeChangeEvent!=NULL)
+	if (m_viewModeChangeEvent!=nullptr)
 		m_viewModeChangeEvent->onViewModeChange((TViewModeEvent)m_viewMode);
 	
 	return true;	
@@ -765,7 +765,7 @@ void CWorkspaceView::setCoordinateEvent(CCoordinateEvent *event)
 // ------------------------------------------------------------
 void CWorkspaceView::onMouseMove3d(double x, double y, double z)
 {
-	if (m_coordinateEvent!=NULL)
+	if (m_coordinateEvent!=nullptr)
 		m_coordinateEvent->onCoordinate(x, y, z);
 }
 
@@ -783,7 +783,7 @@ void CWorkspaceView::onCopyShape(double x, double y, double z, CShapePtr& shape,
 void CWorkspaceView::onFinishCopy()
 {
 	setViewMode(VM_SELECT_SHAPES);
-	if (m_viewModeChangeEvent!=NULL)
+	if (m_viewModeChangeEvent!=nullptr)
 		m_viewModeChangeEvent->onViewModeChange((TViewModeEvent)m_viewMode);
 }
 
@@ -818,8 +818,8 @@ void CWorkspaceView::createScenario(TScenarioType scenarioType)
 	m_camera->setEyeSeparation(0.1);
 	m_camera->setPerspective(45.0, 1.0, 100.0);
 
-	m_moveShape = NULL;
-	m_oldShape = NULL;
+	m_moveShape = nullptr;
+	m_oldShape = nullptr;
 
 	m_selection->clear();
 	m_lineSelection->clear();

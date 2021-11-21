@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -135,7 +135,7 @@ COldLight* COldLightModel::removeLight( int index )
 	if ( index >= 0 && index < (int)m_lights.size() ) {
 		COldLight *light = m_lights[index];
 		
-		if ( light != NULL  && m_usereference ) {
+		if ( light != nullptr  && m_usereference ) {
 			light->deleteReference();
 			//      if ( !light->referenced() )
 			//	delete light;
@@ -144,7 +144,7 @@ COldLight* COldLightModel::removeLight( int index )
 		m_lights.erase(it); 
 		return light;
 	} else 
-		return NULL;
+		return nullptr;
 }
 
 // ------------------------------------------------------------

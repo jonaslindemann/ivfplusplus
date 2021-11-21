@@ -39,6 +39,8 @@ public:
 	CColorMap();
 	virtual ~CColorMap();
 
+	IvfStdFactory(CColorMap);
+
 	void open(const std::string& fname);
 	void clear();
 

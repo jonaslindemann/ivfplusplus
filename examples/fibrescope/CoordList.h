@@ -37,6 +37,7 @@ public:
 	virtual ~CCoordList();
 
 	IvfClassInfo("CCoordList", ivf::CBase);
+	IvfStdFactory(CCoordList);
 
 	virtual void readFromStream(std::istream &in);
 	virtual void saveToStream(std::ostream &out);

@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -33,11 +33,11 @@ CGleTwistExtrusion::CGleTwistExtrusion()
 
 void CGleTwistExtrusion::doCreateGeometry()
 {
-	if (m_contour==NULL)
+	if (m_contour==nullptr)
 		return;
 
 
-	if ((m_pointArray!=NULL)&&(m_twistArray!=NULL)&&(m_colorArray==NULL))
+	if ((m_pointArray!=nullptr)&&(m_twistArray!=nullptr)&&(m_colorArray==nullptr))
 	{
 		gleDouble (*temp1)[3];
 		temp1 = (double (*)[3])m_pointArray->getData();
@@ -55,12 +55,12 @@ void CGleTwistExtrusion::doCreateGeometry()
 			m_up,
 			m_pointArray->getSize(),
 			temp1,
-			NULL,
+			nullptr,
 			m_twistArray->getData()
 		);
 	}
 
-	if ((m_pointArray!=NULL)&&(m_twistArray!=NULL)&&(m_colorArray!=NULL))
+	if ((m_pointArray!=nullptr)&&(m_twistArray!=nullptr)&&(m_colorArray!=nullptr))
 	{
 		if (m_pointArray->getSize()==m_colorArray->getSize())
 		{

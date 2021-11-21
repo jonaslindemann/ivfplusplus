@@ -26,16 +26,16 @@
 CArrayCoordList::CArrayCoordList()
 {
 	m_size = 0;
-	m_colors = NULL;
-	m_coords = NULL;
+	m_colors = nullptr;
+	m_coords = nullptr;
 }
 
 CArrayCoordList::~CArrayCoordList()
 {
-	if (m_coords!=NULL)
+	if (m_coords!=nullptr)
 		delete [] m_coords;
 	
-	if (m_colors!=NULL)
+	if (m_colors!=nullptr)
 		delete [] m_colors;
 }
 
@@ -109,7 +109,7 @@ void CArrayCoordList::getCoord(long idx, double &x, double &y, double &z)
 
 ivf::CVec3d* CArrayCoordList::getCoord(long idx)
 {
-	return NULL;
+	return nullptr;
 }
 
 long CArrayCoordList::getSize()
@@ -151,10 +151,10 @@ void CArrayCoordList::resize(int newSize)
 		
 		m_size = newSize;
 		
-		if (m_coords!=NULL)
+		if (m_coords!=nullptr)
 			delete [] m_coords;
 		
-		if (m_colors!=NULL)
+		if (m_colors!=nullptr)
 			delete [] m_colors;
 
 		m_coords = coords;

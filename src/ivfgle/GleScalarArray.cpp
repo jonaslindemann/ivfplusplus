@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -28,13 +28,13 @@ using namespace ivf;
 
 CGleScalarArray::CGleScalarArray()
 {
-	m_scalars = NULL;
+	m_scalars = nullptr;
 	m_size = 0;
 }
 
 CGleScalarArray::CGleScalarArray(int size)
 {
-	m_scalars = NULL;
+	m_scalars = nullptr;
 	m_size = 0;
 
 	setSize(size);
@@ -42,7 +42,7 @@ CGleScalarArray::CGleScalarArray(int size)
 
 CGleScalarArray::~CGleScalarArray()
 {
-	if (m_scalars!=NULL)
+	if (m_scalars!=nullptr)
 		delete [] m_scalars;
 }
 
@@ -50,7 +50,7 @@ void CGleScalarArray::setSize(int size)
 {
 	// Delete previous spine coords/colors if any
 	
-	if (m_scalars!=NULL)
+	if (m_scalars!=nullptr)
 		delete [] m_scalars;
 		
 	// Set new size
@@ -83,8 +83,8 @@ int CGleScalarArray::getSize()
 
 gleDouble* CGleScalarArray::getData()
 {
-	if (m_scalars!=NULL)
+	if (m_scalars!=nullptr)
 		return m_scalars;
 	else
-		return NULL;
+		return nullptr;
 }

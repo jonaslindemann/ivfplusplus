@@ -52,7 +52,7 @@ void CFibreComposite::doBeginTransform()
 		lighting->disable();
 
 	CMaterialPtr material = this->getMaterial();
-	if (material!=NULL)
+	if (material!=nullptr)
 	{
 		if (userSettings->getRepresentation()==FIBRE_BAND2)
 		{
@@ -71,7 +71,7 @@ void CFibreComposite::doEndTransform()
 	CUserSettingsPtr userSettings = CUserSettings::getInstance();
 
 	CMaterialPtr material = this->getMaterial();
-	if (material!=NULL)
+	if (material!=nullptr)
 	{
 		if (userSettings->getRepresentation()==FIBRE_BAND2)
 		{

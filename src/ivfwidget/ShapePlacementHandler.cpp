@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -44,14 +44,14 @@ CShapePlacementHandler::CShapePlacementHandler(CWidgetBase* widget, CCamera* cam
 	
 	m_scene->addChild(m_ruler);
 	
-	m_createShapeEvent = NULL;
-	m_moveSelectionEvent = NULL;
-	m_copyShapeEvent = NULL;
-	m_finishCopyEvent = NULL;
-	m_finishMoveEvent = NULL;
-	m_cursorUpdateEvent = NULL;
+	m_createShapeEvent = nullptr;
+	m_moveSelectionEvent = nullptr;
+	m_copyShapeEvent = nullptr;
+	m_finishCopyEvent = nullptr;
+	m_finishMoveEvent = nullptr;
+	m_cursorUpdateEvent = nullptr;
 	
-	m_moveShape = NULL;
+	m_moveShape = nullptr;
 	
 	m_inputMethod = IM_CLICK_MODIFIER;
 	m_operatingMode = OM_CREATE_SHAPE;
@@ -109,7 +109,7 @@ void CShapePlacementHandler::onMouseMove3d(double x, double y, double z)
 	m_ruler->setEndPoint(x, y, z);
 
 	if ((m_operatingMode==OM_MOVE_SHAPE)||(m_operatingMode==OM_COPY_SHAPE))
-		if (m_shapeSelection!=NULL)
+		if (m_shapeSelection!=nullptr)
 			m_shapeSelection->setOffset(dx, dy, dz);
 
 	if (m_operatingMode==OM_MOVE_SHAPE)
@@ -141,14 +141,14 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 		case IM_CLICK_MODIFIER:
 			if (m_operatingMode==OM_CREATE_SHAPE)
 			{
-				if (m_createShapeEvent!=NULL)
+				if (m_createShapeEvent!=nullptr)
 				{
 					CShapePtr newShape;
 					m_createShapeEvent->onCreateShapeEvent(x, y, z, newShape);
 					
-					if (newShape!=NULL)
+					if (newShape!=nullptr)
 					{
-						if (m_composite!=NULL)
+						if (m_composite!=nullptr)
 							m_composite->addChild(newShape);
 						else
 							m_scene->addChild(newShape);
@@ -171,14 +171,14 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 			{
 				if (m_operatingMode==OM_CREATE_SHAPE)
 				{
-					if (m_createShapeEvent!=NULL)
+					if (m_createShapeEvent!=nullptr)
 					{
 						CShapePtr newShape;
 						m_createShapeEvent->onCreateShapeEvent(x, y, z, newShape);
 						
-						if (newShape!=NULL)
+						if (newShape!=nullptr)
 						{
-							if (m_composite!=NULL)
+							if (m_composite!=nullptr)
 								m_composite->addChild(newShape);
 							else
 								m_scene->addChild(newShape);
@@ -212,7 +212,7 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 					}
 					else
 					{
-						if (m_copyShapeEvent!=NULL)
+						if (m_copyShapeEvent!=nullptr)
 						{
 							int i;
 							double dx, dy, dz;
@@ -232,13 +232,13 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 								
 								m_copyShapeEvent->onCopyShape(nx, ny, nz, shape, newShape);
 
-								if (m_composite!=NULL)
+								if (m_composite!=nullptr)
 									m_composite->addChild(newShape);
 								else
 									m_scene->addChild(newShape);
 							}
 
-							if (m_finishCopyEvent!=NULL)
+							if (m_finishCopyEvent!=nullptr)
 								m_finishCopyEvent->onFinishCopy();
 
 							setPlanePosition(x, y, z);
@@ -329,7 +329,7 @@ void CShapePlacementHandler::setOperatingMode(TOperatingMode mode)
 	m_operatingMode = mode;
 
 	if ((m_operatingMode==OM_MOVE_SHAPE)||(m_operatingMode==OM_COPY_SHAPE))
-		m_cursor->setShape(NULL);
+		m_cursor->setShape(nullptr);
 	else
 	{
 		m_moveDone = false;
@@ -372,7 +372,7 @@ void CShapePlacementHandler::initiateMove(CVec3d &vec)
 void CShapePlacementHandler::finalizeMove()
 {
 	setPlanePosition(0.0, 0.0, 0.0);
-	if (m_shapeSelection!=NULL)
+	if (m_shapeSelection!=nullptr)
 		m_shapeSelection->setOffset(0.0, 0.0, 0.0);
 	m_cursor->setState(CGLBase::OS_OFF);
 	//m_ruler->setState(CIvfGLBase::OS_OFF);
@@ -407,11 +407,11 @@ void CShapePlacementHandler::setCursorUpdateEvent(CCursorUpdateEvent *event)
 void CShapePlacementHandler::reset()
 {
 	setPlanePosition(0.0, 0.0, 0.0);
-	if (m_shapeSelection!=NULL)
+	if (m_shapeSelection!=nullptr)
 		m_shapeSelection->setOffset(0.0, 0.0, 0.0);
 	//m_ruler->setState(CIvfGLBase::OS_OFF);
 	if ((m_operatingMode==OM_MOVE_SHAPE)||(m_operatingMode==OM_COPY_SHAPE))
-		m_cursor->setShape(NULL);
+		m_cursor->setShape(nullptr);
 	else
 	{
 		m_moveDone = false;

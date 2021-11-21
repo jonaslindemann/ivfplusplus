@@ -53,6 +53,8 @@ private:
 public:
 	CExampleWindow(int X, int Y, int W, int H, bool fullScreen);
 
+	static CExampleWindowPtr CExampleWindow::create(int X, int Y, int W, int H, bool fullScreen);
+
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
 	virtual void onRender();
@@ -66,6 +68,11 @@ public:
 // ------------------------------------------------------------
 // Window class implementation
 // ------------------------------------------------------------
+
+CExampleWindowPtr CExampleWindow::create(int X, int Y, int W, int H, bool fullScreen)
+{
+	return CExampleWindowPtr(new CExampleWindow(X, Y, W, H, fullScreen));
+}
 
 CExampleWindow::CExampleWindow(int X, int Y, int W, int H, bool fullScreen)
 		:CGlutBase(X, Y, W, H, fullScreen) 
@@ -88,7 +95,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CCamera();
+	m_camera = CCamera::create();
 	m_camera->setPosition(-0.0, 3.0, 5.0);
 	m_camera->setTarget(-0.0, 0.0, 0.0);
 
@@ -96,11 +103,11 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create scene
 
-	m_scene = new CComposite();
+	m_scene = CComposite::create();
 
 	// Create a file reader
 
-	CAc3DReaderPtr acReader = new CAc3DReader();
+	auto acReader = CAc3DReader::create();
 
 	// Set parameters
 
@@ -117,7 +124,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Retrieve poly set
 
-	CShapePtr shape = acReader->getShape();
+	auto shape = acReader->getShape();
 	shape->initBoundingSphere();
 	std::cout << shape->getBoundingSphere()->getRadius() << std::endl;
 
@@ -125,10 +132,9 @@ void CExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(shape);
 
-
 	// Create a light
 
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = CLighting::getInstance();
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
@@ -137,15 +143,6 @@ void CExampleWindow::onInit(int width, int height)
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
-	/*
-	CIvfDxfWriterPtr dxfWriter = new CDxfWriter();
-	dxfWriter->setFileName("models/ac3dreader.dxf");
-	dxfWriter->setShape(m_scene);
-	dxfWriter->write();
-	*/
-
-	//enableTimeout(0.01, 0);
-	
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 1);	
 	m_scene->setUselist(true);
@@ -265,11 +262,11 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512, false);
+	auto window = CExampleWindow::create(0, 0, 512, 512, false);
 	window->setModeString("1280x1024");
 
 	// Set window title and show window

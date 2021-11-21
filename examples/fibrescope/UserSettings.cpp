@@ -42,14 +42,14 @@ CUserSettings::CUserSettings()
 {
 	m_scaleFactor = 1.0;
 	m_showUsage = false;
-	m_connectionMaterial = NULL;
-	m_colorMap = NULL;
+	m_connectionMaterial = nullptr;
+	m_colorMap = nullptr;
 	m_connectionSize = 1.0;
 	m_enlargeUsage = false;
 	m_textureScale = 1.0;
 	m_fibreRadius = 0.5;
 	m_fibreSides = 6;
-	m_camera = NULL;
+	m_camera = nullptr;
 	m_fibreRep = 0;
 	m_blendFibres = false;
 	m_breakageLimit = 0.7;

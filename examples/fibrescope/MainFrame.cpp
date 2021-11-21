@@ -469,7 +469,7 @@ void CMainFrame::cb_NORMAL_MODEL_SPH(Fl_Menu_* o, void* v) {
 }
 
 void CMainFrame::cb_mnuHelpAbout_i(Fl_Menu_*, void*) {
-  if (m_splash!=NULL)
+  if (m_splash!=nullptr)
 {
 	m_splash->hide();
 	delete m_splash;
@@ -1901,7 +1901,7 @@ void CMainFrame::show() {
   ivfCustomWidget->setWidgets(outMessage, sldProgress, wndMain);
   Fl::add_timeout(g_event_spacing, timer_callback,(void*)ivfCustomWidget);
   g_mainFrame = this;
-  m_splash = NULL;
+  m_splash = nullptr;
 }
 
 Fl_Window* CMainFrame::getWindow() {

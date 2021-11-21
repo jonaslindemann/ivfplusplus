@@ -54,6 +54,8 @@ public:
 	CConnectionPoint();
 	virtual ~CConnectionPoint();
 
+	IvfStdFactory(CConnectionPoint);
+
 	void setCamera(ivf::CCamera* camera);
 	void setRadius(double radius);
 	void setUseColor(bool flag);

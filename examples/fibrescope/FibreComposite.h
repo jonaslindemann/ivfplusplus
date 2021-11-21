@@ -37,6 +37,7 @@ public:
 	virtual ~CFibreComposite();
 
 	IvfClassInfo("CFibreComposite", ivf::CComposite);
+	IvfStdFactory(CFibreComposite);
 
 protected:
 	void doEndTransform();

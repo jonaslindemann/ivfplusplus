@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -120,7 +120,7 @@ void CUIButton::setUpShape(CShape *shape)
 	
 	CMaterialPtr material = m_upShape->getMaterial();
 	
-	if (material!=NULL)
+	if (material!=nullptr)
 	{
 		CMaterialPtr hlMaterial = new CMaterial();
 		hlMaterial->assignFrom(material);
@@ -138,7 +138,7 @@ void CUIButton::setDownShape(CShape *shape)
 	
 	CMaterialPtr material = m_downShape->getMaterial();
 	
-	if (material!=NULL)
+	if (material!=nullptr)
 	{
 		CMaterialPtr hlMaterial = new CMaterial();
 		hlMaterial->assignFrom(material);
@@ -164,7 +164,7 @@ void CUIButton::setVisualAction(TVisualAction action)
 		this->addChild(m_movementXfm);
 		break;
 	case VA_SHAPES:
-		if ((m_downShape!=NULL)&&(m_upShape!=NULL))
+		if ((m_downShape!=nullptr)&&(m_upShape!=nullptr))
 		{
 			this->addChild(m_downShape);
 			this->addChild(m_upShape);
@@ -197,7 +197,7 @@ void CUIButton::setShape(CShape *shape)
 
 	CMaterialPtr material = m_shape->getMaterial();
 	
-	if (material!=NULL)
+	if (material!=nullptr)
 	{
 		CMaterialPtr hlMaterial = new CMaterial();
 		hlMaterial->assignFrom(material);
@@ -233,7 +233,7 @@ void CUIButton::visualDown()
 		this->setScale(0.8, 0.8, 0.8);
 		break;
 	case VA_MOVING:
-		if (m_shape!=NULL)
+		if (m_shape!=nullptr)
 		{
 			CVec3d pos = m_movementXfm->getPosition();
 			m_originalPosition = pos;
@@ -242,7 +242,7 @@ void CUIButton::visualDown()
 		}
 		break;
 	case VA_SHAPES:
-		if ((m_downShape!=NULL)&&(m_upShape!=NULL))
+		if ((m_downShape!=nullptr)&&(m_upShape!=nullptr))
 		{
 			m_downShape->setState(CGLBase::OS_ON);
 			m_upShape->setState(CGLBase::OS_OFF);
@@ -262,13 +262,13 @@ void CUIButton::visualUp()
 		this->setNormalize(false);
 		break;
 	case VA_MOVING:
-		if (m_shape!=NULL)
+		if (m_shape!=nullptr)
 		{
 			m_movementXfm->setPosition(m_originalPosition);
 		}
 		break;
 	case VA_SHAPES:
-		if ((m_downShape!=NULL)&&(m_upShape!=NULL))
+		if ((m_downShape!=nullptr)&&(m_upShape!=nullptr))
 		{
 			m_downShape->setState(CGLBase::OS_OFF);
 			m_upShape->setState(CGLBase::OS_ON);
@@ -288,13 +288,13 @@ void CUIButton::visualRestore()
 		this->setNormalize(false);
 		break;
 	case VA_MOVING:
-		if (m_shape!=NULL)
+		if (m_shape!=nullptr)
 		{
 			m_movementXfm->setPosition(m_originalPosition);
 		}
 		break;
 	case VA_SHAPES:
-		if ((m_downShape!=NULL)&&(m_upShape!=NULL))
+		if ((m_downShape!=nullptr)&&(m_upShape!=nullptr))
 		{
 			m_downShape->setState(CGLBase::OS_OFF);
 			m_upShape->setState(CGLBase::OS_ON);

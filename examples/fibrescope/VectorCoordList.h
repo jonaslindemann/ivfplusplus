@@ -42,6 +42,7 @@ public:
 	virtual ~CVectorCoordList();
 
 	IvfClassInfo("CVectorCoordList",CCoordList);
+	IvfStdFactory(CVectorCoordList);
 	
 	void readFromStream(std::istream &in);
 	void saveToStream(std::ostream &out);

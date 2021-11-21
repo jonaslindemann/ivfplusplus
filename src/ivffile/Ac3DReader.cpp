@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2010 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -61,7 +61,7 @@ using namespace std;
 
 CAc3DReader::CAc3DReader()
 {
-	m_currentPolySet = NULL;
+	m_currentPolySet = nullptr;
 	m_materialSet = new CMaterialSet();
 	//m_materialSet->addReference();
 
@@ -89,9 +89,9 @@ void CAc3DReader::read()
 	m_texrep[0] = 1.0;
 	m_texrep[1] = 1.0;
 
-	m_currentLight = NULL;
+	m_currentLight = nullptr;
 
-	m_lastTexture = NULL;
+	m_lastTexture = nullptr;
 
 	// Open file
 
@@ -355,7 +355,7 @@ bool CAc3DReader::parseObject(string &row)
 		}
 		decChild();
 
-		m_currentLineStripSet = NULL;
+		m_currentLineStripSet = nullptr;
 
 		m_currentPolySet = new CPolySet();
 		//m_currentPolySet->setUseVertexNormals(true);
@@ -611,7 +611,7 @@ bool CAc3DReader::parseName(string &row)
 
 		IvfLog("CAc3DReader: name = " << m_currentName.c_str());
 
-		if (m_currentShape!=NULL)
+		if (m_currentShape!=nullptr)
 			m_currentShape->setName(m_currentName.c_str());
 
 		//IvfLog("\tName : " <
@@ -636,7 +636,7 @@ bool CAc3DReader::parseTexrep(string &row)
 	strStream.seekg(0);
 	strStream >> m_texrep[0] >> m_texrep[1];
 
-	if (m_lastTexture!=NULL)
+	if (m_lastTexture!=nullptr)
 		m_lastTexture->setTextureModifier(m_texrep[0], m_texrep[1], 0.0);
 
 	return true;
@@ -802,7 +802,7 @@ bool CAc3DReader::parseMat(string &row)
 	if ((materialIdx>=0)&&(materialIdx<m_materialSet->getSize()))
 		m_currentMaterial = m_materialSet->getMaterial(materialIdx);
 	else
-		m_currentMaterial = NULL;
+		m_currentMaterial = nullptr;
 
 	return true;
 }
@@ -852,7 +852,7 @@ bool CAc3DReader::parseRefs(string &row, istream &in)
 		}
 
 		//delete m_currentPolySet;
-		//m_currentPolySet = NULL;
+		//m_currentPolySet = nullptr;
 	}
 
 	if (m_surfaceType == ST_POLY)
@@ -992,7 +992,7 @@ void CAc3DReader::clearVertexList()
 void CAc3DReader::pushGroup(CComposite *group)
 {
 	//IvfLog("-->");
-	if (m_groupStack[m_currentLevel]==NULL)
+	if (m_groupStack[m_currentLevel]==nullptr)
 		m_groupStack[m_currentLevel] = group;
 	else
 	{
@@ -1004,7 +1004,7 @@ void CAc3DReader::pushGroup(CComposite *group)
 void CAc3DReader::popGroup()
 {
 	//IvfLog("<--");
-	m_groupStack[m_currentLevel]=NULL;
+	m_groupStack[m_currentLevel]=nullptr;
 
 	if (m_currentLevel>0)
 		m_currentLevel--;
@@ -1035,7 +1035,7 @@ void CAc3DReader::initGroupStack()
 
 	for (i=0; i<100; i++)
 	{
-		m_groupStack[i] = NULL;
+		m_groupStack[i] = nullptr;
 		m_childStack[i] = 0;
 	}
 }

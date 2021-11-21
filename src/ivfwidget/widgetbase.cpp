@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -42,7 +42,7 @@ using namespace ivf;
 	}
 
 #define IvfDispatchTimeout(nbr) \
-	if (m_timeoutEvents[nbr]!=NULL) \
+	if (m_timeoutEvents[nbr]!=nullptr) \
 	{ \
 		return m_timeoutEvents[nbr]->onTimeout(); \
 	} \
@@ -123,14 +123,14 @@ CWidgetBase::CWidgetBase()
 	m_modifierKey = MT_NONE;
 
 	m_idleProcessing = false;
-	m_appLoopEvent = NULL;
+	m_appLoopEvent = nullptr;
 
 	int i;
 
 	for (i=0; i<10; i++)
 	{
 		m_timeouts[i] = -1.0f;
-		m_timeoutEvents[i] = NULL;
+		m_timeoutEvents[i] = nullptr;
 	}
 }
 
@@ -717,7 +717,7 @@ bool CWidgetBase::doAppLoop()
 {
 	if (m_initDone)
 	{
-		if (m_appLoopEvent!=NULL)
+		if (m_appLoopEvent!=nullptr)
 			return m_appLoopEvent->onAppLoop();
 		else	
 			return onAppLoop();
@@ -935,7 +935,7 @@ void CWidgetBase::assignTimeoutEvent(int nbr, CTimeoutEvent* event)
 void CWidgetBase::removeTimeoutEvent(int nbr)
 {
 	if ((nbr>=0)&&(nbr<10))
-		m_timeoutEvents[nbr] = NULL;
+		m_timeoutEvents[nbr] = nullptr;
 }
 
 void CWidgetBase::addModifierDownEvent(CModifierDownEvent *event)

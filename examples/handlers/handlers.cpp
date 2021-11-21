@@ -204,7 +204,7 @@ bool CExampleWindow::onTimeout()
 // ------------------------------------------------------------
 void CExampleWindow::onSelect(CShape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << shape->getClassName() << " selected." << endl;
 	else
 		cout << "Nothingness selected." << endl;

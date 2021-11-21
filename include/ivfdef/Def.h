@@ -229,6 +229,9 @@
 			return false; \
 	}
 
+#define IvfStdFactory(classname) \
+	static classname##Ptr create() { return classname##Ptr(new classname()); }
+
 #define IvfClassInfoTop(ivfclassname) \
 	void getClassNameThis(std::string& name) { name = ivfclassname; } \
 	const std::string getClassNameThis() { return ivfclassname; } \

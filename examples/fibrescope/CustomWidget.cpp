@@ -45,8 +45,8 @@ using namespace ivf;
 CCustomWidget::CCustomWidget(int X, int Y, int W, int H, const char *L)
 :CFltkBase(X, Y, W, H)
 {
-	sldProgress = NULL;
-	outMessage = NULL;
+	sldProgress = nullptr;
+	outMessage = nullptr;
 }
 
 void CCustomWidget::onInit(int width, int height)
@@ -62,16 +62,16 @@ void CCustomWidget::onInit(int width, int height)
 	m_fibreSides = 6;
 	m_fogNear = 150.0;
 	m_fogFar = 300.0;
-	m_fibres = NULL;
-	m_connections = NULL;
-	m_boundingVolume = NULL;
+	m_fibres = nullptr;
+	m_connections = nullptr;
+	m_boundingVolume = nullptr;
 	m_representation = -1;
 	m_stereoMode = SM_NONE;
 	m_viewMode = VM_EXAMINER;
 
 	// Initialize Ivf++ camera
 	
-	m_camera = new CCamera();
+	m_camera = CCamera::create();
 	m_camera->setPosition(-0.0, 3.0, 5.0);
 	m_camera->setTarget(0.0, 0.0, 0.0);
 	m_camera->setEyeSeparation(0.01);
@@ -81,7 +81,7 @@ void CCustomWidget::onInit(int width, int height)
 
 	// Create scene
 	
-	m_scene = new CScene();
+	m_scene = CScene::create();
 	m_scene->setView(m_camera);
 	m_scene->setStereoMode(CSceneBase::SM_NONE);
 	m_scene->setLightMode(CSceneBase::LM_LOCAL);
@@ -114,67 +114,65 @@ void CCustomWidget::onInit(int width, int height)
 	
 	// Define material palette
 
-	CMaterialPtr material;
-	
-	material = new CMaterial();
+	auto material = CMaterial::create();
 	material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CMaterialPtr(material));
+	m_meshMaterials.push_back(material);
 	
-	material = new CMaterial();
+	material = CMaterial::create();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.3f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CMaterialPtr(material));
+	m_meshMaterials.push_back(material);
 
-	material = new CMaterial();
+	material = CMaterial::create();
 	material->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.3f, 0.3f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CMaterialPtr(material));
+	m_meshMaterials.push_back(material);
 	
-	material = new CMaterial();
+	material = CMaterial::create();
 	material->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.0f, 0.3f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CMaterialPtr(material));
+	m_meshMaterials.push_back(material);
 	
-	material = new CMaterial();
+	material = CMaterial::create();
 	material->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.3f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CMaterialPtr(material));
+	m_meshMaterials.push_back(material);
 	
-	material = new CMaterial();
+	material = CMaterial::create();
 	material->setDiffuseColor(0.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.3f, 0.3f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CMaterialPtr(material));
+	m_meshMaterials.push_back(material);
 	
-	material = new CMaterial();
+	material = CMaterial::create();
 	material->setDiffuseColor(0.8f, 0.8f, 0.8f, 1.0f);
 	material->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CMaterialPtr(material));
+	m_meshMaterials.push_back(material);
 
-	material = new CMaterial();
+	material = CMaterial::create();
 	material->setDiffuseColor(0.5f, 0.5f, 0.5f, 1.0f);
 	material->setAmbientColor(0.1f, 0.1f, 0.1f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_meshMaterials.push_back(CMaterialPtr(material));
+	m_meshMaterials.push_back(material);
 
-	material = new CMaterial();
+	material = CMaterial::create();
 	material->setDiffuseColor(0.2f, 0.2f, 0.2f, 1.0f);
 	material->setAmbientColor(0.1f, 0.1f, 0.1f, 1.0f);
 	material->setSpecularColor(0.5f, 0.5f, 0.5f, 1.0f);
-	m_meshMaterials.push_back(CMaterialPtr(material));
+	m_meshMaterials.push_back(material);
 
-	m_discreteTime = new CDiscreteTime();
+	m_discreteTime = CDiscreteTime::create();
 
 	// Create a color map object
 
-	m_colorMap = new CColorMap();
+	m_colorMap = CColorMap::create();
 	m_colorMap->open("colormaps/colormap1.map");
 
 	// Create user settings object 
@@ -186,15 +184,15 @@ void CCustomWidget::onInit(int width, int height)
 
 	// Highlight renderer
 
-	m_highlightRenderer = new CHighlightRenderer();
+	m_highlightRenderer = CHighlightRenderer::create();
 	
 	// Load default fibre texture
 
-	CSgiImage* image = new CSgiImage();
+	auto image = CSgiImage::create();
 	image->setFileName("textures/tex01.rgb");
 	image->read();
 	
-	m_fibreTexture = new CTexture();
+	m_fibreTexture = CTexture::create();
 	m_fibreTexture->setImage(image);
 	m_fibreTexture->setGenerateMipmaps(true);
 	m_fibreTexture->setTextureMode(GL_MODULATE);
@@ -209,7 +207,7 @@ void CCustomWidget::onInit(int width, int height)
 	m_count = 0;
 	m_renderingInterval = 1;
 
-	CAxisPtr axis = new CAxis();
+	auto axis = CAxis::create();
 	m_scene->addChild(axis);
 
 	m_lighting = CLighting::getInstance();
@@ -285,16 +283,16 @@ void CCustomWidget::readMesh(char *name)
 	minX = minY = minZ = 1e300;
 	maxDispl = -1e300;
 	
-	if (m_fibres!=NULL)
+	if (m_fibres!=nullptr)
 		m_scene->removeShape(m_fibres);
 
-	if (m_boundingVolume!=NULL)
+	if (m_boundingVolume!=nullptr)
 		m_scene->removeShape(m_boundingVolume);
 	
-	m_fibres = new CFibreComposite();
+	m_fibres = CFibreComposite::create();
 	m_fibres->setTexture(m_fibreTexture);
 	
-	if (m_connections!=NULL)
+	if (m_connections!=nullptr)
 	{
 		m_scene->removeShape(m_connections);
 		delete m_connections;
@@ -303,7 +301,7 @@ void CCustomWidget::readMesh(char *name)
 	m_sigX.clear();
 	m_epsX.clear();
 	
-	m_connections = new CComposite();
+	m_connections = CComposite::create();
 	
 	// Wire cube coordinates
 	
@@ -353,7 +351,7 @@ void CCustomWidget::readMesh(char *name)
 		// Create fibre object
 
 		
-		fibre = new CFibre();
+		fibre = CFibre::create();
 		fibre->setDiscreteTime(m_discreteTime);
 		coordHist = fibre->getCoordHist();
 
@@ -422,7 +420,7 @@ void CCustomWidget::readMesh(char *name)
 
 	// Create a bounding volume
 
-	m_boundingVolume = new CLineSet();
+	m_boundingVolume = CLineSet::create();
 	m_boundingVolume->addCoord(minX, minY, minZ);
 	m_boundingVolume->addCoord(maxX, minY, minZ);
 	m_boundingVolume->addCoord(minX, minY, maxZ);
@@ -537,7 +535,7 @@ void CCustomWidget::readMesh(char *name)
 			Fl::flush();
 			// Create bPoint object
 			
-			connectionPoint = new CConnectionPoint();
+			connectionPoint = CConnectionPoint::create();
 			connectionPoint->setDiscreteTime(m_discreteTime);
 			connectionPoint->setRadius(connectionRadius);
 			coordHist = connectionPoint->getCoordHist();
@@ -563,7 +561,7 @@ void CCustomWidget::readMesh(char *name)
 			{
 				connectionPoint = (CConnectionPoint*)m_connections->getChild(j);
 				coordHist = connectionPoint->getCoordHist();
-				coordList = new CVectorCoordList();
+				coordList = CVectorCoordList::create();
 				f >> dx >> dy >> dz >> usage;
 				coordList->addCoord(dx, dy, dz, usage, usage, usage);
 				coordHist->addList(coordList);
@@ -670,11 +668,11 @@ void CCustomWidget::open()
 	
 	// If we have a filename we try to open.
 	
-	if (fname!=NULL)
+	if (fname!=nullptr)
 	{
 		// Ask for representation
 
-		int rep = fl_choice("Choose representation.", "Band I", "Band II", "Extruded", NULL);
+		int rep = fl_choice("Choose representation.", "Band I", "Band II", "Extruded", nullptr);
 
 		strcpy(m_fileName, fname);
 		this->clearAll();
@@ -764,16 +762,16 @@ void CCustomWidget::clearAll()
 {
 	// Remove fibres from scene
 
-	if (m_fibres!=NULL)
+	if (m_fibres!=nullptr)
 	{
 		m_scene->removeShape(m_fibres);
-		m_fibres = NULL;
+		m_fibres = nullptr;
 	}
 
-	if (m_connections!=NULL)
+	if (m_connections!=nullptr)
 	{
 		m_scene->getComposite()->removeShape(m_connections);
-		m_connections = NULL;
+		m_connections = nullptr;
 	}
 
 	this->redraw();
@@ -903,7 +901,7 @@ void CCustomWidget::setShowConnections(bool flag)
 {
 	// Turn on/off connections
 
-	if ((flag)&&(m_connections!=NULL))
+	if ((flag)&&(m_connections!=nullptr))
 		m_connections->setState(CGLBase::OS_ON);
 	else
 		m_connections->setState(CGLBase::OS_OFF);		
@@ -1146,11 +1144,11 @@ void CCustomWidget::openCSV()
 	
 	// If we have a filename we try to open.
 	
-	if (fname!=NULL)
+	if (fname!=nullptr)
 	{
 		// Ask for representation
 
-		int rep = fl_choice("Choose representation.", "Band I", "Band II", "Extruded", NULL);
+		int rep = fl_choice("Choose representation.", "Band I", "Band II", "Extruded", nullptr);
 
 		strcpy(m_fileName, fname);
 		this->clearAll();
@@ -1210,25 +1208,25 @@ void CCustomWidget::readMeshCSV(char *name)
 	maxX = maxY = maxZ = -1e300;
 	minX = minY = minZ = 1e300;
 	
-	if (m_fibres!=NULL)
+	if (m_fibres!=nullptr)
 	{
 		m_scene->removeShape(m_fibres);
-		m_fibres = NULL;
+		m_fibres = nullptr;
 	}
 
-	if (m_boundingVolume!=NULL)
+	if (m_boundingVolume!=nullptr)
 	{
 		m_scene->removeShape(m_boundingVolume);
-		m_boundingVolume = NULL;
+		m_boundingVolume = nullptr;
 	}
 	
 	m_fibres = new CFibreComposite();
 	m_fibres->setTexture(m_fibreTexture);
 	
-	if (m_connections!=NULL)
+	if (m_connections!=nullptr)
 	{
 		m_scene->removeShape(m_connections);
-		m_connections = NULL;
+		m_connections = nullptr;
 	}
 
 	m_sigX.clear();
@@ -1489,7 +1487,7 @@ void CCustomWidget::setStereoMode(TStereoMode mode)
 
 void CCustomWidget::enableFullscreen()
 {
-	if (wndMain!=NULL)
+	if (wndMain!=nullptr)
 	{
 		m_mainWindowPos[0] = wndMain->x();
 		m_mainWindowPos[1] = wndMain->y();
@@ -1508,7 +1506,7 @@ void CCustomWidget::enableFullscreen()
 
 void CCustomWidget::disableFullscreen()
 {
-	if (wndMain!=NULL)
+	if (wndMain!=nullptr)
 	{
 		resize(m_windowPos[0], m_windowPos[1], m_windowSize[0], m_windowSize[1]);
 		wndMain->fullscreen_off(m_mainWindowPos[0], m_mainWindowPos[1], m_mainWindowSize[0], m_mainWindowSize[1]);
@@ -1571,16 +1569,16 @@ void CCustomWidget::readMeshNEF(char *name)
 	maxX = maxY = maxZ = -1e300;
 	minX = minY = minZ = 1e300;
 	
-	if (m_multiply!=NULL)
+	if (m_multiply!=nullptr)
 	{
 		m_scene->removeShape(m_multiply);
-		m_multiply = NULL;
+		m_multiply = nullptr;
 	}
 
-	if (m_boundingVolume!=NULL)
+	if (m_boundingVolume!=nullptr)
 	{
 		m_scene->removeShape(m_boundingVolume);
-		m_boundingVolume = NULL;
+		m_boundingVolume = nullptr;
 	}
 	
 	m_fibres = new CFibreComposite();
@@ -1794,11 +1792,11 @@ void CCustomWidget::openNEF()
 	
 	// If we have a filename we try to open.
 	
-	if (fname!=NULL)
+	if (fname!=nullptr)
 	{
 		// Ask for representation
 
-		int rep = fl_choice("Choose representation.", "Band I", "Band II", "Extruded", NULL);
+		int rep = fl_choice("Choose representation.", "Band I", "Band II", "Extruded", nullptr);
 
 		strcpy(m_fileName, fname);
 		this->clearAll();
@@ -1850,7 +1848,7 @@ void CCustomWidget::setUseDisplayLists(bool flag)
 {
 	m_useDisplayLists = flag;
 	//m_scene->getComposite()->setUselist(flag);
-	if (m_fibres!=NULL)
+	if (m_fibres!=nullptr)
 		m_fibres->setUselist(flag);
 	redraw();
 }

@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -53,7 +53,7 @@ void CWorkspaceWidget::doInit(int width, int height)
 	m_zoomY = 0.0;
 	m_selectOver = false;
 	
-	m_lastOver = NULL;
+	m_lastOver = nullptr;
 	
 	// Initialize Ivf++ camera
 	
@@ -152,7 +152,7 @@ void CWorkspaceWidget::doMouseDown(int x, int y)
 			shape = m_workspace->getSelectedShape();
 			uiShape = queryUIShape(shape);
 
-			if (uiShape==NULL)
+			if (uiShape==nullptr)
 				onShapeDown(shape);
 			else
 			{
@@ -246,27 +246,27 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 			
 			CVec3d vec;
 			
-			if (uiShape==NULL)
+			if (uiShape==nullptr)
 			{
 				if (shape!=m_lastOver)
 				{
-					// We don't leave from NULL
+					// We don't leave from nullptr
 					
-					if (lastUIShape!=NULL)
+					if (lastUIShape!=nullptr)
 					{
 						lastUIShape->doControlLeave(vec);
 						onControlLeave(lastUIShape);
 						lastUIShape->doControlUp(vec);
 						onControlUp(lastUIShape);
-						lastUIShape = NULL;
+						lastUIShape = nullptr;
 						doRedraw();
 					}
 					else
 					{
-						if (m_lastOver!=NULL)
+						if (m_lastOver!=nullptr)
 							onShapeLeave(m_lastOver);
 
-						m_lastOver = NULL;
+						m_lastOver = nullptr;
 					}
 				}
 				
@@ -276,22 +276,22 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 			{
 				if (shape!=m_lastOver)
 				{
-					// We don't leave from NULL
+					// We don't leave from nullptr
 					
-					if (lastUIShape!=NULL)
+					if (lastUIShape!=nullptr)
 					{
 						lastUIShape->doControlLeave(vec);
 						onControlLeave(lastUIShape);
 						lastUIShape->doControlUp(vec);
 						onControlUp(lastUIShape);
-						lastUIShape = NULL;
+						lastUIShape = nullptr;
 					}
 					else
 					{
-						if (m_lastOver!=NULL)
+						if (m_lastOver!=nullptr)
 							onShapeLeave(m_lastOver);
 
-						m_lastOver = NULL;
+						m_lastOver = nullptr;
 					}
 				}
 				
@@ -315,13 +315,13 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 				
 				CVec3d vec;
 				
-				if (uiShape==NULL)
+				if (uiShape==nullptr)
 				{
 					if (shape!=m_lastOver)
 					{
-						// We don't leave from NULL
+						// We don't leave from nullptr
 						
-						if (lastUIShape!=NULL)
+						if (lastUIShape!=nullptr)
 						{
 							lastUIShape->doControlLeave(vec);
 							onControlLeave(lastUIShape);
@@ -331,7 +331,7 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 						}
 						else
 						{
-							if (m_lastOver!=NULL)
+							if (m_lastOver!=nullptr)
 								onShapeLeave(m_lastOver);
 
 						}
@@ -343,9 +343,9 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 				{
 					if (shape!=m_lastOver)
 					{
-						// We don't leave from NULL
+						// We don't leave from nullptr
 						
-						if (lastUIShape!=NULL)
+						if (lastUIShape!=nullptr)
 						{
 							lastUIShape->doControlLeave(vec);
 							onControlLeave(lastUIShape);
@@ -354,7 +354,7 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 						}
 						else
 						{
-							if (m_lastOver!=NULL)
+							if (m_lastOver!=nullptr)
 								onShapeLeave(m_lastOver);
 						}
 					}
@@ -405,7 +405,7 @@ void CWorkspaceWidget::doMouseUp(int x, int y)
 		uiShape = queryUIShape(shape);
 		lastUIShape = queryUIShape(m_lastOver);
 
-		if ((lastUIShape!=NULL)&&(lastUIShape!=uiShape))
+		if ((lastUIShape!=nullptr)&&(lastUIShape!=uiShape))
 		{
 			lastUIShape->doControlClick(vec, 0);
 			onControlClick(lastUIShape);
@@ -414,7 +414,7 @@ void CWorkspaceWidget::doMouseUp(int x, int y)
 			doRedraw();
 		}
 
-		if (uiShape==NULL)
+		if (uiShape==nullptr)
 		{
 			onShapeClick(m_workspace->getSelectedShape());
 			onShapeUp(m_workspace->getSelectedShape());
@@ -526,7 +526,7 @@ CUIInteractiveBasePtr CWorkspaceWidget::queryUIShape(CShape *shape)
 {
 	CUIInteractiveBasePtr uiShape;
 
-	if (shape!=NULL)
+	if (shape!=nullptr)
 	{
 		if (shape->isClass("CUIInteractiveBase"))
 		{

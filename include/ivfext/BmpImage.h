@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by John Aspras
@@ -90,6 +90,7 @@ public:
 	virtual ~CBmpImage();
 
 	IvfClassInfo("CBmpImage",CFileImage);
+    IvfStdFactory(CBmpImage);
 
 	/** Reads Bmp image */
 	virtual bool read();

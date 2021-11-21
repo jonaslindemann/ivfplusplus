@@ -60,6 +60,8 @@ public:
 	CExampleWindow(int X, int Y, int W, int H)
 		:CGlutBase(X, Y, W, H) {};
 
+	static CExampleWindowPtr create(int X, int Y, int W, int H);
+
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
 	virtual void onRender();
@@ -72,6 +74,11 @@ public:
 // ------------------------------------------------------------
 // Window class implementation
 // ------------------------------------------------------------
+
+CExampleWindowPtr CExampleWindow::create(int X, int Y, int W, int H)
+{
+	return CExampleWindowPtr(new CExampleWindow(X, Y, W, H));
+}
 
 void CExampleWindow::onInit(int width, int height)
 {
@@ -90,12 +97,12 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create cameras
 
-	m_camera = new CCamera();
+	m_camera = CCamera::create();
 	m_camera->setPosition(0.0, 0.0, 10.0);
 	m_camera->setPerspective(45.0, 0.5, 100.0);
 	m_camera->setViewPort(width, height);
 
-	m_externalCamera = new CCamera();
+	m_externalCamera = CCamera::create();
 	m_externalCamera->setPosition(25.0, 50.0, 50.0);
 	m_externalCamera->setPerspective(45.0, 0.5, 100.0);
 	m_externalCamera->setViewPort(width, height);
@@ -104,14 +111,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a materials
 
-	CMaterialPtr material = new CMaterial();
+	auto material = CMaterial::create();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene
 
-	m_scene = new CComposite();
+	m_scene = CComposite::create();
 
 	// Create a somewhat complex sphere 
 
@@ -121,7 +128,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Geometry is reduced by reusing the same sphere.
 
-	CSpherePtr sphere = new CSphere();
+	auto sphere = CSphere::create();
 	sphere->setSlices(12);
 	sphere->setStacks(12);
 	sphere->setMaterial(material);
@@ -129,14 +136,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a grid of spheres.
 
-	CTransformPtr arrayXlt = new CTransform();
+	auto arrayXlt = CTransform::create();
 	CTransformPtr xlt;
 
 	for (i=0; i<nNodes; i++)
 		for (j=0; j<nNodes; j++)
 			for (k=0; k<nNodes; k++)
 			{
-				xlt = new CTransform();
+				xlt = CTransform::create();
 				xlt->setPosition(
 					-10 + distance*i,
 					-10 + distance*j,
@@ -152,13 +159,13 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create culling object
 
-	m_culling = new CCulling();
+	m_culling = CCulling::create();
     m_culling->setComposite(m_scene);
 	m_culling->setCullView(m_camera);
 
 	// Create a light
 
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = CLighting::getInstance();
 
 	m_light = lighting->getLight(0);
 	m_light->setType(CLight::LT_DIRECTIONAL);
@@ -170,8 +177,8 @@ void CExampleWindow::onInit(int width, int height)
 // ------------------------------------------------------------
 void CExampleWindow::onResize(int width, int height)
 {
-	m_externalCamera->setViewPort(width, height);
-	m_externalCamera->initialize();
+	m_currentCamera->setViewPort(width, height);
+	m_currentCamera->initialize();
 }
 
 // ------------------------------------------------------------
@@ -295,12 +302,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = CExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

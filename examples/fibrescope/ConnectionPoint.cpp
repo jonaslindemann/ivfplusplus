@@ -28,18 +28,18 @@
 
 using namespace ivf;
 
-GLUquadricObj* CConnectionPoint::m_qobj = NULL;
-CMaterial* CConnectionPoint::m_material = NULL;
+GLUquadricObj* CConnectionPoint::m_qobj = nullptr;
+CMaterial* CConnectionPoint::m_material = nullptr;
 
 CConnectionPoint::CConnectionPoint()
 {
-	m_discreteTime = NULL;
+	m_discreteTime = nullptr;
 	m_coords = new CCoordHist();
 	m_useColor = true;
-	m_camera = NULL;
+	m_camera = nullptr;
 	m_connectionRadius = 1.0;
 
-	if (m_material==NULL)
+	if (m_material==nullptr)
 	{
 		m_material = new CMaterial();
 		m_material->addReference();
@@ -47,7 +47,7 @@ CConnectionPoint::CConnectionPoint()
 		m_material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	if (m_qobj==NULL)
+	if (m_qobj==nullptr)
 	{
 		m_qobj = gluNewQuadric();
 		gluQuadricDrawStyle(m_qobj, GLU_FILL);
@@ -60,10 +60,10 @@ CConnectionPoint::CConnectionPoint()
 
 CConnectionPoint::~CConnectionPoint()
 {
-	if (m_qobj!=NULL)
+	if (m_qobj!=nullptr)
 	{
 		gluDeleteQuadric(m_qobj);
-		m_qobj = NULL;
+		m_qobj = nullptr;
 	}
 }
 
@@ -122,7 +122,7 @@ void CConnectionPoint::doCreateGeometry()
 	if (userSettings->getShowUsage())
 	{
 		coordList->getColor(0, r1, g1, b1);
-		if (userSettings->getColorMap()!=NULL)
+		if (userSettings->getColorMap()!=nullptr)
 			userSettings->getColorMap()->getColor((double)r1, r, g, b);
 		else
 			colorScale((double)r1, r, g, b);

@@ -45,6 +45,8 @@ public:
 	CArrayCoordList();
 	virtual ~CArrayCoordList();
 
+	IvfStdFactory(CArrayCoordList);
+
 	void setCoord(int idx, double x, double y, double z);
 	void addCoord(double x, double y, double z);
 	void addCoord(double x, double y, double z, float r, float g, float b);

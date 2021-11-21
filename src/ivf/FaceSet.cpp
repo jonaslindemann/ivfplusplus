@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
 #include <ivf/config.h>
@@ -35,12 +35,12 @@ CFaceSet::CFaceSet()
 	m_nFaces = 0;
 	m_nTextureCoords = 0;
 
-	m_coords = NULL;
-	m_coordIndex = NULL;
-	m_textureCoordIndex = NULL;
-	m_textureCoords = NULL;
-	m_colors = NULL;
-	m_normals = NULL;
+	m_coords = nullptr;
+	m_coordIndex = nullptr;
+	m_textureCoordIndex = nullptr;
+	m_textureCoords = nullptr;
+	m_colors = nullptr;
+	m_normals = nullptr;
 	m_useColor = FALSE;
 	m_useTexture = FALSE;
 
@@ -48,17 +48,17 @@ CFaceSet::CFaceSet()
 
 CFaceSet::~CFaceSet()
 {
-	if (m_coords!=NULL)
+	if (m_coords!=nullptr)
 		delete [] m_coords;
-	if (m_coordIndex!=NULL)
+	if (m_coordIndex!=nullptr)
 		delete [] m_coordIndex;
-	if (m_colors!=NULL)
+	if (m_colors!=nullptr)
 		delete [] m_colors;
-	if (m_normals!=NULL)
+	if (m_normals!=nullptr)
 		delete [] m_normals;
-	if (m_textureCoords!=NULL)
+	if (m_textureCoords!=nullptr)
 		delete [] m_textureCoords;
-	if (m_textureCoordIndex!=NULL)
+	if (m_textureCoordIndex!=nullptr)
 		delete [] m_textureCoordIndex;
 }
 
@@ -102,9 +102,9 @@ void CFaceSet::setCoordSize(long coordSize)
 {
 	m_nCoords = coordSize;
 
-	if (m_coords!=NULL)
+	if (m_coords!=nullptr)
 		delete [] m_coords;
-	if (m_colors!=NULL)
+	if (m_colors!=nullptr)
 		delete [] m_colors;
 
 	m_coords = new double[m_nCoords][3];
@@ -140,11 +140,11 @@ void CFaceSet::setCoordIndexSize(long indexSize)
 	{
 		m_nFaces = indexSize;
 
-		if (m_coordIndex!=NULL)
+		if (m_coordIndex!=nullptr)
 			delete [] m_coordIndex;
-		if (m_normals!=NULL)
+		if (m_normals!=nullptr)
 			delete [] m_normals;
-		if (m_textureCoordIndex!=NULL)
+		if (m_textureCoordIndex!=nullptr)
 			delete [] m_textureCoordIndex;
 
 		m_coordIndex = new long[m_nFaces][4];
@@ -160,7 +160,7 @@ void CFaceSet::setTextureCoordSize(long size)
 	{
 		m_nTextureCoords = size;
 
-		if (m_textureCoords!=NULL)
+		if (m_textureCoords!=nullptr)
 			delete [] m_textureCoords;
 
 		m_textureCoords = new double[m_nTextureCoords][2];

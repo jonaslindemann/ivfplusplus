@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -54,20 +54,20 @@ CCameraController::CCameraController()
 	m_targetEndAction = EA_STOP;
 	m_targetStartAction = SA_STOP;
 
-	m_camera = NULL;
+	m_camera = nullptr;
 }
 
 CCameraController::~CCameraController()
 {
 	/*
-	if (m_path!=NULL)
+	if (m_path!=nullptr)
 	{
 		m_path->deleteReference();
 		if (!m_path->referenced())
 			delete m_path;
 	}
 
-	if (m_targetPath!=NULL)
+	if (m_targetPath!=nullptr)
 	{
 		m_targetPath->deleteReference();
 		if (!m_path->referenced())
@@ -80,7 +80,7 @@ void CCameraController::setPath(CSpline3d *spline)
 {
 	m_path = spline;
 	/*
-	if (m_path!=NULL)
+	if (m_path!=nullptr)
 	{
 		m_path->deleteReference();
 		if (!m_path->referenced())
@@ -99,7 +99,7 @@ CSpline3d* CCameraController::getPath()
 
 void CCameraController::doUpdate(double dt)
 {
-	if (m_camera!=NULL)
+	if (m_camera!=nullptr)
 	{
 		double x, y, z;
 
@@ -108,7 +108,7 @@ void CCameraController::doUpdate(double dt)
 		m_v += m_a0*dt;
 		m_t += m_v*dt + pow(m_a0,2)*dt*0.5;
 
-		if (m_path!=NULL)
+		if (m_path!=nullptr)
 			m_path->getPosition(m_t).getComponents(x, y, z);
 
 		if (m_t>(double)m_path->getSize()-1.0)
@@ -177,7 +177,7 @@ void CCameraController::doUpdate(double dt)
 			m_target_v += m_target_a0*dt;
 			m_target_t += m_target_v*dt + pow(m_target_a0,2)*dt*0.5;
 			
-			if (m_targetPath!=NULL)
+			if (m_targetPath!=nullptr)
 				m_targetPath->getPosition(m_target_t).getComponents(x, y, z);
 
 			if (m_target_t>(double)m_targetPath->getSize()-1.0)
@@ -251,16 +251,16 @@ void CCameraController::doReset()
 	m_target_t = m_target_t0;
 	m_target_v = m_target_v0;
 
-	if (m_camera!=NULL)
+	if (m_camera!=nullptr)
 	{
 		double x, y, z;
 
-		if (m_path!=NULL)
+		if (m_path!=nullptr)
 			m_path->getPosition(m_t).getComponents(x, y, z);
 
 		m_camera->setPosition(x, y, z);
 
-		if (m_targetPath!=NULL)
+		if (m_targetPath!=nullptr)
 		{
 			m_targetPath->getPosition(m_target_t).getComponents(x, y, z);
 			if (m_useTargetPath)
@@ -311,7 +311,7 @@ void CCameraController::setTargetPath(CSpline3d *spline)
 {
 	m_targetPath = spline;
 	/*
-	if (m_targetPath!=NULL)
+	if (m_targetPath!=nullptr)
 	{
 		m_targetPath->deleteReference();
 		if (!m_targetPath->referenced())
@@ -371,7 +371,7 @@ void CCameraController::setTargetEndActionType(TEndAction action)
 void CCameraController::setFollowPath(bool flag)
 {
 	m_followPath = flag;
-	if (m_camera!=NULL)
+	if (m_camera!=nullptr)
 		if (m_followPath)
 			m_camera->setType(CCamera::CT_FREE_ORIENTATION);
 		else

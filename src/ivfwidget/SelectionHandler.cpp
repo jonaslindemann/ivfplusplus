@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -35,9 +35,9 @@ CSelectionHandler::CSelectionHandler(CWidgetBase* widget, CScene* scene)
 	m_widget->addMouseDownEvent(this);
 	m_widget->addMouseUpEvent(this);
 
-	m_singleSelectionEvent = NULL;
-	m_multipleSelectionEvent = NULL;
-	m_highlightEvent = NULL;
+	m_singleSelectionEvent = nullptr;
+	m_multipleSelectionEvent = nullptr;
+	m_highlightEvent = nullptr;
 }
 
 CSelectionHandler::~CSelectionHandler()
@@ -59,11 +59,11 @@ void CSelectionHandler::doMouseMove(int x, int y)
 {
 	m_scene->pick(x, y);
 
-	if (m_scene->getSelectedShape()!=NULL)
+	if (m_scene->getSelectedShape()!=nullptr)
 	{
-		if (m_highlightEvent==NULL)
+		if (m_highlightEvent==nullptr)
 		{
-			if (m_oldShape!=NULL)
+			if (m_oldShape!=nullptr)
 				if (m_oldShape!=m_scene->getSelectedShape())
 					m_oldShape->setHighlight(CShape::HS_OFF);
 			m_scene->getSelectedShape()->setHighlight(CShape::HS_ON);
@@ -76,14 +76,14 @@ void CSelectionHandler::doMouseMove(int x, int y)
 	}
 	else
 	{
-		if (m_highlightEvent==NULL)
+		if (m_highlightEvent==nullptr)
 		{
-			if (m_oldShape!=NULL)
+			if (m_oldShape!=nullptr)
 				m_oldShape->setHighlight(CShape::HS_OFF);
 		}
 		else
 		{
-			dispatchHighlightEvent(NULL);
+			dispatchHighlightEvent(nullptr);
 		}
 	}
 	m_widget->redraw();
@@ -114,13 +114,13 @@ void CSelectionHandler::onMouseMove(int x, int y)
 
 void CSelectionHandler::dispatchSingleSelectionEvent(CShape *shape)
 {
-	if (m_singleSelectionEvent!=NULL)
+	if (m_singleSelectionEvent!=nullptr)
 		m_singleSelectionEvent->onSelect(shape);
 }
 
 void CSelectionHandler::dispatchHighlightEvent(CShape* shape)
 {
-	if (m_highlightEvent!=NULL)
+	if (m_highlightEvent!=nullptr)
 		m_highlightEvent->onHighlight(shape);
 }
 
@@ -141,7 +141,7 @@ void CSelectionHandler::setHighlightEvent(CHighlightEvent* event)
 
 void CSelectionHandler::dispatchMultipleSelectionEvent(CIvfSelectedShapesVector &selectedShapes)
 {
-	if (m_multipleSelectionEvent!=NULL)
+	if (m_multipleSelectionEvent!=nullptr)
 		m_multipleSelectionEvent->onSelectMultiple(selectedShapes);
 }
 

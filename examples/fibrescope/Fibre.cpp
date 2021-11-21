@@ -108,13 +108,13 @@ void normalizedcross(double* u, double* v, double* n)
 
 CFibre::CFibre()
 {
-	m_discreteTime = NULL;
+	m_discreteTime = nullptr;
 	m_coords = new CCoordHist();
 	g_upvector[0] = 0.0;
 	g_upvector[1] = 1.0;
 	g_upvector[2] = 1.0;
-	m_sectionCoords = NULL;
-	m_sectionNormals = NULL;
+	m_sectionCoords = nullptr;
+	m_sectionNormals = nullptr;
 
 	m_fibreRadius = -1.0;
 
@@ -484,7 +484,7 @@ void CFibre::doCreateGeometry()
 			g_upvector,
 			g_aCoordList->getSize(),
 			g_summedSpine,
-			NULL
+			nullptr
 			);
 		//glEnable(GL_TEXTURE_2D);
 
@@ -527,9 +527,9 @@ void CFibre::initSection()
 	r = userSettings->getFibreRadius();
 	nSides = userSettings->getExtrusionSides();
 
-	if (m_sectionCoords!=NULL)
+	if (m_sectionCoords!=nullptr)
 		delete [] m_sectionCoords;
-	if (m_sectionNormals!=NULL)
+	if (m_sectionNormals!=nullptr)
 		delete [] m_sectionNormals;
 
 	m_sectionCoords = new gleDouble[nSides+1][2];

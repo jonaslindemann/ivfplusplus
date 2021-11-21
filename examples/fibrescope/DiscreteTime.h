@@ -41,18 +41,21 @@ private:
 	int m_endAction;
 	bool m_loop;
 public:
+	CDiscreteTime();
+	virtual ~CDiscreteTime();
+
+	IvfStdFactory(CDiscreteTime);
+
+	void rewind();
+	void next();
+	void previous();
+
 	void checkStep(int testStep);
 	void reset();
 	void setLoop(bool flag);
 	void last();
 	void setEndAction(int action);
 	void setTime(long time);
-	CDiscreteTime();
-	virtual ~CDiscreteTime();
-
-	void rewind();
-	void next();
-	void previous();
 
 	void setInterval(long startTime, long endTime);
 	long getCurrentTime();

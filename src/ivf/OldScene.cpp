@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
 // Implementation of: public class COldScene
@@ -36,8 +36,8 @@ COldScene::COldScene ()
 	m_world->addReference();
 	m_cursor = new CCursor();
 	m_cursor->addReference();
-	m_tempShape = NULL;
-	m_transparentShape = NULL;
+	m_tempShape = nullptr;
+	m_transparentShape = nullptr;
 	m_objectSize = 1;
 	m_cursorLocked = false;
 
@@ -53,9 +53,9 @@ COldScene::COldScene ()
 // ------------------------------------------------------------
 COldScene::~COldScene ()
 {
-	if (m_cursor!=NULL)
+	if (m_cursor!=nullptr)
 		m_cursor->deleteReference();
-	if (m_world!=NULL)
+	if (m_world!=nullptr)
 		m_world->deleteReference();
 
 	if (!m_cursor->referenced())
@@ -94,18 +94,18 @@ void COldScene::doCreateGeometry()
 	CSelectComposite::doCreateGeometry();
 
 	if (m_showGrid)
-		if (m_world!=NULL)
+		if (m_world!=nullptr)
 			m_world->render();
 
 
 	if (m_showCursor)
-		if (m_cursor!=NULL)
+		if (m_cursor!=nullptr)
 			m_cursor->render();
 
 	// Draw line from cursor to plane
 
 	if (m_showCursor)
-		if (m_cursor!=NULL)
+		if (m_cursor!=nullptr)
 		{
 			double x1, y1, z1;
 			double x2, y2, z2;
@@ -124,7 +124,7 @@ void COldScene::doCreateGeometry()
 			glPopAttrib();
 		}
 
-	if (m_tempShape!=NULL)
+	if (m_tempShape!=nullptr)
 	{
 		switch (m_tempRenderStyle) {
 		case IVF_TEMP_SOLID:
@@ -141,7 +141,7 @@ void COldScene::doCreateGeometry()
 		}
 	}
 
-	if (m_transparentShape!=NULL)
+	if (m_transparentShape!=nullptr)
 		m_transparentShape->render();
 }
 
@@ -149,11 +149,11 @@ void COldScene::doBeginTransform()
 {
 	glPushMatrix();
 	if (m_lightMode == IVF_LIGHT_LOCAL)
-		if (m_lighting != NULL)
+		if (m_lighting != nullptr)
 			m_lighting->render();
 	CSelectComposite::doBeginTransform();
 	if (m_lightMode == IVF_LIGHT_WORLD)
-		if (m_lighting != NULL)
+		if (m_lighting != nullptr)
 			m_lighting->render();
 }
 
@@ -165,7 +165,7 @@ void COldScene::doEndTransform()
 
 void COldScene::setWorldSystem(CCoordinateSystem * world)
 {
-	if (m_world!=NULL)
+	if (m_world!=nullptr)
 	{
 		m_world->deleteReference();
 
@@ -184,7 +184,7 @@ CCoordinateSystem* COldScene::getWorldSystem()
 
 void COldScene::setCursor(CCursor * cursor)
 {
-	if (m_cursor!=NULL)
+	if (m_cursor!=nullptr)
 	{
 		m_cursor->deleteReference();
 		if (!m_cursor->referenced())
@@ -213,9 +213,9 @@ void COldScene::updateCursor(int x, int y)
 
 	CCamera* camera = (CCamera*) getCamera();
 
-	if ((m_cursor!=NULL)&&
-		(camera!=NULL)&&
-		(m_world!=NULL))
+	if ((m_cursor!=nullptr)&&
+		(camera!=nullptr)&&
+		(m_world!=nullptr))
 	{
 
 

@@ -51,6 +51,8 @@ public:
 	CFibre();
 	virtual ~CFibre();
 
+	IvfStdFactory(CFibre);
+
 	void refresh();
 
 	CCoordHist* getCoordHist();

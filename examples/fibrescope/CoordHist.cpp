@@ -27,7 +27,7 @@ using namespace ivf;
 
 CCoordHist::CCoordHist()
 {
-	m_discreteTime = NULL;
+	m_discreteTime = nullptr;
 }
 
 CCoordHist::~CCoordHist()
@@ -45,7 +45,7 @@ CCoordList* CCoordHist::getList(long idx)
 	if ( (idx>=0)&&(idx<m_lists.size()) )
 		return m_lists[idx];
 	else
-		return NULL;
+		return nullptr;
 }
 
 long CCoordHist::getSize()
@@ -60,13 +60,13 @@ void CCoordHist::clear()
 
 CCoordList* CCoordHist::getList()
 {
-	if (m_discreteTime!=NULL)
+	if (m_discreteTime!=nullptr)
 	{
 		long timeStep = m_discreteTime->getCurrentTime();
 		if ((timeStep>=0)&&(timeStep<m_lists.size()))
 			return m_lists[timeStep];
 		else
-			return NULL;
+			return nullptr;
 	}
 	else
 		return m_lists[0];

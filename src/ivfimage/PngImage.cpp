@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -58,14 +58,14 @@ bool CPngImage::read()
 		return false;
 #else
 	fp = fopen(getFileName().c_str(), "rb");
-	if (fp==NULL)
+	if (fp==nullptr)
 		return false;
 #endif
 
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
-		NULL, NULL, NULL);
+		nullptr, nullptr, nullptr);
 
-	if (png_ptr == NULL)
+	if (png_ptr == nullptr)
 	{
 		fclose(fp);
 		return false;
@@ -73,10 +73,10 @@ bool CPngImage::read()
 
 	/* Allocate/initialize the memory for image information.  REQUIRED. */
 	info_ptr = png_create_info_struct(png_ptr);
-	if (info_ptr == NULL)
+	if (info_ptr == nullptr)
 	{
 		fclose(fp);
-		png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+		png_destroy_read_struct(&png_ptr, (png_infopp)nullptr, (png_infopp)nullptr);
 		return false;
 	}
 
@@ -86,7 +86,7 @@ bool CPngImage::read()
 	/* The easiest way to read the image: */
 	png_bytep* row_pointers;
 
-    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+    png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
 	row_pointers = png_get_rows(png_ptr, info_ptr);
 
     width            = png_get_image_width(png_ptr, info_ptr);
@@ -122,7 +122,7 @@ bool CPngImage::read()
 
 	if (!supported)
 	{
-		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)nullptr);
 		return false;
 	}
 
@@ -139,7 +139,7 @@ bool CPngImage::read()
 	/* At this point you have read the entire image */
 
 	/* clean up after the read, and free any memory allocated - REQUIRED */
-	png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+	png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)nullptr);
 
 	/* close the file */
 	fclose(fp);

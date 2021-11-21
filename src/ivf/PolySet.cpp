@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
 #include <ivf/PolySet.h>
@@ -63,7 +63,7 @@ void CPolySet::doCreateGeometry()
 				{
 					material = this->getMaterialAt(idx);
 
-					if (material!=NULL)
+					if (material!=nullptr)
 						material->render();
 				}
 			}
@@ -91,7 +91,7 @@ void CPolySet::doCreateGeometry()
 		if (i<(int)m_textureIndexSet.size())
 			textureIdx = m_textureIndexSet[i];
 		else
-			textureIdx = NULL;
+			textureIdx = nullptr;
 
 		for (j=0; j<coordIdx->getSize(); j+=topoHop)
 		{
@@ -103,7 +103,7 @@ void CPolySet::doCreateGeometry()
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 
-			if (textureIdx!=NULL)
+			if (textureIdx!=nullptr)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
 
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
@@ -116,7 +116,7 @@ void CPolySet::doCreateGeometry()
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j+1)]->getColor());
 
-			if (textureIdx!=NULL)
+			if (textureIdx!=nullptr)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+1)]->getComponents());
 
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j+1)]->getComponents());
@@ -129,7 +129,7 @@ void CPolySet::doCreateGeometry()
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j+2)]->getColor());
 
-			if (textureIdx!=NULL)
+			if (textureIdx!=nullptr)
 				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+2)]->getComponents());
 
 			glVertex3dv(m_coordSet[coordIdx->getIndex(j+2)]->getComponents());
@@ -144,7 +144,7 @@ void CPolySet::doCreateGeometry()
 				if (m_useColor)
 					glColor3fv(m_colorSet[colorIdx->getIndex(j+3)]->getColor());
 
-				if (textureIdx!=NULL)
+				if (textureIdx!=nullptr)
 					glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+3)]->getComponents());
 
 				glVertex3dv(m_coordSet[coordIdx->getIndex(j+3)]->getComponents());

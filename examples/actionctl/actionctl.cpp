@@ -62,6 +62,8 @@ public:
 	CExampleWindow(int X, int Y, int W, int H)
 		:CGlutBase(X, Y, W, H) {};
 
+	static CExampleWindowPtr create(int X, int Y, int W, int H);
+
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
 	virtual void onRender();
@@ -75,6 +77,11 @@ public:
 // ------------------------------------------------------------
 // Window class implementation
 // ------------------------------------------------------------
+
+CExampleWindowPtr CExampleWindow::create(int X, int Y, int W, int H)
+{
+	return CExampleWindowPtr(new CExampleWindow(X, Y, W, H));
+}
 
 void CExampleWindow::onInit(int width, int height)
 {
@@ -93,74 +100,74 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CCamera();
+	m_camera = CCamera::create();
 	m_camera->setPosition(8.0, 8.0, 8.0);
 	m_camera->setTarget(0.0, 0.0, 0.0);
 
 	// Create a materials
 
-	CMaterialPtr material = new CMaterial();
+	auto material = CMaterial::create();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene
 
-	m_scene = new CComposite();
+	m_scene = CComposite::create();
 
-	CCubePtr cube = new CCube();
+	auto cube = CCube::create();
 	cube->setMaterial(material);
 
-	CAxisPtr axis = new CAxis();
+	auto axis = CAxis::create();
 	axis->setPosition(0.0, 0.0, 0.0);
 	axis->setSize(2.0);
+
 	m_scene->addChild(axis);
 
 	// Create controllers
 
-	m_controllers = new CActionController();
+	m_controllers = CActionController::create();
 	m_controllers->activate();
 
 	for (i=0; i<5; i++)
 		for (j=0; j<5; j++)
 		{
-			CTransformPtr tf = new CTransform();
+			auto tf = CTransform::create();
 			tf->addChild(cube);
 			tf->setPosition(-5.0+2.5*(double)i, 0.0, -5.0+2.5*(double)j);
 			m_scene->addChild(tf);
 
-			CRotateControllerPtr ctl = new CRotateController();
+			auto ctl = CRotateController::create();
 			ctl->setShape(tf);
 			ctl->setRotationSpeed(45.0*3.0/10.0);
 			ctl->activate();
 
-			CSpline3dPtr path = new CSpline3d();
+			auto path = CSpline3d::create();
 			path->setSize(2);
 			path->getPoint(0)->setComponents(-5.0+2.5*(double)i, 0.0, -5.0+2.5*(double)j);
 			path->getPoint(1)->setComponents(-5.0+2.5*(double)i, 3.0, -5.0+2.5*(double)j);
 			path->update();
 
-			CPathControllerPtr pathCtl = new CPathController();
+			auto pathCtl = CPathController::create();
 			pathCtl->setPath(path);
 			pathCtl->setShape(tf);
 			pathCtl->setInitialSpeed(0.1);
 			pathCtl->activate();
 
-			CControllerGroupPtr groupCtl = new CControllerGroup();
+			auto groupCtl = CControllerGroup::create();
 			groupCtl->addChild(ctl);
 			groupCtl->addChild(pathCtl);
-			//groupCtl->activate();
 
 			m_controllers->addChild(groupCtl);
 
-			CActionPtr action = new CAction();
+			auto action = CAction::create();
 			action->setActionType(IVF_ACTION_ACTIVATE);
 			action->setTarget(groupCtl);
 			action->setTime(1.0+1.0*(double)(i*5+j));
 
 			m_controllers->addAction(action);
 			
-			action = new CAction();
+			action = CAction::create();
 			action->setActionType(IVF_ACTION_DEACTIVATE);
 			action->setTarget(ctl);
 			action->setTime(1.0+1.0*(double)(i*5+j)+10.0);
@@ -170,7 +177,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a light
 
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = CLighting::getInstance();
 	
 	m_light = lighting->getLight(0);;
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
@@ -280,12 +287,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = CGlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGBA|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = CExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

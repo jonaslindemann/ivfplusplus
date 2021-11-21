@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
 #include <ivf/SelectComposite.h>
@@ -27,9 +27,9 @@ using namespace ivf;
 CSelectComposite::CSelectComposite ()
 		:CComposite()
 {
-	m_camera = NULL;
+	m_camera = nullptr;
 	m_childCount = 0;
-	m_selectedShape = NULL;
+	m_selectedShape = nullptr;
 	m_renderCamera = true;
 	m_useCustomTransform = false;
 }
@@ -37,7 +37,7 @@ CSelectComposite::CSelectComposite ()
 // ------------------------------------------------------------
 CSelectComposite::~CSelectComposite ()
 {
-	if (m_camera!=NULL)
+	if (m_camera!=nullptr)
 		m_camera->deleteReference();
 
 	if (!m_camera->referenced())
@@ -47,7 +47,7 @@ CSelectComposite::~CSelectComposite ()
 // ------------------------------------------------------------
 void CSelectComposite::setCamera(CView * camera)
 {
-	if (m_camera!=NULL)
+	if (m_camera!=nullptr)
 	{
 		m_camera->deleteReference();
 		if (!m_camera->referenced())
@@ -75,7 +75,7 @@ void CSelectComposite::doBeginTransform()
 	glPushMatrix();
 	if (m_renderCamera)
 	{
-		if (m_camera!=NULL)
+		if (m_camera!=nullptr)
 			m_camera->render();
 		else
 			if (m_useCustomTransform)
@@ -94,7 +94,7 @@ void CSelectComposite::doEndTransform()
 // ------------------------------------------------------------
 GLint CSelectComposite::pick(int x, int y)
 {
-	m_selectedShape = NULL;
+	m_selectedShape = nullptr;
 
 	GLint hits;
 
@@ -110,7 +110,7 @@ GLint CSelectComposite::pick(int x, int y)
 		if (m_renderCamera)
 			glLoadIdentity();
 
-		if (m_camera!=NULL)
+		if (m_camera!=nullptr)
 			m_camera->initializeSelect(x, y, 4, 4);
 		else
 			this->initializeSelect(x, y, 4, 4);
@@ -129,7 +129,7 @@ GLint CSelectComposite::pick(int x, int y)
 
 	if (hits!=0)
 		processHits(hits, m_selectBuf);
-	else m_selectedShape = NULL;
+	else m_selectedShape = nullptr;
 
 	return hits;
 }
@@ -172,10 +172,10 @@ void CSelectComposite::processHits(GLint hits, GLuint buffer [ ])
 		if (objectName<m_allObjects.size())
 			m_selectedShape = m_allObjects[objectName];
 		else
-			m_selectedShape = NULL;
+			m_selectedShape = nullptr;
 	}
 	else
-		m_selectedShape = NULL;
+		m_selectedShape = nullptr;
 }
 
 // ------------------------------------------------------------

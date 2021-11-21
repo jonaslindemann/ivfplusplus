@@ -92,4 +92,6 @@ protected:
 	friend class CSingletonDestroyer<CGlutApplication>;
 };
 
+typedef CGlutApplication* CGlutApplicationPtr;
+
 }

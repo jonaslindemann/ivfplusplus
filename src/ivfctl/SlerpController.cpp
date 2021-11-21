@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -49,12 +49,12 @@ CSlerpController::~CSlerpController()
 void CSlerpController::doUpdate(double dt)
 {
 	CShape* shape = this->getShape();
-	if (shape!=NULL)
+	if (shape!=nullptr)
 	{
 		m_v += m_a0*dt;
 		m_t += m_v*dt + pow(m_a0,2)*dt*0.5;
 
-		if (m_slerp!=NULL)
+		if (m_slerp!=nullptr)
 			m_q = m_slerp->getQuat(m_t);
 
 		if (m_t>(double)m_slerp->getSize()-1.0)
@@ -120,9 +120,9 @@ void CSlerpController::doReset()
 	m_v = m_v0;
 
 	CShape* shape = this->getShape();
-	if (shape!=NULL)
+	if (shape!=nullptr)
 	{
-		if (m_slerp!=NULL)
+		if (m_slerp!=nullptr)
 			m_q = m_slerp->getQuat(m_t);
 
 		shape->setRotation(m_q);

@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2006 by Structural Mechanics, Lund University.
+// Copyright 1999-2021 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "ivf@byggmek.lth.se".
+// Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 //
 // Written by Jonas Lindemann
@@ -27,7 +27,7 @@
 using namespace ivf;
 
 #define IvfDispatchEvent(event,eventMethod,shape) \
-	if (event!=NULL) \
+	if (event!=nullptr) \
 		event->eventMethod(shape); 
 
 CInteractionHandler::CInteractionHandler(CWidgetBase* widget, CScene* scene)
@@ -35,21 +35,21 @@ CInteractionHandler::CInteractionHandler(CWidgetBase* widget, CScene* scene)
 	m_widget = widget;
 	m_scene = scene;
 
-	m_shapeDownEvent = NULL;
-	m_shapeClickEvent = NULL;
-	m_shapeUpEvent = NULL;
-	m_shapeEnterEvent = NULL;
-	m_shapeOverEvent = NULL;
-	m_shapeLeaveEvent = NULL;
-	m_shapeDragEvent = NULL;
+	m_shapeDownEvent = nullptr;
+	m_shapeClickEvent = nullptr;
+	m_shapeUpEvent = nullptr;
+	m_shapeEnterEvent = nullptr;
+	m_shapeOverEvent = nullptr;
+	m_shapeLeaveEvent = nullptr;
+	m_shapeDragEvent = nullptr;
 
-	m_controlEnterEvent = NULL;
-	m_controlOverEvent = NULL;
-	m_controlLeaveEvent = NULL;
-	m_controlDragEvent = NULL;
-	m_controlUpEvent = NULL;
-	m_controlClickEvent = NULL;
-	m_controlDownEvent = NULL;
+	m_controlEnterEvent = nullptr;
+	m_controlOverEvent = nullptr;
+	m_controlLeaveEvent = nullptr;
+	m_controlDragEvent = nullptr;
+	m_controlUpEvent = nullptr;
+	m_controlClickEvent = nullptr;
+	m_controlDownEvent = nullptr;
 
 	m_widget->addMouseMoveEvent(this);
 	m_widget->addMouseDownEvent(this);
@@ -72,13 +72,13 @@ void CInteractionHandler::doMouseUp(int x, int y)
 
 	vec = m_scene->getCamera()->pickVector(x, y);
 
-	if (m_currentShape!=NULL)
+	if (m_currentShape!=nullptr)
 	{
 		IvfDispatchEvent(m_shapeUpEvent,onShapeUp,m_currentShape);
 		IvfDispatchEvent(m_shapeClickEvent,onShapeClick,m_currentShape);
 	}
 
-	if (m_currentControl!=NULL)
+	if (m_currentControl!=nullptr)
 	{
 		m_currentControl->doControlUp(vec);
 		IvfDispatchEvent(m_controlUpEvent,onControlUp,m_currentControl);
@@ -100,63 +100,63 @@ void CInteractionHandler::doMouseMove(int x, int y)
 
 	if ((m_lastPos[0]!=x)||(m_lastPos[1]!=y))
 	{
-		if ((m_shapeLeaveEvent!=NULL)||
-			(m_shapeEnterEvent!=NULL)||
-			(m_shapeOverEvent!=NULL)||
-			(m_controlLeaveEvent!=NULL)||
-			(m_controlEnterEvent!=NULL)||
-			(m_controlOverEvent!=NULL))
+		if ((m_shapeLeaveEvent!=nullptr)||
+			(m_shapeEnterEvent!=nullptr)||
+			(m_shapeOverEvent!=nullptr)||
+			(m_controlLeaveEvent!=nullptr)||
+			(m_controlEnterEvent!=nullptr)||
+			(m_controlOverEvent!=nullptr))
 		{
 			m_scene->pick(x, y);
 			
 			m_currentShape = m_scene->getSelectedShape();
 
-			if (m_currentShape!=NULL)
+			if (m_currentShape!=nullptr)
 			{
 				if (m_currentShape->isClass("CUIInteractiveBase"))
 				{
 					CShape* temp = m_currentShape;
 					m_currentControl = (CUIInteractiveBase*)temp;
-					m_currentShape = NULL;
-					m_lastShape = NULL;
+					m_currentShape = nullptr;
+					m_lastShape = nullptr;
 				}
 			}
 			else
-				m_currentControl = NULL;
+				m_currentControl = nullptr;
 
 			if (m_currentControl!=m_lastControl)
 			{
-				if (m_lastControl!=NULL)
+				if (m_lastControl!=nullptr)
 				{
 					m_lastControl->doControlLeave(vec);
 					IvfDispatchEvent(m_controlLeaveEvent,onControlLeave, m_lastControl);
 				}
 				
-				if (m_currentControl!=NULL)
+				if (m_currentControl!=nullptr)
 					IvfDispatchEvent(m_controlEnterEvent, onControlEnter, m_currentControl);
 			}
 			
 			if (m_currentShape!=m_lastShape)
 			{
-				if (m_lastShape!=NULL)
+				if (m_lastShape!=nullptr)
 					IvfDispatchEvent(m_shapeLeaveEvent,onShapeLeave,m_lastShape);
 				
-				if (m_currentShape!=NULL)
+				if (m_currentShape!=nullptr)
 					IvfDispatchEvent(m_shapeEnterEvent,onShapeEnter,m_currentShape);
 			}
 
-			if (m_currentControl!=NULL)
+			if (m_currentControl!=nullptr)
 			{
 				m_currentControl->doControlOver(vec);
 				IvfDispatchEvent(m_controlOverEvent, onControlOver, m_currentControl);
 			}
 			
-			if (m_currentShape!=NULL)
+			if (m_currentShape!=nullptr)
 			{
 				IvfDispatchEvent(m_shapeOverEvent, onShapeOver, m_currentShape);
 			}
 
-			//if ((m_currentControl!=NULL)||(m_lastControl!=NULL))
+			//if ((m_currentControl!=nullptr)||(m_lastControl!=nullptr))
 				m_widget->redraw();
 			
 			m_lastShape = m_currentShape;
@@ -180,23 +180,23 @@ void CInteractionHandler::doMouseDown(int x, int y)
 
 	m_currentShape = m_scene->getSelectedShape();
 
-	if (m_currentShape!=NULL)
+	if (m_currentShape!=nullptr)
 	{
 		if (m_currentShape->isClass("CUIInteractiveBase"))
 		{
 			CShape* temp = m_currentShape;
 			m_currentControl = (CUIInteractiveBase*)temp;
-			m_currentShape = NULL;
-			m_lastShape = NULL;
+			m_currentShape = nullptr;
+			m_lastShape = nullptr;
 		}
 	}
 	else
-		m_currentControl = NULL;
+		m_currentControl = nullptr;
 
-	if (m_currentShape!=NULL)
+	if (m_currentShape!=nullptr)
 		IvfDispatchEvent(m_shapeDownEvent,onShapeDown,m_currentShape);
 
-	if (m_currentControl!=NULL)
+	if (m_currentControl!=nullptr)
 	{
 		m_currentControl->doControlDown(vec, 0);
 		IvfDispatchEvent(m_controlDownEvent,onControlDown,m_currentControl);

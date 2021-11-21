@@ -225,7 +225,7 @@ float perlinNoise::noise(float x, float y, float z) {
 // reinitialize with new, random values.
 
 void perlinNoise::reseed() {
-  srand((unsigned int) (time(NULL) + rand()));
+  srand((unsigned int) (time(nullptr) + rand()));
   generateLookupTables();
 }
 
