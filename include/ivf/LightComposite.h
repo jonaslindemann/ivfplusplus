@@ -29,26 +29,26 @@
 
 namespace ivf {
 
-IvfSmartPointer(CLightComposite);
+IvfSmartPointer(LightComposite);
 
 /**
  * Composite class with attached light
  *
  * Implements a composite that has a light
- * attached to it. OBSOLETE see CLight
+ * attached to it. OBSOLETE see Light
  */
-class IVF_API CLightComposite : public CComposite {
+class IVF_API LightComposite : public Composite {
 private:
-	COldLight* m_light;
+	OldLight* m_light;
 public:
-	CLightComposite();
+	LightComposite();
 
-	virtual ~CLightComposite();
+	virtual ~LightComposite();
 
-	IvfClassInfo("CLightComposite",CComposite);
-	IvfStdFactory(CLightComposite);
+	IvfClassInfo("LightComposite",Composite);
+	IvfStdFactory(LightComposite);
 
-	void setLight(COldLight* light);
+	void setLight(OldLight* light);
 
 protected:
 	virtual void doCreateGeometry();

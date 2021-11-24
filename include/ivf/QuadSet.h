@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CQuadSet);
+IvfSmartPointer(QuadSet);
 
 /**
  * Quad set class
@@ -37,18 +37,18 @@ IvfSmartPointer(CQuadSet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CQuadSet : public CGLPrimitive {
+class IVF_API QuadSet : public GLPrimitive {
 private:
 	bool m_useColor;
 public:
-	/** CQuadSet constructor */
-	CQuadSet();
+	/** QuadSet constructor */
+	QuadSet();
 
-	/** CQuadSet destructor */
-	virtual ~CQuadSet();
+	/** QuadSet destructor */
+	virtual ~QuadSet();
 
-	IvfClassInfo("CQuadSet",CGLPrimitive);
-	IvfStdFactory(CQuadSet);
+	IvfClassInfo("QuadSet",GLPrimitive);
+	IvfStdFactory(QuadSet);
 
 	/** Enable or disable the use of color values when rendering */
 	void setUseColor(bool flag);
@@ -57,7 +57,7 @@ public:
 	bool getUseColor();
 protected:
 	void updateVertexNormals();
-	void calcNormal(CIndex* idx);
+	void calcNormal(Index* idx);
 	void doCreateGeometry();
 };
 /** \example advgeom.cpp */

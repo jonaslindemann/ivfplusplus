@@ -30,7 +30,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CDxfReader);
+IvfSmartPointer(DxfReader);
 
 /**
  * Base class for a DXF reader
@@ -41,26 +41,26 @@ IvfSmartPointer(CDxfReader);
  *
  * @author Jonas Lindemann
  */
-class IVFFILE_API CDxfReader : public CFileReader {
+class IVFFILE_API DxfReader : public FileReader {
 private:
 	std::string m_row;
 	int m_faceCount;
-	CIndex* m_idx;
+	Index* m_idx;
 	bool m_doubleFaces;
-	std::vector<CIndex*> m_faceIndex;
+	std::vector<Index*> m_faceIndex;
 	void read3DFace(std::istream &in);
 	bool findKey(const char* heading, std::istream &in);
 	bool readData(std::istream &in);
 	bool checkHeader(std::istream &in);
 public:
-	/** CDxfReader constructor */
-	CDxfReader();
+	/** DxfReader constructor */
+	DxfReader();
 
-	/** CDxfReader destructor */
-	virtual ~CDxfReader();
+	/** DxfReader destructor */
+	virtual ~DxfReader();
 
-	IvfClassInfo("CDxfReader", CFileReader);
-	IvfStdFactory(CDxfReader);
+	IvfClassInfo("DxfReader", FileReader);
+	IvfStdFactory(DxfReader);
 
 	void correctFaceNormals();
 

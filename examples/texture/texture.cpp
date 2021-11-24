@@ -38,15 +38,15 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase {
+class ExampleWindow: public GlutBase {
 private:
-	CCameraPtr		m_camera;
-	CCompositePtr  m_scene;
-	CLightPtr		m_light;
-	CSolidLinePtr  m_solidLine;
-	CTexturePtr	m_coloredTexture;
+	CameraPtr		m_camera;
+	CompositePtr  m_scene;
+	LightPtr		m_light;
+	SolidLinePtr  m_solidLine;
+	TexturePtr	m_coloredTexture;
 
 	double m_angleX;
 	double m_angleY;
@@ -62,15 +62,16 @@ private:
 
 
 public:
-	CExampleWindow(int X, int Y, int W, int H)
-		:CGlutBase(X, Y, W, H) {};
+	ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H) {};
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	void setTextureMode(int mode);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
 	virtual void onRender();
-	virtual void onDestroy();
 	virtual void onMouseDown(int x, int y);
 	virtual void onMouseMove(int x, int y);
 	virtual void onMouseUp(int x, int y);
@@ -82,7 +83,12 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-void CExampleWindow::onInit(int width, int height)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -97,43 +103,43 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CCamera();
+	m_camera = new Camera();
 	m_camera->setPosition(0.0, 0.0, 6.0);
 
 	// Create a materials
 
-	CMaterialPtr material = new CMaterial();
+	auto material = Material::create();
 	material->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 	// Create scene composite
 
-	m_scene = new CComposite();
+	m_scene = Composite::create();
 
 	// Create images
 
-	CSgiImagePtr image1 = new CSgiImage();
+	auto image1 = SgiImage::create();
 	image1->setFileName("data/images/cars1.rgb");
 	image1->read();
 
-	CJpegImagePtr image2 = new CJpegImage();
+	auto image2 = JpegImage::create();
 	image2->setFileName("data/images/architecture8.jpg");
 	image2->read();
 
-	CPngImagePtr image3 = new CPngImage();
+	auto image3 = PngImage::create();
 	image3->setFileName("data/images/ivf.png");
 	image3->read();
 
-	CJpegImagePtr image4 = new CJpegImage();
+	auto image4 = JpegImage::create();
 	image4->setFileName("data/images/road2.jpg");
 	image4->read();
 
-	CJpegImagePtr image5 = new CJpegImage();
+	auto image5 = JpegImage::create();
 	image5->setFileName("data/images/architecture9.jpg");
 	image5->read();
 
-	CImagePtr image6 = new CImage();
+	auto image6 = Image::create();
 	image6->setSize(4,4);
     
     for (int i=0; i<4; i++)
@@ -146,42 +152,42 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a texture
 
-	CTexturePtr texture1 = new CTexture();
+	auto texture1 = Texture::create();
 	texture1->setImage(image1);
 	texture1->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 	texture1->setGenerateMipmaps(true);
 
-	CTexturePtr texture2 = new CTexture();
+	auto texture2 = Texture::create();
 	texture2->setImage(image2);
 	texture2->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 	texture2->setGenerateMipmaps(true);
 
-	CTexturePtr texture3 = new CTexture();
+	auto texture3 = Texture::create();
 	texture3->setImage(image3);
 	texture3->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 	texture3->setGenerateMipmaps(true);
 
-	CTexturePtr texture4 = new CTexture();
+	auto texture4 = Texture::create();
 	texture4->setImage(image4);
 	texture4->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
 	texture4->setGenerateMipmaps(true);
 
-	CTexturePtr texture5 = new CTexture();
+	auto texture5 = Texture::create();
 	texture5->setImage(image6);
 	texture5->setFilters(GL_NEAREST, GL_NEAREST);
 	texture5->setGenerateMipmaps(false);
 
-	m_coloredTexture = new CTexture();
+	m_coloredTexture = Texture::create();
 	m_coloredTexture->setFilters(GL_NEAREST, GL_NEAREST);
 	m_coloredTexture->setImage(image6);
 
-	CNodePtr node1 = new CNode();
-	CNodePtr node2 = new CNode();
+	auto node1 = Node::create();
+	auto node2 = Node::create();
 
 	node1->setPosition(-2.0, -0.5, 0.0);
 	node2->setPosition( 2.0, 0.5, 0.0);
 
-	m_solidLine = new CSolidLine();
+	m_solidLine = SolidLine::create();
 	m_solidLine->setNodes(node1, node2);
     m_solidLine->setSides(12);
 	m_solidLine->setMaterial(material);
@@ -197,7 +203,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a quad plane
 
-	CQuadPlanePtr quadPlane = new CQuadPlane();
+	auto quadPlane = QuadPlane::create();
 	quadPlane->setSize(1.8, 1.8);;
 	quadPlane->setMaterial(material);
 
@@ -205,27 +211,27 @@ void CExampleWindow::onInit(int width, int height)
 	// 5 different transforms and assigning
 	// the textures to these instead.
 
-	CTransformPtr xfrm1 = new CTransform();
+	auto xfrm1 = Transform::create();
 	xfrm1->addChild(quadPlane);
 	xfrm1->setPosition(-1.2, -1.2, 0.0);
 	xfrm1->setTexture(texture1);
 
-	CTransformPtr xfrm2 = new CTransform();
+	auto xfrm2 = Transform::create();
 	xfrm2->addChild(quadPlane);
 	xfrm2->setPosition(1.2, -1.2, 0.0);
 	xfrm2->setTexture(texture2);
 
-	CTransformPtr xfrm3 = new CTransform();
+	auto xfrm3 = Transform::create();
 	xfrm3->addChild(quadPlane);
 	xfrm3->setPosition(0.0, 0.0, -3.0);
 	xfrm3->setTexture(texture3);
 
-	CTransformPtr xfrm4 = new CTransform();
+	auto xfrm4 = Transform::create();
 	xfrm4->addChild(quadPlane);
 	xfrm4->setPosition(1.2, 1.2, 0.0);
 	xfrm4->setTexture(texture4);
 
-	CTransformPtr xfrm5 = new CTransform();
+	auto xfrm5 = Transform::create();
 	xfrm5->addChild(quadPlane);
 	xfrm5->setPosition(-1.2, 1.2, 0.0);
 	xfrm5->setTexture(texture5);
@@ -238,17 +244,17 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a light
 
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 
 	m_light = lighting->getLight(0);
-	m_light->setType(CLight::LT_DIRECTIONAL);
+	m_light->setType(Light::LT_DIRECTIONAL);
 	m_light->setDirection(1.0, 1.0, 1.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -256,7 +262,7 @@ void CExampleWindow::onResize(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 
@@ -270,15 +276,7 @@ void CExampleWindow::onRender()
 	m_scene->render();
 }
 
-// ------------------------------------------------------------
-void CExampleWindow::onDestroy()
-{
-	delete m_camera;
-	delete m_light;
-	delete m_scene;
-}
-
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	if (key=='m')
 	{
@@ -308,14 +306,14 @@ void CExampleWindow::onKeyboard(int key, int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseDown(int x, int y)
+void ExampleWindow::onMouseDown(int x, int y)
 {
 	m_beginX = x;
 	m_beginY = y;
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseMove(int x, int y)
+void ExampleWindow::onMouseMove(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -335,7 +333,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CWidgetBase::MT_SHIFT)
+		if (getModifierKey() == WidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -353,7 +351,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseUp(int x, int y)
+void ExampleWindow::onMouseUp(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -364,7 +362,7 @@ void CExampleWindow::onMouseUp(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::setTextureMode(int mode)
+void ExampleWindow::setTextureMode(int mode)
 {
 	switch (m_textureMode) {
 case 0:m_solidLine->setTextureMode(GLE_TEXTURE_ENABLE | GLE_TEXTURE_VERTEX_FLAT); break;
@@ -396,7 +394,7 @@ case 11:cout << "GLE_TEXTURE_NORMAL_MODEL_SPH" << endl; break;
 	}
 }
 
-float CExampleWindow::fnoise(float x, float y)
+float ExampleWindow::fnoise(float x, float y)
 {
   int i;
   float amplitude = 1.0;
@@ -420,12 +418,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

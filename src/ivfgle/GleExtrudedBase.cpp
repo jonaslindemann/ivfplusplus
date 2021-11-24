@@ -26,27 +26,27 @@
 
 using namespace ivf;
 
-CGleExtrudedBase::CGleExtrudedBase()
+GleExtrudedBase::GleExtrudedBase()
 {
 	// Add construction code here
 }
 
-void CGleExtrudedBase::setPoints(CGleCoordArray *array)
+void GleExtrudedBase::setPoints(GleCoordArray *array)
 {
 	m_pointArray = array;
 }
 
-void CGleExtrudedBase::setColors(CGleColorArray *array)
+void GleExtrudedBase::setColors(GleColorArray *array)
 {
 	m_colorArray = array;
 }
 
-CGleColorArray* CGleExtrudedBase::getColors(void)
+GleColorArray* GleExtrudedBase::getColors(void)
 {
 	return nullptr;
 }
 
-CGleCoordArray* CGleExtrudedBase::getPoints(void)
+GleCoordArray* GleExtrudedBase::getPoints(void)
 {
 	return nullptr;
 }

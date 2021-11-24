@@ -29,18 +29,18 @@
 
 namespace ivf {
 
-IvfStdPointer(CGle);
+IvfStdPointer(Gle);
 
-class IVFGLE_API CGle: public CBase {
+class IVFGLE_API Gle: public Base {
 private:
-	static CGle* m_instance;
-	static CSingletonDestroyer<CGle> m_destroyer;
+	static Gle* m_instance;
+	static SingletonDestroyer<Gle> m_destroyer;
 public:
 	/** Returns the IvfGle singleton */
-	static CGle* getInstance();
+	static Gle* getInstance();
 
-	IvfClassInfo("CGle", CBase);
-	IvfStdFactory(CGle);
+	IvfClassInfo("Gle", Base);
+	IvfStdFactory(Gle);
 
 	void setNumSides(int sides);
 	int getNumSides();
@@ -49,8 +49,8 @@ public:
 	int getJoinStyle();
 protected:
 	/** Protected constructor (do not use) */
-	CGle();
-	friend class CSingletonDestroyer<CGle>;
+	Gle();
+	friend class SingletonDestroyer<Gle>;
 };
 
 }

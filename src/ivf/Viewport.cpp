@@ -27,7 +27,7 @@
 
 using namespace ivf;
 
-CViewport::CViewport()
+Viewport::Viewport()
 {
 	m_pos[0] = 0;
 	m_pos[1] = 0;
@@ -35,41 +35,41 @@ CViewport::CViewport()
 	m_size[1] = 100;
 }
 
-CViewport::~CViewport()
+Viewport::~Viewport()
 {
 
 }
 
-void CViewport::setPosition(int x, int y)
+void Viewport::setPosition(int x, int y)
 {
 	m_pos[0] = x;
 	m_pos[1] = y;
 }
 
-void CViewport::setSize(int width, int height)
+void Viewport::setSize(int width, int height)
 {
 	m_size[0] = width;
 	m_size[1] = height;
 }
 
-void CViewport::getPosition(int &x, int &y)
+void Viewport::getPosition(int &x, int &y)
 {
 	x = m_pos[0];
 	y = m_pos[1];
 }
 
-void CViewport::getSize(int &width, int &height)
+void Viewport::getSize(int &width, int &height)
 {
 	width = m_size[0];
 	height = m_size[1];
 }
 
-void CViewport::apply()
+void Viewport::apply()
 {
 	glViewport(m_pos[0], m_pos[1], m_size[0], m_size[1]);
 }
 
-double CViewport::getAspect()
+double Viewport::getAspect()
 {
 	if (m_size[1]==0)		  
 		return m_size[0]-m_pos[0];

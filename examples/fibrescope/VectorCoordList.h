@@ -31,31 +31,31 @@
 
 #include "CoordList.h"
 
-IvfSmartPointer(CVectorCoordList);
+IvfSmartPointer(VectorCoordList);
 
-class CVectorCoordList : public CCoordList {
+class VectorCoordList : public CoordList {
 private:
-	std::vector<ivf::CVec3dPtr> m_coords;
-	std::vector<ivf::CColorPtr> m_colors;
+	std::vector<ivf::Vec3dPtr> m_coords;
+	std::vector<ivf::ColorPtr> m_colors;
 public:
-	CVectorCoordList();
-	virtual ~CVectorCoordList();
+	VectorCoordList();
+	virtual ~VectorCoordList();
 
-	IvfClassInfo("CVectorCoordList",CCoordList);
-	IvfStdFactory(CVectorCoordList);
+	IvfClassInfo("VectorCoordList",CoordList);
+	IvfStdFactory(VectorCoordList);
 	
 	void readFromStream(std::istream &in);
 	void saveToStream(std::ostream &out);
 
 	void addCoord(double x, double y, double z);
 	void addCoord(double x, double y, double z, float r, float g, float b);
-	void addCoord(ivf::CVec3d* coord);
+	void addCoord(ivf::Vec3d* coord);
 
 	void setColor(long idx, float r, float g, float b);
 	void getColor(long idx, float &r, float &g, float &b);
 	
 	void getCoord(long idx, double &x, double &y, double &z);
-	ivf::CVec3d* getCoord(long idx);
+	ivf::Vec3d* getCoord(long idx);
 
 	long getSize();
 	void clear();

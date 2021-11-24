@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CSceneHandler::CSceneHandler(CWidgetBase* widget, CScene* scene)
+SceneHandler::SceneHandler(WidgetBase* widget, Scene* scene)
 {
 	m_widget = widget;
 	m_scene = scene;
@@ -35,13 +35,13 @@ CSceneHandler::CSceneHandler(CWidgetBase* widget, CScene* scene)
 	m_widget->addRenderEvent(this);
 }
 
-CSceneHandler::~CSceneHandler()
+SceneHandler::~SceneHandler()
 {
 	m_widget->removeResizeEvent(this);
 	m_widget->removeRenderEvent(this);
 }
 
-void CSceneHandler::onResize(int width, int height)
+void SceneHandler::onResize(int width, int height)
 {
 	if (m_scene!=nullptr)
 	{
@@ -50,7 +50,7 @@ void CSceneHandler::onResize(int width, int height)
 	}
 }
 
-void CSceneHandler::onRender()
+void SceneHandler::onRender()
 {
 	if (m_scene!=nullptr)
 		m_scene->render();

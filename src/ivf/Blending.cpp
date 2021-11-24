@@ -28,35 +28,35 @@
 
 using namespace ivf;
 
-CBlending* CBlending::m_instance = 0;
-CSingletonDestroyer<CBlending> CBlending::m_destroyer;
+Blending* Blending::m_instance = 0;
+SingletonDestroyer<Blending> Blending::m_destroyer;
 
-CBlending* CBlending::getInstance () 
+Blending* Blending::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CBlending(); 
+		m_instance = new Blending(); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CBlending::CBlending()
+Blending::Blending()
 {
 
 }
 
-void CBlending::enable()
+void Blending::enable()
 {
 	glEnable(GL_BLEND);
 }
 
-void CBlending::disable()
+void Blending::disable()
 {
 	glDisable(GL_BLEND);
 }
 
-bool CBlending::isEnabled()
+bool Blending::isEnabled()
 {
 	GLboolean blending;
 	glGetBooleanv(GL_BLEND, &blending);
@@ -65,7 +65,7 @@ bool CBlending::isEnabled()
 
 
 
-void CBlending::setFunction(TBlendFactor src, TBlendFactor dst)
+void Blending::setFunction(TBlendFactor src, TBlendFactor dst)
 {
 	GLenum glSrc, glDst;
 	
@@ -150,28 +150,28 @@ void CBlending::setFunction(TBlendFactor src, TBlendFactor dst)
 	glBlendFunc(glSrc, glDst);
 }
 
-void CBlending::saveState()
+void Blending::saveState()
 {
 	glPushAttrib(GL_BLEND);
 }
 
-void CBlending::restoreState()
+void Blending::restoreState()
 {
 	glPopAttrib();
 }
 
-void CBlending::defineAddFunction()
+void Blending::defineAddFunction()
 {
 	this->setFunction(
-		CBlending::BF_ONE,
-		CBlending::BF_ONE
+		Blending::BF_ONE,
+		Blending::BF_ONE
 	);
 }
 
-void CBlending::defineAlphaBlendFunction()
+void Blending::defineAlphaBlendFunction()
 {
 	this->setFunction(
-		CBlending::BF_SRC_ALPHA,
-		CBlending::BF_ONE_MINUS_SRC_ALPHA
+		Blending::BF_SRC_ALPHA,
+		Blending::BF_ONE_MINUS_SRC_ALPHA
 	);
 }

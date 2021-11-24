@@ -32,34 +32,34 @@
 
 namespace ivf {
 
-IvfSmartPointer(CCulledScene);
+IvfSmartPointer(CulledScene);
 
 /**
- * Culled scene class (obsolete use CSceneBase derived classes instead)
+ * Culled scene class (obsolete use SceneBase derived classes instead)
  *
  * Implements a scene with culling against a view frustum.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CCulledScene : public CScene {
+class IVF_API CulledScene : public Scene {
 private:
-	void cullChildren(CShape* shape);
+	void cullChildren(Shape* shape);
 
-	CMatrixStack* m_matrixStack;
-	CViewFrustum* m_frustum;
-	CView* m_cullView;
+	MatrixStack* m_matrixStack;
+	ViewFrustum* m_frustum;
+	View* m_cullView;
 	int m_cullCount;
 	bool m_useCulling;
 
 public:
 	/** CIvfCulledScene constructor */
-	CCulledScene();
+	CulledScene();
 
 	/** CIvfCulledScene destructor */
-	virtual ~CCulledScene();
+	virtual ~CulledScene();
 
-	IvfClassInfo("CCulledScene",CScene);
-	IvfStdFactory(CCulledScene);
+	IvfClassInfo("CulledScene",Scene);
+	IvfStdFactory(CulledScene);
 
 	/** 
 	 * Adds a child to scene
@@ -68,7 +68,7 @@ public:
 	 * a bounding sphere using the initBoundingSphere
 	 * method of the CIvfGLBase class.
 	 */
-	void addChild(CShape* shape);
+	void addChild(Shape* shape);
 
 	/**
 	 * Sets the view used for culling 
@@ -77,10 +77,10 @@ public:
 	 * cull the scene. This method can be used to 
 	 * support custom culling routines.
 	 */
-	void setCullView(CView* view);
+	void setCullView(View* view);
 
 	/** Returns the view used for culling */
-	CView* getCullView();
+	View* getCullView();
 
 	/**
 	 * Enables or disables culling
@@ -97,7 +97,7 @@ public:
 	int getCullCount();
 
 protected:
-	bool intersectFrustum(CBoundingSphere* bSphere);
+	bool intersectFrustum(BoundingSphere* bSphere);
 	void cull();
 	virtual void doCreateGeometry();
 };

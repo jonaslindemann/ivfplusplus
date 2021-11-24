@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CFlyHandler::CFlyHandler(CWidgetBase* widget, CCamera* camera)
+FlyHandler::FlyHandler(WidgetBase* widget, Camera* camera)
 {
 	m_mouseDelta[0] = 0;
 	m_mouseDelta[1] = 0;
@@ -54,7 +54,7 @@ CFlyHandler::CFlyHandler(CWidgetBase* widget, CCamera* camera)
 	m_widget->addMouseMoveEvent(this);
 }
 
-CFlyHandler::~CFlyHandler()
+FlyHandler::~FlyHandler()
 {
 	m_widget->removeKeyboardEvent(this);
 	m_widget->removeMouseDownEvent(this);
@@ -62,13 +62,13 @@ CFlyHandler::~CFlyHandler()
 	m_widget->removeMouseMoveEvent(this);
 }
 
-void CFlyHandler::doMouseDown(int x, int y)
+void FlyHandler::doMouseDown(int x, int y)
 {
 	m_mouseDownPos[0] = x;
 	m_mouseDownPos[1] = y;
 }
 
-void CFlyHandler::doMouseMove(int x, int y)
+void FlyHandler::doMouseMove(int x, int y)
 {
 	if (m_widget!=nullptr)
 	{
@@ -86,13 +86,13 @@ void CFlyHandler::doMouseMove(int x, int y)
 	}
 }
 
-void CFlyHandler::doMouseUp(int x, int y)
+void FlyHandler::doMouseUp(int x, int y)
 {
 	m_mouseDelta[0] = 0;
 	m_mouseDelta[1] = 0;
 }
 
-void CFlyHandler::doKeyboard(int key, int x, int y)
+void FlyHandler::doKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'w':
@@ -142,7 +142,7 @@ void CFlyHandler::doKeyboard(int key, int x, int y)
 
 }
 
-void CFlyHandler::update()
+void FlyHandler::update()
 {
 	if (m_widget!=nullptr)
 	{
@@ -158,14 +158,14 @@ void CFlyHandler::update()
 			m_dt = m_widget->elapsedTime()-m_t;
 			m_t = m_widget->elapsedTime();
 			
-			if (m_widget->getModifierKey()==CWidgetBase::MT_NONE)
+			if (m_widget->getModifierKey()==WidgetBase::MT_NONE)
 			{
 				if (m_widget->isLeftButtonDown())
 					m_camera->turn(m_mouseDelta[1]*m_mouseSensitivity*m_dt, m_mouseDelta[0]*m_mouseSensitivity*m_dt, 0.0);
 				if (m_widget->isRightButtonDown())
 					m_camera->turn(m_mouseDelta[1]*m_mouseSensitivity*m_dt, 0.0, -m_mouseDelta[0]*m_mouseSensitivity*m_dt);
 			}
-			if (m_widget->getModifierKey()==CWidgetBase::MT_SHIFT)
+			if (m_widget->getModifierKey()==WidgetBase::MT_SHIFT)
 			{
 				m_verticalSpeed = -m_mouseDelta[1]*m_mouseSensitivity*m_dt;
 				m_horisontalSpeed = -m_mouseDelta[0]*m_mouseSensitivity*m_dt;
@@ -186,79 +186,79 @@ void CFlyHandler::update()
 }
 
 
-void CFlyHandler::setMouseSensitivity(double value)
+void FlyHandler::setMouseSensitivity(double value)
 {
 	m_mouseSensitivity = value;
 }
 
-double CFlyHandler::getMouseSensitivity()
+double FlyHandler::getMouseSensitivity()
 {
 	return m_mouseSensitivity;
 }
 
-void CFlyHandler::setMaxSpeed(double speed)
+void FlyHandler::setMaxSpeed(double speed)
 {
 	m_maxSpeed = speed;
 }
 
-void CFlyHandler::setSpeedStep(double step)
+void FlyHandler::setSpeedStep(double step)
 {
 	m_speedStep = step;
 }
 
-double CFlyHandler::getSpeedStep()
+double FlyHandler::getSpeedStep()
 {
 	return m_speedStep;
 }
 
-double CFlyHandler::getMaxSpeed()
+double FlyHandler::getMaxSpeed()
 {
 	return m_maxSpeed;
 }
 
-void CFlyHandler::setRedraw(bool flag)
+void FlyHandler::setRedraw(bool flag)
 {
 	m_doRedraw = flag;
 }
 
-void CFlyHandler::doRedraw()
+void FlyHandler::doRedraw()
 {
 	if (m_doRedraw)
 		m_widget->redraw();
 }
 
-void CFlyHandler::onMouseMove(int x, int y)
+void FlyHandler::onMouseMove(int x, int y)
 {
 	if (isActive())
 		doMouseMove(x, y);
 }
 
-void CFlyHandler::onMouseDown(int x, int y)
+void FlyHandler::onMouseDown(int x, int y)
 {
 	if (isActive())
 		doMouseDown(x, y);
 }
 
-void CFlyHandler::onMouseUp(int x, int y)
+void FlyHandler::onMouseUp(int x, int y)
 {
 	if (isActive())
 		doMouseUp(x, y);
 }
 
-void CFlyHandler::onKeyboard(int key, int x, int y)
+void FlyHandler::onKeyboard(int key, int x, int y)
 {
 	if (isActive())
 		doKeyboard(key, x, y);
 }
 
-void CFlyHandler::doActivate()
+void FlyHandler::doActivate()
 {
 	if (m_camera!=nullptr)
-		m_camera->setType(CCamera::CT_FLY);
+		m_camera->setType(Camera::CT_FLY);
 }
 
-void CFlyHandler::doDeactivate()
+void FlyHandler::doDeactivate()
 {
 	if (m_camera!=nullptr)
-		m_camera->setType(CCamera::CT_NORMAL);
+		m_camera->setType(Camera::CT_NORMAL);
 }

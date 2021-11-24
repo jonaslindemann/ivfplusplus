@@ -33,7 +33,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGrid);
+IvfSmartPointer(Grid);
 
 /**
  * Grid class
@@ -41,18 +41,18 @@ IvfSmartPointer(CGrid);
  * This class implements a grid used in conjunction with
  * the construction plane class @see CIvfConstructionPlane
  */
-class IVF_API CGrid : public CShape {
+class IVF_API Grid : public Shape {
 private:
-	CPoint3d m_p1;
-	CPoint3d m_p2;
+	Point3d m_p1;
+	Point3d m_p2;
 
-	CLineSet* m_corners;
-	CLineSet* m_outline;
-	CLineSet* m_gridLines;
-	CQuadSet* m_surface;
-	CAxis*	 m_axis;
+	LineSet* m_corners;
+	LineSet* m_outline;
+	LineSet* m_gridLines;
+	QuadSet* m_surface;
+	Axis*	 m_axis;
 
-	CMaterialPtr m_surfaceMaterial;
+	MaterialPtr m_surfaceMaterial;
 	float m_cornerColor[4];
 	float m_outlineColor[4];
 	float m_majorColor[4];
@@ -72,13 +72,13 @@ private:
 	bool isRoughly(double x, double value);
 public:
 	/** CIvfGrid constructor */
-	CGrid();
+	Grid();
 
 	/** CIvfGrid destructor */
-	virtual ~CGrid();
+	virtual ~Grid();
 
-	IvfClassInfo("CGrid",CShape);
-	IvfStdFactory(CGrid)
+	IvfClassInfo("Grid",Shape);
+	IvfStdFactory(Grid)
 
 	/** 
 	 * Set axis state flag 
@@ -136,14 +136,14 @@ public:
 	virtual void doUpdateBoundingSphere();
 
 	/** Returns axis shape */
-	CAxis* getAxisShape();
+	Axis* getAxisShape();
 
 	/** Set drawing interval of grid lines */
 	void setGridInterval(int interval);
 
 	void setCornerColor(float red, float green, float blue, float alpha);
 	void setOutlineColor(float red, float green, float blue, float alpha);
-	void setSurfaceMaterial(CMaterial* material);
+	void setSurfaceMaterial(Material* material);
 	void setMajorColor(float red, float green, float blue, float alpha);
 	void setMinorColor(float red, float green, float blue, float alpha);
 protected:

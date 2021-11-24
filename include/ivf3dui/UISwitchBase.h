@@ -28,14 +28,14 @@
 
 namespace ivf {
 
-IvfSmartPointer(CUISwitchBase);
+IvfSmartPointer(UISwitchBase);
 
-class IVF3DUI_API CUISwitchBase : public CUIInteractiveBase {
+class IVF3DUI_API UISwitchBase : public UIInteractiveBase {
 private:
 	bool m_state;
 public:
-	CUISwitchBase();
-	virtual ~CUISwitchBase();
+	UISwitchBase();
+	virtual ~UISwitchBase();
 
 	void on();
 	void off();
@@ -46,14 +46,14 @@ public:
 	void setState(bool state);
 	bool getState();
 
-	IvfClassInfo("CUISwitchBase",CUIInteractiveBase);
-	IvfStdFactory(CUISwitchBase);
+	IvfClassInfo("UISwitchBase",UIInteractiveBase);
+	IvfStdFactory(UISwitchBase);
 
-	virtual void doControlClick(CVec3d vec, int button);
-	virtual void doControlOver(CVec3d vec);
-	virtual void doControlLeave(CVec3d vec);
-	virtual void doControlUp(CVec3d vec);
-	virtual void doControlDown(CVec3d vec, int button);
+	virtual void doControlClick(Vec3d vec, int button);
+	virtual void doControlOver(Vec3d vec);
+	virtual void doControlLeave(Vec3d vec);
+	virtual void doControlUp(Vec3d vec);
+	virtual void doControlDown(Vec3d vec, int button);
 	virtual void doStateChange(bool state);
 };
 

@@ -28,22 +28,22 @@
 
 namespace ivf {
 
-IvfSmartPointer(COrthoCamera);
+IvfSmartPointer(OrthoCamera);
 
 /**
  * Ortho camera class
  *
  * Not yet implemented...
  */
-class IVF_API COrthoCamera : public CView {
+class IVF_API OrthoCamera : public View {
 private:
 
 public:
-	COrthoCamera();
-	virtual ~COrthoCamera();
+	OrthoCamera();
+	virtual ~OrthoCamera();
 
-	IvfClassInfo("COrthoCamera",CView);
-	IvfStdFactory(COrthoCamera);
+	IvfClassInfo("OrthoCamera",View);
+	IvfStdFactory(OrthoCamera);
 };
 
 }

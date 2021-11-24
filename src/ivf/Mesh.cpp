@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CMesh::CMesh()
+Mesh::Mesh()
 {
 	m_controlPoints = nullptr;
 	m_initDone = false;
@@ -37,26 +37,26 @@ CMesh::CMesh()
 	this->setSize(4,4);
 }
 
-CMesh::~CMesh()
+Mesh::~Mesh()
 {
 	if (m_controlPoints!=nullptr)
 		delete [] m_controlPoints;
 }
 
-void CMesh::setSize(int xSize, int ySize)
+void Mesh::setSize(int xSize, int ySize)
 {
 	m_xSize = xSize;
 	m_ySize = ySize;
 	this->initialize();
 }
 
-void CMesh::getSize(int &xSize, int &ySize)
+void Mesh::getSize(int &xSize, int &ySize)
 {
 	xSize = m_xSize;
 	ySize = m_ySize;
 }
 
-void CMesh::initialize()
+void Mesh::initialize()
 {
 	if (m_controlPoints!=nullptr)
 		delete [] m_controlPoints;
@@ -66,7 +66,7 @@ void CMesh::initialize()
 	m_initDone = false;
 }
 
-void CMesh::doCreateGeometry()
+void Mesh::doCreateGeometry()
 {
 
 	glPushAttrib(GL_LIGHTING|GL_AUTO_NORMAL|GL_NORMALIZE);
@@ -116,7 +116,7 @@ void CMesh::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CMesh::setControlPoint(int i, int j, double x, double y, double z)
+void Mesh::setControlPoint(int i, int j, double x, double y, double z)
 {
 	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))
 	{
@@ -127,7 +127,7 @@ void CMesh::setControlPoint(int i, int j, double x, double y, double z)
 	}
 }
 
-void CMesh::getControlPoint(int i, int j, double &x, double &y, double &z)
+void Mesh::getControlPoint(int i, int j, double &x, double &y, double &z)
 {
 	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))
 	{
@@ -138,7 +138,7 @@ void CMesh::getControlPoint(int i, int j, double &x, double &y, double &z)
 	}
 }
 
-void CMesh::createMesh(double width, double height)
+void Mesh::createMesh(double width, double height)
 {
 	int i, j;
 
@@ -152,7 +152,7 @@ void CMesh::createMesh(double width, double height)
 		}
 }
 
-void CMesh::setControlPoint(int i, int j, double y)
+void Mesh::setControlPoint(int i, int j, double y)
 {
 	if ((i>=0)&&(i<m_ySize)&&(j>=0)&&(j<m_xSize))
 	{
@@ -161,7 +161,7 @@ void CMesh::setControlPoint(int i, int j, double y)
 	}
 }
 
-void CMesh::setMeshType(TMeshType meshType)
+void Mesh::setMeshType(TMeshType meshType)
 {
 	m_meshType = meshType;
 
@@ -182,13 +182,13 @@ void CMesh::setMeshType(TMeshType meshType)
 	}
 }
 
-void CMesh::setMeshResolution(int rows, int cols)
+void Mesh::setMeshResolution(int rows, int cols)
 {
 	m_meshRows = rows;
 	m_meshCols = cols;
 }
 
-void CMesh::setMeshOrientation(TMeshOrientation meshOrientation)
+void Mesh::setMeshOrientation(TMeshOrientation meshOrientation)
 {
 	m_meshOrientation = meshOrientation;
 }

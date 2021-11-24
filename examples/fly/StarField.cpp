@@ -8,25 +8,25 @@
 
 using namespace ivf;
 
-CStarField::CStarField(CCamera* camera)
+StarField::StarField(Camera* camera)
 {
-	m_texturedStars = new CQuadSet();
+	m_texturedStars = new QuadSet();
 	m_texturedStars->setUseColor(false);
 
-	m_pointStars = new CPointSet();
+	m_pointStars = new PointSet();
 	m_pointStars->setUseColor(true);
 
-	m_nebulaSphere = new CSphere();
+	m_nebulaSphere = new Sphere();
 	m_nebulaSphere->setRadius(61.0);
 
-	m_planets = new CQuadSet();
+	m_planets = new QuadSet();
 	m_planets->setUseColor(false);
 
-	CSgiImagePtr image = new CSgiImage();
+	auto image = SgiImage::create();
 	image->setFileName("data/images/nebula02.rgb");
 	image->read();
 
-	CTexturePtr texture = new CTexture();
+	auto texture = Texture::create();
 	texture->setImage(image);
 	//texture->load("textures/nebula02.rgb");
 	m_nebulaSphere->setTexture(texture);
@@ -35,11 +35,11 @@ CStarField::CStarField(CCamera* camera)
 	initializeStars();
 }
 
-CStarField::~CStarField()
+StarField::~StarField()
 {
 }
 
-void CStarField::doCreateGeometry()
+void StarField::doCreateGeometry()
 {
 	double x, y, z;
 	m_camera->getPosition(x, y, z);
@@ -70,18 +70,18 @@ void CStarField::doCreateGeometry()
 
 }
 
-void CStarField::initializeStars()
+void StarField::initializeStars()
 {
 	int i;
 
-	CVec3d p1;
-	CVec3d p2;
-	CVec3d p3;
-	CVec3d p4;
-	CVec3d pos;
-	CVec3d normal;
-	CVec3d s;
-	CVec3d t;
+	Vec3d p1;
+	Vec3d p2;
+	Vec3d p3;
+	Vec3d p4;
+	Vec3d pos;
+	Vec3d normal;
+	Vec3d s;
+	Vec3d t;
 
 	double x, y, z;
 	double alfa, beta;
@@ -95,11 +95,11 @@ void CStarField::initializeStars()
 
 	m_texturedStars->clear();
 
-	CSgiImagePtr image = new CSgiImage();
+	auto image = SgiImage::create();
 	image->setFileName("data/images/star02.rgb");
 	image->read();
 
-	CTexturePtr texture = new CTexture();
+	auto texture = Texture::create();
 	texture->setImage(image);
 	texture->setTextureMode(GL_DECAL);
 
@@ -134,11 +134,11 @@ void CStarField::initializeStars()
 		m_texturedStars->addTextureCoord(0.0, 1.0);
 	}
 
-	CIndexPtr idx = new CIndex();
+	IndexPtr idx = Index::create();
 	idx->createLinear(0, nTexturedStars*4);
 	m_texturedStars->addCoordIndex(idx);
 
-	idx = new CIndex();
+	idx = Index::create();
 	idx->createLinear(0, nTexturedStars*4);
 	m_texturedStars->addTextureIndex(idx);
 
@@ -157,15 +157,15 @@ void CStarField::initializeStars()
 		m_pointStars->addColor(c * 0.8f, c * 0.8f,  c);
 	}
 
-	idx = new CIndex();
+	idx = new Index();
 	idx->createLinear(0, nPointStars);
 	m_pointStars->addCoordIndex(idx);
 
-	idx = new CIndex();
+	idx = new Index();
 	idx->createLinear(0, nPointStars);
 	m_pointStars->addColorIndex(idx);
 
-	image = new CSgiImage();
+	image = SgiImage::create();
 	image->setFileName("data/images/planet01.rgb");
 	image->setAlphaChannel(true);
 	image->read();
@@ -173,7 +173,7 @@ void CStarField::initializeStars()
 	image->replaceColor(255, 255, 255, 0, 0, 0);
 	image->setInternalFormat(GL_RGB10_A2);
 
-	texture = new CTexture();
+	texture = Texture::create();
 	texture->setImage(image);
 	texture->setTextureMode(GL_BLEND);
 
@@ -204,21 +204,21 @@ void CStarField::initializeStars()
 		m_planets->addTextureCoord(0.0, 1.0);
 	}
 
-	idx = new CIndex();
+	idx = new Index();
 	idx->createLinear(0, nPlanets*4);
 	m_planets->addCoordIndex(idx);
 
-	idx = new CIndex();
+	idx = new Index();
 	idx->createLinear(0, nPlanets*4);
 	m_planets->addTextureIndex(idx);
 }
 
-void CStarField::setCamera(CCamera *camera)
+void StarField::setCamera(Camera *camera)
 {
 	m_camera = camera;
 }
 
-void CStarField::getPolarVectors(double alfa, double beta, CVec3d &normal, CVec3d &s, CVec3d &t)
+void StarField::getPolarVectors(double alfa, double beta, Vec3d &normal, Vec3d &s, Vec3d &t)
 {
 	double x, y, z;
 

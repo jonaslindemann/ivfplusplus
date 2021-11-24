@@ -80,7 +80,7 @@ using namespace ivf;
 	{ \
 		unsigned int i; \
 		for (i=0; i<events.size(); i++) \
-		events[i]->eventMethod((CEventBase::TFunctionKey)key, x, y); \
+		events[i]->eventMethod((EventBase::TFunctionKey)key, x, y); \
 	} \
 	else \
 	{ \
@@ -111,7 +111,7 @@ using namespace ivf;
 		} \
 	}
 
-CWidgetBase::CWidgetBase()
+WidgetBase::WidgetBase()
 {
 	m_initDone = false;
 	m_doOverlay = false;
@@ -134,64 +134,64 @@ CWidgetBase::CWidgetBase()
 	}
 }
 
-CWidgetBase::~CWidgetBase()
+WidgetBase::~WidgetBase()
 {
 	doDestroy();
 }
 
-bool CWidgetBase::isLeftButtonDown()
+bool WidgetBase::isLeftButtonDown()
 {
 	return m_leftButtonDown;
 }
 
-bool CWidgetBase::isRightButtonDown()
+bool WidgetBase::isRightButtonDown()
 {
 	return m_rightButtonDown;
 }
 
-bool CWidgetBase::isMiddleButtonDown()
+bool WidgetBase::isMiddleButtonDown()
 {
 	return m_middleButtonDown;
 }
 
-void CWidgetBase::setLeftButtonStatus(bool down)
+void WidgetBase::setLeftButtonStatus(bool down)
 {
 	m_leftButtonDown = down;
 }
 
-void CWidgetBase::setRightButtonStatus(bool down)
+void WidgetBase::setRightButtonStatus(bool down)
 {
 	m_rightButtonDown = down;
 }
 
-void CWidgetBase::setMiddleButtonStatus(bool down)
+void WidgetBase::setMiddleButtonStatus(bool down)
 {
 	m_middleButtonDown = down;
 }
 
-void CWidgetBase::setModifierKey(TModifierType key)
+void WidgetBase::setModifierKey(TModifierType key)
 {
 	m_modifierKey = key;
 }
 
-void CWidgetBase::clearMouseStatus()
+void WidgetBase::clearMouseStatus()
 {
 	m_leftButtonDown = false;
 	m_rightButtonDown = false;
 	m_middleButtonDown = false;
 }
 
-int CWidgetBase::getWidth()
+int WidgetBase::getWidth()
 {
 	return m_size[0];
 }
 
-int CWidgetBase::getHeight()
+int WidgetBase::getHeight()
 {
 	return m_size[1];
 }
 
-void CWidgetBase::fullscreen()
+void WidgetBase::fullscreen()
 {
 	doFullscreen();
 }
@@ -200,12 +200,12 @@ void CWidgetBase::fullscreen()
 // Implementation specific interface routines
 //
 
-void CWidgetBase::doFullscreen()
+void WidgetBase::doFullscreen()
 {
 
 }
 
-void CWidgetBase::doDraw()
+void WidgetBase::doDraw()
 {
 	// Drawing code
 
@@ -231,7 +231,7 @@ void CWidgetBase::doDraw()
 	glPopMatrix();
 }
 
-void CWidgetBase::doResize(int width, int height)
+void WidgetBase::doResize(int width, int height)
 {
 	// Call initialisation callback
 	
@@ -249,57 +249,57 @@ void CWidgetBase::doResize(int width, int height)
 	IvfDispatchDimensional(m_resizeEvents,onResize,width,height);
 }
 
-void CWidgetBase::doMouseDown(int x, int y)
+void WidgetBase::doMouseDown(int x, int y)
 {
 	IvfDispatchPositional(m_mouseDownEvents,onMouseDown,x,y);
 }
 
-void CWidgetBase::doMouseUp(int x, int y)
+void WidgetBase::doMouseUp(int x, int y)
 {
 	IvfDispatchPositional(m_mouseUpEvents,onMouseUp,x,y);
 }
 
-void CWidgetBase::doMouseMove(int x, int y)
+void WidgetBase::doMouseMove(int x, int y)
 {
 	IvfDispatchPositional(m_mouseMoveEvents,onMouseMove,x,y);
 }
 
-void CWidgetBase::doFocus()
+void WidgetBase::doFocus()
 {
 	IvfDispatchNotify(m_focusEvents,onFocus);
 }
 
-void CWidgetBase::doUnFocus()
+void WidgetBase::doUnFocus()
 {
 	IvfDispatchNotify(m_unFocusEvents,onUnFocus);
 }
 
-void CWidgetBase::doMouseEnter(int x, int y)
+void WidgetBase::doMouseEnter(int x, int y)
 {
 	IvfDispatchPositional(m_mouseEnterEvents,onMouseEnter,x,y);
 }
 
-void CWidgetBase::doMouseLeave(int x, int y)
+void WidgetBase::doMouseLeave(int x, int y)
 {
 	IvfDispatchPositional(m_mouseLeaveEvents,onMouseLeave,x,y);
 }
 
-void CWidgetBase::doKeyboard(int key, int x, int y)
+void WidgetBase::doKeyboard(int key, int x, int y)
 {
 	IvfDispatchKeyboard(m_keyboardEvents,onKeyboard,key,x,y);
 }
 
-void CWidgetBase::doModifierDown()
+void WidgetBase::doModifierDown()
 {
 	IvfDispatchNotify(m_modifierDownEvents,onModifierDown);
 }
 
-void CWidgetBase::doModifierUp()
+void WidgetBase::doModifierUp()
 {
 	IvfDispatchNotify(m_modifierUpEvents,onModifierUp);
 }
 
-void CWidgetBase::doFunctionKey(TFunctionKey key, int x, int y)
+void WidgetBase::doFunctionKey(TFunctionKey key, int x, int y)
 {
 	IvfDispatchKeyboard(m_functionKeyEvents,onFunctionKey,key,x,y);
 }
@@ -308,34 +308,34 @@ void CWidgetBase::doFunctionKey(TFunctionKey key, int x, int y)
 // Event methods
 //
 
-void CWidgetBase::onInit(int width, int height)
+void WidgetBase::onInit(int width, int height)
 {
 
 }
 
-void CWidgetBase::onInitContext(int width, int height)
+void WidgetBase::onInitContext(int width, int height)
 {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 }
 
-void CWidgetBase::onClear()
+void WidgetBase::onClear()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void CWidgetBase::onResize(int width, int height)
+void WidgetBase::onResize(int width, int height)
 {
 
 }
 
-void CWidgetBase::onRender()
+void WidgetBase::onRender()
 {
 
 }
 
-void CWidgetBase::onInitOverlay(int width, int height)
+void WidgetBase::onInitOverlay(int width, int height)
 {
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_FOG);
@@ -348,131 +348,131 @@ void CWidgetBase::onInitOverlay(int width, int height)
 	glLoadIdentity();
 }
 
-void CWidgetBase::onDestroy()
+void WidgetBase::onDestroy()
 {
 
 }
 
 
-void CWidgetBase::onOverlay()
+void WidgetBase::onOverlay()
 {
 
 }
 
-void CWidgetBase::onMouse(int x, int y)
+void WidgetBase::onMouse(int x, int y)
 {
 
 }
 
-void CWidgetBase::onMouseDown(int x, int y)
+void WidgetBase::onMouseDown(int x, int y)
 {
 
 }
 
-void CWidgetBase::onMouseUp(int x, int y)
+void WidgetBase::onMouseUp(int x, int y)
 {
 
 }
 
-void CWidgetBase::onFocus()
+void WidgetBase::onFocus()
 {
 
 }
 
-void CWidgetBase::onUnFocus()
+void WidgetBase::onUnFocus()
 {
 
 }
 
-void CWidgetBase::onMouseEnter(int x, int y)
+void WidgetBase::onMouseEnter(int x, int y)
 {
 
 }
 
-void CWidgetBase::onMouseLeave(int x, int y)
+void WidgetBase::onMouseLeave(int x, int y)
 {
 
 }
 
-void CWidgetBase::onMouseMove(int x, int y)
+void WidgetBase::onMouseMove(int x, int y)
 {
 
 }
 
-void CWidgetBase::onKeyboard(int key, int x, int y)
+void WidgetBase::onKeyboard(int key, int x, int y)
 {
 
 }
 
-void CWidgetBase::onMenuItem(int id)
+void WidgetBase::onMenuItem(int id)
 {
 
 }
 
-void CWidgetBase::onModifierDown()
+void WidgetBase::onModifierDown()
 {
 
 }
 
-void CWidgetBase::onModifierUp()
+void WidgetBase::onModifierUp()
 {
 
 }
 
-void CWidgetBase::onFunctionKey(TFunctionKey key, int x, int y)
+void WidgetBase::onFunctionKey(TFunctionKey key, int x, int y)
 {
 
 }
 
 
-CWidgetBase::TModifierType CWidgetBase::getModifierKey()
+WidgetBase::TModifierType WidgetBase::getModifierKey()
 {
 	return m_modifierKey;
 }
 
-bool CWidgetBase::isAnyButtonDown()
+bool WidgetBase::isAnyButtonDown()
 {
 	return (isLeftButtonDown())||(isRightButtonDown())||(isMiddleButtonDown());
 }
 
-void CWidgetBase::onIdle()
+void WidgetBase::onIdle()
 {
 
 }
 
-void CWidgetBase::doIdle()
+void WidgetBase::doIdle()
 {
 	onIdle();
 }
 
-void CWidgetBase::enableIdleProcessing()
+void WidgetBase::enableIdleProcessing()
 {
 	doEnableIdleProcessing();
 	m_idleProcessing = true;
 }
 
-void CWidgetBase::disableIdleProcessing()
+void WidgetBase::disableIdleProcessing()
 {
 	doDisableIdleProcessing();
 	m_idleProcessing = false;
 }
 
-void CWidgetBase::doEnableIdleProcessing()
+void WidgetBase::doEnableIdleProcessing()
 {
 
 }
 
-void CWidgetBase::doDisableIdleProcessing()
+void WidgetBase::doDisableIdleProcessing()
 {
 
 }
 
-bool CWidgetBase::isIdleProcessing()
+bool WidgetBase::isIdleProcessing()
 {
 	return m_idleProcessing;
 }
 
-void CWidgetBase::enableTimeout(float time, int nbr)
+void WidgetBase::enableTimeout(float time, int nbr)
 {
 	if ((nbr>=0)&&(nbr<10))
 	{
@@ -481,7 +481,7 @@ void CWidgetBase::enableTimeout(float time, int nbr)
 	}
 }
 
-void CWidgetBase::disableTimeout(int nbr)
+void WidgetBase::disableTimeout(int nbr)
 {
 	if ((nbr>=0)&&(nbr<10))
 	{
@@ -490,112 +490,112 @@ void CWidgetBase::disableTimeout(int nbr)
 	}
 }
 
-void CWidgetBase::doEnableTimeout(float time, int nbr)
+void WidgetBase::doEnableTimeout(float time, int nbr)
 {
 
 }
 
-bool CWidgetBase::onTimeout0()
-{
-	return false;
-}
-
-bool CWidgetBase::onTimeout1()
+bool WidgetBase::onTimeout0()
 {
 	return false;
 }
 
-bool CWidgetBase::onTimeout2()
+bool WidgetBase::onTimeout1()
 {
 	return false;
 }
 
-bool CWidgetBase::onTimeout3()
+bool WidgetBase::onTimeout2()
 {
 	return false;
 }
 
-bool CWidgetBase::onTimeout4()
+bool WidgetBase::onTimeout3()
 {
 	return false;
 }
 
-bool CWidgetBase::onTimeout5()
+bool WidgetBase::onTimeout4()
 {
 	return false;
 }
 
-bool CWidgetBase::onTimeout6()
+bool WidgetBase::onTimeout5()
 {
 	return false;
 }
 
-bool CWidgetBase::onTimeout7()
+bool WidgetBase::onTimeout6()
 {
 	return false;
 }
 
-bool CWidgetBase::onTimeout8()
+bool WidgetBase::onTimeout7()
 {
 	return false;
 }
 
-bool CWidgetBase::onTimeout9()
+bool WidgetBase::onTimeout8()
 {
 	return false;
 }
 
-bool CWidgetBase::doTimeout0()
+bool WidgetBase::onTimeout9()
+{
+	return false;
+}
+
+bool WidgetBase::doTimeout0()
 {
 	IvfDispatchTimeout(0);
 }
 
-bool CWidgetBase::doTimeout1()
+bool WidgetBase::doTimeout1()
 {
 	IvfDispatchTimeout(1);
 }
 
-bool CWidgetBase::doTimeout2()
+bool WidgetBase::doTimeout2()
 {
 	IvfDispatchTimeout(2);
 }
 
-bool CWidgetBase::doTimeout3()
+bool WidgetBase::doTimeout3()
 {
 	IvfDispatchTimeout(3);
 }
 
-bool CWidgetBase::doTimeout4()
+bool WidgetBase::doTimeout4()
 {
 	IvfDispatchTimeout(4);
 }
 
-bool CWidgetBase::doTimeout5()
+bool WidgetBase::doTimeout5()
 {
 	IvfDispatchTimeout(5);
 }
 
-bool CWidgetBase::doTimeout6()
+bool WidgetBase::doTimeout6()
 {
 	IvfDispatchTimeout(6);
 }
 
-bool CWidgetBase::doTimeout7()
+bool WidgetBase::doTimeout7()
 {
 	IvfDispatchTimeout(7);
 }
 
-bool CWidgetBase::doTimeout8()
+bool WidgetBase::doTimeout8()
 {
 	IvfDispatchTimeout(8);
 }
 
-bool CWidgetBase::doTimeout9()
+bool WidgetBase::doTimeout9()
 {
 	IvfDispatchTimeout(9);
 }
 
-float CWidgetBase::getTimeout(int number)
+float WidgetBase::getTimeout(int number)
 {
 	if ((number>=0)&&(number<10))
 		return m_timeouts[number];
@@ -603,63 +603,63 @@ float CWidgetBase::getTimeout(int number)
 		return -1.0;
 }
 
-void CWidgetBase::doRedraw()
+void WidgetBase::doRedraw()
 {
 
 }
 
-void CWidgetBase::doInit(int width, int height)
+void WidgetBase::doInit(int width, int height)
 {
 	IvfDispatchDimensional(m_initEvents,onInit,width,height);
 }
 
-void CWidgetBase::doInitContext(int width, int height)
+void WidgetBase::doInitContext(int width, int height)
 {
 	IvfDispatchDimensional(m_initContextEvents,onInitContext,width,height);
 }
 
-void CWidgetBase::doRender()
+void WidgetBase::doRender()
 {
 	IvfDispatchNotify(m_renderEvents,onRender);
 }
 
-void CWidgetBase::doClear()
+void WidgetBase::doClear()
 {
 	IvfDispatchNotify(m_clearEvents,onClear);
 }
 
-void CWidgetBase::doInitOverlay(int width, int height)
+void WidgetBase::doInitOverlay(int width, int height)
 {
 	IvfDispatchDimensional(m_initOverlayEvents,onInitOverlay,width,height);
 }
 
-void CWidgetBase::doOverlay()
+void WidgetBase::doOverlay()
 {
 	IvfDispatchNotify(m_overlayEvents,onOverlay);
 }
 
-void CWidgetBase::doDestroy()
+void WidgetBase::doDestroy()
 {
 	IvfDispatchNotify(m_destroyEvents,onDestroy);
 }
 
-void CWidgetBase::doMenuItem(int id)
+void WidgetBase::doMenuItem(int id)
 {
 	IvfDispatchMenuItem(m_menuItemEvents,onMenuItem,id)	
 }
 
-bool CWidgetBase::isInitDone()
+bool WidgetBase::isInitDone()
 {
 	return m_initDone;
 }
 
-void CWidgetBase::doDisableTimeout(int nbr)
+void WidgetBase::doDisableTimeout(int nbr)
 {
 
 }
 
 
-bool CWidgetBase::isTimeoutEnabled(int nbr)
+bool WidgetBase::isTimeoutEnabled(int nbr)
 {
 	if ((nbr>=0)&&(nbr<10))
 		return m_timeouts[nbr]>=0.0f;
@@ -667,53 +667,53 @@ bool CWidgetBase::isTimeoutEnabled(int nbr)
 		return false;
 }
 
-void CWidgetBase::setUseOverlay(bool flag)
+void WidgetBase::setUseOverlay(bool flag)
 {
 	m_doOverlay = flag;
 }
 
-bool CWidgetBase::getUseOverlay()
+bool WidgetBase::getUseOverlay()
 {
 	return m_doOverlay;
 }
 
-void CWidgetBase::redraw()
+void WidgetBase::redraw()
 {
 	doRedraw();
 }
 
-double CWidgetBase::elapsedTime()
+double WidgetBase::elapsedTime()
 {
 	return doElapsedTime();
 }
 
-double CWidgetBase::doElapsedTime()
+double WidgetBase::doElapsedTime()
 {
 	return 0.0;
 }
 
-void CWidgetBase::setSize(int w, int h)
+void WidgetBase::setSize(int w, int h)
 {
 	doSetSize(w, h);
 	doResize(w, h);
 }
 
-void CWidgetBase::setPosition(int x, int y)
+void WidgetBase::setPosition(int x, int y)
 {
 	doSetPosition(x, y);
 }
 
-void CWidgetBase::doSetSize(int w, int h)
+void WidgetBase::doSetSize(int w, int h)
 {
 
 }
 
-void CWidgetBase::doSetPosition(int x, int y)
+void WidgetBase::doSetPosition(int x, int y)
 {
 
 }
 
-bool CWidgetBase::doAppLoop()
+bool WidgetBase::doAppLoop()
 {
 	if (m_initDone)
 	{
@@ -726,244 +726,244 @@ bool CWidgetBase::doAppLoop()
 		return true;
 }
 
-bool CWidgetBase::onAppLoop()
+bool WidgetBase::onAppLoop()
 {
 	return true;
 }
 
-void CWidgetBase::addRenderEvent(CRenderEvent *event)
+void WidgetBase::addRenderEvent(RenderEvent *event)
 {
 	m_renderEvents.push_back(event);
 }
 
-void CWidgetBase::addClearEvent(CClearEvent* event)
+void WidgetBase::addClearEvent(ClearEvent* event)
 {
 	m_clearEvents.push_back(event);
 }
 
-void CWidgetBase::assignAppLoopEvent(CAppLoopEvent* event)
+void WidgetBase::assignAppLoopEvent(AppLoopEvent* event)
 {
 	m_appLoopEvent = event;
 }
 
-void CWidgetBase::addDestroyEvent(CDestroyEvent* event)
+void WidgetBase::addDestroyEvent(DestroyEvent* event)
 {
 	m_destroyEvents.push_back(event);
 }
 
-void CWidgetBase::addFocusEvent(CFocusEvent* event)
+void WidgetBase::addFocusEvent(FocusEvent* event)
 {
 	m_focusEvents.push_back(event);
 }
 
-void CWidgetBase::addFunctionKeyEvent(CFunctionKeyEvent* event)
+void WidgetBase::addFunctionKeyEvent(FunctionKeyEvent* event)
 {
 	m_functionKeyEvents.push_back(event);
 }
 
-void CWidgetBase::addIdleEvent(CIdleEvent* event)
+void WidgetBase::addIdleEvent(IdleEvent* event)
 {
 	m_idleEvents.push_back(event);
 }
 
-void CWidgetBase::addInitContextEvent(CInitContextEvent* event)
+void WidgetBase::addInitContextEvent(InitContextEvent* event)
 {
 	m_initContextEvents.push_back(event);
 }
 
-void CWidgetBase::addInitEvent(CInitEvent* event)
+void WidgetBase::addInitEvent(InitEvent* event)
 {
 	m_initEvents.push_back(event);
 }
 
-void CWidgetBase::addInitOverlayEvent(CInitOverlayEvent* event)
+void WidgetBase::addInitOverlayEvent(InitOverlayEvent* event)
 {
 	m_initOverlayEvents.push_back(event);
 }
 
-void CWidgetBase::addKeyboardEvent(CKeyboardEvent* event)
+void WidgetBase::addKeyboardEvent(KeyboardEvent* event)
 {
 	m_keyboardEvents.push_back(event);
 }
 
-void CWidgetBase::addMouseDownEvent(CMouseDownEvent* event)
+void WidgetBase::addMouseDownEvent(MouseDownEvent* event)
 {
 	m_mouseDownEvents.push_back(event);
 }
 
-void CWidgetBase::addMouseEnterEvent(CMouseEnterEvent* event)
+void WidgetBase::addMouseEnterEvent(MouseEnterEvent* event)
 {
 	m_mouseEnterEvents.push_back(event);
 }
 
-void CWidgetBase::addMouseEvent(CMouseEvent* event)
+void WidgetBase::addMouseEvent(MouseEvent* event)
 {
 	m_mouseEvents.push_back(event);
 }
 
-void CWidgetBase::addMouseLeaveEvent(CMouseLeaveEvent* event)
+void WidgetBase::addMouseLeaveEvent(MouseLeaveEvent* event)
 {
 	m_mouseLeaveEvents.push_back(event);
 }
 
-void CWidgetBase::addMouseMoveEvent(CMouseMoveEvent* event)
+void WidgetBase::addMouseMoveEvent(MouseMoveEvent* event)
 {
 	m_mouseMoveEvents.push_back(event);
 }
 
-void CWidgetBase::addMouseUpEvent(CMouseUpEvent* event)
+void WidgetBase::addMouseUpEvent(MouseUpEvent* event)
 {
 	m_mouseUpEvents.push_back(event);
 }
 
-void CWidgetBase::addOverlayEvent(COverlayEvent* event)
+void WidgetBase::addOverlayEvent(OverlayEvent* event)
 {
 	m_overlayEvents.push_back(event);
 }
 
-void CWidgetBase::addResizeEvent(CResizeEvent* event)
+void WidgetBase::addResizeEvent(ResizeEvent* event)
 {
 	m_resizeEvents.push_back(event);
 }
 
-void CWidgetBase::addUnFocusEvent(CUnFocusEvent* event)
+void WidgetBase::addUnFocusEvent(UnFocusEvent* event)
 {
 	m_unFocusEvents.push_back(event);
 }
 
-void CWidgetBase::removeRenderEvent(CRenderEvent* event)
+void WidgetBase::removeRenderEvent(RenderEvent* event)
 {
-	IvfRemoveEvent(CRenderEvent,m_renderEvents,event);
+	IvfRemoveEvent(RenderEvent,m_renderEvents,event);
 }
 
-void CWidgetBase::removeClearEvent(CClearEvent* event)
+void WidgetBase::removeClearEvent(ClearEvent* event)
 {
-	IvfRemoveEvent(CClearEvent,m_clearEvents,event);
+	IvfRemoveEvent(ClearEvent,m_clearEvents,event);
 }
 
-void CWidgetBase::removeDestroyEvent(CDestroyEvent* event)
+void WidgetBase::removeDestroyEvent(DestroyEvent* event)
 {
-	IvfRemoveEvent(CDestroyEvent,m_destroyEvents,event);
+	IvfRemoveEvent(DestroyEvent,m_destroyEvents,event);
 }
 
-void CWidgetBase::removeFocusEvent(CFocusEvent* event)
+void WidgetBase::removeFocusEvent(FocusEvent* event)
 {
-	IvfRemoveEvent(CFocusEvent,m_focusEvents,event);
+	IvfRemoveEvent(FocusEvent,m_focusEvents,event);
 }
 
-void CWidgetBase::removeFunctionKeyEvent(CFunctionKeyEvent* event)
+void WidgetBase::removeFunctionKeyEvent(FunctionKeyEvent* event)
 {
-	IvfRemoveEvent(CFunctionKeyEvent,m_functionKeyEvents,event);
+	IvfRemoveEvent(FunctionKeyEvent,m_functionKeyEvents,event);
 }
 
-void CWidgetBase::removeIdleEvent(CIdleEvent* event)
+void WidgetBase::removeIdleEvent(IdleEvent* event)
 {
-	IvfRemoveEvent(CIdleEvent,m_idleEvents,event);
+	IvfRemoveEvent(IdleEvent,m_idleEvents,event);
 }
 
-void CWidgetBase::removeInitContextEvent(CInitContextEvent* event)
+void WidgetBase::removeInitContextEvent(InitContextEvent* event)
 {
-	IvfRemoveEvent(CInitContextEvent,m_initContextEvents,event);
+	IvfRemoveEvent(InitContextEvent,m_initContextEvents,event);
 }
 
-void CWidgetBase::removeInitEvent(CInitEvent* event)
+void WidgetBase::removeInitEvent(InitEvent* event)
 {
-	IvfRemoveEvent(CInitEvent,m_initEvents,event);
+	IvfRemoveEvent(InitEvent,m_initEvents,event);
 }
 
-void CWidgetBase::removeInitOverlayEvent(CInitOverlayEvent* event)
+void WidgetBase::removeInitOverlayEvent(InitOverlayEvent* event)
 {
-	IvfRemoveEvent(CInitOverlayEvent,m_initOverlayEvents,event);
+	IvfRemoveEvent(InitOverlayEvent,m_initOverlayEvents,event);
 }
 
-void CWidgetBase::removeKeyboardEvent(CKeyboardEvent* event)
+void WidgetBase::removeKeyboardEvent(KeyboardEvent* event)
 {
-	IvfRemoveEvent(CKeyboardEvent,m_keyboardEvents,event);
+	IvfRemoveEvent(KeyboardEvent,m_keyboardEvents,event);
 }
 
-void CWidgetBase::removeMouseDownEvent(CMouseDownEvent* event)
+void WidgetBase::removeMouseDownEvent(MouseDownEvent* event)
 {
-	IvfRemoveEvent(CMouseDownEvent,m_mouseDownEvents,event);
+	IvfRemoveEvent(MouseDownEvent,m_mouseDownEvents,event);
 }
 
-void CWidgetBase::removeMouseEnterEvent(CMouseEnterEvent* event)
+void WidgetBase::removeMouseEnterEvent(MouseEnterEvent* event)
 {
-	IvfRemoveEvent(CMouseEnterEvent,m_mouseEnterEvents,event);
+	IvfRemoveEvent(MouseEnterEvent,m_mouseEnterEvents,event);
 }
 
-void CWidgetBase::removeMouseEvent(CMouseEvent* event)
+void WidgetBase::removeMouseEvent(MouseEvent* event)
 {
-	IvfRemoveEvent(CMouseEvent,m_mouseEvents,event);
+	IvfRemoveEvent(MouseEvent,m_mouseEvents,event);
 }
 
-void CWidgetBase::removeMouseLeaveEvent(CMouseLeaveEvent* event)
+void WidgetBase::removeMouseLeaveEvent(MouseLeaveEvent* event)
 {
-	IvfRemoveEvent(CMouseLeaveEvent,m_mouseLeaveEvents,event);
+	IvfRemoveEvent(MouseLeaveEvent,m_mouseLeaveEvents,event);
 }
 
-void CWidgetBase::removeMouseMoveEvent(CMouseMoveEvent* event)
+void WidgetBase::removeMouseMoveEvent(MouseMoveEvent* event)
 {
-	IvfRemoveEvent(CMouseMoveEvent,m_mouseMoveEvents,event);
+	IvfRemoveEvent(MouseMoveEvent,m_mouseMoveEvents,event);
 }
 
-void CWidgetBase::removeMouseUpEvent(CMouseUpEvent* event)
+void WidgetBase::removeMouseUpEvent(MouseUpEvent* event)
 {
-	IvfRemoveEvent(CMouseUpEvent,m_mouseUpEvents,event);
+	IvfRemoveEvent(MouseUpEvent,m_mouseUpEvents,event);
 }
 
-void CWidgetBase::removeOverlayEvent(COverlayEvent* event)
+void WidgetBase::removeOverlayEvent(OverlayEvent* event)
 {
-	IvfRemoveEvent(COverlayEvent,m_overlayEvents,event);
+	IvfRemoveEvent(OverlayEvent,m_overlayEvents,event);
 }
 
-void CWidgetBase::removeResizeEvent(CResizeEvent* event)
+void WidgetBase::removeResizeEvent(ResizeEvent* event)
 {
-	IvfRemoveEvent(CResizeEvent,m_resizeEvents,event);
+	IvfRemoveEvent(ResizeEvent,m_resizeEvents,event);
 }
 
-void CWidgetBase::removeUnFocusEvent(CUnFocusEvent* event)
+void WidgetBase::removeUnFocusEvent(UnFocusEvent* event)
 {
-	IvfRemoveEvent(CUnFocusEvent,m_unFocusEvents,event);
+	IvfRemoveEvent(UnFocusEvent,m_unFocusEvents,event);
 }
 
-void CWidgetBase::assignTimeoutEvent(int nbr, CTimeoutEvent* event)
+void WidgetBase::assignTimeoutEvent(int nbr, TimeoutEvent* event)
 {
 	if ((nbr>=0)&&(nbr<10))
 		m_timeoutEvents[nbr] = event;
 }
 
-void CWidgetBase::removeTimeoutEvent(int nbr)
+void WidgetBase::removeTimeoutEvent(int nbr)
 {
 	if ((nbr>=0)&&(nbr<10))
 		m_timeoutEvents[nbr] = nullptr;
 }
 
-void CWidgetBase::addModifierDownEvent(CModifierDownEvent *event)
+void WidgetBase::addModifierDownEvent(ModifierDownEvent *event)
 {
 	m_modifierDownEvents.push_back(event);
 }
 
-void CWidgetBase::removeModifierDownEvent(CModifierDownEvent *event)
+void WidgetBase::removeModifierDownEvent(ModifierDownEvent *event)
 {
-	IvfRemoveEvent(CModifierDownEvent,m_modifierDownEvents,event);
+	IvfRemoveEvent(ModifierDownEvent,m_modifierDownEvents,event);
 }
 
-void CWidgetBase::addModifierUpEvent(CModifierUpEvent *event)
+void WidgetBase::addModifierUpEvent(ModifierUpEvent *event)
 {
 	m_modifierUpEvents.push_back(event);
 }
 
-void CWidgetBase::removeModifierUpEvent(CModifierUpEvent *event)
+void WidgetBase::removeModifierUpEvent(ModifierUpEvent *event)
 {
-	IvfRemoveEvent(CModifierUpEvent,m_modifierUpEvents,event);
+	IvfRemoveEvent(ModifierUpEvent,m_modifierUpEvents,event);
 }
 
-void CWidgetBase::addMenuItemEvent(CMenuItemEvent *event)
+void WidgetBase::addMenuItemEvent(MenuItemEvent *event)
 {
 	m_menuItemEvents.push_back(event);
 }
 
-void CWidgetBase::removeMenuItemEvent(CMenuItemEvent *event)
+void WidgetBase::removeMenuItemEvent(MenuItemEvent *event)
 {
-	IvfRemoveEvent(CMenuItemEvent,m_menuItemEvents,event);
+	IvfRemoveEvent(MenuItemEvent,m_menuItemEvents,event);
 }

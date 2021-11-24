@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CNormalList::CNormalList()
+NormalList::NormalList()
 {
 	m_size = 0;
 	m_blockSize = 1024;
@@ -36,24 +36,24 @@ CNormalList::CNormalList()
 	m_next = 0;
 }
 
-CNormalList::~CNormalList()
+NormalList::~NormalList()
 {
 	delete [] m_normals;
 }
 
-void CNormalList::add(double x, double y, double z)
+void NormalList::add(double x, double y, double z)
 {
 	add(x);
 	add(y);
 	add(z);
 }
 
-void CNormalList::add(double comp)
+void NormalList::add(double comp)
 {
 	if (m_next==m_allocSize)
 	{
 		m_allocSize = m_allocSize*2;
-		IvfDbg1("CNormalList: Expanding to " << m_allocSize << " normals. (allocated size)");
+		IvfDbg1("NormalList: Expanding to " << m_allocSize << " normals. (allocated size)");
 		GLfloat* newNormals = new GLfloat[m_allocSize];
 		
 		int i;
@@ -70,12 +70,12 @@ void CNormalList::add(double comp)
 	m_next++;
 }
 
-int CNormalList::getSize()
+int NormalList::getSize()
 {
 	return m_next / 3;
 }
 
-void CNormalList::getNormal(int idx, double &x, double &y, double &z)
+void NormalList::getNormal(int idx, double &x, double &y, double &z)
 {
 	if ((idx>=0)&&(idx<m_next/3))
 	{
@@ -85,7 +85,7 @@ void CNormalList::getNormal(int idx, double &x, double &y, double &z)
 	}
 }
 
-double CNormalList::getComp(int idx)
+double NormalList::getComp(int idx)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{
@@ -95,22 +95,22 @@ double CNormalList::getComp(int idx)
 		return -1.0;
 }
 
-void* CNormalList::getData()
+void* NormalList::getData()
 {
 	return (void*)m_normals;
 }
 
-GLenum CNormalList::getDataType()
+GLenum NormalList::getDataType()
 {
 	return GL_FLOAT;
 }
 
-GLsizei CNormalList::getStride()
+GLsizei NormalList::getStride()
 {
 	return 3*sizeof(GLfloat);
 }
 
-void CNormalList::clear()
+void NormalList::clear()
 {
 	delete [] m_normals;
 

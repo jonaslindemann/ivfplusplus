@@ -28,24 +28,24 @@
 
 namespace ivf {
 
-IvfSmartPointer(CMultiply);
+IvfSmartPointer(Multiply);
 
-class IVF_API CMultiply: public CShape {
+class IVF_API Multiply: public Shape {
 private:
-	CShapePtr	m_shape;
+	ShapePtr	m_shape;
 	double			m_offsets[3];
 	int				m_repeat[3];
 	int				m_startIndices[3];
 public:
-	CMultiply();
+	Multiply();
 
-	IvfClassInfo("CMultiply", CShape);
-	IvfStdFactory(CMultiply);
+	IvfClassInfo("Multiply", Shape);
+	IvfStdFactory(Multiply);
 
 	virtual void refresh();
 
-	void setShape(CShape* shape);
-	CShape* getShape();
+	void setShape(Shape* shape);
+	Shape* getShape();
 
 	void setOffsets(double dx, double dy, double dz);
 	void getOffsets(double &dx, double &dy, double &dz);

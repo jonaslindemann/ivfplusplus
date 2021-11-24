@@ -5,7 +5,7 @@ using namespace ivf;
 #define R2D(a) a*360.0/M_PI/2.0
 #define D2R(a) a*2.0*M_PI/360.0
 
-CCircularTube::CCircularTube()
+CircularTube::CircularTube()
 {
 	m_radius = 1.0;
 	m_startAngle = 0.0;
@@ -15,18 +15,18 @@ CCircularTube::CCircularTube()
 	refresh();
 }
 
-CCircularTube::~CCircularTube()
+CircularTube::~CircularTube()
 {
 
 }
 
-void CCircularTube::refresh()
+void CircularTube::refresh()
 {
 	initSpine();
-	CTubeExtrusion::refresh();
+	TubeExtrusion::refresh();
 }
 
-void CCircularTube::initSpine()
+void CircularTube::initSpine()
 {
 	double angle, angleStep;
 	double x, z;
@@ -62,65 +62,65 @@ void CCircularTube::initSpine()
 
 }
 
-void CCircularTube::setCircleRadius(double radius)
+void CircularTube::setCircleRadius(double radius)
 {
 	m_radius = radius;
 	refresh();
 }
 
-void CCircularTube::setStartAngle(double angle)
+void CircularTube::setStartAngle(double angle)
 {
 	m_startAngle = D2R(angle);
 	refresh();
 }
 
-void CCircularTube::setEndAngle(double angle)
+void CircularTube::setEndAngle(double angle)
 {
 	m_endAngle = D2R(angle);
 	refresh();
 }
 
-void CCircularTube::setCalculationPoints(int numberOfPoints)
+void CircularTube::setCalculationPoints(int numberOfPoints)
 {
 	m_calcPoints = numberOfPoints;
 }
 
-double CCircularTube::getCircleRadius()
+double CircularTube::getCircleRadius()
 {
 	return m_radius;
 }
 
-double CCircularTube::getStartAngle()
+double CircularTube::getStartAngle()
 {
 	return R2D(m_startAngle);
 }
 
-double CCircularTube::getEndAngle()
+double CircularTube::getEndAngle()
 {
 	return R2D(m_endAngle);
 }
 
-int CCircularTube::getCalculationPoints()
+int CircularTube::getCalculationPoints()
 {
 	return m_calcPoints;
 }
 
-CVec3d& CCircularTube::getStartVector()
+Vec3d& CircularTube::getStartVector()
 {
 	return m_startVector;
 }
 
-CVec3d& CCircularTube::getEndVector()
+Vec3d& CircularTube::getEndVector()
 {
 	return m_endVector;
 }
 
-CVec3d& CCircularTube::getStartPosition()
+Vec3d& CircularTube::getStartPosition()
 {
 	return m_startPos;
 }
 
-CVec3d& CCircularTube::getEndPosition()
+Vec3d& CircularTube::getEndPosition()
 {
 	return m_endPos;
 }

@@ -29,20 +29,20 @@
 
 namespace ivf {
 
-IvfSmartPointer(CUIButtonGroup);
+IvfSmartPointer(UIButtonGroup);
 
-class IVF3DUI_API CUIButtonGroup : public CUIBase {
+class IVF3DUI_API UIButtonGroup : public UIBase {
 private:
 
 public:
-	CUIButtonGroup();
-	virtual ~CUIButtonGroup();
+	UIButtonGroup();
+	virtual ~UIButtonGroup();
 
-	IvfClassInfo("CUIButtonGroup", CUIBase);
-	IvfStdFactory(CUIButtonGroup);
+	IvfClassInfo("UIButtonGroup", UIBase);
+	IvfStdFactory(UIButtonGroup);
 
-	void addChild(CUIButtonBase* button);
-	void updateState(CUIButtonBase* button);
+	void addChild(UIButtonBase* button);
+	void updateState(UIButtonBase* button);
 };
 
 }

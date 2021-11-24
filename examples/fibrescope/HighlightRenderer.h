@@ -3,17 +3,17 @@
 
 #include <ivf/Shape.h>
 
-IvfSmartPointer(CHighlightRenderer);
+IvfSmartPointer(HighlightRenderer);
 
-class CHighlightRenderer: public ivf::CShape {
+class HighlightRenderer: public ivf::Shape {
 private:
 	GLUquadricObj* m_qobj;
 public:
-	CHighlightRenderer();
-	virtual ~CHighlightRenderer();
+	HighlightRenderer();
+	virtual ~HighlightRenderer();
 
-	IvfClassInfo("CHighlightRenderer", ivf::CShape);
-	IvfStdFactory(CHighlightRenderer);
+	IvfClassInfo("HighlightRenderer", ivf::Shape);
+	IvfStdFactory(HighlightRenderer);
 protected:
 	virtual void doCreateGeometry();
 };

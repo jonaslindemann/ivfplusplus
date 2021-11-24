@@ -28,17 +28,17 @@
 
 using namespace ivf;
 
-CDepthBufferState::CDepthBufferState()
+DepthBufferState::DepthBufferState()
 {
 	m_depthBufferState = DS_ENABLED;
 }
 
-CDepthBufferState::~CDepthBufferState()
+DepthBufferState::~DepthBufferState()
 {
 
 }
 
-void CDepthBufferState::doSaveState()
+void DepthBufferState::doSaveState()
 {
 	if (glIsEnabled(GL_DEPTH_TEST))
 		m_oldState = DS_ENABLED;
@@ -46,7 +46,7 @@ void CDepthBufferState::doSaveState()
 		m_oldState = DS_DISABLED;
 }
 
-void CDepthBufferState::doRestoreState()
+void DepthBufferState::doRestoreState()
 {
 	if (m_oldState==DS_ENABLED)
 		glEnable(GL_DEPTH_TEST);
@@ -54,7 +54,7 @@ void CDepthBufferState::doRestoreState()
 		glDisable(GL_DEPTH_TEST);
 }
 
-void CDepthBufferState::doState()
+void DepthBufferState::doState()
 {
 	if (m_depthBufferState==DS_ENABLED)
 		glEnable(GL_DEPTH_TEST);
@@ -62,12 +62,12 @@ void CDepthBufferState::doState()
 		glDisable(GL_DEPTH_TEST);
 }
 
-void CDepthBufferState::setState(TDepthBufferState state)
+void DepthBufferState::setState(TDepthBufferState state)
 {
 	m_depthBufferState = state;
 }
 
-CDepthBufferState::TDepthBufferState CDepthBufferState::getState()
+DepthBufferState::TDepthBufferState DepthBufferState::getState()
 {
 	return m_depthBufferState;
 }

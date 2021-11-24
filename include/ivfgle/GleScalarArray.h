@@ -30,19 +30,21 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGleScalarArray);
+IvfSmartPointer(GleScalarArray);
 
-class IVFGLE_API CGleScalarArray: public CBase {
+class IVFGLE_API GleScalarArray: public Base {
 private:
 	int m_size;
 	gleDouble* m_scalars;
 public:
-	CGleScalarArray();
-	CGleScalarArray(int size);
-	virtual ~CGleScalarArray();
+	GleScalarArray();
+	GleScalarArray(int size);
+	virtual ~GleScalarArray();
 
-	IvfClassInfo("CGleScalarArray", CBase);
-	IvfStdFactory(CGleScalarArray);
+	IvfClassInfo("GleScalarArray", Base);
+
+	static GleScalarArrayPtr create(int size) { return new GleScalarArray(size); };
+	static GleScalarArrayPtr create() { return new GleScalarArray(); };
 
 	void setSize(int size);
 	int getSize();

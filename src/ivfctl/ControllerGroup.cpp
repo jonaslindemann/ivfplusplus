@@ -23,41 +23,41 @@
 
 using namespace ivf;
 
-CControllerGroup::CControllerGroup()
+ControllerGroup::ControllerGroup()
 {
 
 }
 
-CControllerGroup::~CControllerGroup()
+ControllerGroup::~ControllerGroup()
 {
 	clear();
 }
 
-void CControllerGroup::doUpdate(double dt)
+void ControllerGroup::doUpdate(double dt)
 {
 	using namespace std;
 
-	vector<CController*>::iterator vi;
+	vector<Controller*>::iterator vi;
 
 	for (vi=m_controllers.begin(); vi!=m_controllers.end(); vi++)
 		(*vi)->update(dt);
 }
 
-void CControllerGroup::addChild(CController *controller)
+void ControllerGroup::addChild(Controller *controller)
 {
 	controller->addReference();
 	m_controllers.push_back(controller);
 }
 
-void CControllerGroup::clear()
+void ControllerGroup::clear()
 {
 	using namespace std;
 
-	vector<CController*>::iterator vi;
+	vector<Controller*>::iterator vi;
 
 	for (vi=m_controllers.begin(); vi!=m_controllers.end(); vi++)
 	{
-		CController* controller = (*vi);
+		Controller* controller = (*vi);
 
 		controller->deleteReference();
 		if (!controller->referenced())
@@ -67,9 +67,9 @@ void CControllerGroup::clear()
 	m_controllers.clear();
 }
 
-void CControllerGroup::doAction(CAction *action)
+void ControllerGroup::doAction(Action *action)
 {
-	CController* target = action->getTarget();
+	Controller* target = action->getTarget();
 	if ((target==this)||(target==nullptr))
 	{
 		switch (action->getActionType()) {
@@ -90,18 +90,18 @@ void CControllerGroup::doAction(CAction *action)
 	{
 		using namespace std;
 		
-		vector<CController*>::iterator vi;
+		vector<Controller*>::iterator vi;
 		
 		for (vi=m_controllers.begin(); vi!=m_controllers.end(); vi++)
 			(*vi)->doAction(action);
 	}
 }
 
-void CControllerGroup::doReset()
+void ControllerGroup::doReset()
 {
 	using namespace std;
 
-	vector<CController*>::iterator vi;
+	vector<Controller*>::iterator vi;
 
 	for (vi=m_controllers.begin(); vi!=m_controllers.end(); vi++)
 		(*vi)->reset();

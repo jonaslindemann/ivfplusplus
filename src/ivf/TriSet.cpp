@@ -27,23 +27,23 @@ using namespace ivf;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CTriSet::CTriSet()
+TriSet::TriSet()
 {
 	m_useColor = false;
 	m_drawInterval = 1;
 }
 
-CTriSet::~CTriSet()
+TriSet::~TriSet()
 {
 
 }
 
-void CTriSet::doCreateGeometry()
+void TriSet::doCreateGeometry()
 {
-	CIndex* coordIdx;
-	CIndex* colorIdx;
-	CIndex* normalIdx;
-	CIndex* textureIdx;
+	Index* coordIdx;
+	Index* colorIdx;
+	Index* normalIdx;
+	Index* textureIdx;
 	long i, j;
 
 	glPushAttrib(GL_COLOR_MATERIAL);
@@ -127,32 +127,32 @@ void CTriSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CTriSet::setUseColor(bool flag)
+void TriSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CTriSet::getUseColor()
+bool TriSet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CTriSet::calcNormal(CIndex *idx)
+void TriSet::calcNormal(Index *idx)
 {
 	long i;
-	CVec3d* p1;
-	CVec3d* p2;
-	CVec3d* p3;
-	CVec3d u;
-	CVec3d v;
-	CIndex* normalIdx;
+	Vec3d* p1;
+	Vec3d* p2;
+	Vec3d* p3;
+	Vec3d u;
+	Vec3d v;
+	Index* normalIdx;
 	//double n[3];
 
-	normalIdx = new CIndex();
+	normalIdx = new Index();
 
 	for (i=0; i<idx->getSize(); i+=3)
 	{
-		CVec3d* normal = new CVec3d();
+		Vec3d* normal = new Vec3d();
 
 		p1 = m_coordSet[idx->getIndex(i)];
 		p2 = m_coordSet[idx->getIndex(i+1)];
@@ -171,25 +171,25 @@ void CTriSet::calcNormal(CIndex *idx)
 
 		m_normalSet.push_back(normal);
 
-		normalIdx->add(m_normalSet.size()-1);
+		normalIdx->add(static_cast<int>(m_normalSet.size())-1);
 
 		// Add normal idx to each vertex
 
-		m_vertexNormalIndexSet[idx->getIndex(i)]->add(m_normalSet.size()-1);
-		m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(m_normalSet.size()-1);
-		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
+		m_vertexNormalIndexSet[idx->getIndex(i)]->add(static_cast<int>(m_normalSet.size())-1);
+		m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(static_cast<int>(m_normalSet.size())-1);
+		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(static_cast<int>(m_normalSet.size())-1);
 	}
 
 	m_normalIndexSet.push_back(normalIdx);
 }
 
 
-void CTriSet::updateVertexNormals()
+void TriSet::updateVertexNormals()
 {
 	long i, j;
-	CVec3d* vertexNormal;
-	CVec3d* normal;
-	CVec3d averageNormal;
+	Vec3d* vertexNormal;
+	Vec3d* normal;
+	Vec3d averageNormal;
 	double sx, sy, sz;
 	double nx, ny, nz;
 
@@ -220,7 +220,7 @@ void CTriSet::updateVertexNormals()
 	}
 }
 
-void CTriSet::setDrawInterval(int interval)
+void TriSet::setDrawInterval(int interval)
 {
 	m_drawInterval = interval;
 }

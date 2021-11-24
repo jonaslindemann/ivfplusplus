@@ -43,26 +43,26 @@ enum ftype {MB=19778}; // magic number identifies a bmp file; actually chars 'B'
 enum ncol { BW=1, IA, RGB, RGBA};
 
 
-CBmpImage::CBmpImage()
+BmpImage::BmpImage()
 {
 	imageData = nullptr;
 	m_alphaChannel = false;
 }
 
-CBmpImage::CBmpImage(const std::string& name)
-:CFileImage(name)
+BmpImage::BmpImage(const std::string& name)
+:FileImage(name)
 {
 	imageData = nullptr;
 	m_alphaChannel = false;
 }
 
-CBmpImage::~CBmpImage()
+BmpImage::~BmpImage()
 {
 
 }
 
 
-bool CBmpImage::read()
+bool BmpImage::read()
 {
 	FILE* inf;
 
@@ -85,13 +85,13 @@ bool CBmpImage::read()
 
 
 
-void CBmpImage::setAlphaChannel(bool flag)
+void BmpImage::setAlphaChannel(bool flag)
 {
 	m_alphaChannel = flag;
 }
 
 /* byte order workarounds *sigh* */
-void CBmpImage::swapbyte(long *i)
+void BmpImage::swapbyte(long *i)
 {
     char *vv=(char *)i;
     char tmp=vv[0];
@@ -102,7 +102,7 @@ void CBmpImage::swapbyte(long *i)
     vv[2]=tmp;
 }
 
-void CBmpImage::swapbyte(unsigned long *i)
+void BmpImage::swapbyte(unsigned long *i)
 {
     char *vv=(char *)i;
     char tmp=vv[0];
@@ -112,7 +112,7 @@ void CBmpImage::swapbyte(unsigned long *i)
     vv[1]=vv[2];
     vv[2]=tmp;
 }
-void CBmpImage::swapbyte(float *i)
+void BmpImage::swapbyte(float *i)
 {
     char *vv=(char *)i;
     char tmp=vv[0];
@@ -124,7 +124,7 @@ void CBmpImage::swapbyte(float *i)
 }
 
 
-void CBmpImage::swapbyte(unsigned short *i)
+void BmpImage::swapbyte(unsigned short *i)
 {
     char *vv=(char *)i;
     char tmp=vv[0];
@@ -132,7 +132,7 @@ void CBmpImage::swapbyte(unsigned short *i)
     vv[1]=tmp;
 }
 
-void CBmpImage::swapbyte(short *i)
+void BmpImage::swapbyte(short *i)
 {
     char *vv=(char *)i;
     char tmp=vv[0];
@@ -140,7 +140,7 @@ void CBmpImage::swapbyte(short *i)
     vv[1]=tmp;
 }
 
-unsigned char *CBmpImage::bmp_load(const char *filename,
+unsigned char *BmpImage::bmp_load(const char *filename,
                                       int *width_ret,
                                       int *height_ret,
                                       int *numComponents_ret)

@@ -26,11 +26,11 @@
 
 using namespace ivf;
 
-CCulledComposite::CCulledComposite()
+CulledComposite::CulledComposite()
 {
-	m_matrixStack = new CMatrixStack();
+	m_matrixStack = new MatrixStack();
 
-	m_frustum = new CViewFrustum();
+	m_frustum = new ViewFrustum();
 
 	m_useCulling = true;
 	m_cullCount = 0;
@@ -40,37 +40,37 @@ CCulledComposite::CCulledComposite()
 	this->getBoundingSphere()->setRadius(0.0);
 }
 
-CCulledComposite::~CCulledComposite()
+CulledComposite::~CulledComposite()
 {
 	delete m_matrixStack;
 	delete m_frustum;
 }
 
-void CCulledComposite::addChild(CShape *shape)
+void CulledComposite::addChild(Shape *shape)
 {
-	CComposite::addChild(shape);
+	Composite::addChild(shape);
 
 	// Initialize bounding sphere
 
 	shape->initBoundingSphere();
 }
 
-void CCulledComposite::doCreateGeometry()
+void CulledComposite::doCreateGeometry()
 {
 	if (m_useCulling)
 		this->cull();
 
-	CComposite::doCreateGeometry();
+	Composite::doCreateGeometry();
 }
 
-void CCulledComposite::cull()
+void CulledComposite::cull()
 {
 	m_cullView->getViewFrustum(m_frustum);
 	m_cullCount = 0;
 	cullChildren(this);
 }
 
-void CCulledComposite::cullChildren(CShape *shape)
+void CulledComposite::cullChildren(Shape *shape)
 {
 	// Recursively cull children
 
@@ -81,7 +81,7 @@ void CCulledComposite::cullChildren(CShape *shape)
 
 	if (shape->isClass("CIvfComposite"))
 	{
-		CComposite* composite = (CComposite*) shape;
+		Composite* composite = (Composite*) shape;
 
 		composite->getPosition(x, y, z);
 		m_matrixStack->getWorldCoordinate(x, y, z, wx, wy, wz);
@@ -109,7 +109,7 @@ void CCulledComposite::cullChildren(CShape *shape)
 
 			for (i = 0; i<composite->getSize(); i++)
 			{
-				CShape* child = composite->getChild(i);
+				Shape* child = composite->getChild(i);
 				cullChildren(child);
 			}
 			m_matrixStack->popMatrix();
@@ -141,32 +141,32 @@ void CCulledComposite::cullChildren(CShape *shape)
 	}
 }
 
-int CCulledComposite::getCullCount()
+int CulledComposite::getCullCount()
 {
 	return m_cullCount;
 }
 
-CView* CCulledComposite::getCullView()
+View* CulledComposite::getCullView()
 {
 	return m_cullView;
 }
 
-bool CCulledComposite::getUseCulling()
+bool CulledComposite::getUseCulling()
 {
 	return m_useCulling;
 }
 
-bool CCulledComposite::intersectFrustum(CBoundingSphere *bSphere)
+bool CulledComposite::intersectFrustum(BoundingSphere *bSphere)
 {
 	return m_frustum->isInside(bSphere);
 }
 
-void CCulledComposite::setCullView(CView *view)
+void CulledComposite::setCullView(View *view)
 {
 	m_cullView = view;
 }
 
-void CCulledComposite::setUseCulling(bool flag)
+void CulledComposite::setUseCulling(bool flag)
 {
 	m_useCulling = flag;
 }

@@ -29,52 +29,52 @@
 
 namespace ivf {
 
-IvfSmartPointer(CQuat);
+IvfSmartPointer(Quat);
 
 /**
  * Quaternion class
  *
  * Interface not finished
  */
-class IVFMATH_API CQuat : public CMathBase {
+class IVFMATH_API Quat : public MathBase {
 private:
-	CVec3d m_q;
+	Vec3d m_q;
 	double m_qw;
 public:
-	/** CQuat constructor */
-	CQuat();
+	/** Quat constructor */
+	Quat();
 	
-	/** CQuat copy constructor */
-	CQuat(CQuat& v);
+	/** Quat copy constructor */
+	Quat(Quat& v);
 
-	/** CQuat destructor */
-	virtual ~CQuat();
+	/** Quat destructor */
+	virtual ~Quat();
 
-	IvfClassInfo("CQuat",CMathBase);
-	IvfStdFactory(CQuat);
+	IvfClassInfo("Quat",MathBase);
+	IvfStdFactory(Quat);
 
 	void getComponents(double &qx, double &qy, double &qz, double &qw);
 	void setComponents(double qx, double qy, double qz, double qw);
 
-	CVec3d& getVectorPart();
+	Vec3d& getVectorPart();
 	double getRealPart();
 
 	void getAxisAngle(double& vx, double& vy, double &vz, double &angle);
 	void setFromAxisAngle(double vx, double vy, double vz, double angle);
 	void setRealPart(double value);
-	CQuat& inv();
+	Quat& inv();
 	double norm();
 	void identity();
-	CQuat& conjugate();
+	Quat& conjugate();
 
-	CQuat& operator=(CQuat& a);
-	CQuat& operator*(CQuat& a);
-	CQuat& operator*(double b);
-	CQuat& operator/(double b);
-	CQuat& operator+(CQuat& a);
-	CQuat& operator-(CQuat& a);
+	Quat& operator=(Quat& a);
+	Quat& operator*(Quat& a);
+	Quat& operator*(double b);
+	Quat& operator/(double b);
+	Quat& operator+(Quat& a);
+	Quat& operator-(Quat& a);
 };
 
-CQuat& ivfGetTempQuat();
+Quat& ivfGetTempQuat();
 
 }

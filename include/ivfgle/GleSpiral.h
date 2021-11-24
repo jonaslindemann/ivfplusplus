@@ -34,23 +34,23 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGleSpiral);
+IvfSmartPointer(GleSpiral);
 
-class IVFGLE_API CGleSpiral: public CShape {
+class IVFGLE_API GleSpiral: public Shape {
 private:
-	CGleContourPtr	 m_contour;
+	GleContourPtr	 m_contour;
 	gleDouble			 m_up[3];
 	gleDouble			 m_startXfm[2][3];
 	gleDouble			 m_xfmTheta[2][3];
 public:
-	CGleSpiral();
+	GleSpiral();
 
-	IvfClassInfo("CGleSpiral", CShape);
-	IvfStdFactory(CGleSpiral);
+	IvfClassInfo("GleSpiral", Shape);
+	IvfStdFactory(GleSpiral);
 
-	void setContour(CGleContour* contour);
+	void setContour(GleContour* contour);
 	void setContourUp(double vx, double vy, double vz);
-	void setContourUp(CVec3d& vec);
+	void setContourUp(Vec3d& vec);
 protected:
 	virtual void doCreateGeometry();
 };

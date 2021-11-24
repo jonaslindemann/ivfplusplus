@@ -32,33 +32,33 @@
 
 namespace ivf {
 
-IvfSmartPointer(CCulledComposite);
+IvfSmartPointer(CulledComposite);
 
 /** Obsolete use CIvfCulling instead */
-class IVF_API CCulledComposite : public CComposite {
+class IVF_API CulledComposite : public Composite {
 private:
-	CMatrixStack* m_matrixStack;
-	CViewFrustum* m_frustum;
-	CView* m_cullView;
+	MatrixStack* m_matrixStack;
+	ViewFrustum* m_frustum;
+	View* m_cullView;
 	int m_cullCount;
 	bool m_useCulling;
 
-	void cullChildren(CShape* shape);
-	bool intersectFrustum(CBoundingSphere *bSphere);
+	void cullChildren(Shape* shape);
+	bool intersectFrustum(BoundingSphere *bSphere);
 public:
-	CCulledComposite();
-	virtual ~CCulledComposite();
+	CulledComposite();
+	virtual ~CulledComposite();
 
-	IvfClassInfo("CCulledComposite",CComposite);
-	IvfStdFactory(CCulledComposite);
+	IvfClassInfo("CulledComposite",Composite);
+	IvfStdFactory(CulledComposite);
 
-	void addChild(CShape* shape);
+	void addChild(Shape* shape);
 
 	void setUseCulling(bool flag);
 	bool getUseCulling();
 	
-	void setCullView(CView* view);
-	CView* getCullView();
+	void setCullView(View* view);
+	View* getCullView();
 
 	int getCullCount();
 

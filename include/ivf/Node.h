@@ -30,17 +30,17 @@
 
 namespace ivf {
 
-IvfSmartPointer(CNode);
+IvfSmartPointer(Node);
 
 /**
  * Node shape class
  *
- * CNode implements a geometric node. The node shape
+ * Node implements a geometric node. The node shape
  * can represent a node as a sphere or a cube. The node class
- * is used by CSolidLine.
+ * is used by SolidLine.
  * @author Jonas Lindemann
  */
-class IVF_API CNode : public CShape {
+class IVF_API Node : public Shape {
 public:
 	enum TNodeType {
 		NT_SPHERE,
@@ -48,14 +48,14 @@ public:
 		NT_INVISIBLE
 	};
 public:
-	/** CNode constructor */
-	CNode ();
+	/** Node constructor */
+	Node ();
 
-	/** CNode destructor */
-	virtual ~CNode ();
+	/** Node destructor */
+	virtual ~Node ();
 
-	IvfClassInfo("CNode",CBase);
-	IvfStdFactory(CNode);
+	IvfClassInfo("Node",Base);
+	IvfStdFactory(Node);
 	
 	/**
 	 * Set node size.
@@ -84,11 +84,11 @@ public:
 	virtual void doUpdateBoundingSphere();
 private:
 	double m_nodeSize;
-	CSelectionBoxPtr m_selectionBox;
+	SelectionBoxPtr m_selectionBox;
 	TNodeType m_nodeType;
-	CShapePtr m_nodeShape;
-	CCubePtr m_cubeShape;
-	CSpherePtr m_sphereShape;
+	ShapePtr m_nodeShape;
+	CubePtr m_cubeShape;
+	SpherePtr m_sphereShape;
 protected:
 	virtual void doCreateSelect();
 	virtual void doCreateGeometry();

@@ -23,8 +23,8 @@
 
 using namespace ivf;
 
-CQuadPlane::CQuadPlane()
-:CQuadSet()
+QuadPlane::QuadPlane()
+:QuadSet()
 {
 	m_width = 1.0;
 	m_height = 1.0;
@@ -35,12 +35,12 @@ CQuadPlane::CQuadPlane()
 	this->initPlane();
 }
 
-CQuadPlane::~CQuadPlane()
+QuadPlane::~QuadPlane()
 {
 
 }
 
-void CQuadPlane::setSize(double width, double height)
+void QuadPlane::setSize(double width, double height)
 {
 	m_width = width;
 	m_height = height;
@@ -49,10 +49,10 @@ void CQuadPlane::setSize(double width, double height)
 	this->initPlane();
 }
 
-void CQuadPlane::setTexture(CTexture *texture)
+void QuadPlane::setTexture(Texture *texture)
 {
 	int width, height;
-	CShape::setTexture(texture);
+	Shape::setTexture(texture);
 	texture->getSize(width, height);
 	if ((width>0)&&(height>0))
 	{
@@ -61,18 +61,18 @@ void CQuadPlane::setTexture(CTexture *texture)
 	}
 }
 
-void CQuadPlane::updateTextureCoords()
+void QuadPlane::updateTextureCoords()
 {
 
 }
 
 
-void CQuadPlane::setWidth(double width)
+void QuadPlane::setWidth(double width)
 {
 	this->setSize(width, width/m_ratio);
 }
 
-void CQuadPlane::flipVert()
+void QuadPlane::flipVert()
 {
 	this->setTextureCoord(0, 0.0,m_textureRepeat[1]);
 	this->setTextureCoord(1, m_textureRepeat[0],m_textureRepeat[1]);
@@ -80,7 +80,7 @@ void CQuadPlane::flipVert()
 	this->setTextureCoord(3, 0.0,0.0);
 }
 
-void CQuadPlane::initPlane()
+void QuadPlane::initPlane()
 {
 	this->clear();
 	
@@ -111,7 +111,7 @@ void CQuadPlane::initPlane()
 		break;
 	};
 	
-	CIndexPtr idx = new CIndex();
+	IndexPtr idx = new Index();
 	idx->createLinear(4);
 	this->addCoordIndex(idx);
 
@@ -120,18 +120,18 @@ void CQuadPlane::initPlane()
 	this->addTextureCoord(m_textureRepeat[0],m_textureRepeat[1]);
 	this->addTextureCoord(0.0,m_textureRepeat[1]);
 
-	idx = new CIndex();
+	idx = new Index();
 	idx->createLinear(4);
 	this->addTextureIndex(idx);
 }
 
-void CQuadPlane::setOrientation(TPlaneOrientation orientation)
+void QuadPlane::setOrientation(TPlaneOrientation orientation)
 {
 	m_planeOrientation = orientation;
 	this->initPlane();
 }
 
-void CQuadPlane::setTextureRepeat(double xrepeat, double yrepeat)
+void QuadPlane::setTextureRepeat(double xrepeat, double yrepeat)
 {
 	m_textureRepeat[0] = xrepeat;
 	m_textureRepeat[1] = yrepeat;

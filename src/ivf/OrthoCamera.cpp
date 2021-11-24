@@ -27,12 +27,12 @@
 
 using namespace ivf;
 
-COrthoCamera::COrthoCamera()
+OrthoCamera::OrthoCamera()
 {
 
 }
 
-COrthoCamera::~COrthoCamera()
+OrthoCamera::~OrthoCamera()
 {
 
 }

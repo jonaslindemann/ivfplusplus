@@ -28,9 +28,9 @@
 
 namespace ivf {
 
-IvfSmartPointer(CUIButtonBase);
+IvfSmartPointer(UIButtonBase);
 
-class IVF3DUI_API CUIButtonBase : public CUIInteractiveBase {
+class IVF3DUI_API UIButtonBase : public UIInteractiveBase {
 public:
 	enum TButtonType {
 		BT_NORMAL,
@@ -47,11 +47,11 @@ private:
 	TButtonState m_state;
 public:
 	void groupUpdateState(TButtonState state);
-	CUIButtonBase();
-	virtual ~CUIButtonBase();
+	UIButtonBase();
+	virtual ~UIButtonBase();
 
-	IvfClassInfo("CUIButtonBase",CUIInteractiveBase);
-	IvfStdFactory(CUIButtonBase);
+	IvfClassInfo("UIButtonBase",UIInteractiveBase);
+	IvfStdFactory(UIButtonBase);
 
 	void setState(TButtonState state);
 	TButtonType getType();

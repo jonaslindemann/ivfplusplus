@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CCube);
+IvfSmartPointer(Cube);
 
 /**
  * Cube shape class
@@ -37,18 +37,18 @@ IvfSmartPointer(CCube);
  * dimensions.
  * @author Jonas Lindemann
  */
-class IVF_API CCube : public CBrick {
+class IVF_API Cube : public Brick {
 private:
 
 public:
 	/** CIvfCube constructor. */
-	CCube ();
+	Cube ();
 	
 	/** CIvfCube destructor. */
-	virtual ~CCube ();
+	virtual ~Cube ();
 	
-	IvfClassInfo("CCube",CBrick);
-	IvfStdFactory(CCube);
+	IvfClassInfo("Cube",Brick);
+	IvfStdFactory(Cube);
 
 	/** Set size of cube size */
 	void	setSize (const double size);

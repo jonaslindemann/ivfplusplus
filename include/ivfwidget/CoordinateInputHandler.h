@@ -36,7 +36,7 @@ namespace ivf {
 /**
  * 3D mouse down event class
  */
-class IVFWIDGET_API CMouseDown3dEvent : public CEventBase 
+class IVFWIDGET_API MouseDown3dEvent : public EventBase 
 {
 public:
 	/**
@@ -53,7 +53,7 @@ public:
 /**
  * 3D mouse move event class
  */
-class IVFWIDGET_API CMouseMove3dEvent : public CEventBase 
+class IVFWIDGET_API MouseMove3dEvent : public EventBase 
 {
 public:
 	/**
@@ -70,7 +70,7 @@ public:
 /**
  * 3D mouse up event class
  */
-class IVFWIDGET_API CMouseUp3dEvent : public CEventBase 
+class IVFWIDGET_API MouseUp3dEvent : public EventBase 
 {
 public:
 	/**
@@ -84,43 +84,43 @@ public:
 	virtual void onMouseUp3d(double x, double y, double z) {};
 };
 
-IvfSmartPointer(CCoordinateInputHandler);
+IvfSmartPointer(CoordinateInputHandler);
 
 /**
  * 3D Coordinate input handler
  *
  * This class implements 3d coordinate input handler. The
- * class is used together with CWidgetBase derived classes,
- * such as CFltkBase, CIvfWin32Window, CIvfMfcBase etc.
+ * class is used together with WidgetBase derived classes,
+ * such as FltkBase, CIvfWin32Window, CIvfMfcBase etc.
  * The class needs a reference to the base widget and a CIvfCamera
  * derived class. The class installs 3 handlers for mouse movement
  * in the widget class.
  */
-class IVFWIDGET_API CCoordinateInputHandler : public CHandlerBase,
-	CMouseMoveEvent,
-	CMouseDownEvent,
-	CMouseUpEvent 
+class IVFWIDGET_API CoordinateInputHandler : public HandlerBase,
+	MouseMoveEvent,
+	MouseDownEvent,
+	MouseUpEvent 
 {
 private:
-	CWidgetBase*		m_widget;
-	CCameraPtr		m_camera;
-	CUcs3dPtr		m_ucsXZ;
-	CUcs3dPtr		m_ucsXY;
-	CUcs3dPtr		m_ucsYZ;
-	CVec3d			m_intersection;
-	CVec3d			m_xzIntersection;
-	CVec3d			m_temp;
+	WidgetBase*		m_widget;
+	CameraPtr		m_camera;
+	Ucs3dPtr		m_ucsXZ;
+	Ucs3dPtr		m_ucsXY;
+	Ucs3dPtr		m_ucsYZ;
+	Vec3d			m_intersection;
+	Vec3d			m_xzIntersection;
+	Vec3d			m_temp;
 
 	bool				m_lockXZ;
 	bool				m_snap;
 
 	int					m_mousePos[2];
 
-	std::vector<CMouseDown3dEvent*> m_mouseDown3dEvents;
-	std::vector<CMouseMove3dEvent*> m_mouseMove3dEvents;
-	std::vector<CMouseUp3dEvent*> m_mouseUp3dEvents;
+	std::vector<MouseDown3dEvent*> m_mouseDown3dEvents;
+	std::vector<MouseMove3dEvent*> m_mouseMove3dEvents;
+	std::vector<MouseUp3dEvent*> m_mouseUp3dEvents;
 
-	CVec3d& calcIntersection(int x, int y);
+	Vec3d& calcIntersection(int x, int y);
 	void dispatchMouseDown3dEvent(double x, double y, double z);
 	void dispatchMouseMove3dEvent(double x, double y, double z);
 	void dispatchMouseUp3dEvent(double x, double y, double z);
@@ -133,17 +133,17 @@ public:
 	/**
 	 * Class constructor
 	 *
-	 * @paran widget Reference to a CWidgetBase class. In most cases
+	 * @paran widget Reference to a WidgetBase class. In most cases
 	 * this parameter can be set to this.
 	 * @param camera CIvfCamera derived class for calulcating the intersection
 	 * with the coordinate plane.
 	 */
-	CCoordinateInputHandler(CWidgetBase* widget, CCamera* camera);
+	CoordinateInputHandler(WidgetBase* widget, Camera* camera);
 
 	/** Class destructor */
-	virtual ~CCoordinateInputHandler();
+	virtual ~CoordinateInputHandler();
 
-	IvfClassInfo("CCoordinateInputHandler",CHandlerBase);
+	IvfClassInfo("CoordinateInputHandler",HandlerBase);
 
 	/** Locks cursor in XY direction (without producing an event) */
 	void setLockXZNoEvent(bool flag);
@@ -152,25 +152,25 @@ public:
 	void setPlanePosition(double x, double y, double z);
 
 	/** Set position of the coordinate input plane. */
-	void setPlanePosition(CVec3d& vec);
+	void setPlanePosition(Vec3d& vec);
 
 	/** Add mouse down event */
-	void addMouseDown3dEvent(CMouseDown3dEvent* event);
+	void addMouseDown3dEvent(MouseDown3dEvent* event);
 
 	/** Add mouse move event */
-	void addMouseMove3dEvent(CMouseMove3dEvent* event);
+	void addMouseMove3dEvent(MouseMove3dEvent* event);
 
 	/** Add mouse up event */
-	void addMouseUp3dEvent(CMouseUp3dEvent* event);
+	void addMouseUp3dEvent(MouseUp3dEvent* event);
 
 	/** Remove mouse down event */
-	void removeMouseDown3dEvent(CMouseDown3dEvent* event);
+	void removeMouseDown3dEvent(MouseDown3dEvent* event);
 
 	/** Remove mouse move event */
-	void removeMouseMove3dEvent(CMouseMove3dEvent* event);
+	void removeMouseMove3dEvent(MouseMove3dEvent* event);
 
 	/** Remove mouse up event */
-	void removeMouseUp3dEvent(CMouseUp3dEvent* event);
+	void removeMouseUp3dEvent(MouseUp3dEvent* event);
 
 	/** Lock/unlock cursor in XZ plane */
 	void setLockXZ(bool flag);
@@ -179,10 +179,10 @@ public:
 	bool getLockXZ();
 
 	/** Return reference to current camera */
-	CCamera* getCamera();
+	Camera* getCamera();
 
 	/** Return reference to widget */
-	CWidgetBase* getWidget();
+	WidgetBase* getWidget();
 
 	virtual void onMouseDown(int x, int y);
 	virtual void onMouseMove(int x, int y);

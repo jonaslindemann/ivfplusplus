@@ -30,29 +30,29 @@
 
 namespace ivf {
 
-IvfSmartPointer(CCompositeState);
+IvfSmartPointer(CompositeState);
 
 /**
  * Composite state class
  *
  * This class is used to manage a composite set of 
- * CRenderState derived states.
+ * RenderState derived states.
  */
-class IVF_API CCompositeState : public CRenderState {
+class IVF_API CompositeState : public RenderState {
 private:
-	std::vector<CRenderState*> m_children;
+	std::vector<RenderState*> m_children;
 public:
 	/** CIvfCompositeState constructor */
-	CCompositeState();
+	CompositeState();
 
 	/** CIvfCompositeState destructor */
-	virtual ~CCompositeState();
+	virtual ~CompositeState();
 
-	IvfClassInfo("CCompositeState",CRenderState);
-	IvfStdFactory(CCompositeState);
+	IvfClassInfo("CompositeState",RenderState);
+	IvfStdFactory(CompositeState);
 
-	/** Add CRenderState derived state */
-	void addChild(CRenderState* state);
+	/** Add RenderState derived state */
+	void addChild(RenderState* state);
 
 	/** Clear all states */
 	void clear();

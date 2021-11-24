@@ -26,12 +26,12 @@
 
 using namespace ivf;
 
-CGlePolyCone::CGlePolyCone()
+GlePolyCone::GlePolyCone()
 {
 
 }
 
-void CGlePolyCone::doCreateGeometry()
+void GlePolyCone::doCreateGeometry()
 {
 	if ((m_pointArray!=nullptr)&&(m_radius!=nullptr)&&(m_colorArray==nullptr))
 	{
@@ -71,7 +71,7 @@ void CGlePolyCone::doCreateGeometry()
 	}
 }
 
-void CGlePolyCone::setRadius(CGleScalarArray *array)
+void GlePolyCone::setRadius(GleScalarArray *array)
 {
 	m_radius = array;
 }

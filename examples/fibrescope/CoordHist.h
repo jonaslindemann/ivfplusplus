@@ -31,28 +31,28 @@
 #include "CoordList.h"
 #include "DiscreteTime.h"
 
-IvfSmartPointer(CCoordHist);
+IvfSmartPointer(CoordHist);
 
-class CCoordHist : public ivf::CBase {
+class CoordHist : public ivf::Base {
 private:
-	std::vector<CCoordListPtr> m_lists;
-	CDiscreteTimePtr m_discreteTime;
+	std::vector<CoordListPtr> m_lists;
+	DiscreteTimePtr m_discreteTime;
 public:
-	CCoordHist();
-	virtual ~CCoordHist();
+	CoordHist();
+	virtual ~CoordHist();
 
-	IvfStdFactory(CCoordHist);
+	IvfStdFactory(CoordHist);
 
 	void readFromStream(std::istream &in);
 	void saveToStream(std::ostream &out);
 
-	void addList(CCoordList* list);
-	CCoordList* getList(long idx);
-	CCoordList* getList();
+	void addList(CoordList* list);
+	CoordList* getList(long idx);
+	CoordList* getList();
 	long getSize();
 	void clear();
 
-	void setDiscreteTime(CDiscreteTime* discreteTime);
+	void setDiscreteTime(DiscreteTime* discreteTime);
 };
 
 #endif 

@@ -9,9 +9,9 @@
 
 #include "CircularTube.h"
 
-IvfSmartPointer(CVectorCursor);
+IvfSmartPointer(VectorCursor);
 
-class CVectorCursor : public ivf::CShape {
+class VectorCursor : public ivf::Shape {
 public:
 	enum TCursorType {
 		CT_VECTOR,
@@ -19,31 +19,33 @@ public:
 		CT_BETA
 	};
 private:
-	ivf::CTransformPtr	m_cursor;
-	ivf::CTransformPtr	m_alfaRotate;
-	ivf::CTransformPtr	m_betaRotate;
-	ivf::CTransformPtr	m_nonRotatingCursor;
-	ivf::CTransformPtr	m_angleIndicators;
-	CCircularTubePtr	m_circle1;
-	CCircularTubePtr	m_circle2;
-	ivf::CTransformPtr	m_spheres;
-	ivf::CExtrArrowPtr	m_vectorIndicator;
+	ivf::TransformPtr	m_cursor;
+	ivf::TransformPtr	m_alfaRotate;
+	ivf::TransformPtr	m_betaRotate;
+	ivf::TransformPtr	m_nonRotatingCursor;
+	ivf::TransformPtr	m_angleIndicators;
+	CircularTubePtr		m_circle1;
+	CircularTubePtr		m_circle2;
+	ivf::TransformPtr	m_spheres;
+	ivf::ExtrArrowPtr	m_vectorIndicator;
 	TCursorType			m_cursorType;
 	double				m_alpha;
 	double				m_beta;
-	ivf::CVec3d			m_vector;
+	ivf::Vec3d			m_vector;
 
-	ivf::CTransformPtr m_spheres1;
-	ivf::CTransformPtr m_spheres2;
+	ivf::TransformPtr	m_spheres1;
+	ivf::TransformPtr	m_spheres2;
 
 	void calcVector();
 public:
-	ivf::CVec3d& getDirection();
+	ivf::Vec3d& getDirection();
 	void reset();
 	double getBeta();
 	double getAlpha();
-	CVectorCursor();
-	virtual ~CVectorCursor();
+	VectorCursor();
+	virtual ~VectorCursor();
+
+	IvfStdFactory(VectorCursor);
 
 	void setType(TCursorType type);
 	void setBeta(double beta);

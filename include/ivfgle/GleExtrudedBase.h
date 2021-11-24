@@ -31,24 +31,24 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGleExtrudedBase);
+IvfSmartPointer(GleExtrudedBase);
 
-class IVFGLE_API CGleExtrudedBase: public CShape {
+class IVFGLE_API GleExtrudedBase: public Shape {
 private:
 
 protected:
-	CGleCoordArrayPtr m_pointArray;
-	CGleColorArrayPtr m_colorArray;
+	GleCoordArrayPtr m_pointArray;
+	GleColorArrayPtr m_colorArray;
 public:
-	CGleExtrudedBase();
+	GleExtrudedBase();
 
-	IvfClassInfo("CGleExtrudedBase", CShape);
-	IvfStdFactory(CGleExtrudedBase);
+	IvfClassInfo("GleExtrudedBase", Shape);
+	IvfStdFactory(GleExtrudedBase);
 
-	void setColors(CGleColorArray* array);
-	void setPoints(CGleCoordArray* array);
-	CGleColorArray* getColors(void);
-	CGleCoordArray* getPoints(void);
+	void setColors(GleColorArray* array);
+	void setPoints(GleCoordArray* array);
+	GleColorArray* getColors(void);
+	GleCoordArray* getPoints(void);
 };
 
 }

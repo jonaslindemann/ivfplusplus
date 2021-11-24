@@ -28,23 +28,23 @@
 
 using namespace ivf;
 
-CCullState::CCullState()
+CullState::CullState()
 {
 	m_cull = true;
 	m_cullFace = CF_BACK;
 }
 
-CCullState::~CCullState()
+CullState::~CullState()
 {
 
 }
 
-void CCullState::doSaveState()
+void CullState::doSaveState()
 {
 	glPushAttrib(GL_ENABLE_BIT);
 }
 
-void CCullState::doState()
+void CullState::doState()
 {
 	if (m_cull)
 		glEnable(GL_CULL_FACE);
@@ -54,17 +54,17 @@ void CCullState::doState()
 	glCullFace(m_cullFace);
 }
 
-void CCullState::doRestoreState()
+void CullState::doRestoreState()
 {
 	glPopAttrib();
 }
 
-void CCullState::setCulling(bool flag)
+void CullState::setCulling(bool flag)
 {
 	m_cull = flag;
 }
 
-void CCullState::setCullFace(TCullFace face)
+void CullState::setCullFace(TCullFace face)
 {
 	m_cullFace = face;
 }

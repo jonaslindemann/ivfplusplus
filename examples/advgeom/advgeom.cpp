@@ -47,13 +47,13 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase {
+class ExampleWindow: public GlutBase {
 private:
-	CCameraPtr		m_camera;
-	CCompositePtr	m_scene;
-	CLightPtr		m_light;
+	CameraPtr		m_camera;
+	CompositePtr	m_scene;
+	LightPtr		m_light;
 
 	double m_angleX;
 	double m_angleY;
@@ -65,10 +65,10 @@ private:
 	int m_beginX;
 	int m_beginY;
 public:
-	CExampleWindow(int X, int Y, int W, int H)
-		:CGlutBase(X, Y, W, H) {};
+	ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H) {};
 
-	static CExampleWindowPtr create(int X, int Y, int W, int H);
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -82,12 +82,12 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindowPtr CExampleWindow::create(int X, int Y, int W, int H)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
 {
-	return CExampleWindowPtr(new CExampleWindow(X, Y, W, H));
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -100,38 +100,38 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = CCamera::create();
+	m_camera = Camera::create();
 	m_camera->setPosition(-6.6, 9.2, 10.5);
 	m_camera->setTarget(1.1, 0.1, 0.6);
 
 	// Create a materials
 
-	auto greenMaterial = CMaterial::create();
+	auto greenMaterial = Material::create();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.2f, 0.0f, 1.0f);
 	
-	auto redMaterial = CMaterial::create();
+	auto redMaterial = Material::create();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.2f, 0.0f, 0.0f, 1.0f);
 
 	// Create textures
 
-	auto logoImage = CPngImage::create();
+	auto logoImage = PngImage::create();
 	logoImage->setFileName("images/ivf.png");
 	logoImage->read();
 
-	auto logoTexture = CTexture::create();
+	auto logoTexture = Texture::create();
 	logoTexture->setImage(logoImage);
 
 	// Create scene composite
 
-	m_scene = CComposite::create();;
+	m_scene = Composite::create();;
 
 	// Create a PointSet
 
-	auto pointSet = CPointSet::create();
+	auto pointSet = PointSet::create();
 
 	pointSet->addCoord(0.0, 0.0, 0.0);
 	pointSet->addCoord(0.0, 0.0, 1.0);
@@ -142,7 +142,7 @@ void CExampleWindow::onInit(int width, int height)
 	pointSet->addCoord(3.0, 0.0, 0.0);
 	pointSet->addCoord(3.0, 0.0, 1.0);
 	
-	auto coordIdx = CIndex::create();
+	auto coordIdx = Index::create();
 	coordIdx->createLinear(8);
 
 	pointSet->addCoordIndex(coordIdx);
@@ -156,7 +156,7 @@ void CExampleWindow::onInit(int width, int height)
 	pointSet->addColor(1.0, 1.0, 1.0);
 	pointSet->addColor(0.0, 0.0, 1.0);
 
-	auto colorIdx = CIndex::create();
+	auto colorIdx = Index::create();
 	colorIdx->createLinear(8);
 	pointSet->addColorIndex(colorIdx);
 	pointSet->setUseColor(true);
@@ -168,7 +168,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a LineSet
 
-	auto lineSet = CLineSet::create();
+	auto lineSet = LineSet::create();
 	
 	lineSet->addCoord(0.0, 0.0, 0.0);
 	lineSet->addCoord(0.0, 0.0, 1.0);
@@ -179,7 +179,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineSet->addCoord(3.0, 0.0, 0.0);
 	lineSet->addCoord(3.0, 0.0, 1.0);
 	
-	coordIdx = CIndex::create();
+	coordIdx = Index::create();
 	coordIdx->createLinear(8);
 
 	lineSet->addCoordIndex(coordIdx);
@@ -193,7 +193,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineSet->addColor(1.0, 1.0, 1.0);
 	lineSet->addColor(0.0, 0.0, 1.0);
 
-	colorIdx = CIndex::create();
+	colorIdx = Index::create();
 	colorIdx->createLinear(8);
 
 	lineSet->addColorIndex(colorIdx);
@@ -207,7 +207,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a LineStripSet
 	
-	auto lineStripSet = CLineStripSet::create();
+	auto lineStripSet = LineStripSet::create();
 
 	lineStripSet->addCoord(0.0, 0.0, 0.0);
 	lineStripSet->addCoord(0.0, 0.0, 1.0);
@@ -218,7 +218,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineStripSet->addCoord(3.0, 0.0, 0.0);
 	lineStripSet->addCoord(3.0, 0.0, 1.0);
 	
-	coordIdx = CIndex::create();
+	coordIdx = Index::create();
 	coordIdx->createLinear(8);
 
 	lineStripSet->addCoordIndex(coordIdx);
@@ -232,7 +232,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineStripSet->addColor(1.0, 1.0, 1.0);
 	lineStripSet->addColor(0.0, 0.0, 1.0);
 
-	colorIdx = CIndex::create();
+	colorIdx = Index::create();
 	colorIdx->createLinear(8);
 
 	lineStripSet->addColorIndex(colorIdx);
@@ -245,7 +245,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a TriSet
 
-	auto triSet = CTriSet::create();
+	auto triSet = TriSet::create();
 	
 	triSet->addCoord(0.0,0.0,2.0);
 	triSet->addCoord(1.0,0.3,2.0);
@@ -257,7 +257,7 @@ void CExampleWindow::onInit(int width, int height)
 	triSet->addCoord(1.0,0.3,0.0);
 	triSet->addCoord(2.0,0.0,0.0);
 
-	coordIdx = CIndex::create();
+	coordIdx = Index::create();
 	coordIdx->add(0,1,4);
 	coordIdx->add(0,4,3);
 	coordIdx->add(1,2,5);
@@ -279,7 +279,7 @@ void CExampleWindow::onInit(int width, int height)
 	triSet->addTextureCoord(0.5,1.0);
 	triSet->addTextureCoord(1.0,1.0);
 
-	auto textureIdx = CIndex::create();
+	auto textureIdx = Index::create();
 	textureIdx->assignFrom(coordIdx);
 
 	triSet->addTextureIndex(textureIdx);
@@ -293,7 +293,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a TriStripSet
 
-	auto triStripSet = CTriStripSet::create();
+	auto triStripSet = TriStripSet::create();
 
 	triStripSet->addCoord(0.0, 0.0, 0.0);
 	triStripSet->addCoord(0.0, 0.0, 1.0);
@@ -313,12 +313,12 @@ void CExampleWindow::onInit(int width, int height)
 	triStripSet->addCoord(3.0, 1.0, 0.0);
 	triStripSet->addCoord(3.0, 1.0, 1.0);
 
-	coordIdx = CIndex::create();
+	coordIdx = Index::create();
 	coordIdx->createLinear(8);
 
 	triStripSet->addCoordIndex(coordIdx);
 
-	coordIdx = CIndex::create();
+	coordIdx = Index::create();
 	coordIdx->createLinear(8,8);
 
 	triStripSet->addCoordIndex(coordIdx);
@@ -332,7 +332,7 @@ void CExampleWindow::onInit(int width, int height)
 	triStripSet->addColor(1.0, 1.0, 1.0);
 	triStripSet->addColor(0.0, 0.0, 1.0);
 
-	colorIdx = CIndex::create();
+	colorIdx = Index::create();
 	colorIdx->createLinear(8);
 
 	triStripSet->addColorIndex(colorIdx);
@@ -346,7 +346,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a QuadSet
 
-	auto quadSet = CQuadSet::create();
+	auto quadSet = QuadSet::create();
 	
 	quadSet->addCoord(0.0,0.0,1.0);
 	quadSet->addCoord(1.0,0.0,1.0);
@@ -357,7 +357,7 @@ void CExampleWindow::onInit(int width, int height)
 	quadSet->addCoord(1.0,1.0,0.0);
 	quadSet->addCoord(0.0,1.0,0.0);
 
-	coordIdx = CIndex::create();
+	coordIdx = Index::create();
 	coordIdx->add(0,1,5,4);
 	coordIdx->add(1,2,6,5);
 	coordIdx->add(2,3,7,6);
@@ -376,7 +376,7 @@ void CExampleWindow::onInit(int width, int height)
 	quadSet->addColor(1.0, 1.0, 1.0);
 	quadSet->addColor(0.0, 0.0, 1.0);
 	
-	colorIdx = CIndex::create();
+	colorIdx = Index::create();
 	colorIdx->assignFrom(coordIdx);
 	
 	quadSet->addColorIndex(colorIdx);
@@ -386,13 +386,13 @@ void CExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(quadSet);
 
-	auto axis = CAxis::create();
+	auto axis = Axis::create();
 	axis->setSize(1.5);
 	m_scene->addChild(axis);
 	
 	// Create a light
 
-	auto lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
@@ -403,7 +403,7 @@ void CExampleWindow::onInit(int width, int height)
 	// Export all to a DXF file
 
 	/*
-	CIvfDxfWriterPtr dxfWriter = new CDxfWriter();
+	CIvfDxfWriterPtr dxfWriter = new DxfWriter();
 	dxfWriter->setFileName("advgeom.dxf");
 	dxfWriter->setShape(m_scene);
 	dxfWriter->write();
@@ -411,7 +411,7 @@ void CExampleWindow::onInit(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -419,7 +419,7 @@ void CExampleWindow::onResize(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 	m_camera->render();
@@ -427,14 +427,14 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseDown(int x, int y)
+void ExampleWindow::onMouseDown(int x, int y)
 {
 	m_beginX = x;
 	m_beginY = y;
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseMove(int x, int y)
+void ExampleWindow::onMouseMove(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -456,7 +456,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CWidgetBase::MT_SHIFT)
+		if (getModifierKey() == WidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -478,7 +478,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseUp(int x, int y)
+void ExampleWindow::onMouseUp(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -496,12 +496,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	auto app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	auto window = CExampleWindow::create(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

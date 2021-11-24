@@ -31,17 +31,17 @@
 
 namespace ivf {
 
-IvfStdPointer(CLighting);
+IvfStdPointer(Lighting);
 
 /**
  * Lighting singleton class
  *
- * The CLighting singleton encapsulates OpenGL lighting. 
- * An instance of the CLighting class is retrieved using the
+ * The Lighting singleton encapsulates OpenGL lighting. 
+ * An instance of the Lighting class is retrieved using the
  * getInstance() method. See the following code:
  *
  * \code
- * CIvfLightingPtr lighting = CLighting::getInstance();
+ * CIvfLightingPtr lighting = Lighting::getInstance();
  * lighting->enable();
  * CIvfLightPtr light = lighting->getLight(0);
  * light->enable();
@@ -50,18 +50,18 @@ IvfStdPointer(CLighting);
  *
  * @author Carl-Johan Lejdfors and Jonas Lindemann
  */
-class IVF_API CLighting : public CBase {
+class IVF_API Lighting : public Base {
 private:
-	static CLighting* m_instance;
-	static CSingletonDestroyer<CLighting> m_destroyer;
-	std::vector<CLight*> m_lights;
+	static Lighting* m_instance;
+	static SingletonDestroyer<Lighting> m_destroyer;
+	std::vector<Light*> m_lights;
 	GLfloat m_ambient[4];
 	GLint m_local[1], m_twoside[1];
 	std::vector<bool> m_enabled;
-public:	/** Return instance of CLighting */
-	static CLighting* getInstance();
+public:	/** Return instance of Lighting */
+	static Lighting* getInstance();
 
-	IvfClassInfo("CLighting",CBase);
+	IvfClassInfo("Lighting",Base);
 
 
 	/** Renders all lights */
@@ -105,7 +105,7 @@ public:	/** Return instance of CLighting */
 	 *
 	 * param idx should be between 0 and getSize()-1
 	 */
-	CLight* getLight(int idx);
+	Light* getLight(int idx);
 
 	/** Return the maximum light sources */
 	int getSize();
@@ -120,9 +120,9 @@ public:	/** Return instance of CLighting */
 	void saveEnabledState();
 protected:
 	/** Protected constructor (do not use) */
-	CLighting();
-	~CLighting();
-	friend class CSingletonDestroyer<CLighting>;
+	Lighting();
+	~Lighting();
+	friend class SingletonDestroyer<Lighting>;
 };
  
 }

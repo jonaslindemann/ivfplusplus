@@ -28,20 +28,20 @@
 
 namespace ivf {
 
-IvfSmartPointer(CUIComposite);
+IvfSmartPointer(UIComposite);
 
-class IVF3DUI_API CUIComposite : public CComposite {
+class IVF3DUI_API UIComposite : public Composite {
 private:
 
 public:
-	CUIComposite();
-	virtual ~CUIComposite();
+	UIComposite();
+	virtual ~UIComposite();
 
 	void setHighlight(THighlightState state);
-	void addChild(CShape* shape);
+	void addChild(Shape* shape);
 
-	IvfClassInfo("CUIComposite", CComposite);
-	IvfStdFactory(CUIComposite);
+	IvfClassInfo("UIComposite", Composite);
+	IvfStdFactory(UIComposite);
 
 };
 

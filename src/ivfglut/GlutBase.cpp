@@ -20,8 +20,8 @@
 
 using namespace ivf;
 
-CGlutBase::CGlutBase(int X, int Y, int W, int H, bool fullScreen)
-:CWidgetBase()
+GlutBase::GlutBase(int X, int Y, int W, int H, bool fullScreen)
+:WidgetBase()
 {
 	m_fullScreen = fullScreen;
 	m_id = -1;
@@ -43,16 +43,16 @@ CGlutBase::CGlutBase(int X, int Y, int W, int H, bool fullScreen)
 #endif
 	m_elapsedTime = 0.0;
 
-	CGlutApplication* application = CGlutApplication::getInstance();
+	GlutApplication* application = GlutApplication::getInstance();
 	application->addWindow(this);
 }
 
-CGlutBase::~CGlutBase()
+GlutBase::~GlutBase()
 {
 	
 }
 
-void CGlutBase::create()
+void GlutBase::create()
 {
 	if (m_fullScreen)
 	{
@@ -74,7 +74,7 @@ void CGlutBase::create()
 	}
 }
 
-double CGlutBase::doElapsedTime()
+double GlutBase::doElapsedTime()
 {
 #ifdef WIN32
 	LARGE_INTEGER count;
@@ -88,33 +88,33 @@ double CGlutBase::doElapsedTime()
 #endif
 }
 
-void CGlutBase::doEnableTimeout(float time, int nbr)
+void GlutBase::doEnableTimeout(float time, int nbr)
 {
-	CGlutApplication::getInstance()->enableTimer(nbr, (int)(time*1000.0));
+	GlutApplication::getInstance()->enableTimer(nbr, (int)(time*1000.0));
 }
 
-void CGlutBase::doDisableTimeout(int nbr)
+void GlutBase::doDisableTimeout(int nbr)
 {
-	CGlutApplication::getInstance()->disableTimer(nbr);
+	GlutApplication::getInstance()->disableTimer(nbr);
 }
 
-void CGlutBase::glutDisplay()
+void GlutBase::glutDisplay()
 {
 	this->doDraw();
 	glutSwapBuffers();
 }
 
-void CGlutBase::glutReshape(int width, int height)
+void GlutBase::glutReshape(int width, int height)
 {
 	this->doResize(width, height);
 }
 
-void CGlutBase::glutKeyboard(unsigned char key, int x, int y)
+void GlutBase::glutKeyboard(unsigned char key, int x, int y)
 {
 	this->doKeyboard(key, x, y);
 }
 
-void CGlutBase::glutMouse(int button, int state, int x, int y)
+void GlutBase::glutMouse(int button, int state, int x, int y)
 {
 	this->clearMouseStatus();
 	
@@ -133,133 +133,133 @@ void CGlutBase::glutMouse(int button, int state, int x, int y)
 	switch (state) {
 	case GLUT_DOWN:
 		if (glutGetModifiers() == GLUT_ACTIVE_SHIFT)
-			setModifierKey(CWidgetBase::MT_SHIFT);
+			setModifierKey(WidgetBase::MT_SHIFT);
 		if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
-			setModifierKey(CWidgetBase::MT_CTRL);
+			setModifierKey(WidgetBase::MT_CTRL);
 		if (glutGetModifiers() == GLUT_ACTIVE_ALT)
-			setModifierKey(CWidgetBase::MT_ALT);
+			setModifierKey(WidgetBase::MT_ALT);
 		this->doMouseDown(x, y);
 		break;
 	case GLUT_UP:
-		setModifierKey(CWidgetBase::MT_NONE);
+		setModifierKey(WidgetBase::MT_NONE);
 		this->doMouseUp(x, y);
 		this->clearMouseStatus();
 		break;
 	}
 }
 
-void CGlutBase::glutMotion(int x, int y)
+void GlutBase::glutMotion(int x, int y)
 {
 	this->doMouseMove(x, y);
 }
 
-void CGlutBase::glutPassiveMotion(int x, int y)
+void GlutBase::glutPassiveMotion(int x, int y)
 {
 	this->doMouseMove(x, y);
 }
 
-void CGlutBase::glutTimer0(int value)
+void GlutBase::glutTimer0(int value)
 {
 	if (this->doTimeout0())
-		CGlutApplication::getInstance()->enableTimer(0, (int)(this->getTimeout(0)*1000.0));
+		GlutApplication::getInstance()->enableTimer(0, (int)(this->getTimeout(0)*1000.0));
 	else
-		CGlutApplication::getInstance()->disableTimer(0);
+		GlutApplication::getInstance()->disableTimer(0);
 }
 
-void CGlutBase::glutTimer1(int value)
+void GlutBase::glutTimer1(int value)
 {
 	if (this->doTimeout1())
-		CGlutApplication::getInstance()->enableTimer(1, (int)(this->getTimeout(1)*1000.0));
+		GlutApplication::getInstance()->enableTimer(1, (int)(this->getTimeout(1)*1000.0));
 	else
-		CGlutApplication::getInstance()->disableTimer(1);
+		GlutApplication::getInstance()->disableTimer(1);
 }
 
-void CGlutBase::glutTimer2(int value)
+void GlutBase::glutTimer2(int value)
 {
 	if (this->doTimeout2())
-		CGlutApplication::getInstance()->enableTimer(2, (int)(this->getTimeout(2)*1000.0));
+		GlutApplication::getInstance()->enableTimer(2, (int)(this->getTimeout(2)*1000.0));
 	else
-		CGlutApplication::getInstance()->disableTimer(2);
+		GlutApplication::getInstance()->disableTimer(2);
 }
 
-void CGlutBase::glutTimer3(int value)
+void GlutBase::glutTimer3(int value)
 {
 	if (this->doTimeout3())
-		CGlutApplication::getInstance()->enableTimer(3, (int)(this->getTimeout(3)*1000.0));
+		GlutApplication::getInstance()->enableTimer(3, (int)(this->getTimeout(3)*1000.0));
 	else
-		CGlutApplication::getInstance()->disableTimer(3);
+		GlutApplication::getInstance()->disableTimer(3);
 }
 
-void CGlutBase::glutTimer4(int value)
+void GlutBase::glutTimer4(int value)
 {
 	if (this->doTimeout4())
-		CGlutApplication::getInstance()->enableTimer(4, (int)(this->getTimeout(4)*1000.0));
+		GlutApplication::getInstance()->enableTimer(4, (int)(this->getTimeout(4)*1000.0));
 	else
-		CGlutApplication::getInstance()->disableTimer(4);
+		GlutApplication::getInstance()->disableTimer(4);
 }
 
-void CGlutBase::glutTimer5(int value)
+void GlutBase::glutTimer5(int value)
 {
 	if (this->doTimeout5())
-		CGlutApplication::getInstance()->enableTimer(5, (int)(this->getTimeout(5)*1000.0));
+		GlutApplication::getInstance()->enableTimer(5, (int)(this->getTimeout(5)*1000.0));
 	else
-		CGlutApplication::getInstance()->disableTimer(5);
+		GlutApplication::getInstance()->disableTimer(5);
 }
 
-void CGlutBase::glutTimer6(int value)
+void GlutBase::glutTimer6(int value)
 {
 	if (this->doTimeout6())
-		CGlutApplication::getInstance()->enableTimer(6, (int)(this->getTimeout(6)*1000.0));
+		GlutApplication::getInstance()->enableTimer(6, (int)(this->getTimeout(6)*1000.0));
 	else
-		CGlutApplication::getInstance()->disableTimer(6);
+		GlutApplication::getInstance()->disableTimer(6);
 }
 
-void CGlutBase::glutTimer7(int value)
+void GlutBase::glutTimer7(int value)
 {
 	if (this->doTimeout7())
-		CGlutApplication::getInstance()->enableTimer(7, (int)(this->getTimeout(7)*1000.0));
+		GlutApplication::getInstance()->enableTimer(7, (int)(this->getTimeout(7)*1000.0));
 	else
-		CGlutApplication::getInstance()->disableTimer(7);
+		GlutApplication::getInstance()->disableTimer(7);
 }
 
-void CGlutBase::glutTimer8(int value)
+void GlutBase::glutTimer8(int value)
 {
 	if (this->doTimeout8())
-		CGlutApplication::getInstance()->enableTimer(8, (int)(this->getTimeout(8)*1000.0));
+		GlutApplication::getInstance()->enableTimer(8, (int)(this->getTimeout(8)*1000.0));
 	else
-		CGlutApplication::getInstance()->disableTimer(8);
+		GlutApplication::getInstance()->disableTimer(8);
 }
 
-void CGlutBase::glutTimer9(int value)
+void GlutBase::glutTimer9(int value)
 {
 	if (this->doTimeout9())
-		CGlutApplication::getInstance()->enableTimer(9, (int)(this->getTimeout(9)*1000.0));
+		GlutApplication::getInstance()->enableTimer(9, (int)(this->getTimeout(9)*1000.0));
 	else
-		CGlutApplication::getInstance()->disableTimer(9);
+		GlutApplication::getInstance()->disableTimer(9);
 }
 
-void CGlutBase::setCaption(const std::string& caption)
+void GlutBase::setCaption(const std::string& caption)
 {
 	m_caption = caption;
 	glutSetWindowTitle(const_cast<char*>(m_caption.c_str()));
 }
 
-const std::string CGlutBase::getCaption()
+const std::string GlutBase::getCaption()
 {
 	return m_caption;
 }
 
-void CGlutBase::setWindowTitle(const std::string& title)
+void GlutBase::setWindowTitle(const std::string& title)
 {
 	this->setCaption(title);
 }
 
-const std::string CGlutBase::getWindowTitle()
+const std::string GlutBase::getWindowTitle()
 {
 	return this->getCaption();
 }
 
-void CGlutBase::show()
+void GlutBase::show()
 {
 	if (this->m_fullScreen)
 	{
@@ -272,33 +272,33 @@ void CGlutBase::show()
 	}
 }
 
-void CGlutBase::doFullscreen()
+void GlutBase::doFullscreen()
 {
 	glutSetWindow(m_id);
 	glutFullScreen();
 }
 
-void CGlutBase::doRedraw()
+void GlutBase::doRedraw()
 {
 	glutPostRedisplay();
 }
 
-void CGlutBase::setId(int id)
+void GlutBase::setId(int id)
 {
 	m_id = id;
 }
 
-int CGlutBase::getId()
+int GlutBase::getId()
 {
 	return m_id;
 }
 
-void CGlutBase::setModeString(const std::string& modeString)
+void GlutBase::setModeString(const std::string& modeString)
 {
 	m_modeString = modeString;
 }
 
-void CGlutBase::enterFullscreen()
+void GlutBase::enterFullscreen()
 {
 	glutGameModeString(m_modeString.c_str());
 	glutEnterGameMode();

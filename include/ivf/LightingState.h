@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CLightingState);
+IvfSmartPointer(LightingState);
 
 /**
  * Lighting state class
@@ -38,19 +38,19 @@ IvfSmartPointer(CLightingState);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CLightingState : public CRenderState {
+class IVF_API LightingState : public RenderState {
 private:
 	bool m_lightingState;
-	CLighting* m_lighting;
+	Lighting* m_lighting;
 public:
-	/** CLightingState constructor */
-	CLightingState();
+	/** LightingState constructor */
+	LightingState();
 
-	/** CLightingState destructor */
-	virtual ~CLightingState();
+	/** LightingState destructor */
+	virtual ~LightingState();
 
-	IvfClassInfo("CLightingState",CRenderState);
-	IvfStdFactory(CLightingState);
+	IvfClassInfo("LightingState",RenderState);
+	IvfStdFactory(LightingState);
 
 	/** Lighting flag (enabled = true) */
 	void setLighting(bool flag);

@@ -25,29 +25,29 @@
 
 namespace ivf {
 
-IvfSmartPointer(CBoundingSphere);
+IvfSmartPointer(BoundingSphere);
 
 /**
  * Bounding sphere class
  * 
- * CBoundingSphere defines a bounding sphere used together 
+ * BoundingSphere defines a bounding sphere used together 
  * with the CIvfCulledScene class.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CBoundingSphere : public CMathBase {
+class IVFMATH_API BoundingSphere : public MathBase {
 private:
 	double m_radius;
 	double m_globalPos[3];
 public:
 	/** CIvfBounding sphere constructor */
-	CBoundingSphere();
+	BoundingSphere();
 
 	/** CIvfBounding sphere destructor */
-	virtual ~CBoundingSphere();
+	virtual ~BoundingSphere();
 
-	IvfClassInfo("CBoundingSphere",CMathBase);
-	IvfStdFactory(CBoundingSphere);
+	IvfClassInfo("BoundingSphere",MathBase);
+	IvfStdFactory(BoundingSphere);
 
 	/** Set the bounding sphere radius. */
 	void setRadius(double radius);

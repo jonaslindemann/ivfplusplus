@@ -29,22 +29,22 @@
 
 namespace ivf {
 
-IvfSmartPointer(CSphere);
+IvfSmartPointer(Sphere);
 
 /**
  * Sphere primitive
  * @author Jonas Lindemann
  */
-class IVF_API CSphere : public CShape {
+class IVF_API Sphere : public Shape {
 public:
 	/** Constructor */
-	CSphere ();
+	Sphere ();
 
 	/** Destructor */
-	virtual ~CSphere ();
+	virtual ~Sphere ();
 
-	IvfClassInfo("CSphere",CShape);
-	IvfStdFactory(CSphere);
+	IvfClassInfo("Sphere",Shape);
+	IvfStdFactory(Sphere);
 
 	/** Set sphere radius */
 	void setRadius (double radius);
@@ -69,7 +69,7 @@ public:
 
 private:
 	void updateSelectBox();
-	CSelectionBox* m_selectionBox;
+	SelectionBox* m_selectionBox;
 	int m_stacks;
 	int m_slices;
 	double	m_radius;

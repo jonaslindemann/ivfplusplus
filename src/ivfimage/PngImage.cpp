@@ -34,17 +34,17 @@ using namespace ivf;
 #endif
 #endif
 
-CPngImage::CPngImage()
+PngImage::PngImage()
 {
 
 }
 
-CPngImage::~CPngImage()
+PngImage::~PngImage()
 {
 
 }
 
-bool CPngImage::read()
+bool PngImage::read()
 {
 #ifdef IVF_HAVE_PNG
 

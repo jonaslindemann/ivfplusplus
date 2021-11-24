@@ -28,7 +28,7 @@ using namespace ivf;
 
 // ------------------------------------------------------------
 
-CVertexIndex::CVertexIndex()
+VertexIndex::VertexIndex()
 {
 	m_size = 0;
 	m_blockSize = 1024;
@@ -39,18 +39,18 @@ CVertexIndex::CVertexIndex()
 }
 
 // ------------------------------------------------------------
-CVertexIndex::~CVertexIndex()
+VertexIndex::~VertexIndex()
 {
 
 }
 
 // ------------------------------------------------------------
-void CVertexIndex::addLast(long idx)
+void VertexIndex::addLast(long idx)
 {
 	if (m_next==m_allocSize)
 	{
 		m_allocSize = m_allocSize*2;
-		IvfDbg1("CVertexIndex: Expanding to " << m_allocSize << " indices. (allocated size)");
+		IvfDbg1("VertexIndex: Expanding to " << m_allocSize << " indices. (allocated size)");
 		GLuint* newIndex = new GLuint[m_allocSize];
 		
 		int i;
@@ -68,7 +68,7 @@ void CVertexIndex::addLast(long idx)
 }
 
 // ------------------------------------------------------------
-long CVertexIndex::getIndex(long pos)
+long VertexIndex::getIndex(long pos)
 {
 	if ((pos>=0)&&(pos<m_next))
 		return (long)m_index[pos];
@@ -77,13 +77,13 @@ long CVertexIndex::getIndex(long pos)
 }
 
 // ------------------------------------------------------------
-long CVertexIndex::getSize()
+long VertexIndex::getSize()
 {
 	return m_next;
 }
 
 // ------------------------------------------------------------
-void CVertexIndex::clear()
+void VertexIndex::clear()
 {
 	delete [] m_index;
 	m_index = new GLuint[m_blockSize];
@@ -92,7 +92,7 @@ void CVertexIndex::clear()
 }
 
 // ------------------------------------------------------------
-void CVertexIndex::createLinear(long size)
+void VertexIndex::createLinear(long size)
 {
 	long i;
 	this->clear();
@@ -101,7 +101,7 @@ void CVertexIndex::createLinear(long size)
 }
 
 // ------------------------------------------------------------
-void CVertexIndex::addArray(long *i, long size)
+void VertexIndex::addArray(long *i, long size)
 {
 	long j;
 
@@ -110,7 +110,7 @@ void CVertexIndex::addArray(long *i, long size)
 }
 
 // ------------------------------------------------------------
-void CVertexIndex::assignFrom(CIndexBase *idx)
+void VertexIndex::assignFrom(IndexBase *idx)
 {
 	long i;
 
@@ -121,14 +121,14 @@ void CVertexIndex::assignFrom(CIndexBase *idx)
 }
 
 // ------------------------------------------------------------
-void CVertexIndex::assignTo(CIndexBase *idx)
+void VertexIndex::assignTo(IndexBase *idx)
 {
 	idx->clear();
 	idx->assignFrom(this);
 }
 
 // ------------------------------------------------------------
-void CVertexIndex::createLinear(long start, long size)
+void VertexIndex::createLinear(long start, long size)
 {
 	long i;
 	this->clear();
@@ -137,7 +137,7 @@ void CVertexIndex::createLinear(long start, long size)
 }
 
 // ------------------------------------------------------------
-void CVertexIndex::createConstant(long value, long size)
+void VertexIndex::createConstant(long value, long size)
 {
 	long i;
 	this->clear();
@@ -146,18 +146,18 @@ void CVertexIndex::createConstant(long value, long size)
 }
 
 
-void* CVertexIndex::getData()
+void* VertexIndex::getData()
 {
 	return (void*)m_index;
 }
 
-GLenum CVertexIndex::getDataType()
+GLenum VertexIndex::getDataType()
 {
 	return GL_UNSIGNED_INT;
 }
 
 
-void CVertexIndex::setIndex(long idx, long value)
+void VertexIndex::setIndex(long idx, long value)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{

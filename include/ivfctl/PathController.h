@@ -26,7 +26,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CPathController);
+IvfSmartPointer(PathController);
 
 /**
  * Path controller class
@@ -35,7 +35,7 @@ IvfSmartPointer(CPathController);
  * can bes set as well as actions at the start point and 
  * end point.
  */
-class IVFCTL_API CPathController : public CController {
+class IVFCTL_API PathController : public Controller {
 public:
 	enum TEndAction {
 		EA_STOP,
@@ -50,7 +50,7 @@ public:
 		SA_DEACTIVATE
 	};
 private:
-	CSpline3dPtr m_path;
+	Spline3dPtr m_path;
 	double m_v0;
 	double m_a0;
 	double m_t0;
@@ -59,20 +59,20 @@ private:
 	TEndAction m_endAction;
 	TStartAction m_startAction;
 public:
-	/** CPathController contructor */
-	CPathController();
+	/** PathController contructor */
+	PathController();
 
-	/** CPathController destructor */
-	virtual ~CPathController();
+	/** PathController destructor */
+	virtual ~PathController();
 
-	IvfClassInfo("CPathController",CController);
-	IvfStdFactory(CPathController);
+	IvfClassInfo("PathController",Controller);
+	IvfStdFactory(PathController);
 
 	/** Set path controlling the movement */
-	void setPath(CSpline3d* spline);
+	void setPath(Spline3d* spline);
 
 	/** Return path */
-	CSpline3d* getPath();
+	Spline3d* getPath();
 	
 	/** 
 	 * Set initial position on path

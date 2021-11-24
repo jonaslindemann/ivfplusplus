@@ -4,7 +4,7 @@
 
 using namespace ivf;
 
-CHighlightRenderer::CHighlightRenderer()
+HighlightRenderer::HighlightRenderer()
 {
 	// Add construction code here
 
@@ -15,16 +15,16 @@ CHighlightRenderer::CHighlightRenderer()
 	gluQuadricNormals(m_qobj, GLU_SMOOTH);
 }
 
-CHighlightRenderer::~CHighlightRenderer()
+HighlightRenderer::~HighlightRenderer()
 {
 	gluDeleteQuadric(m_qobj);
 }
 
 
-void CHighlightRenderer::doCreateGeometry()
+void HighlightRenderer::doCreateGeometry()
 {
-	CUserSettingsPtr userSettings = CUserSettings::getInstance();
-	CMaterialPtr material = new CMaterial();
+	UserSettingsPtr userSettings = UserSettings::getInstance();
+	MaterialPtr material = new Material();
 	material->setDiffuseColor(0.1f, 0.1f, 0.1f, 1.0f);
 	material->setAmbientColor(0.1f, 0.1f, 0.1f, 1.0f);
 

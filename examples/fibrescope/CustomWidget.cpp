@@ -39,17 +39,19 @@
 #include <FL/fl_file_chooser.H>
 #include <FL/fl_ask.H>
 
+#include <sstream>
+
 using namespace std;
 using namespace ivf;
 
-CCustomWidget::CCustomWidget(int X, int Y, int W, int H, const char *L)
-:CFltkBase(X, Y, W, H)
+CustomWidget::CustomWidget(int X, int Y, int W, int H, const char *L)
+:FltkBase(X, Y, W, H)
 {
 	sldProgress = nullptr;
 	outMessage = nullptr;
 }
 
-void CCustomWidget::onInit(int width, int height)
+void CustomWidget::onInit(int width, int height)
 {
 	// Set up widget / workspace
 
@@ -71,39 +73,39 @@ void CCustomWidget::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 	
-	m_camera = CCamera::create();
+	m_camera = Camera::create();
 	m_camera->setPosition(-0.0, 3.0, 5.0);
 	m_camera->setTarget(0.0, 0.0, 0.0);
 	m_camera->setEyeSeparation(0.01);
 	m_camera->setPerspective(45.0, 1.0, 100.0);
 	m_camera->setStereo(true);
-	m_camera->setType(CCamera::CT_FLY);
+	m_camera->setType(Camera::CT_FLY);
 
 	// Create scene
 	
-	m_scene = CScene::create();
+	m_scene = Scene::create();
 	m_scene->setView(m_camera);
-	m_scene->setStereoMode(CSceneBase::SM_NONE);
-	m_scene->setLightMode(CSceneBase::LM_LOCAL);
-	m_scene->setAnaglyphColorPair(CScene::CP_RED_CYAN);
+	m_scene->setStereoMode(SceneBase::SM_NONE);
+	m_scene->setLightMode(SceneBase::LM_LOCAL);
+	m_scene->setAnaglyphColorPair(Scene::CP_RED_CYAN);
 
 	// Initialize mouse handler
 	
-	m_mouseViewHandler = new CMouseViewHandler(this, m_camera);
+	m_mouseViewHandler = new MouseViewHandler(this, m_camera);
 	m_mouseViewHandler->activate();
 
 	// Initialize fly handler
 	
-	m_flyHandler = new CFlyHandler(this, m_camera);
+	m_flyHandler = new FlyHandler(this, m_camera);
 	m_flyHandler->deactivate();
 
 	// Initialize scene handler
 
-	m_sceneHandler = new CSceneHandler(this, m_scene);
+	m_sceneHandler = new SceneHandler(this, m_scene);
 
 	// Create a light
 	
-	m_lighting = CLighting::getInstance();
+	m_lighting = Lighting::getInstance();
 	m_lighting->enable();
 	
 	m_light = m_lighting->getLight(0);
@@ -114,85 +116,85 @@ void CCustomWidget::onInit(int width, int height)
 	
 	// Define material palette
 
-	auto material = CMaterial::create();
+	auto material = Material::create();
 	material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_meshMaterials.push_back(material);
 	
-	material = CMaterial::create();
+	material = Material::create();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.3f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_meshMaterials.push_back(material);
 
-	material = CMaterial::create();
+	material = Material::create();
 	material->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.3f, 0.3f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_meshMaterials.push_back(material);
 	
-	material = CMaterial::create();
+	material = Material::create();
 	material->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.0f, 0.3f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_meshMaterials.push_back(material);
 	
-	material = CMaterial::create();
+	material = Material::create();
 	material->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	material->setAmbientColor(0.3f, 0.3f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_meshMaterials.push_back(material);
 	
-	material = CMaterial::create();
+	material = Material::create();
 	material->setDiffuseColor(0.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.3f, 0.3f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_meshMaterials.push_back(material);
 	
-	material = CMaterial::create();
+	material = Material::create();
 	material->setDiffuseColor(0.8f, 0.8f, 0.8f, 1.0f);
 	material->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_meshMaterials.push_back(material);
 
-	material = CMaterial::create();
+	material = Material::create();
 	material->setDiffuseColor(0.5f, 0.5f, 0.5f, 1.0f);
 	material->setAmbientColor(0.1f, 0.1f, 0.1f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_meshMaterials.push_back(material);
 
-	material = CMaterial::create();
+	material = Material::create();
 	material->setDiffuseColor(0.2f, 0.2f, 0.2f, 1.0f);
 	material->setAmbientColor(0.1f, 0.1f, 0.1f, 1.0f);
 	material->setSpecularColor(0.5f, 0.5f, 0.5f, 1.0f);
 	m_meshMaterials.push_back(material);
 
-	m_discreteTime = CDiscreteTime::create();
+	m_discreteTime = DiscreteTime::create();
 
 	// Create a color map object
 
-	m_colorMap = CColorMap::create();
+	m_colorMap = ColorMap::create();
 	m_colorMap->open("colormaps/colormap1.map");
 
 	// Create user settings object 
 
-	m_userSettings = CUserSettings::getInstance();
+	m_userSettings = UserSettings::getInstance();
 	m_userSettings->setConnectionMaterial(m_meshMaterials[4]);
 	m_userSettings->setColorMap(m_colorMap);
 	m_userSettings->setFibreLighting(true);
 
 	// Highlight renderer
 
-	m_highlightRenderer = CHighlightRenderer::create();
+	m_highlightRenderer = HighlightRenderer::create();
 	
 	// Load default fibre texture
 
-	auto image = CSgiImage::create();
+	auto image = SgiImage::create();
 	image->setFileName("textures/tex01.rgb");
 	image->read();
 	
-	m_fibreTexture = CTexture::create();
+	m_fibreTexture = Texture::create();
 	m_fibreTexture->setImage(image);
 	m_fibreTexture->setGenerateMipmaps(true);
 	m_fibreTexture->setTextureMode(GL_MODULATE);
@@ -207,13 +209,13 @@ void CCustomWidget::onInit(int width, int height)
 	m_count = 0;
 	m_renderingInterval = 1;
 
-	auto axis = CAxis::create();
+	auto axis = Axis::create();
 	m_scene->addChild(axis);
 
-	m_lighting = CLighting::getInstance();
-	m_fog = CFog::getInstance();
-	m_pixelOps = CPixelOps::getInstance();
-	m_blending = CBlending::getInstance();
+	m_lighting = Lighting::getInstance();
+	m_fog = Fog::getInstance();
+	m_pixelOps = PixelOps::getInstance();
+	m_blending = Blending::getInstance();
 
 	this->setUseOverlay(false);
 
@@ -222,17 +224,17 @@ void CCustomWidget::onInit(int width, int height)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::onDestroy()
+void CustomWidget::onDestroy()
 {
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setWorkspace(double size)
+void CustomWidget::setWorkspace(double size)
 {
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::readMesh(char *name)
+void CustomWidget::readMesh(std::string name)
 {
 	// Loads a fibre network 
 
@@ -268,13 +270,13 @@ void CCustomWidget::readMesh(char *name)
 	
 	vector<int> nFibreCoords;
 	
-	CFibrePtr fibre;
-	CCoordHistPtr coordHist;
+	FibrePtr fibre;
+	CoordHistPtr coordHist;
 
-	CCoordListPtr coordList;
-	CCoordListPtr undeformedList;
+	CoordListPtr coordList;
+	CoordListPtr undeformedList;
 	
-	CConnectionPointPtr connectionPoint;
+	ConnectionPointPtr connectionPoint;
 
 	fstream f;
 	f.open(name, ios::in);
@@ -289,7 +291,7 @@ void CCustomWidget::readMesh(char *name)
 	if (m_boundingVolume!=nullptr)
 		m_scene->removeShape(m_boundingVolume);
 	
-	m_fibres = CFibreComposite::create();
+	m_fibres = FibreComposite::create();
 	m_fibres->setTexture(m_fibreTexture);
 	
 	if (m_connections!=nullptr)
@@ -301,7 +303,7 @@ void CCustomWidget::readMesh(char *name)
 	m_sigX.clear();
 	m_epsX.clear();
 	
-	m_connections = CComposite::create();
+	m_connections = Composite::create();
 	
 	// Wire cube coordinates
 	
@@ -351,14 +353,14 @@ void CCustomWidget::readMesh(char *name)
 		// Create fibre object
 
 		
-		fibre = CFibre::create();
+		fibre = Fibre::create();
 		fibre->setDiscreteTime(m_discreteTime);
 		coordHist = fibre->getCoordHist();
 
 		if ((m_representation==FIBRE_BAND1)||(m_representation==FIBRE_BAND2))
-			coordList = (CCoordList*) new CVectorCoordList();
+			coordList = (CoordList*) new VectorCoordList();
 		else
-			coordList = (CCoordList*) new CArrayCoordList();
+			coordList = (CoordList*) new ArrayCoordList();
 
 		coordHist->addList(coordList);
 		
@@ -420,7 +422,7 @@ void CCustomWidget::readMesh(char *name)
 
 	// Create a bounding volume
 
-	m_boundingVolume = CLineSet::create();
+	m_boundingVolume = LineSet::create();
 	m_boundingVolume->addCoord(minX, minY, minZ);
 	m_boundingVolume->addCoord(maxX, minY, minZ);
 	m_boundingVolume->addCoord(minX, minY, maxZ);
@@ -438,7 +440,7 @@ void CCustomWidget::readMesh(char *name)
 	m_boundingVolume->addColor(1.0f, 1.0f, 1.0f);
 	m_boundingVolume->addColor(1.0f, 1.0f, 1.0f);
 
-	CIndex* coordIdx = new CIndex();
+	Index* coordIdx = new Index();
 	int zero = 0;
 	coordIdx->add(zero,1);
 	coordIdx->add(1,3);
@@ -453,7 +455,7 @@ void CCustomWidget::readMesh(char *name)
 	coordIdx->add(7,6);
 	coordIdx->add(6,4);
 
-	CIndex* colorIdx = new CIndex();
+	Index* colorIdx = new Index();
 	colorIdx->assignFrom(coordIdx);
 
 	m_boundingVolume->addCoordIndex(coordIdx);
@@ -474,14 +476,14 @@ void CCustomWidget::readMesh(char *name)
 
 		for (j=0; j<nFibres; j++)
 		{
-			fibre = (CFibre*)m_fibres->getChild(j);
+			fibre = (Fibre*)m_fibres->getChild(j);
 			coordHist = fibre->getCoordHist();
-			undeformedList = (CCoordList*)coordHist->getList(0);
+			undeformedList = (CoordList*)coordHist->getList(0);
 
 			if ((m_representation==FIBRE_BAND1)||(m_representation==FIBRE_BAND2))
-				coordList = (CCoordList*) new CVectorCoordList();
+				coordList = (CoordList*) new VectorCoordList();
 			else
-				coordList = (CCoordList*) new CArrayCoordList();
+				coordList = (CoordList*) new ArrayCoordList();
 
 			if (m_representation==FIBRE_EXTRUSION)
 				coordList->addCoord(0.0, 0.0, 0.0);
@@ -535,11 +537,11 @@ void CCustomWidget::readMesh(char *name)
 			Fl::flush();
 			// Create bPoint object
 			
-			connectionPoint = CConnectionPoint::create();
+			connectionPoint = ConnectionPoint::create();
 			connectionPoint->setDiscreteTime(m_discreteTime);
 			connectionPoint->setRadius(connectionRadius);
 			coordHist = connectionPoint->getCoordHist();
-			coordList = new CVectorCoordList();
+			coordList = new VectorCoordList();
 			coordHist->addList(coordList);
 			
 			// Read initial connection point coordinates
@@ -559,9 +561,9 @@ void CCustomWidget::readMesh(char *name)
 		{
 			for (j=0; j<nNodes; j++)
 			{
-				connectionPoint = (CConnectionPoint*)m_connections->getChild(j);
+				connectionPoint = (ConnectionPoint*)m_connections->getChild(j);
 				coordHist = connectionPoint->getCoordHist();
-				coordList = CVectorCoordList::create();
+				coordList = VectorCoordList::create();
 				f >> dx >> dy >> dz >> usage;
 				coordList->addCoord(dx, dy, dz, usage, usage, usage);
 				coordHist->addList(coordList);
@@ -660,7 +662,7 @@ void CCustomWidget::readMesh(char *name)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::open()
+void CustomWidget::open()
 {
 	// Open a fibre network 
 
@@ -674,7 +676,8 @@ void CCustomWidget::open()
 
 		int rep = fl_choice("Choose representation.", "Band I", "Band II", "Extruded", nullptr);
 
-		strcpy(m_fileName, fname);
+		m_filename = fname;
+
 		this->clearAll();
 
 		switch (rep) {
@@ -697,7 +700,7 @@ void CCustomWidget::open()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setTimeStep(int step)
+void CustomWidget::setTimeStep(int step)
 {
 	// Set current timestep
 
@@ -706,7 +709,7 @@ void CCustomWidget::setTimeStep(int step)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setScaleFactor(double factor)
+void CustomWidget::setScaleFactor(double factor)
 {
 	// Set fibre scale factor 
 
@@ -717,7 +720,7 @@ void CCustomWidget::setScaleFactor(double factor)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::nextStep()
+void CustomWidget::nextStep()
 {
 	// Go to next step
 
@@ -738,7 +741,7 @@ void CCustomWidget::nextStep()
 }
 
 // ----------------------------------------------------------------------
-int CCustomWidget::getTimeStep()
+int CustomWidget::getTimeStep()
 {
 	// Return time step
 
@@ -746,7 +749,7 @@ int CCustomWidget::getTimeStep()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setColor(int color)
+void CustomWidget::setColor(int color)
 {
 	// Set fibre color
 
@@ -758,7 +761,7 @@ void CCustomWidget::setColor(int color)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::clearAll()
+void CustomWidget::clearAll()
 {
 	// Remove fibres from scene
 
@@ -778,54 +781,54 @@ void CCustomWidget::clearAll()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setFogNear(double fogNear)
+void CustomWidget::setFogNear(double fogNear)
 {
 	// Set fog near limit
 	m_fogNear = fogNear;
 
-	CFog* fog = CFog::getInstance();
+	Fog* fog = Fog::getInstance();
 	fog->setStart(m_fogNear);
 
 	this->redraw();
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setFogFar(double fogFar)
+void CustomWidget::setFogFar(double fogFar)
 {
 	// Set far fog limit
 
 	m_fogFar = fogFar;
 
-	CFog* fog = CFog::getInstance();
+	Fog* fog = Fog::getInstance();
 	fog->setEnd(m_fogFar);
 
 	this->redraw();
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::onInitContext(int width, int height)
+void CustomWidget::onInitContext(int width, int height)
 {
 	// Initialize OpenGL
 
-	CFltkBase::onInitContext(width, height);
+	FltkBase::onInitContext(width, height);
 
 	m_lighting->setTwoSide(true);
 	m_lighting->enable();
 
 	if (m_representation==FIBRE_EXTRUSION)
-		CRasterization::getInstance()->enableCullFace();
+		Rasterization::getInstance()->enableCullFace();
 	else
-		CRasterization::getInstance()->disableCullFace();
+		Rasterization::getInstance()->disableCullFace();
 
 
-	CLight* light = m_lighting->getLight(0);
-	light->setType(CLight::LT_DIRECTIONAL);
+	Light* light = m_lighting->getLight(0);
+	light->setType(Light::LT_DIRECTIONAL);
 	light->setDirection(0.0, 0.0, 1.0);
 	light->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	light->setAmbientColor(0.5f, 0.5f, 0.5f, 1.0f); 
 	light->enable();
 
-	m_fog->setType(CFog::FT_LINEAR);
+	m_fog->setType(Fog::FT_LINEAR);
 	m_fog->setLimits(m_fogNear, m_fogFar);
 	m_fog->setColor(0.0f, 0.0f, 0.0f, 1.0f);
 	m_fog->enable();
@@ -834,7 +837,7 @@ void CCustomWidget::onInitContext(int width, int height)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setScaling(double scaling)
+void CustomWidget::setScaling(double scaling)
 {
 	// Set fibre displacement scale
 
@@ -844,7 +847,7 @@ void CCustomWidget::setScaling(double scaling)
 }
 
 // ----------------------------------------------------------------------
-double CCustomWidget::getScaling()
+double CustomWidget::getScaling()
 {
 	// Return scale factor
 
@@ -852,7 +855,7 @@ double CCustomWidget::getScaling()
 }
 
 // ----------------------------------------------------------------------
-int CCustomWidget::getSteps()
+int CustomWidget::getSteps()
 {
 	// Return number of time steps
 
@@ -860,7 +863,7 @@ int CCustomWidget::getSteps()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::rewind()
+void CustomWidget::rewind()
 {
 	// Goto first timestep
 
@@ -869,7 +872,7 @@ void CCustomWidget::rewind()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::last()
+void CustomWidget::last()
 {
 	// Goto last timestep 
 
@@ -878,7 +881,7 @@ void CCustomWidget::last()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setLoop(bool flag)
+void CustomWidget::setLoop(bool flag)
 {
 	// Set loop flag
 
@@ -886,7 +889,7 @@ void CCustomWidget::setLoop(bool flag)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setReverse(bool flag)
+void CustomWidget::setReverse(bool flag)
 {
 	// Set reverse flag
 
@@ -897,19 +900,19 @@ void CCustomWidget::setReverse(bool flag)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setShowConnections(bool flag)
+void CustomWidget::setShowConnections(bool flag)
 {
 	// Turn on/off connections
 
 	if ((flag)&&(m_connections!=nullptr))
-		m_connections->setState(CGLBase::OS_ON);
+		m_connections->setState(GLBase::OS_ON);
 	else
-		m_connections->setState(CGLBase::OS_OFF);		
+		m_connections->setState(GLBase::OS_OFF);		
 	this->redraw();
 }		
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setShowUsage(bool flag)
+void CustomWidget::setShowUsage(bool flag)
 {
 	// Turn on/off usage information
 
@@ -919,7 +922,7 @@ void CCustomWidget::setShowUsage(bool flag)
 
 
 // ----------------------------------------------------------------------
-double CCustomWidget::getFogFar()
+double CustomWidget::getFogFar()
 {
 	// Return far fog limit
 
@@ -927,7 +930,7 @@ double CCustomWidget::getFogFar()
 }
 
 // ----------------------------------------------------------------------
-double CCustomWidget::getFogNear()
+double CustomWidget::getFogNear()
 {
 	// Return fog near limit
 
@@ -935,7 +938,7 @@ double CCustomWidget::getFogNear()
 }
 
 // ----------------------------------------------------------------------
-double CCustomWidget::getScaleFactor()
+double CustomWidget::getScaleFactor()
 {
 	// return fibre scale factor
 
@@ -943,7 +946,7 @@ double CCustomWidget::getScaleFactor()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::onOverlay()
+void CustomWidget::onOverlay()
 {
 	// Draw stress diagram in an overlay
 
@@ -994,7 +997,7 @@ void CCustomWidget::onOverlay()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setShowStressDiagram(bool flag)
+void CustomWidget::setShowStressDiagram(bool flag)
 {
 	// Turn on/off stress diagram
 
@@ -1002,7 +1005,7 @@ void CCustomWidget::setShowStressDiagram(bool flag)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setWidgets(Fl_Output *output, Fl_Slider *slider, Fl_Window* window)
+void CustomWidget::setWidgets(Fl_Output *output, Fl_Slider *slider, Fl_Window* window)
 {
 	// Assign progress and message widgets
 
@@ -1012,52 +1015,54 @@ void CCustomWidget::setWidgets(Fl_Output *output, Fl_Slider *slider, Fl_Window* 
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setColorMap(int map)
+void CustomWidget::setColorMap(int map)
 {
-	char filename[40];
-	sprintf(filename,"colormaps/colormap%d.map",map+1);
-	m_colorMap->open(filename);
+	std::ostringstream ss;
+
+	ss << "colormaps/colormap" << map + 1;
+	m_colorMap->open(ss.str());
+	
 	this->redraw();
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setConnectionSize(double size)
+void CustomWidget::setConnectionSize(double size)
 {
 	m_userSettings->setConnectionSize(size);
 	this->redraw();
 }
 
 // ----------------------------------------------------------------------
-double CCustomWidget::getConnectionSize()
+double CustomWidget::getConnectionSize()
 {
 	return m_userSettings->getConnectionSize();
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setEnlargeUsage(bool flag)
+void CustomWidget::setEnlargeUsage(bool flag)
 {
 	m_userSettings->setEnlargeUsage(flag);
 }
 
 // ----------------------------------------------------------------------
-bool CCustomWidget::getEnlargeUsage()
+bool CustomWidget::getEnlargeUsage()
 {
 	return m_userSettings->getEnlargeUsage();
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setTexture(int texture)
+void CustomWidget::setTexture(int texture)
 {
-	char filename[40];
-	sprintf(filename,"textures/tex%d.rgb",texture+1);
+	std::ostringstream ss;
 
-	CSgiImage* image = new CSgiImage();
-	image->setFileName(filename);
+	ss << "textures/tex" << texture + 1;
+
+	SgiImage* image = new SgiImage();
+	image->setFileName(ss.str());
 	image->read();
 
-	CTexture* newTexture = new CTexture();
+	Texture* newTexture = new Texture();
 	newTexture->addReference();
-	//newTexture->load(filename);
 	newTexture->setImage(image);
 	newTexture->setGenerateMipmaps(true);
 	newTexture->setTextureMode(GL_MODULATE);
@@ -1068,13 +1073,13 @@ void CCustomWidget::setTexture(int texture)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setRepresentation(int representation)
+void CustomWidget::setRepresentation(int representation)
 {
 	m_representation = representation;
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setSectionSides(int sides)
+void CustomWidget::setSectionSides(int sides)
 {
 	m_fibreSides = sides;
 	m_userSettings->setExtrusionSides(sides);
@@ -1083,7 +1088,7 @@ void CCustomWidget::setSectionSides(int sides)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setRenderingInterval(int interval)
+void CustomWidget::setRenderingInterval(int interval)
 {
 	m_renderingInterval = interval;
 	m_fibres->setRenderInterval(m_renderingInterval);
@@ -1091,7 +1096,7 @@ void CCustomWidget::setRenderingInterval(int interval)
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::storeCamera()
+void CustomWidget::storeCamera()
 {
 	fstream f;
 	double xp, yp, zp;
@@ -1111,7 +1116,7 @@ void CCustomWidget::storeCamera()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::loadCamera()
+void CustomWidget::loadCamera()
 {
 	fstream f;
 	double xp, yp, zp;
@@ -1129,14 +1134,14 @@ void CCustomWidget::loadCamera()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::setTextureScale(float scale)
+void CustomWidget::setTextureScale(float scale)
 {
 	m_userSettings->setTextureScale(scale);
 	this->redraw();	
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::openCSV()
+void CustomWidget::openCSV()
 {
 	// Open a fibre network 
 
@@ -1150,7 +1155,8 @@ void CCustomWidget::openCSV()
 
 		int rep = fl_choice("Choose representation.", "Band I", "Band II", "Extruded", nullptr);
 
-		strcpy(m_fileName, fname);
+		m_filename = fname;
+
 		this->clearAll();
 
 		switch (rep) {
@@ -1173,7 +1179,7 @@ void CCustomWidget::openCSV()
 }
 
 // ----------------------------------------------------------------------
-void CCustomWidget::readMeshCSV(char *name)
+void CustomWidget::readMeshCSV(std::string name)
 {
 	// Loads a fibre network 
 
@@ -1193,10 +1199,10 @@ void CCustomWidget::readMeshCSV(char *name)
 	
 	vector<int> nFibreCoords;
 	
-	CFibre* fibre;
-	CCoordHist* coordHist;
+	Fibre* fibre;
+	CoordHist* coordHist;
 
-	CCoordList* coordList;
+	CoordList* coordList;
 	
 	fstream f;
 	f.open(name, ios::in);
@@ -1220,7 +1226,7 @@ void CCustomWidget::readMeshCSV(char *name)
 		m_boundingVolume = nullptr;
 	}
 	
-	m_fibres = new CFibreComposite();
+	m_fibres = new FibreComposite();
 	m_fibres->setTexture(m_fibreTexture);
 	
 	if (m_connections!=nullptr)
@@ -1232,7 +1238,7 @@ void CCustomWidget::readMeshCSV(char *name)
 	m_sigX.clear();
 	m_epsX.clear();
 	
-	//m_connections = new CComposite();
+	//m_connections = new Composite();
 
 	m_timeSteps = 0;
 	
@@ -1303,14 +1309,14 @@ void CCustomWidget::readMeshCSV(char *name)
 
 		// Create fibre object
 		
-		fibre = new CFibre();
+		fibre = new Fibre();
 		fibre->setDiscreteTime(m_discreteTime);
 		coordHist = fibre->getCoordHist();
 
 		if ((m_representation==FIBRE_BAND1)||(m_representation==FIBRE_BAND2))
-			coordList = (CCoordList*) new CVectorCoordList();
+			coordList = (CoordList*) new VectorCoordList();
 		else
-			coordList = (CCoordList*) new CArrayCoordList();
+			coordList = (CoordList*) new ArrayCoordList();
 
 		coordHist->addList(coordList);
 		
@@ -1354,7 +1360,7 @@ void CCustomWidget::readMeshCSV(char *name)
 
 	// Create a bounding volume
 
-	m_boundingVolume = new CLineSet();
+	m_boundingVolume = new LineSet();
 	m_boundingVolume->addCoord(minX, minZ, minY);
 	m_boundingVolume->addCoord(maxX, minZ, minY);
 	m_boundingVolume->addCoord(minX, maxZ, minY);
@@ -1372,7 +1378,7 @@ void CCustomWidget::readMeshCSV(char *name)
 	m_boundingVolume->addColor(1.0f, 1.0f, 1.0f);
 	m_boundingVolume->addColor(1.0f, 1.0f, 1.0f);
 
-	CIndex* coordIdx = new CIndex();
+	Index* coordIdx = new Index();
 	int zero = 0;
 	coordIdx->add(zero,1);
 	coordIdx->add(1,3);
@@ -1387,7 +1393,7 @@ void CCustomWidget::readMeshCSV(char *name)
 	coordIdx->add(7,6);
 	coordIdx->add(6,4);
 
-	CIndex* colorIdx = new CIndex();
+	Index* colorIdx = new Index();
 	colorIdx->assignFrom(coordIdx);
 
 	m_boundingVolume->addCoordIndex(coordIdx);
@@ -1434,7 +1440,7 @@ void CCustomWidget::readMeshCSV(char *name)
 	m_camera->setPerspective(45.0, 5.0, width*10.0);
 	m_camera->setPosition(0.0, 0.0, width*2);
 	//m_camera->setPosition(0.0, 0.0, 0.0);
-	CVec3d forward;
+	Vec3d forward;
 	forward.setComponents(0.0, 0.0, -1.0);
 	m_camera->setForwardVector(forward);
 
@@ -1465,27 +1471,27 @@ void CCustomWidget::readMeshCSV(char *name)
 	this->redraw();
 }
 
-void CCustomWidget::setStereoMode(TStereoMode mode)
+void CustomWidget::setStereoMode(TStereoMode mode)
 {
 	m_stereoMode = mode;
 	switch (mode) {
 	case SM_NONE:
-		m_scene->setStereoMode(CSceneBase::SM_NONE);
+		m_scene->setStereoMode(SceneBase::SM_NONE);
 		break;
 	case SM_ANAGLYPH:
-		m_scene->setStereoMode(CSceneBase::SM_ANAGLYPH);
+		m_scene->setStereoMode(SceneBase::SM_ANAGLYPH);
 		break;
 	case SM_QUAD_BUFFER:
-		m_scene->setStereoMode(CSceneBase::SM_QUAD_BUFFER);
+		m_scene->setStereoMode(SceneBase::SM_QUAD_BUFFER);
 		break;
 	default:
-		m_scene->setStereoMode(CSceneBase::SM_NONE);
+		m_scene->setStereoMode(SceneBase::SM_NONE);
 		break;
 	}
 	redraw();
 }
 
-void CCustomWidget::enableFullscreen()
+void CustomWidget::enableFullscreen()
 {
 	if (wndMain!=nullptr)
 	{
@@ -1504,7 +1510,7 @@ void CCustomWidget::enableFullscreen()
 	}	
 }
 
-void CCustomWidget::disableFullscreen()
+void CustomWidget::disableFullscreen()
 {
 	if (wndMain!=nullptr)
 	{
@@ -1513,7 +1519,7 @@ void CCustomWidget::disableFullscreen()
 	}
 }
 
-void CCustomWidget::onKeyboard(int key, int x, int y)
+void CustomWidget::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'q':
@@ -1525,19 +1531,19 @@ void CCustomWidget::onKeyboard(int key, int x, int y)
 	}
 }
 
-bool CCustomWidget::onTimeout()
+bool CustomWidget::onTimeout()
 {
 	m_flyHandler->update();
 	return true;
 }
 
-void CCustomWidget::onClear()
+void CustomWidget::onClear()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void CCustomWidget::readMeshNEF(char *name)
+void CustomWidget::readMeshNEF(std::string name)
 {
 	// Loads a fibre network Niklas Edlind Format (NEF)
 
@@ -1554,10 +1560,10 @@ void CCustomWidget::readMeshNEF(char *name)
 
 	vector<int> nFibreCoords;
 	
-	CFibre* fibre;
-	CCoordHist* coordHist;
+	Fibre* fibre;
+	CoordHist* coordHist;
 
-	CCoordList* coordList;
+	CoordList* coordList;
 	
 	fstream f;
 	f.open(name, ios::in);
@@ -1581,7 +1587,7 @@ void CCustomWidget::readMeshNEF(char *name)
 		m_boundingVolume = nullptr;
 	}
 	
-	m_fibres = new CFibreComposite();
+	m_fibres = new FibreComposite();
 
 	// Read fibres
 
@@ -1604,15 +1610,15 @@ void CCustomWidget::readMeshNEF(char *name)
 		
 		nPointsPerSegment = (int)value;
 
-		fibre = new CFibre();
+		fibre = new Fibre();
 		fibre->setDiscreteTime(m_discreteTime);
 
 		coordHist = fibre->getCoordHist();
 
 		if ((m_representation==FIBRE_BAND1)||(m_representation==FIBRE_BAND2))
-			coordList = (CCoordList*) new CVectorCoordList();
+			coordList = (CoordList*) new VectorCoordList();
 		else
-			coordList = (CCoordList*) new CArrayCoordList();
+			coordList = (CoordList*) new ArrayCoordList();
 
 		coordHist->addList(coordList);
 
@@ -1675,7 +1681,7 @@ void CCustomWidget::readMeshNEF(char *name)
 	cout << "Min y = " << minY << " Max y = " << maxY << endl;
 	cout << "Min z = " << minZ << " Max z = " << maxZ << endl;
 
-	m_boundingVolume = new CLineSet();
+	m_boundingVolume = new LineSet();
 	m_boundingVolume->addCoord(minX, minY, minZ);
 	m_boundingVolume->addCoord(maxX, minY, minZ);
 	m_boundingVolume->addCoord(minX, maxY, minZ);
@@ -1693,7 +1699,7 @@ void CCustomWidget::readMeshNEF(char *name)
 	m_boundingVolume->addColor(1.0f, 1.0f, 0.0f);
 	m_boundingVolume->addColor(1.0f, 1.0f, 0.0f);
 
-	CIndexPtr coordIdx = new CIndex();
+	IndexPtr coordIdx = new Index();
 	int zero = 0;
 	coordIdx->add(zero,1);
 	coordIdx->add(1,3);
@@ -1708,7 +1714,7 @@ void CCustomWidget::readMeshNEF(char *name)
 	coordIdx->add(7,6);
 	coordIdx->add(6,4);
 
-	CIndexPtr colorIdx = new CIndex();
+	IndexPtr colorIdx = new Index();
 	colorIdx->assignFrom(coordIdx);
 
 	m_boundingVolume->addCoordIndex(coordIdx);
@@ -1746,7 +1752,7 @@ void CCustomWidget::readMeshNEF(char *name)
 	m_camera->setPerspective(45.0, 5.0, width*10.0);
 	m_camera->setPosition(0.0, 0.0, width*2);
 
-	CVec3d forward;
+	Vec3d forward;
 	forward.setComponents(0.0, 0.0, -1.0);
 	m_camera->setForwardVector(forward);
 	m_camera->initialize();
@@ -1772,7 +1778,7 @@ void CCustomWidget::readMeshNEF(char *name)
 
 	//this->setColor(4);
 
-	m_multiply = new CMultiply();
+	m_multiply = new Multiply();
 	m_multiply->setShape(m_fibres);
 	m_multiply->setRepeat(3, 1, 3);
 	m_multiply->setOffsets(width, height, depth);
@@ -1784,7 +1790,7 @@ void CCustomWidget::readMeshNEF(char *name)
 	this->redraw();
 }
 
-void CCustomWidget::openNEF()
+void CustomWidget::openNEF()
 {
 	// Open a fibre network 
 
@@ -1798,7 +1804,8 @@ void CCustomWidget::openNEF()
 
 		int rep = fl_choice("Choose representation.", "Band I", "Band II", "Extruded", nullptr);
 
-		strcpy(m_fileName, fname);
+		m_filename = fname;
+
 		this->clearAll();
 
 		switch (rep) {
@@ -1820,7 +1827,7 @@ void CCustomWidget::openNEF()
 	}
 }
 
-void CCustomWidget::setViewMode(TViewMode mode)
+void CustomWidget::setViewMode(TViewMode mode)
 {
 	m_viewMode = mode;
 
@@ -1844,7 +1851,7 @@ void CCustomWidget::setViewMode(TViewMode mode)
 	redraw();
 }
 
-void CCustomWidget::setUseDisplayLists(bool flag)
+void CustomWidget::setUseDisplayLists(bool flag)
 {
 	m_useDisplayLists = flag;
 	//m_scene->getComposite()->setUselist(flag);
@@ -1853,12 +1860,12 @@ void CCustomWidget::setUseDisplayLists(bool flag)
 	redraw();
 }
 
-bool CCustomWidget::getUseDisplayLists()
+bool CustomWidget::getUseDisplayLists()
 {
 	return m_useDisplayLists;
 }
 
-void CCustomWidget::setVertexNormalFollowPath(bool flag)
+void CustomWidget::setVertexNormalFollowPath(bool flag)
 {
 	m_vertexFollowPath = flag;
 	if (m_vertexFollowPath)
@@ -1869,12 +1876,12 @@ void CCustomWidget::setVertexNormalFollowPath(bool flag)
 	redraw();
 }
 
-bool CCustomWidget::getVertexNormalFollowPath()
+bool CustomWidget::getVertexNormalFollowPath()
 {
 	return m_vertexFollowPath;
 }
 
-void CCustomWidget::setExtrusionTextureMode(int mode)
+void CustomWidget::setExtrusionTextureMode(int mode)
 {
 	switch (mode) {
 	case 0:
@@ -1922,35 +1929,35 @@ void CCustomWidget::setExtrusionTextureMode(int mode)
 	}
 }
 
-void CCustomWidget::setBlendFibres(bool flag)
+void CustomWidget::setBlendFibres(bool flag)
 {
 	m_userSettings->setBlendFibres(flag);	
 	redraw();
 }
 
-bool CCustomWidget::getBlendFibres()
+bool CustomWidget::getBlendFibres()
 {
 	return m_userSettings->getBlendFibres();
 }
 
-void CCustomWidget::setBreakageLimit(double limit)
+void CustomWidget::setBreakageLimit(double limit)
 {
 	m_userSettings->setBreakageLimit(limit);
 	redraw();
 }
 
-double CCustomWidget::getBreakageLimit()
+double CustomWidget::getBreakageLimit()
 {
 	return m_userSettings->getBreakageLimit();
 }
 
-void CCustomWidget::setFibreLighting(bool flag)
+void CustomWidget::setFibreLighting(bool flag)
 {
 	m_userSettings->setFibreLighting(flag);
 	redraw();
 }
 
-bool CCustomWidget::getFibreLighting()
+bool CustomWidget::getFibreLighting()
 {
 	return m_userSettings->getFibreLighting();
 }

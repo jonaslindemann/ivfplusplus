@@ -38,7 +38,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGLPrimitive);
+IvfSmartPointer(GLPrimitive);
 
 /**
  * OpenGL primitive base class
@@ -53,7 +53,7 @@ IvfSmartPointer(CGLPrimitive);
  * code:
  *
  * \code
- *	CQuadSet* quadSet = new CQuadSet();
+ *	QuadSet* quadSet = new QuadSet();
  *	
  *	quadSet->addCoord(0.0,0.0,2.0);
  *	quadSet->addCoord(1.0,0.3,2.0);
@@ -77,34 +77,34 @@ IvfSmartPointer(CGLPrimitive);
  *	quadSet->setUseVertexNormals(false);
  * \endcode
  */
-class IVF_API CGLPrimitive : public CShape {
+class IVF_API GLPrimitive : public Shape {
 private:
 	bool m_useVertexNormals;
 protected:
-	virtual void calcNormal(CIndex* idx);
-	std::vector<CVec3d*>		m_coordSet;
-	std::vector<CColor*>		m_colorSet;
-	std::vector<CVec3d*>		m_normalSet;
-	CMaterialSetPtr			m_materialSet;
-	std::vector<CVec3d*>		m_textureCoordSet;
+	virtual void calcNormal(Index* idx);
+	std::vector<Vec3d*>		m_coordSet;
+	std::vector<Color*>		m_colorSet;
+	std::vector<Vec3d*>		m_normalSet;
+	MaterialSetPtr			m_materialSet;
+	std::vector<Vec3d*>		m_textureCoordSet;
 
-	std::vector<CIndexPtr>		m_coordIndexSet;
-	std::vector<CIndexPtr>		m_colorIndexSet;
-	std::vector<CIndexPtr>		m_normalIndexSet;
-	std::vector<CIndexPtr>		m_textureIndexSet;
-	std::vector<CVec3d*>		m_vertexNormalSet;
-	std::vector<CIndexPtr>		m_vertexNormalIndexSet;
+	std::vector<IndexPtr>		m_coordIndexSet;
+	std::vector<IndexPtr>		m_colorIndexSet;
+	std::vector<IndexPtr>		m_normalIndexSet;
+	std::vector<IndexPtr>		m_textureIndexSet;
+	std::vector<Vec3d*>		m_vertexNormalSet;
+	std::vector<IndexPtr>		m_vertexNormalIndexSet;
 	std::vector<int>			m_materialIndexSet;
 public:
 	int getCoordIndexSetSize();
 	/** CIvfGLPrimitive constructor */
-	CGLPrimitive();
+	GLPrimitive();
 
 	/** CIvfGLPrimitive destructor */
-	virtual ~CGLPrimitive();
+	virtual ~GLPrimitive();
 
-	IvfClassInfo("CGLPrimitive",CShape);
-	IvfStdFactory(CGLPrimitive);
+	IvfClassInfo("GLPrimitive",Shape);
+	IvfStdFactory(GLPrimitive);
 
 	/** Clear all sets */
 	void clear();
@@ -113,7 +113,7 @@ public:
 	void addCoord(double x, double y, double z);
 
 	/** Add coordinate to coordinate set */
-	void addCoord(CVec3d &coord);
+	void addCoord(Vec3d &coord);
 
 	/** Set a coordinate at specified position in set */
 	void setCoord(int pos, double x, double y, double z);
@@ -128,7 +128,7 @@ public:
 	void clearCoord();
 
 	/** Add a material to material set */
-	void addMaterial(CMaterial* material);
+	void addMaterial(Material* material);
 
 	/** Clear material set */
 	void clearMaterial();
@@ -137,13 +137,13 @@ public:
 	int getMaterialSetSize();
 
 	/** Return a specific material from material set */
-	CMaterial* getMaterialAt(int pos);
+	Material* getMaterialAt(int pos);
 
 	/** Return material set */
-	CMaterialSet* getMaterialSet();
+	MaterialSet* getMaterialSet();
 
 	/** Assign material set */
-	void setMaterialSet(CMaterialSet* materialSet);
+	void setMaterialSet(MaterialSet* materialSet);
 
 	/** Add material index for element @param idx */
 	void addMaterialIndex(int idx);
@@ -159,10 +159,10 @@ public:
 	 * 
 	 * All indices added are owned by CIvfGLPrimitive.
 	 */
-	void addCoordIndex(CIndex* index);
+	void addCoordIndex(Index* index);
 
 	/** Returns a coordinate index */
-	CIndex* getCoordIndex(long pos);
+	Index* getCoordIndex(long pos);
 
 	/** Clears coordinate index set (deleting indices) */
 	void clearCoordIndex();
@@ -203,10 +203,10 @@ public:
 	 * 
 	 * All color indices are owned by CIvfGLPrimitive.
 	 */
-	void addColorIndex(CIndex* index);
+	void addColorIndex(Index* index);
 
 	/** Returns a color index at given position*/
-	CIndex* getColorIndex(long pos);
+	Index* getColorIndex(long pos);
 
 	/** Add normal to normal set */
 	void addNormal(double n1, double n2, double n3);
@@ -222,10 +222,10 @@ public:
 	 *
 	 * All normal indices are owned by CIvfGLPrimitive.
 	 */
-	void addNormalIndex(CIndex* index);
+	void addNormalIndex(Index* index);
 
 	/** Return normal index at given position */
-	CIndex* getNormalIndex(long pos);
+	Index* getNormalIndex(long pos);
 
 	/** Add Texture coordinate to texture coordinate set */
 	void addTextureCoord(double s, double t);
@@ -247,10 +247,10 @@ public:
 	 *
 	 * All texture indices are owned by CIvfGLPrimitive 
 	 */
-	void addTextureIndex(CIndex* index);
+	void addTextureIndex(Index* index);
 
 	/** Return texture coordinate index at given position */
-	CIndex* getTextureIndex(long pos);
+	Index* getTextureIndex(long pos);
 
 	/** Recomputes normals if geometry has been modified */
 	void refresh();

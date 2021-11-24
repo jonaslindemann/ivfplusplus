@@ -33,52 +33,52 @@
 namespace ivf {
 
 /** Create shape event class */
-class IVFWIDGET_API CCreateShapeEvent : public CEventBase {
+class IVFWIDGET_API CreateShapeEvent : public EventBase {
 public:
-	virtual void onCreateShapeEvent(double x, double y, double z, CShapePtr& shape) {};
+	virtual void onCreateShapeEvent(double x, double y, double z, ShapePtr& shape) {};
 };
 
 /** Move selection event class */
-class IVFWIDGET_API CMoveSelectionEvent : public CEventBase {
+class IVFWIDGET_API MoveSelectionEvent : public EventBase {
 public:
 	virtual bool onMoveSelection() {return true;};
 };
 
 /** Finish move event class */
-class IVFWIDGET_API CFinishMoveEvent : public CEventBase {
+class IVFWIDGET_API FinishMoveEvent : public EventBase {
 public:
 	virtual void onFinishMove() {};
 };
 
 /** Copy shape event class */
-class IVFWIDGET_API CCopyShapeEvent : public CEventBase {
+class IVFWIDGET_API CopyShapeEvent : public EventBase {
 public:
-	virtual void onCopyShape(double x, double y, double z, CShapePtr& shape, CShapePtr& newShape) {};
+	virtual void onCopyShape(double x, double y, double z, ShapePtr& shape, ShapePtr& newShape) {};
 };
 
 /** Finish copy event class */
-class IVFWIDGET_API CFinishCopyEvent : public CEventBase {
+class IVFWIDGET_API FinishCopyEvent : public EventBase {
 public:
 	virtual void onFinishCopy() {};
 };
 
 /** Cursor update event class */
-class IVFWIDGET_API CCursorUpdateEvent : public CEventBase {
+class IVFWIDGET_API CursorUpdateEvent : public EventBase {
 public:
 	virtual void onCursorUpdate() {};
 };
 
-IvfSmartPointer(CShapePlacementHandler);
+IvfSmartPointer(ShapePlacementHandler);
 
 /**
  * Experimental shape placement handler
  *
  * Not yet supported....
  */
-class IVFWIDGET_API CShapePlacementHandler : public CCoordinateInputHandler,
-	CMouseDown3dEvent,
-	CMouseMove3dEvent,
-	CMouseUp3dEvent
+class IVFWIDGET_API ShapePlacementHandler : public CoordinateInputHandler,
+	MouseDown3dEvent,
+	MouseMove3dEvent,
+	MouseUp3dEvent
 {
 public:
 	enum TInputMethod {
@@ -91,67 +91,72 @@ public:
 		OM_COPY_SHAPE
 	};
 private:
-	CNodeCursorPtr				m_cursor;
-	CRulerPtr					m_ruler;
-	CScenePtr					m_scene;
-	CCompositePtr				m_composite;
+	NodeCursorPtr				m_cursor;
+	RulerPtr					m_ruler;
+	ScenePtr					m_scene;
+	CompositePtr				m_composite;
 
-	CShapePtr					m_shapeRepresentation;
-	CShapePtr					m_moveShape;
+	ShapePtr					m_shapeRepresentation;
+	ShapePtr					m_moveShape;
 
 	TInputMethod					m_inputMethod;
 	TOperatingMode					m_operatingMode;
 
 	int								m_clickCount;
 
-	CCreateShapeEvent*			m_createShapeEvent;
-	CMoveSelectionEvent*			m_moveSelectionEvent;
-	CCopyShapeEvent*				m_copyShapeEvent;
-	CFinishCopyEvent*			m_finishCopyEvent;
-	CFinishMoveEvent*			m_finishMoveEvent;
-	CCursorUpdateEvent*			m_cursorUpdateEvent;
+	CreateShapeEvent*			m_createShapeEvent;
+	MoveSelectionEvent*			m_moveSelectionEvent;
+	CopyShapeEvent*				m_copyShapeEvent;
+	FinishCopyEvent*			m_finishCopyEvent;
+	FinishMoveEvent*			m_finishMoveEvent;
+	CursorUpdateEvent*			m_cursorUpdateEvent;
 
 	bool							m_lastButtonLeft;
 
-	CVec3d						m_startPoint;
-	CVec3d						m_currentPoint;
-	CVec3d						m_endPoint;
-	CVec3d						m_moveDelta;
+	Vec3d						m_startPoint;
+	Vec3d						m_currentPoint;
+	Vec3d						m_endPoint;
+	Vec3d						m_moveDelta;
 
-	CShapeSelectionPtr			m_shapeSelection;
+	ShapeSelectionPtr			m_shapeSelection;
 
 	bool							m_moving;
 	bool							m_moveDone;
 
 public:
 	void reset();
-	CShapePlacementHandler(CWidgetBase* widget, CCamera* camera, CScene* scene, CComposite* composite);
-	virtual ~CShapePlacementHandler();
+	ShapePlacementHandler(WidgetBase* widget, Camera* camera, Scene* scene, Composite* composite);
+	virtual ~ShapePlacementHandler();
 
-	IvfClassInfo("CShapePlacementHandler",CCoordinateInputHandler);
+	static ShapePlacementHandlerPtr create(WidgetBase* widget, Camera* camera, Scene* scene, Composite* composite)
+	{
+		return ShapePlacementHandlerPtr(new ShapePlacementHandler(widget, camera, scene, composite));
+	}
 
-	void setShapeRepresentation(CShape* shape);
+	IvfClassInfo("ShapePlacementHandler",CoordinateInputHandler);
+
+	void setShapeRepresentation(Shape* shape);
 
 	void setInputMethod(TInputMethod method);
 	TInputMethod getInputMethod();
 
-	CNodeCursor* getCursor();
+	NodeCursor* getCursor();
 
-	void setCreateShapeEvent(CCreateShapeEvent* event);
-	void setMoveSelectionEvent(CMoveSelectionEvent* event);
-	void setCursorUpdateEvent(CCursorUpdateEvent* event);
-	void setFinishMoveEvent(CFinishMoveEvent* event);
-	void setFinishCopyEvent(CFinishCopyEvent* event);
-	void setCopyShapeEvent(CCopyShapeEvent* event);
+	void setCreateShapeEvent(CreateShapeEvent* event);
+	void setMoveSelectionEvent(MoveSelectionEvent* event);
+	void setCursorUpdateEvent(CursorUpdateEvent* event);
+	void setFinishMoveEvent(FinishMoveEvent* event);
+	void setFinishCopyEvent(FinishCopyEvent* event);
+	void setCopyShapeEvent(CopyShapeEvent* event);
 
-	void setMoveShape(CShape* shape);
+	void setMoveShape(Shape* shape);
 
 	TOperatingMode getOperatingMode();
 	void setOperatingMode(TOperatingMode mode);
 
-	void initiateMove(CVec3d& vec);
+	void initiateMove(Vec3d& vec);
 	void initiateMove(double x, double y, double z);
-	void setShapeSelection(CShapeSelection* shapeSelection);
+	void setShapeSelection(ShapeSelection* shapeSelection);
 	bool isMoving();
 	void finalizeMove();
 

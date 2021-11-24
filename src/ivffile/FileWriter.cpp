@@ -26,18 +26,18 @@
 
 using namespace ivf;
 
-CFileWriter::CFileWriter()
+FileWriter::FileWriter()
 {
 
 }
 
-CFileWriter::~CFileWriter()
+FileWriter::~FileWriter()
 {
 
 }
 
 
-void CFileWriter::write()
+void FileWriter::write()
 {
 
 }

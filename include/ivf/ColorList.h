@@ -29,18 +29,18 @@
 
 namespace ivf {
 
-IvfSmartPointer(CColorList);
+IvfSmartPointer(ColorList);
 
 /**
  * Color list class
  *
- * Maintains a list of colors for use with the CVertexElements class.
+ * Maintains a list of colors for use with the VertexElements class.
  * The list is initially 1024 elements and the size is doubled if exceeding
  * 1024.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CColorList : public CBase {
+class IVF_API ColorList : public Base {
 private:
 	GLfloat* m_color;
 	long m_allocSize;
@@ -49,13 +49,13 @@ private:
 	long m_next;
 public:
 	/** CIvfColorList constructor */
-	CColorList();
+	ColorList();
 
 	/** CIvfColorList destructor */
-	virtual ~CColorList();
+	virtual ~ColorList();
 
-	IvfClassInfo("CColorList",CBase);
-	IvfStdFactory(CColorList);
+	IvfClassInfo("ColorList",Base);
+	IvfStdFactory(ColorList);
 
 	/** Clear the color list */
 	void clear();

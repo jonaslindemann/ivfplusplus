@@ -23,9 +23,9 @@
 
 using namespace ivf;
 
-CPathController::CPathController()
+PathController::PathController()
 {
-	m_path = new CSpline3d();
+	m_path = new Spline3d();
 	
 	m_t = 0.0;
 	m_v = 0.0;
@@ -38,23 +38,23 @@ CPathController::CPathController()
 	m_startAction = SA_STOP;
 }
 
-CPathController::~CPathController()
+PathController::~PathController()
 {
 }
 
-void CPathController::setPath(CSpline3d *spline)
+void PathController::setPath(Spline3d *spline)
 {
 	m_path = spline;
 }
 
-CSpline3d* CPathController::getPath()
+Spline3d* PathController::getPath()
 {
 	return m_path;
 }
 
-void CPathController::doUpdate(double dt)
+void PathController::doUpdate(double dt)
 {
-	CShape* shape = this->getShape();
+	Shape* shape = this->getShape();
 	if (shape!=nullptr)
 	{
 		double x, y, z;
@@ -121,12 +121,12 @@ void CPathController::doUpdate(double dt)
 	}
 }
 
-void CPathController::doReset()
+void PathController::doReset()
 {
 	m_t = m_t0;
 	m_v = m_v0;
 
-	CShape* shape = this->getShape();
+	Shape* shape = this->getShape();
 	if (shape!=nullptr)
 	{
 		double x, y, z;
@@ -138,30 +138,30 @@ void CPathController::doReset()
 	}
 }
 
-void CPathController::setInitialPos(double t)
+void PathController::setInitialPos(double t)
 {
 	m_t0 = t;
 	doReset();
 }
 
-void CPathController::setInitialSpeed(double v)
+void PathController::setInitialSpeed(double v)
 {
 	m_v0 = v;
 	doReset();
 }
 
-void CPathController::setInitialAcceleration(double a)
+void PathController::setInitialAcceleration(double a)
 {
 	m_a0 = a;
 	doReset();
 }
 
-void CPathController::setEndActionType(TEndAction action)
+void PathController::setEndActionType(TEndAction action)
 {
 	m_endAction = action;
 }
 
-void CPathController::setStartActionType(TStartAction action)
+void PathController::setStartActionType(TStartAction action)
 {
 	m_startAction = action;
 }

@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CRenderState);
+IvfSmartPointer(RenderState);
 
 /**
  * Render state class
@@ -37,18 +37,18 @@ IvfSmartPointer(CRenderState);
  * This class manages a OpenGL state change. This class
  * is an abstract class, and should not be used directly.
  */
-class IVF_API CRenderState : public CBase {
+class IVF_API RenderState : public Base {
 private:
 
 public:
-	/** CRenderState constructor */
-	CRenderState();
+	/** RenderState constructor */
+	RenderState();
 
-	/** CRenderState destructor */
-	virtual ~CRenderState();
+	/** RenderState destructor */
+	virtual ~RenderState();
 
-	IvfClassInfo("CRenderState",CBase);
-	IvfStdFactory(CRenderState);
+	IvfClassInfo("RenderState",Base);
+	IvfStdFactory(RenderState);
 
 	/** 
 	 * Applies state

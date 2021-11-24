@@ -35,21 +35,21 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGleExtrusion);
+IvfSmartPointer(GleExtrusion);
 
-class IVFGLE_API CGleExtrusion: public CGleExtrudedBase {
+class IVFGLE_API GleExtrusion: public GleExtrudedBase {
 private:
-	CGleContourPtr	 m_contour;
+	GleContourPtr	 m_contour;
 	gleDouble			 m_up[3];
 public:
-	CGleExtrusion();
+	GleExtrusion();
 
-	IvfClassInfo("CGleExtrusion", CShape);
-	IvfStdFactory(CGleExtrusion);
+	IvfClassInfo("GleExtrusion", Shape);
+	IvfStdFactory(GleExtrusion);
 
-	void setContour(CGleContour* contour);
+	void setContour(GleContour* contour);
 	void setContourUp(double vx, double vy, double vz);
-	void setContourUp(CVec3d& vec);
+	void setContourUp(Vec3d& vec);
 protected:
 	virtual void doCreateGeometry();
 };

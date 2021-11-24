@@ -49,11 +49,11 @@
 
 namespace ivf {
 
-class CGlutApplication {
+class GlutApplication {
 private:
-	static CGlutApplication* m_instance;
-	static CSingletonDestroyer<CGlutApplication> m_destroyer;
-	static CGlutBase* m_windows[];
+	static GlutApplication* m_instance;
+	static SingletonDestroyer<GlutApplication> m_destroyer;
+	static GlutBase* m_windows[];
 	static unsigned int m_nextWindow;
 	GLUT_CB(0);
 	GLUT_CB(1);
@@ -71,27 +71,27 @@ private:
 #endif
 	
 public:	
-	static CGlutApplication* getInstance(int* argc, char** argv);
-	static CGlutApplication* getInstance();
+	static GlutApplication* getInstance(int* argc, char** argv);
+	static GlutApplication* getInstance();
 	
 	void setDisplayMode(unsigned int mode);
 	unsigned int getDisplayMode();
 	
-	bool addWindow(CGlutBase* window);
+	bool addWindow(GlutBase* window);
 	void enableTimer(int timerIdx, int msecs);
 	void disableTimer(int timerIdx);
 	
 	void mainLoop();
 	void run();
-	void runAppLoop(CGlutBase *window);
+	void runAppLoop(GlutBase *window);
 
 protected:
 	/** Protected constructor (do not use) */
-	CGlutApplication(int* argc, char** argv);
-	~CGlutApplication();
-	friend class CSingletonDestroyer<CGlutApplication>;
+	GlutApplication(int* argc, char** argv);
+	~GlutApplication();
+	friend class SingletonDestroyer<GlutApplication>;
 };
 
-typedef CGlutApplication* CGlutApplicationPtr;
+typedef GlutApplication* CGlutApplicationPtr;
 
 }

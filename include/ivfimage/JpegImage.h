@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CJpegImage);
+IvfSmartPointer(JpegImage);
 
 /**
  * Jpeg file loader 
@@ -38,18 +38,18 @@ IvfSmartPointer(CJpegImage);
  *
  * @author Jonas Lindemann
  */
-class IVFIMAGE_API CJpegImage : public CFileImage {
+class IVFIMAGE_API JpegImage : public FileImage {
 private:
 
 public:
-	/** CJpegImage constructor */
-	CJpegImage();
+	/** JpegImage constructor */
+	JpegImage();
 
-	/** CJpegImage destructor */
-	virtual ~CJpegImage();
+	/** JpegImage destructor */
+	virtual ~JpegImage();
 
-	IvfClassInfo("CJpegImage",CFileImage);
-	IvfStdFactory(CJpegImage);
+	IvfClassInfo("JpegImage",FileImage);
+	IvfStdFactory(JpegImage);
 
 	/** Reads jpeg image */
 	virtual bool read();

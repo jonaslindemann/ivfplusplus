@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CTriSet);
+IvfSmartPointer(TriSet);
 
 /**
  * Tri set class
@@ -37,19 +37,19 @@ IvfSmartPointer(CTriSet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CTriSet : public CGLPrimitive {
+class IVF_API TriSet : public GLPrimitive {
 private:
 	bool m_useColor;
 	int m_drawInterval;
 public:
-	/** CTriSet constructor */
-	CTriSet();
+	/** TriSet constructor */
+	TriSet();
 
-	/** CTriSet destructor */
-	virtual ~CTriSet();
+	/** TriSet destructor */
+	virtual ~TriSet();
 
-	IvfClassInfo("CTriSet",CGLPrimitive);
-	IvfStdFactory(CTriSet);
+	IvfClassInfo("TriSet",GLPrimitive);
+	IvfStdFactory(TriSet);
 
 	/** Enable/disable usage of color values when rendering */
 	void setUseColor(bool flag);
@@ -67,7 +67,7 @@ public:
 	void setDrawInterval(int interval);
 protected:
 	virtual void updateVertexNormals();
-	virtual void calcNormal(CIndex* idx);
+	virtual void calcNormal(Index* idx);
 	virtual void doCreateGeometry();
 };
 /** \example advgeom.cpp */

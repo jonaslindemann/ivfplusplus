@@ -32,7 +32,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGLBase);
+IvfSmartPointer(GLBase);
 
 //static double g_nodeSize = 0.2;
 
@@ -44,7 +44,7 @@ IvfSmartPointer(CGLBase);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CGLBase : public CBase {
+class IVF_API GLBase : public Base {
 public:
 	enum TObjectState {
 		OS_ON,
@@ -60,14 +60,14 @@ private:
 	long m_tag;
 	TSelectState m_selectState;
 	TObjectState m_state;
-	CBoundingSpherePtr m_boundSphere;
+	BoundingSpherePtr m_boundSphere;
 	GLuint m_displayList;
 	bool m_useList;
 	bool m_dynamic;
 	bool m_useSelectShape;
 	bool m_culled;
 	bool m_renderMaterial;
-	CRenderStatePtr m_renderState;
+	RenderStatePtr m_renderState;
 
 public:
 	bool getRenderMaterial();
@@ -79,17 +79,17 @@ public:
 	void disable();
 	void enable();
 	/** CIvfGLBase constructor */
-	CGLBase ();
+	GLBase ();
 
 	/** CIvfGLBase constructor */
-	CGLBase (const CGLBase&);
+	GLBase (const GLBase&);
 
 	/** CIvfGLBase destructor */
-	virtual ~CGLBase ();
-	CGLBase& operator = (const CGLBase &arg);
+	virtual ~GLBase ();
+	GLBase& operator = (const GLBase &arg);
 
-	IvfClassInfo("CGLBase",CBase);
-	IvfStdFactory(CGLBase);
+	IvfClassInfo("GLBase",Base);
+	IvfStdFactory(GLBase);
 
 	/**
 	 * Sets the tag property of an object.
@@ -141,7 +141,7 @@ public:
 	 *
 	 * To be implemented.
 	 */
-	CBoundingSphere* getBoundingSphere();
+	BoundingSphere* getBoundingSphere();
 
 	/**
 	 * Sets the display list number.
@@ -232,10 +232,10 @@ public:
 	 * removed before exiting the render() method. The render
 	 * state should be handled like a material or texture.
 	 */
-	void setRenderState(CRenderState* state);
+	void setRenderState(RenderState* state);
 
 	/** Return assigned render state */
-	CRenderState* getRenderState();
+	RenderState* getRenderState();
 
 protected:
 	virtual void doPreGeometry();

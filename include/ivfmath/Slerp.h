@@ -29,25 +29,25 @@
 
 namespace ivf {
 
-IvfSmartPointer(CSlerp);
+IvfSmartPointer(Slerp);
 
 /**
  * Slerp class
  *
  * Interface not finished
  */
-class IVFMATH_API CSlerp : public CMathBase {
+class IVFMATH_API Slerp : public MathBase {
 private:
-	std::vector<CSlerpSegment*> m_segments;
-	std::vector<CQuat*> m_quats;
+	std::vector<SlerpSegment*> m_segments;
+	std::vector<Quat*> m_quats;
 	int m_size;
 	void initSlerp();
 public:
-	CSlerp();
-	virtual ~CSlerp();
+	Slerp();
+	virtual ~Slerp();
 
-	IvfClassInfo("CSlerp",CMathBase);
-	IvfStdFactory(CSlerp);
+	IvfClassInfo("Slerp",MathBase);
+	IvfStdFactory(Slerp);
 
 	void clear();
 	void update();
@@ -55,10 +55,10 @@ public:
 	void setSize(int size);
 	int getSize();
 	
-	void setQuat(int idx, CQuat& q);
+	void setQuat(int idx, Quat& q);
 	void setQuatAxisAngle(int idx, double vx, double vy, double vz, double angle);
-	CQuat& getQuat(int idx);
-	CQuat& getQuat(double t);
+	Quat& getQuat(int idx);
+	Quat& getQuat(double t);
 };
 
 }

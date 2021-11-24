@@ -29,10 +29,10 @@ using namespace ivf;
 
 const int ivfMaxTempQuat = 32;
 
-CQuat& ivf::ivfGetTempQuat()
+Quat& ivf::ivfGetTempQuat()
 {
 	static int nBuf = 0;
-	static CQuat buf[ivfMaxTempQuat];
+	static Quat buf[ivfMaxTempQuat];
 	
 	if (nBuf==ivfMaxTempQuat) nBuf = 0;
 
@@ -41,13 +41,13 @@ CQuat& ivf::ivfGetTempQuat()
 	return buf[nBuf++];
 }
 
-CQuat::CQuat()
+Quat::Quat()
 {
 	m_q.setComponents(0.0, 0.0, 0.0);
 	m_qw = 1.0;
 }
 
-CQuat::CQuat(CQuat& v)
+Quat::Quat(Quat& v)
 {
 	double qx, qy, qz, qw;
 
@@ -56,24 +56,24 @@ CQuat::CQuat(CQuat& v)
 	m_qw = qw;
 }
 
-CQuat::~CQuat()
+Quat::~Quat()
 {
 
 }
 
-void CQuat::setComponents(double qx, double qy, double qz, double qw)
+void Quat::setComponents(double qx, double qy, double qz, double qw)
 {
 	m_q.setComponents(qx, qy, qz);
 	m_qw = qw;
 }
 
-void CQuat::getComponents(double &qx, double &qy, double &qz, double &qw)
+void Quat::getComponents(double &qx, double &qy, double &qz, double &qw)
 {
 	m_q.getComponents(qx, qy, qz);
 	qw = m_qw;
 }
 
-CQuat& CQuat::operator=(CQuat& a)
+Quat& Quat::operator=(Quat& a)
 {
 	double ax, ay, az, aw;
 	a.getComponents(ax, ay, az, aw);
@@ -82,11 +82,11 @@ CQuat& CQuat::operator=(CQuat& a)
 	return *this;
 }
 
-CQuat& CQuat::operator *(CQuat& a)
+Quat& Quat::operator *(Quat& a)
 {
-	CQuat& r = ivfGetTempQuat();
+	Quat& r = ivfGetTempQuat();
 
-	CVec3d& av = a.getVectorPart();
+	Vec3d& av = a.getVectorPart();
 	double* u = m_q.getComponents();
 	double* v = a.getVectorPart().getComponents();
 
@@ -96,18 +96,18 @@ CQuat& CQuat::operator *(CQuat& a)
 	return r;
 }
 
-CQuat& CQuat::operator *(double a)
+Quat& Quat::operator *(double a)
 {
-	CQuat& r = ivfGetTempQuat();
+	Quat& r = ivfGetTempQuat();
 
 	r.getVectorPart() = m_q * a;
 	r.setRealPart(m_qw*a);
 	return r;
 }
 
-CQuat& CQuat::operator/(double b)
+Quat& Quat::operator/(double b)
 {
-	CQuat& r = ivfGetTempQuat();
+	Quat& r = ivfGetTempQuat();
 
 	double k = 1.0/b;
 	r.getVectorPart() = m_q * k;
@@ -115,11 +115,11 @@ CQuat& CQuat::operator/(double b)
 	return r;
 }
 
-CQuat& CQuat::operator +(CQuat& a)
+Quat& Quat::operator +(Quat& a)
 {
-	CQuat& r = ivfGetTempQuat();
+	Quat& r = ivfGetTempQuat();
 
-	CVec3d& av = a.getVectorPart();
+	Vec3d& av = a.getVectorPart();
 
 	r.getVectorPart() = m_q + av;
 	r.setRealPart(m_qw + a.getRealPart());
@@ -127,11 +127,11 @@ CQuat& CQuat::operator +(CQuat& a)
 	return r;
 }
 
-CQuat& CQuat::operator -(CQuat& a)
+Quat& Quat::operator -(Quat& a)
 {
-	CQuat& r = ivfGetTempQuat();
+	Quat& r = ivfGetTempQuat();
 
-	CVec3d& av = a.getVectorPart();
+	Vec3d& av = a.getVectorPart();
 
 	r.getVectorPart() = m_q - av;
 	r.setRealPart(m_qw - a.getRealPart());
@@ -139,19 +139,19 @@ CQuat& CQuat::operator -(CQuat& a)
 	 return r;
 }
 
-CVec3d& CQuat::getVectorPart()
+Vec3d& Quat::getVectorPart()
 {
 	return m_q;
 }
 
-double CQuat::getRealPart()
+double Quat::getRealPart()
 {
 	return m_qw;
 }
 
-CQuat& CQuat::conjugate()
+Quat& Quat::conjugate()
 {
-	CQuat& r = ivfGetTempQuat();
+	Quat& r = ivfGetTempQuat();
 
 	double qx, qy, qz;
 
@@ -161,34 +161,34 @@ CQuat& CQuat::conjugate()
 	return r;
 }
 
-void CQuat::identity()
+void Quat::identity()
 {
 	m_q.setComponents(0.0, 0.0, 0.0);
 	m_qw = 1.0;
 }
 
-double CQuat::norm()
+double Quat::norm()
 {
 	double qx, qy, qz;
 	m_q.getComponents(qx, qy, qz);
 	return pow(qx,2) + pow(qy,2) + pow(qz,2) + pow(m_qw,2);
 }
 
-CQuat& CQuat::inv()
+Quat& Quat::inv()
 {
-	CQuat& r = ivfGetTempQuat();
+	Quat& r = ivfGetTempQuat();
 
 	r = this->conjugate()/this->norm();
 
 	return r;
 }
 
-void CQuat::setRealPart(double value)
+void Quat::setRealPart(double value)
 {
 	m_qw = value;
 }
 
-void CQuat::setFromAxisAngle(double vx, double vy, double vz, double angle)
+void Quat::setFromAxisAngle(double vx, double vy, double vz, double angle)
 {
 	double x, y, z;
 	/*
@@ -218,7 +218,7 @@ void CQuat::setFromAxisAngle(double vx, double vy, double vz, double angle)
 }
 
 
-void CQuat::getAxisAngle(double &vx, double &vy, double &vz, double &angle)
+void Quat::getAxisAngle(double &vx, double &vy, double &vz, double &angle)
 {
 	double x, y, z;
 	double s;

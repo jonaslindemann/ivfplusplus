@@ -33,20 +33,20 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase {
+class ExampleWindow: public GlutBase {
 private:
-	CCameraPtr		m_camera;
-	CCompositePtr	m_scene;
-	CLightPtr		m_light;
+	CameraPtr		m_camera;
+	CompositePtr	m_scene;
+	LightPtr		m_light;
 
-	CControllerGroupPtr m_controllers;
-	CRotateControllerPtr m_propCtl;
-	CRotateControllerPtr m_headCtl;
-	CCameraControllerPtr m_cameraCtl;
+	ControllerGroupPtr m_controllers;
+	RotateControllerPtr m_propCtl;
+	RotateControllerPtr m_headCtl;
+	CameraControllerPtr m_cameraCtl;
 
-	CSlerpControllerPtr m_slerpCtl;
+	SlerpControllerPtr m_slerpCtl;
 
 	double m_angleX;
 	double m_angleY;
@@ -61,10 +61,10 @@ private:
 	bool m_rotating;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H)
-		:CGlutBase(X, Y, W, H) {};
+	ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H) {};
 
-	static CExampleWindowPtr create(int X, int Y, int W, int H);
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -80,12 +80,12 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindowPtr CExampleWindow::create(int X, int Y, int W, int H)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
 {
-	return CExampleWindowPtr(new CExampleWindow(X, Y, W, H));
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -100,24 +100,24 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = CCamera::create();
+	m_camera = Camera::create();
 	m_camera->setPosition(10.0, 20.0, 20.0);
 	m_camera->setTarget(0.0, 8.0, 0.0);
 
 	// Create a materials
 
-	auto material = CMaterial::create();
+	auto material = Material::create();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene
 
-	m_scene = CComposite::create();
+	m_scene = Composite::create();
 
 	// Create a file reader
 
-	auto acReader = CAc3DReader::create();
+	auto acReader = Ac3DReader::create();
 
 	// Set parameters
 
@@ -130,24 +130,24 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Retrieve poly set
 
-	auto model = (CComposite*)acReader->getShape();
+	auto model = (Composite*)acReader->getShape();
 
 	auto propeller = model->findShape("propeller");
 	propeller->setRotationQuat(0.0, 0.0, 1.0, 0.0);
 	auto head = model->findShape("head");
 	head->setRotationQuat(0.0, 1.0, 0.0, 0.0);
 
-	m_propCtl = CRotateController::create();
+	m_propCtl = RotateController::create();
 	m_propCtl->setShape(propeller);
 	m_propCtl->setRotationSpeed(100.0);
 	m_propCtl->activate();
 
-	m_headCtl = CRotateController::create();
+	m_headCtl = RotateController::create();
 	m_headCtl->setShape(head);
 	m_headCtl->setRotationSpeed(10.0);
 	m_headCtl->activate();
 
-	auto positionSpline = CSpline3d::create();
+	auto positionSpline = Spline3d::create();
 	positionSpline->setSize(5);
 	positionSpline->getPoint(0)->setComponents(15.0, 10.0, 15.0);
 	positionSpline->getPoint(1)->setComponents(-15.0,  5.0, 15.0);
@@ -157,7 +157,7 @@ void CExampleWindow::onInit(int width, int height)
 	positionSpline->update();
 
 	/*
-	CSpline3d* targetSpline = new CSpline3d();
+	Spline3d* targetSpline = new Spline3d();
 	targetSpline->setSize(5);
 	targetSpline->getPoint(0)->setComponents(15.0, 10.0, 15.0);
 	targetSpline->getPoint(1)->setComponents(-15.0,  5.0, 15.0);
@@ -167,25 +167,25 @@ void CExampleWindow::onInit(int width, int height)
 	targetSpline->update();
 	*/
 
-	m_cameraCtl = CCameraController::create();
+	m_cameraCtl = CameraController::create();
 	m_cameraCtl->setCamera(m_camera);
 	m_cameraCtl->setPath(positionSpline);
 	m_cameraCtl->setFollowPath(false);
 	//m_cameraCtl->setTargetPath(targetSpline);
 	m_cameraCtl->setInitialSpeed(0.2);
 	//m_cameraCtl->setInitialTargetSpeed(0.2);
-	m_cameraCtl->setEndActionType(CCameraController::EA_RESET);
-	m_cameraCtl->setStartActionType(CCameraController::SA_RESET);
-	//m_cameraCtl->setTargetEndAction(CCameraController::EA_REVERSE);
-	//m_cameraCtl->setTargetStartAction(CCameraController::SA_REVERSE);
+	m_cameraCtl->setEndActionType(CameraController::EA_RESET);
+	m_cameraCtl->setStartActionType(CameraController::SA_RESET);
+	//m_cameraCtl->setTargetEndAction(CameraController::EA_REVERSE);
+	//m_cameraCtl->setTargetStartAction(CameraController::SA_REVERSE);
 	m_cameraCtl->deactivate();
 
-	auto axis = CAxis::create();
+	auto axis = Axis::create();
 	axis->setPosition(3.0, 3.0, 3.0);
 	axis->setSize(2.0);
 	m_scene->addChild(axis);
 
-	auto slerp = CSlerp::create();
+	auto slerp = Slerp::create();
 	slerp->setSize(4);
 	slerp->setQuatAxisAngle(0, 0.0, 0.0, 1.0, 10.0);
 	slerp->setQuatAxisAngle(1, 0.0, 0.0, 1.0, 90.0);
@@ -193,25 +193,25 @@ void CExampleWindow::onInit(int width, int height)
 	slerp->setQuatAxisAngle(3, 0.0, 1.0, 0.0, 30.0);
 	slerp->update();
 
-	auto action1 = CAction::create();
+	auto action1 = Action::create();
 	action1->setActionType(IVF_ACTION_ACTIVATE);
 	action1->setTarget(m_cameraCtl);
 
-	auto action2 = CAction::create();
+	auto action2 = Action::create();
 	action2->setActionType(IVF_ACTION_DEACTIVATE);
 	action2->setTarget(m_cameraCtl);
 
-	m_slerpCtl = CSlerpController::create();
+	m_slerpCtl = SlerpController::create();
 	m_slerpCtl->setSlerp(slerp);
 	m_slerpCtl->setShape(axis);
 	m_slerpCtl->setInitialSpeed(1.0);
-	m_slerpCtl->setEndActionType(CSlerpController::EA_REVERSE);
+	m_slerpCtl->setEndActionType(SlerpController::EA_REVERSE);
 	m_slerpCtl->setEndAction(action1);
-	m_slerpCtl->setStartActionType(CSlerpController::SA_REVERSE);
+	m_slerpCtl->setStartActionType(SlerpController::SA_REVERSE);
 	m_slerpCtl->setStartAction(action2);
 	m_slerpCtl->activate();
 
-	m_controllers = CControllerGroup::create();
+	m_controllers = ControllerGroup::create();
 	m_controllers->addChild(m_propCtl);
 	m_controllers->addChild(m_headCtl);
 	m_controllers->addChild(m_cameraCtl);
@@ -222,7 +222,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a light
 
-	auto lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 
 	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
@@ -233,7 +233,7 @@ void CExampleWindow::onInit(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -241,7 +241,7 @@ void CExampleWindow::onResize(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 
@@ -256,14 +256,14 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseDown(int x, int y)
+void ExampleWindow::onMouseDown(int x, int y)
 {
 	m_beginX = x;
 	m_beginY = y;
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseMove(int x, int y)
+void ExampleWindow::onMouseMove(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -283,7 +283,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CWidgetBase::MT_SHIFT)
+		if (getModifierKey() == WidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -301,7 +301,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseUp(int x, int y)
+void ExampleWindow::onMouseUp(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -312,7 +312,7 @@ void CExampleWindow::onMouseUp(int x, int y)
 }
 
 // ------------------------------------------------------------
-bool CExampleWindow::onTimeout0()
+bool ExampleWindow::onTimeout0()
 {
 	m_controllers->update(0.01);
 	redraw();
@@ -320,7 +320,7 @@ bool CExampleWindow::onTimeout0()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'p' :
@@ -354,12 +354,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

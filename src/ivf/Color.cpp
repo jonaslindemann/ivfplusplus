@@ -29,20 +29,20 @@ using namespace ivf;
 // ------------------------------------------------------------
 // ------------------------------------------------------------
 
-CColor::CColor()
+Color::Color()
 {
 	this->setColor(0.8f, 0.8f, 0.8f);
 	this->setAlfa(1.0);
 }
 
 // ------------------------------------------------------------
-CColor::~CColor()
+Color::~Color()
 {
 
 }
 
 // ------------------------------------------------------------
-void CColor::setColor(float red, float green, float blue)
+void Color::setColor(float red, float green, float blue)
 {
 	m_color[0] = red;
 	m_color[1] = green;
@@ -50,7 +50,7 @@ void CColor::setColor(float red, float green, float blue)
 }
 
 // ------------------------------------------------------------
-void CColor::getColor(float &red, float &green, float &blue)
+void Color::getColor(float &red, float &green, float &blue)
 {
 	red = m_color[0];
 	green = m_color[1];
@@ -58,19 +58,19 @@ void CColor::getColor(float &red, float &green, float &blue)
 }
 
 // ------------------------------------------------------------
-const float* CColor::getColor()
+const float* Color::getColor()
 {
 	return &m_color[0];
 }
 
 // ------------------------------------------------------------
-void CColor::setAlfa(float alfa)
+void Color::setAlfa(float alfa)
 {
 	m_color[3] = alfa;
 }
 
 // ------------------------------------------------------------
-float CColor::getAlfa()
+float Color::getAlfa()
 {
 	return m_color[3];
 }

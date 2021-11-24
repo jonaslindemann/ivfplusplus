@@ -37,21 +37,21 @@ namespace ivf {
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CMat3d : public CMathBase {
+class IVFMATH_API Mat3d : public MathBase {
 private:
 	double m_matrix[3][3];
 public:
-	/** CMat3d constructor */
-	CMat3d();
+	/** Mat3d constructor */
+	Mat3d();
 
-	/** CMat3d copy constructor */
-	CMat3d(CMat3d& M);
+	/** Mat3d copy constructor */
+	Mat3d(Mat3d& M);
 
-	/** CMat3d scalar constructor */
-	CMat3d(double scalar);
+	/** Mat3d scalar constructor */
+	Mat3d(double scalar);
 
-	/** CMat3d destructor */
-	virtual ~CMat3d();
+	/** Mat3d destructor */
+	virtual ~Mat3d();
 
 	/** Initializes matrix with all ones (=1.0) */
 	void one();
@@ -87,40 +87,40 @@ public:
 	void setRow(int row, double v1, double v2, double v3);
 
 	/** Return the transpose of the matrix */
-	CMat3d& t();
+	Mat3d& t();
 
 	/** Return the inverse of the matrix */
-	CMat3d& inv();
+	Mat3d& inv();
 
 	/** Assignment operator Matrix = Matrix */
-	CMat3d& operator=(CMat3d& A);
+	Mat3d& operator=(Mat3d& A);
 
 	/** Assignment operator Matrix = scalar */
-	CMat3d& operator=(double a);
+	Mat3d& operator=(double a);
 
 	/** += operator assignment Matrix += Matrix */
-	CMat3d& operator+=(CMat3d& A);
+	Mat3d& operator+=(Mat3d& A);
 
 	/** -= operator assignment Matrix -= Matrix */
-	CMat3d& operator-=(CMat3d& A);
+	Mat3d& operator-=(Mat3d& A);
 
 	/** Matrix/Matrix multiplication operator */
-	CMat3d& operator*(CMat3d& A);
+	Mat3d& operator*(Mat3d& A);
 
 	/** Matrix/Vector multiplication operator */
-	CVec3d& operator*(CVec3d& v);
+	Vec3d& operator*(Vec3d& v);
 
 	/** Matrix/Scalar multiplication operator */
-	CMat3d& operator*(double scalar);
+	Mat3d& operator*(double scalar);
 
 	/** Elemental division operator */
-	CMat3d& operator/(double scalar);
+	Mat3d& operator/(double scalar);
 
 	/** Matrix/Matrix addition operator */
-	CMat3d& operator+(CMat3d& A);
+	Mat3d& operator+(Mat3d& A);
 };
 
-IVFMATH_API CMat3d& ivfGetTempMatrix3d();
+IVFMATH_API Mat3d& ivfGetTempMatrix3d();
 
 /** \example math.cpp */
 

@@ -32,18 +32,18 @@ namespace ivf {
  * Reference counting base class
  *
  * This class implements the reference counting
- * scheme used in Ivf++. See template CPointer
+ * scheme used in Ivf++. See template Pointer
  * for a smart pointer class.
  */
-class IVF_API CRefCountBase {
+class IVF_API RefCountBase {
 private:
 	int m_ref;
 public:
 	/** Class constructor */
-	CRefCountBase();
+	RefCountBase();
 
 	/** Class destructor */
-	virtual ~CRefCountBase();
+	virtual ~RefCountBase();
 
 	/** Returns current reference count */
 	int getRefCount();

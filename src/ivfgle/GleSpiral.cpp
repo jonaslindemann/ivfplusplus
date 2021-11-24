@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CGleSpiral::CGleSpiral()
+GleSpiral::GleSpiral()
 {
 	int i, j;
 
@@ -41,7 +41,7 @@ CGleSpiral::CGleSpiral()
 	m_startXfm[1][1] = 1.0;
 }
 
-void CGleSpiral::doCreateGeometry()
+void GleSpiral::doCreateGeometry()
 {
 	if (m_contour==nullptr)
 		return;
@@ -69,19 +69,19 @@ void CGleSpiral::doCreateGeometry()
 	);
 }
 
-void CGleSpiral::setContour(CGleContour *contour)
+void GleSpiral::setContour(GleContour *contour)
 {
 	m_contour = contour;
 }
 
-void CGleSpiral::setContourUp(double vx, double vy, double vz)
+void GleSpiral::setContourUp(double vx, double vy, double vz)
 {
 	m_up[0] = vx;
 	m_up[1] = vy;
 	m_up[2] = vz;
 }
 
-void CGleSpiral::setContourUp(CVec3d &vec)
+void GleSpiral::setContourUp(Vec3d &vec)
 {
 	double vx, vy, vz;
 	vec.getComponents(vx, vy, vz);

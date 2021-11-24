@@ -26,20 +26,20 @@
 
 #include <ivf/Shape.h>
 
-// Obsolete use CTriSet, CQuadSet or CPolySet instead.
+// Obsolete use TriSet, QuadSet or PolySet instead.
 
 namespace ivf {
 
-IvfSmartPointer(CFaceSet);
+IvfSmartPointer(FaceSet);
 
-class IVF_API CFaceSet : public CShape {
+class IVF_API FaceSet : public Shape {
 public:
-	CFaceSet();
+	FaceSet();
 
-	virtual ~CFaceSet();
+	virtual ~FaceSet();
 
-	IvfClassInfo("CFaceSet",CShape);
-	IvfStdFactory(CFaceSet);
+	IvfClassInfo("FaceSet",Shape);
+	IvfStdFactory(FaceSet);
 
 	void setCoordSize(long coordSize);
 	long getCoordSize();

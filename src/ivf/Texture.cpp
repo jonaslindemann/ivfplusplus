@@ -20,7 +20,7 @@
 //
 
 
-// Implementation of: public class CTexture
+// Implementation of: public class Texture
 
 #include <ivf/config.h>
 #include <ivf/Texture.h>
@@ -28,8 +28,8 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CTexture::CTexture ()
-:CGLBase()
+Texture::Texture ()
+:GLBase()
 {
 	m_bound = false;
 	m_generateMipmaps = false;
@@ -57,7 +57,7 @@ CTexture::CTexture ()
 }
 
 // ------------------------------------------------------------
-CTexture::~CTexture ()
+Texture::~Texture ()
 {
 	if (m_generateName)
 		if (isBound() == TRUE)
@@ -65,13 +65,13 @@ CTexture::~CTexture ()
 }
 
 // ------------------------------------------------------------
-bool CTexture::isBound()
+bool Texture::isBound()
 {
 	return m_bound;
 }
 
 // ------------------------------------------------------------
-GLuint CTexture::getName()
+GLuint Texture::getName()
 {
 	// return texture name
 	
@@ -79,7 +79,7 @@ GLuint CTexture::getName()
 }
 
 // ------------------------------------------------------------
-void CTexture::bind()
+void Texture::bind()
 {
 #ifndef _NO_TEXTURE_NAMES
 	if (isBound())
@@ -131,7 +131,7 @@ void CTexture::bind()
 }
 
 // ------------------------------------------------------------
-void CTexture::apply()
+void Texture::apply()
 {
 	if (m_active)
 	{
@@ -155,46 +155,46 @@ void CTexture::apply()
 }
 
 // ------------------------------------------------------------
-void CTexture::setTextureRepeat(GLenum repeatS, GLenum repeatT)
+void Texture::setTextureRepeat(GLenum repeatS, GLenum repeatT)
 {
 	m_wrapS = repeatS;
 	m_wrapT = repeatT;
 }
 
 // ------------------------------------------------------------
-void CTexture::setRepeat(GLenum repeatS, GLenum repeatT)
+void Texture::setRepeat(GLenum repeatS, GLenum repeatT)
 {
 	m_wrapS = repeatS;
 	m_wrapT = repeatT;
 }
 
 // ------------------------------------------------------------
-void CTexture::setFilters(GLenum minFilter, GLenum magFilter)
+void Texture::setFilters(GLenum minFilter, GLenum magFilter)
 {
 	m_minFilter = minFilter;
 	m_magFilter = magFilter;
 }
 
 // ------------------------------------------------------------
-void CTexture::setTextureMode(GLenum mode)
+void Texture::setTextureMode(GLenum mode)
 {
 	m_textureMode = mode;
 }
 
 // ------------------------------------------------------------
-void CTexture::setMode(GLenum mode)
+void Texture::setMode(GLenum mode)
 {
 	m_textureMode = mode;
 }
 
 // ------------------------------------------------------------
-void CTexture::setGenerateMipmaps(bool flag)
+void Texture::setGenerateMipmaps(bool flag)
 {
 	m_generateMipmaps = flag;
 }
 
 // ------------------------------------------------------------
-void CTexture::setTextureEnvColor(float red, float green, float blue, float alfa)
+void Texture::setTextureEnvColor(float red, float green, float blue, float alfa)
 {
 	m_textureEnvColor[0] = red;
 	m_textureEnvColor[1] = green;
@@ -203,7 +203,7 @@ void CTexture::setTextureEnvColor(float red, float green, float blue, float alfa
 }
 
 // ------------------------------------------------------------
-void CTexture::setEnvColor(float red, float green, float blue, float alfa)
+void Texture::setEnvColor(float red, float green, float blue, float alfa)
 {
 	m_textureEnvColor[0] = red;
 	m_textureEnvColor[1] = green;
@@ -212,7 +212,7 @@ void CTexture::setEnvColor(float red, float green, float blue, float alfa)
 }
 
 // ------------------------------------------------------------
-void CTexture::getTextureEnvColor(float &red, float &green, float &blue, float &alfa)
+void Texture::getTextureEnvColor(float &red, float &green, float &blue, float &alfa)
 {
 	red   = m_textureEnvColor[0];
 	green = m_textureEnvColor[1];
@@ -221,7 +221,7 @@ void CTexture::getTextureEnvColor(float &red, float &green, float &blue, float &
 }
 
 // ------------------------------------------------------------
-void CTexture::getEnvColor(float &red, float &green, float &blue, float &alfa)
+void Texture::getEnvColor(float &red, float &green, float &blue, float &alfa)
 {
 	red   = m_textureEnvColor[0];
 	green = m_textureEnvColor[1];
@@ -230,14 +230,14 @@ void CTexture::getEnvColor(float &red, float &green, float &blue, float &alfa)
 }
 
 // ------------------------------------------------------------
-void CTexture::getSize(int &width, int &height)
+void Texture::getSize(int &width, int &height)
 {
 	width = m_width;
 	height = m_height;
 }
 
 // ------------------------------------------------------------
-void CTexture::setTextureModifier(double scaleX, double scaleY, double rotate)
+void Texture::setTextureModifier(double scaleX, double scaleY, double rotate)
 {
 	m_texScaleX = scaleX;
 	m_texScaleY = scaleY;
@@ -245,7 +245,7 @@ void CTexture::setTextureModifier(double scaleX, double scaleY, double rotate)
 }
 
 // ------------------------------------------------------------
-void CTexture::setModifier(double scaleX, double scaleY, double rotate)
+void Texture::setModifier(double scaleX, double scaleY, double rotate)
 {
 	m_texScaleX = scaleX;
 	m_texScaleY = scaleY;
@@ -253,26 +253,26 @@ void CTexture::setModifier(double scaleX, double scaleY, double rotate)
 }
 
 // ------------------------------------------------------------
-void CTexture::setSize(int width, int height)
+void Texture::setSize(int width, int height)
 {
 	m_width = width;
 	m_height = height;
 }
 
 // ------------------------------------------------------------
-void CTexture::setImageMap(void *imageMap)
+void Texture::setImageMap(void *imageMap)
 {
 	m_imageMap = imageMap;
 }
 
 // ------------------------------------------------------------
-void CTexture::setImage(CImage *image)
+void Texture::setImage(Image *image)
 {
 	m_ivfImage = image;
 }
 
 // ------------------------------------------------------------
-void CTexture::setName(GLuint name)
+void Texture::setName(GLuint name)
 {
 	if (m_generateName)
 		if (isBound() == TRUE)
@@ -283,45 +283,45 @@ void CTexture::setName(GLuint name)
 }
 
 // ------------------------------------------------------------
-void CTexture::setGenerateName(bool flag)
+void Texture::setGenerateName(bool flag)
 {
 	m_generateName = flag;
 }
 
 // ------------------------------------------------------------
-void CTexture::setLoadImages(bool flag)
+void Texture::setLoadImages(bool flag)
 {
 	m_loadImages = flag;
 }
 
 // ------------------------------------------------------------
-void CTexture::setTextureTranslate(double x, double y)
+void Texture::setTextureTranslate(double x, double y)
 {
 	m_texTransX = x;
 	m_texTransY = y;
 }
 
 // ------------------------------------------------------------
-void CTexture::setTranslate(double x, double y)
+void Texture::setTranslate(double x, double y)
 {
 	m_texTransX = x;
 	m_texTransY = y;
 }
 
 // ------------------------------------------------------------
-void CTexture::activate()
+void Texture::activate()
 {
 	m_active = true;
 }
 
 // ------------------------------------------------------------
-void CTexture::deactivate()
+void Texture::deactivate()
 {
 	m_active = false;
 }
 
 // ------------------------------------------------------------
-bool CTexture::isActive()
+bool Texture::isActive()
 {
 	return m_active;
 }

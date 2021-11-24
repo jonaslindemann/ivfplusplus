@@ -24,17 +24,17 @@
 
 using namespace ivf;
 
-CViewFrustum::CViewFrustum()
+ViewFrustum::ViewFrustum()
 {
-	m_near = new CPlane();
-	m_far = new CPlane();
-	m_left = new CPlane();
-	m_right = new CPlane();
-	m_top = new CPlane();
-	m_bottom = new CPlane();
+	m_near = new Plane();
+	m_far = new Plane();
+	m_left = new Plane();
+	m_right = new Plane();
+	m_top = new Plane();
+	m_bottom = new Plane();
 }
 
-CViewFrustum::~CViewFrustum()
+ViewFrustum::~ViewFrustum()
 {
 	delete m_near;
 	delete m_far;
@@ -44,37 +44,37 @@ CViewFrustum::~CViewFrustum()
 	delete m_bottom;
 }
 
-CPlane* CViewFrustum::getNearPlane()
+Plane* ViewFrustum::getNearPlane()
 {
 	return m_near;
 }
 
-CPlane* CViewFrustum::getFarPlane()
+Plane* ViewFrustum::getFarPlane()
 {
 	return m_far;
 }
 
-CPlane* CViewFrustum::getLeftPlane()
+Plane* ViewFrustum::getLeftPlane()
 {
 	return m_left;
 }
 
-CPlane* CViewFrustum::getRightPlane()
+Plane* ViewFrustum::getRightPlane()
 {
 	return m_right;
 }
 
-CPlane* CViewFrustum::getTopPlane()
+Plane* ViewFrustum::getTopPlane()
 {
 	return m_top;
 }
 
-CPlane* CViewFrustum::getBottomPlane()
+Plane* ViewFrustum::getBottomPlane()
 {
 	return m_bottom;
 }
 
-bool CViewFrustum::isInside(CBoundingSphere *bSphere)
+bool ViewFrustum::isInside(BoundingSphere *bSphere)
 {
 	double x, y, z, radius;
 

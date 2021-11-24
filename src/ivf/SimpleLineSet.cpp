@@ -19,7 +19,7 @@
 // Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
-// Implementation of: public class CSimpleLineSet
+// Implementation of: public class SimpleLineSet
 
 #include <ivf/config.h>
 #include <ivf/SimpleLineSet.h>
@@ -27,8 +27,8 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CSimpleLineSet::CSimpleLineSet ()
-		:CShape()
+SimpleLineSet::SimpleLineSet ()
+		:Shape()
 {
 	m_nCoords = 0;
 	m_nCoordIndex = 0;
@@ -39,7 +39,7 @@ CSimpleLineSet::CSimpleLineSet ()
 }
 
 // ------------------------------------------------------------
-CSimpleLineSet::~CSimpleLineSet ()
+SimpleLineSet::~SimpleLineSet ()
 {
 	if (m_coordIndex!=nullptr)
 		delete [] m_coordIndex;
@@ -50,7 +50,7 @@ CSimpleLineSet::~CSimpleLineSet ()
 }
 
 // ------------------------------------------------------------
-void CSimpleLineSet::doCreateGeometry()
+void SimpleLineSet::doCreateGeometry()
 {
 	int i;
 	glPushAttrib(GL_LIGHTING);
@@ -78,7 +78,7 @@ void CSimpleLineSet::doCreateGeometry()
 }
 
 // ------------------------------------------------------------
-void CSimpleLineSet::setCoordSize(int n)
+void SimpleLineSet::setCoordSize(int n)
 {
 	m_nCoords = n;
 	if (m_coords!=nullptr)
@@ -87,7 +87,7 @@ void CSimpleLineSet::setCoordSize(int n)
 }
 
 // ------------------------------------------------------------
-void CSimpleLineSet::setLineSize(int n)
+void SimpleLineSet::setLineSize(int n)
 {
 	m_nCoordIndex = n;
 	if (m_coordIndex!=nullptr)
@@ -96,7 +96,7 @@ void CSimpleLineSet::setLineSize(int n)
 }
 
 // ------------------------------------------------------------
-void CSimpleLineSet::setCoord(int n, double x, double y, double z)
+void SimpleLineSet::setCoord(int n, double x, double y, double z)
 {
 	if (m_coords!=nullptr)
 	{
@@ -110,7 +110,7 @@ void CSimpleLineSet::setCoord(int n, double x, double y, double z)
 }
 
 // ------------------------------------------------------------
-void CSimpleLineSet::setLineIndex(int n, int idx)
+void SimpleLineSet::setLineIndex(int n, int idx)
 {
 	if (m_coordIndex!=nullptr)
 	{
@@ -122,7 +122,7 @@ void CSimpleLineSet::setLineIndex(int n, int idx)
 }
 
 // ------------------------------------------------------------
-void CSimpleLineSet::setColorSize(int n)
+void SimpleLineSet::setColorSize(int n)
 {
 	m_nColors = n;
 	if (m_colors!=nullptr)
@@ -131,7 +131,7 @@ void CSimpleLineSet::setColorSize(int n)
 }
 
 // ------------------------------------------------------------
-void CSimpleLineSet::setColor(int n, double red, double green, double blue)
+void SimpleLineSet::setColor(int n, double red, double green, double blue)
 {
 	if (m_colors!=nullptr)
 	{

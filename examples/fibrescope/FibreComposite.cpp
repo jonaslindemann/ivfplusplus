@@ -31,27 +31,27 @@ using namespace ivf;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFibreComposite::CFibreComposite()
+FibreComposite::FibreComposite()
 {
 
 }
 
-CFibreComposite::~CFibreComposite()
+FibreComposite::~FibreComposite()
 {
 
 }
 
-void CFibreComposite::doBeginTransform()
+void FibreComposite::doBeginTransform()
 {
-	CUserSettingsPtr userSettings = CUserSettings::getInstance();
-	CLightingPtr lighting = CLighting::getInstance();
+	UserSettingsPtr userSettings = UserSettings::getInstance();
+	LightingPtr lighting = Lighting::getInstance();
 
 	if (userSettings->getFibreLighting())
 		lighting->enable();
 	else
 		lighting->disable();
 
-	CMaterialPtr material = this->getMaterial();
+	MaterialPtr material = this->getMaterial();
 	if (material!=nullptr)
 	{
 		if (userSettings->getRepresentation()==FIBRE_BAND2)
@@ -61,16 +61,16 @@ void CFibreComposite::doBeginTransform()
 		}
 	}
 
-	CComposite::doBeginTransform();
+	Composite::doBeginTransform();
 }
 
-void CFibreComposite::doEndTransform()
+void FibreComposite::doEndTransform()
 {
-	CComposite::doEndTransform();
+	Composite::doEndTransform();
 
-	CUserSettingsPtr userSettings = CUserSettings::getInstance();
+	UserSettingsPtr userSettings = UserSettings::getInstance();
 
-	CMaterialPtr material = this->getMaterial();
+	MaterialPtr material = this->getMaterial();
 	if (material!=nullptr)
 	{
 		if (userSettings->getRepresentation()==FIBRE_BAND2)

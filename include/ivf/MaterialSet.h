@@ -29,38 +29,38 @@
 
 namespace ivf {
 
-IvfSmartPointer(CMaterialSet);
+IvfSmartPointer(MaterialSet);
 
 /**
  * Material set class
  *
  * This class is used with the CIvfGLPrimitive class and
- * CPolySet class to define materials on a primitive level.
- * The CAc3DReader class reads CPolySet:s with material 
+ * PolySet class to define materials on a primitive level.
+ * The Ac3DReader class reads PolySet:s with material 
  * sets
  * @author Jonas Lindemann
  */
-class IVF_API CMaterialSet : public CBase {
+class IVF_API MaterialSet : public Base {
 private:
-	std::vector<CMaterialPtr> m_materials;
+	std::vector<MaterialPtr> m_materials;
 public:
-	/** CMaterialSet constructor */
-	CMaterialSet();
+	/** MaterialSet constructor */
+	MaterialSet();
 
-	/** CMaterialSet destructor */
-	virtual ~CMaterialSet();
+	/** MaterialSet destructor */
+	virtual ~MaterialSet();
 
-	IvfClassInfo("CMaterialSet",CBase);
-	IvfStdFactory(CMaterialSet);
+	IvfClassInfo("MaterialSet",Base);
+	IvfStdFactory(MaterialSet);
 
 	/** Add material to set */
-	void addMaterial(CMaterial* material);
+	void addMaterial(Material* material);
 
 	/** Clear materials from set */
 	void clear();
 
 	/** Return material at @param pos */
-	CMaterial* getMaterial(int pos);
+	Material* getMaterial(int pos);
 
 	/** Return number of materials in set */
 	int getSize();

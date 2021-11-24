@@ -26,13 +26,13 @@
 
 using namespace ivf;
 
-CGleColorArray::CGleColorArray()
+GleColorArray::GleColorArray()
 {
 	m_colors = nullptr;
 	m_size = 0;
 }
 
-CGleColorArray::CGleColorArray(int size)
+GleColorArray::GleColorArray(int size)
 {
 	m_colors = nullptr;
 	m_size = 0;
@@ -40,13 +40,13 @@ CGleColorArray::CGleColorArray(int size)
 	setSize(size);
 }
 
-CGleColorArray::~CGleColorArray()
+GleColorArray::~GleColorArray()
 {
 	if (m_colors!=nullptr)
 		delete [] m_colors;
 }
 
-void CGleColorArray::setSize(int size)
+void GleColorArray::setSize(int size)
 {
 	// Delete previous spine colors/colors if any
 	
@@ -62,7 +62,7 @@ void CGleColorArray::setSize(int size)
 	m_colors = new float[m_size][3];
 }
 
-void CGleColorArray::setColor(int idx, float r, float g, float b)
+void GleColorArray::setColor(int idx, float r, float g, float b)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -72,7 +72,7 @@ void CGleColorArray::setColor(int idx, float r, float g, float b)
 	}
 }
 
-void CGleColorArray::getColor(int idx, float &r, float &g, float &b)
+void GleColorArray::getColor(int idx, float &r, float &g, float &b)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -82,12 +82,12 @@ void CGleColorArray::getColor(int idx, float &r, float &g, float &b)
 	}
 }
 
-int CGleColorArray::getSize()
+int GleColorArray::getSize()
 {
 	return m_size;
 }
 
-void* CGleColorArray::getData()
+void* GleColorArray::getData()
 {
 	if (m_colors!=nullptr)
 		return &m_colors[0];

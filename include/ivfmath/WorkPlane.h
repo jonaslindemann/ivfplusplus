@@ -35,19 +35,19 @@ namespace ivf {
 /**
  * User coordinate class.
  *
- * CUcs3d implements a user defined coordinate system and
+ * Ucs3d implements a user defined coordinate system and
  * routines to convert to and from this. Coordinate snap is 
  * also implemented.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CWorkPlane : public CMathBase {
+class IVFMATH_API WorkPlane : public MathBase {
 private:
 	double m_snapUnit;
 
-	CVec3d m_zAxis;
-	CVec3d m_yAxis;
-	CVec3d m_xAxis;
+	Vec3d m_zAxis;
+	Vec3d m_yAxis;
+	Vec3d m_xAxis;
 
 	double m_theta;
 	double m_vz;
@@ -57,23 +57,23 @@ private:
 	double m_tx;
 	double m_ty;
 
-	CMat4d m_transformationMatrix;
-	CMat4d m_inversionMatrix;
-	CVec4d m_pointWorld;
-	CVec4d m_pointTransformed;
+	Mat4d m_transformationMatrix;
+	Mat4d m_inversionMatrix;
+	Vec4d m_pointWorld;
+	Vec4d m_pointTransformed;
 
 public:
-	CWorkPlane();
-	virtual ~CWorkPlane();
+	WorkPlane();
+	virtual ~WorkPlane();
 
 	bool isClass(char* name);
 	void getClassName(char* name);
 
 	/** Transform point to world coordinate system */
-	void transformWorld(CPoint3d* point);
+	void transformWorld(Point3d* point);
 
 	/** Transform point to local coordinate system */
-	void transform(CPoint3d* point);
+	void transform(Point3d* point);
 
 	/** Transform (sx, sy, sz) to world coordinate system */
 	void transformWorld(double sx, double sy, double sz, double &wx, double &wy,  double &wz);

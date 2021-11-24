@@ -31,7 +31,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CSceneHandler);
+IvfSmartPointer(SceneHandler);
 
 /**
  * Scene handler
@@ -40,29 +40,34 @@ IvfSmartPointer(CSceneHandler);
  * application by automatically handling rendering
  * and resizing for a scene based Ivf++ application.
  */
-class IVFWIDGET_API CSceneHandler : public CHandlerBase,
-	CResizeEvent,
-	CRenderEvent
+class IVFWIDGET_API SceneHandler : public HandlerBase,
+	ResizeEvent,
+	RenderEvent
 {
 private:
-	CWidgetBase* m_widget;
-	CScenePtr m_scene;
+	WidgetBase* m_widget;
+	ScenePtr m_scene;
 	bool m_multiPass;
 	bool m_nPasses;
 public:
 	/**
 	 * Class constructor
 	 *
-	 * @param widget Reference to a CWidgetBase derived class.
-	 * @param scene Reference to a CScene derived scene containing
+	 * @param widget Reference to a WidgetBase derived class.
+	 * @param scene Reference to a Scene derived scene containing
 	 * the scene graph setup.
 	 */
-	CSceneHandler(CWidgetBase* widget, CScene* scene);
+	SceneHandler(WidgetBase* widget, Scene* scene);
 
 	/** Class destructor */
-	virtual ~CSceneHandler();
+	virtual ~SceneHandler();
 
-	IvfClassInfo("CSceneHandler",CHandlerBase);
+	IvfClassInfo("SceneHandler",HandlerBase);
+
+	static SceneHandlerPtr create(WidgetBase* widget, Scene* scene)
+	{
+		return SceneHandlerPtr(new SceneHandler(widget, scene));
+	}
 
 	void onResize(int width, int height);
 	void onRender();

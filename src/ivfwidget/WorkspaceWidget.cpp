@@ -28,19 +28,19 @@
 
 using namespace ivf;
 
-CWorkspaceWidget::CWorkspaceWidget()
+WorkspaceWidget::WorkspaceWidget()
 {
 	
 }
 
-CWorkspaceWidget::~CWorkspaceWidget()
+WorkspaceWidget::~WorkspaceWidget()
 {
 	
 }
 
-void CWorkspaceWidget::doInit(int width, int height)
+void WorkspaceWidget::doInit(int width, int height)
 {
-	IvfDbg2("CWorkspaceWidget::doInit: Start.");
+	IvfDbg2("WorkspaceWidget::doInit: Start.");
 	
 	// Initialize variables
 	
@@ -57,36 +57,36 @@ void CWorkspaceWidget::doInit(int width, int height)
 	
 	// Initialize Ivf++ camera
 	
-	m_camera = new CCamera();
+	m_camera = new Camera();
 	m_camera->setPosition(0.0, 8.0, 8.0);
 	
 	// Create scene composite
 	
-	m_workspace = new CWorkspace();
+	m_workspace = new Workspace();
 	m_workspace->setCamera(m_camera);
 	m_workspace->setRelativeCursorSize(0.2);
 	m_workspace->setWorkspaceSize(10.0);
 	
 	// Setup lighting
 	
-	CLighting* lighting = CLighting::getInstance();
+	Lighting* lighting = Lighting::getInstance();
 	
-	CLight* light = lighting->getLight(0);
+	Light* light = lighting->getLight(0);
 	light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	light->enable();
 	
 	onInit(width, height);
 	
-	IvfDbg2("CWorkspaceWidget::doInit: End.");
+	IvfDbg2("WorkspaceWidget::doInit: End.");
 }
 
 // ------------------------------------------------------------
-void CWorkspaceWidget::doResize(int width, int height)
+void WorkspaceWidget::doResize(int width, int height)
 {
-	IvfDbg2("CWorkspaceWidget::doResize: Start.");
+	IvfDbg2("WorkspaceWidget::doResize: Start.");
 	
-	CWidgetBase::doResize(width, height); // This must be here!
+	WidgetBase::doResize(width, height); // This must be here!
 	
 	//m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -94,13 +94,13 @@ void CWorkspaceWidget::doResize(int width, int height)
 	
 	onResize(width, height);
 	
-	IvfDbg2("CWorkspaceWidget::doResize: End.");
+	IvfDbg2("WorkspaceWidget::doResize: End.");
 }
 
 // ------------------------------------------------------------
-void CWorkspaceWidget::doRender()
+void WorkspaceWidget::doRender()
 {
-	IvfDbg2("CWorkspaceWidget::doRender: Start.");
+	IvfDbg2("WorkspaceWidget::doRender: Start.");
 	
 	m_camera->rotatePositionY(m_angleX/100.0);
 	m_camera->rotatePositionX(m_angleY/100.0);
@@ -116,28 +116,28 @@ void CWorkspaceWidget::doRender()
 	
 	onRender();
 	
-	IvfDbg2("CWorkspaceWidget::doRender: End.");
+	IvfDbg2("WorkspaceWidget::doRender: End.");
 }
 
 // ------------------------------------------------------------
-void CWorkspaceWidget::doDestroy()
+void WorkspaceWidget::doDestroy()
 {
-	IvfDbg2("CWorkspaceWidget::doDestroy: Start.");
+	IvfDbg2("WorkspaceWidget::doDestroy: Start.");
 	onDestroy();
-	IvfDbg2("CWorkspaceWidget::doDestroy: End.");
+	IvfDbg2("WorkspaceWidget::doDestroy: End.");
 }
 
 // ------------------------------------------------------------
-void CWorkspaceWidget::doMouseDown(int x, int y)
+void WorkspaceWidget::doMouseDown(int x, int y)
 {
-	IvfDbg2("CWorkspaceWidget::doMouseDown: Start.");
+	IvfDbg2("WorkspaceWidget::doMouseDown: Start.");
 	
 	m_beginX = x;
 	m_beginY = y;
 	
-	CVec3d vec;
-	CShapePtr shape;
-	CUIInteractiveBasePtr uiShape;
+	Vec3d vec;
+	ShapePtr shape;
+	UIInteractiveBasePtr uiShape;
 	
 	if ( isLeftButtonDown() )
 	{
@@ -168,13 +168,13 @@ void CWorkspaceWidget::doMouseDown(int x, int y)
 	
 	onMouseDown(x, y);
 	
-	IvfDbg2("CWorkspaceWidget::doMouseDown: End.");
+	IvfDbg2("WorkspaceWidget::doMouseDown: End.");
 }
 
 // ------------------------------------------------------------
-void CWorkspaceWidget::doMouseMove(int x, int y)
+void WorkspaceWidget::doMouseMove(int x, int y)
 {
-	IvfDbg2("CWorkspaceWidget::doMouseMove: Start.");
+	IvfDbg2("WorkspaceWidget::doMouseMove: Start.");
 	
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -202,7 +202,7 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 		
 		if (isRightButtonDown())
 		{
-			if (getModifierKey() == CWidgetBase::MT_SHIFT)
+			if (getModifierKey() == WidgetBase::MT_SHIFT)
 			{
 				m_zoomX = (x - m_beginX);
 				m_zoomY = (y - m_beginY);
@@ -225,7 +225,7 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 		{
 			m_workspace->updateCursor(x, y);
 			
-			CVec3d pos;
+			Vec3d pos;
 			pos = m_workspace->getCursorPosition();
 			double wx, wy, wz;
 			pos.getComponents(wx, wy, wz);
@@ -240,11 +240,11 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 		{
 			m_workspace->pick(x, y);
 			
-			CShapePtr shape = m_workspace->getSelectedShape();
-			CUIInteractiveBasePtr uiShape = queryUIShape(shape);
-			CUIInteractiveBasePtr lastUIShape = queryUIShape(m_lastOver);
+			ShapePtr shape = m_workspace->getSelectedShape();
+			UIInteractiveBasePtr uiShape = queryUIShape(shape);
+			UIInteractiveBasePtr lastUIShape = queryUIShape(m_lastOver);
 			
-			CVec3d vec;
+			Vec3d vec;
 			
 			if (uiShape==nullptr)
 			{
@@ -309,11 +309,11 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 			{
 				m_workspace->pick(x, y);
 				
-				CShapePtr shape = m_workspace->getSelectedShape();
-				CUIInteractiveBasePtr uiShape = queryUIShape(shape);
-				CUIInteractiveBasePtr lastUIShape = queryUIShape(m_lastOver);
+				ShapePtr shape = m_workspace->getSelectedShape();
+				UIInteractiveBasePtr uiShape = queryUIShape(shape);
+				UIInteractiveBasePtr lastUIShape = queryUIShape(m_lastOver);
 				
-				CVec3d vec;
+				Vec3d vec;
 				
 				if (uiShape==nullptr)
 				{
@@ -377,13 +377,13 @@ void CWorkspaceWidget::doMouseMove(int x, int y)
 	
 	onMouseMove(x, y);
 	
-	IvfDbg2("CWorkspaceWidget::doMouseMove: End.");
+	IvfDbg2("WorkspaceWidget::doMouseMove: End.");
 }
 
 // ------------------------------------------------------------
-void CWorkspaceWidget::doMouseUp(int x, int y)
+void WorkspaceWidget::doMouseUp(int x, int y)
 {
-	IvfDbg2("CWorkspaceWidget::doMouseUp: Start.");
+	IvfDbg2("WorkspaceWidget::doMouseUp: Start.");
 	
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -392,10 +392,10 @@ void CWorkspaceWidget::doMouseUp(int x, int y)
 	m_zoomX = 0.0;
 	m_zoomY = 0.0;
 
-	CVec3d vec;
-	CShapePtr shape;
-	CUIInteractiveBasePtr uiShape;
-	CUIInteractiveBasePtr lastUIShape;
+	Vec3d vec;
+	ShapePtr shape;
+	UIInteractiveBasePtr uiShape;
+	UIInteractiveBasePtr lastUIShape;
 
 	switch (m_editMode) {
 	case EM_INTERACT:
@@ -434,136 +434,136 @@ void CWorkspaceWidget::doMouseUp(int x, int y)
 	
 	onMouseUp(x, y);
 	
-	IvfDbg2("CWorkspaceWidget::doMouseUp: End.");
+	IvfDbg2("WorkspaceWidget::doMouseUp: End.");
 }
 
 // ------------------------------------------------------------
-void CWorkspaceWidget::doKeyboard(int key, int x, int y)
+void WorkspaceWidget::doKeyboard(int key, int x, int y)
 {
-	IvfDbg2("CWorkspaceWidget::doKeyboard: Start.");
+	IvfDbg2("WorkspaceWidget::doKeyboard: Start.");
 	
 	onKeyboard(key, x, y);
 	
-	IvfDbg2("CWorkspaceWidget::doKeyboard: End.");
+	IvfDbg2("WorkspaceWidget::doKeyboard: End.");
 }
 
-void CWorkspaceWidget::addChild(CShape *shape)
+void WorkspaceWidget::addChild(Shape *shape)
 {
 	m_workspace->addChild(shape);
 }
 
-void CWorkspaceWidget::setEditMode(TEditMode mode)
+void WorkspaceWidget::setEditMode(TEditMode mode)
 {
 	m_editMode = mode;
 }
 
-CWorkspaceWidget::TEditMode CWorkspaceWidget::getEditMode()
+WorkspaceWidget::TEditMode WorkspaceWidget::getEditMode()
 {
 	return m_editMode;
 }
 
-void CWorkspaceWidget::onCursor(double x, double y, double z)
+void WorkspaceWidget::onCursor(double x, double y, double z)
 {
 	
 }
 
-CCamera* CWorkspaceWidget::getCamera()
+Camera* WorkspaceWidget::getCamera()
 {
 	return m_camera;
 }
 
-CWorkspace* CWorkspaceWidget::getWorkspace()
+Workspace* WorkspaceWidget::getWorkspace()
 {
 	return m_workspace;
 }
 
-void CWorkspaceWidget::onShapeDown(CShape *shape)
+void WorkspaceWidget::onShapeDown(Shape *shape)
 {
 	
 }
 
-void CWorkspaceWidget::onShapeClick(CShape *shape)
+void WorkspaceWidget::onShapeClick(Shape *shape)
 {
 	
 }
 
-void CWorkspaceWidget::onShapeUp(CShape *shape)
+void WorkspaceWidget::onShapeUp(Shape *shape)
 {
 	
 }
 
-void CWorkspaceWidget::onShapeOver(CShape *shape)
+void WorkspaceWidget::onShapeOver(Shape *shape)
 {
 	
 }
 
-void CWorkspaceWidget::onShapeLeave(CShape *shape)
+void WorkspaceWidget::onShapeLeave(Shape *shape)
 {
 	
 }
 
-void CWorkspaceWidget::enableShapeOver()
+void WorkspaceWidget::enableShapeOver()
 {
 	m_selectOver = true;
 }
 
-void CWorkspaceWidget::disableShapeOver()
+void WorkspaceWidget::disableShapeOver()
 {
 	m_selectOver = false;
 }
 
-bool CWorkspaceWidget::isShapeOverEnabled()
+bool WorkspaceWidget::isShapeOverEnabled()
 {
 	return m_selectOver;
 }
 
-void CWorkspaceWidget::onShapeDrag(CShape *shape)
+void WorkspaceWidget::onShapeDrag(Shape *shape)
 {
 	
 }
 
-CUIInteractiveBasePtr CWorkspaceWidget::queryUIShape(CShape *shape)
+UIInteractiveBasePtr WorkspaceWidget::queryUIShape(Shape *shape)
 {
-	CUIInteractiveBasePtr uiShape;
+	UIInteractiveBasePtr uiShape;
 
 	if (shape!=nullptr)
 	{
-		if (shape->isClass("CUIInteractiveBase"))
+		if (shape->isClass("UIInteractiveBase"))
 		{
-			CShape* s = shape;
-			uiShape = (CUIInteractiveBase*)s;
+			Shape* s = shape;
+			uiShape = (UIInteractiveBase*)s;
 		}
 	}
 
 	return uiShape;
 }
 
-void CWorkspaceWidget::onControlOver(CUIInteractiveBase *uiControl)
+void WorkspaceWidget::onControlOver(UIInteractiveBase *uiControl)
 {
 
 }
 
-void CWorkspaceWidget::onControlLeave(CUIInteractiveBase *uiControl)
+void WorkspaceWidget::onControlLeave(UIInteractiveBase *uiControl)
 {
 
 }
 
-void CWorkspaceWidget::onControlDrag(CUIInteractiveBase *uiControl)
+void WorkspaceWidget::onControlDrag(UIInteractiveBase *uiControl)
 {
 
 }
 
-void CWorkspaceWidget::onControlDown(CUIInteractiveBase *uiControl)
+void WorkspaceWidget::onControlDown(UIInteractiveBase *uiControl)
 {
 
 }
 
-void CWorkspaceWidget::onControlClick(CUIInteractiveBase *uiControl)
+void WorkspaceWidget::onControlClick(UIInteractiveBase *uiControl)
 {
 
 }
 
-void CWorkspaceWidget::onControlUp(CUIInteractiveBase *uiControl)
+void WorkspaceWidget::onControlUp(UIInteractiveBase *uiControl)
 {
 
 }

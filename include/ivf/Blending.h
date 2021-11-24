@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfStdPointer(CBlending);
+IvfStdPointer(Blending);
 
 /**
  * Blending singleton 
@@ -47,7 +47,7 @@ IvfStdPointer(CBlending);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CBlending : public CBase {
+class IVF_API Blending : public Base {
 public:
 	enum TBlendFactor {
 		BF_ZERO,
@@ -63,13 +63,13 @@ public:
 		BF_SRC_ALPHA_SATURATE
 	};
 private:
-	static CBlending* m_instance;
-	static CSingletonDestroyer<CBlending> m_destroyer;
+	static Blending* m_instance;
+	static SingletonDestroyer<Blending> m_destroyer;
 public:
 	/** Returns the blending singleton */
-	static CBlending* getInstance();
+	static Blending* getInstance();
 
-	IvfClassInfo("CBlending",CBase);
+	IvfClassInfo("Blending",Base);
 
 	/** Enable blending */
 	void enable();
@@ -95,8 +95,8 @@ public:
 protected:
 
 	/** Protected constructor (do not use) */
-	CBlending();
-	friend class CSingletonDestroyer<CBlending>;
+	Blending();
+	friend class SingletonDestroyer<Blending>;
 };
 
 }

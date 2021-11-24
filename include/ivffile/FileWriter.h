@@ -28,21 +28,21 @@
 
 namespace ivf {
 
-IvfSmartPointer(CFileWriter);
+IvfSmartPointer(FileWriter);
 
 /**
  * File export base class
  */
-class IVFFILE_API CFileWriter : public CFileBase {
+class IVFFILE_API FileWriter : public FileBase {
 private:
 
 public:
 	void write();
-	CFileWriter();
-	virtual ~CFileWriter();
+	FileWriter();
+	virtual ~FileWriter();
 
-	IvfClassInfo("CFileWriter",CFileBase);
-	IvfStdFactory(CFileWriter);
+	IvfClassInfo("FileWriter",FileBase);
+	IvfStdFactory(FileWriter);
 };
 
 }

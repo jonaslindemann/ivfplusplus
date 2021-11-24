@@ -29,8 +29,8 @@ using namespace std;
 using namespace ivf;
 
 // ------------------------------------------------------------
-COldLightModel::COldLightModel()
-: CGLBase(),
+OldLightModel::OldLightModel()
+: GLBase(),
 m_usereference(true)
 {
 	setAmbient( 0.2, 0.2, 0.2, 1.0 );
@@ -39,11 +39,11 @@ m_usereference(true)
 }
 
 // ------------------------------------------------------------
-COldLightModel::~COldLightModel()
+OldLightModel::~OldLightModel()
 {
 	deactivate();
 
-	for ( vector<COldLight*>::iterator it = m_lights.begin(); it != m_lights.end() ; ++it ) {
+	for ( vector<OldLight*>::iterator it = m_lights.begin(); it != m_lights.end() ; ++it ) {
 		(*it)->deleteReference();
 		if ( !(*it)->referenced() )
 			delete *it;
@@ -52,7 +52,7 @@ COldLightModel::~COldLightModel()
 
 
 // ------------------------------------------------------------
-void COldLightModel::setAmbient( GLfloat r, GLfloat g,
+void OldLightModel::setAmbient( GLfloat r, GLfloat g,
 								GLfloat b, GLfloat a )
 {
 	m_ambient[0] = r;
@@ -62,19 +62,19 @@ void COldLightModel::setAmbient( GLfloat r, GLfloat g,
 }
 
 // ------------------------------------------------------------
-void COldLightModel::setLocalViewer( GLboolean t )
+void OldLightModel::setLocalViewer( GLboolean t )
 {
 	m_local[0] = ( t ) ? 1 : 0;
 }
 
 // ------------------------------------------------------------
-void COldLightModel::setTwoSide( GLboolean t )
+void OldLightModel::setTwoSide( GLboolean t )
 {
 	m_twoside[0] = ( t ) ? 1 : 0;
 }
 
 // ------------------------------------------------------------
-void COldLightModel::getAmbient( GLfloat &r, GLfloat &g, 
+void OldLightModel::getAmbient( GLfloat &r, GLfloat &g, 
 								GLfloat &b, GLfloat &a ) const
 {
 	r = m_ambient[0];
@@ -84,25 +84,25 @@ void COldLightModel::getAmbient( GLfloat &r, GLfloat &g,
 }
 
 // ------------------------------------------------------------
-bool COldLightModel::getLocalViewer() const
+bool OldLightModel::getLocalViewer() const
 {
 	return m_local;
 }
 
 // ------------------------------------------------------------
-bool COldLightModel::getTwoSide() const
+bool OldLightModel::getTwoSide() const
 {
 	return m_twoside;
 }
 
 // ------------------------------------------------------------
-void COldLightModel::render()
+void OldLightModel::render()
 {
 	glLightModelfv( GL_LIGHT_MODEL_AMBIENT, m_ambient );
 	glLightModeliv( GL_LIGHT_MODEL_LOCAL_VIEWER, m_local );
 	glLightModeliv( GL_LIGHT_MODEL_TWO_SIDE, m_twoside );
 	
-	vector<COldLight*>::const_iterator cit = m_lights.begin();
+	vector<OldLight*>::const_iterator cit = m_lights.begin();
 	while ( cit != m_lights.end() ) {
 		(*cit)->render();
 		++cit;
@@ -114,13 +114,13 @@ void COldLightModel::render()
 }
 
 // ------------------------------------------------------------
-void COldLightModel::setUseReference( bool t )
+void OldLightModel::setUseReference( bool t )
 {
 	m_usereference = t;
 }
 
 // ------------------------------------------------------------
-void COldLightModel::addLight( COldLight *light ) 
+void OldLightModel::addLight( OldLight *light ) 
 {
 	if ( m_usereference )
 		light->addReference();
@@ -128,12 +128,12 @@ void COldLightModel::addLight( COldLight *light )
 }
 
 // ------------------------------------------------------------
-COldLight* COldLightModel::removeLight( int index ) 
+OldLight* OldLightModel::removeLight( int index ) 
 {
-	vector<COldLight*>::iterator it = m_lights.begin();
+	vector<OldLight*>::iterator it = m_lights.begin();
 	
 	if ( index >= 0 && index < (int)m_lights.size() ) {
-		COldLight *light = m_lights[index];
+		OldLight *light = m_lights[index];
 		
 		if ( light != nullptr  && m_usereference ) {
 			light->deleteReference();
@@ -148,33 +148,33 @@ COldLight* COldLightModel::removeLight( int index )
 }
 
 // ------------------------------------------------------------
-void COldLightModel::deleteLight( int i )
+void OldLightModel::deleteLight( int i )
 {
 	delete this->removeLight(i);
 }
 
 // ------------------------------------------------------------
-COldLight* COldLightModel::getLight( int i )
+OldLight* OldLightModel::getLight( int i )
 {
 	return m_lights[i];
 }
 
 // ------------------------------------------------------------
-const COldLight* COldLightModel::getLight( int i ) const
+const OldLight* OldLightModel::getLight( int i ) const
 {
 	return m_lights[i];
 }
 
 // ------------------------------------------------------------
-int COldLightModel::getNoLights() const
+int OldLightModel::getNoLights() const
 {
-  return m_lights.size();
+  return static_cast<int>(m_lights.size());
 }
 
 // ------------------------------------------------------------
-void COldLightModel::activate()
+void OldLightModel::activate()
 {
-	vector<COldLight*>::const_iterator cit = m_lights.begin();
+	vector<OldLight*>::const_iterator cit = m_lights.begin();
 	while ( cit != m_lights.end() ) {
 		(*cit)->activate();
 		++cit;
@@ -182,10 +182,10 @@ void COldLightModel::activate()
 }
 
 // ------------------------------------------------------------
-void COldLightModel::deactivate()
+void OldLightModel::deactivate()
 {
 	disableAll();
-	vector<COldLight*>::const_iterator cit = m_lights.begin();
+	vector<OldLight*>::const_iterator cit = m_lights.begin();
 	while ( cit != m_lights.end() ) {
 		(*cit)->deactivate();
 		++cit;
@@ -193,7 +193,7 @@ void COldLightModel::deactivate()
 }
 
 // ------------------------------------------------------------
-void COldLightModel::disableAll()
+void OldLightModel::disableAll()
 {
 	GLenum light;
 	
@@ -205,9 +205,9 @@ void COldLightModel::disableAll()
 }
 
 // ------------------------------------------------------------
-void COldLightModel::deleteAll()
+void OldLightModel::deleteAll()
 {
-	for ( vector<COldLight*>::iterator it = m_lights.begin(); it != m_lights.end() ; ++it ) {
+	for ( vector<OldLight*>::iterator it = m_lights.begin(); it != m_lights.end() ; ++it ) {
 		(*it)->deleteReference();
 		if ( !(*it)->referenced() )
 			delete *it;
@@ -215,9 +215,9 @@ void COldLightModel::deleteAll()
 }
 
 // ------------------------------------------------------------
-void COldLightModel::deleteLight(COldLight *light)
+void OldLightModel::deleteLight(OldLight *light)
 {
-	for ( vector<COldLight*>::iterator it = m_lights.begin(); it != m_lights.end() ; ++it ) 
+	for ( vector<OldLight*>::iterator it = m_lights.begin(); it != m_lights.end() ; ++it ) 
 	{
 		if (*it==light)
 		{

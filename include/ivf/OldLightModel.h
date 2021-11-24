@@ -31,7 +31,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(COldLightModel);
+IvfSmartPointer(OldLightModel);
 
 /**
 * Light model class
@@ -39,16 +39,16 @@ IvfSmartPointer(COldLightModel);
 * Contains all scene lighting info 
 * @author Carl-Johan Lejdfors
 */
-class IVF_API COldLightModel : public CGLBase {
+class IVF_API OldLightModel : public GLBase {
 public:
-	void deleteLight(COldLight* light);
+	void deleteLight(OldLight* light);
 	/** Constructor */
-	COldLightModel();
+	OldLightModel();
 
 	/** Destructor */
-	~COldLightModel(); 
+	~OldLightModel(); 
 
-	IvfClassInfo("COldLightModel",CGLBase);
+	IvfClassInfo("OldLightModel",GLBase);
 
 	/** Set environment ambient lighting components */
 	void setAmbient( GLfloat r, GLfloat g, 
@@ -87,17 +87,17 @@ public:
 	 * the light model, it is owned by the light model instance and
 	 * is deleted if not needed anymore.
 	 */
-	void addLight( COldLight *light );
+	void addLight( OldLight *light );
 
 	/** Removes a light from the light model */
-	COldLight* removeLight( int index );
+	OldLight* removeLight( int index );
 
 	/** Deletes a light from the model */
 	void deleteLight( int index );
 	
 	/** Returns the i:th light*/
-	COldLight* getLight( int i );
-	const COldLight* getLight( int i ) const;
+	OldLight* getLight( int i );
+	const OldLight* getLight( int i ) const;
 	
 	/** Returns the total number of lights */
 	int getNoLights() const;
@@ -113,12 +113,12 @@ public:
 
 	void deleteAll();
 protected:
-	COldLightModel& operator = ( const COldLightModel& );
-	COldLightModel( const COldLightModel& );
+	OldLightModel& operator = ( const OldLightModel& );
+	OldLightModel( const OldLightModel& );
 	
 private:
 	bool m_usereference;
-	std::vector<COldLight*> m_lights;
+	std::vector<OldLight*> m_lights;
 	
 	GLfloat m_ambient[4];
 	GLint m_local[1], m_twoside[1];

@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CLineStripSet);
+IvfSmartPointer(LineStripSet);
 
 /**
  * LineStripSet class
@@ -37,21 +37,21 @@ IvfSmartPointer(CLineStripSet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CLineStripSet : public CGLPrimitive {
+class IVF_API LineStripSet : public GLPrimitive {
 private:
 	bool m_useColor;
 	float m_lineWidth;
 protected:
 	virtual void doCreateGeometry();
 public:
-	/** CLineStripSet constructor */
-	CLineStripSet();
+	/** LineStripSet constructor */
+	LineStripSet();
 
-	/** CLineStripSet destructor */
-	virtual ~CLineStripSet();
+	/** LineStripSet destructor */
+	virtual ~LineStripSet();
 
-	IvfClassInfo("CLineStripSet",CGLPrimitive);
-	IvfStdFactory(CLineStripSet);
+	IvfClassInfo("LineStripSet",GLPrimitive);
+	IvfStdFactory(LineStripSet);
 
 	/** Enables or disables the use of color values when rendering */
 	void setUseColor(bool flag);

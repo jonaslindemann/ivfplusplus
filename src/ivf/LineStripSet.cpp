@@ -23,21 +23,21 @@
 
 using namespace ivf;
 
-CLineStripSet::CLineStripSet()
+LineStripSet::LineStripSet()
 {
 	m_useColor = false;
 	m_lineWidth = 1.0;
 }
 
-CLineStripSet::~CLineStripSet()
+LineStripSet::~LineStripSet()
 {
 
 }
 
-void CLineStripSet::doCreateGeometry()
+void LineStripSet::doCreateGeometry()
 {
-	CIndex* coordIdx;
-	CIndex* colorIdx;
+	Index* coordIdx;
+	Index* colorIdx;
 	long i, j;
 	float oldWidth[1];
 
@@ -79,23 +79,23 @@ void CLineStripSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CLineStripSet::setUseColor(bool flag)
+void LineStripSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CLineStripSet::getUseColor()
+bool LineStripSet::getUseColor()
 {
 	return m_useColor;
 }
 
 
-void CLineStripSet::setLineWidth(float width)
+void LineStripSet::setLineWidth(float width)
 {
 	m_lineWidth = width;
 }
 
-float CLineStripSet::getLineWidth()
+float LineStripSet::getLineWidth()
 {
 	return m_lineWidth;
 }

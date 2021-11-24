@@ -32,38 +32,38 @@
 
 namespace ivf {
 
-typedef std::vector<CShapePtr> CShapeSelectionVector;
-typedef std::vector<CShapePtr>::iterator CShapeSelectionVectorIterator;
+typedef std::vector<ShapePtr> ShapeSelectionVector;
+typedef std::vector<ShapePtr>::iterator ShapeSelectionVectorIterator;
 
-IvfSmartPointer(CShapeSelection);
+IvfSmartPointer(ShapeSelection);
 
-class IVF_API CShapeSelection : public CShape {
+class IVF_API ShapeSelection : public Shape {
 private:
-	CShapeSelectionVector m_selection;	
-	CMaterialPtr m_hlMaterial;
-	std::set<CShape*> m_selectionSet;
+	ShapeSelectionVector m_selection;	
+	MaterialPtr m_hlMaterial;
+	std::set<Shape*> m_selectionSet;
 	double m_offset[3];
 public:
-	void setHighlightMaterial(CMaterial* material);
-	CShapeSelection();
-	virtual ~CShapeSelection();
+	void setHighlightMaterial(Material* material);
+	ShapeSelection();
+	virtual ~ShapeSelection();
 
-	IvfClassInfo("CShapeSelection",CShape);
-	IvfStdFactory(CShapeSelection);
+	IvfClassInfo("ShapeSelection",Shape);
+	IvfStdFactory(ShapeSelection);
 
-	void add(CShape* shape);
+	void add(Shape* shape);
 	void clear();
-	CShape* getShape(int idx);
+	Shape* getShape(int idx);
 	int getSize();
-	void remove(CShape* shape);
+	void remove(Shape* shape);
 
-	bool contains(CShape* shape);
-	void assignFrom(CShapeSelection* selection);
+	bool contains(Shape* shape);
+	void assignFrom(ShapeSelection* selection);
 	void moveShapes(double dx, double dy, double dz);
-	void addTo(CComposite* composite);
+	void addTo(Composite* composite);
 	void setOffset(double dx, double dy, double dz);
 
-	void getSelection(CShapeSelectionVector& vector);
+	void getSelection(ShapeSelectionVector& vector);
 protected:
 	virtual void doCreateGeometry();
 };

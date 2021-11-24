@@ -24,18 +24,18 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase {
+class ExampleWindow: public GlutBase {
 private:
-	CCameraPtr m_camera;
-	CCubePtr   m_cube;
-	CLightPtr  m_light;
+	CameraPtr m_camera;
+	CubePtr   m_cube;
+	LightPtr  m_light;
 public:
-	CExampleWindow(int X, int Y, int W, int H)
-		:CGlutBase(X, Y, W, H) {};
+	ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H) {};
 
-	static CExampleWindowPtr create(int X, int Y, int W, int H);
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -46,33 +46,33 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindowPtr CExampleWindow::create(int X, int Y, int W, int H)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
 {
-	return CExampleWindowPtr(new CExampleWindow(X, Y, W, H));
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize Ivf++ camera
 
-	m_camera = CCamera::create();
+	m_camera = Camera::create();
 	m_camera->setPosition(2.0, 2.0, 2.0);
 
 	// Create a material
 
-	auto material = CMaterial::create();
+	auto material = Material::create();
 	material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
 	// Create a cube
 	
-	m_cube = CCube::create();
+	m_cube = Cube::create();
 	m_cube->setMaterial(material);
 	
 	// Create a light
 
-	auto lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 
 	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
@@ -81,7 +81,7 @@ void CExampleWindow::onInit(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -89,7 +89,7 @@ void CExampleWindow::onResize(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 	m_camera->render();
@@ -104,12 +104,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	auto app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH);
 
 	// Create a window
 
-	auto window = CExampleWindow::create(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

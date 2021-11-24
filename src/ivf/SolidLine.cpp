@@ -19,7 +19,7 @@
 // Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
-// Implementation of: public class CSolidLine
+// Implementation of: public class SolidLine
 
 #include <ivf/config.h>
 #include <ivfmath/Vec3d.h>
@@ -28,8 +28,8 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CSolidLine::CSolidLine ()
-		:CExtrusion()
+SolidLine::SolidLine ()
+		:Extrusion()
 		//TODO: check and complete member initialisation list!
 {
 	m_radius = 0.25;
@@ -42,26 +42,26 @@ CSolidLine::CSolidLine ()
 }
 
 // ------------------------------------------------------------
-CSolidLine::~CSolidLine ()
+SolidLine::~SolidLine ()
 {
 }
 
 // ------------------------------------------------------------
-void CSolidLine::initExtrusion()
+void SolidLine::initExtrusion()
 {
 	initSection();
 	initNodes();
 }
 
 // ------------------------------------------------------------
-void CSolidLine::setRadius(double radius)
+void SolidLine::setRadius(double radius)
 {
 	m_radius = radius;
 	initExtrusion();
 }
 
 // ------------------------------------------------------------
-void CSolidLine::setNodes(CNode *n1, CNode *n2)
+void SolidLine::setNodes(Node *n1, Node *n2)
 {
 	// Set nodes
 
@@ -77,7 +77,7 @@ void CSolidLine::setNodes(CNode *n1, CNode *n2)
 }
 
 // ------------------------------------------------------------
-CNode* CSolidLine::getNode(int idx)
+Node* SolidLine::getNode(int idx)
 {
 	switch (idx)
 	{
@@ -94,14 +94,14 @@ CNode* CSolidLine::getNode(int idx)
 }
 
 // ------------------------------------------------------------
-void CSolidLine::setSides(long n)
+void SolidLine::setSides(long n)
 {
 	m_nSides = n;
 	initExtrusion();
 }
 
 // ------------------------------------------------------------
-void CSolidLine::refresh()
+void SolidLine::refresh()
 {
 	switch (m_refreshMode) {
 	case IVF_REFRESH_ALL:
@@ -119,12 +119,12 @@ void CSolidLine::refresh()
 	}
 }
 
-void CSolidLine::setRefresh(int mode)
+void SolidLine::setRefresh(int mode)
 {
 	m_refreshMode = mode;
 }
 
-void CSolidLine::initSection()
+void SolidLine::initSection()
 {
 	int i, nSides;
 	double r, angle, x, y;
@@ -147,15 +147,15 @@ void CSolidLine::initSection()
 	}
 }
 
-void CSolidLine::initNodes()
+void SolidLine::initNodes()
 {
 	if ((m_node1!=nullptr)&&(m_node2!=nullptr))
 	{
 
 		// Create spine
 
-		CVec3d p1, p2;
-		CVec3d v1;
+		Vec3d p1, p2;
+		Vec3d v1;
 		double x, y, z, ex, ey, ez;
 
 		m_node1->getPosition(x, y, z);
@@ -205,30 +205,30 @@ void CSolidLine::initNodes()
 	}
 }
 
-double CSolidLine::getLength()
+double SolidLine::getLength()
 {
 	if ((m_node1!=nullptr)&&(m_node2!=nullptr))
 	{
-		CVec3d p1 = m_node1->getPosition();
-		CVec3d p2 = m_node2->getPosition();
-		CVec3d v = p2-p1;
+		Vec3d p1 = m_node1->getPosition();
+		Vec3d p2 = m_node2->getPosition();
+		Vec3d v = p2-p1;
 		return v.length();
 	}
 	else
 		return 0.0;
 }
 
-double CSolidLine::getRadius()
+double SolidLine::getRadius()
 {
 	return m_radius;
 }
 
-void CSolidLine::onSetNodes(CNode* n1, CNode* n2)
+void SolidLine::onSetNodes(Node* n1, Node* n2)
 {
 
 }
 
-void CSolidLine::setOffsets(double offset1, double offset2)
+void SolidLine::setOffsets(double offset1, double offset2)
 {
 	m_offsets[0] = offset1;
 	m_offsets[1] = offset2;

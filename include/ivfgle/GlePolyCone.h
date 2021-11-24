@@ -33,18 +33,18 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGlePolyCone);
+IvfSmartPointer(GlePolyCone);
 
-class IVFGLE_API CGlePolyCone: public CGleExtrudedBase {
+class IVFGLE_API GlePolyCone: public GleExtrudedBase {
 private:
-	CGleScalarArrayPtr m_radius;
+	GleScalarArrayPtr m_radius;
 public:
-	CGlePolyCone();
+	GlePolyCone();
 
-	void setRadius(CGleScalarArray* array);
+	void setRadius(GleScalarArray* array);
 
-	IvfClassInfo("CGlePolyCone", CShape);
-	IvfStdFactory(CGlePolyCone);
+	IvfClassInfo("GlePolyCone", Shape);
+	IvfStdFactory(GlePolyCone);
 protected:
 	virtual void doCreateGeometry();
 };

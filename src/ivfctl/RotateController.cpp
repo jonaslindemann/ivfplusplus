@@ -23,7 +23,7 @@
 
 using namespace ivf;
 
-CRotateController::CRotateController()
+RotateController::RotateController()
 {
 	m_rotationSpeed[0] = 0;
 	m_rotationSpeed[1] = 0;
@@ -33,12 +33,12 @@ CRotateController::CRotateController()
 	m_axis.setComponents(0.0, 0.0, 1.0);
 }
 
-CRotateController::~CRotateController()
+RotateController::~RotateController()
 {
 
 }
 
-void CRotateController::setRotationSpeed(double vx, double vy, double vz)
+void RotateController::setRotationSpeed(double vx, double vy, double vz)
 {
 	m_rotationSpeed[0] = vx;
 	m_rotationSpeed[1] = vy;
@@ -46,16 +46,16 @@ void CRotateController::setRotationSpeed(double vx, double vy, double vz)
 	m_useAxis = false;
 }
 
-void CRotateController::getRotationSpeed(double &vx, double &vy, double &vz)
+void RotateController::getRotationSpeed(double &vx, double &vy, double &vz)
 {
 	vx = m_rotationSpeed[0];
 	vy = m_rotationSpeed[1];
 	vz = m_rotationSpeed[2];
 }
 
-void CRotateController::doUpdate(double dt)
+void RotateController::doUpdate(double dt)
 {
-	CShape* shape = this->getShape();
+	Shape* shape = this->getShape();
 
 	if (shape!=nullptr)
 	{	
@@ -78,7 +78,7 @@ void CRotateController::doUpdate(double dt)
 	}
 }
 
-void CRotateController::setRotationSpeed(double v)
+void RotateController::setRotationSpeed(double v)
 {
 	m_rotationSpeed[0] = v;
 	m_useAxis = true;

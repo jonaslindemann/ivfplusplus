@@ -26,30 +26,30 @@
 
 using namespace ivf;
 
-CTexCoordList::CTexCoordList()
+TexCoordList::TexCoordList()
 {
 	m_allocSize = 1024;
 	m_vertices = new GLfloat[m_allocSize];
 	m_next = 0;
 }
 
-CTexCoordList::~CTexCoordList()
+TexCoordList::~TexCoordList()
 {
 	delete [] m_vertices;
 }
 
-void CTexCoordList::add(double s, double t)
+void TexCoordList::add(double s, double t)
 {
 	add(s);
 	add(t);
 }
 
-void CTexCoordList::add(double comp)
+void TexCoordList::add(double comp)
 {
 	if (m_next==m_allocSize)
 	{
 		m_allocSize = m_allocSize*2;
-		IvfDbg1("CTexCoordList: Expanding to " << m_allocSize << " vertices. (allocated size)");
+		IvfDbg1("TexCoordList: Expanding to " << m_allocSize << " vertices. (allocated size)");
 		GLfloat* newVertices = new GLfloat[m_allocSize];
 		
 		int i;
@@ -66,12 +66,12 @@ void CTexCoordList::add(double comp)
 	m_next++;
 }
 
-int CTexCoordList::getSize()
+int TexCoordList::getSize()
 {
 	return m_next / 3;
 }
 
-void CTexCoordList::getVertex(int idx, double &s, double &t)
+void TexCoordList::getVertex(int idx, double &s, double &t)
 {
 	if ((idx>=0)&&(idx<m_next/2))
 	{
@@ -85,7 +85,7 @@ void CTexCoordList::getVertex(int idx, double &s, double &t)
 	}
 }
 
-double CTexCoordList::getComp(int idx)
+double TexCoordList::getComp(int idx)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{
@@ -95,27 +95,27 @@ double CTexCoordList::getComp(int idx)
 		return -1.0;
 }
 
-void* CTexCoordList::getData()
+void* TexCoordList::getData()
 {
 	return (void*)m_vertices;
 }
 
-GLenum CTexCoordList::getDataType()
+GLenum TexCoordList::getDataType()
 {
 	return GL_FLOAT;
 }
 
-GLsizei CTexCoordList::getStride()
+GLsizei TexCoordList::getStride()
 {
 	return 2*sizeof(GLfloat);
 }
 
-GLint CTexCoordList::getCompSize()
+GLint TexCoordList::getCompSize()
 {
 	return 2;
 }
 
-void CTexCoordList::setSize(int size)
+void TexCoordList::setSize(int size)
 {
 	delete [] m_vertices;
 
@@ -124,7 +124,7 @@ void CTexCoordList::setSize(int size)
 	m_next = m_allocSize;
 }
 
-void CTexCoordList::setVertex(int idx, double s, double t)
+void TexCoordList::setVertex(int idx, double s, double t)
 {
 	if ((idx>=0)&&(idx<m_next/2))
 	{
@@ -138,7 +138,7 @@ void CTexCoordList::setVertex(int idx, double s, double t)
 	}
 }
 
-void CTexCoordList::setComp(int idx, double value)
+void TexCoordList::setComp(int idx, double value)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{
@@ -146,7 +146,7 @@ void CTexCoordList::setComp(int idx, double value)
 	}
 }
 
-void CTexCoordList::clear()
+void TexCoordList::clear()
 {
 	delete [] m_vertices;
 	m_allocSize = 1024;

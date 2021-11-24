@@ -8,8 +8,8 @@ using namespace ivf;
 // Window class implementation
 // ------------------------------------------------------------
 
-CWorkspaceView::CWorkspaceView(int X, int Y, int W, int H, const char* L)
-:CFltkBase(X, Y, W, H, L) 
+WorkspaceView::WorkspaceView(int X, int Y, int W, int H, const char* L)
+:FltkBase(X, Y, W, H, L) 
 {
 	m_viewModeChangeEvent = nullptr;
 	m_coordinateEvent = nullptr;
@@ -17,7 +17,7 @@ CWorkspaceView::CWorkspaceView(int X, int Y, int W, int H, const char* L)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onInit(int width, int height)
+void WorkspaceView::onInit(int width, int height)
 {
 	// Initialize variables
 	
@@ -30,7 +30,7 @@ void CWorkspaceView::onInit(int width, int height)
 	
 	// Initialize Ivf++ camera
 	
-	m_camera = new CCamera();
+	m_camera = Camera::create();
 	m_camera->setPosition(0.0, 4.0, 8.0);
 	m_camera->setTarget(0.0, 0.0, 0.0);
 	m_camera->setEyeSeparation(0.1);
@@ -38,64 +38,64 @@ void CWorkspaceView::onInit(int width, int height)
 	
 	// Create a materials
 	
-	m_nodeMaterial = new CMaterial();
+	m_nodeMaterial = Material::create();
 	m_nodeMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	m_nodeMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_nodeMaterial->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 	
-	m_lineMaterial = new CMaterial();
+	m_lineMaterial = Material::create();
 	m_lineMaterial->setDiffuseColor(0.3f, 0.8f, 0.0f, 1.0f);
 	m_lineMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lineMaterial->setAmbientColor(0.0f, 0.2f, 0.0f, 1.0f);
 	
-	m_vectorMaterial = new CMaterial();
+	m_vectorMaterial = Material::create();
 	m_vectorMaterial->setDiffuseColor(0.0f, 0.5f, 1.0f, 1.0f);
 	m_vectorMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_vectorMaterial->setAmbientColor(0.0f, 0.1f, 0.2f, 1.0f);
 
-	m_movementMaterial = new CMaterial();
+	m_movementMaterial = Material::create();
 	m_movementMaterial->setDiffuseColor(0.8f, 0.8f, 0.0f, 0.5f);
 	m_movementMaterial->setSpecularColor(1.0f, 1.0f, 0.0f, 0.8f);
 	m_movementMaterial->setAmbientColor(0.3f, 0.3f, 0.0f, 0.5f);
 	
-	CMaterialPtr lineSelectionMaterial = new CMaterial();
+	auto lineSelectionMaterial = Material::create();
 	lineSelectionMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	lineSelectionMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	lineSelectionMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 	
 	// Create scene
 	
-	m_scene = new CScene();
+	m_scene = Scene::create();
 	m_scene->setCamera(m_camera);
-	m_scene->setLightMode(CSceneBase::LM_LOCAL);
+	m_scene->setLightMode(SceneBase::LM_LOCAL);
 	
-	CGridPtr grid = new CGrid();
+	auto grid = Grid::create();
 	grid->setSize(10.0, 10.0);
 	grid->setGridSpacing(0.5);
 	grid->refresh();
 	m_scene->addChild(grid);
 	
-	CCubePtr cube = new CCube();
+	auto cube = Cube::create();
 	cube->setSize(0.1);
 	
 	// Make vector arrows blend over existing
 	// geometry
 	
-	CBlendStatePtr blendState = new CBlendState();
+	auto blendState = BlendState::create();
 	blendState->setFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Create cursors
 	
-	m_selectionCursor = new CNodeCursor();
-	m_selectionCursor->setType(CNodeCursor::CT_Y_TOP);
+	m_selectionCursor = NodeCursor::create();
+	m_selectionCursor->setType(NodeCursor::CT_Y_TOP);
 	m_selectionCursor->disable();
-	m_selectionCursor->setDirection(CNodeCursor::CD_INWARDS);
-	m_selectionCursor->setArrowType(CNodeCursor::AT_SIMPLE);
+	m_selectionCursor->setDirection(NodeCursor::CD_INWARDS);
+	m_selectionCursor->setArrowType(NodeCursor::AT_SIMPLE);
 	m_selectionCursor->setSize(0.5);
 	m_selectionCursor->setShapeSize(0.1);
 	
-	m_movementCursor = new CNodeCursor();
-	m_movementCursor->setType(CNodeCursor::CT_XZ);
+	m_movementCursor = NodeCursor::create();
+	m_movementCursor->setType(NodeCursor::CT_XZ);
 	m_movementCursor->disable();
 	m_movementCursor->setSize(0.5);
 	m_movementCursor->setShapeSize(0.1);
@@ -104,14 +104,14 @@ void CWorkspaceView::onInit(int width, int height)
 	
 	double arrowSize = 0.5;
 	
-	m_vectorCursor = new CVectorCursor();
-	m_vectorCursor->setType(CVectorCursor::CT_VECTOR);
+	m_vectorCursor = VectorCursor::create();
+	m_vectorCursor->setType(VectorCursor::CT_VECTOR);
 	m_vectorCursor->disable();
 
 	// Shape selection for handling line creation
 	
-	m_selection = new CShapeSelection();
-	m_lineSelection = new CShapeSelection();
+	m_selection = ShapeSelection::create();
+	m_lineSelection = ShapeSelection::create();
 	m_lineSelection->setHighlightMaterial(lineSelectionMaterial);
 	
 	// Add all cursor and selection to scene
@@ -129,18 +129,18 @@ void CWorkspaceView::onInit(int width, int height)
 	
 	// Create special composites for the created objects
 	
-	m_nodes = new CComposite();
+	m_nodes = Composite::create();
 	m_scene->addChild(m_nodes);
 	
-	m_lines = new CComposite();
+	m_lines = Composite::create();
 	m_scene->addChild(m_lines);
 	
-	m_vectors = new CComposite();
+	m_vectors = Composite::create();
 	m_scene->addChild(m_vectors);
 	
 	// Setup lighting
 	
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 	lighting->enable();
 	
 	m_light = lighting->getLight(0);
@@ -151,22 +151,22 @@ void CWorkspaceView::onInit(int width, int height)
 	
 	// Initialize event handlers
 	
-	m_sceneHandler = new CSceneHandler(this, m_scene);
+	m_sceneHandler = SceneHandler::create(this, m_scene);
 	
-	m_mouseViewHandler = new CMouseViewHandler(this, m_camera);
-	m_mouseViewHandler->setKeyHandling(CMouseViewHandler::KH_NORMAL);
+	m_mouseViewHandler = MouseViewHandler::create(this, m_camera);
+	m_mouseViewHandler->setKeyHandling(MouseViewHandler::KH_NORMAL);
 	m_mouseViewHandler->activate();
 	
-	m_selectionHandler = new CSelectionHandler(this, m_scene);
+	m_selectionHandler = SelectionHandler::create(this, m_scene);
 	m_selectionHandler->setSingleSelectionEvent(this);
 	m_selectionHandler->setHighlightEvent(this);
 	m_selectionHandler->deactivate();
 	
-	m_shapePlacementHandler = new CShapePlacementHandler(this, m_camera, m_scene, m_nodes);
-	m_shapePlacementHandler->setInputMethod(CShapePlacementHandler::IM_TWO_CLICK);
+	m_shapePlacementHandler = ShapePlacementHandler::create(this, m_camera, m_scene, m_nodes);
+	m_shapePlacementHandler->setInputMethod(ShapePlacementHandler::IM_TWO_CLICK);
 	m_shapePlacementHandler->setShapeRepresentation(cube);
 	m_shapePlacementHandler->getCursor()->setShapeSize(0.2);
-	m_shapePlacementHandler->getCursor()->setDirection(CNodeCursor::CD_OUTWARDS);
+	m_shapePlacementHandler->getCursor()->setDirection(NodeCursor::CD_OUTWARDS);
 	m_shapePlacementHandler->setCreateShapeEvent(this);
 	m_shapePlacementHandler->setMoveSelectionEvent(this);
 	m_shapePlacementHandler->addMouseMove3dEvent(this);
@@ -186,7 +186,7 @@ void CWorkspaceView::onInit(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::setViewMode(TViewMode mode)
+void WorkspaceView::setViewMode(TViewMode mode)
 {
 	m_viewMode = mode;
 	
@@ -194,7 +194,7 @@ void CWorkspaceView::setViewMode(TViewMode mode)
 	case VM_CREATE_SHAPES:
 		m_shapePlacementHandler->finalizeMove();
 		m_shapePlacementHandler->activate();
-		m_shapePlacementHandler->setOperatingMode(CShapePlacementHandler::OM_CREATE_SHAPE);
+		m_shapePlacementHandler->setOperatingMode(ShapePlacementHandler::OM_CREATE_SHAPE);
 		m_selectionHandler->deactivate();
 		m_selectionCursor->disable();
 		m_movementCursor->disable();
@@ -232,8 +232,8 @@ void CWorkspaceView::setViewMode(TViewMode mode)
 			m_shapePlacementHandler->activate();
 		else
 		{
-			m_shapePlacementHandler->setOperatingMode(CShapePlacementHandler::OM_MOVE_SHAPE);
-			//m_shapePlacementHandler->setOperatingMode(CShapePlacementHandler::OM_MOVE_SHAPE);
+			m_shapePlacementHandler->setOperatingMode(ShapePlacementHandler::OM_MOVE_SHAPE);
+			//m_shapePlacementHandler->setOperatingMode(ShapePlacementHandler::OM_MOVE_SHAPE);
 			m_selectionHandler->activate();
 			m_selectionCursor->disable();
 			m_movementCursor->enable();
@@ -245,8 +245,8 @@ void CWorkspaceView::setViewMode(TViewMode mode)
 			m_shapePlacementHandler->activate();
 		else
 		{
-			m_shapePlacementHandler->setOperatingMode(CShapePlacementHandler::OM_COPY_SHAPE);
-			//m_shapePlacementHandler->setOperatingMode(CShapePlacementHandler::OM_MOVE_SHAPE);
+			m_shapePlacementHandler->setOperatingMode(ShapePlacementHandler::OM_COPY_SHAPE);
+			//m_shapePlacementHandler->setOperatingMode(ShapePlacementHandler::OM_MOVE_SHAPE);
 			m_selectionHandler->activate();
 			m_selectionCursor->disable();
 			m_movementCursor->enable();
@@ -264,22 +264,22 @@ void CWorkspaceView::setViewMode(TViewMode mode)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::saveViewMode()
+void WorkspaceView::saveViewMode()
 {
 	m_savedViewMode = m_viewMode;
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::restoreViewMode()
+void WorkspaceView::restoreViewMode()
 {
 	setViewMode(m_savedViewMode);
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::deleteSelectedNodes()
+void WorkspaceView::deleteSelectedNodes()
 {
-	CShapeSelectionVector vec;
-	CShapeSelectionVectorIterator it;
+	ShapeSelectionVector vec;
+	ShapeSelectionVectorIterator it;
 	
 	m_selection->getSelection(vec);
 	m_selection->clear();
@@ -289,11 +289,11 @@ void CWorkspaceView::deleteSelectedNodes()
 	
 	for (it=vec.begin(); it!=vec.end(); it++)
 	{
-		CShapePtr shape = *it;
+		auto shape = *it;
 		
 		if (shape->getRefCount()<4)
 			m_nodes->removeShape(shape);
-		if (shape->isClass("CSolidLine"))
+		if (shape->isClass("SolidLine"))
 			m_lines->removeShape(shape);
 	}
 	
@@ -306,7 +306,7 @@ void CWorkspaceView::deleteSelectedNodes()
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onKeyboard(int key, int x, int y)
+void WorkspaceView::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'n':
@@ -382,10 +382,10 @@ void CWorkspaceView::onKeyboard(int key, int x, int y)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onFunctionKey(CWidgetBase::TFunctionKey key, int x, int y)
+void WorkspaceView::onFunctionKey(WidgetBase::TFunctionKey key, int x, int y)
 {
 	switch (key) {
-	case CWidgetBase::FK_ESCAPE:
+	case WidgetBase::FK_ESCAPE:
 		m_lineSelection->clear();
 		m_selection->clear();
 		m_nodeCount=0;
@@ -396,7 +396,7 @@ void CWorkspaceView::onFunctionKey(CWidgetBase::TFunctionKey key, int x, int y)
 		m_shapePlacementHandler->reset();
 		redraw();
 		break;
-	case CWidgetBase::FK_DELETE:
+	case WidgetBase::FK_DELETE:
 		deleteSelectedNodes();
 		redraw();
 		break;
@@ -407,9 +407,9 @@ void CWorkspaceView::onFunctionKey(CWidgetBase::TFunctionKey key, int x, int y)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onCreateShapeEvent(double x, double y, double z, CShapePtr& shape)
+void WorkspaceView::onCreateShapeEvent(double x, double y, double z, ShapePtr& shape)
 {
-	CNodePtr node = new CNode();
+	auto node = Node::create();
 	node->setSize(0.1);
 	node->setPosition(x, y, z);
 	node->setMaterial(m_nodeMaterial);
@@ -417,7 +417,7 @@ void CWorkspaceView::onCreateShapeEvent(double x, double y, double z, CShapePtr&
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onSelect(CShape* shape)
+void WorkspaceView::onSelect(Shape* shape)
 {
 	if (isLeftButtonDown())
 	{
@@ -425,7 +425,7 @@ void CWorkspaceView::onSelect(CShape* shape)
 		{
 			switch (m_viewMode) {
 			case VM_CREATE_LINES:
-				if (shape->isClass("CNode"))
+				if (shape->isClass("Node"))
 				{
 					m_nodeCount++;
 					
@@ -435,12 +435,12 @@ void CWorkspaceView::onSelect(CShape* shape)
 						
 						m_nodeCount = 0;
 						
-						CSolidLinePtr line = new CSolidLine();
+						auto line = SolidLine::create();
 						line->setRadius(0.03);
 						line->setMaterial(m_lineMaterial);
 						
-						CNodePtr node1 = (CNode*)m_lineSelection->getShape(0);
-						CNodePtr node2 = (CNode*)m_lineSelection->getShape(1);
+						NodePtr node1 = (Node*)m_lineSelection->getShape(0);
+						NodePtr node2 = (Node*)m_lineSelection->getShape(1);
 						
 						line->setNodes(node1, node2);
 						m_lines->addChild(line);
@@ -462,10 +462,10 @@ void CWorkspaceView::onSelect(CShape* shape)
 
 				break;
 			case VM_CREATE_VECTORS:
-				if (shape->isClass("CNode"))
+				if (shape->isClass("Node"))
 				{
 					m_vectorCursor->setPosition(shape->getPosition());
-					m_vectorCursor->setType(CVectorCursor::CT_BETA);
+					m_vectorCursor->setType(VectorCursor::CT_BETA);
 					m_vectorCursor->enable();
 					m_selectionHandler->deactivate();
 					std::cout << "VCC: " << m_vectorClickCount << std::endl;
@@ -488,7 +488,7 @@ void CWorkspaceView::onSelect(CShape* shape)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onHighlight(CShape* shape)
+void WorkspaceView::onHighlight(Shape* shape)
 {
 	m_moveShape = nullptr;
 	
@@ -499,7 +499,7 @@ void CWorkspaceView::onHighlight(CShape* shape)
 	{
 		switch (m_viewMode) {
 		case VM_SELECT_SHAPES:
-			if (shape->isClass("CNode"))
+			if (shape->isClass("Node"))
 			{
 				m_selectionCursor->enable();
 				m_selectionCursor->setPosition(shape->getPosition());
@@ -511,7 +511,7 @@ void CWorkspaceView::onHighlight(CShape* shape)
 			break;
 			
 		case VM_CREATE_LINES:
-			if (shape->isClass("CNode"))
+			if (shape->isClass("Node"))
 			{
 				m_selectionCursor->enable();
 				m_selectionCursor->setPosition(shape->getPosition());
@@ -519,14 +519,14 @@ void CWorkspaceView::onHighlight(CShape* shape)
 			else
 				m_selectionCursor->disable();
 			
-			if (shape->isClass("CNode"))
+			if (shape->isClass("Node"))
 				shape->enableHighlight();
 			
 			break;
 			
 		case VM_CREATE_VECTORS:
 			
-			if (shape->isClass("CNode"))
+			if (shape->isClass("Node"))
 			{
 				m_vectorCursor->enable();
 				m_vectorCursor->setPosition(shape->getPosition());
@@ -534,7 +534,7 @@ void CWorkspaceView::onHighlight(CShape* shape)
 			else
 				m_vectorCursor->disable();
 			
-			if (shape->isClass("CNode"))
+			if (shape->isClass("Node"))
 				shape->enableHighlight();
 			
 			break;
@@ -565,7 +565,7 @@ void CWorkspaceView::onHighlight(CShape* shape)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onMouseDown(int x, int y)
+void WorkspaceView::onMouseDown(int x, int y)
 {
 	m_mouseDownPos[0] = x;
 	m_mouseDownPos[1] = y;
@@ -615,7 +615,7 @@ void CWorkspaceView::onMouseDown(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onMouseMove(int x, int y)
+void WorkspaceView::onMouseMove(int x, int y)
 {
 	if (m_viewMode==VM_CREATE_VECTORS)
 	{
@@ -625,7 +625,7 @@ void CWorkspaceView::onMouseMove(int x, int y)
 			int dy = m_mouseDownPos[1] - y;
 			
 			m_vectorCursor->setAlpha(-(dx)*0.5);
-			m_vectorCursor->setType(CVectorCursor::CT_ALPHA);
+			m_vectorCursor->setType(VectorCursor::CT_ALPHA);
 			//m_vectorCursor->setBeta(dy*0.5);
 			
 			redraw();
@@ -638,7 +638,7 @@ void CWorkspaceView::onMouseMove(int x, int y)
 			
 			//m_vectorCursor->setAlpha(dx*0.5);
 			m_vectorCursor->setBeta(-90.0-(dy)*0.5);
-			m_vectorCursor->setType(CVectorCursor::CT_BETA);
+			m_vectorCursor->setType(VectorCursor::CT_BETA);
 			
 			redraw();
 		}
@@ -646,7 +646,7 @@ void CWorkspaceView::onMouseMove(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onMouseUp(int x, int y)
+void WorkspaceView::onMouseUp(int x, int y)
 {
 	if (m_viewMode==VM_NONE)
 	{
@@ -666,7 +666,7 @@ void CWorkspaceView::onMouseUp(int x, int y)
 
 				double arrowSize = 0.5;
 
-				CExtrArrowPtr vectorArrow = new CExtrArrow();
+				auto vectorArrow = ExtrArrow::create();
 				vectorArrow->setSize(arrowSize*1.0, arrowSize*0.4);
 				vectorArrow->setRadius(arrowSize*0.12, arrowSize*0.07);
 				vectorArrow->setOffset(-0.7);
@@ -689,7 +689,7 @@ void CWorkspaceView::onMouseUp(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onModifierDown()
+void WorkspaceView::onModifierDown()
 {
 	if (m_shapePlacementHandler->isActive())
 	{
@@ -702,7 +702,7 @@ void CWorkspaceView::onModifierDown()
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onModifierUp()
+void WorkspaceView::onModifierUp()
 {
 	if (m_shapePlacementHandler->isActive())
 	{
@@ -712,7 +712,7 @@ void CWorkspaceView::onModifierUp()
 }
 
 // ------------------------------------------------------------
-bool CWorkspaceView::onMoveSelection()
+bool WorkspaceView::onMoveSelection()
 {
 	setViewMode(VM_SELECT_SHAPES);
 	if (m_viewModeChangeEvent!=nullptr)
@@ -722,7 +722,7 @@ bool CWorkspaceView::onMoveSelection()
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::deleteNodes()
+void WorkspaceView::deleteNodes()
 {
 	m_selection->clear();
 	m_nodes->deleteAll();
@@ -734,13 +734,13 @@ void CWorkspaceView::deleteNodes()
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::selectAll()
+void WorkspaceView::selectAll()
 {
 	int i;
 	
 	for (i=0; i<m_nodes->getSize(); i++)
 	{
-		CShapePtr shape = m_nodes->getChild(i);
+		ShapePtr shape = m_nodes->getChild(i);
 		m_selection->add(shape);
 	}
 
@@ -751,28 +751,28 @@ void CWorkspaceView::selectAll()
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::setViewModeChangeEvent(CViewModeChangeEvent *event)
+void WorkspaceView::setViewModeChangeEvent(ViewModeChangeEvent *event)
 {
 	m_viewModeChangeEvent = event;
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::setCoordinateEvent(CCoordinateEvent *event)
+void WorkspaceView::setCoordinateEvent(CoordinateEvent *event)
 {
 	m_coordinateEvent = event;
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onMouseMove3d(double x, double y, double z)
+void WorkspaceView::onMouseMove3d(double x, double y, double z)
 {
 	if (m_coordinateEvent!=nullptr)
 		m_coordinateEvent->onCoordinate(x, y, z);
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onCopyShape(double x, double y, double z, CShapePtr& shape, CShapePtr& newShape)
+void WorkspaceView::onCopyShape(double x, double y, double z, ShapePtr& shape, ShapePtr& newShape)
 {
-	CNodePtr node = new CNode();
+	auto node = Node::create();
 	node->setSize(0.1);
 	node->setPosition(x, y, z);
 	node->setMaterial(m_nodeMaterial);
@@ -780,7 +780,7 @@ void CWorkspaceView::onCopyShape(double x, double y, double z, CShapePtr& shape,
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onFinishCopy()
+void WorkspaceView::onFinishCopy()
 {
 	setViewMode(VM_SELECT_SHAPES);
 	if (m_viewModeChangeEvent!=nullptr)
@@ -788,30 +788,30 @@ void CWorkspaceView::onFinishCopy()
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onFinishMove()
+void WorkspaceView::onFinishMove()
 {
 	m_lines->refresh();
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::onCursorUpdate()
+void WorkspaceView::onCursorUpdate()
 {
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::setSelectionChangedEvent(CSelectionChangedEvent *event)
+void WorkspaceView::setSelectionChangedEvent(SelectionChangedEvent *event)
 {
 	m_selectionChangedEvent = event;
 }
 
 // ------------------------------------------------------------
-CShapeSelection* CWorkspaceView::getSelection()
+ShapeSelection* WorkspaceView::getSelection()
 {
 	return m_selection;
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::createScenario(TScenarioType scenarioType)
+void WorkspaceView::createScenario(TScenarioType scenarioType)
 {
 	m_camera->setPosition(0.0, 4.0, 8.0);
 	m_camera->setTarget(-0.0, 0.0, 0.0);
@@ -869,7 +869,7 @@ void CWorkspaceView::createScenario(TScenarioType scenarioType)
 }
 
 // ------------------------------------------------------------
-void CWorkspaceView::createSimpleStructure(int rows, int cols, int stacks)
+void WorkspaceView::createSimpleStructure(int rows, int cols, int stacks)
 {
 	int i, j, k;
 
@@ -886,7 +886,7 @@ void CWorkspaceView::createSimpleStructure(int rows, int cols, int stacks)
 		{
 			for (k=0; k<stacks; k++)
 			{
-				CNodePtr node = new CNode();
+				auto node = Node::create();
 				node->setSize(0.1);
 				node->setPosition(x+(double)i*spacing, (double)k*spacing, z+(double)j*spacing);
 				node->setMaterial(m_nodeMaterial);
@@ -897,7 +897,7 @@ void CWorkspaceView::createSimpleStructure(int rows, int cols, int stacks)
 	}
 }
 
-void CWorkspaceView::save()
+void WorkspaceView::save()
 {
 	using namespace std;
 
@@ -914,7 +914,7 @@ void CWorkspaceView::save()
 
 	for (i=0; i<m_nodes->getSize(); i++)
 	{
-		CShapePtr shape = m_nodes->getChild(i);
+		ShapePtr shape = m_nodes->getChild(i);
 		shape->setTag(i);
 		shape->getPosition(x, y, z);
 
@@ -925,8 +925,8 @@ void CWorkspaceView::save()
 
 	for (i=0; i<m_lines->getSize(); i++)
 	{
-		CShape* shape = m_lines->getChild(i);
-		CSolidLinePtr line = (CSolidLine*) shape;
+		Shape* shape = m_lines->getChild(i);
+		SolidLinePtr line = (SolidLine*) shape;
 
 		f << line->getNode(0)->getTag() << " " << line->getNode(1)->getTag() << endl;
 	}
@@ -934,7 +934,7 @@ void CWorkspaceView::save()
 	f.close();
 }
 
-void CWorkspaceView::open(const char *filename)
+void WorkspaceView::open(const char *filename)
 {
 	using namespace std;
 
@@ -955,7 +955,7 @@ void CWorkspaceView::open(const char *filename)
 	{
 		f >> x >> y >> z;
 
-		CNodePtr node = new CNode();
+		auto node = Node::create();
 		node->setSize(0.1);
 		node->setPosition(x, y, z);
 		node->setMaterial(m_nodeMaterial);
@@ -969,12 +969,12 @@ void CWorkspaceView::open(const char *filename)
 	{
 		f >> nodeIdx1 >> nodeIdx2;
 		
-		CSolidLinePtr line = new CSolidLine();
+		auto line = SolidLine::create();
 		line->setRadius(0.03);
 		line->setMaterial(m_lineMaterial);
 		
-		CNode* node1 = (CNode*)m_nodes->getChild(nodeIdx1);
-		CNode* node2 = (CNode*)m_nodes->getChild(nodeIdx2);
+		Node* node1 = (Node*)m_nodes->getChild(nodeIdx1);
+		Node* node2 = (Node*)m_nodes->getChild(nodeIdx2);
 
 		line->setNodes(node1, node2);
 

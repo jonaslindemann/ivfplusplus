@@ -23,16 +23,16 @@
 
 using namespace ivf;
 
-CSlerp::CSlerp()
+Slerp::Slerp()
 {
 	m_size = -1;
 }
 
-CSlerp::~CSlerp()
+Slerp::~Slerp()
 {
 }
 
-void CSlerp::setSize(int size)
+void Slerp::setSize(int size)
 {
 	if (size>1)
 		m_size = size;
@@ -42,12 +42,12 @@ void CSlerp::setSize(int size)
 	initSlerp();
 }
 
-int CSlerp::getSize()
+int Slerp::getSize()
 {
-	return m_quats.size();
+	return static_cast<int>(m_quats.size());
 }
 
-void CSlerp::clear()
+void Slerp::clear()
 {
 	int i;
 
@@ -58,7 +58,7 @@ void CSlerp::clear()
 	m_quats.clear();
 }
 
-void CSlerp::initSlerp()
+void Slerp::initSlerp()
 {
 	if (m_size>1)
 	{
@@ -70,7 +70,7 @@ void CSlerp::initSlerp()
 
 		for (i=0; i<m_size; i++)
 		{
-			CQuat* q = new CQuat();
+			Quat* q = new Quat();
 			m_quats.push_back(q);
 		}
 
@@ -78,7 +78,7 @@ void CSlerp::initSlerp()
 		
 		for (i=0; i<m_size-1 ; i++)
 		{
-			CSlerpSegment* slerpSegment = new CSlerpSegment();
+			SlerpSegment* slerpSegment = new SlerpSegment();
 			m_segments.push_back(slerpSegment);
 			slerpSegment->setStartQuat(m_quats[i]);
 			slerpSegment->setEndQuat(m_quats[i+1]);
@@ -87,7 +87,7 @@ void CSlerp::initSlerp()
 }
 
 /** Retrieve specified point on spline. */
-CQuat& CSlerp::getQuat(int idx)
+Quat& Slerp::getQuat(int idx)
 {
 	if ((idx>=0)&&(idx<(int)m_quats.size()))
 		return *m_quats[idx];
@@ -96,7 +96,7 @@ CQuat& CSlerp::getQuat(int idx)
 }
 
 /** No descriptions */
-CQuat& CSlerp::getQuat(double t)
+Quat& Slerp::getQuat(double t)
 {
 	int segment = (int)t;
 
@@ -112,19 +112,19 @@ CQuat& CSlerp::getQuat(double t)
 }
 
 
-void CSlerp::setQuat(int idx, CQuat &q)
+void Slerp::setQuat(int idx, Quat &q)
 {
 	if ((idx>=0)&&(idx<(int)m_quats.size()))
 		*m_quats[idx] = q;
 }
 
-void CSlerp::setQuatAxisAngle(int idx, double vx, double vy, double vz, double angle)
+void Slerp::setQuatAxisAngle(int idx, double vx, double vy, double vz, double angle)
 {
 	if ((idx>=0)&&(idx<(int)m_quats.size()))
 		m_quats[idx]->setFromAxisAngle(vx, vy, vz, angle*2.0*M_PI/360.0);
 }
 
-void CSlerp::update()
+void Slerp::update()
 {
 	int i;
 

@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CFileBase);
+IvfSmartPointer(FileBase);
 
 /**
  * Base class for file readers and writers
@@ -39,21 +39,21 @@ IvfSmartPointer(CFileBase);
  *
  * @author Jonas Lindemann
  */
-class IVFFILE_API CFileBase : public CBase {
+class IVFFILE_API FileBase : public Base {
 private:
 	std::string	m_fileName;
-	CShapePtr m_shape;
+	ShapePtr m_shape;
 protected:
 	std::fstream m_inputFile;
 public:
-	/** CFileBase constructor */
-	CFileBase();
+	/** FileBase constructor */
+	FileBase();
 
-	/** CFileBase destructor */
-	virtual ~CFileBase();
+	/** FileBase destructor */
+	virtual ~FileBase();
 
-	IvfClassInfo("CFileBase",CBase);
-	IvfStdFactory(CFileBase);
+	IvfClassInfo("FileBase",Base);
+	IvfStdFactory(FileBase);
 
 	/** Sets the filename of the file to be read/written */
 	void setFileName(const std::string& fileName);
@@ -62,10 +62,10 @@ public:
 	const std::string getFileName();
 
 	/** Sets the shape to be exported to file */
-	void setShape(CShape* shape);
+	void setShape(Shape* shape);
 
 	/** Returns the shape read */
-	CShape* getShape();
+	Shape* getShape();
 };
 /** \example ac3dreader.cpp
  * This example shows how to read a AC3D file from file

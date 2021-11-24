@@ -31,7 +31,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CUIBase)
+IvfSmartPointer(UIBase)
 
 /**
  * Base user interface class
@@ -41,22 +41,22 @@ IvfSmartPointer(CUIBase)
  *
  * @author Jonas Lindemann
  */
-class IVF3DUI_API CUIBase : public CComposite {
+class IVF3DUI_API UIBase : public Composite {
 public:
 
 private:
 	int m_id;
 	bool m_enabled;
-	CUIBasePtr m_parent;
+	UIBasePtr m_parent;
 public:
-	/** CUIBase constructor */
-	CUIBase();
+	/** UIBase constructor */
+	UIBase();
 
-	/** CUIBase destructor */
-	virtual ~CUIBase();
+	/** UIBase destructor */
+	virtual ~UIBase();
 
-	IvfClassInfo("CUIBase",CComposite);
-	IvfStdFactory(CUIBase);
+	IvfClassInfo("UIBase",Composite);
+	IvfStdFactory(UIBase);
 
 	void enable();
 	void disable();
@@ -68,10 +68,10 @@ public:
 	/** Return button id */
 	int getId();
 
-	void setParentControl(CUIBase* parent);
+	void setParentControl(UIBase* parent);
 
 	bool haveParent();
-	CUIBase* getParentControl();
+	UIBase* getParentControl();
 
 	virtual void doChangeState(bool enabled);
 };

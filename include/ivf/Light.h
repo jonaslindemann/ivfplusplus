@@ -28,17 +28,17 @@
 
 namespace ivf {
 
-IvfSmartPointer(CLight);
+IvfSmartPointer(Light);
 
 /**
  * Light class
  *
- * Implements a single OpenGL light source. Instances of the CLight
- * class should be retrieved from the CLighting singleton.
+ * Implements a single OpenGL light source. Instances of the Light
+ * class should be retrieved from the Lighting singleton.
  *
  * @author Carl-Johan Lejdfors and Jonas Lindemann
  */
-class IVF_API CLight : public CShape {
+class IVF_API Light : public Shape {
 public:
 	enum TLightType {
 		LT_POINT,
@@ -63,8 +63,8 @@ private:
 	TLightType m_lightType;
 	bool m_enabled;
 public:
-	CLight();
-	virtual ~CLight();
+	Light();
+	virtual ~Light();
 
 	/** Enable light */
 	void enable();
@@ -78,8 +78,8 @@ public:
 	/** Set the number of the light = GL_LIGHT0 + number */
 	void setNumber(int number);
 
-	IvfClassInfo("CLight",CShape);
-	IvfStdFactory(CLight);
+	IvfClassInfo("Light",Shape);
+	IvfStdFactory(Light);
 
 	/** Set ambient light components */
 	void setAmbientColor( const float r, const float g, 

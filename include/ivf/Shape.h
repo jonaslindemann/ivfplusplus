@@ -34,7 +34,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CShape);
+IvfSmartPointer(Shape);
 
 #define IVF_NONAME			999999
 #define IVF_NO_ENUM         999998
@@ -44,16 +44,16 @@ IvfSmartPointer(CShape);
 /**
  * Abstract shape class with material and position.
  *
- * CShape implements a CIvfGLBase with a material and a position.
- * Methods for moving, and rotation are implemented. The CShape
+ * Shape implements a CIvfGLBase with a material and a position.
+ * Methods for moving, and rotation are implemented. The Shape
  * also has a special material and state for a highlight effect.
- * CShape should be considered an abstract class. Classes derived 
- * from CShape should override the doCreateGeometry, 
+ * Shape should be considered an abstract class. Classes derived 
+ * from Shape should override the doCreateGeometry, 
  * doCreateSelect methods.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CShape : public CGLBase {
+class IVF_API Shape : public GLBase {
 public:
 	enum THighlightState {
 		HS_ON,
@@ -68,14 +68,14 @@ public:
 	void disableHighlight();
 	void enableHighlight();
 	void setHighlightType(THighlightType type);
-	/** CShape constructor */
-	CShape ();
+	/** Shape constructor */
+	Shape ();
 
-	/** CShape destructor */
-	virtual ~CShape ();
+	/** Shape destructor */
+	virtual ~Shape ();
 
-	IvfClassInfo("CShape",CGLBase);
-	IvfStdFactory(CShape);
+	IvfClassInfo("Shape",GLBase);
+	IvfStdFactory(Shape);
 
 	/** Force object refresh */
 	virtual void refresh();
@@ -125,59 +125,59 @@ public:
 	 * Assign a CIvfPoint the position of the object.
 	 * @param point Reference to a CIvfPoint instance.
 	 */
-	void assignPointTo(CPoint3d* point);
+	void assignPointTo(Point3d* point);
 
 	/**
 	 * Assigns the position of the object to a 
-	 * CShape instance.
-	 * @param shape Reference to a CShape instance.
+	 * Shape instance.
+	 * @param shape Reference to a Shape instance.
 	 */
-	void assignPositionTo(CShape* shape);
+	void assignPositionTo(Shape* shape);
 
 	/**
 	 * Assign highlight material
 	 *
 	 * Assigns the material used to highlight the object. 
-	 * The CShape class increases the reference count of the
+	 * The Shape class increases the reference count of the
 	 * material when it is assigned to the class. When the
 	 * destructor of the class is called the reference count is 
 	 * decreased. If the material is not referenced it is deleted.
-	 * @param material Reference of a CMaterial instance.
+	 * @param material Reference of a Material instance.
 	 */
-	void setHighlightMaterial(CMaterial* material);
+	void setHighlightMaterial(Material* material);
 	
 	/** Returns the used highlight material */
-	CMaterial* getHightlightMaterial();
+	Material* getHightlightMaterial();
 
 	/**
 	 * Assign material
 	 *
 	 * Assigns the default material to the object. 
-	 * The CShape class increases the reference count of the
+	 * The Shape class increases the reference count of the
 	 * material when it is assigned to the class. When the
 	 * destructor of the class is called the reference count is 
 	 * decreased. If the material is not referenced it is deleted.
-	 * @param material Reference of a CMaterial instance.
+	 * @param material Reference of a Material instance.
 	 */
-	void setMaterial (CMaterial* material);
+	void setMaterial (Material* material);
 
 	/** Returns the used material */
-	virtual CMaterial* getMaterial ();
+	virtual Material* getMaterial ();
 	
 	/**
 	 * Assign texture
 	 *
 	 * Assigns the default texture to the object. 
-	 * The CShape class increases the reference count of the
+	 * The Shape class increases the reference count of the
 	 * texture when it is assigned to the class. When the
 	 * destructor of the class is called the reference count is 
 	 * decreased. If the texture is not referenced it is deleted.
-	 * @param texture Reference of a CTexture instance.
+	 * @param texture Reference of a Texture instance.
 	 */
-	void setTexture(CTexture* texture);
+	void setTexture(Texture* texture);
 
 	/** Returns used texture */
-	CTexture* getTexture();
+	Texture* getTexture();
 
 	/** 
 	 * Set the quaternion rotation of the object.
@@ -191,8 +191,8 @@ public:
 	 */
 	void setRotationQuat(double vx, double vy, double vz, double theta);
 
-	/** Sets the rotation of the object specified by an CQuat. */
-	void setRotation(CQuat& q);
+	/** Sets the rotation of the object specified by an Quat. */
+	void setRotation(Quat& q);
 
 	/** Return quaternion rotation of the object */
 	void getRotationQuat(double &vx, double &vy, double &vz, double &theta);
@@ -219,7 +219,7 @@ public:
 	 * Sets the position of the object int the global coordinate system.
 	 * @param shape Shape used to retrieve position from.
 	 */
-	virtual void setPosition (CShape* shape);
+	virtual void setPosition (Shape* shape);
 	
 	/**
 	 * Position of object
@@ -227,7 +227,7 @@ public:
 	 * Sets the position of the object int the global coordinate system.
 	 * @param point Point used to retrieve position from.
 	 */
-	virtual void setPosition (CPoint3d* point);
+	virtual void setPosition (Point3d* point);
 
 	/**
 	 * Position of object
@@ -235,7 +235,7 @@ public:
 	 * Sets the position of the object int the global coordinate system.
 	 * @param pos Point used to retrieve position from.
 	 */
-	virtual void setPosition(CPoint3d& pos);
+	virtual void setPosition(Point3d& pos);
 
 	/**
 	 * Position of object
@@ -243,19 +243,19 @@ public:
 	 * Sets the position of the object int the global coordinate system.
 	 * @param pos Point used to retrieve position from.
 	 */
-	virtual void setPosition(CVec3d& pos);
+	virtual void setPosition(Vec3d& pos);
 
 	/** Return position of object */
 	virtual void getPosition (double &x, double &y, double &z);
 
 	/** Return position of object */
-	virtual void getPosition (CShape* shape);
+	virtual void getPosition (Shape* shape);
 
 	/** Return position of object */
-	virtual void getPosition (CPoint3d* point);
+	virtual void getPosition (Point3d* point);
 
 	/** Return position of object */
-	virtual CVec3d& getPosition();
+	virtual Vec3d& getPosition();
 
 	/**
 	 * Object scale
@@ -271,7 +271,7 @@ public:
 	void getScale (double &xScale, double &yScale, double &zScale);
 
 	/** Set material for selection */
-	void setSelectMaterial(CMaterial* material);
+	void setSelectMaterial(Material* material);
 
 	/** Enable/disable normalization of normals */
 	void setNormalize(bool flag);
@@ -283,15 +283,15 @@ private:
 	int m_selectState;
 	THighlightState m_highlight;
 	THighlightType  m_highlightType;
-	CMaterialPtr m_highlightMaterial;
-	CMaterialPtr m_selectMaterial;
+	MaterialPtr m_highlightMaterial;
+	MaterialPtr m_selectMaterial;
 	GLuint m_objectName;
 	double	m_position[3];
 	double	m_scale[3];
 	double	m_rotation[3];
 	double  m_rotQuat[4];
-	CMaterialPtr	m_material;
-	CTexturePtr    m_texture;
+	MaterialPtr	m_material;
+	TexturePtr    m_texture;
 	bool m_normalize;
 protected:
 	/** Forces an object recalculation. */

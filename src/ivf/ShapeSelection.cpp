@@ -27,9 +27,9 @@
 
 using namespace ivf;
 
-CShapeSelection::CShapeSelection()
+ShapeSelection::ShapeSelection()
 {
-	m_hlMaterial = new CMaterial();
+	m_hlMaterial = new Material();
 	m_hlMaterial->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_hlMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_hlMaterial->setAmbientColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -39,14 +39,14 @@ CShapeSelection::CShapeSelection()
 	m_offset[2] = 0.0;
 }
 
-CShapeSelection::~CShapeSelection()
+ShapeSelection::~ShapeSelection()
 {
 
 }
 
-void CShapeSelection::doCreateGeometry()
+void ShapeSelection::doCreateGeometry()
 {
-	CShapeSelectionVectorIterator it;
+	ShapeSelectionVectorIterator it;
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE);
@@ -54,14 +54,14 @@ void CShapeSelection::doCreateGeometry()
 
 	for (it=m_selection.begin(); it!=m_selection.end(); it++)
 	{
-		CShapePtr shape = *it;
+		ShapePtr shape = *it;
 
 
-		if (!shape->isClass("CSolidLine"))
+		if (!shape->isClass("SolidLine"))
 		{
 			glPushMatrix();
 			glTranslated(m_offset[0], m_offset[1], m_offset[2]);
-			CMaterialPtr oldMat = shape->getMaterial();
+			MaterialPtr oldMat = shape->getMaterial();
 			shape->setMaterial(m_hlMaterial);
 			shape->setScale(1.4, 1.4, 1.4);
 			shape->render();
@@ -71,13 +71,13 @@ void CShapeSelection::doCreateGeometry()
 		}
 		else
 		{
-			CShape* temp = shape;
-			CSolidLinePtr solidLine = (CSolidLine*) temp;
+			Shape* temp = shape;
+			SolidLinePtr solidLine = (SolidLine*) temp;
 
 			double oldRadius = solidLine->getRadius();
 			solidLine->setRadius(oldRadius*1.4);
 
-			CMaterialPtr oldMat = shape->getMaterial();
+			MaterialPtr oldMat = shape->getMaterial();
 			shape->setMaterial(m_hlMaterial);
 			shape->render();
 			shape->setMaterial(oldMat);
@@ -90,25 +90,25 @@ void CShapeSelection::doCreateGeometry()
 	glDisable(GL_BLEND);
 }
 
-void CShapeSelection::add(CShape *shape)
+void ShapeSelection::add(Shape *shape)
 {
 	m_selectionSet.insert(shape);
 	if (m_selectionSet.size()>m_selection.size())
-		m_selection.push_back(CShapePtr(shape));
+		m_selection.push_back(ShapePtr(shape));
 }
 
-void CShapeSelection::clear()
+void ShapeSelection::clear()
 {
 	m_selection.clear();
 	m_selectionSet.clear();
 }
 
-int CShapeSelection::getSize()
+int ShapeSelection::getSize()
 {
-	return m_selection.size();
+	return static_cast<int>(m_selection.size());
 }
 
-CShape* CShapeSelection::getShape(int idx)
+Shape* ShapeSelection::getShape(int idx)
 {
 	if ((idx>=0)&&(idx<(int)m_selection.size()))
 		return m_selection[idx];
@@ -116,20 +116,20 @@ CShape* CShapeSelection::getShape(int idx)
 		return nullptr;
 }
 
-void CShapeSelection::getSelection(CShapeSelectionVector &vec)
+void ShapeSelection::getSelection(ShapeSelectionVector &vec)
 {
-	CShapeSelectionVectorIterator it;
+	ShapeSelectionVectorIterator it;
 
 	for (it=m_selection.begin(); it!=m_selection.end(); it++)
 	{
-		CShapePtr shape = *it;
+		ShapePtr shape = *it;
 		vec.push_back(shape);
 	}
 }
 
-bool CShapeSelection::contains(CShape *shape)
+bool ShapeSelection::contains(Shape *shape)
 {
-	std::set<CShape*>::iterator it;
+	std::set<Shape*>::iterator it;
 
 	it = m_selectionSet.find(shape);
 	return (it != m_selectionSet.end());
@@ -149,25 +149,25 @@ bool CShapeSelection::contains(CShape *shape)
 	*/
 }
 
-void CShapeSelection::addTo(CComposite *composite)
+void ShapeSelection::addTo(Composite *composite)
 {
-	CShapeSelectionVectorIterator it;
+	ShapeSelectionVectorIterator it;
 
 	for (it=m_selection.begin(); it!=m_selection.end(); it++)
 	{
-		CShapePtr shape = *it;
+		ShapePtr shape = *it;
 		composite->addChild(shape);
 	}
 }
 
-void CShapeSelection::moveShapes(double dx, double dy, double dz)
+void ShapeSelection::moveShapes(double dx, double dy, double dz)
 {
-	CShapeSelectionVectorIterator it;
+	ShapeSelectionVectorIterator it;
 	double x, y, z;
 
 	for (it=m_selection.begin(); it!=m_selection.end(); it++)
 	{
-		CShapePtr shape = *it;
+		ShapePtr shape = *it;
 
 		shape->getPosition(x, y, z);
 		x+=dx;
@@ -177,7 +177,7 @@ void CShapeSelection::moveShapes(double dx, double dy, double dz)
 	}
 }
 
-void CShapeSelection::assignFrom(CShapeSelection *selection)
+void ShapeSelection::assignFrom(ShapeSelection *selection)
 {
 	clear();
 
@@ -185,22 +185,22 @@ void CShapeSelection::assignFrom(CShapeSelection *selection)
 
 	for (i=0; i<selection->getSize(); i++)
 	{
-		CShape* shape = selection->getShape(i);
+		Shape* shape = selection->getShape(i);
 		add(shape);
 	}
 }
 
-void CShapeSelection::setOffset(double dx, double dy, double dz)
+void ShapeSelection::setOffset(double dx, double dy, double dz)
 {
 	m_offset[0] = dx;
 	m_offset[1] = dy;
 	m_offset[2] = dz;
 }
 
-void CShapeSelection::remove(CShape *shape)
+void ShapeSelection::remove(Shape *shape)
 {
-	std::set<CShape*>::iterator sit;
-	std::vector<CShapePtr>::iterator vit;
+	std::set<Shape*>::iterator sit;
+	std::vector<ShapePtr>::iterator vit;
 
 	sit = m_selectionSet.find(shape);
 
@@ -217,7 +217,7 @@ void CShapeSelection::remove(CShape *shape)
 	}
 }
 
-void CShapeSelection::setHighlightMaterial(CMaterial *material)
+void ShapeSelection::setHighlightMaterial(Material *material)
 {
 	m_hlMaterial = material;
 }

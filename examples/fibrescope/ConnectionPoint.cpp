@@ -28,20 +28,20 @@
 
 using namespace ivf;
 
-GLUquadricObj* CConnectionPoint::m_qobj = nullptr;
-CMaterial* CConnectionPoint::m_material = nullptr;
+GLUquadricObj* ConnectionPoint::m_qobj = nullptr;
+Material* ConnectionPoint::m_material = nullptr;
 
-CConnectionPoint::CConnectionPoint()
+ConnectionPoint::ConnectionPoint()
 {
 	m_discreteTime = nullptr;
-	m_coords = new CCoordHist();
+	m_coords = new CoordHist();
 	m_useColor = true;
 	m_camera = nullptr;
 	m_connectionRadius = 1.0;
 
 	if (m_material==nullptr)
 	{
-		m_material = new CMaterial();
+		m_material = new Material();
 		m_material->addReference();
 		m_material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 		m_material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -58,7 +58,7 @@ CConnectionPoint::CConnectionPoint()
 	//this->setMaterial(m_material);
 }
 
-CConnectionPoint::~CConnectionPoint()
+ConnectionPoint::~ConnectionPoint()
 {
 	if (m_qobj!=nullptr)
 	{
@@ -67,21 +67,21 @@ CConnectionPoint::~CConnectionPoint()
 	}
 }
 
-void CConnectionPoint::setDiscreteTime(CDiscreteTime *discreteTime)
+void ConnectionPoint::setDiscreteTime(DiscreteTime *discreteTime)
 {
 	m_discreteTime = discreteTime;
 	m_coords->setDiscreteTime(m_discreteTime);
 }
 
-CCoordHist* CConnectionPoint::getCoordHist()
+CoordHist* ConnectionPoint::getCoordHist()
 {
 	return m_coords;
 }
 
-void CConnectionPoint::doCreateGeometry()
+void ConnectionPoint::doCreateGeometry()
 {
-	CCoordListPtr coordList = m_coords->getList();
-	CCoordListPtr undeformedList = m_coords->getList(0);
+	CoordListPtr coordList = m_coords->getList();
+	CoordListPtr undeformedList = m_coords->getList(0);
 	float r1, g1, b1;
 	float r, g, b;
 	double u1[3];
@@ -89,12 +89,12 @@ void CConnectionPoint::doCreateGeometry()
 	double radius;
 	double scale;
 
-	CBlendingPtr blending = CBlending::getInstance();
+	BlendingPtr blending = Blending::getInstance();
 
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 
-	CLightingPtr lighting = CLighting::getInstance();
+	LightingPtr lighting = Lighting::getInstance();
 	lighting->enable();
 
 	radius = m_connectionRadius;
@@ -103,7 +103,7 @@ void CConnectionPoint::doCreateGeometry()
 
 	coordList->getCoord(0, p1[0], p1[1], p1[2]);
 
-	CUserSettingsPtr userSettings = CUserSettings::getInstance();
+	UserSettingsPtr userSettings = UserSettings::getInstance();
 	scale = userSettings->getScaleFactor();
 
 	if (undeformedList!=coordList)
@@ -200,33 +200,33 @@ void CConnectionPoint::doCreateGeometry()
 	glPopMatrix();
 }
 
-void CConnectionPoint::setUseColor(bool flag)
+void ConnectionPoint::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-void CConnectionPoint::saveToStream(ostream &out)
+void ConnectionPoint::saveToStream(ostream &out)
 {
 	m_coords->saveToStream(out);
 }
 
-void CConnectionPoint::readFromStream(istream &in)
+void ConnectionPoint::readFromStream(istream &in)
 {
 	m_coords->readFromStream(in);
 }
 
-void CConnectionPoint::setCamera(CCamera *camera)
+void ConnectionPoint::setCamera(Camera *camera)
 {
 	m_camera = camera;
 }
 
-void CConnectionPoint::setRadius(double radius)
+void ConnectionPoint::setRadius(double radius)
 {
 	m_connectionRadius = radius;
 }
 
 
-void CConnectionPoint::colorScale(double t, float &r, float &g, float &b)
+void ConnectionPoint::colorScale(double t, float &r, float &g, float &b)
 {
 	if (t<0)
 		t=0;

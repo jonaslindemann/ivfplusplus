@@ -30,9 +30,9 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase {
+class ExampleWindow: public GlutBase {
 private:
 
 	// Camera movement state variables
@@ -47,9 +47,9 @@ private:
 	double m_zoomX;
 	double m_zoomY;
 
-	CCameraPtr		m_camera;
-	CLightPtr		m_light;
-	CCompositePtr  m_scene;
+	CameraPtr		m_camera;
+	LightPtr		m_light;
+	CompositePtr  m_scene;
 
 	// Robot state variables
 
@@ -60,18 +60,19 @@ private:
 
 	// Robot arm transforms
 
-	CTransformPtr  m_part1;
-	CTransformPtr  m_part2;
-	CTransformPtr  m_part3;
-	CTransformPtr  m_arm;
+	TransformPtr  m_part1;
+	TransformPtr  m_part2;
+	TransformPtr  m_part3;
+	TransformPtr  m_arm;
 
 	// Routine for updating the arm
 
 	void updateArm();
 public:
-	CExampleWindow(int X, int Y, int W, int H)
-		:CGlutBase(X, Y, W, H) {};
+	ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H) {};
 
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -87,7 +88,12 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-void CExampleWindow::onInit(int width, int height)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -105,44 +111,44 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CCamera();
+	m_camera = new Camera();
 	m_camera->setPosition(0.0, 5.0, 5.0);
 
 	// Create a materials
 
-	CMaterialPtr redMaterial = new CMaterial();
+	auto redMaterial = Material::create();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
-	CMaterialPtr greenMaterial = new CMaterial();
+	auto greenMaterial = Material::create();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 	
-	CMaterialPtr blueMaterial = new CMaterial();
+	auto blueMaterial = Material::create();
 	blueMaterial->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	blueMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	blueMaterial->setAmbientColor(0.0f, 0.0f, 0.5f, 1.0f);
 
-	CMaterialPtr yellowMaterial = new CMaterial();
+	auto yellowMaterial = Material::create();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene composite
 
-	m_scene = new CComposite();
+	m_scene = Composite::create();
 
 	// Create robot base
 
-	CCylinderPtr lowerBase = new CCylinder();
+	auto lowerBase = Cylinder::create();
 	lowerBase->setHeight(0.2);
 	lowerBase->setSlices(20);
 	lowerBase->setMaterial(yellowMaterial);
 	m_scene->addChild(lowerBase);
 
-	CCylinderPtr upperBase = new CCylinder();
+	auto upperBase = Cylinder::create();
 	upperBase->setHeight(0.3);
 	upperBase->setRadius(0.5);
 	upperBase->setSlices(20);
@@ -152,14 +158,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create part1
 
-	m_part1 = new CTransform();
+	m_part1 = Transform::create();
 
-	CSpherePtr sphere = new CSphere();
+	auto sphere = Sphere::create();
 	sphere->setRadius(0.1);
 	sphere->setMaterial(redMaterial);
 	m_part1->addChild(sphere);
 
-	CCylinderPtr cylinder = new CCylinder();
+	auto cylinder = Cylinder::create();
 	cylinder->setRadius(0.1);
 	cylinder->setHeight(1.0);
 	cylinder->setMaterial(greenMaterial);
@@ -171,14 +177,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create part2
 
-	m_part2 = new CTransform();
+	m_part2 = Transform::create();
 
-	sphere = new CSphere();
+	sphere = Sphere::create();
 	sphere->setRadius(0.1);
 	sphere->setMaterial(redMaterial);
 	m_part2->addChild(sphere);
 
-	cylinder = new CCylinder();
+	cylinder = Cylinder::create();
 	cylinder->setRadius(0.1);
 	cylinder->setHeight(1.0);
 	cylinder->setMaterial(greenMaterial);
@@ -190,14 +196,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create part3
 
-	m_part3 = new CTransform();
+	m_part3 = Transform::create();
 
-	sphere = new CSphere();
+	sphere = Sphere::create();
 	sphere->setRadius(0.1);
 	sphere->setMaterial(redMaterial);
 	m_part3->addChild(sphere);
 
-	cylinder = new CCylinder();
+	cylinder = Cylinder::create();
 	cylinder->setRadius(0.1);
 	cylinder->setHeight(1.0);
 	cylinder->setMaterial(greenMaterial);
@@ -209,33 +215,33 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create complete arm
 
-	m_arm = new CTransform();
+	m_arm = Transform::create();
 	m_arm->addChild(m_part3);
 	m_arm->setPosition(0.0, 0.1+0.4, 0.0);
 	m_arm->setRotationQuat(0.0, 1.0, 0.0, m_alfa);
 
 	m_scene->addChild(m_arm);
 
-	CAxisPtr axis = new CAxis();
+	auto axis = Axis::create();
 	axis->setSize(1.5);
 	m_scene->addChild(axis);
 	
 	// Create a light
 
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 
 	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
-	CRasterizationPtr rasterOps = CRasterization::getInstance();
+	auto rasterOps = Rasterization::getInstance();
 	rasterOps->enableCullFace();
-	rasterOps->setCullFace(CRasterization::CF_BACK);
+	rasterOps->setCullFace(Rasterization::CF_BACK);
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -243,7 +249,7 @@ void CExampleWindow::onResize(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 	m_camera->render();
@@ -251,7 +257,7 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onDestroy()
+void ExampleWindow::onDestroy()
 {
 	delete m_camera;
 	delete m_light;
@@ -259,7 +265,7 @@ void CExampleWindow::onDestroy()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'a':
@@ -300,14 +306,14 @@ void CExampleWindow::onKeyboard(int key, int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseDown(int x, int y)
+void ExampleWindow::onMouseDown(int x, int y)
 {
 	m_beginX = x;
 	m_beginY = y;
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseMove(int x, int y)
+void ExampleWindow::onMouseMove(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -331,7 +337,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 	
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CWidgetBase::MT_SHIFT)
+		if (getModifierKey() == WidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -353,7 +359,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseUp(int x, int y)
+void ExampleWindow::onMouseUp(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -364,7 +370,7 @@ void CExampleWindow::onMouseUp(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::updateArm()
+void ExampleWindow::updateArm()
 {
 	m_arm->setRotationQuat(0.0, 1.0, 0.0, m_alfa);
 	m_part1->setRotationQuat(0.0, 0.0, 1.0, m_delta);
@@ -382,12 +388,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

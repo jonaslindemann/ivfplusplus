@@ -35,9 +35,9 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGleLine);
+IvfSmartPointer(GleLine);
 
-class IVFGLE_API CGleLine: public CShape {
+class IVFGLE_API GleLine: public Shape {
 public:
 	enum TLineRepresentation {
 		LR_EXTRUSION,
@@ -46,21 +46,21 @@ public:
 		LR_WIRE
 	};
 private:
-	CVec3d m_startPoint;
-	CVec3d m_endPoint;
+	Vec3d m_startPoint;
+	Vec3d m_endPoint;
 	TLineRepresentation m_lineRep;
 	void updateLine();
 public:
-	CGleLine();
-	virtual ~CGleLine();
+	GleLine();
+	virtual ~GleLine();
 
 	void setLineRepresentation(TLineRepresentation lineRep);
 	void setStartPoint(double x, double y, double z);
 	void setEndPoint(double x, double y, double z);
 	void setSections(int sections);
 
-	IvfClassInfo("CGleLine", CShape);
-	IvfStdFactory(CGleLine);
+	IvfClassInfo("GleLine", Shape);
+	IvfStdFactory(GleLine);
 };
 
 }

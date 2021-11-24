@@ -32,14 +32,14 @@
 
 namespace ivf {
 
-IvfSmartPointer(CNodeCursor);
+IvfSmartPointer(NodeCursor);
 
 /**
  * Node cursor class
  *
  * Implements a special cursor for manipulating nodes
  */
-class IVF_API CNodeCursor : public CShape {
+class IVF_API NodeCursor : public Shape {
 public:
 	enum TCursorType {
 		CT_XZ,
@@ -63,34 +63,34 @@ private:
 	TCursorDirection m_cursorDirection;
 	TCursorArrowType m_cursorArrowType;
 
-	CArrowPtr m_arrow;
+	ArrowPtr m_arrow;
 	
-	CTransformPtr m_arrowXZ1;
-	CTransformPtr m_arrowXZ2;
-	CTransformPtr m_arrowXZ3;
-	CTransformPtr m_arrowXZ4;
+	TransformPtr m_arrowXZ1;
+	TransformPtr m_arrowXZ2;
+	TransformPtr m_arrowXZ3;
+	TransformPtr m_arrowXZ4;
 
-	CTransformPtr m_arrowY1;
-	CTransformPtr m_arrowY2;
+	TransformPtr m_arrowY1;
+	TransformPtr m_arrowY2;
 
-	CCompositePtr m_cursorShape;
+	CompositePtr m_cursorShape;
 
-	CShapePtr	 m_nodeShape;
+	ShapePtr	 m_nodeShape;
 
-	CQuadPlanePtr	m_plane;
+	QuadPlanePtr	m_plane;
 
 	bool			m_usePlane;
 
 	void initCursor();
 public:
 	/** Class constructor */
-	CNodeCursor();
+	NodeCursor();
 
 	/** Class destructor */
-	virtual ~CNodeCursor();
+	virtual ~NodeCursor();
 
-	IvfClassInfo("CNodeCursor",CShape);
-	IvfStdFactory(CNodeCursor);
+	IvfClassInfo("NodeCursor",Shape);
+	IvfStdFactory(NodeCursor);
 
 	/** Set size of cursor */
 	void setSize(double size);
@@ -102,10 +102,10 @@ public:
 	void setType(TCursorType type);
 
 	/** Set shape used at center of cursor */
-	void setShape(CShape* shape);
+	void setShape(Shape* shape);
 
 	/** Return shape at center of cursor */
-	CShape* getShape();
+	Shape* getShape();
 
 	/** Enable/disable special plane helper object */
 	void setUsePlaneHelper(bool flag);

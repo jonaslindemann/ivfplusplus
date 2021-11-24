@@ -19,7 +19,7 @@
 // Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
-// Implementation of: public class CSphere
+// Implementation of: public class Sphere
 
 #include <ivf/config.h>
 #include <ivf/Sphere.h>
@@ -27,14 +27,14 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CSphere::CSphere ()
-		:CShape()
+Sphere::Sphere ()
+		:Shape()
 		//TODO: check and complete member initialisation list!
 {
 	m_radius = 1.0;
 	m_slices = 8;
 	m_stacks = 8;
-	m_selectionBox = new CSelectionBox();
+	m_selectionBox = new SelectionBox();
 	m_selectionBox->setUseName(false);
 	m_qobj = gluNewQuadric();
 	gluQuadricDrawStyle(m_qobj, GLU_FILL);
@@ -44,27 +44,27 @@ CSphere::CSphere ()
 }
 
 // ------------------------------------------------------------
-CSphere::~CSphere ()
+Sphere::~Sphere ()
 {
 	gluDeleteQuadric(m_qobj);
 	delete m_selectionBox;
 }
 
 // ------------------------------------------------------------
-void CSphere::setRadius (const double radius)
+void Sphere::setRadius (const double radius)
 {
 	m_radius = radius;
 	updateSelectBox();
 }
 
 // ------------------------------------------------------------
-double CSphere::getRadius ()
+double Sphere::getRadius ()
 {
 	return m_radius;
 }
 
 // ------------------------------------------------------------
-void CSphere::doCreateGeometry()
+void Sphere::doCreateGeometry()
 {
 	glPushMatrix();
 		glRotated(90, 1.0, 0.0, 0.0);
@@ -74,43 +74,43 @@ void CSphere::doCreateGeometry()
 }
 
 // ------------------------------------------------------------
-void CSphere::setSlices(const int slices)
+void Sphere::setSlices(const int slices)
 {
 	m_slices = slices;
 }
 
 // ------------------------------------------------------------
-int CSphere::getSlices()
+int Sphere::getSlices()
 {
 	return m_slices;
 }
 
 // ------------------------------------------------------------
-void CSphere::setStacks(const int stacks)
+void Sphere::setStacks(const int stacks)
 {
 	m_stacks = stacks;
 }
 
 // ------------------------------------------------------------
-int CSphere::getStacks()
+int Sphere::getStacks()
 {
 	return m_stacks;
 }
 
 // ------------------------------------------------------------
-void CSphere::updateSelectBox()
+void Sphere::updateSelectBox()
 {
 	m_selectionBox->setSize(m_radius*2.0, m_radius*2.0, m_radius*2.0);
 }
 
 // ------------------------------------------------------------
-void CSphere::doCreateSelect()
+void Sphere::doCreateSelect()
 {
 	m_selectionBox->render();
 }
 
 // ------------------------------------------------------------
-void CSphere::doUpdateBoundingSphere()
+void Sphere::doUpdateBoundingSphere()
 {
 	// This is very simple
 

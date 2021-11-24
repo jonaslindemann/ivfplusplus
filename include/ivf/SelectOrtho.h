@@ -28,23 +28,23 @@
 
 namespace ivf {
 
-IvfSmartPointer(CSelectOrtho);
+IvfSmartPointer(SelectOrtho);
 
 /**
  * Ortho selection
  *
  * ....
  */
-class IVF_API CSelectOrtho : public CSelectComposite {
+class IVF_API SelectOrtho : public SelectComposite {
 private:
 	int m_width;
 	int m_height;
 public:
-	CSelectOrtho();
-	virtual ~CSelectOrtho();
+	SelectOrtho();
+	virtual ~SelectOrtho();
 
-	IvfClassInfo("CSelectOrtho",CSelectComposite);
-	IvfStdFactory(CSelectOrtho);
+	IvfClassInfo("SelectOrtho",SelectComposite);
+	IvfStdFactory(SelectOrtho);
 
 	void initializeSelect(int x, int y, int w, int h);
 	void customView();

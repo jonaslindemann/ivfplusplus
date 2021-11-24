@@ -27,27 +27,27 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CCylinder::CCylinder ()
-		:CCone()
+Cylinder::Cylinder ()
+		:Cone()
 		//TODO: check and complete member initialisation list!
 {
 	setRadius(1.0);
 }
 
 // ------------------------------------------------------------
-CCylinder::~CCylinder ()
+Cylinder::~Cylinder ()
 {
 }
 
 // ------------------------------------------------------------
-void CCylinder::setRadius (const double radius)
+void Cylinder::setRadius (const double radius)
 {
 	setBottomRadius(radius);
 	setTopRadius(radius);
 }
 
 // ------------------------------------------------------------
-double CCylinder::getRadius ()
+double Cylinder::getRadius ()
 {
 	return getBottomRadius();
 }

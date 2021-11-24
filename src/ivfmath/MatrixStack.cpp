@@ -23,38 +23,38 @@
 
 using namespace ivf;
 
-CMatrixStack::CMatrixStack()
+MatrixStack::MatrixStack()
 {
 	m_currentMatrix = 0;
 	initialize();
 }
 
-void CMatrixStack::initialize()
+void MatrixStack::initialize()
 {
 	m_translateMatrix.identity();
 	identity();
 }
 
-CMatrixStack::~CMatrixStack()
+MatrixStack::~MatrixStack()
 {
 
 }
 
-void CMatrixStack::translate(double x, double y, double z)
+void MatrixStack::translate(double x, double y, double z)
 {
 	m_translateMatrix.translate(x, y, z);
 	m_matrixStack[m_currentMatrix] = 
 		m_matrixStack[m_currentMatrix] * m_translateMatrix;
 }
 
-void CMatrixStack::rotate(double vx, double vy, double vz, double theta)
+void MatrixStack::rotate(double vx, double vy, double vz, double theta)
 {
 	m_rotateMatrix.rotate(vx, vy, vz, theta*2*M_PI/360.0);
 	m_matrixStack[m_currentMatrix] = 
 		m_matrixStack[m_currentMatrix] * m_rotateMatrix;
 }
 
-void CMatrixStack::pushMatrix()
+void MatrixStack::pushMatrix()
 {
 	if (m_currentMatrix<IVF_MATRIX_STACK_SIZE)
 	{
@@ -63,23 +63,23 @@ void CMatrixStack::pushMatrix()
 	}
 }
 
-void CMatrixStack::popMatrix()
+void MatrixStack::popMatrix()
 {
 	if (m_currentMatrix!=0)
 		m_currentMatrix--;
 }
 
-void CMatrixStack::identity()
+void MatrixStack::identity()
 {
 	m_matrixStack[m_currentMatrix].identity();
 }
 
-void CMatrixStack::zero()
+void MatrixStack::zero()
 {
 	m_matrixStack[m_currentMatrix].zero();
 }
 
-void CMatrixStack::printCurrent()
+void MatrixStack::printCurrent()
 {
 #ifdef IVF_HAVE_IOSTREAM
 	m_matrixStack[m_currentMatrix].print(std::cout);
@@ -88,12 +88,12 @@ void CMatrixStack::printCurrent()
 #endif
 }
 
-void CMatrixStack::getWorldCoordinate(double lx, double ly, double lz, 
+void MatrixStack::getWorldCoordinate(double lx, double ly, double lz, 
 										 double &wx, double &wy, double &wz)
 {
-	CVec4d l;
-	CVec4d w;
-	CVec4d z(0.0,0.0,0.0);
+	Vec4d l;
+	Vec4d w;
+	Vec4d z(0.0,0.0,0.0);
 
 	l.setComponents(lx, ly, lz, 1.0);
 	w = m_matrixStack[m_currentMatrix] * l;
@@ -102,10 +102,10 @@ void CMatrixStack::getWorldCoordinate(double lx, double ly, double lz,
 
 
 /*
-void CMatrixStack::applyToVector(double *v)
+void MatrixStack::applyToVector(double *v)
 {
-	CVec4d l;
-	CVec4d w;
+	Vec4d l;
+	Vec4d w;
 
 	l.setComponents(lx, ly, lz, 1.0);
 	w = m_matrixStack[m_currentMatrix] * l;

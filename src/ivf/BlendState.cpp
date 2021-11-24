@@ -26,36 +26,36 @@
 
 using namespace ivf;
 
-CBlendState::CBlendState()
+BlendState::BlendState()
 {
 	m_sfactor = GL_ONE;
 	m_dfactor = GL_ZERO;
 }
 
-CBlendState::CBlendState(GLenum sfactor, GLenum dfactor)
+BlendState::BlendState(GLenum sfactor, GLenum dfactor)
 {
 	m_sfactor = sfactor;
 	m_dfactor = dfactor;
 }
 
-CBlendState::~CBlendState()
+BlendState::~BlendState()
 {
 
 }
 
-void CBlendState::doState()
+void BlendState::doState()
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(m_sfactor, m_dfactor);
 }
 
-void CBlendState::doSaveState()
+void BlendState::doSaveState()
 {
 	m_oldState = glIsEnabled(GL_BLEND);
 	glPushAttrib(GL_BLEND);
 }
 
-void CBlendState::doRestoreState()
+void BlendState::doRestoreState()
 {
 	if (m_oldState)
 		glEnable(GL_BLEND);
@@ -65,7 +65,7 @@ void CBlendState::doRestoreState()
 	glPopAttrib();
 }
 
-void CBlendState::setFunction(GLenum sfactor, GLenum dfactor)
+void BlendState::setFunction(GLenum sfactor, GLenum dfactor)
 {
 	m_sfactor = sfactor;
 	m_dfactor = dfactor;

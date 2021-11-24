@@ -28,25 +28,25 @@
 
 namespace ivf {
 
-IvfSmartPointer(CSelectionBox);
+IvfSmartPointer(SelectionBox);
 
 /**
  * Selection box class
  *
- * CSelectionBox implements a selection box
+ * SelectionBox implements a selection box
  * used to mark objects as selected.
  * @author Jonas Lindemann
  */
-class IVF_API CSelectionBox : public CWireBrick {
+class IVF_API SelectionBox : public WireBrick {
 public:
-	/** CSelectionBox constructor */
-	CSelectionBox ();
+	/** SelectionBox constructor */
+	SelectionBox ();
 
-	/** CSelectionBox destructor */
-	virtual ~CSelectionBox ();
+	/** SelectionBox destructor */
+	virtual ~SelectionBox ();
 
-	IvfClassInfo("CSelectionBox",CWireBrick);
-	IvfStdFactory(CSelectionBox);
+	IvfClassInfo("SelectionBox",WireBrick);
+	IvfStdFactory(SelectionBox);
 protected:
 	virtual void doCreateGeometry();
 private:

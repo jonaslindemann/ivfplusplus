@@ -28,64 +28,64 @@
 
 using namespace ivf;
 
-CMultiply::CMultiply()
+Multiply::Multiply()
 {
 
 }
 
-void CMultiply::setShape(CShape* shape)
+void Multiply::setShape(Shape* shape)
 {
 	m_shape = shape;
 }
 
-CShape* CMultiply::getShape()
+Shape* Multiply::getShape()
 {
 	return m_shape;
 }
 
-void CMultiply::setOffsets(double dx, double dy, double dz)
+void Multiply::setOffsets(double dx, double dy, double dz)
 {
 	m_offsets[0] = dx;
 	m_offsets[1] = dy;
 	m_offsets[2] = dz;
 }
 
-void CMultiply::getOffsets(double &dx, double &dy, double &dz)
+void Multiply::getOffsets(double &dx, double &dy, double &dz)
 {
 	dx = m_offsets[0];
 	dy = m_offsets[1];
 	dz = m_offsets[2];
 }
 
-void CMultiply::setRepeat(int x, int y, int z)
+void Multiply::setRepeat(int x, int y, int z)
 {
 	m_repeat[0] = x;
 	m_repeat[1] = y;
 	m_repeat[2] = z;
 }
 
-void CMultiply::getRepeat(int &x, int &y, int &z)
+void Multiply::getRepeat(int &x, int &y, int &z)
 {
 	x = m_repeat[0];
 	y = m_repeat[1];
 	z = m_repeat[2];
 }
 
-void CMultiply::setStartIndices(int i, int j, int k)
+void Multiply::setStartIndices(int i, int j, int k)
 {
 	m_startIndices[0] = i;
 	m_startIndices[1] = j;
 	m_startIndices[2] = k;
 }
 
-void CMultiply::getStartIndices(int &i, int &j, int &k)
+void Multiply::getStartIndices(int &i, int &j, int &k)
 {
 	i = m_startIndices[0];
 	j = m_startIndices[1];
 	k = m_startIndices[2];
 }
 
-void CMultiply::doCreateGeometry()
+void Multiply::doCreateGeometry()
 {
 	if (m_shape!=nullptr)
 	{
@@ -99,7 +99,7 @@ void CMultiply::doCreateGeometry()
 		int jmax = j0 + m_repeat[1] - 1;
 		int kmax = k0 + m_repeat[2] - 1;
 
-		CTransformPtr xfm = new CTransform();
+		TransformPtr xfm = new Transform();
 		xfm->addChild(m_shape);
 
 		for (i=i0; i<=imax; i++)
@@ -117,7 +117,7 @@ void CMultiply::doCreateGeometry()
 	}
 }
 
-void CMultiply::refresh()
+void Multiply::refresh()
 {
 	if (m_shape!=nullptr)
 		m_shape->refresh();

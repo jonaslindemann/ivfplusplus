@@ -35,10 +35,10 @@
 //////////////////////////////////////////////////////////////////////
 
 int g_j;
-CVectorCoordList* g_vCoordList;
-CVectorCoordList* g_vUndeformedList;
-CArrayCoordList* g_aCoordList;
-CArrayCoordList* g_aUndeformedList;
+VectorCoordList* g_vCoordList;
+VectorCoordList* g_vUndeformedList;
+ArrayCoordList* g_aCoordList;
+ArrayCoordList* g_aUndeformedList;
 float g_r1, g_g1, g_b1;
 float g_r2, g_g2, g_b2;
 double g_u1[3];
@@ -106,10 +106,10 @@ void normalizedcross(double* u, double* v, double* n)
 
 }
 
-CFibre::CFibre()
+Fibre::Fibre()
 {
 	m_discreteTime = nullptr;
-	m_coords = new CCoordHist();
+	m_coords = new CoordHist();
 	g_upvector[0] = 0.0;
 	g_upvector[1] = 1.0;
 	g_upvector[2] = 1.0;
@@ -130,28 +130,28 @@ CFibre::CFibre()
 	}
 }
 
-CFibre::~CFibre()
+Fibre::~Fibre()
 {
 	delete [] m_sectionCoords;
 	delete [] m_sectionNormals;
 }
 
-void CFibre::setDiscreteTime(CDiscreteTime *discreteTime)
+void Fibre::setDiscreteTime(DiscreteTime *discreteTime)
 {
 	m_discreteTime = discreteTime;
 	m_coords->setDiscreteTime(m_discreteTime);
 }
 
-CCoordHist* CFibre::getCoordHist()
+CoordHist* Fibre::getCoordHist()
 {
 	return m_coords;
 }
 
-void CFibre::doCreateGeometry()
+void Fibre::doCreateGeometry()
 {
 	// Get settings
 
-	CUserSettingsPtr userSettings = CUserSettings::getInstance();
+	UserSettingsPtr userSettings = UserSettings::getInstance();
 
 	g_radius = userSettings->getFibreRadius();
 	g_nSides = userSettings->getExtrusionSides();
@@ -175,8 +175,8 @@ void CFibre::doCreateGeometry()
 		////////////////////////////////////////////////////////////////
 		// Fibre band method I
 
-		g_vCoordList = (CVectorCoordList*)m_coords->getList();
-		g_vUndeformedList = (CVectorCoordList*)m_coords->getList(0);
+		g_vCoordList = (VectorCoordList*)m_coords->getList();
+		g_vUndeformedList = (VectorCoordList*)m_coords->getList(0);
 
 		// Get camera up-vector
 
@@ -260,8 +260,8 @@ void CFibre::doCreateGeometry()
 		////////////////////////////////////////////////////////////////
 		// Fibre band method II
 
-		g_vCoordList = (CVectorCoordList*)m_coords->getList();
-		g_vUndeformedList = (CVectorCoordList*)m_coords->getList(0);
+		g_vCoordList = (VectorCoordList*)m_coords->getList();
+		g_vUndeformedList = (VectorCoordList*)m_coords->getList(0);
 
 		// Get camera forward vector
 
@@ -441,8 +441,8 @@ void CFibre::doCreateGeometry()
 		////////////////////////////////////////////////////////////////
 		// Extrusion method
 
-		g_aCoordList = (CArrayCoordList*)m_coords->getList();
-		g_aUndeformedList = (CArrayCoordList*)m_coords->getList(0);
+		g_aCoordList = (ArrayCoordList*)m_coords->getList();
+		g_aUndeformedList = (ArrayCoordList*)m_coords->getList(0);
 
 		for (g_j=0; g_j<g_aCoordList->getSize(); g_j++)
 		{
@@ -504,17 +504,17 @@ void CFibre::doCreateGeometry()
 
 }
 
-void CFibre::saveToStream(std::ostream &out)
+void Fibre::saveToStream(std::ostream &out)
 {
 	m_coords->saveToStream(out);
 }
 
-void CFibre::readFromStream(std::istream &in)
+void Fibre::readFromStream(std::istream &in)
 {
 	m_coords->readFromStream(in);
 }
 
-void CFibre::initSection()
+void Fibre::initSection()
 {
 	double r;
 	int nSides;
@@ -522,7 +522,7 @@ void CFibre::initSection()
 	double x, y;
 	int i;
 
-	CUserSettingsPtr userSettings = CUserSettings::getInstance();
+	UserSettingsPtr userSettings = UserSettings::getInstance();
 
 	r = userSettings->getFibreRadius();
 	nSides = userSettings->getExtrusionSides();
@@ -547,13 +547,13 @@ void CFibre::initSection()
 	}
 }
 
-void CFibre::refresh()
+void Fibre::refresh()
 {
 	this->initSection();
 }
 
 
-void CFibre::setFibreRadius(double radius)
+void Fibre::setFibreRadius(double radius)
 {
 	m_fibreRadius = radius;
 }

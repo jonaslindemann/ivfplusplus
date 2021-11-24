@@ -26,17 +26,17 @@
 
 using namespace ivf;
 
-CLightComposite::CLightComposite()
+LightComposite::LightComposite()
 {
 	m_light = nullptr;
 }
 
-CLightComposite::~CLightComposite()
+LightComposite::~LightComposite()
 {
 
 }
 
-void CLightComposite::doCreateGeometry()
+void LightComposite::doCreateGeometry()
 {
 	if (m_light!=nullptr)
 	{
@@ -45,10 +45,10 @@ void CLightComposite::doCreateGeometry()
 		m_light->setPosition(x, y, z);
 		m_light->render();
 	}
-	CComposite::doCreateGeometry();
+	Composite::doCreateGeometry();
 }
 
-void CLightComposite::setLight(COldLight *light)
+void LightComposite::setLight(OldLight *light)
 {
 	m_light = light;
 }

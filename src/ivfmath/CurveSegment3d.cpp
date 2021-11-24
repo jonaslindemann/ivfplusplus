@@ -23,18 +23,18 @@
 
 using namespace ivf;
 
-CCurveSegment3d::CCurveSegment3d()
+CurveSegment3d::CurveSegment3d()
 {
 
 }
 
-CCurveSegment3d::~CCurveSegment3d()
+CurveSegment3d::~CurveSegment3d()
 {
 	
 }
 
 /** Set start position of curve */
-void CCurveSegment3d::setStartPosition(double t0)
+void CurveSegment3d::setStartPosition(double t0)
 {
 	m_t0 = t0;	
 }

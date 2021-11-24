@@ -26,12 +26,12 @@
 
 using namespace ivf;
 
-CConstructionPlane::CConstructionPlane()
+ConstructionPlane::ConstructionPlane()
 {
-	m_ucs = new CUcs3d();
-	m_cursor = new CCursor();
+	m_ucs = new Ucs3d();
+	m_cursor = new Cursor();
 	m_cursor->addReference();
-	m_grid = new CGrid();
+	m_grid = new Grid();
 	m_grid->addReference();
 
 	m_size[0] = 10.0;
@@ -51,7 +51,7 @@ CConstructionPlane::CConstructionPlane()
 	initPlane();
 }
 
-CConstructionPlane::~CConstructionPlane()
+ConstructionPlane::~ConstructionPlane()
 {
 	delete m_ucs;
 
@@ -68,14 +68,14 @@ CConstructionPlane::~CConstructionPlane()
 		delete m_grid;
 }
 
-void CConstructionPlane::setSize(double width, double height)
+void ConstructionPlane::setSize(double width, double height)
 {
 	m_size[0] = width;
 	m_size[1] = height;
 	initPlane();
 }
 
-void CConstructionPlane::initPlane()
+void ConstructionPlane::initPlane()
 {
 	m_grid->setSize(m_size[0], m_size[1]);
 	m_grid->setGridSpacing(m_gridSpacing);
@@ -85,7 +85,7 @@ void CConstructionPlane::initPlane()
 	this->getRotationQuat(m_v[0], m_v[1], m_v[2], m_theta);
 }
 
-void CConstructionPlane::setRotationQuat(double vx, double vy, double vz, double theta)
+void ConstructionPlane::setRotationQuat(double vx, double vy, double vz, double theta)
 {
 	m_ucs->setRotation(vx, vy, vz, theta);
 	m_grid->setRotationQuat(vx, vy, vz, theta);
@@ -95,20 +95,20 @@ void CConstructionPlane::setRotationQuat(double vx, double vy, double vz, double
 	m_theta = theta;
 }
 
-void CConstructionPlane::setPosition(double x, double y, double z)
+void ConstructionPlane::setPosition(double x, double y, double z)
 {
 	m_grid->setPosition(x, y, z);
 	m_ucs->setTranslation(x, y, z);
 }
 
-void CConstructionPlane::updateCursor(int x, int y)
+void ConstructionPlane::updateCursor(int x, int y)
 {
 	if (m_camera!=nullptr)
 	{
 
-		CVec3d pickVector;
-		CVec3d position;
-		CVec3d intersection;
+		Vec3d pickVector;
+		Vec3d position;
+		Vec3d intersection;
 
 		if (!m_cursorLocked)
 		{
@@ -164,7 +164,7 @@ void CConstructionPlane::updateCursor(int x, int y)
 			if (m_snapToGrid)
 				intersection = m_ucs->snap(intersection);
 
-			CVec3d delta;
+			Vec3d delta;
 			delta = m_last - intersection;
 
 			double sign;
@@ -173,9 +173,9 @@ void CConstructionPlane::updateCursor(int x, int y)
 			else
 				sign = 1.0;
 
-			CVec3d wlast;
+			Vec3d wlast;
 			wlast = m_ucs->transformWorld(m_last);
-			CVec3d newPos;
+			Vec3d newPos;
 			newPos = wlast + sign*delta.length()*m_ucs->getYAxis();
 
 			//m_ucs->transformWorld(newPos);
@@ -215,7 +215,7 @@ void CConstructionPlane::updateCursor(int x, int y)
 }
 
 
-void CConstructionPlane::setCamera(CCamera *camera)
+void ConstructionPlane::setCamera(Camera *camera)
 {
 	if (m_camera!=nullptr)
 	{
@@ -228,24 +228,24 @@ void CConstructionPlane::setCamera(CCamera *camera)
 	m_camera->addReference();
 }
 
-void CConstructionPlane::setGridSpacing(double spacing)
+void ConstructionPlane::setGridSpacing(double spacing)
 {
 	m_gridSpacing = spacing;
 	initPlane();
 }
 
-CUcs3d* CConstructionPlane::getUcs()
+Ucs3d* ConstructionPlane::getUcs()
 {
 	return m_ucs;
 }
 
-void CConstructionPlane::doCreateGeometry()
+void ConstructionPlane::doCreateGeometry()
 {
 	m_grid->render();
 	if (m_active) m_cursor->render();
 }
 
-void CConstructionPlane::setCursor(CCursor *cursor)
+void ConstructionPlane::setCursor(Cursor *cursor)
 {
 	m_cursor->deleteReference();
 	if (!m_cursor->referenced())
@@ -255,43 +255,43 @@ void CConstructionPlane::setCursor(CCursor *cursor)
 	m_cursor->addReference();
 }
 
-void CConstructionPlane::lockCursor()
+void ConstructionPlane::lockCursor()
 {
 	m_cursorLocked = true;
 	m_cursorStartX = m_cursorX;
 	m_cursorStartY = m_cursorY;
 }
 
-bool CConstructionPlane::isCursorLocked()
+bool ConstructionPlane::isCursorLocked()
 {
 	return m_cursorLocked;
 }
 
-void CConstructionPlane::unlockCursor()
+void ConstructionPlane::unlockCursor()
 {
 	m_cursorLocked = false;
 }
 
-void CConstructionPlane::activate()
+void ConstructionPlane::activate()
 {
 	m_active = true;
 	m_grid->setUseAxis(true);
 	m_grid->setUseGrid(true);
 }
 
-void CConstructionPlane::deactivate()
+void ConstructionPlane::deactivate()
 {
 	m_active = false;
 	m_grid->setUseAxis(false);
 	m_grid->setUseGrid(false);
 }
 
-bool CConstructionPlane::isActive()
+bool ConstructionPlane::isActive()
 {
 	return m_active;
 }
 
-void CConstructionPlane::doUpdateBoundingSphere()
+void ConstructionPlane::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=nullptr)
 	{
@@ -300,32 +300,32 @@ void CConstructionPlane::doUpdateBoundingSphere()
 	}
 }
 
-void CConstructionPlane::getPosition(double &x, double &y, double &z)
+void ConstructionPlane::getPosition(double &x, double &y, double &z)
 {
 	m_grid->getPosition(x, y, z);
 }
 
-CVec3d& CConstructionPlane::getCursorPosition()
+Vec3d& ConstructionPlane::getCursorPosition()
 {
-	CVec3d& pos = ivfGetTempVec3d();
+	Vec3d& pos = ivfGetTempVec3d();
 	pos = m_cursor->getPosition();
 	return pos;
 }
 
-void CConstructionPlane::setUpdateCursorSize(bool flag)
+void ConstructionPlane::setUpdateCursorSize(bool flag)
 {
 	m_updateCursorSize = true;
 }
 
-void CConstructionPlane::updateCursorSize()
+void ConstructionPlane::updateCursorSize()
 {
 	if (m_camera!=nullptr)
 	{
 		if (m_updateCursorSize)
 		{
-			CVec3d cameraPos;
-			CVec3d cursorPos;
-			CVec3d delta;
+			Vec3d cameraPos;
+			Vec3d cursorPos;
+			Vec3d delta;
 
 			cameraPos = m_camera->getPosition();
 			cursorPos = m_cursor->getPosition();
@@ -336,25 +336,25 @@ void CConstructionPlane::updateCursorSize()
 	}
 }
 
-void CConstructionPlane::setRelativeCursorSize(double size)
+void ConstructionPlane::setRelativeCursorSize(double size)
 {
 	m_relativeCursorSize = size;
 }
 
-double CConstructionPlane::getRelativeCursorSize()
+double ConstructionPlane::getRelativeCursorSize()
 {
 	return m_relativeCursorSize;
 }
 
-void CConstructionPlane::updateAxisSize()
+void ConstructionPlane::updateAxisSize()
 {
 	if (m_camera!=nullptr)
 	{
 		if (m_updateAxisSize)
 		{
-			CVec3d cameraPos;
-			CVec3d axisPos;
-			CVec3d delta;
+			Vec3d cameraPos;
+			Vec3d axisPos;
+			Vec3d delta;
 
 			cameraPos = m_camera->getPosition();
 			axisPos = m_grid->getPosition();
@@ -365,58 +365,58 @@ void CConstructionPlane::updateAxisSize()
 	}
 }
 
-void CConstructionPlane::updateSizes()
+void ConstructionPlane::updateSizes()
 {
 	updateCursorSize();
 	updateAxisSize();
 }
 
-void CConstructionPlane::setRelativeAxisSize(double size)
+void ConstructionPlane::setRelativeAxisSize(double size)
 {
 	m_relativeAxisSize = size;
 }
 
-double CConstructionPlane::getRelativeAxisSize()
+double ConstructionPlane::getRelativeAxisSize()
 {
 	return m_relativeAxisSize;
 }
 
-void CConstructionPlane::setUpdateAxisSize(bool flag)
+void ConstructionPlane::setUpdateAxisSize(bool flag)
 {
 	m_updateAxisSize = flag;
 }
 
-double CConstructionPlane::getWidth()
+double ConstructionPlane::getWidth()
 {
 	return m_size[0];
 }
 
-double CConstructionPlane::getDepth()
+double ConstructionPlane::getDepth()
 {
 	return m_size[1];
 }
 
-void CConstructionPlane::disableCursor()
+void ConstructionPlane::disableCursor()
 {
 	m_cursor->setState(OS_OFF);
 }
 
-void CConstructionPlane::enableCursor()
+void ConstructionPlane::enableCursor()
 {
 	m_cursor->setState(OS_ON);
 }
 
-bool CConstructionPlane::isCursorEnabled()
+bool ConstructionPlane::isCursorEnabled()
 {
 	return (m_cursor->getState()==OS_ON);
 }
 
-CGrid* CConstructionPlane::getGrid()
+Grid* ConstructionPlane::getGrid()
 {
 	return m_grid;
 }
 
-CCursor* CConstructionPlane::getCursor()
+Cursor* ConstructionPlane::getCursor()
 {
     return m_cursor;
 }

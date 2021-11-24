@@ -26,12 +26,12 @@
 
 using namespace ivf;
 
-CScene::CScene()
+Scene::Scene()
 {
 
 }
 
-CScene::~CScene()
+Scene::~Scene()
 {
 
 }

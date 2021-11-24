@@ -31,23 +31,23 @@
 
 namespace ivf {
 
-IvfSmartPointer(CIndexBase);
+IvfSmartPointer(IndexBase);
 
 /**
  * Abstract base class for an index
  */
-class IVF_API CIndexBase : public CBase {
+class IVF_API IndexBase : public Base {
 private:
 	int m_topology;
 public:
 	/** CIvfIndex constructor */
-	CIndexBase();
+	IndexBase();
 
 	/** CIvfIndex destructor */
-	virtual ~CIndexBase();
+	virtual ~IndexBase();
 
-	IvfClassInfo("CIndexBase",CBase);
-	IvfStdFactory(CIndexBase);
+	IvfClassInfo("IndexBase",Base);
+	IvfStdFactory(IndexBase);
 
 	/** Return value at position */
 	virtual long getIndex(long pos);
@@ -86,10 +86,10 @@ public:
 	virtual void createConstant(long value, long size);
 
 	/** Assigns values from another index */
-	virtual void assignFrom(CIndexBase* idx);
+	virtual void assignFrom(IndexBase* idx);
 
 	/** Assigns \em idx the values of this index */
-	virtual void assignTo(CIndexBase* idx);
+	virtual void assignTo(IndexBase* idx);
 
 	/** Add values from array \em i to this index */ 
 	virtual void addArray(long* i, long size);
@@ -114,7 +114,7 @@ public:
 	/** 
 	 * Sets topology hint 
 	 *
-	 * This information is used by the CPolySet class
+	 * This information is used by the PolySet class
 	 * to determine the topology of the index
 	 */
 	void setTopology(int topology);

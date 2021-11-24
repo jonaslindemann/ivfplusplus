@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CWireBrick);
+IvfSmartPointer(WireBrick);
 
 /**
  * Wireframe brick primitive
@@ -36,16 +36,16 @@ IvfSmartPointer(CWireBrick);
  * Wireframe representation of a IvfBrick class
  * @author Jonas Lindemann
  */
-class IVF_API CWireBrick : public CBrick {
+class IVF_API WireBrick : public Brick {
 public:
 	/** Constructor */
-	CWireBrick ();
+	WireBrick ();
 
 	/** Destructor */
-	virtual ~CWireBrick ();
+	virtual ~WireBrick ();
 
-	IvfClassInfo("CWireBrick",CBrick);
-	IvfStdFactory(CWireBrick);
+	IvfClassInfo("WireBrick",Brick);
+	IvfStdFactory(WireBrick);
 protected:
 	virtual void doCreateGeometry();
 };

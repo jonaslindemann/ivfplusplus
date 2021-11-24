@@ -31,15 +31,15 @@
 /**
  * Smart pointer class
  *
- * CPointer handles the Ivf++ reference counting scheme of
+ * Pointer handles the Ivf++ reference counting scheme of
  * the CIvfBase class. To declare a Ivf++ smart pointer use the 
  * IvfSmartPointer() macro. See the following example:
  *
  * \code
  * int main()
  * {
- *    CPointer<CMaterial> material = new CMaterial(); // addReference() called.
- *    CPointer<CMaterial> material2;
+ *    Pointer<Material> material = new Material(); // addReference() called.
+ *    Pointer<Material> material2;
  *    material2 = material; // addReference() called 
  *    .
  *    .
@@ -47,7 +47,7 @@
  *    return 0;
  * } 
  * // material calls deleteReference()
- * // material2 calls deleteRefernce() and deletes CMaterial object
+ * // material2 calls deleteRefernce() and deletes Material object
  * \endcode
  */
 template <class T,class R> class CPointerRefBase {
@@ -182,12 +182,12 @@ public:
 		m_object = object;
 		if (m_object)
 		{
-			IvfDbg1("CPointer: created for " << m_object->getClassName());
+			IvfDbg1("Pointer: created for " << m_object->getClassName());
 			m_object->addReference();
 		}
 		else
 		{
-			IvfDbg1("CPointer: assigned 0");
+			IvfDbg1("Pointer: assigned 0");
 		}
 	}
 
@@ -196,12 +196,12 @@ public:
 		m_object = ivfObject.m_object;
 		if (m_object)
 		{
-			IvfDbg1("CPointer: assigned " << m_object->getClassName());
+			IvfDbg1("Pointer: assigned " << m_object->getClassName());
 			m_object->addReference();
 		}
 		else
 		{
-			IvfDbg1("CPointer: assigned 0");
+			IvfDbg1("Pointer: assigned 0");
 		}
 	}
 
@@ -210,10 +210,10 @@ public:
 		if (m_object)
 		{
 			m_object->deleteReference();
-			IvfDbg1("CPointer: " << m_object->getClassName() << " dereferenced.");
+			IvfDbg1("Pointer: " << m_object->getClassName() << " dereferenced.");
 			if (!m_object->referenced())
 			{
-				IvfDbg1("CPointer: " << m_object->getClassName() << " deleted.");
+				IvfDbg1("Pointer: " << m_object->getClassName() << " deleted.");
 				delete m_object;
 			}
 		}
@@ -230,10 +230,10 @@ public:
 			if (m_object)
 			{
 				m_object->deleteReference();
-				IvfDbg1("CPointer(=): " << m_object->getClassName() << " dereferenced.");
+				IvfDbg1("Pointer(=): " << m_object->getClassName() << " dereferenced.");
 				if (!m_object->referenced())
 				{
-					IvfDbg1("CPointer(=): " << m_object->getClassName() << " deleted.");
+					IvfDbg1("Pointer(=): " << m_object->getClassName() << " deleted.");
 					delete m_object;
 				}
 			}
@@ -242,12 +242,12 @@ public:
 
 			if (m_object)
 			{
-				IvfDbg1("CPointer(=): assigned " << m_object->getClassName());
+				IvfDbg1("Pointer(=): assigned " << m_object->getClassName());
 				m_object->addReference();
 			}
 			else
 			{
-				IvfDbg1("CPointer(=): assigned 0");
+				IvfDbg1("Pointer(=): assigned 0");
 			}
 		}
 		return *this;
@@ -260,10 +260,10 @@ public:
 			if (m_object)
 			{
 				m_object->deleteReference();
-				IvfDbg1("CPointer(=): " << m_object->getClassName() << " dereferenced.");
+				IvfDbg1("Pointer(=): " << m_object->getClassName() << " dereferenced.");
 				if (!m_object->referenced())
 				{
-					IvfDbg1("CPointer(=): " << m_object->getClassName() << " deleted.");
+					IvfDbg1("Pointer(=): " << m_object->getClassName() << " deleted.");
 					delete m_object;
 				}
 			}
@@ -272,12 +272,12 @@ public:
 
 			if (m_object)
 			{
-				IvfDbg1("CPointer(=): assigned " << m_object->getClassName());
+				IvfDbg1("Pointer(=): assigned " << m_object->getClassName());
 				m_object->addReference();
 			}
 			else
 			{
-				IvfDbg1("CPointer(=): assigned 0");
+				IvfDbg1("Pointer(=): assigned 0");
 			}
 		}
 		return *this;

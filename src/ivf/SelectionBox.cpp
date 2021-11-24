@@ -28,28 +28,28 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CSelectionBox::CSelectionBox ()
-		:CWireBrick()
+SelectionBox::SelectionBox ()
+		:WireBrick()
 		//TODO: check and complete member initialisation list!
 {
-	CMaterial* selectMaterial = new CMaterial();
+	Material* selectMaterial = new Material();
 	selectMaterial->setDiffuseColor(1.0, 1.0, 1.0, 1.0);
 	selectMaterial->setAmbientColor(0.5, 0.5, 0.5, 1.0);
 	this->setMaterial(selectMaterial);
 }
 
 // ------------------------------------------------------------
-CSelectionBox::~CSelectionBox ()
+SelectionBox::~SelectionBox ()
 {
 }
 
 // ------------------------------------------------------------
-void CSelectionBox::doCreateGeometry()
+void SelectionBox::doCreateGeometry()
 {
 	glPushAttrib(GL_LIGHTING);
 		glDisable(GL_LIGHTING);
 		glColor3f(1.0, 1.0, 1.0);
-		CWireBrick::doCreateGeometry();
+		WireBrick::doCreateGeometry();
 	glPopAttrib();
 }
 

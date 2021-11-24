@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CPointSet);
+IvfSmartPointer(PointSet);
 
 /**
  * Point set class
@@ -37,19 +37,19 @@ IvfSmartPointer(CPointSet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CPointSet : public CGLPrimitive {
+class IVF_API PointSet : public GLPrimitive {
 private:
 	bool m_useColor;
 	int m_pointSize;
 public:
-	/** CPointSet constructor */
-	CPointSet();
+	/** PointSet constructor */
+	PointSet();
 
-	/** CPointSet destructor */
-	virtual ~CPointSet();
+	/** PointSet destructor */
+	virtual ~PointSet();
 
-	IvfClassInfo("CPointSet",CGLPrimitive);
-	IvfStdFactory(CPointSet);
+	IvfClassInfo("PointSet",GLPrimitive);
+	IvfStdFactory(PointSet);
 
 	/** Enable or disable the use of color values when rendering */
 	void setUseColor(bool flag);

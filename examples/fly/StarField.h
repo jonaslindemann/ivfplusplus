@@ -7,26 +7,26 @@
 #include <ivf/Sphere.h>
 #include <ivf/Camera.h>
 
-IvfSmartPointer(CStarField);
+IvfSmartPointer(StarField);
 
-class CStarField : public ivf::CShape {
+class StarField : public ivf::Shape {
 private:
-	//CPointSet* m_stars;
-	ivf::CQuadSetPtr m_texturedStars;
-	ivf::CQuadSetPtr m_planets;
-	ivf::CPointSetPtr m_pointStars;
-	ivf::CSpherePtr m_nebulaSphere;
-	ivf::CCameraPtr m_camera;
+	//PointSet* m_stars;
+	ivf::QuadSetPtr m_texturedStars;
+	ivf::QuadSetPtr m_planets;
+	ivf::PointSetPtr m_pointStars;
+	ivf::SpherePtr m_nebulaSphere;
+	ivf::CameraPtr m_camera;
 
 	void initializeStars();
 	void getPolarVectors(
 		double alfa,  double beta,
-		ivf::CVec3d &normal, ivf::CVec3d &s, ivf::CVec3d &t);
+		ivf::Vec3d &normal, ivf::Vec3d &s, ivf::Vec3d &t);
 public:
-	CStarField(ivf::CCamera* camera);
-	virtual ~CStarField();
+	StarField(ivf::Camera* camera);
+	virtual ~StarField();
 
-	void setCamera(ivf::CCamera* camera);
+	void setCamera(ivf::Camera* camera);
 protected:
 	virtual void doCreateGeometry();
 };

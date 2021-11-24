@@ -28,14 +28,14 @@
 
 namespace ivf {
 
-IvfSmartPointer(CMesh);
+IvfSmartPointer(Mesh);
 
 /** 
  * Mesh class
  *
  * Implements a mesh using OpenGL glEvalMesh2 function
  */
-class IVF_API CMesh : public CShape {
+class IVF_API Mesh : public Shape {
 public:
 	enum TMeshType {
 		MT_ORDER_2,
@@ -55,14 +55,14 @@ private:
 	int m_meshRows;
 	int m_meshCols;
 public:
-	/** CMesh constructor */
-	CMesh();
+	/** Mesh constructor */
+	Mesh();
 
-	/** CMesh destructor */
-	virtual ~CMesh();
+	/** Mesh destructor */
+	virtual ~Mesh();
 
-	IvfClassInfo("CMesh",CShape);
-	IvfStdFactory(CMesh);
+	IvfClassInfo("Mesh",Shape);
+	IvfStdFactory(Mesh);
 
 	void createMesh(double width, double height);
 

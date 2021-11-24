@@ -53,7 +53,7 @@ namespace ivf {
 #define PFR_BLUE    5
 #define PFR_OTHER   6
 
-IvfSmartPointer(CPolyReader);
+IvfSmartPointer(PolyReader);
 
 /**
  * Base class for a POLY reader
@@ -64,7 +64,7 @@ IvfSmartPointer(CPolyReader);
  *
  * @author Jonas Lindemann
  */
-class IVFFILE_API CPolyReader : public CFileReader {
+class IVFFILE_API PolyReader : public FileReader {
 private:
 	std::string m_row;
 	int m_nFaces;
@@ -90,14 +90,14 @@ private:
 	bool readVertices(std::istream &in);
 	bool readData(std::istream &in);
 public:
-	/** CPolyReader constructor */
-	CPolyReader();
+	/** PolyReader constructor */
+	PolyReader();
 
-	/** CPolyReader destructor */
-	virtual ~CPolyReader();
+	/** PolyReader destructor */
+	virtual ~PolyReader();
 
-	IvfClassInfo("CPolyReader",CFileReader);
-	IvfStdFactory(CPolyReader);
+	IvfClassInfo("PolyReader",FileReader);
+	IvfStdFactory(PolyReader);
 
 	/** Reads POLY file */
 	virtual void read();

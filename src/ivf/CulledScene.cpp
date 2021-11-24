@@ -26,11 +26,11 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CCulledScene::CCulledScene()
+CulledScene::CulledScene()
 {
-	m_matrixStack = new CMatrixStack();
+	m_matrixStack = new MatrixStack();
 
-	m_frustum = new CViewFrustum();
+	m_frustum = new ViewFrustum();
 
 	m_useCulling = true;
 	m_cullCount = 0;
@@ -41,16 +41,16 @@ CCulledScene::CCulledScene()
 }
 
 // ------------------------------------------------------------
-CCulledScene::~CCulledScene()
+CulledScene::~CulledScene()
 {
 	delete m_matrixStack;
 	delete m_frustum;
 }
 
 // ------------------------------------------------------------
-void CCulledScene::addChild(CShape *shape)
+void CulledScene::addChild(Shape *shape)
 {
-	CScene::addChild(shape);
+	Scene::addChild(shape);
 
 	// Initialize bounding sphere
 
@@ -58,9 +58,9 @@ void CCulledScene::addChild(CShape *shape)
 }
 
 // ------------------------------------------------------------
-void CCulledScene::cull()
+void CulledScene::cull()
 {
-	CView* view;
+	View* view;
 	if (m_cullView==nullptr)
 		view = this->getCamera();
 	else
@@ -74,7 +74,7 @@ void CCulledScene::cull()
 }
 
 // ------------------------------------------------------------
-void CCulledScene::cullChildren(CShape *shape)
+void CulledScene::cullChildren(Shape *shape)
 {
 	// Recursively cull children
 
@@ -85,7 +85,7 @@ void CCulledScene::cullChildren(CShape *shape)
 
 	if (shape->isClass("CIvfComposite"))
 	{
-		CComposite* composite = (CComposite*) shape;
+		Composite* composite = (Composite*) shape;
 
 		composite->getPosition(x, y, z);
 		m_matrixStack->getWorldCoordinate(x, y, z, wx, wy, wz);
@@ -99,7 +99,7 @@ void CCulledScene::cullChildren(CShape *shape)
 		// else
 		//    turn composite shape off
 
-		if ((composite==(CComposite*)this)||intersectFrustum(composite->getBoundingSphere()))
+		if ((composite==(Composite*)this)||intersectFrustum(composite->getBoundingSphere()))
 		{
 			m_matrixStack->pushMatrix();
 
@@ -113,7 +113,7 @@ void CCulledScene::cullChildren(CShape *shape)
 
 			for (i = 0; i<composite->getSize(); i++)
 			{
-				CShape* child = composite->getChild(i);
+				Shape* child = composite->getChild(i);
 				cullChildren(child);
 			}
 			m_matrixStack->popMatrix();
@@ -145,40 +145,40 @@ void CCulledScene::cullChildren(CShape *shape)
 	}
 }
 
-bool CCulledScene::intersectFrustum(CBoundingSphere *bSphere)
+bool CulledScene::intersectFrustum(BoundingSphere *bSphere)
 {
 	return m_frustum->isInside(bSphere);
 }
 
-int CCulledScene::getCullCount()
+int CulledScene::getCullCount()
 {
 	return m_cullCount;
 }
 
-void CCulledScene::doCreateGeometry()
+void CulledScene::doCreateGeometry()
 {
 	if (m_useCulling)
 		this->cull();
 
-	CScene::doCreateGeometry();
+	Scene::doCreateGeometry();
 }
 
-void CCulledScene::setUseCulling(bool flag)
+void CulledScene::setUseCulling(bool flag)
 {
 	m_useCulling = flag;
 }
 
-bool CCulledScene::getUseCulling()
+bool CulledScene::getUseCulling()
 {
 	return m_useCulling;
 }
 
-void CCulledScene::setCullView(CView *view)
+void CulledScene::setCullView(View *view)
 {
 	m_cullView = view;
 }
 
-CView* CCulledScene::getCullView()
+View* CulledScene::getCullView()
 {
 	return m_cullView;
 }

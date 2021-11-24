@@ -138,8 +138,8 @@ void tilePerspective(GLdouble fovy, GLdouble aspect,
 }
 
 // ------------------------------------------------------------
-CCamera::CCamera ()
-		:CView()
+Camera::Camera ()
+		:View()
 {
 	m_position.setComponents(0.0, 0.0, -10.0);
 	m_target.setComponents(0.0, 0.0, 0.0);
@@ -164,39 +164,39 @@ CCamera::CCamera ()
 }
 
 // ------------------------------------------------------------
-CCamera::~CCamera ()
+Camera::~Camera ()
 {
 
 }
 
 // ------------------------------------------------------------
-void CCamera::setPosition(GLdouble x, GLdouble y, GLdouble z)
+void Camera::setPosition(GLdouble x, GLdouble y, GLdouble z)
 {
 	m_position.setComponents(x, y, z);
 	calcOrientation();
 }
 
 // ------------------------------------------------------------
-void CCamera::setTarget(GLdouble x, GLdouble y, GLdouble z)
+void Camera::setTarget(GLdouble x, GLdouble y, GLdouble z)
 {
 	m_target.setComponents(x, y, z);
 	calcOrientation();
 }
 
 // ------------------------------------------------------------
-void CCamera::getTarget(GLdouble & x, GLdouble & y, GLdouble & z)
+void Camera::getTarget(GLdouble & x, GLdouble & y, GLdouble & z)
 {
 	m_target.getComponents(x, y, z);
 }
 
 // ------------------------------------------------------------
-void CCamera::getPosition(GLdouble & x, GLdouble & y, GLdouble & z)
+void Camera::getPosition(GLdouble & x, GLdouble & y, GLdouble & z)
 {
 	m_position.getComponents(x, y, z);
 }
 
 // ------------------------------------------------------------
-void CCamera::calcOrientation()
+void Camera::calcOrientation()
 {
 	double cx, cy, cz;
 	double ax, ay, az;
@@ -224,31 +224,31 @@ void CCamera::calcOrientation()
 }
 
 // ------------------------------------------------------------
-void CCamera::moveSideways(double d)
+void Camera::moveSideways(double d)
 {
 	if (m_cameraType==CT_NORMAL)
 		calcOrientation();
 
-	CVec3d direction;
+	Vec3d direction;
 	direction = m_sideways * d;
 	m_position += direction;
 	m_target += direction; 
 }
 
 // ------------------------------------------------------------
-void CCamera::moveVertical(double d)
+void Camera::moveVertical(double d)
 {
 	if (m_cameraType==CT_NORMAL)
 		calcOrientation();
 	
-	CVec3d direction;
+	Vec3d direction;
 	direction = m_up * d;
 	m_position += direction;
 	m_target += direction; 
 }
 
 // ------------------------------------------------------------
-void CCamera::moveDepth(double d)
+void Camera::moveDepth(double d)
 {
 	double dx, dy, dz;
 	double xt, yt, zt;
@@ -273,7 +273,7 @@ void CCamera::moveDepth(double d)
 }
 
 // ------------------------------------------------------------
-void CCamera::rotatePositionX(double angle)
+void Camera::rotatePositionX(double angle)
 {
 	double px, py, pz;
 	double tx, ty, tz;
@@ -316,7 +316,7 @@ void CCamera::rotatePositionX(double angle)
 }
 
 // ------------------------------------------------------------
-void CCamera::rotatePositionY(double angle)
+void Camera::rotatePositionY(double angle)
 {
 	double px, py, pz;
 	double tx, ty, tz;
@@ -351,13 +351,13 @@ void CCamera::rotatePositionY(double angle)
 }
 
 // ------------------------------------------------------------
-void CCamera::getForwardVector(double & vx, double & vy, double & vz)
+void Camera::getForwardVector(double & vx, double & vy, double & vz)
 {
 	m_forward.getComponents(vx,vy,vz);	
 }
 
 // ------------------------------------------------------------
-void CCamera::pickVector(int sx, int sy, double & vx, double & vy, double & vz)
+void Camera::pickVector(int sx, int sy, double & vx, double & vy, double & vz)
 {
 	double xx, yy;
 	double px, py, pz;
@@ -366,8 +366,8 @@ void CCamera::pickVector(int sx, int sy, double & vx, double & vy, double & vz)
 	int x, y, w, h;
 	double fov;
 
-	CVec3d  planePoint;
-	CVec3d  pickVector;
+	Vec3d  planePoint;
+	Vec3d  pickVector;
 
 	fov = m_fov * 2.0 * M_PI / 360.0;
 
@@ -397,7 +397,7 @@ void CCamera::pickVector(int sx, int sy, double & vx, double & vy, double & vz)
 }
 
 // ------------------------------------------------------------
-void CCamera::setPerspective(double fov, double zNear, double zFar)
+void Camera::setPerspective(double fov, double zNear, double zFar)
 {
 	m_fov = fov;
 	m_zNear = zNear;
@@ -405,7 +405,7 @@ void CCamera::setPerspective(double fov, double zNear, double zFar)
 }
 
 // ------------------------------------------------------------
-void CCamera::getPerspective(double & fov, double & zNear, double & zFar)
+void Camera::getPerspective(double & fov, double & zNear, double & zFar)
 {
 	fov = m_fov;
 	zNear = m_zNear;
@@ -413,7 +413,7 @@ void CCamera::getPerspective(double & fov, double & zNear, double & zFar)
 }
 
 // ------------------------------------------------------------
-void CCamera::rotateAbsolute(double alfa, double beta)
+void Camera::rotateAbsolute(double alfa, double beta)
 {
 	double px, py, pz;
 	double tx, ty, tz;
@@ -444,7 +444,7 @@ void CCamera::rotateAbsolute(double alfa, double beta)
 }
 
 // ------------------------------------------------------------
-void CCamera::getAbsoluteRotation(double &alfa, double &beta)
+void Camera::getAbsoluteRotation(double &alfa, double &beta)
 {
 	double px, py, pz;
 	double tx, ty, tz;
@@ -465,13 +465,13 @@ void CCamera::getAbsoluteRotation(double &alfa, double &beta)
 }
 
 // ------------------------------------------------------------
-void CCamera::getUpVector(double *v)
+void Camera::getUpVector(double *v)
 {
 	m_up.getComponents(v[0],v[1],v[2]);	
 }
 
 // ------------------------------------------------------------
-void CCamera::projectionTransform()
+void Camera::projectionTransform()
 {
 	if (m_stereo)
 		stereoTransform();
@@ -500,7 +500,7 @@ void CCamera::projectionTransform()
 }
 
 // ------------------------------------------------------------
-void CCamera::viewTransform()
+void Camera::viewTransform()
 {
 	GLdouble eyeX, eyeY, eyeZ;
 	GLdouble centerX, centerY, centerZ;
@@ -508,8 +508,8 @@ void CCamera::viewTransform()
 
 	if (m_stereo)
 	{
-		CVec3d pos;
-		CVec3d target;
+		Vec3d pos;
+		Vec3d target;
 
 		pos = m_position;
 		target = m_target;
@@ -539,7 +539,7 @@ void CCamera::viewTransform()
 			m_target.getComponents(centerX, centerY, centerZ);
 		else
 		{
-			CVec3d center = m_position + m_forward;
+			Vec3d center = m_position + m_forward;
 			center.getComponents(centerX, centerY, centerZ);
 		}
 	}
@@ -561,7 +561,7 @@ void CCamera::viewTransform()
 }
 
 // ------------------------------------------------------------
-void CCamera::getViewFrustum(CViewFrustum *frustum)
+void Camera::getViewFrustum(ViewFrustum *frustum)
 {
 	double x, y, z;
 	double v1[3];
@@ -577,12 +577,12 @@ void CCamera::getViewFrustum(CViewFrustum *frustum)
 
 	// Get all planes
 
-	CPlane* nearPlane   = frustum->getNearPlane();
-	CPlane* farPlane    = frustum->getFarPlane();
-	CPlane* leftPlane   = frustum->getLeftPlane();
-	CPlane* rightPlane  = frustum->getRightPlane();
-	CPlane* topPlane    = frustum->getTopPlane();
-	CPlane* bottomPlane = frustum->getBottomPlane();
+	Plane* nearPlane   = frustum->getNearPlane();
+	Plane* farPlane    = frustum->getFarPlane();
+	Plane* leftPlane   = frustum->getLeftPlane();
+	Plane* rightPlane  = frustum->getRightPlane();
+	Plane* topPlane    = frustum->getTopPlane();
+	Plane* bottomPlane = frustum->getBottomPlane();
 
 	// Get orientation vectors
 
@@ -651,7 +651,7 @@ void CCamera::getViewFrustum(CViewFrustum *frustum)
 
 
 // ------------------------------------------------------------
-void CCamera::moveAbsoluteDepth(double d)
+void Camera::moveAbsoluteDepth(double d)
 {
 	double dx, dy, dz;
 	double xt, yt, zt;
@@ -665,10 +665,10 @@ void CCamera::moveAbsoluteDepth(double d)
 }
 
 // ------------------------------------------------------------
-CVec3d& CCamera::pickVector(int x, int y)
+Vec3d& Camera::pickVector(int x, int y)
 {
 	double cx, cy, cz;
-	CVec3d& v = ivfGetTempVec3d();
+	Vec3d& v = ivfGetTempVec3d();
 
 	pickVector(x, y, cx, cy, cz);
 	v.setComponents(cx, cy, cz);
@@ -677,13 +677,13 @@ CVec3d& CCamera::pickVector(int x, int y)
 }
 
 // ------------------------------------------------------------
-CVec3d& CCamera::getPosition()
+Vec3d& Camera::getPosition()
 {
 	return m_position;
 }
 
 // ------------------------------------------------------------
-void CCamera::setForwardVector(CVec3d &vec)
+void Camera::setForwardVector(Vec3d &vec)
 {
 	m_forward = vec;
 	m_forward.normalize();
@@ -695,7 +695,7 @@ void CCamera::setForwardVector(CVec3d &vec)
 // By Paul Bourke
 // http://astronomy.swin.edu.au/~pbourke/opengl/stereogl/
 
-void CCamera::stereoTransform()
+void Camera::stereoTransform()
 {
 
 	double znear, zfar, fov;
@@ -705,7 +705,7 @@ void CCamera::stereoTransform()
 	double left, right, top, bottom;
 	double ratio = getAspect();
 	
-	CVec3d r;
+	Vec3d r;
 
 	getPerspective(fov, znear, zfar);
 
@@ -734,42 +734,42 @@ void CCamera::stereoTransform()
     glFrustum(left,right,bottom,top,znear,zfar);
 }
 
-void CCamera::setStereo(bool flag)
+void Camera::setStereo(bool flag)
 {
 	m_stereo = flag;
 }
 
-bool CCamera::getStereo()
+bool Camera::getStereo()
 {
 	return m_stereo;
 }
 
-void CCamera::setStereoEye(TStereoEye eye)
+void Camera::setStereoEye(TStereoEye eye)
 {
 	m_stereoEye = eye;
 }
 
-void CCamera::setEyeSeparation(double separation)
+void Camera::setEyeSeparation(double separation)
 {
 	m_eyeSeparation = separation;
 }
 
-double CCamera::getEyeSeparation()
+double Camera::getEyeSeparation()
 {
 	return m_eyeSeparation;
 }
 
-void CCamera::setType(TCameraType type)
+void Camera::setType(TCameraType type)
 {
 	m_cameraType = type;
 }
 
-CCamera::TCameraType CCamera::getType()
+Camera::TCameraType Camera::getType()
 {
 	return m_cameraType;
 }
 
-void CCamera::turn(double dx, double dy, double dz)
+void Camera::turn(double dx, double dy, double dz)
 {
 	m_forward.rotate(m_up, -dy);
 	m_sideways.rotate(m_up, -dy);
@@ -781,54 +781,54 @@ void CCamera::turn(double dx, double dy, double dz)
 	m_sideways.rotate(m_forward, -dz);
 }
 
-void CCamera::moveForward(double d)
+void Camera::moveForward(double d)
 {
 	m_position = m_position + m_forward*d;
 }
 
-CVec3d& CCamera::getTarget()
+Vec3d& Camera::getTarget()
 {
 	return m_target;
 }
 
-CVec3d& CCamera::getForwardVector()
+Vec3d& Camera::getForwardVector()
 {
 	return m_forward;
 }
 
-void CCamera::setTileRendering(bool flag)
+void Camera::setTileRendering(bool flag)
 {
 	m_tileRendering = flag;
 }
 
-bool CCamera::getTileRendering()
+bool Camera::getTileRendering()
 {
 	return m_tileRendering;
 }
 
-void CCamera::setJitter(bool flag)
+void Camera::setJitter(bool flag)
 {
 	m_jitter = flag;
 }
 
-bool CCamera::getJitter()
+bool Camera::getJitter()
 {
 	return m_jitter;
 }
 
-void CCamera::setJitterPixels(double dx, double dy)
+void Camera::setJitterPixels(double dx, double dy)
 {
 	m_jitterX = dx;
 	m_jitterY = dy;
 }
 
-void CCamera::getJitterPixels(double &dx, double &dy)
+void Camera::getJitterPixels(double &dx, double &dy)
 {
 	dx = m_jitterX;
 	dy = m_jitterY;
 }
 
-void CCamera::setTileRect(double left, double right, double bottom, double top)
+void Camera::setTileRect(double left, double right, double bottom, double top)
 {
 	m_tileLeft = left;
 	m_tileRight = right;
@@ -836,7 +836,7 @@ void CCamera::setTileRect(double left, double right, double bottom, double top)
 	m_tileTop = top;
 }
 
-void CCamera::getTileRect(double &left, double &right, double &bottom, double &top)
+void Camera::getTileRect(double &left, double &right, double &bottom, double &top)
 {
 	left = m_tileLeft;
 	right = m_tileRight;

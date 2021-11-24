@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CFileImage);
+IvfSmartPointer(FileImage);
 
 /**
  * Image file loader base class
@@ -41,21 +41,21 @@ IvfSmartPointer(CFileImage);
  *
  * @author Jonas Lindemann
  */
-class IVFIMAGE_API CFileImage : public CImage {
+class IVFIMAGE_API FileImage : public Image {
 private:
 	std::string m_fileName;
 public:
-	/** CFileImage constructor */
-	CFileImage();
+	/** FileImage constructor */
+	FileImage();
 
-	/** CFileImage constructor */
-	CFileImage(const std::string& name);
+	/** FileImage constructor */
+	FileImage(const std::string& name);
 
-	/** CFileImage destructor */
-	virtual ~CFileImage();
+	/** FileImage destructor */
+	virtual ~FileImage();
 
-	IvfClassInfo("CFileImage",CImage);
-	IvfStdFactory(CFileImage);
+	IvfClassInfo("FileImage",Image);
+	IvfStdFactory(FileImage);
 
 	/** Set filename of file to load */
 	void setFileName(const std::string& name);

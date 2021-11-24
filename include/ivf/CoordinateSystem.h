@@ -32,7 +32,7 @@
 #include <ivf/Grid.h>
 
 namespace ivf {
-IvfSmartPointer(CCoordinateSystem);
+IvfSmartPointer(CoordinateSystem);
 
 /**
  * Coordinate system interaction/shape class
@@ -41,20 +41,20 @@ IvfSmartPointer(CCoordinateSystem);
  * int the form of a grid with an attached coordinatesystem.
  *
  * This class will become OBSOLETE. @see CIvfConstructionPlane,
- * @see CIvfWorkplace and @see CUcs3d.
+ * @see CIvfWorkplace and @see Ucs3d.
  * @author Jonas Lindemann
  */
-class IVF_API CCoordinateSystem : public CComposite {
+class IVF_API CoordinateSystem : public Composite {
 public:
-	CGrid* getGrid();
+	Grid* getGrid();
 	/** CIvfCoordinateSystem constructor */
-	CCoordinateSystem ();
+	CoordinateSystem ();
 
 	/** CIvfCoordinateSystem destructor */
-	virtual ~CCoordinateSystem ();
+	virtual ~CoordinateSystem ();
 
-	IvfClassInfo("CCoordinateSystem",CComposite);
-	IvfStdFactory(CCoordinateSystem);
+	IvfClassInfo("CoordinateSystem",Composite);
+	IvfStdFactory(CoordinateSystem);
 
 	/** Set the state of the internal axis shape */
 	void setAxisState(TObjectState state);
@@ -80,10 +80,10 @@ public:
 	void setAxisType(int type);
 
 	/** Transform point to world coordinate system */
-	void transformWorld(CPoint3d* point);
+	void transformWorld(Point3d* point);
 
 	/** Transform point to local coordinate system */
-	void transform(CPoint3d* point);
+	void transform(Point3d* point);
 
 	/** Transform (sx, sy, sz) to world coordinate system */
 	void transformWorld(double sx, double sy, double sz, double &wx, double &wy,  double &wz);
@@ -100,7 +100,7 @@ public:
 	double getSnapUnit();
 
 	/** Align shape with local coordinate system */
-	void alignShape(CShape* shape);
+	void alignShape(Shape* shape);
 
 	/** Determine plane intersection */
 	void intersect(double x0, double y0, double z0, double i, double j, double k, double &x, double &y, double &z);
@@ -116,7 +116,7 @@ public:
 	void getRotation(double & vx, double & vy, double & vz, double & theta);
 
 	/** Returns axis shape */
-	CAxis* getAxisShape();
+	Axis* getAxisShape();
 
 	// Unsupported
 
@@ -124,12 +124,12 @@ public:
 private:
 	double m_snapUnit;
 	//CIvfAxis* m_axis;
-	//COldGrid* m_grid;
-	CGrid* m_grid;
+	//OldGrid* m_grid;
+	Grid* m_grid;
 
-	CVec3d m_zAxis;
-	CVec3d m_yAxis;
-	CVec3d m_xAxis;
+	Vec3d m_zAxis;
+	Vec3d m_yAxis;
+	Vec3d m_xAxis;
 
 	double m_theta;
 	double m_vz;
@@ -142,10 +142,10 @@ private:
 /*  	Matrix<double> m_pointTransformed; */
 /*  	Matrix<double> m_pointWorld; */
 
-	CMat4d m_transformationMatrix;
-	CMat4d m_inversionMatrix;
-	CVec4d m_pointWorld;
-	CVec4d m_pointTransformed;
+	Mat4d m_transformationMatrix;
+	Mat4d m_inversionMatrix;
+	Vec4d m_pointWorld;
+	Vec4d m_pointTransformed;
 
 protected:
 	void calcMatrix();

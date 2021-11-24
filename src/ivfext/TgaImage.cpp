@@ -26,26 +26,26 @@
 
 using namespace ivf;
 
-CTgaImage::CTgaImage()
+TgaImage::TgaImage()
 {
 	m_alphaChannel = false;
 }
 
-CTgaImage::CTgaImage(const std::string& name)
-:CFileImage(name)
+TgaImage::TgaImage(const std::string& name)
+:FileImage(name)
 {
 
 	m_alphaChannel = false;
 }
 
 
-CTgaImage::~CTgaImage()
+TgaImage::~TgaImage()
 {
 
 }
 
 
-bool CTgaImage::read()
+bool TgaImage::read()
 {
 	FILE* inf;
 
@@ -70,13 +70,13 @@ bool CTgaImage::read()
 
 
 
-void CTgaImage::setAlphaChannel(bool flag)
+void TgaImage::setAlphaChannel(bool flag)
 {
 	m_alphaChannel = flag;
 }
 
 
-bool CTgaImage::LoadTGA(Texture * texture, char * filename)	// Load a TGA file
+bool TgaImage::LoadTGA(Texture * texture, char * filename)	// Load a TGA file
 {
 	FILE * fTGA;												// File pointer to texture file
 	fTGA = fopen(filename, "rb");								// Open file for reading
@@ -115,7 +115,7 @@ bool CTgaImage::LoadTGA(Texture * texture, char * filename)	// Load a TGA file
 	return true;															// All went well, continue on
 }
 
-bool CTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * fTGA)	// Load an uncompressed TGA (note, much of this code is based on NeHe's
+bool TgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * fTGA)	// Load an uncompressed TGA (note, much of this code is based on NeHe's
 {																			// TGA Loading code nehe.gamedev.net)
 	if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)					// Read TGA header
 	{
@@ -184,7 +184,7 @@ bool CTgaImage::LoadUncompressedTGA(Texture * texture, char * filename, FILE * f
 	return true;															// Return success
 }
 
-bool CTgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTGA)		// Load COMPRESSED TGAs
+bool TgaImage::LoadCompressedTGA(Texture * texture, char * filename, FILE * fTGA)		// Load COMPRESSED TGAs
 {
 	if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)					// Attempt to read header
 	{

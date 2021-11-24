@@ -30,7 +30,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CQuadPlane);
+IvfSmartPointer(QuadPlane);
 
 /**
  * Quad plane class
@@ -41,7 +41,7 @@ IvfSmartPointer(CQuadPlane);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CQuadPlane : public CQuadSet {
+class IVF_API QuadPlane : public QuadSet {
 public:
 	enum TPlaneOrientation {
 		PO_XY,
@@ -57,14 +57,14 @@ private:
 	TPlaneOrientation m_planeOrientation;
 	void updateTextureCoords();
 public:
-	/** CQuadPlane constructor */
-	CQuadPlane();
+	/** QuadPlane constructor */
+	QuadPlane();
 
-	/** CQuadPlane destructor */
-	virtual ~CQuadPlane();
+	/** QuadPlane destructor */
+	virtual ~QuadPlane();
 
-	IvfClassInfo("CQuadPlane",CQuadSet);
-	IvfStdFactory(CQuadPlane);
+	IvfClassInfo("QuadPlane",QuadSet);
+	IvfStdFactory(QuadPlane);
 
 	/** Flips texture coordinates */
 	void flipVert();
@@ -82,7 +82,7 @@ public:
 	 *
 	 * Calculates ratio and modifies the plane size
 	 */
-	void setTexture(CTexture* texture);
+	void setTexture(Texture* texture);
 
 	/**
 	 * Set size of plane

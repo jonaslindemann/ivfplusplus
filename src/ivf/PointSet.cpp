@@ -28,21 +28,21 @@ using namespace ivf;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CPointSet::CPointSet()
+PointSet::PointSet()
 {
 	m_useColor = false;
 	m_pointSize = 1;
 }
 
-CPointSet::~CPointSet()
+PointSet::~PointSet()
 {
 
 }
 
-void CPointSet::doCreateGeometry()
+void PointSet::doCreateGeometry()
 {
-	CIndex* coordIdx;
-	CIndex* colorIdx;
+	Index* coordIdx;
+	Index* colorIdx;
 	long i, j;
 	int oldSize;
 
@@ -72,8 +72,8 @@ void CPointSet::doCreateGeometry()
 			if (m_useColor)
 				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 			else
-				if (CShape::getMaterial()!=nullptr)
-					CShape::getMaterial()->render();
+				if (Shape::getMaterial()!=nullptr)
+					Shape::getMaterial()->render();
 				else
 					glColor3f(1.0f, 1.0f, 1.0f);
 
@@ -87,22 +87,22 @@ void CPointSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CPointSet::setUseColor(bool flag)
+void PointSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CPointSet::getUseColor()
+bool PointSet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CPointSet::setPointSize(int size)
+void PointSet::setPointSize(int size)
 {
 	m_pointSize = size;
 }
 
-int CPointSet::getPointSize()
+int PointSet::getPointSize()
 {
 	return m_pointSize;
 }

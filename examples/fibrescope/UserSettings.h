@@ -36,18 +36,18 @@
 #define FIBRE_BAND2 1
 #define FIBRE_EXTRUSION 2
 
-IvfStdPointer(CUserSettings);
+IvfStdPointer(UserSettings);
 
-class CUserSettings : public ivf::CBase {
+class UserSettings : public ivf::Base {
 private:
-	static CUserSettings* m_instance;
-	static CSingletonDestroyer<CUserSettings> m_destroyer;
+	static UserSettings* m_instance;
+	static SingletonDestroyer<UserSettings> m_destroyer;
 
-	ivf::CMaterialPtr m_connectionMaterial;
-	CColorMapPtr m_colorMap;
-	ivf::CCameraPtr m_camera;
+	ivf::MaterialPtr m_connectionMaterial;
+	ColorMapPtr m_colorMap;
+	ivf::CameraPtr m_camera;
 
-	std::vector<ivf::CVec3dPtr> m_highlightPoints;
+	std::vector<ivf::Vec3dPtr> m_highlightPoints;
 	std::vector<double> m_highlightRadius;
 
 	double m_scaleFactor;
@@ -66,7 +66,7 @@ private:
 
 	double m_breakageLimit;
 public:
-	static CUserSettings* getInstance();
+	static UserSettings* getInstance();
 
 	void setScaleFactor(double factor);
 	double getScaleFactor();
@@ -86,14 +86,14 @@ public:
 	double getConnectionSize();
 	void setConnectionSize(double size);
 
-	void setColorMap(CColorMap* colorMap);
-	CColorMap* getColorMap();
+	void setColorMap(ColorMap* colorMap);
+	ColorMap* getColorMap();
 
-	void setConnectionMaterial(ivf::CMaterial* material);
-	ivf::CMaterial* getConnectionMaterial();
+	void setConnectionMaterial(ivf::Material* material);
+	ivf::Material* getConnectionMaterial();
 
-	void setCamera(ivf::CCamera* camera);
-	ivf::CCamera* getCamera();
+	void setCamera(ivf::Camera* camera);
+	ivf::Camera* getCamera();
 
 	void setExtrusionSides(int sides);
 	int getExtrusionSides();
@@ -117,9 +117,9 @@ public:
 
 protected:
 	/** Protected constructor (do not use) */
-	CUserSettings();
-	~CUserSettings();
-	friend class CSingletonDestroyer<CUserSettings>;
+	UserSettings();
+	~UserSettings();
+	friend class SingletonDestroyer<UserSettings>;
 };
 
 #endif 

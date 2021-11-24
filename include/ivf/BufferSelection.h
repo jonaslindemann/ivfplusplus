@@ -31,10 +31,10 @@
 
 namespace ivf {
 
-IvfSmartPointer(CBufferSelection);
+IvfSmartPointer(BufferSelection);
 
-typedef std::vector<CShape*> CIvfSelectedShapesVector;
-typedef std::vector<CShape*>::iterator CIvfSelectedShapesIterator;
+typedef std::vector<Shape*> SelectedShapesVector;
+typedef std::vector<Shape*>::iterator SelectedShapesIterator;
 
 /**
  * Buffer selection class
@@ -70,12 +70,12 @@ typedef std::vector<CShape*>::iterator CIvfSelectedShapesIterator;
  *		m_selection->pick(x, y);
  *		if (m_selection->getSelectedShape()!=nullptr)
  *		{
- *			m_selection->getSelectedShape()->setHighlight(CShape::HS_ON);
+ *			m_selection->getSelectedShape()->setHighlight(Shape::HS_ON);
  *			redraw();
  *		}
  *		else
  *		{
- *			m_scene->setHighlightChildren(CShape::HS_OFF);
+ *			m_scene->setHighlightChildren(Shape::HS_OFF);
  *			redraw();
  *		}
  *	}
@@ -86,42 +86,42 @@ typedef std::vector<CShape*>::iterator CIvfSelectedShapesIterator;
  *		if (m_selection->getSize()!=0)
  *		{
  *			for (i=0; i<m_selection->getSize(); i++)
- *				m_selection->getSelectedShape(i)->setHighlight(CShape::HS_ON);
+ *				m_selection->getSelectedShape(i)->setHighlight(Shape::HS_ON);
  *
  *			redraw();
  *		}
  *		else
  *		{
- *			m_scene->setHighlightChildren(CShape::HS_OFF);
+ *			m_scene->setHighlightChildren(Shape::HS_OFF);
  *			redraw();
  *		}
  *	}
  * \endcode 
  * @author Jonas Lindemann
  */
-class IVF_API CBufferSelection : public CBase {
+class IVF_API BufferSelection : public Base {
 private:
-	CShape* m_selectedShape;
-	CComposite* m_composite;
-	CView* m_camera;
-	std::vector<CShape*> m_allObjects;
+	Shape* m_selectedShape;
+	Composite* m_composite;
+	View* m_camera;
+	std::vector<Shape*> m_allObjects;
 
-	std::vector<CShape*> m_selectedShapes;
+	std::vector<Shape*> m_selectedShapes;
 
 	int m_childCount;
 	GLuint m_selectBuf[512];
 
-	void nameChildren(CShape* shape);
+	void nameChildren(Shape* shape);
 	void processHits(GLint hits, GLuint buffer []);
 public:
 	/** CIvfBufferSelection constructor */
-	CBufferSelection();
+	BufferSelection();
 
 	/** CIvfBufferSelection destructor */
-	virtual ~CBufferSelection();
+	virtual ~BufferSelection();
 	
-	IvfClassInfo("CIvfBufferSelection",CBase);
-	IvfStdFactory(CBufferSelection);
+	IvfClassInfo("CIvfBufferSelection",Base);
+	IvfStdFactory(BufferSelection);
 
 	/** 
 	 * Initiates a object selection
@@ -152,16 +152,16 @@ public:
 	 * object selection list.
 	 * @see update
 	 */
-	void setComposite(CComposite* composite);
+	void setComposite(Composite* composite);
 
 	/** Returns the composite with objects used in the selection */
-	CComposite* getComposite();
+	Composite* getComposite();
 
 	/** Sets the view used for selection (required)*/
-	void setView(CView* view);
+	void setView(View* view);
 
 	/** Returns view used for selection (required) */
-	CView* getView();
+	View* getView();
 	
 	/** 
 	 * Returns the topmost selected shape.
@@ -169,7 +169,7 @@ public:
 	 * Returns nullptr if no object is selected or the selection
 	 * operation failed.
 	 */
-	CShape* getSelectedShape();
+	Shape* getSelectedShape();
 
 	/** Return the total number of selected shapes */
 	int getSize();
@@ -180,14 +180,14 @@ public:
 	 * Returns nullptr if no object is selected or the selection
 	 * operation failed.
 	 */
-	CShape* getSelectedShape(int idx);
+	Shape* getSelectedShape(int idx);
 
 	/**
 	 * Returns selected shapes
 	 *
 	 * Returns a STL vector of the selected shapes.
 	 */
-	CIvfSelectedShapesVector& getSelectedShapes();
+	SelectedShapesVector& getSelectedShapes();
 };
 /** \example selection.cpp
  * This is an example of how to use the CIvfBufferSelection

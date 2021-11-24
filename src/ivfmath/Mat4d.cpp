@@ -33,7 +33,7 @@ const int ivfMaxTempMatrix = 16;
 // LU_Decompose and LU_Backsub are from Steve Hollasch, Microsoft
 //
 
-int  CMat4d::LU_Decompose  (double matrix[4][4], int* index)
+int  Mat4d::LU_Decompose  (double matrix[4][4], int* index)
 {
 #ifdef WIN32
     register int    i, j, k;		/* Loop Indices */
@@ -105,7 +105,7 @@ int  CMat4d::LU_Decompose  (double matrix[4][4], int* index)
     return 1;
 }
 
-void  CMat4d::LU_Backsub  (double matrix[4][4], int* index, double* B)
+void  Mat4d::LU_Backsub  (double matrix[4][4], int* index, double* B)
 {
 #ifdef WIN32
     register int    i,j;
@@ -141,10 +141,10 @@ void  CMat4d::LU_Backsub  (double matrix[4][4], int* index, double* B)
     }
 }
 
-CMat4d& ivf::ivfGetTempMatrix4d()
+Mat4d& ivf::ivfGetTempMatrix4d()
 {
 	static int nBuf = 0;
-	static CMat4d buf[ivfMaxTempMatrix];
+	static Mat4d buf[ivfMaxTempMatrix];
 	
 	if (nBuf==ivfMaxTempMatrix) nBuf = 0;
 
@@ -154,12 +154,12 @@ CMat4d& ivf::ivfGetTempMatrix4d()
 }
 
 
-CMat4d::CMat4d()
+Mat4d::Mat4d()
 {
 	zero();	
 }
 
-CMat4d::CMat4d(CMat4d& M)
+Mat4d::Mat4d(Mat4d& M)
 {
 	int i, j;
 
@@ -168,7 +168,7 @@ CMat4d::CMat4d(CMat4d& M)
 			m_matrix[i][j] = M.m_matrix[i][j];
 }
 
-CMat4d::CMat4d(double scalar)
+Mat4d::Mat4d(double scalar)
 {
 	int i, j;
 
@@ -177,12 +177,12 @@ CMat4d::CMat4d(double scalar)
 			m_matrix[i][j] = scalar;
 }
 
-CMat4d::~CMat4d()
+Mat4d::~Mat4d()
 {
 
 }
 
-void CMat4d::zero()
+void Mat4d::zero()
 {
 	int i, j;
 
@@ -191,7 +191,7 @@ void CMat4d::zero()
 			m_matrix[i][j] = 0.0;
 }
 
-void CMat4d::identity()
+void Mat4d::identity()
 {
 	int i, j;
 
@@ -205,7 +205,7 @@ void CMat4d::identity()
 		}
 }
 
-void CMat4d::one()
+void Mat4d::one()
 {
 	int i, j;
 
@@ -214,7 +214,7 @@ void CMat4d::one()
 			m_matrix[i][j] = 1.0;
 }
 
-void CMat4d::setRow(int row, double v1, double v2, double v3, double v4)
+void Mat4d::setRow(int row, double v1, double v2, double v3, double v4)
 {
 	if ((row>=1)&&(row<=4))
 	{
@@ -225,7 +225,7 @@ void CMat4d::setRow(int row, double v1, double v2, double v3, double v4)
 	}
 }
 
-void CMat4d::setColumn(int col, double v1, double v2, double v3, double v4)
+void Mat4d::setColumn(int col, double v1, double v2, double v3, double v4)
 {
 	if ((col>=1)&&(col<=4))
 	{
@@ -236,7 +236,7 @@ void CMat4d::setColumn(int col, double v1, double v2, double v3, double v4)
 	}
 }
 
-double CMat4d::getComponent(int row, int col)
+double Mat4d::getComponent(int row, int col)
 {
 	if ((col>=0)&&(col<=4))
 		if ((row>=0)&&(row<=4))
@@ -247,7 +247,7 @@ double CMat4d::getComponent(int row, int col)
 		return 0.0;
 }
 
-void CMat4d::setComponent(int row, int col, double value)
+void Mat4d::setComponent(int row, int col, double value)
 {
 	if ((col>=0)&&(col<=4))
 		if ((row>=0)&&(row<=4))
@@ -255,7 +255,7 @@ void CMat4d::setComponent(int row, int col, double value)
 }
 
 #ifdef IVF_HAVE_IOSTREAM
-void CMat4d::print(std::ostream &out)
+void Mat4d::print(std::ostream &out)
 {
 	int i, j;
 
@@ -287,7 +287,7 @@ void CIvfMat4d::print(ostream &out)
 #endif
 
 
-CMat4d& CMat4d::operator=(double a)
+Mat4d& Mat4d::operator=(double a)
 {
 	int i, j;
 
@@ -298,7 +298,7 @@ CMat4d& CMat4d::operator=(double a)
 	return *this;
 }
 
-CMat4d& CMat4d::operator=(CMat4d &A)
+Mat4d& Mat4d::operator=(Mat4d &A)
 {
 	int i, j;
 
@@ -309,7 +309,7 @@ CMat4d& CMat4d::operator=(CMat4d &A)
 	return *this;
 }
 
-CMat4d& CMat4d::operator+=(CMat4d &A)
+Mat4d& Mat4d::operator+=(Mat4d &A)
 {
 	int i, j;
 
@@ -320,7 +320,7 @@ CMat4d& CMat4d::operator+=(CMat4d &A)
 	return *this;
 }
 
-CMat4d& CMat4d::operator-=(CMat4d &A)
+Mat4d& Mat4d::operator-=(Mat4d &A)
 {
 	int i, j;
 
@@ -331,9 +331,9 @@ CMat4d& CMat4d::operator-=(CMat4d &A)
 	return *this;
 }
 
-CMat4d& CMat4d::t()
+Mat4d& Mat4d::t()
 {
-	CMat4d& R = ivfGetTempMatrix4d();
+	Mat4d& R = ivfGetTempMatrix4d();
 
 	int i, j;
 
@@ -344,9 +344,9 @@ CMat4d& CMat4d::t()
 	return R;
 }
 
-CMat4d& CMat4d::operator*(CMat4d &A)
+Mat4d& Mat4d::operator*(Mat4d &A)
 {
-	CMat4d& R = ivfGetTempMatrix4d();
+	Mat4d& R = ivfGetTempMatrix4d();
 
 	int i, j, k;
 
@@ -358,9 +358,9 @@ CMat4d& CMat4d::operator*(CMat4d &A)
 	return R;
 }
 
-CVec4d& CMat4d::operator*(CVec4d &v)
+Vec4d& Mat4d::operator*(Vec4d &v)
 {
-	CVec4d& r = ivfGetTempVec4d();
+	Vec4d& r = ivfGetTempVec4d();
 
 	double vector[4];
 
@@ -381,9 +381,9 @@ CVec4d& CMat4d::operator*(CVec4d &v)
 }
 
 /*
-CVec4d CMat4d::operator*(CVec4d &v)
+Vec4d Mat4d::operator*(Vec4d &v)
 {
-	CVec4d r;
+	Vec4d r;
 
 	double vector[4];
 
@@ -404,9 +404,9 @@ CVec4d CMat4d::operator*(CVec4d &v)
 }
 */
 
-CMat4d& CMat4d::operator *(double scalar)
+Mat4d& Mat4d::operator *(double scalar)
 {
-	CMat4d& R = ivfGetTempMatrix4d();
+	Mat4d& R = ivfGetTempMatrix4d();
 
 	int i, j;
 
@@ -417,9 +417,9 @@ CMat4d& CMat4d::operator *(double scalar)
 	return R;
 }
 
-CMat4d& CMat4d::operator /(double scalar)
+Mat4d& Mat4d::operator /(double scalar)
 {
-	CMat4d& R = ivfGetTempMatrix4d();
+	Mat4d& R = ivfGetTempMatrix4d();
 
 	int i, j;
 
@@ -430,9 +430,9 @@ CMat4d& CMat4d::operator /(double scalar)
 	return R;
 }
 
-CMat4d& CMat4d::operator +(CMat4d &A)
+Mat4d& Mat4d::operator +(Mat4d &A)
 {
-	CMat4d& R = ivfGetTempMatrix4d();
+	Mat4d& R = ivfGetTempMatrix4d();
 
 	int i, j;
 
@@ -443,9 +443,9 @@ CMat4d& CMat4d::operator +(CMat4d &A)
 	return R;
 }
 
-CMat4d& CMat4d::inv()
+Mat4d& Mat4d::inv()
 {
-	CMat4d& R = ivfGetTempMatrix4d();
+	Mat4d& R = ivfGetTempMatrix4d();
 
 	//
 	// Code from Steve Hollasch, Microsoft
@@ -489,7 +489,7 @@ CMat4d& CMat4d::inv()
 	return R;
 }
 
-void CMat4d::translate(double tx, double ty, double tz)
+void Mat4d::translate(double tx, double ty, double tz)
 {
 	zero();
 	m_matrix[0][0] = 1.0;
@@ -501,7 +501,7 @@ void CMat4d::translate(double tx, double ty, double tz)
 	m_matrix[2][3] = tz;
 }
 
-void CMat4d::rotateX(double angle)
+void Mat4d::rotateX(double angle)
 {
 	double s, c;
 
@@ -517,7 +517,7 @@ void CMat4d::rotateX(double angle)
 	m_matrix[2][2] = c;
 }
 
-void CMat4d::rotateY(double angle)
+void Mat4d::rotateY(double angle)
 {
 	double s, c;
 	
@@ -533,7 +533,7 @@ void CMat4d::rotateY(double angle)
 	m_matrix[2][2] = c;
 }
 
-void CMat4d::rotateZ(double angle)
+void Mat4d::rotateZ(double angle)
 {
 	double s, c;
 	
@@ -549,7 +549,7 @@ void CMat4d::rotateZ(double angle)
 	m_matrix[1][1] = c;
 }
 
-void CMat4d::scaling(double sx, double sy, double sz)
+void Mat4d::scaling(double sx, double sy, double sz)
 {
 	m_matrix[3][3] = 1.0;
 	m_matrix[0][0] = sx;
@@ -565,7 +565,7 @@ void CMat4d::scaling(double sx, double sy, double sz)
    [ P.z' ]   [ xz*c_1-ys  yz*c_1+xs  zz*c_1+c  ]   [ P.z ]
 */
 
-void CMat4d::rotate(double vx, double vy, double vz, double theta)
+void Mat4d::rotate(double vx, double vy, double vz, double theta)
 {
 	double s, c;
 	double c_1;

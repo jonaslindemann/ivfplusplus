@@ -23,15 +23,15 @@
 
 using namespace ivf;
 
-CSlerpSegment::CSlerpSegment()
+SlerpSegment::SlerpSegment()
 {
-	m_q1 = new CQuat();
+	m_q1 = new Quat();
 	m_q1->addReference();
-	m_q2 = new CQuat();
+	m_q2 = new Quat();
 	m_q2->addReference();
 }
 
-CSlerpSegment::~CSlerpSegment()
+SlerpSegment::~SlerpSegment()
 {
 	if (m_q1!=nullptr)
 	{
@@ -48,9 +48,9 @@ CSlerpSegment::~CSlerpSegment()
 	}
 }
 
-CQuat& CSlerpSegment::getQuat(double t)
+Quat& SlerpSegment::getQuat(double t)
 {
-	CQuat& s = ivfGetTempQuat();
+	Quat& s = ivfGetTempQuat();
 	double k1, k2;
 
 	if ((t>=0.0)&&(t<=1.0))
@@ -73,7 +73,7 @@ CQuat& CSlerpSegment::getQuat(double t)
 	}
 }
 
-void CSlerpSegment::initSlerp()
+void SlerpSegment::initSlerp()
 {
 	double qx, qy, qz, qw;
 	double rx, ry, rz, rw;
@@ -83,7 +83,7 @@ void CSlerpSegment::initSlerp()
 	m_theta = acos(qx*rx + qy*ry + qz*rz + qw*rw);
 }
 
-const void CSlerpSegment::setStartQuat(CQuat* q)
+const void SlerpSegment::setStartQuat(Quat* q)
 {
 	if (m_q1!=nullptr)
 	{
@@ -97,7 +97,7 @@ const void CSlerpSegment::setStartQuat(CQuat* q)
 	initSlerp();
 }
 
-const void CSlerpSegment::setEndQuat(CQuat* q)
+const void SlerpSegment::setEndQuat(Quat* q)
 {
 	if (m_q2!=nullptr)
 	{
@@ -111,7 +111,7 @@ const void CSlerpSegment::setEndQuat(CQuat* q)
 	initSlerp();
 }
 
-void CSlerpSegment::update()
+void SlerpSegment::update()
 {
 	initSlerp();
 }

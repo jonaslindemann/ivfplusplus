@@ -30,7 +30,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CFileReader);
+IvfSmartPointer(FileReader);
 
 /**
  * Base class for a file reader
@@ -39,12 +39,12 @@ IvfSmartPointer(CFileReader);
  * a text based 3d geometry file. It also serves as a
  * base class for file readers. File readers should 
  * override the read() method and assign imported 
- * geometry using the setShape() method in the CFileBase
+ * geometry using the setShape() method in the FileBase
  * class.
  *
  * @author Jonas Lindemann
  */
-class IVFFILE_API CFileReader : public CFileBase {
+class IVFFILE_API FileReader : public FileBase {
 private:
 	char m_rawRow[256];
 	double m_min[3];
@@ -52,14 +52,14 @@ private:
 	double m_scaleFactor;
 	bool m_reverseFace;
 public:
-	/** CFileReader constructor */
-	CFileReader();
+	/** FileReader constructor */
+	FileReader();
 
-	/** CFileReader destructor */
-	virtual ~CFileReader();
+	/** FileReader destructor */
+	virtual ~FileReader();
 
-	IvfClassInfo("CFileReader",CFileBase);
-	IvfStdFactory(CFileReader);
+	IvfClassInfo("FileReader",FileBase);
+	IvfStdFactory(FileReader);
 
 	/** 
 	 * Returns min/max size of read geometry 

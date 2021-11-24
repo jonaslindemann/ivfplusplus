@@ -23,20 +23,20 @@
 
 using namespace ivf;
 
-CSpline3d::CSpline3d()
+Spline3d::Spline3d()
 {
- 	m_start = new CVec3d();
- 	m_end = new CVec3d();
+ 	m_start = new Vec3d();
+ 	m_end = new Vec3d();
 	m_size = -1;
 }
 
-CSpline3d::~CSpline3d()
+Spline3d::~Spline3d()
 {
 	delete m_start;
 	delete m_end;
 }
 
-void CSpline3d::setSize(int size)
+void Spline3d::setSize(int size)
 {
 	if (size>1)
 		m_size = size;
@@ -47,12 +47,12 @@ void CSpline3d::setSize(int size)
 	updateSpline();
 }
 
-int CSpline3d::getSize()
+int Spline3d::getSize()
 {
-	return m_points.size();
+	return static_cast<int>(m_points.size());
 }
 
-void CSpline3d::clear()
+void Spline3d::clear()
 {
 	unsigned int i;
 
@@ -66,7 +66,7 @@ void CSpline3d::clear()
 	m_beta.clear();
 }
 
-void CSpline3d::initSpline()
+void Spline3d::initSpline()
 {
 	if (m_size>1)
 	{
@@ -78,7 +78,7 @@ void CSpline3d::initSpline()
 
 		for (i=0; i<m_size; i++)
 		{
-			CVec3d* point = new CVec3d();
+			Vec3d* point = new Vec3d();
 			m_points.push_back(point);
 			m_tau.push_back(0.0);
 			m_gamma.push_back(0.0);
@@ -89,7 +89,7 @@ void CSpline3d::initSpline()
 		
 		for (i=0; i<m_size-1 ; i++)
 		{
-			CSplineSegment3d* spline = new CSplineSegment3d();
+			SplineSegment3d* spline = new SplineSegment3d();
 			m_segments.push_back(spline);
 			spline->setStartPoint(m_points[i]);
 			spline->setEndPoint(m_points[i+1]);
@@ -98,7 +98,7 @@ void CSpline3d::initSpline()
 }
 
 /** Retrieve specified point on spline. */
-CVec3d* CSpline3d::getPoint(int idx)
+Vec3d* Spline3d::getPoint(int idx)
 {
 	if ((idx>=0)&&(idx<(int)m_points.size()))
 		return m_points[idx];
@@ -106,7 +106,7 @@ CVec3d* CSpline3d::getPoint(int idx)
 		return nullptr;
 }
 /** No descriptions */
-void CSpline3d::updateSpline()
+void Spline3d::updateSpline()
 {
 	int i;
 
@@ -115,12 +115,12 @@ void CSpline3d::updateSpline()
 
 		// Handle first point
 
-		CSplineSegment3d* splineLeft = m_segments[0];
+		SplineSegment3d* splineLeft = m_segments[0];
 
-		CVec3d* tangentLeft = splineLeft->getStartDirection();
+		Vec3d* tangentLeft = splineLeft->getStartDirection();
 
-		CVec3d* point = splineLeft->getStartPoint();
-		CVec3d* pointRight = splineLeft->getEndPoint();
+		Vec3d* point = splineLeft->getStartPoint();
+		Vec3d* pointRight = splineLeft->getEndPoint();
 
 		*m_start = *point;
 
@@ -136,15 +136,15 @@ void CSpline3d::updateSpline()
 		
 		for (i=1; i<m_size-1; i++)
 		{
-			CSplineSegment3d* splineLeft = m_segments[i-1];
-			CSplineSegment3d* splineRight = m_segments[i];
+			SplineSegment3d* splineLeft = m_segments[i-1];
+			SplineSegment3d* splineRight = m_segments[i];
 
-			CVec3d* tangentLeft = splineLeft->getEndDirection();
-			CVec3d* tangentRight = splineRight->getStartDirection();
+			Vec3d* tangentLeft = splineLeft->getEndDirection();
+			Vec3d* tangentRight = splineRight->getStartDirection();
 
-			CVec3d* pointLeft = splineLeft->getStartPoint();
-			CVec3d* point = splineLeft->getEndPoint();
-			CVec3d* pointRight = splineRight->getEndPoint();
+			Vec3d* pointLeft = splineLeft->getStartPoint();
+			Vec3d* point = splineLeft->getEndPoint();
+			Vec3d* pointRight = splineRight->getEndPoint();
 
 			double t, g, b;
 
@@ -161,11 +161,11 @@ void CSpline3d::updateSpline()
 
 		// Handle last point
 
-		CSplineSegment3d* splineRight = m_segments[m_segments.size()-1];
+		SplineSegment3d* splineRight = m_segments[m_segments.size()-1];
 
-		CVec3d* tangentRight = splineRight->getEndDirection();
+		Vec3d* tangentRight = splineRight->getEndDirection();
 
-		CVec3d* pointLeft = splineRight->getStartPoint();
+		Vec3d* pointLeft = splineRight->getStartPoint();
 		point = splineRight->getEndPoint();
 
 		*m_end = *point;
@@ -180,7 +180,7 @@ void CSpline3d::updateSpline()
 }
 
 /** No descriptions */
-CVec3d& CSpline3d::getPosition(double t)
+Vec3d& Spline3d::getPosition(double t)
 {
 	int segment = (int)t;
 
@@ -196,13 +196,13 @@ CVec3d& CSpline3d::getPosition(double t)
 }
 
 /** No descriptions */
-void CSpline3d::update()
+void Spline3d::update()
 {
 	updateSpline();
 }
 
 /** No descriptions */
-void CSpline3d::setTension(int idx, double value)
+void Spline3d::setTension(int idx, double value)
 {
 	if ((idx>=0)&&(idx<(int)m_points.size()))
 	{
@@ -212,7 +212,7 @@ void CSpline3d::setTension(int idx, double value)
 }
 
 /** No descriptions */
-void CSpline3d::setContinuity(int idx, double value)
+void Spline3d::setContinuity(int idx, double value)
 {
 	if ((idx>=0)&&(idx<(int)m_points.size()))
 	{
@@ -222,7 +222,7 @@ void CSpline3d::setContinuity(int idx, double value)
 }
 
 /** No descriptions */
-void CSpline3d::setTangentWeight(int idx, double value)
+void Spline3d::setTangentWeight(int idx, double value)
 {
 	if ((idx>=0)&&(idx<(int)m_points.size()))
 	{
@@ -231,7 +231,7 @@ void CSpline3d::setTangentWeight(int idx, double value)
 	}
 }
 
-CVec3d& CSpline3d::getTangent(double t)
+Vec3d& Spline3d::getTangent(double t)
 {
 	int segment = (int)t;
 
@@ -246,7 +246,7 @@ CVec3d& CSpline3d::getTangent(double t)
 		return *m_segments[0]->getTangent(0.0);
 }
 
-double CSpline3d::getSpeed(double t)
+double Spline3d::getSpeed(double t)
 {
 	int segment = (int)t;
 

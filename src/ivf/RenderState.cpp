@@ -26,36 +26,36 @@
 
 using namespace ivf;
 
-CRenderState::CRenderState()
+RenderState::RenderState()
 {
 
 }
 
-CRenderState::~CRenderState()
+RenderState::~RenderState()
 {
 
 }
 
-void CRenderState::apply()
+void RenderState::apply()
 {
 	doSaveState();
 	doState();
 }
 
-void CRenderState::remove()
+void RenderState::remove()
 {
 	doRestoreState();
 }
 
-void CRenderState::doState()
+void RenderState::doState()
 {
 
 }
 
-void CRenderState::doSaveState()
+void RenderState::doSaveState()
 {
 }
 
-void CRenderState::doRestoreState()
+void RenderState::doRestoreState()
 {
 }

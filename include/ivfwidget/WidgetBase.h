@@ -30,7 +30,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CWidgetBase);
+IvfSmartPointer(WidgetBase);
 
 /**
  * Base class for all Ivf++ widgets
@@ -39,14 +39,14 @@ IvfSmartPointer(CWidgetBase);
  * keyboard, mouse and drawing of a widget. The class should be used 
  * in combination with some kind of window/view class. The 
  * ivffltk library derives a widget class by combining
- * Fl_Gl_Window with CWidgetBase.
+ * Fl_Gl_Window with WidgetBase.
  *
- * Ivf++ 0.9.x introduces a new event model in the CWidgetBase
+ * Ivf++ 0.9.x introduces a new event model in the WidgetBase
  * class. This model uses assignable event classes in addition of
  * the virtual methods previously used. This enables the use
  * of "handler" classes for supporting pluggable user interface
  * functionality. See the IvfEvent.h header file for a description
- * of the supported events in the CWidgetBase class. Events is
+ * of the supported events in the WidgetBase class. Events is
  * preferred way of implementing UI functionality in Ivf++ 0.9.x.
  *
  * When implementing new classes mouse, keyboard and drawing
@@ -60,7 +60,7 @@ IvfSmartPointer(CWidgetBase);
  *
  * @author Jonas Lindemann
  */
-class IVFWIDGET_API CWidgetBase : public CBase {
+class IVFWIDGET_API WidgetBase : public Base {
 public:
 	/** Function key enumerations */
 	enum TFunctionKey {
@@ -139,182 +139,182 @@ private:
 
 	float m_timeouts[10];
 
-	std::vector<CRenderEvent*>			m_renderEvents;
-	std::vector<CClearEvent*>			m_clearEvents;
-	CAppLoopEvent*						m_appLoopEvent;
-	std::vector<CDestroyEvent*>			m_destroyEvents;
-	std::vector<CFocusEvent*>			m_focusEvents;
-	std::vector<CFunctionKeyEvent*>		m_functionKeyEvents;
-	std::vector<CIdleEvent*>				m_idleEvents;
-	std::vector<CInitContextEvent*>		m_initContextEvents;
-	std::vector<CInitEvent*>				m_initEvents;
-	std::vector<CInitOverlayEvent*>		m_initOverlayEvents;
-	std::vector<CKeyboardEvent*>			m_keyboardEvents;
-	std::vector<CModifierDownEvent*>		m_modifierDownEvents;
-	std::vector<CModifierUpEvent*>		m_modifierUpEvents;
-	std::vector<CMouseDownEvent*>		m_mouseDownEvents;
-	std::vector<CMouseEnterEvent*>		m_mouseEnterEvents;
-	std::vector<CMouseEvent*>			m_mouseEvents;
-	std::vector<CMouseLeaveEvent*>		m_mouseLeaveEvents;
-	std::vector<CMouseMoveEvent*>		m_mouseMoveEvents;
-	std::vector<CMouseUpEvent*>			m_mouseUpEvents;
-	std::vector<COverlayEvent*>			m_overlayEvents;
-	std::vector<CResizeEvent*>			m_resizeEvents;
-	std::vector<CUnFocusEvent*>			m_unFocusEvents;
-	std::vector<CMenuItemEvent*>			m_menuItemEvents;
+	std::vector<RenderEvent*>			m_renderEvents;
+	std::vector<ClearEvent*>			m_clearEvents;
+	AppLoopEvent*						m_appLoopEvent;
+	std::vector<DestroyEvent*>			m_destroyEvents;
+	std::vector<FocusEvent*>			m_focusEvents;
+	std::vector<FunctionKeyEvent*>		m_functionKeyEvents;
+	std::vector<IdleEvent*>				m_idleEvents;
+	std::vector<InitContextEvent*>		m_initContextEvents;
+	std::vector<InitEvent*>				m_initEvents;
+	std::vector<InitOverlayEvent*>		m_initOverlayEvents;
+	std::vector<KeyboardEvent*>			m_keyboardEvents;
+	std::vector<ModifierDownEvent*>		m_modifierDownEvents;
+	std::vector<ModifierUpEvent*>		m_modifierUpEvents;
+	std::vector<MouseDownEvent*>		m_mouseDownEvents;
+	std::vector<MouseEnterEvent*>		m_mouseEnterEvents;
+	std::vector<MouseEvent*>			m_mouseEvents;
+	std::vector<MouseLeaveEvent*>		m_mouseLeaveEvents;
+	std::vector<MouseMoveEvent*>		m_mouseMoveEvents;
+	std::vector<MouseUpEvent*>			m_mouseUpEvents;
+	std::vector<OverlayEvent*>			m_overlayEvents;
+	std::vector<ResizeEvent*>			m_resizeEvents;
+	std::vector<UnFocusEvent*>			m_unFocusEvents;
+	std::vector<MenuItemEvent*>			m_menuItemEvents;
 
-	CTimeoutEvent*						m_timeoutEvents[10];
+	TimeoutEvent*						m_timeoutEvents[10];
 public:
 	/** Add menu item event */
-	void addMenuItemEvent(CMenuItemEvent* event);
+	void addMenuItemEvent(MenuItemEvent* event);
 
 	/** Add render event */
-	void addRenderEvent(CRenderEvent* event);
+	void addRenderEvent(RenderEvent* event);
 
 	/** Add clear event */
-	void addClearEvent(CClearEvent* event);
+	void addClearEvent(ClearEvent* event);
 
 	/** Assign application loop event */
-	void assignAppLoopEvent(CAppLoopEvent* event);
+	void assignAppLoopEvent(AppLoopEvent* event);
 
 	/** Add destroy event */
-	void addDestroyEvent(CDestroyEvent* event);
+	void addDestroyEvent(DestroyEvent* event);
 
 	/** Add focus event */
-	void addFocusEvent(CFocusEvent* event);
+	void addFocusEvent(FocusEvent* event);
 
 	/** Add function key event */
-	void addFunctionKeyEvent(CFunctionKeyEvent* event);
+	void addFunctionKeyEvent(FunctionKeyEvent* event);
 
 	/** Add idle event */
-	void addIdleEvent(CIdleEvent* event);
+	void addIdleEvent(IdleEvent* event);
 
 	/** Add init context event */
-	void addInitContextEvent(CInitContextEvent* event);
+	void addInitContextEvent(InitContextEvent* event);
 
 	/** Add init event */
-	void addInitEvent(CInitEvent* event);
+	void addInitEvent(InitEvent* event);
 
 	/** Add init overlay event */
-	void addInitOverlayEvent(CInitOverlayEvent* event);
+	void addInitOverlayEvent(InitOverlayEvent* event);
 
 	/** Add keyboard event */
-	void addKeyboardEvent(CKeyboardEvent* event);
+	void addKeyboardEvent(KeyboardEvent* event);
 
 	/** Add modifier down event */
-	void addModifierDownEvent(CModifierDownEvent* event);
+	void addModifierDownEvent(ModifierDownEvent* event);
 
 	/** Add modifier up event */
-	void addModifierUpEvent(CModifierUpEvent* event);
+	void addModifierUpEvent(ModifierUpEvent* event);
 
 	/** Add mouse down event */
-	void addMouseDownEvent(CMouseDownEvent* event);
+	void addMouseDownEvent(MouseDownEvent* event);
 
 	/** Add mouse enter event */
-	void addMouseEnterEvent(CMouseEnterEvent* event);
+	void addMouseEnterEvent(MouseEnterEvent* event);
 
 	/** Add mouse event */
-	void addMouseEvent(CMouseEvent* event);
+	void addMouseEvent(MouseEvent* event);
 
 	/** Add mouse leave event */
-	void addMouseLeaveEvent(CMouseLeaveEvent* event);
+	void addMouseLeaveEvent(MouseLeaveEvent* event);
 
 	/** Add mouse move event */
-	void addMouseMoveEvent(CMouseMoveEvent* event);
+	void addMouseMoveEvent(MouseMoveEvent* event);
 
 	/** Add mouse up event */
-	void addMouseUpEvent(CMouseUpEvent* event);
+	void addMouseUpEvent(MouseUpEvent* event);
 
 	/** Add overlay event */
-	void addOverlayEvent(COverlayEvent* event);
+	void addOverlayEvent(OverlayEvent* event);
 
 	/** Add resize event */
-	void addResizeEvent(CResizeEvent* event);
+	void addResizeEvent(ResizeEvent* event);
 
 	/** Add unfocus event */
-	void addUnFocusEvent(CUnFocusEvent* event);
+	void addUnFocusEvent(UnFocusEvent* event);
 
 	/** Assign timeout event */
-	void assignTimeoutEvent(int nbr, CTimeoutEvent* event);
+	void assignTimeoutEvent(int nbr, TimeoutEvent* event);
 
 	/** Remove menu item event */
-	void removeMenuItemEvent(CMenuItemEvent* event);
+	void removeMenuItemEvent(MenuItemEvent* event);
 
 	/** Remove render event */
-	void removeRenderEvent(CRenderEvent* event);
+	void removeRenderEvent(RenderEvent* event);
 
 	/** Remove clear event */
-	void removeClearEvent(CClearEvent* event);
+	void removeClearEvent(ClearEvent* event);
 
 	/** Remove destroy event */
-	void removeDestroyEvent(CDestroyEvent* event);
+	void removeDestroyEvent(DestroyEvent* event);
 
 	/** Remove focus event */
-	void removeFocusEvent(CFocusEvent* event);
+	void removeFocusEvent(FocusEvent* event);
 
 	/** Remove function key event */
-	void removeFunctionKeyEvent(CFunctionKeyEvent* event);
+	void removeFunctionKeyEvent(FunctionKeyEvent* event);
 
 	/** Remove idle event */
-	void removeIdleEvent(CIdleEvent* event);
+	void removeIdleEvent(IdleEvent* event);
 
 	/** Remove init context event */
-	void removeInitContextEvent(CInitContextEvent* event);
+	void removeInitContextEvent(InitContextEvent* event);
 
 	/** Remove init event */
-	void removeInitEvent(CInitEvent* event);
+	void removeInitEvent(InitEvent* event);
 
 	/** Remove init overlay event */
-	void removeInitOverlayEvent(CInitOverlayEvent* event);
+	void removeInitOverlayEvent(InitOverlayEvent* event);
 
 	/** Remove keyboard event */
-	void removeKeyboardEvent(CKeyboardEvent* event);
+	void removeKeyboardEvent(KeyboardEvent* event);
 
 	/** Remove modifier down event */
-	void removeModifierDownEvent(CModifierDownEvent* event);
+	void removeModifierDownEvent(ModifierDownEvent* event);
 
 	/** Remove modifier up event */
-	void removeModifierUpEvent(CModifierUpEvent* event);
+	void removeModifierUpEvent(ModifierUpEvent* event);
 
 	/** Remove mouse down event */
-	void removeMouseDownEvent(CMouseDownEvent* event);
+	void removeMouseDownEvent(MouseDownEvent* event);
 
 	/** Remove mouse enter event */
-	void removeMouseEnterEvent(CMouseEnterEvent* event);
+	void removeMouseEnterEvent(MouseEnterEvent* event);
 
 	/** Remove mouse event */
-	void removeMouseEvent(CMouseEvent* event);
+	void removeMouseEvent(MouseEvent* event);
 
 	/** Remove mouse leave event */
-	void removeMouseLeaveEvent(CMouseLeaveEvent* event);
+	void removeMouseLeaveEvent(MouseLeaveEvent* event);
 
 	/** Remove mouse move event */
-	void removeMouseMoveEvent(CMouseMoveEvent* event);
+	void removeMouseMoveEvent(MouseMoveEvent* event);
 
 	/** Remove mouse up event */
-	void removeMouseUpEvent(CMouseUpEvent* event);
+	void removeMouseUpEvent(MouseUpEvent* event);
 
 	/** Remove overlay event */
-	void removeOverlayEvent(COverlayEvent* event);
+	void removeOverlayEvent(OverlayEvent* event);
 
 	/** Remove resize event */
-	void removeResizeEvent(CResizeEvent* event);
+	void removeResizeEvent(ResizeEvent* event);
 
 	/** Remove unfocus event */
-	void removeUnFocusEvent(CUnFocusEvent* event);
+	void removeUnFocusEvent(UnFocusEvent* event);
 
 	/** Remove timeout event */
 	void removeTimeoutEvent(int nbr);
 
 	/**
-	 * CWidgetBase constructor
+	 * WidgetBase constructor
 	 */
-	CWidgetBase();
+	WidgetBase();
 
-	/** CWidgetBase destructor */
-	virtual ~CWidgetBase();
+	/** WidgetBase destructor */
+	virtual ~WidgetBase();
 
-	IvfClassInfo("CWidgetBase", CBase);
+	IvfClassInfo("WidgetBase", Base);
 
 	void redraw();
 
@@ -945,7 +945,7 @@ public:
 	virtual void doSetSize(int w, int h);
 };
 /** \example robot_events.cpp
- * This is an example of how to use CWidgetBase derived
+ * This is an example of how to use WidgetBase derived
  * classes with the new event model.
  */
 }

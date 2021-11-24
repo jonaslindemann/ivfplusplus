@@ -32,24 +32,24 @@
 
 namespace ivf {
 
-IvfSmartPointer(CUcs3d);
+IvfSmartPointer(Ucs3d);
 
 /**
  * User coordinate class.
  *
- * CUcs3d implements a user defined coordinate system and
+ * Ucs3d implements a user defined coordinate system and
  * routines to convert to and from this. Coordinate snap is 
  * also implemented.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CUcs3d : public CMathBase {
+class IVFMATH_API Ucs3d : public MathBase {
 private:
 	double m_snapUnit;
 
-	CVec3d m_zAxis;
-	CVec3d m_yAxis;
-	CVec3d m_xAxis;
+	Vec3d m_zAxis;
+	Vec3d m_yAxis;
+	Vec3d m_xAxis;
 
 	double m_theta;
 	double m_vz;
@@ -59,26 +59,26 @@ private:
 	double m_tx;
 	double m_ty;
 
-	CMat4d m_transformationMatrix;
-	CMat4d m_inversionMatrix;
-	CVec4d m_pointWorld;
-	CVec4d m_pointTransformed;
+	Mat4d m_transformationMatrix;
+	Mat4d m_inversionMatrix;
+	Vec4d m_pointWorld;
+	Vec4d m_pointTransformed;
 
 public:
-	/** CUcs3d constructor */
-	CUcs3d();
+	/** Ucs3d constructor */
+	Ucs3d();
 
-	/** CUcs3d destructor */
-	virtual ~CUcs3d();
+	/** Ucs3d destructor */
+	virtual ~Ucs3d();
 
-	IvfClassInfo("CUcs3d",CMathBase);
-	IvfStdFactory(CUcs3d);
+	IvfClassInfo("Ucs3d",MathBase);
+	IvfStdFactory(Ucs3d);
 
 	/** Transform point to world coordinate system */
-	void transformWorld(CPoint3d* point);
+	void transformWorld(Point3d* point);
 
 	/** Transform point to local coordinate system */
-	void transform(CPoint3d* point);
+	void transform(Point3d* point);
 
 	/** Transform (sx, sy, sz) to world coordinate system */
 	void transformWorld(double sx, double sy, double sz, double &wx, double &wy,  double &wz);
@@ -87,16 +87,16 @@ public:
 	void transform(double wx, double wy, double wz, double &sx, double &sy, double &sz);
 
 	/** Transform vector to world coordinates */
-	CVec3d& transformWorld(CVec3d& vector);
+	Vec3d& transformWorld(Vec3d& vector);
 
 	/** Transform vector to local coordinate system */
-	CVec3d& transform(CVec3d& vector);
+	Vec3d& transform(Vec3d& vector);
 
 	/** Snap (x, y, z) to grid */
 	void snap(double &x, double &y, double &z);
 
 	/** Snap vector to grid */
-	CVec3d& snap(CVec3d& vector);
+	Vec3d& snap(Vec3d& vector);
 
 	/** Set snap unit */
 	void setSnapUnit(double unit);
@@ -108,7 +108,7 @@ public:
 	void intersect(double x0, double y0, double z0, double i, double j, double k, double &x, double &y, double &z);
 
 	/** Determine plane intersection */
-	CVec3d& intersect(CVec3d &origin, CVec3d &vector);
+	Vec3d& intersect(Vec3d &origin, Vec3d &vector);
 
 	/** Set coordinate system translation */
 	void setTranslation(double tx, double ty, double tz);
@@ -123,7 +123,7 @@ public:
 	void getRotation(double & vx, double & vy, double & vz, double & theta);
 
 	/** Return y-axis orientation */
-	CVec3d& getYAxis();
+	Vec3d& getYAxis();
 protected:
 	void calcMatrix();
 };

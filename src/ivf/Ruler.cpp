@@ -28,7 +28,7 @@
 
 using namespace ivf;
 
-CRuler::CRuler()
+Ruler::Ruler()
 {
 	m_startPoint.setComponents(0.0, 0.0, 0.0);
 	m_endPoint.setComponents(0.0, 1.0, 0.0);
@@ -36,42 +36,42 @@ CRuler::CRuler()
 	initRuler();
 }
 
-CRuler::~CRuler()
+Ruler::~Ruler()
 {
 
 }
 
-void CRuler::setStartPoint(CVec3d &startPoint)
+void Ruler::setStartPoint(Vec3d &startPoint)
 {
 	m_startPoint = startPoint;
 	initRuler();
 }
 
-void CRuler::setEndPoint(CVec3d &endPoint)
+void Ruler::setEndPoint(Vec3d &endPoint)
 {
 	m_endPoint = endPoint;
 	initRuler();
 }
 
-void CRuler::initRuler()
+void Ruler::initRuler()
 {
 	m_direction = m_endPoint - m_startPoint;
 	m_length = m_direction.length();
 	m_direction.normalize();
 }
 
-void CRuler::doCreateGeometry()
+void Ruler::doCreateGeometry()
 {
 	int i, nSteps;
 	double x, y, z;
-	CVec3d p;
-	bool oldLightingState = CLighting::getInstance()->isEnabled();
+	Vec3d p;
+	bool oldLightingState = Lighting::getInstance()->isEnabled();
 
 	nSteps = (int)(m_length/m_tickStep);
 
 	glLineWidth(1.0);
 
-	CLighting::getInstance()->disable();
+	Lighting::getInstance()->disable();
 	glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
 	glBegin(GL_LINES);
 	glVertex3dv(m_startPoint.getComponents());
@@ -98,24 +98,24 @@ void CRuler::doCreateGeometry()
 	glEnable(GL_DEPTH_TEST);
 	glLineWidth(0.0);
 	if (oldLightingState)
-		CLighting::getInstance()->enable();
+		Lighting::getInstance()->enable();
 	else
-		CLighting::getInstance()->disable();
+		Lighting::getInstance()->disable();
 }
 
-void CRuler::setStartPoint(double x, double y, double z)
+void Ruler::setStartPoint(double x, double y, double z)
 {
 	m_startPoint.setComponents(x, y, z);
 	initRuler();
 }
 
-void CRuler::setEndPoint(double x, double y, double z)
+void Ruler::setEndPoint(double x, double y, double z)
 {
 	m_endPoint.setComponents(x, y, z);
 	initRuler();
 }
 
-void CRuler::setTickStep(double tickStep)
+void Ruler::setTickStep(double tickStep)
 {
 	m_tickStep = tickStep;
 }

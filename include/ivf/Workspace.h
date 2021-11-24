@@ -29,25 +29,25 @@
 
 namespace ivf {
 
-IvfSmartPointer(CWorkspace);
+IvfSmartPointer(Workspace);
 
 /**
  * Workspace class
  *
- * The CWorkspace class implements a complete scene
+ * The Workspace class implements a complete scene
  * class with construction plane management. Use updateCursor()
  * and updateSizes() to update cursor and gui element sizes in 
  * response to mouse moves and camera changes.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CWorkspace : public CSceneBase {
+class IVF_API Workspace : public SceneBase {
 private:
-	std::vector<CConstructionPlane*> m_workplanes;
-	CConstructionPlane* m_currentPlane;
-	CConstructionPlane* m_rootPlane;
+	std::vector<ConstructionPlane*> m_workplanes;
+	ConstructionPlane* m_currentPlane;
+	ConstructionPlane* m_rootPlane;
 
-    CShapePtr m_cursorShape;
+    ShapePtr m_cursorShape;
 
 	int m_currentPlaneIdx;
 	bool m_usePlanes;
@@ -56,17 +56,17 @@ private:
     bool m_hideCursor;
 
 public:
-	/** CWorkspace constructor */
-	CWorkspace();
+	/** Workspace constructor */
+	Workspace();
 
-	/** CWorkspace destructor */
-	virtual ~CWorkspace();
+	/** Workspace destructor */
+	virtual ~Workspace();
 
-	IvfClassInfo("CWorkspace",CSceneBase);
-	IvfStdFactory(CWorkspace);
+	IvfClassInfo("Workspace",SceneBase);
+	IvfStdFactory(Workspace);
 
 	/** Add a construction plane */
-	void addPlane(CConstructionPlane* plane);
+	void addPlane(ConstructionPlane* plane);
 
 	/** Clear all construction planes */
 	void clearPlanes();
@@ -107,7 +107,7 @@ public:
 	bool isCursorLocked();
 
 	/** Set view used (required) */
-	virtual void setView(CView* view);
+	virtual void setView(View* view);
 
 	/** Set size of workspace */
 	void setWorkspaceSize(double size);
@@ -119,10 +119,10 @@ public:
 	void setRelativeCursorSize(double size);
 
 	/** Return current construction plane */
-	CConstructionPlane* getCurrentPlane();
+	ConstructionPlane* getCurrentPlane();
 
 	/** Return global cursor position */
-	CVec3d& getCursorPosition();
+	Vec3d& getCursorPosition();
 
 	bool getUsePlanes();
 	void setUsePlanes(bool flag);
@@ -138,8 +138,8 @@ public:
     bool getUseCursor();
     void setUseCursor(bool flag);
 
-    void setCursorShape(CShape* shape);
-    CShape* cursorShape();
+    void setCursorShape(Shape* shape);
+    Shape* cursorShape();
     void setUseCursorShape(bool flag);
     bool useCursorShape();
 

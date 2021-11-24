@@ -29,10 +29,10 @@ using namespace ivf;
 
 const int ivfMaxTempMatrix = 16;
 
-CMat3d& ivf::ivfGetTempMatrix3d()
+Mat3d& ivf::ivfGetTempMatrix3d()
 {
 	static int nBuf = 0;
-	static CMat3d buf[ivfMaxTempMatrix];
+	static Mat3d buf[ivfMaxTempMatrix];
 	
 	if (nBuf==ivfMaxTempMatrix) nBuf = 0;
 
@@ -42,12 +42,12 @@ CMat3d& ivf::ivfGetTempMatrix3d()
 }
 
 
-CMat3d::CMat3d()
+Mat3d::Mat3d()
 {
 	zero();	
 }
 
-CMat3d::CMat3d(CMat3d& M)
+Mat3d::Mat3d(Mat3d& M)
 {
 	int i, j;
 
@@ -56,7 +56,7 @@ CMat3d::CMat3d(CMat3d& M)
 			m_matrix[i][j] = M.m_matrix[i][j];
 }
 
-CMat3d::CMat3d(double scalar)
+Mat3d::Mat3d(double scalar)
 {
 	int i, j;
 
@@ -65,12 +65,12 @@ CMat3d::CMat3d(double scalar)
 			m_matrix[i][j] = scalar;
 }
 
-CMat3d::~CMat3d()
+Mat3d::~Mat3d()
 {
 
 }
 
-void CMat3d::zero()
+void Mat3d::zero()
 {
 	int i, j;
 
@@ -79,7 +79,7 @@ void CMat3d::zero()
 			m_matrix[i][j] = 0.0;
 }
 
-void CMat3d::identity()
+void Mat3d::identity()
 {
 	int i, j;
 
@@ -93,7 +93,7 @@ void CMat3d::identity()
 		}
 }
 
-void CMat3d::one()
+void Mat3d::one()
 {
 	int i, j;
 
@@ -102,7 +102,7 @@ void CMat3d::one()
 			m_matrix[i][j] = 1.0;
 }
 
-void CMat3d::setRow(int row, double v1, double v2, double v3)
+void Mat3d::setRow(int row, double v1, double v2, double v3)
 {
 	if ((row>=1)&&(row<=3))
 	{
@@ -112,7 +112,7 @@ void CMat3d::setRow(int row, double v1, double v2, double v3)
 	}
 }
 
-void CMat3d::setColumn(int col, double v1, double v2, double v3)
+void Mat3d::setColumn(int col, double v1, double v2, double v3)
 {
 	if ((col>=1)&&(col<=3))
 	{
@@ -122,7 +122,7 @@ void CMat3d::setColumn(int col, double v1, double v2, double v3)
 	}
 }
 
-double CMat3d::getComponent(int row, int col)
+double Mat3d::getComponent(int row, int col)
 {
 	if ((col>=0)&&(col<=3))
 		if ((row>=0)&&(row<=3))
@@ -133,7 +133,7 @@ double CMat3d::getComponent(int row, int col)
 		return 0.0;
 }
 
-void CMat3d::setComponent(int row, int col, double value)
+void Mat3d::setComponent(int row, int col, double value)
 {
 	if ((col>=0)&&(col<=3))
 		if ((row>=0)&&(row<=3))
@@ -141,7 +141,7 @@ void CMat3d::setComponent(int row, int col, double value)
 }
 
 #ifdef IVF_HAVE_IOSTREAM
-void CMat3d::print(std::ostream &out)
+void Mat3d::print(std::ostream &out)
 {
 	int i, j;
 
@@ -173,7 +173,7 @@ void CIvfMat3d::print(ostream &out)
 #endif
 
 
-CMat3d& CMat3d::operator=(double a)
+Mat3d& Mat3d::operator=(double a)
 {
 	int i, j;
 
@@ -184,7 +184,7 @@ CMat3d& CMat3d::operator=(double a)
 	return *this;
 }
 
-CMat3d& CMat3d::operator=(CMat3d &A)
+Mat3d& Mat3d::operator=(Mat3d &A)
 {
 	int i, j;
 
@@ -195,7 +195,7 @@ CMat3d& CMat3d::operator=(CMat3d &A)
 	return *this;
 }
 
-CMat3d& CMat3d::operator+=(CMat3d &A)
+Mat3d& Mat3d::operator+=(Mat3d &A)
 {
 	int i, j;
 
@@ -206,7 +206,7 @@ CMat3d& CMat3d::operator+=(CMat3d &A)
 	return *this;
 }
 
-CMat3d& CMat3d::operator-=(CMat3d &A)
+Mat3d& Mat3d::operator-=(Mat3d &A)
 {
 	int i, j;
 
@@ -217,9 +217,9 @@ CMat3d& CMat3d::operator-=(CMat3d &A)
 	return *this;
 }
 
-CMat3d& CMat3d::t()
+Mat3d& Mat3d::t()
 {
-	CMat3d& R = ivfGetTempMatrix3d();
+	Mat3d& R = ivfGetTempMatrix3d();
 
 	int i, j;
 
@@ -230,9 +230,9 @@ CMat3d& CMat3d::t()
 	return R;
 }
 
-CMat3d& CMat3d::operator*(CMat3d &A)
+Mat3d& Mat3d::operator*(Mat3d &A)
 {
-	CMat3d& R = ivfGetTempMatrix3d();
+	Mat3d& R = ivfGetTempMatrix3d();
 
 	int i, j, k;
 
@@ -244,9 +244,9 @@ CMat3d& CMat3d::operator*(CMat3d &A)
 	return R;
 }
 
-CVec3d& CMat3d::operator*(CVec3d &v)
+Vec3d& Mat3d::operator*(Vec3d &v)
 {
-	CVec3d& r = ivfGetTempVec3d();
+	Vec3d& r = ivfGetTempVec3d();
 
 	double vector[3];
 
@@ -265,9 +265,9 @@ CVec3d& CMat3d::operator*(CVec3d &v)
 	return r;
 }
 
-CMat3d& CMat3d::operator *(double scalar)
+Mat3d& Mat3d::operator *(double scalar)
 {
-	CMat3d& R = ivfGetTempMatrix3d();
+	Mat3d& R = ivfGetTempMatrix3d();
 
 	int i, j;
 
@@ -278,9 +278,9 @@ CMat3d& CMat3d::operator *(double scalar)
 	return R;
 }
 
-CMat3d& CMat3d::operator /(double scalar)
+Mat3d& Mat3d::operator /(double scalar)
 {
-	CMat3d& R = ivfGetTempMatrix3d();
+	Mat3d& R = ivfGetTempMatrix3d();
 
 	int i, j;
 
@@ -291,9 +291,9 @@ CMat3d& CMat3d::operator /(double scalar)
 	return R;
 }
 
-CMat3d& CMat3d::operator +(CMat3d &A)
+Mat3d& Mat3d::operator +(Mat3d &A)
 {
-	CMat3d& R = ivfGetTempMatrix3d();
+	Mat3d& R = ivfGetTempMatrix3d();
 
 	int i, j;
 
@@ -304,9 +304,9 @@ CMat3d& CMat3d::operator +(CMat3d &A)
 	return R;
 }
 
-CMat3d& CMat3d::inv()
+Mat3d& Mat3d::inv()
 {
-	CMat3d& R = ivfGetTempMatrix3d();
+	Mat3d& R = ivfGetTempMatrix3d();
 
 	double idetA = 1.0/(
 		m_matrix[0][0]*(m_matrix[1][1]*m_matrix[2][2]-m_matrix[1][2]*m_matrix[2][1]) +

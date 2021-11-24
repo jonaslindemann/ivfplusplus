@@ -26,33 +26,33 @@
 
 using namespace ivf;
 
-CUIButtonGroup::CUIButtonGroup()
+UIButtonGroup::UIButtonGroup()
 {
 	this->setUseName(false);
 }
 
-CUIButtonGroup::~CUIButtonGroup()
+UIButtonGroup::~UIButtonGroup()
 {
 
 }
 
-void CUIButtonGroup::addChild(CUIButtonBase* button)
+void UIButtonGroup::addChild(UIButtonBase* button)
 {
 	button->setParentControl(this);
-	button->setType(CUIButtonBase::BT_TOGGLE);
-	CComposite::addChild(button);
+	button->setType(UIButtonBase::BT_TOGGLE);
+	Composite::addChild(button);
 }
 
-void CUIButtonGroup::updateState(CUIButtonBase* button)
+void UIButtonGroup::updateState(UIButtonBase* button)
 {
 	int i;
 
 	for (i=0; i<this->getSize(); i++)
 	{
-		CShape* shape = this->getChild(i);
-		CUIButtonBasePtr b = (CUIButtonBase*)shape;
+		Shape* shape = this->getChild(i);
+		UIButtonBasePtr b = (UIButtonBase*)shape;
 
 		if (b!=button)
-			b->groupUpdateState(CUIButtonBase::BS_UP);
+			b->groupUpdateState(UIButtonBase::BS_UP);
 	}	
 }

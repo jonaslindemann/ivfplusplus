@@ -24,8 +24,8 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CSelectComposite::CSelectComposite ()
-		:CComposite()
+SelectComposite::SelectComposite ()
+		:Composite()
 {
 	m_camera = nullptr;
 	m_childCount = 0;
@@ -35,7 +35,7 @@ CSelectComposite::CSelectComposite ()
 }
 
 // ------------------------------------------------------------
-CSelectComposite::~CSelectComposite ()
+SelectComposite::~SelectComposite ()
 {
 	if (m_camera!=nullptr)
 		m_camera->deleteReference();
@@ -45,7 +45,7 @@ CSelectComposite::~CSelectComposite ()
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::setCamera(CView * camera)
+void SelectComposite::setCamera(View * camera)
 {
 	if (m_camera!=nullptr)
 	{
@@ -58,19 +58,19 @@ void CSelectComposite::setCamera(CView * camera)
 }
 
 // ------------------------------------------------------------
-CView* CSelectComposite::getCamera()
+View* SelectComposite::getCamera()
 {
 	return m_camera;
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::doCreateGeometry()
+void SelectComposite::doCreateGeometry()
 {
-	CComposite::doCreateGeometry();
+	Composite::doCreateGeometry();
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::doBeginTransform()
+void SelectComposite::doBeginTransform()
 {
 	glPushMatrix();
 	if (m_renderCamera)
@@ -81,18 +81,18 @@ void CSelectComposite::doBeginTransform()
 			if (m_useCustomTransform)
 				this->customView();
 	}
-	CShape::doBeginTransform();
+	Shape::doBeginTransform();
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::doEndTransform()
+void SelectComposite::doEndTransform()
 {
-		CShape::doEndTransform();
+		Shape::doEndTransform();
 	glPopMatrix();
 }
 
 // ------------------------------------------------------------
-GLint CSelectComposite::pick(int x, int y)
+GLint SelectComposite::pick(int x, int y)
 {
 	m_selectedShape = nullptr;
 
@@ -135,7 +135,7 @@ GLint CSelectComposite::pick(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::processHits(GLint hits, GLuint buffer [ ])
+void SelectComposite::processHits(GLint hits, GLuint buffer [ ])
 {
 	GLuint depth = ~0;
 	unsigned int i, getThisName;
@@ -179,7 +179,7 @@ void CSelectComposite::processHits(GLint hits, GLuint buffer [ ])
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::nameChildren(CShape* shape)
+void SelectComposite::nameChildren(Shape* shape)
 {
 	// Recursively name all children
 
@@ -189,10 +189,10 @@ void CSelectComposite::nameChildren(CShape* shape)
 	{
 		// Name all children of composite
 
-		CComposite* composite = (CComposite*) shape;
+		Composite* composite = (Composite*) shape;
 		for (i = 0; i<composite->getSize(); i++)
 		{
-			CShape* child = composite->getChild(i);
+			Shape* child = composite->getChild(i);
 			nameChildren(child);
 		}
 
@@ -201,7 +201,7 @@ void CSelectComposite::nameChildren(CShape* shape)
 		if (composite->getUseName()==TRUE)
 		{
 			m_allObjects.push_back(composite);
-			composite->setObjectName(m_allObjects.size()-1);
+			composite->setObjectName(static_cast<int>(m_allObjects.size())-1);
 		}
 	}
 	else
@@ -209,22 +209,22 @@ void CSelectComposite::nameChildren(CShape* shape)
 		// Name shape
 
 		m_allObjects.push_back(shape);
-		shape->setObjectName(m_allObjects.size()-1);
+		shape->setObjectName(static_cast<int>(m_allObjects.size())-1);
 	}
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::addChild(CShape * shape)
+void SelectComposite::addChild(Shape * shape)
 {
-	CComposite::addChild(shape);
+	Composite::addChild(shape);
 	nameChildren(shape);
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::deleteChild(int index)
+void SelectComposite::deleteChild(int index)
 {
 	//int i, count;
-	CComposite::deleteChild(index);
+	Composite::deleteChild(index);
 
 	// Renumber shapes
 
@@ -232,11 +232,11 @@ void CSelectComposite::deleteChild(int index)
 }
 
 // ------------------------------------------------------------
-CShape* CSelectComposite::removeChild(int index)
+Shape* SelectComposite::removeChild(int index)
 {
 	//int i, count;
-	CShape* removedChild;
-	removedChild = CComposite::removeChild(index);
+	Shape* removedChild;
+	removedChild = Composite::removeChild(index);
 
 	// Renumber shapes
 
@@ -246,46 +246,46 @@ CShape* CSelectComposite::removeChild(int index)
 }
 
 // ------------------------------------------------------------
-CShape* CSelectComposite::getSelectedShape()
+Shape* SelectComposite::getSelectedShape()
 {
 	return m_selectedShape;
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::renameChildren()
+void SelectComposite::renameChildren()
 {
 	m_allObjects.clear();
 	nameChildren(this);
 }
 
 // ------------------------------------------------------------
-CShape* CSelectComposite::removeShape(CShape *removeShape)
+Shape* SelectComposite::removeShape(Shape *removeShape)
 {
-	CComposite::compositeRemove(this, removeShape);
+	Composite::compositeRemove(this, removeShape);
 	renameChildren();
 	return removeShape;
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::initializeSelect(int x, int y, int w, int h)
+void SelectComposite::initializeSelect(int x, int y, int w, int h)
 {
 
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::customView()
+void SelectComposite::customView()
 {
 
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::setUseCustomTransform(bool flag)
+void SelectComposite::setUseCustomTransform(bool flag)
 {
 	m_useCustomTransform = flag;
 }
 
 // ------------------------------------------------------------
-void CSelectComposite::setRenderCamera(bool flag)
+void SelectComposite::setRenderCamera(bool flag)
 {
 	m_renderCamera = flag;
 }

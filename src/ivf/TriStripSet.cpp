@@ -23,22 +23,22 @@
 
 using namespace ivf;
 
-CTriStripSet::CTriStripSet()
+TriStripSet::TriStripSet()
 {
 	m_useColor = false;
 }
 
-CTriStripSet::~CTriStripSet()
+TriStripSet::~TriStripSet()
 {
 
 }
 
-void CTriStripSet::doCreateGeometry()
+void TriStripSet::doCreateGeometry()
 {
-	CIndex* coordIdx;
-	CIndex* colorIdx;
-	CIndex* normalIdx;
-	CIndex* textureIdx;
+	Index* coordIdx;
+	Index* colorIdx;
+	Index* normalIdx;
+	Index* textureIdx;
 	long i, j;
 
 	glPushAttrib(GL_COLOR_MATERIAL);
@@ -82,34 +82,34 @@ void CTriStripSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CTriStripSet::setUseColor(bool flag)
+void TriStripSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CTriStripSet::getUseColor()
+bool TriStripSet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CTriStripSet::calcNormal(CIndex *idx)
+void TriStripSet::calcNormal(Index *idx)
 {
 	long i;
-	CVec3d* p1;
-	CVec3d* p2;
-	CVec3d* p3;
-	CVec3d u;
-	CVec3d v;
-	CIndex* normalIdx;
+	Vec3d* p1;
+	Vec3d* p2;
+	Vec3d* p3;
+	Vec3d u;
+	Vec3d v;
+	Index* normalIdx;
 	//double n[3];
 	bool evenPoint = true;
 
-	normalIdx = new CIndex();
+	normalIdx = new Index();
 
 
 	for (i=0; i<idx->getSize()-2; i++)
 	{
-		CVec3d* normal = new CVec3d();
+		Vec3d* normal = new Vec3d();
 
 		p1 = m_coordSet[idx->getIndex(i)];
 		p2 = m_coordSet[idx->getIndex(i+1)];
@@ -138,13 +138,13 @@ void CTriStripSet::calcNormal(CIndex *idx)
 
 		m_normalSet.push_back(normal);
 
-		normalIdx->add(m_normalSet.size()-1);
+		normalIdx->add(static_cast<int>(m_normalSet.size())-1);
 
 		// Add normal idx to each vertex
 
-		m_vertexNormalIndexSet[idx->getIndex(i)]->add(m_normalSet.size()-1);
-		m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(m_normalSet.size()-1);
-		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
+		m_vertexNormalIndexSet[idx->getIndex(i)]->add(static_cast<int>(m_normalSet.size())-1);
+		m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(static_cast<int>(m_normalSet.size())-1);
+		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(static_cast<int>(m_normalSet.size())-1);
 	}
 
 	m_normalIndexSet.push_back(normalIdx);
@@ -154,12 +154,12 @@ void CTriStripSet::calcNormal(CIndex *idx)
 }
 
 
-void CTriStripSet::updateVertexNormals()
+void TriStripSet::updateVertexNormals()
 {
 	long i, j;
-	CVec3d* vertexNormal;
-	CVec3d* normal;
-	CVec3d averageNormal;
+	Vec3d* vertexNormal;
+	Vec3d* normal;
+	Vec3d averageNormal;
 	double sx, sy, sz;
 	double nx, ny, nz;
 

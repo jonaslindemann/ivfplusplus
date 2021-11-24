@@ -30,21 +30,21 @@
 
 namespace ivf {
 
-IvfSmartPointerRefBase(CUISwitch,CComposite);
+IvfSmartPointerRefBase(UISwitch,Composite);
 
-class IVF3DUI_API CUISwitch : public CUISwitchBase {
+class IVF3DUI_API UISwitch : public UISwitchBase {
 private:
-	CShapePtr m_onShape;
-	CShapePtr m_offShape;
+	ShapePtr m_onShape;
+	ShapePtr m_offShape;
 public:
-	CUISwitch();
-	virtual ~CUISwitch();
+	UISwitch();
+	virtual ~UISwitch();
 
-	IvfClassInfo("CUISwitch",CUISwitchBase);
-	IvfStdFactory(CUISwitch);
+	IvfClassInfo("UISwitch",UISwitchBase);
+	IvfStdFactory(UISwitch);
 
-	void setOffShape(CShape* shape);
-	void setOnShape(CShape* shape);
+	void setOffShape(Shape* shape);
+	void setOnShape(Shape* shape);
 
 	virtual void doStateChange(bool state);
 };

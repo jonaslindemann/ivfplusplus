@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CTriStripSet);
+IvfSmartPointer(TriStripSet);
 
 /**
  * Tri strip set class
@@ -37,18 +37,18 @@ IvfSmartPointer(CTriStripSet);
  *
  * @autor Jonas Lindemann
  */
-class IVF_API CTriStripSet : public CGLPrimitive {
+class IVF_API TriStripSet : public GLPrimitive {
 private:
 	bool m_useColor;
 public:
-	/** CTriStripSet constructor */
-	CTriStripSet();
+	/** TriStripSet constructor */
+	TriStripSet();
 
-	/** CTriStripSet destructor */
-	virtual ~CTriStripSet();
+	/** TriStripSet destructor */
+	virtual ~TriStripSet();
 
-	IvfClassInfo("CTriStripSet",CGLPrimitive);
-	IvfStdFactory(CTriStripSet);
+	IvfClassInfo("TriStripSet",GLPrimitive);
+	IvfStdFactory(TriStripSet);
 
 	/** Enable/disable usage of color values when rendering */
 	void setUseColor(bool flag);
@@ -57,7 +57,7 @@ public:
 	bool getUseColor();
 protected:
 	virtual void updateVertexNormals();
-	virtual void calcNormal(CIndex* idx);
+	virtual void calcNormal(Index* idx);
 	virtual void doCreateGeometry();
 };
 /** \example advgeom.cpp */

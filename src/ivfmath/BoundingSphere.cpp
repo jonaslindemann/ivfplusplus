@@ -23,7 +23,7 @@
 
 using namespace ivf;
 
-CBoundingSphere::CBoundingSphere()
+BoundingSphere::BoundingSphere()
 {
 	m_radius = 0.0;
 	m_globalPos[0] = 0.0;
@@ -31,29 +31,29 @@ CBoundingSphere::CBoundingSphere()
 	m_globalPos[2] = 0.0;
 }
 
-CBoundingSphere::~CBoundingSphere()
+BoundingSphere::~BoundingSphere()
 {
 
 }
 
-double CBoundingSphere::getRadius()
+double BoundingSphere::getRadius()
 {
 	return m_radius;
 }
 
-void CBoundingSphere::setRadius(double radius)
+void BoundingSphere::setRadius(double radius)
 {
 	m_radius = radius;
 }
 
-void CBoundingSphere::setGlobalPosition(double x, double y, double z)
+void BoundingSphere::setGlobalPosition(double x, double y, double z)
 {
 	m_globalPos[0] = x;
 	m_globalPos[1] = y;
 	m_globalPos[2] = z;
 }
 
-void CBoundingSphere::getGlobalPosition(double &x, double &y, double &z)
+void BoundingSphere::getGlobalPosition(double &x, double &y, double &z)
 {
 	x = m_globalPos[0];
 	y = m_globalPos[1];

@@ -46,148 +46,155 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase,
-	CInitEvent,
-	CShapeOverEvent,
-	CShapeLeaveEvent,
-	CShapeEnterEvent,
-	CShapeDownEvent,
-	CShapeUpEvent,
-	CShapeClickEvent,
-	CControlOverEvent,
-	CControlLeaveEvent,
-	CControlEnterEvent,
-	CControlDownEvent,
-	CControlUpEvent,
-	CControlClickEvent,
-	CTimeoutEvent
+class ExampleWindow: public GlutBase,
+	InitEvent,
+	ShapeOverEvent,
+	ShapeLeaveEvent,
+	ShapeEnterEvent,
+	ShapeDownEvent,
+	ShapeUpEvent,
+	ShapeClickEvent,
+	ControlOverEvent,
+	ControlLeaveEvent,
+	ControlEnterEvent,
+	ControlDownEvent,
+	ControlUpEvent,
+	ControlClickEvent,
+	TimeoutEvent
 {
 private:
 
 	// Camera movement state variables
 
-	CCameraPtr		m_camera;
-	CScenePtr		m_scene;
-	CLightPtr		m_light;
+	CameraPtr		m_camera;
+	ScenePtr		m_scene;
+	LightPtr		m_light;
 
-	CCubePtr			m_cube;
-	CSpherePtr		m_sphere;
-	CCylinderPtr		m_cylinder;
-	CConePtr			m_cone;
+	CubePtr			m_cube;
+	SpherePtr		m_sphere;
+	CylinderPtr		m_cylinder;
+	ConePtr			m_cone;
 
-	CTransformPtr	m_xfm;
+	TransformPtr	m_xfm;
 
-	CShapePtr		m_rotateShape;
+	ShapePtr		m_rotateShape;
 
-	CMouseViewHandlerPtr		m_mouseHandler;
-	CSceneHandlerPtr			m_sceneHandler;
-	CInteractionHandlerPtr	m_interactionHandler;
+	MouseViewHandlerPtr		m_mouseHandler;
+	SceneHandlerPtr			m_sceneHandler;
+	InteractionHandlerPtr	m_interactionHandler;
 public:
-	CExampleWindow(int X, int Y, int W, int H);
+	ExampleWindow(int X, int Y, int W, int H);
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual bool onTimeout();
 
-	virtual void onShapeDown(CShape* shape);
-	virtual void onShapeClick(CShape* shape);
-	virtual void onShapeUp(CShape* shape);
-	virtual void onShapeEnter(CShape* shape);
-	virtual void onShapeOver(CShape* shape);
-	virtual void onShapeLeave(CShape* shape);
-	virtual void onShapeDrag(CShape* shape);
+	virtual void onShapeDown(Shape* shape);
+	virtual void onShapeClick(Shape* shape);
+	virtual void onShapeUp(Shape* shape);
+	virtual void onShapeEnter(Shape* shape);
+	virtual void onShapeOver(Shape* shape);
+	virtual void onShapeLeave(Shape* shape);
+	virtual void onShapeDrag(Shape* shape);
 
-	virtual void onControlClick(CUIInteractiveBase* uiControl);
-	virtual void onControlDrag(CUIInteractiveBase* uiControl);
-	virtual void onControlUp(CUIInteractiveBase* uiControl);
-	virtual void onControlDown(CUIInteractiveBase* uiControl);
-	virtual void onControlEnter(CUIInteractiveBase* uiControl);
-	virtual void onControlOver(CUIInteractiveBase* uiControl);
-	virtual void onControlLeave(CUIInteractiveBase* uiControl);
+	virtual void onControlClick(UIInteractiveBase* uiControl);
+	virtual void onControlDrag(UIInteractiveBase* uiControl);
+	virtual void onControlUp(UIInteractiveBase* uiControl);
+	virtual void onControlDown(UIInteractiveBase* uiControl);
+	virtual void onControlEnter(UIInteractiveBase* uiControl);
+	virtual void onControlOver(UIInteractiveBase* uiControl);
+	virtual void onControlLeave(UIInteractiveBase* uiControl);
 };
 
 // ------------------------------------------------------------
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-		:CGlutBase(X, Y, W, H)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H)
 {
 	addInitEvent(this);
 	assignTimeoutEvent(0, this);
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize Ivf++ camera
 
-	m_camera = new CCamera();
+	m_camera = Camera::create();
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setPosition(-0.0, 6.0, 10.0);
 	m_camera->setTarget(-0.0, 0.0, 0.0);
 
 	// Create scene
 
-	m_scene = new CScene();
+	m_scene = Scene::create();
 	m_scene->setView(m_camera);
 
 	// Create a materials
 
-	CMaterialPtr redMaterial = new CMaterial();
+	auto redMaterial = Material::create();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
-	CMaterialPtr greenMaterial = new CMaterial();
+	auto greenMaterial = Material::create();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 	
-	CMaterialPtr blueMaterial = new CMaterial();
+	auto blueMaterial = Material::create();
 	blueMaterial->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	blueMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	blueMaterial->setAmbientColor(0.0f, 0.0f, 0.5f, 1.0f);
 
-	CMaterialPtr yellowMaterial = new CMaterial();
+	auto yellowMaterial = Material::create();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create objects
 
-	m_xfm = new CTransform();
+	m_xfm = Transform::create();
 
 	m_scene->addChild(m_xfm);
 	
-	m_cube = new CCube();
+	m_cube = Cube::create();
 	m_cube->setMaterial(redMaterial);
 	m_cube->setPosition(2.0, 0.0, 2.0);
 	m_xfm->addChild(m_cube);
 
-	m_sphere = new CSphere();
+	m_sphere = Sphere::create();
 	m_sphere->setMaterial(greenMaterial);
 	m_sphere->setPosition(-2.0, 0.0, 2.0);
 	m_xfm->addChild(m_sphere);
 
-	m_cylinder = new CCylinder();
+	m_cylinder = Cylinder::create();
 	m_cylinder->setMaterial(blueMaterial);
 	m_cylinder->setPosition(-2.0, 0.0, -2.0);
 	m_xfm->addChild(m_cylinder);
 
-	m_cone = new CCone();
+	m_cone = Cone::create();
 	m_cone->setMaterial(yellowMaterial);
 	m_cone->setPosition(2.0, 0.0, -2.0);
 	m_cone->setRotationQuat(0.0, 0.0, 1.0, 45.0);
 	m_xfm->addChild(m_cone);
 
-	CBrickPtr buttonShape = new CBrick();
+	auto buttonShape = Brick::create();
 	buttonShape->setSize(0.3, 0.1, 0.3);
 	buttonShape->setMaterial(yellowMaterial);
 
 	// Create a light
 
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
@@ -196,20 +203,20 @@ void CExampleWindow::onInit(int width, int height)
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
-	CUIButtonGroupPtr buttonGroup = new CUIButtonGroup();
+	auto buttonGroup = UIButtonGroup::create();
 	buttonGroup->setPosition(0.0, 0.0, 0.0);
 	//buttonGroup->setRotationQuat(1.0, 0.0, 0.0, 0.0);
 
 	int i, j;
 
-	CUIButtonPtr button;
+	UIButtonPtr button;
 
 	for (i=0; i<2; i++)
 	{
 		for (j=0; j<2; j++)
 		{
-			button = new CUIButton();
-			button->setVisualAction(CUIButton::VA_MOVING);
+			button = UIButton::create();
+			button->setVisualAction(UIButton::VA_MOVING);
 			button->setId(1001+j+i*2);
 			button->setMovementDirection(0.0, -1.0, 0.0);
 			button->setMovementDistance(0.2);
@@ -221,8 +228,8 @@ void CExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(buttonGroup);
 
-	button = new CUIButton();
-	button->setVisualAction(CUIButton::VA_MOVING);
+	button = UIButton::create();
+	button->setVisualAction(UIButton::VA_MOVING);
 	button->setId(1005);
 	button->setMovementDirection(0.0, -1.0, 0.0);
 	button->setMovementDistance(0.2);
@@ -233,10 +240,10 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create event handlers
 
-	m_mouseHandler = new CMouseViewHandler(this, m_camera);
+	m_mouseHandler = MouseViewHandler::create(this, m_camera);
 	m_mouseHandler->activate();
 
-	m_interactionHandler = new CInteractionHandler(this, m_scene);
+	m_interactionHandler = InteractionHandler::create(this, m_scene);
 	m_interactionHandler->activate();
 	m_interactionHandler->setShapeEnterEvent(this);
 	m_interactionHandler->setShapeOverEvent(this);
@@ -251,13 +258,13 @@ void CExampleWindow::onInit(int width, int height)
 	m_interactionHandler->setControlUpEvent(this);
 	m_interactionHandler->setControlClickEvent(this);
 	
-	m_sceneHandler = new CSceneHandler(this, m_scene);
+	m_sceneHandler = SceneHandler::create(this, m_scene);
 	m_sceneHandler->activate();
 
 	enableTimeout(0.01, 0);
 }
 
-bool CExampleWindow::onTimeout()
+bool ExampleWindow::onTimeout()
 {
 	if (m_rotateShape!=nullptr)
 	{
@@ -271,49 +278,49 @@ bool CExampleWindow::onTimeout()
 	return true;
 }
 
-void CExampleWindow::onShapeDown(CShape* shape)
+void ExampleWindow::onShapeDown(Shape* shape)
 {
 	if (shape!=nullptr)
 		cout << "onShapeDown: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeClick(CShape* shape)
+void ExampleWindow::onShapeClick(Shape* shape)
 {
 	if (shape!=nullptr)
 		cout << "onShapeClick: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeUp(CShape* shape)
+void ExampleWindow::onShapeUp(Shape* shape)
 {
 	if (shape!=nullptr)
 		cout << "onShapeUp: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeEnter(CShape* shape)
+void ExampleWindow::onShapeEnter(Shape* shape)
 {
 	if (shape!=nullptr)
 		cout << "onShapeEnter: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeOver(CShape* shape)
+void ExampleWindow::onShapeOver(Shape* shape)
 {
 	if (shape!=nullptr)
 		cout << "onShapeOver: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeLeave(CShape* shape)
+void ExampleWindow::onShapeLeave(Shape* shape)
 {
 	if (shape!=nullptr)
 		cout << "onShapeLeave: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeDrag(CShape* shape)
+void ExampleWindow::onShapeDrag(Shape* shape)
 {
 	if (shape!=nullptr)
 		cout << "onShapeDrag: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onControlClick(CUIInteractiveBase *uiControl)
+void ExampleWindow::onControlClick(UIInteractiveBase *uiControl)
 {
 	if (uiControl!=nullptr)
 	{
@@ -338,14 +345,14 @@ void CExampleWindow::onControlClick(CUIInteractiveBase *uiControl)
 	}
 }
 
-void CExampleWindow::onControlOver(CUIInteractiveBase *uiControl)
+void ExampleWindow::onControlOver(UIInteractiveBase *uiControl)
 {
 	if (uiControl!=nullptr)
 		cout << "onControlOver: " << uiControl->getClassName() 
 		<< ", " << uiControl->getId() << endl;
 }
 
-void CExampleWindow::onControlDown(CUIInteractiveBase *uiControl)
+void ExampleWindow::onControlDown(UIInteractiveBase *uiControl)
 {
 	if (uiControl!=nullptr)
 	{
@@ -357,7 +364,7 @@ void CExampleWindow::onControlDown(CUIInteractiveBase *uiControl)
 	}
 }
 
-void CExampleWindow::onControlUp(CUIInteractiveBase *uiControl)
+void ExampleWindow::onControlUp(UIInteractiveBase *uiControl)
 {
 	if (uiControl!=nullptr)
 	{
@@ -369,19 +376,19 @@ void CExampleWindow::onControlUp(CUIInteractiveBase *uiControl)
 	}
 }
 
-void CExampleWindow::onControlDrag(CUIInteractiveBase *uiControl)
+void ExampleWindow::onControlDrag(UIInteractiveBase *uiControl)
 {
 	if (uiControl!=nullptr)
 		cout << "onControlDrag: " << uiControl->getClassName() << endl;
 }
 
-void CExampleWindow::onControlLeave(CUIInteractiveBase *uiControl)
+void ExampleWindow::onControlLeave(UIInteractiveBase *uiControl)
 {
 	if (uiControl!=nullptr)
 		cout << "onControlLeave: " << uiControl->getClassName() << endl;
 }
 
-void CExampleWindow::onControlEnter(CUIInteractiveBase *uiControl)
+void ExampleWindow::onControlEnter(UIInteractiveBase *uiControl)
 {
 	if (uiControl!=nullptr)
 		cout << "onControlEnter: " << uiControl->getClassName() << endl;
@@ -390,18 +397,17 @@ void CExampleWindow::onControlEnter(CUIInteractiveBase *uiControl)
 // ------------------------------------------------------------
 // Main program
 // ------------------------------------------------------------
-	
 
 int main(int argc, char **argv) 
 {
 	// Create Ivf++ application object.
 
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

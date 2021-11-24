@@ -32,18 +32,18 @@ namespace ivf {
  * 3d spline segment class
  *
  * Implements a 3d spline segment, used in conjunction with
- * the CSpline3d class.
+ * the Spline3d class.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CSplineSegment3d : public CCurveSegment3d  {
+class IVFMATH_API SplineSegment3d : public CurveSegment3d  {
 private:
-	CVec3d* m_p1;
-	CVec3d* m_p2;
-	CVec3d* m_p;
-	CVec3d* m_t;
-	CVec3d* m_t1;
-	CVec3d* m_t2;
+	Vec3d* m_p1;
+	Vec3d* m_p2;
+	Vec3d* m_p;
+	Vec3d* m_t;
+	Vec3d* m_t1;
+	Vec3d* m_t2;
 	double m_bias[2];
 	
 	double h0(double t);
@@ -56,30 +56,30 @@ private:
 	double dh1(double t);
 	double dh0(double t);
 public:
-	/** CSplineSegment3d constructor */
-	CSplineSegment3d();
+	/** SplineSegment3d constructor */
+	SplineSegment3d();
 
-	/** CSplineSegment3d destructor */
-	virtual ~CSplineSegment3d();
+	/** SplineSegment3d destructor */
+	virtual ~SplineSegment3d();
 	
 	/** 
 	 * Get position on curve 
 	 *
 	 * @param t distance from curve start 0 <= t <= 1
 	 */
-	virtual CVec3d* getPosition(double t);
+	virtual Vec3d* getPosition(double t);
 
 	/** Get curve start point */
-	virtual CVec3d* getEndPoint();
+	virtual Vec3d* getEndPoint();
 
 	/** Get curve starting point */
-	virtual CVec3d* getStartPoint();
+	virtual Vec3d* getStartPoint();
 	
 	/** Get curve end direction */
-	virtual CVec3d* getEndDirection();
+	virtual Vec3d* getEndDirection();
 
 	/** Get curve start direction */
-	virtual CVec3d* getStartDirection();
+	virtual Vec3d* getStartDirection();
 
 	/** Get curve end bias*/
 	double getEndBias();
@@ -94,10 +94,10 @@ public:
 	void setStartBias(double bias);
 
 	/** Set curve end point */
-  	void setEndPoint(CVec3d* point);
+  	void setEndPoint(Vec3d* point);
 	
 	/** Set curve start point */
-	void setStartPoint(CVec3d* point);
+	void setStartPoint(Vec3d* point);
 
 	/** 
 	 * Get curve speed
@@ -111,7 +111,7 @@ public:
 	 *
 	 * @param t distance from curve start 0.0 <= t <= 1.0
 	 */
-	virtual CVec3d* getTangent(double t);
+	virtual Vec3d* getTangent(double t);
 };
 
 }

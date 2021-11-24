@@ -26,10 +26,10 @@
 
 using namespace ivf;
 
-CCameraController::CCameraController()
+CameraController::CameraController()
 {
-	m_path = new CSpline3d();
-	m_targetPath = new CSpline3d();
+	m_path = new Spline3d();
+	m_targetPath = new Spline3d();
 	
 	m_t = 0.0;
 	m_v = 0.0;
@@ -57,7 +57,7 @@ CCameraController::CCameraController()
 	m_camera = nullptr;
 }
 
-CCameraController::~CCameraController()
+CameraController::~CameraController()
 {
 	/*
 	if (m_path!=nullptr)
@@ -76,7 +76,7 @@ CCameraController::~CCameraController()
 	*/
 }
 
-void CCameraController::setPath(CSpline3d *spline)
+void CameraController::setPath(Spline3d *spline)
 {
 	m_path = spline;
 	/*
@@ -92,12 +92,12 @@ void CCameraController::setPath(CSpline3d *spline)
 	*/
 }
 
-CSpline3d* CCameraController::getPath()
+Spline3d* CameraController::getPath()
 {
 	return m_path;
 }
 
-void CCameraController::doUpdate(double dt)
+void CameraController::doUpdate(double dt)
 {
 	if (m_camera!=nullptr)
 	{
@@ -229,9 +229,9 @@ void CCameraController::doUpdate(double dt)
 		{
 			if (m_followPath)
 			{
-				CVec3d p0;
-				CVec3d p1;
-				CVec3d forward;
+				Vec3d p0;
+				Vec3d p1;
+				Vec3d forward;
 				p0 = m_path->getPosition(m_t);
 				//p1 = m_path->getPosition(m_t + m_v*dt + pow(m_a0,2)*dt*0.5);
 				p1 = m_path->getPosition(m_t+0.3);
@@ -243,7 +243,7 @@ void CCameraController::doUpdate(double dt)
 	}
 }
 
-void CCameraController::doReset()
+void CameraController::doReset()
 {
 	m_t = m_t0;
 	m_v = m_v0;
@@ -269,45 +269,45 @@ void CCameraController::doReset()
 	}
 }
 
-void CCameraController::setInitialPos(double t)
+void CameraController::setInitialPos(double t)
 {
 	m_t0 = t;
 	doReset();
 }
 
-void CCameraController::setInitialSpeed(double v)
+void CameraController::setInitialSpeed(double v)
 {
 	m_v0 = v;
 	doReset();
 }
 
-void CCameraController::setInitialAcceleration(double a)
+void CameraController::setInitialAcceleration(double a)
 {
 	m_a0 = a;
 	doReset();
 }
 
-void CCameraController::setEndActionType(TEndAction action)
+void CameraController::setEndActionType(TEndAction action)
 {
 	m_endAction = action;
 }
 
-void CCameraController::setStartActionType(TStartAction action)
+void CameraController::setStartActionType(TStartAction action)
 {
 	m_startAction = action;
 }
 
-void CCameraController::setCamera(CCamera *camera)
+void CameraController::setCamera(Camera *camera)
 {
 	m_camera = camera;
 }
 
-CCamera* CCameraController::getCamera()
+Camera* CameraController::getCamera()
 {
 	return m_camera;
 }
 
-void CCameraController::setTargetPath(CSpline3d *spline)
+void CameraController::setTargetPath(Spline3d *spline)
 {
 	m_targetPath = spline;
 	/*
@@ -325,55 +325,55 @@ void CCameraController::setTargetPath(CSpline3d *spline)
 	m_useTargetPath = true;
 }
 
-void CCameraController::setUseTargetPath(bool flag)
+void CameraController::setUseTargetPath(bool flag)
 {
 	m_useTargetPath = true;
 }
 
-bool CCameraController::getUseTargetPath()
+bool CameraController::getUseTargetPath()
 {
 	return m_useTargetPath;
 }
 
-CSpline3d* CCameraController::getTargetPath()
+Spline3d* CameraController::getTargetPath()
 {
 	return m_targetPath;
 }
 
-void CCameraController::setInitialTargetPos(double t)
+void CameraController::setInitialTargetPos(double t)
 {
 	m_target_t0 = t;
 	doReset();
 }
 
-void CCameraController::setInitialTargetSpeed(double v)
+void CameraController::setInitialTargetSpeed(double v)
 {
 	m_target_v0 = v;
 	doReset();
 }
 
-void CCameraController::setInitialTargetAcceleration(double a)
+void CameraController::setInitialTargetAcceleration(double a)
 {
 	m_target_a0 = a;
 	doReset();
 }
 
-void CCameraController::setTargetStartActionType(TStartAction action)
+void CameraController::setTargetStartActionType(TStartAction action)
 {
 	m_targetStartAction = action;
 }
 
-void CCameraController::setTargetEndActionType(TEndAction action)
+void CameraController::setTargetEndActionType(TEndAction action)
 {
 	m_targetEndAction = action;
 }
 
-void CCameraController::setFollowPath(bool flag)
+void CameraController::setFollowPath(bool flag)
 {
 	m_followPath = flag;
 	if (m_camera!=nullptr)
 		if (m_followPath)
-			m_camera->setType(CCamera::CT_FREE_ORIENTATION);
+			m_camera->setType(Camera::CT_FREE_ORIENTATION);
 		else
-			m_camera->setType(CCamera::CT_NORMAL);
+			m_camera->setType(Camera::CT_NORMAL);
 }

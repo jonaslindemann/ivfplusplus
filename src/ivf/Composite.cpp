@@ -29,8 +29,8 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CComposite::CComposite ()
-		:CShape()
+Composite::Composite ()
+		:Shape()
 {
 	setUseName(false);
 	setUseReference(true);
@@ -38,13 +38,13 @@ CComposite::CComposite ()
 }
 
 // ------------------------------------------------------------
-CComposite::~CComposite ()
+Composite::~Composite ()
 {
 	unsigned int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CShape* shape = m_children[i];
+		Shape* shape = m_children[i];
 		if (m_useReference)
 		{
 			shape->deleteReference();
@@ -55,7 +55,7 @@ CComposite::~CComposite ()
 }
 
 // ------------------------------------------------------------
-void CComposite::doCreateGeometry()
+void Composite::doCreateGeometry()
 {
 	unsigned int i;
 
@@ -63,7 +63,7 @@ void CComposite::doCreateGeometry()
 
 	while (i<m_children.size())
 	{
-		if ((m_children[i]->getState()==CGLBase::OS_ON)&&(!getCulled()))
+		if ((m_children[i]->getState()==GLBase::OS_ON)&&(!getCulled()))
 			m_children[i]->render();
 
 		i += m_renderInterval;
@@ -71,7 +71,7 @@ void CComposite::doCreateGeometry()
 }
 
 // ------------------------------------------------------------
-void CComposite::addChild(CShape* shape)
+void Composite::addChild(Shape* shape)
 {
 	if (m_useReference)
 		shape->addReference();
@@ -79,7 +79,7 @@ void CComposite::addChild(CShape* shape)
 }
 
 // ------------------------------------------------------------
-CShape* CComposite::getChild(int index)
+Shape* Composite::getChild(int index)
 {
 	if ((index>=0)&&(index<(int)m_children.size()))
 		return m_children[index];
@@ -88,13 +88,13 @@ CShape* CComposite::getChild(int index)
 }
 
 // ------------------------------------------------------------
-CShape* CComposite::removeChild(int index)
+Shape* Composite::removeChild(int index)
 {
-	std::vector<CShape*>::iterator pos;
+	std::vector<Shape*>::iterator pos;
 
 	if ((index>=0)&&(index<(int)m_children.size()))
 	{
-		CShape* shape = m_children[index];
+		Shape* shape = m_children[index];
 		if (m_useReference)
 			shape->deleteReference();
 		pos = m_children.begin();
@@ -107,13 +107,13 @@ CShape* CComposite::removeChild(int index)
 }
 
 // ------------------------------------------------------------
-void CComposite::deleteChild(int index)
+void Composite::deleteChild(int index)
 {
-	std::vector<CShape*>::iterator pos;
+	std::vector<Shape*>::iterator pos;
 
 	if ((index>=0)&&(index<(int)m_children.size()))
 	{
-		CShape* shape = m_children[index];
+		Shape* shape = m_children[index];
 		if (m_useReference)
 			shape->deleteReference();
 		pos = m_children.begin();
@@ -124,19 +124,19 @@ void CComposite::deleteChild(int index)
 }
 
 // ------------------------------------------------------------
-int CComposite::getSize()
+int Composite::getSize()
 {
-	return m_children.size();
+	return static_cast<int>(m_children.size());
 }
 
 // ------------------------------------------------------------
-void CComposite::clear()
+void Composite::clear()
 {
 	unsigned int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CShape* shape = m_children[i];
+		Shape* shape = m_children[i];
 		if (m_useReference)
 			shape->deleteReference();
 	}
@@ -144,55 +144,55 @@ void CComposite::clear()
 }
 
 // ------------------------------------------------------------
-void CComposite::setSelectChildren(TSelectState state)
+void Composite::setSelectChildren(TSelectState state)
 {
 	unsigned int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CShape* shape = m_children[i];
+		Shape* shape = m_children[i];
 		shape->setSelect(state);
 	}
 }
 
 // ------------------------------------------------------------
-void CComposite::setHighlightChildren(THighlightState state)
+void Composite::setHighlightChildren(THighlightState state)
 {
 	unsigned int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CShape* shape = m_children[i];
+		Shape* shape = m_children[i];
 		shape->setHighlight(state);
 	}
 }
 
 // ------------------------------------------------------------
-void CComposite::refresh()
+void Composite::refresh()
 {
 	unsigned int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CShape* shape = m_children[i];
+		Shape* shape = m_children[i];
 		shape->refresh();
 	}
 }
 
 // ------------------------------------------------------------
-void CComposite::setUseReference(bool flag)
+void Composite::setUseReference(bool flag)
 {
 	m_useReference = flag;
 }
 
 // ------------------------------------------------------------
-void CComposite::deleteAll()
+void Composite::deleteAll()
 {
 	unsigned int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CShape* shape = m_children[i];
+		Shape* shape = m_children[i];
 		if (m_useReference)
 		{
 			shape->deleteReference();
@@ -204,19 +204,19 @@ void CComposite::deleteAll()
 }
 
 // ------------------------------------------------------------
-void CComposite::setHighlight(THighlightState state)
+void Composite::setHighlight(THighlightState state)
 {
 	this->setHighlightChildren(state);
 }
 
 // ------------------------------------------------------------
-void CComposite::compositeRemove(CComposite* composite, CShape* deleteChild)
+void Composite::compositeRemove(Composite* composite, Shape* deleteChild)
 {
 	int i;
 
 	for (i = 0; i<composite->getSize(); i++)
 	{
-		CShape* child = composite->getChild(i);
+		Shape* child = composite->getChild(i);
 
 		if (child == deleteChild)
 		{
@@ -225,27 +225,27 @@ void CComposite::compositeRemove(CComposite* composite, CShape* deleteChild)
 		else
 			if (child->isClass("CIvfComposite"))
 			{
-				CComposite* tree = (CComposite*)child;
+				Composite* tree = (Composite*)child;
 				compositeRemove(tree, deleteChild);
 			}
 	}
 }
 
 // ------------------------------------------------------------
-CShape* CComposite::removeShape(CShape *removeShape)
+Shape* Composite::removeShape(Shape *removeShape)
 {
 	compositeRemove(this, removeShape);
 	return removeShape;
 }
 
 // ------------------------------------------------------------
-void CComposite::setRenderInterval(int interval)
+void Composite::setRenderInterval(int interval)
 {
 	m_renderInterval = interval;
 }
 
 // ------------------------------------------------------------
-void CComposite::doUpdateBoundingSphere()
+void Composite::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=nullptr)
 	{
@@ -264,10 +264,10 @@ void CComposite::doUpdateBoundingSphere()
 
 		for (i=0;i<m_children.size();i++)
 		{
-			CShape* shape = m_children[i];
+			Shape* shape = m_children[i];
 			shape->initBoundingSphere();
 			shape->getPosition(x, y, z);
-			CBoundingSphere* bSphere = shape->getBoundingSphere();
+			BoundingSphere* bSphere = shape->getBoundingSphere();
 			radius = bSphere->getRadius();
 
 			if ( (x+radius)>maxSize[0] )
@@ -300,18 +300,18 @@ void CComposite::doUpdateBoundingSphere()
 	}
 }
 
-CShape* CComposite::findShape(const std::string& name)
+Shape* Composite::findShape(const std::string& name)
 {
 	return compositeFind(this, name);
 }
 
-CShape* CComposite::compositeFind(CComposite *composite, const std::string& name)
+Shape* Composite::compositeFind(Composite *composite, const std::string& name)
 {
 	int i;
 
 	for (i = 0; i<composite->getSize(); i++)
 	{
-		CShape* child = composite->getChild(i);
+		Shape* child = composite->getChild(i);
 
 		if (child->getName()!="")
 		{
@@ -319,9 +319,9 @@ CShape* CComposite::compositeFind(CComposite *composite, const std::string& name
 				return child;
 		}
 
-		if (child->isClass("CComposite"))
+		if (child->isClass("Composite"))
 		{
-			CShape* shape = compositeFind((CComposite*)child, name);
+			Shape* shape = compositeFind((Composite*)child, name);
 			if (shape!=nullptr)
 				return shape;
 		}
@@ -330,7 +330,7 @@ CShape* CComposite::compositeFind(CComposite *composite, const std::string& name
 }
 
 
-void CComposite::setHighlightComposite(THighlightState state)
+void Composite::setHighlightComposite(THighlightState state)
 {
-	CShape::setHighlight(state);
+	Shape::setHighlight(state);
 }

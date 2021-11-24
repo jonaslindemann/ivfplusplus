@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CCylinder);
+IvfSmartPointer(Cylinder);
 
 /**
  * Cylinder shape class
@@ -38,16 +38,16 @@ IvfSmartPointer(CCylinder);
  * have the same methods.
  * @author Jonas Lindemann
  */
-class IVF_API CCylinder : public CCone {
+class IVF_API Cylinder : public Cone {
 public:
 	/** CIvfCylinder constructor. */
-	CCylinder ();
+	Cylinder ();
 
 	/** CIvfCylinder destructor. */
-	virtual ~CCylinder ();
+	virtual ~Cylinder ();
 
-	IvfClassInfo("CCylinder",CCone);
-	IvfStdFactory(CCylinder);
+	IvfClassInfo("Cylinder",Cone);
+	IvfStdFactory(Cylinder);
 
 	/** Set cylinder radius */
 	void	setRadius (const double radius);

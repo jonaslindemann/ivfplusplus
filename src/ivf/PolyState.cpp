@@ -28,38 +28,38 @@
 
 using namespace ivf;
 
-CPolyState::CPolyState()
+PolyState::PolyState()
 {
 	m_face = TF_FRONT_AND_BACK;
 	m_mode = PM_FILL;
 }
 
-CPolyState::~CPolyState()
+PolyState::~PolyState()
 {
 
 }
 
-void CPolyState::setFace(TTargetFace face)
+void PolyState::setFace(TTargetFace face)
 {
 	m_face = face;
 }
 
-CPolyState::TTargetFace CPolyState::getFace()
+PolyState::TTargetFace PolyState::getFace()
 {
 	return m_face;
 }
 
-void CPolyState::setMode(TPolygonMode mode)
+void PolyState::setMode(TPolygonMode mode)
 {
 	m_mode = mode;
 }
 
-CPolyState::TPolygonMode CPolyState::getMode()
+PolyState::TPolygonMode PolyState::getMode()
 {
 	return m_mode;
 }
 
-void CPolyState::doState()
+void PolyState::doState()
 {
 	GLenum face, mode;
 
@@ -96,14 +96,14 @@ void CPolyState::doState()
 	glPolygonMode(face, mode);
 }
 
-void CPolyState::doSaveState()
+void PolyState::doSaveState()
 {
 	GLint value[2];
 	glGetIntegerv(GL_POLYGON_MODE, value);
 	m_oldMode = value[0];
 }
 
-void CPolyState::doRestoreState()
+void PolyState::doRestoreState()
 {
 	GLenum face;
 

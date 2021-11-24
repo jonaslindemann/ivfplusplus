@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CTexture);
+IvfSmartPointer(Texture);
 
 /**
  * OpenGL texture definition
@@ -45,7 +45,7 @@ IvfSmartPointer(CTexture);
  * image->setFileName("textures/architecture8.jpg");
  * image->read();
  * 
- * CTexture* texture = new CTexture();
+ * Texture* texture = new Texture();
  * texture->setImage(image);
  * texture->setFilters(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
  * texture->setGenerateMipmaps(true);
@@ -53,23 +53,23 @@ IvfSmartPointer(CTexture);
  * .
  * .
  * 
- * CSphere* sphere = new CSphere();
+ * Sphere* sphere = new Sphere();
  * sphere->setMaterial(...)
  * sphere->setTexture(texture);
  * \endcode
  *
  * @author Jonas Lindemann
  */
-class IVF_API CTexture : public CGLBase {
+class IVF_API Texture : public GLBase {
 public:
 	/** Constructor */
-	CTexture ();
+	Texture ();
 
 	/** Destructor */
-	virtual ~CTexture ();
+	virtual ~Texture ();
 
-	IvfClassInfo("CTexture",CGLBase);
-	IvfStdFactory(CTexture);
+	IvfClassInfo("Texture",GLBase);
+	IvfStdFactory(Texture);
 
 	/** 
 	 * Set texture environment color (Obsolete! Use setEnvColor() instead)
@@ -195,7 +195,7 @@ public:
 	 * Assigns an image to the texture. An image can be loaded using 
 	 * the ivfimage library. 
 	 */
-	void setImage(CImage* image);
+	void setImage(Image* image);
 	
 	/**
 	 * Set raw image map
@@ -301,7 +301,7 @@ private:
 	bool m_bound;
 	bool m_generateName;
 	bool m_loadImages;
-	CImagePtr m_ivfImage;
+	ImagePtr m_ivfImage;
 	void* m_imageMap;
 	int m_width;
 	int m_height;
@@ -313,7 +313,7 @@ private:
 	bool m_active;
 };
 /** \example textures.cpp
- * This is an example of how to use the CTexture class.
+ * This is an example of how to use the Texture class.
  */
 
 }

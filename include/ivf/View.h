@@ -31,7 +31,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CView);
+IvfSmartPointer(View);
 
 /**
  * View abstract class
@@ -40,7 +40,7 @@ IvfSmartPointer(CView);
  * cameras. The viewTransform and projectionTransform methods
  * should be overidden. 
  */
-class IVF_API CView : public CGLBase  {
+class IVF_API View : public GLBase  {
 private:
 	int m_viewX;
 	int m_viewY;
@@ -48,20 +48,20 @@ private:
 	int m_viewWidth;
 	double m_viewAspect;
 	
-	CViewportPtr m_viewport;
+	ViewportPtr m_viewport;
 
 	bool m_selectTransform;
 public:
-	void setViewport(CViewport* viewport);
-	CViewport* getViewport();
-	/** CView constructor */
-	CView();
+	void setViewport(Viewport* viewport);
+	Viewport* getViewport();
+	/** View constructor */
+	View();
 
-	/** CView destructor */
-	virtual ~CView();
+	/** View destructor */
+	virtual ~View();
 
-	IvfClassInfo("CView",CGLBase);
-	IvfStdFactory(CView);
+	IvfClassInfo("View",GLBase);
+	IvfStdFactory(View);
 
 	/**
 	 * Initialize perspective and viewport
@@ -100,7 +100,7 @@ public:
 	 * to reflect the currently used view frustum.
 	 * Method is overidden by descendant classes.
 	 */
-	virtual void getViewFrustum(CViewFrustum* frustum);
+	virtual void getViewFrustum(ViewFrustum* frustum);
 
 	/** Returns view port dimension */
 	void getViewPort(int &w, int &h);

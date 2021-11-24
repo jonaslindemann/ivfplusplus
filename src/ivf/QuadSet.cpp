@@ -23,22 +23,22 @@
 
 using namespace ivf;
 
-CQuadSet::CQuadSet()
+QuadSet::QuadSet()
 {
 	m_useColor = false;
 }
 
-CQuadSet::~CQuadSet()
+QuadSet::~QuadSet()
 {
 
 }
 
-void CQuadSet::doCreateGeometry()
+void QuadSet::doCreateGeometry()
 {
-	CIndex* coordIdx;
-	CIndex* colorIdx;
-	CIndex* normalIdx;
-	CIndex* textureIdx;
+	Index* coordIdx;
+	Index* colorIdx;
+	Index* normalIdx;
+	Index* textureIdx;
 
 	long i, j;
 
@@ -125,32 +125,32 @@ void CQuadSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CQuadSet::setUseColor(bool flag)
+void QuadSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CQuadSet::getUseColor()
+bool QuadSet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CQuadSet::calcNormal(CIndex *idx)
+void QuadSet::calcNormal(Index *idx)
 {
 	long i;
-	CVec3d* p1;
-	CVec3d* p2;
-	CVec3d* p3;
-	CVec3d u;
-	CVec3d v;
-	CIndex* normalIdx;
+	Vec3d* p1;
+	Vec3d* p2;
+	Vec3d* p3;
+	Vec3d u;
+	Vec3d v;
+	Index* normalIdx;
 	//double n[3];
 
-	normalIdx = new CIndex();
+	normalIdx = new Index();
 
 	for (i=0; i<idx->getSize(); i+=4)
 	{
-		CVec3d* normal = new CVec3d();
+		Vec3d* normal = new Vec3d();
 
 		p1 = m_coordSet[idx->getIndex(i)];
 		p2 = m_coordSet[idx->getIndex(i+1)];
@@ -169,26 +169,26 @@ void CQuadSet::calcNormal(CIndex *idx)
 		*/
 		m_normalSet.push_back(normal);
 
-		normalIdx->add(m_normalSet.size()-1);
+		normalIdx->add(static_cast<int>(m_normalSet.size())-1);
 
 		// Add normal idx to each vertex
 
-		m_vertexNormalIndexSet[idx->getIndex(i)]->add(m_normalSet.size()-1);
-		m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(m_normalSet.size()-1);
-		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
-		m_vertexNormalIndexSet[idx->getIndex(i+3)]->add(m_normalSet.size()-1);
+		m_vertexNormalIndexSet[idx->getIndex(i)]->add(static_cast<int>(m_normalSet.size())-1);
+		m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(static_cast<int>(m_normalSet.size())-1);
+		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(static_cast<int>(m_normalSet.size())-1);
+		m_vertexNormalIndexSet[idx->getIndex(i+3)]->add(static_cast<int>(m_normalSet.size())-1);
 	}
 
 	m_normalIndexSet.push_back(normalIdx);
 }
 
 
-void CQuadSet::updateVertexNormals()
+void QuadSet::updateVertexNormals()
 {
 	long i, j;
-	CVec3d* vertexNormal;
-	CVec3d* normal;
-	CVec3d averageNormal;
+	Vec3d* vertexNormal;
+	Vec3d* normal;
+	Vec3d averageNormal;
 	double sx, sy, sz;
 	double nx, ny, nz;
 

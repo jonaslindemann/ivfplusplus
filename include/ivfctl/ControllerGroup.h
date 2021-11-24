@@ -25,7 +25,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CControllerGroup);
+IvfSmartPointer(ControllerGroup);
 
 /**
  * Group controller class
@@ -33,26 +33,26 @@ IvfSmartPointer(CControllerGroup);
  * This controller handles a set of controllers as a single
  * controller
  */
-class IVFCTL_API CControllerGroup : public CController {
+class IVFCTL_API ControllerGroup : public Controller {
 private:
-	std::vector<CController*> m_controllers;
+	std::vector<Controller*> m_controllers;
 public:
-	/** CControllerGroup constructor */
-	CControllerGroup();
+	/** ControllerGroup constructor */
+	ControllerGroup();
 
-	/** CControllerGroup destructor */
-	virtual ~CControllerGroup();
+	/** ControllerGroup destructor */
+	virtual ~ControllerGroup();
 
-	IvfClassInfo("CControllerGroup",CController);
-	IvfStdFactory(CControllerGroup);
+	IvfClassInfo("ControllerGroup",Controller);
+	IvfStdFactory(ControllerGroup);
 
 	/** Add a controller to the controller group */
-	void addChild(CController* controller);
+	void addChild(Controller* controller);
 
 	void clear();
 	
 	virtual void doUpdate(double dt);
-	virtual void doAction(CAction* action);
+	virtual void doAction(Action* action);
 	virtual void doReset();
 };
 

@@ -33,9 +33,9 @@ namespace ivf {
  *
  * Events in Ivf++ are simple classes with a
  * single empty public virtual method defining
- * the event method. @see CWidgetBase.
+ * the event method. @see WidgetBase.
  */
-class IVFWIDGET_API CEventBase {
+class IVFWIDGET_API EventBase {
 public:
 	/** Function key enumerations */
 	enum TFunctionKey {
@@ -97,7 +97,7 @@ public:
 /**
  * Render event class
  */
-class IVFWIDGET_API CRenderEvent : public CEventBase {
+class IVFWIDGET_API RenderEvent : public EventBase {
 public:
 	/**
 	 * onRender method
@@ -111,7 +111,7 @@ public:
 /**
  * Init event class
  */
-class IVFWIDGET_API CInitEvent : public CEventBase {
+class IVFWIDGET_API InitEvent : public EventBase {
 public:
 	/**
 	 * onInit method
@@ -126,7 +126,7 @@ public:
 /**
  * Destroy event class
  */
-class IVFWIDGET_API CDestroyEvent : public CEventBase {
+class IVFWIDGET_API DestroyEvent : public EventBase {
 public:
 	/** 
 	 * onDestroy event
@@ -139,7 +139,7 @@ public:
 /**
  * Init context event class
  */
-class IVFWIDGET_API CInitContextEvent : public CEventBase {
+class IVFWIDGET_API InitContextEvent : public EventBase {
 public:
 	/**
 	 * onInitContext method
@@ -153,7 +153,7 @@ public:
 /**
  * Overlay event class
  */
-class IVFWIDGET_API COverlayEvent : public CEventBase {
+class IVFWIDGET_API OverlayEvent : public EventBase {
 public:
 	/**
 	 * onOverlay method
@@ -169,7 +169,7 @@ public:
 /**
  * Mouse event class
  */
-class IVFWIDGET_API CMouseEvent : public CEventBase {
+class IVFWIDGET_API MouseEvent : public EventBase {
 public:
 	/**
 	 * onMouseDown method
@@ -183,7 +183,7 @@ public:
 /**
  * Mouse down event class
  */
-class IVFWIDGET_API CMouseDownEvent : public CEventBase {
+class IVFWIDGET_API MouseDownEvent : public EventBase {
 public:
 	/**
 	 * onMouseUp method
@@ -197,7 +197,7 @@ public:
 /**
  * Mouse up event class
  */
-class IVFWIDGET_API CMouseUpEvent : public CEventBase {
+class IVFWIDGET_API MouseUpEvent : public EventBase {
 public:
 	/**
 	 * onMouseMove method
@@ -211,7 +211,7 @@ public:
 /**
  * Mouse move event class
  */
-class IVFWIDGET_API CMouseMoveEvent : public CEventBase {
+class IVFWIDGET_API MouseMoveEvent : public EventBase {
 public:
 	/**
 	 * onMouseMove method
@@ -225,7 +225,7 @@ public:
 /**
  * Mouse leave event class
  */
-class IVFWIDGET_API CMouseLeaveEvent : public CEventBase {
+class IVFWIDGET_API MouseLeaveEvent : public EventBase {
 public:
 	/**
 	 * onMouseLeave method
@@ -239,7 +239,7 @@ public:
 /**
  * Mouse leave event class
  */
-class IVFWIDGET_API CMouseEnterEvent : public CEventBase {
+class IVFWIDGET_API MouseEnterEvent : public EventBase {
 public:
 	/**
 	 * onMouseEnter method
@@ -253,7 +253,7 @@ public:
 /**
  * Keyboard event class
  */
-class IVFWIDGET_API CKeyboardEvent : public CEventBase {
+class IVFWIDGET_API KeyboardEvent : public EventBase {
 public:
 	/**
 	 * onKeyboard method
@@ -267,7 +267,7 @@ public:
 /**
  * Menu event class
  */
-class IVFWIDGET_API CMenuItemEvent : public CEventBase {
+class IVFWIDGET_API MenuItemEvent : public EventBase {
 public:
 	virtual void onMenuItem(int id) {};
 };
@@ -275,7 +275,7 @@ public:
 /**
  * Modifier event class
  */
-class IVFWIDGET_API CModifierDownEvent : public CEventBase {
+class IVFWIDGET_API ModifierDownEvent : public EventBase {
 public:
 	/**
 	 * onModifierDown method
@@ -289,7 +289,7 @@ public:
 /**
  * Modifier event class
  */
-class IVFWIDGET_API CModifierUpEvent : public CEventBase {
+class IVFWIDGET_API ModifierUpEvent : public EventBase {
 public:
 	/**
 	 * onModifierUp method
@@ -303,7 +303,7 @@ public:
 /**
  * Init overlay event
  */
-class IVFWIDGET_API CInitOverlayEvent : public CEventBase {
+class IVFWIDGET_API InitOverlayEvent : public EventBase {
 public:
 	/**
 	 * onInitOverlay method
@@ -318,7 +318,7 @@ public:
 /**
  * Clear event class
  */
-class IVFWIDGET_API CClearEvent : public CEventBase {
+class IVFWIDGET_API ClearEvent : public EventBase {
 public:
 	/**
 	 * onClear method
@@ -334,7 +334,7 @@ public:
 /**
  * Resize event class
  */
-class IVFWIDGET_API CResizeEvent : public CEventBase {
+class IVFWIDGET_API ResizeEvent : public EventBase {
 public:
 	/**
 	 * onResize method
@@ -349,7 +349,7 @@ public:
 /**
  * Unfocus event class
  */
-class IVFWIDGET_API CUnFocusEvent : public CEventBase {
+class IVFWIDGET_API UnFocusEvent : public EventBase {
 public:
 	/**
 	 * onUnFocus method
@@ -362,7 +362,7 @@ public:
 /**
  * Focus event class
  */
-class IVFWIDGET_API CFocusEvent : public CEventBase {
+class IVFWIDGET_API FocusEvent : public EventBase {
 public:
 	/**
 	 * onFocus method
@@ -375,7 +375,7 @@ public:
 /**
  * Function key event class
  */
-class IVFWIDGET_API CFunctionKeyEvent : public CEventBase {
+class IVFWIDGET_API FunctionKeyEvent : public EventBase {
 public:
 	/**
 	 * onFunctionKey method
@@ -383,13 +383,13 @@ public:
 	 * The onFunctionKey method is called when a function key is 
 	 * pressed. See the TFunctionKey enumeration.
 	 */
-	virtual void onFunctionKey(CEventBase::TFunctionKey key, int x, int y) {};
+	virtual void onFunctionKey(EventBase::TFunctionKey key, int x, int y) {};
 };
 
 /**
  * Idle event class
  */
-class IVFWIDGET_API CIdleEvent : public CEventBase {
+class IVFWIDGET_API IdleEvent : public EventBase {
 public:
 	/**
 	 * onIdle method 
@@ -403,7 +403,7 @@ public:
 /**
  * Timeout event class
  */
-class IVFWIDGET_API CTimeoutEvent : public CEventBase {
+class IVFWIDGET_API TimeoutEvent : public EventBase {
 public:
 	/**
 	 * onTimeout method
@@ -417,7 +417,7 @@ public:
 /**
  * Apploop event class
  */
-class IVFWIDGET_API CAppLoopEvent : public CEventBase {
+class IVFWIDGET_API AppLoopEvent : public EventBase {
 private:
 	bool m_finished;
 public:

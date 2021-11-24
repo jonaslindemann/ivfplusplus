@@ -34,22 +34,22 @@ namespace ivf {
  *
  * Interface not finished
  */
-class IVFMATH_API CSlerpSegment : public CMathBase {
+class IVFMATH_API SlerpSegment : public MathBase {
 private:
 	void initSlerp();
-	CQuat* m_q1;
-	CQuat* m_q2;
+	Quat* m_q1;
+	Quat* m_q2;
 	double m_theta;
 public:
-	CSlerpSegment();
-	virtual ~CSlerpSegment();
+	SlerpSegment();
+	virtual ~SlerpSegment();
 
 	void update();
 
-	const void setEndQuat(CQuat* q);
-	const void setStartQuat(CQuat* q);
+	const void setEndQuat(Quat* q);
+	const void setStartQuat(Quat* q);
 
-	CQuat& getQuat(double t);
+	Quat& getQuat(double t);
 };
 
 }

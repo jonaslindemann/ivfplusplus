@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CRefCountBase::CRefCountBase()
+RefCountBase::RefCountBase()
 {
 	// Set initial reference count
 
@@ -34,26 +34,26 @@ CRefCountBase::CRefCountBase()
 }
 
 // ------------------------------------------------------------
-CRefCountBase::~CRefCountBase()
+RefCountBase::~RefCountBase()
 {
 
 }
 
 // ------------------------------------------------------------
-void CRefCountBase::addReference()
+void RefCountBase::addReference()
 {
 	m_ref++;
 }
 
 // ------------------------------------------------------------
-void CRefCountBase::deleteReference()
+void RefCountBase::deleteReference()
 {
 	if (m_ref>0)
 		m_ref--;
 }
 
 // ------------------------------------------------------------
-bool CRefCountBase::referenced()
+bool RefCountBase::referenced()
 {
 	if (m_ref>0)
 		return true;
@@ -62,7 +62,7 @@ bool CRefCountBase::referenced()
 }
 
 // ------------------------------------------------------------
-int CRefCountBase::getRefCount()
+int RefCountBase::getRefCount()
 {
 	return m_ref;
 }

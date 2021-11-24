@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CCone);
+IvfSmartPointer(Cone);
 
 /**
  * Cone shape class 
@@ -40,16 +40,16 @@ IvfSmartPointer(CCone);
  * many slices and stacks the cone should consist of.
  * @author Jonas Lindemann
  */
-class IVF_API CCone : public CShape {
+class IVF_API Cone : public Shape {
 public:
 	/** CIvfCone constructor. */
-	CCone ();
+	Cone ();
 
 	/** CIvfCone destructor. */
-	virtual ~CCone ();
+	virtual ~Cone ();
 
-	IvfClassInfo("CCone",CShape);
-	IvfStdFactory(CCone);
+	IvfClassInfo("Cone",Shape);
+	IvfStdFactory(Cone);
 
 	/** Set top radius */
 	void setTopRadius (const double radius);
@@ -101,7 +101,7 @@ public:
 	void doUpdateBoundingSphere();
 private:
 	void updateSelectBox();
-	CSelectionBox* m_selectionBox;
+	SelectionBox* m_selectionBox;
 	int m_stacks;
 	int m_slices;
 	double	m_height;

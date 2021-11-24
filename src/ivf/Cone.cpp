@@ -31,8 +31,8 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CCone::CCone ()
-		:CShape()
+Cone::Cone ()
+		:Shape()
 		//TODO: check and complete member initialisation list!
 {
 	m_bottomRadius = 1.0;
@@ -40,18 +40,18 @@ CCone::CCone ()
 	m_height = 2.0;
 	m_slices = 8;
 	m_stacks = 1;
-	m_selectionBox = new CSelectionBox();
+	m_selectionBox = new SelectionBox();
 	updateSelectBox();
 }
 
 // ------------------------------------------------------------
-CCone::~CCone ()
+Cone::~Cone ()
 {
 	delete m_selectionBox;
 }
 
 // ------------------------------------------------------------
-void CCone::setTopRadius (const double radius)
+void Cone::setTopRadius (const double radius)
 {
 	m_topRadius = radius;
 	doUpdateBoundingSphere();
@@ -59,14 +59,14 @@ void CCone::setTopRadius (const double radius)
 }
 
 // ------------------------------------------------------------
-double CCone::getTopRadius ()
+double Cone::getTopRadius ()
 {
 	return m_topRadius;
 	updateSelectBox();
 }
 
 // ------------------------------------------------------------
-void CCone::setBottomRadius (const double radius)
+void Cone::setBottomRadius (const double radius)
 {
 	m_bottomRadius = radius;
 	doUpdateBoundingSphere();
@@ -74,13 +74,13 @@ void CCone::setBottomRadius (const double radius)
 }
 
 // ------------------------------------------------------------
-double CCone::getBottomRadius ()
+double Cone::getBottomRadius ()
 {
 	return m_bottomRadius;
 }
 
 // ------------------------------------------------------------
-void CCone::setHeight (const double height)
+void Cone::setHeight (const double height)
 {
 	m_height = height;
 	doUpdateBoundingSphere();
@@ -88,32 +88,32 @@ void CCone::setHeight (const double height)
 }
 
 // ------------------------------------------------------------
-double CCone::getHeight ()
+double Cone::getHeight ()
 {
 	return m_height;
 }
 
-void CCone::setSlices(int slices)
+void Cone::setSlices(int slices)
 {
 	m_slices = slices;
 }
 
-int CCone::getSlices()
+int Cone::getSlices()
 {
 	return m_slices;
 }
 
-void CCone::setStacks(int stacks)
+void Cone::setStacks(int stacks)
 {
 	m_stacks = stacks;
 }
 
-int CCone::getStacks()
+int Cone::getStacks()
 {
 	return m_stacks;
 }
 
-void CCone::doCreateGeometry()
+void Cone::doCreateGeometry()
 {
 	glPushMatrix();
 		glPushMatrix();
@@ -161,7 +161,7 @@ void CCone::doCreateGeometry()
 }
 
 
-void CCone::updateSelectBox()
+void Cone::updateSelectBox()
 {
 	if (m_bottomRadius>m_topRadius)
 		m_selectionBox->setSize(m_bottomRadius*2.0,m_height,m_bottomRadius*2.0);
@@ -169,12 +169,12 @@ void CCone::updateSelectBox()
 		m_selectionBox->setSize(m_topRadius*2.0,m_height,m_topRadius*2.0);
 }
 
-void CCone::doCreateSelect()
+void Cone::doCreateSelect()
 {
 	m_selectionBox->render();
 }
 
-void CCone::doUpdateBoundingSphere()
+void Cone::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=nullptr)
 	{

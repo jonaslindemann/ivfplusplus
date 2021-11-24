@@ -33,26 +33,28 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase,
-	CInitEvent,
-	CTimeoutEvent,
-	CGuiEvent
+class ExampleWindow: public GlutBase,
+	InitEvent,
+	TimeoutEvent,
+	GuiEvent
 {
 private:
-	CCameraPtr		m_camera;
-	CScenePtr		m_scene;
-	CLightPtr		m_light;
+	CameraPtr		m_camera;
+	ScenePtr		m_scene;
+	LightPtr		m_light;
 
-	CMouseViewHandlerPtr m_mouseHandler;
-	CSceneHandlerPtr		m_sceneHandler;
-	CImUiHandlerPtr		m_uiHandler;
+	MouseViewHandlerPtr m_mouseHandler;
+	SceneHandlerPtr		m_sceneHandler;
+	ImUiHandlerPtr		m_uiHandler;
 
 	bool m_rotating;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H);
+	ExampleWindow(int X, int Y, int W, int H);
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual bool onTimeout();
@@ -63,14 +65,19 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-	:CGlutBase(X, Y, W, H) 
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
+	:GlutBase(X, Y, W, H) 
 {
 	addInitEvent(this);
 	assignTimeoutEvent(0, this);
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -78,67 +85,67 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CCamera();
+	m_camera = new Camera();
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setPosition(-0.0, 3.0, 5.0);
 	m_camera->setTarget(-0.0, 0.0, 0.0);
 
 	// Create scene
 
-	m_scene = new CScene();
+	m_scene = new Scene();
 	m_scene->setView(m_camera);
 
 	// Create a materials
 
-	CMaterialPtr redMaterial = new CMaterial();
+	auto redMaterial = Material::create();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
-	CMaterialPtr greenMaterial = new CMaterial();
+	auto greenMaterial = Material::create();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 	
-	CMaterialPtr blueMaterial = new CMaterial();
+	auto blueMaterial = Material::create();
 	blueMaterial->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	blueMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	blueMaterial->setAmbientColor(0.0f, 0.0f, 0.5f, 1.0f);
 
-	CMaterialPtr yellowMaterial = new CMaterial();
+	auto yellowMaterial = Material::create();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create objects
 	
-	CCubePtr cube = new CCube();
+	auto cube = Cube::create();
 	cube->setMaterial(redMaterial);
 	cube->setPosition(2.0, 0.0, 2.0);
 	m_scene->addChild(cube);
 
-	CSpherePtr sphere = new CSphere();
+	auto sphere = Sphere::create();
 	sphere->setMaterial(greenMaterial);
 	sphere->setPosition(-2.0, 0.0, 2.0);
 	m_scene->addChild(sphere);
 
-	CCylinderPtr cylinder = new CCylinder();
+	auto cylinder = Cylinder::create();
 	cylinder->setMaterial(blueMaterial);
 	cylinder->setPosition(-2.0, 0.0, -2.0);
 	m_scene->addChild(cylinder);
 
-	CConePtr cone = new CCone();
+	auto cone = Cone::create();
 	cone->setMaterial(yellowMaterial);
 	cone->setPosition(2.0, 0.0, -2.0);
 	cone->setRotationQuat(0.0, 0.0, 1.0, 45.0);
 	m_scene->addChild(cone);
 
-	CAxisPtr axis = new CAxis();
+	auto axis = Axis::create();
 	m_scene->addChild(axis);
 
 	// Create a light
 
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
@@ -149,13 +156,13 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create event handlers
 
-	m_mouseHandler = new CMouseViewHandler(this, m_camera);
+	m_mouseHandler = MouseViewHandler::create(this, m_camera);
 	m_mouseHandler->activate();
 	
-	m_sceneHandler = new CSceneHandler(this, m_scene);
+	m_sceneHandler = SceneHandler::create(this, m_scene);
 	m_sceneHandler->activate();
 	
-	m_uiHandler = new CImUiHandler(this);
+	m_uiHandler = ImUiHandler::create(this);
 	m_uiHandler->setGuiEvent(this);
 	m_uiHandler->activate();
 
@@ -163,13 +170,13 @@ void CExampleWindow::onInit(int width, int height)
 }
 
 // ------------------------------------------------------------
-bool CExampleWindow::onTimeout()
+bool ExampleWindow::onTimeout()
 {
 
 	return true;
 }
 
-void CExampleWindow::onGui()
+void ExampleWindow::onGui()
 {
 	std::cout << "onGui()" << std::endl;
 	
@@ -186,12 +193,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_DEPTH|IVF_MULTISAMPLE|IVF_RGBA);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

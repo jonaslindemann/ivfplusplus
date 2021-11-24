@@ -28,9 +28,9 @@ using namespace std;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase {
+class ExampleWindow: public GlutBase {
 private:
 
 	// Camera movement state variables
@@ -47,20 +47,20 @@ private:
 
 	// Ivf++ object declarations
 
-	CCameraPtr			m_camera;
-	CCameraPtr			m_externalCamera;
-	CCompositePtr		m_scene;
-	CCullingPtr			m_culling;
-	CLightPtr			m_light;
-	CCameraPtr			m_currentCamera;
+	CameraPtr			m_camera;
+	CameraPtr			m_externalCamera;
+	CompositePtr		m_scene;
+	CullingPtr			m_culling;
+	LightPtr			m_light;
+	CameraPtr			m_currentCamera;
 
 	bool m_useCulling;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H)
-		:CGlutBase(X, Y, W, H) {};
+	ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H) {};
 
-	static CExampleWindowPtr create(int X, int Y, int W, int H);
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -75,12 +75,12 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindowPtr CExampleWindow::create(int X, int Y, int W, int H)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
 {
-	return CExampleWindowPtr(new CExampleWindow(X, Y, W, H));
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -97,12 +97,12 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create cameras
 
-	m_camera = CCamera::create();
+	m_camera = Camera::create();
 	m_camera->setPosition(0.0, 0.0, 10.0);
 	m_camera->setPerspective(45.0, 0.5, 100.0);
 	m_camera->setViewPort(width, height);
 
-	m_externalCamera = CCamera::create();
+	m_externalCamera = Camera::create();
 	m_externalCamera->setPosition(25.0, 50.0, 50.0);
 	m_externalCamera->setPerspective(45.0, 0.5, 100.0);
 	m_externalCamera->setViewPort(width, height);
@@ -111,14 +111,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a materials
 
-	auto material = CMaterial::create();
+	auto material = Material::create();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene
 
-	m_scene = CComposite::create();
+	m_scene = Composite::create();
 
 	// Create a somewhat complex sphere 
 
@@ -128,7 +128,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Geometry is reduced by reusing the same sphere.
 
-	auto sphere = CSphere::create();
+	auto sphere = Sphere::create();
 	sphere->setSlices(12);
 	sphere->setStacks(12);
 	sphere->setMaterial(material);
@@ -136,14 +136,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a grid of spheres.
 
-	auto arrayXlt = CTransform::create();
-	CTransformPtr xlt;
+	auto arrayXlt = Transform::create();
+	TransformPtr xlt;
 
 	for (i=0; i<nNodes; i++)
 		for (j=0; j<nNodes; j++)
 			for (k=0; k<nNodes; k++)
 			{
-				xlt = CTransform::create();
+				xlt = Transform::create();
 				xlt->setPosition(
 					-10 + distance*i,
 					-10 + distance*j,
@@ -159,30 +159,30 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create culling object
 
-	m_culling = CCulling::create();
+	m_culling = Culling::create();
     m_culling->setComposite(m_scene);
 	m_culling->setCullView(m_camera);
 
 	// Create a light
 
-	auto lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 
 	m_light = lighting->getLight(0);
-	m_light->setType(CLight::LT_DIRECTIONAL);
+	m_light->setType(Light::LT_DIRECTIONAL);
 	m_light->setDirection(1.0, 1.0, 1.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_currentCamera->setViewPort(width, height);
 	m_currentCamera->initialize();
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_currentCamera->initialize();
 
@@ -197,14 +197,14 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseDown(int x, int y)
+void ExampleWindow::onMouseDown(int x, int y)
 {
 	m_beginX = x;
 	m_beginY = y;
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseMove(int x, int y)
+void ExampleWindow::onMouseMove(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -228,7 +228,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CWidgetBase::MT_SHIFT)
+		if (getModifierKey() == WidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -250,7 +250,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseUp(int x, int y)
+void ExampleWindow::onMouseUp(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -261,7 +261,7 @@ void CExampleWindow::onMouseUp(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'c':
@@ -302,12 +302,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	auto app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	auto window = CExampleWindow::create(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CPolyState);
+IvfSmartPointer(PolyState);
 
 /**
  * Poly state class
@@ -36,7 +36,7 @@ IvfSmartPointer(CPolyState);
  * This class encapsulates the OpenGL glPolygonMode() 
  * state function.
  */
-class IVF_API CPolyState : public CRenderState {
+class IVF_API PolyState : public RenderState {
 public:
 	enum TTargetFace {
 		TF_FRONT,
@@ -54,14 +54,14 @@ private:
 	int m_oldFace;
 	int m_oldMode;
 public:
-	/** CPolyState constructor */
-	CPolyState();
+	/** PolyState constructor */
+	PolyState();
 
-	/** CPolyState destructor */
-	virtual ~CPolyState();
+	/** PolyState destructor */
+	virtual ~PolyState();
 
-	IvfClassInfo("CPolyState",CRenderState);
-	IvfStdFactory(CPolyState);
+	IvfClassInfo("PolyState",RenderState);
+	IvfStdFactory(PolyState);
 
 	/** 
 	 * Set target face 

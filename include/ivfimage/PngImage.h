@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CPngImage);
+IvfSmartPointer(PngImage);
 
 /**
  * PNG file loader 
@@ -38,18 +38,18 @@ IvfSmartPointer(CPngImage);
  *
  * @author Jonas Lindemann
  */
-class IVFIMAGE_API CPngImage : public CFileImage {
+class IVFIMAGE_API PngImage : public FileImage {
 private:
 
 public:
-	/** CPngImage constructor */
-	CPngImage();
+	/** PngImage constructor */
+	PngImage();
 
-	/** CPngImage destructor */
-	virtual ~CPngImage();
+	/** PngImage destructor */
+	virtual ~PngImage();
 
-	IvfClassInfo("CPngImage",CFileImage);
-	IvfStdFactory(CPngImage);
+	IvfClassInfo("PngImage",FileImage);
+	IvfStdFactory(PngImage);
 
 	/** Reads PNG image */
 	virtual bool read();

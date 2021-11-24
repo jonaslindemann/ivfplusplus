@@ -34,17 +34,17 @@ extern "C" {
 #endif
 }
 
-CJpegImage::CJpegImage()
+JpegImage::JpegImage()
 {
 
 }
 
-CJpegImage::~CJpegImage()
+JpegImage::~JpegImage()
 {
 
 }
 
-bool CJpegImage::read()
+bool JpegImage::read()
 {
 	struct jpeg_decompress_struct cinfo;
 	FILE * infile;

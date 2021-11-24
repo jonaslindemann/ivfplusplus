@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CBillBoard);
+IvfSmartPointer(BillBoard);
 
 #define IVF_BILLBOARD_Y  0
 #define IVF_BILLBOARD_X  1
@@ -46,9 +46,9 @@ IvfSmartPointer(CBillBoard);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CBillBoard : public CComposite {
+class IVF_API BillBoard : public Composite {
 private:
-	CCamera* m_camera;
+	Camera* m_camera;
 	double m_angle1;
 	double m_angle2;
 	int m_billboardType;
@@ -57,15 +57,15 @@ private:
 	int m_alignObject;
 public:
 	/** CIvfBillboard constructor */
-	CBillBoard();
+	BillBoard();
 	
 	/** CIvfBillboard destructor */
-	virtual ~CBillBoard();
+	virtual ~BillBoard();
 
-	IvfClassInfo("CBillboard",CComposite);
+	IvfClassInfo("CBillboard",Composite);
 
 	/** Assign the camera used to align the object. */
-	void setCamera(CCamera* camera);
+	void setCamera(Camera* camera);
 
 	/** 
 	 * Set billboard type

@@ -29,30 +29,30 @@
 
 namespace ivf {
 
-IvfSmartPointer(CBlendState);
+IvfSmartPointer(BlendState);
 
 /**
  * Blending state class
  *
  * Encapsulates a blending state. 
  */
-class IVF_API CBlendState : public CRenderState {
+class IVF_API BlendState : public RenderState {
 private:
 	GLenum m_sfactor;
 	GLenum m_dfactor;
 	GLboolean m_oldState;
 public:
 	/** CIvfBlendState constructor */
-	CBlendState();
+	BlendState();
 
 	/** CIvfBlendState constructor */
-	CBlendState(GLenum sfactor, GLenum dfactor);
+	BlendState(GLenum sfactor, GLenum dfactor);
 
 	/** CIvfBlendState destructor */
-	virtual ~CBlendState();
+	virtual ~BlendState();
 
-	IvfClassInfo("CBlendState",CRenderState);
-	IvfStdFactory(CBlendState);
+	IvfClassInfo("BlendState",RenderState);
+	IvfStdFactory(BlendState);
 
 	/** Sets the blend function factors */
 	void setFunction(GLenum sfactor, GLenum dfactor);

@@ -33,7 +33,7 @@
 
 namespace ivf {
 	
-IvfSmartPointer(CArrow);
+IvfSmartPointer(Arrow);
 
 #define IVF_ARROW_STANDARD	0
 #define IVF_ARROW_DOUBLE	1
@@ -45,16 +45,16 @@ IvfSmartPointer(CArrow);
  * of a cone placed on top of a cylinder.
  * @author Jonas Lindemann
  */
-class IVF_API CArrow : public CComposite {
+class IVF_API Arrow : public Composite {
 public:
 	/** CIvfArrow constructor */
-	CArrow ();
+	Arrow ();
 	
 	/** CIvfArrow destructor */
-	virtual ~CArrow ();
+	virtual ~Arrow ();
 
-	IvfClassInfo("CArrow",CComposite);
-	IvfStdFactory(CArrow);
+	IvfClassInfo("Arrow",Composite);
+	IvfStdFactory(Arrow);
 	
 	/**
 	 * Set arrow type
@@ -114,16 +114,16 @@ public:
 	 *
 	 * The arrow can be aligned to a specific vector by 
 	 * providing a reference to a CIvfVect3d instance.
-	 * @param ivfVector Reference to a CVec3d instance to which
+	 * @param ivfVector Reference to a Vec3d instance to which
 	 * the arrow is aligned.
 	 */
-	void alignVector(CVec3d *vec);
+	void alignVector(Vec3d *vec);
 private:
 	double m_offset;
 	int m_arrowType;
-	CCylinderPtr m_tail;
-	CConePtr m_head;
-	CConePtr m_extraHead;
+	CylinderPtr m_tail;
+	ConePtr m_head;
+	ConePtr m_extraHead;
 	double m_tailRadius;
 	double m_headRadius;
 	double m_headSize;

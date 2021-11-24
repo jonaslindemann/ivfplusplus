@@ -28,35 +28,35 @@
 
 using namespace ivf;
 
-CUIButtonBase::CUIButtonBase()
+UIButtonBase::UIButtonBase()
 {
 	m_type = BT_NORMAL;
 	m_state = BS_UP;
 }
 
-CUIButtonBase::~CUIButtonBase()
+UIButtonBase::~UIButtonBase()
 {
 	
 }
 
-void CUIButtonBase::setType(TButtonType type)
+void UIButtonBase::setType(TButtonType type)
 {
 	m_type = type;
 }
 
-CUIButtonBase::TButtonType CUIButtonBase::getType()
+UIButtonBase::TButtonType UIButtonBase::getType()
 {
 	return m_type;
 }
 
-void CUIButtonBase::setState(TButtonState state)
+void UIButtonBase::setState(TButtonState state)
 {
 	if (this->getParentControl()!=nullptr)
 	{
 		if (state==BS_DOWN)
 		{
-			CUIBase* parent = this->getParentControl();
-			CUIButtonGroup* group = (CUIButtonGroup*)parent;
+			UIBase* parent = this->getParentControl();
+			UIButtonGroup* group = (UIButtonGroup*)parent;
 			group->updateState(this);
 			m_state = state;
 			doStateChange();
@@ -69,17 +69,17 @@ void CUIButtonBase::setState(TButtonState state)
 	}
 }
 
-CUIButtonBase::TButtonState CUIButtonBase::getState()
+UIButtonBase::TButtonState UIButtonBase::getState()
 {
 	return m_state;
 }
 
-void CUIButtonBase::doStateChange()
+void UIButtonBase::doStateChange()
 {
 	
 }
 
-void CUIButtonBase::groupUpdateState(TButtonState state)
+void UIButtonBase::groupUpdateState(TButtonState state)
 {
 	m_state = state;
 	doStateChange();

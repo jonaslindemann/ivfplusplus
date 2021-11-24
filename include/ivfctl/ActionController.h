@@ -27,45 +27,45 @@
 namespace ivf {
 
 struct SActionCmp {
-    bool operator() (CAction* a1, CAction* a2) const {
+    bool operator() (Action* a1, Action* a2) const {
         return (a1->getTime()<a2->getTime());
     }
 };
 
-typedef std::multiset<CAction*, SActionCmp> CActions;
-typedef std::multiset<CAction*, SActionCmp>::iterator CActionsIter;
+typedef std::multiset<Action*, SActionCmp> CActions;
+typedef std::multiset<Action*, SActionCmp>::iterator CActionsIter;
 
-IvfSmartPointer(CActionController);
+IvfSmartPointer(ActionController);
 
 /**
  * Action controller class
  *
  * Class for sequencing actions for controlling dynamic scenes
  */
-class IVFCTL_API CActionController : public CControllerGroup {
+class IVFCTL_API ActionController : public ControllerGroup {
 private:
-	std::multiset<CAction*, SActionCmp> m_actionList;
-	std::multiset<CAction*, SActionCmp>::iterator m_actionIter;
+	std::multiset<Action*, SActionCmp> m_actionList;
+	std::multiset<Action*, SActionCmp>::iterator m_actionIter;
 	std::vector<double> m_test;
 
 	double m_time;
 	double m_tolerance;
 public:
-	/** CActionController constructor */
-	CActionController();
+	/** ActionController constructor */
+	ActionController();
 
-	/** CActionController destructor */
-	virtual ~CActionController();
+	/** ActionController destructor */
+	virtual ~ActionController();
 
-	IvfClassInfo("CActionController",CControllerGroup);
-	IvfStdFactory(CActionController);
+	IvfClassInfo("ActionController",ControllerGroup);
+	IvfStdFactory(ActionController);
 
 	/** 
 	 * Add action to controller
 	 *
 	 * Actions will be sorted and executed in order
 	 */
-	void addAction(CAction* action);
+	void addAction(Action* action);
 
 	/** Clear (delete) all actions in controller */
 	void clear();
@@ -78,7 +78,7 @@ public:
 	virtual void doReset();
 };
 /** \example actionctl.cpp
- * This is an example of how to use the CAction class, using the 
- * CActionController class
+ * This is an example of how to use the Action class, using the 
+ * ActionController class
  */
 }

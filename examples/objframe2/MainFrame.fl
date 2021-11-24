@@ -1,21 +1,21 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0104 
-header_name {.h} 
+version 1.0400
+header_name {.h}
 code_name {.cpp}
-class CMainFrame {open : {CViewModeChangeEvent, CCoordinateEvent, CSelectionChangedEvent}
+class MainFrame {open : {ViewModeChangeEvent, CoordinateEvent, SelectionChangedEvent}
 } {
-  Function {CMainFrame()} {open
+  Function {MainFrame()} {open
   } {
     code {} {}
     Fl_Window wndMain {
-      label {ObjectiveFrame HCI prototype} open selected
+      label {ObjectiveFrame HCI prototype} open
       xywh {471 240 849 653} type Double resizable visible
     } {
       Fl_Box workspaceView {
         label label
         xywh {87 0 762 609} box FLAT_BOX color 27 resizable
         code0 {\#include "WorkspaceView.h"}
-        class CWorkspaceView
+        class WorkspaceView
       }
       Fl_Scroll {} {open
         xywh {0 0 87 653}
@@ -27,19 +27,19 @@ class CMainFrame {open : {CViewModeChangeEvent, CCoordinateEvent, CSelectionChan
         }
         Fl_Light_Button btnSelect {
           label Select
-          callback {workspaceView->setViewMode(CWorkspaceView::VM_SELECT_SHAPES);
+          callback {workspaceView->setViewMode(WorkspaceView::VM_SELECT_SHAPES);
 outInfo->value("Select nodes and beams using the mouse.");}
           tooltip {Select nodes and beams} xywh {5 6 74 23} type Radio down_box DOWN_BOX shortcut 0x40073 selection_color 4 labelfont 1 labelsize 12
         }
         Fl_Light_Button btnMove {
           label Move
-          callback {workspaceView->setViewMode(CWorkspaceView::VM_MOVE_SHAPES);
+          callback {workspaceView->setViewMode(WorkspaceView::VM_MOVE_SHAPES);
 outInfo->value("Use the mouse to select start point for move.");}
           tooltip {Move selected nodes} xywh {5 169 74 23} type Radio down_box DOWN_BOX shortcut 0x4006d selection_color 4 labelfont 1 labelsize 12
         }
         Fl_Light_Button btnCopy {
           label Copy
-          callback {workspaceView->setViewMode(CWorkspaceView::VM_COPY_SHAPES);
+          callback {workspaceView->setViewMode(WorkspaceView::VM_COPY_SHAPES);
 outInfo->value("Use the mouse to select starting point for copy operation.");}
           tooltip {Copy selected nodes} xywh {5 195 74 23} type Radio down_box DOWN_BOX shortcut 0x40063 selection_color 4 labelfont 1 labelsize 12
         }
@@ -50,19 +50,19 @@ outInfo->value("Use the mouse to select starting point for copy operation.");}
         }
         Fl_Light_Button btnCreateNodes {
           label Nodes
-          callback {workspaceView->setViewMode(CWorkspaceView::VM_CREATE_SHAPES);
+          callback {workspaceView->setViewMode(WorkspaceView::VM_CREATE_SHAPES);
 outInfo->value("Use the mouse to create nodes.");}
           tooltip {Create nodes} xywh {5 82 74 23} type Radio down_box DOWN_BOX shortcut 0x4006e value 1 selection_color 4 labelfont 1 labelsize 12
         }
         Fl_Light_Button btnCreateLines {
           label Beams
-          callback {workspaceView->setViewMode(CWorkspaceView::VM_CREATE_LINES);
+          callback {workspaceView->setViewMode(WorkspaceView::VM_CREATE_LINES);
 outInfo->value("Create beams by selecting two nodes.");}
           tooltip {Create beams between nodes} xywh {5 108 74 23} type Radio down_box DOWN_BOX shortcut 0x4006e selection_color 4 labelfont 1 labelsize 12
         }
         Fl_Light_Button btnCreateVectors {
           label Loads
-          callback {workspaceView->setViewMode(CWorkspaceView::VM_CREATE_VECTORS);
+          callback {workspaceView->setViewMode(WorkspaceView::VM_CREATE_VECTORS);
 outInfo->value("Select a node to create a load.");}
           tooltip {Create node loads} xywh {5 134 74 23} type Radio down_box DOWN_BOX shortcut 0x4006e selection_color 4 labelfont 1 labelsize 12
         }
@@ -141,7 +141,7 @@ default:
       callback {workspaceView->setViewMode(CWorkspaceView::VM_SELECT_SHAPES);}
     }
   }
-  Function {onCoordinate(double x, double y, double z)} {open return_type {virtual void}
+  Function {onCoordinate(double x, double y, double z)} {open selected return_type {virtual void}
   } {
     code {char buffer[255];
 sprintf(buffer, "%4.2g", x);
@@ -165,4 +165,4 @@ else
 	btnDelete->deactivate();
 }} {}
   }
-} 
+}

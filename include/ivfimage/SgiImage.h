@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CSgiImage);
+IvfSmartPointer(SgiImage);
 
 /**
  * SGI file loader 
@@ -39,7 +39,7 @@ IvfSmartPointer(CSgiImage);
  *
  * @author Jonas Lindemann
  */
-class IVFIMAGE_API CSgiImage : public CFileImage {
+class IVFIMAGE_API SgiImage : public FileImage {
 private:
 	bool m_alphaChannel;
 
@@ -49,17 +49,17 @@ private:
 	void expandrow(unsigned char *optr, unsigned char *iptr, int z);
 	void convertLong(GLuint *array, unsigned int length);
 public:
-	/** CSgiImage constructor */
-	CSgiImage();
+	/** SgiImage constructor */
+	SgiImage();
 
-	/** CSgiImage constructor */
-	CSgiImage(const char* name);
+	/** SgiImage constructor */
+	SgiImage(const char* name);
 
-	/** CSgiImage destructor */
-	virtual ~CSgiImage();
+	/** SgiImage destructor */
+	virtual ~SgiImage();
 
-	IvfClassInfo("CSgiImage",CFileImage);
-	IvfStdFactory(CSgiImage);
+	IvfClassInfo("SgiImage",FileImage);
+	IvfStdFactory(SgiImage);
 
 	/** Reads sgi image */
 	virtual bool read();

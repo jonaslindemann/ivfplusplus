@@ -27,7 +27,7 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CGLBase::CGLBase ()
+GLBase::GLBase ()
 {
 	// Set default state on
 
@@ -58,12 +58,12 @@ CGLBase::CGLBase ()
 }
 
 // ------------------------------------------------------------
-CGLBase::CGLBase (const CGLBase&)
+GLBase::GLBase (const GLBase&)
 {
 }
 
 // ------------------------------------------------------------
-CGLBase::~CGLBase ()
+GLBase::~GLBase ()
 {
 	if (m_useList)
 		if (glIsList(m_displayList))
@@ -71,13 +71,13 @@ CGLBase::~CGLBase ()
 }
 
 // ------------------------------------------------------------
-CGLBase& CGLBase::operator = (const CGLBase &arg)
+GLBase& GLBase::operator = (const GLBase &arg)
 {
 	return *this;
 }
 
 // ------------------------------------------------------------
-void CGLBase::render ()
+void GLBase::render ()
 {
 	if ((m_state == OS_ON)&&(!m_culled))
 	{
@@ -111,46 +111,46 @@ void CGLBase::render ()
 }
 
 // ------------------------------------------------------------
-void CGLBase::doCreateGeometry ()
+void GLBase::doCreateGeometry ()
 {
 }
 
 // ------------------------------------------------------------
-void CGLBase::doCreateMaterial ()
+void GLBase::doCreateMaterial ()
 {
 
 }
 
 // ------------------------------------------------------------
-void CGLBase::doBeginTransform ()
+void GLBase::doBeginTransform ()
 {
 }
 
 // ------------------------------------------------------------
-void CGLBase::doEndTransform ()
+void GLBase::doEndTransform ()
 {
 }
 
 // ------------------------------------------------------------
-void CGLBase::setSelect(TSelectState selectState)
+void GLBase::setSelect(TSelectState selectState)
 {
 	m_selectState = selectState;
 }
 
 // ------------------------------------------------------------
-CGLBase::TSelectState CGLBase::getSelect()
+GLBase::TSelectState GLBase::getSelect()
 {
 	return m_selectState;
 }
 
 // ------------------------------------------------------------
-void CGLBase::doCreateSelect()
+void GLBase::doCreateSelect()
 {
 
 }
 
 // ------------------------------------------------------------
-void CGLBase::compileList()
+void GLBase::compileList()
 {
 	// Remove any existing display list
 
@@ -186,7 +186,7 @@ void CGLBase::compileList()
 }
 
 // ------------------------------------------------------------
-void CGLBase::setUselist(bool flag)
+void GLBase::setUselist(bool flag)
 {
 	m_useList = flag;
 
@@ -202,72 +202,72 @@ void CGLBase::setUselist(bool flag)
 }
 
 // ------------------------------------------------------------
-bool CGLBase::getUselist()
+bool GLBase::getUselist()
 {
 	return m_useList;
 }
 
 // ------------------------------------------------------------
-void CGLBase::setDisplayList(GLuint nList)
+void GLBase::setDisplayList(GLuint nList)
 {
 	m_displayList = nList;
 }
 
 // ------------------------------------------------------------
-GLuint CGLBase::getDisplayList()
+GLuint GLBase::getDisplayList()
 {
 	return m_displayList;
 }
 
 // ------------------------------------------------------------
-CBoundingSphere* CGLBase::getBoundingSphere()
+BoundingSphere* GLBase::getBoundingSphere()
 {
 	return m_boundSphere;
 }
 
 // ------------------------------------------------------------
-void CGLBase::setState(TObjectState state)
+void GLBase::setState(TObjectState state)
 {
 	m_state = state;
 }
 
 // ------------------------------------------------------------
-CGLBase::TObjectState CGLBase::getState()
+GLBase::TObjectState GLBase::getState()
 {
 	return m_state;
 }
 
 // ------------------------------------------------------------
-void CGLBase::setTag(long tag)
+void GLBase::setTag(long tag)
 {
 	m_tag = tag;
 }
 
 // ------------------------------------------------------------
-long CGLBase::getTag()
+long GLBase::getTag()
 {
 	return m_tag;
 }
 
 // ------------------------------------------------------------
-void CGLBase::setUseSelectShape(bool flag)
+void GLBase::setUseSelectShape(bool flag)
 {
 	m_useSelectShape = flag;
 }
 
 // ------------------------------------------------------------
-bool CGLBase::getUseSelectShape()
+bool GLBase::getUseSelectShape()
 {
 	return m_useSelectShape;
 }
 
 // ------------------------------------------------------------
-void CGLBase::initBoundingSphere()
+void GLBase::initBoundingSphere()
 {
 	// Create a bounding sphere
 
 	if (m_boundSphere==nullptr)
-		m_boundSphere = new CBoundingSphere();
+		m_boundSphere = new BoundingSphere();
 
 	// Update bounding sphere
 
@@ -275,93 +275,93 @@ void CGLBase::initBoundingSphere()
 }
 
 // ------------------------------------------------------------
-void CGLBase::doUpdateBoundingSphere()
+void GLBase::doUpdateBoundingSphere()
 {
 	// Should be overridden
 }
 
 // ------------------------------------------------------------
-void CGLBase::setCulled(bool flag)
+void GLBase::setCulled(bool flag)
 {
 	m_culled = flag;
 }
 
 // ------------------------------------------------------------
-bool CGLBase::getCulled()
+bool GLBase::getCulled()
 {
 	return m_culled;
 }
 
 // ------------------------------------------------------------
-void CGLBase::setName(const std::string& name)
+void GLBase::setName(const std::string& name)
 {
 	m_objectName = name;
 }
 
 // ------------------------------------------------------------
-const std::string CGLBase::getName()
+const std::string GLBase::getName()
 {
 	return m_objectName;
 }
 
 // ------------------------------------------------------------
-void CGLBase::setRenderState(CRenderState *state)
+void GLBase::setRenderState(RenderState *state)
 {
 	m_renderState = state;
 }
 
 // ------------------------------------------------------------
-CRenderState* CGLBase::getRenderState()
+RenderState* GLBase::getRenderState()
 {
 	return m_renderState;
 }
 
-void CGLBase::doPostGeometry()
+void GLBase::doPostGeometry()
 {
 
 }
 
-void CGLBase::doPreGeometry()
+void GLBase::doPreGeometry()
 {
 
 }
 
-void CGLBase::enable()
+void GLBase::enable()
 {
 	m_state = OS_ON;
 }
 
-void CGLBase::disable()
+void GLBase::disable()
 {
 	m_state = OS_OFF;
 }
 
-bool CGLBase::isEnabled()
+bool GLBase::isEnabled()
 {
 	return (m_state==OS_ON);
 }
 
-void CGLBase::enableSelect()
+void GLBase::enableSelect()
 {
 	m_selectState = SS_ON;
 }
 
-void CGLBase::disableSelect()
+void GLBase::disableSelect()
 {
 	m_selectState = SS_OFF;
 }
 
-bool CGLBase::isSelectEnabled()
+bool GLBase::isSelectEnabled()
 {
 	return (m_selectState==SS_ON);
 }
 
-void CGLBase::setRenderMaterial(bool flag)
+void GLBase::setRenderMaterial(bool flag)
 {
 	m_renderMaterial = flag;
 }
 
-bool CGLBase::getRenderMaterial()
+bool GLBase::getRenderMaterial()
 {
 	return m_renderMaterial;
 }

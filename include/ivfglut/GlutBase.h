@@ -10,9 +10,9 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGlutBase)
+IvfSmartPointer(GlutBase)
 
-class CGlutBase : public CWidgetBase {
+class GlutBase : public WidgetBase {
 private:
 	int m_id;
 	std::string m_caption;
@@ -26,8 +26,8 @@ private:
 	double		m_zeroTime;
 	bool		m_fullScreen;
 public:
-	CGlutBase(int X, int Y, int W, int H, bool fullScreen = false);
-	virtual ~CGlutBase();
+	GlutBase(int X, int Y, int W, int H, bool fullScreen = false);
+	virtual ~GlutBase();
 	
 	void create();
 	

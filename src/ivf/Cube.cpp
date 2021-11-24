@@ -27,28 +27,28 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CCube::CCube ()
-		:CBrick()
+Cube::Cube ()
+		:Brick()
 		//TODO: check and complete member initialisation list!
 {
 }
 
 // ------------------------------------------------------------
-CCube::~CCube ()
+Cube::~Cube ()
 {
 }
 
 // ------------------------------------------------------------
-void CCube::setSize (const double length)
+void Cube::setSize (const double length)
 {
-	CBrick::setSize(length,length,length);
+	Brick::setSize(length,length,length);
 }
 
 // ------------------------------------------------------------
-void CCube::getSize (double &length)
+void Cube::getSize (double &length)
 {
 	double dval;
-	CBrick::getSize(dval,dval,dval);
+	Brick::getSize(dval,dval,dval);
 	length = dval;
 }
 

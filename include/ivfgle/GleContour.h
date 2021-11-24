@@ -30,20 +30,22 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGleContour);
+IvfSmartPointer(GleContour);
 
-class IVFGLE_API CGleContour: public CBase {
+class IVFGLE_API GleContour: public Base {
 private:
 	int m_size;
 	gleDouble (*m_coords)[2];
 	gleDouble (*m_normals)[2];
 public:
-	CGleContour();
-	CGleContour(int size);
-	virtual ~CGleContour();
+	GleContour();
+	GleContour(int size);
+	virtual ~GleContour();
 
-	IvfClassInfo("CGleContour", CBase);
-	IvfStdFactory(CGleContour);
+	IvfClassInfo("GleContour", Base);
+
+	static GleContourPtr create(int size) { return GleContourPtr(new GleContour(size)); };
+	static GleContourPtr create() { return GleContourPtr(new GleContour()); };
 
 	void calcNormals();
 

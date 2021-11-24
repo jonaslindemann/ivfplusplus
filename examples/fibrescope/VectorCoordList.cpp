@@ -25,77 +25,77 @@
 
 using namespace ivf;
 
-CVectorCoordList::CVectorCoordList()
+VectorCoordList::VectorCoordList()
 {
 
 }
 
-CVectorCoordList::~CVectorCoordList()
+VectorCoordList::~VectorCoordList()
 {
 	this->clear();
 }
 
-void CVectorCoordList::addCoord(CVec3d *coord)
+void VectorCoordList::addCoord(Vec3d *coord)
 {
-	CColorPtr color = new CColor();
-	m_coords.push_back(CVec3dPtr(coord));
+	ColorPtr color = new Color();
+	m_coords.push_back(Vec3dPtr(coord));
 	m_colors.push_back(color);
 }
 
-void CVectorCoordList::addCoord(double x, double y, double z)
+void VectorCoordList::addCoord(double x, double y, double z)
 {
-	CColorPtr color = new CColor();
-	CVec3dPtr coord = new CVec3d();
+	ColorPtr color = new Color();
+	Vec3dPtr coord = new Vec3d();
 	coord->setComponents(x, y, z);
 	m_coords.push_back(coord);
 	m_colors.push_back(color);
 }
 
-CVec3d* CVectorCoordList::getCoord(long idx)
+Vec3d* VectorCoordList::getCoord(long idx)
 {
 	return m_coords[idx];
 }
 
-void CVectorCoordList::getCoord(long idx, double &x, double &y, double &z)
+void VectorCoordList::getCoord(long idx, double &x, double &y, double &z)
 {
 	if ((idx>=0)&&(idx<m_coords.size()))
 		m_coords[idx]->getComponents(x, y, z);
 }
 
-void CVectorCoordList::clear()
+void VectorCoordList::clear()
 {
 	m_coords.clear();
 	m_colors.clear();
 }
 
-long CVectorCoordList::getSize()
+long VectorCoordList::getSize()
 {
-	return m_coords.size();
+	return static_cast<int>(m_coords.size());
 }
 
-void CVectorCoordList::setColor(long idx, float r, float g, float b)
+void VectorCoordList::setColor(long idx, float r, float g, float b)
 {
 	if ((idx>=0)&&(idx<m_coords.size()))
 		m_colors[idx]->setColor(r, g, b);
 }
 
-void CVectorCoordList::addCoord(double x, double y, double z, float r, float g, float b)
+void VectorCoordList::addCoord(double x, double y, double z, float r, float g, float b)
 {
-	CColorPtr color = new CColor();
-	CVec3dPtr coord = new CVec3d();
+	ColorPtr color = new Color();
+	Vec3dPtr coord = new Vec3d();
 	coord->setComponents(x, y, z);
 	color->setColor(r, g, b);
 	m_coords.push_back(coord);
 	m_colors.push_back(color);
 }
 
-void CVectorCoordList::getColor(long idx, float &r, float &g, float &b)
+void VectorCoordList::getColor(long idx, float &r, float &g, float &b)
 {
 	if ((idx>=0)&&(idx<m_coords.size()))
 		m_colors[idx]->getColor(r, g, b);	
 }
 
-void CVectorCoordList::saveToStream(std::ostream &out)
+void VectorCoordList::saveToStream(std::ostream &out)
 {
 	using namespace std;
 	
@@ -113,7 +113,7 @@ void CVectorCoordList::saveToStream(std::ostream &out)
 	}
 }
 
-void CVectorCoordList::readFromStream(std::istream &in)
+void VectorCoordList::readFromStream(std::istream &in)
 {
 	using namespace std;
 	
@@ -121,7 +121,7 @@ void CVectorCoordList::readFromStream(std::istream &in)
 	long i;
 	double x, y, z;
 	float r, g, b;
-	CVec3dPtr point;
+	Vec3dPtr point;
 
 	this->clear();
 
@@ -131,7 +131,7 @@ void CVectorCoordList::readFromStream(std::istream &in)
 	{
 		in >> x >> y >> z;
 		in >> r >> g >> b;
-		point = new CVec3d();
+		point = new Vec3d();
 		point->setComponents(x, y, z);
 		m_coords.push_back(point);
 	}

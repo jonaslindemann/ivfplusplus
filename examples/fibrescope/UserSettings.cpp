@@ -25,20 +25,20 @@
 
 using namespace ivf;
 
-CUserSettings* CUserSettings::m_instance = 0;
-CSingletonDestroyer<CUserSettings> CUserSettings::m_destroyer;
+UserSettings* UserSettings::m_instance = 0;
+SingletonDestroyer<UserSettings> UserSettings::m_destroyer;
 
-CUserSettings* CUserSettings::getInstance () 
+UserSettings* UserSettings::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CUserSettings(); 
+		m_instance = new UserSettings(); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CUserSettings::CUserSettings()
+UserSettings::UserSettings()
 {
 	m_scaleFactor = 1.0;
 	m_showUsage = false;
@@ -56,176 +56,176 @@ CUserSettings::CUserSettings()
 	m_fibreLighting = false;
 }
 
-CUserSettings::~CUserSettings()
+UserSettings::~UserSettings()
 {
 
 }
 
-void CUserSettings::setScaleFactor(double factor)
+void UserSettings::setScaleFactor(double factor)
 {
 	m_scaleFactor = factor;
 }
 
-double CUserSettings::getScaleFactor()
+double UserSettings::getScaleFactor()
 {
 	return m_scaleFactor;
 }
 
-void CUserSettings::setShowUsage(bool flag)
+void UserSettings::setShowUsage(bool flag)
 {
 	m_showUsage = flag;
 }
 
-bool CUserSettings::getShowUsage()
+bool UserSettings::getShowUsage()
 {
 	return m_showUsage;
 }
 
-void CUserSettings::setConnectionMaterial(CMaterial *material)
+void UserSettings::setConnectionMaterial(Material *material)
 {
 	m_connectionMaterial = material;
 }
 
-CMaterial* CUserSettings::getConnectionMaterial()
+Material* UserSettings::getConnectionMaterial()
 {
 	return m_connectionMaterial;
 }
 
-void CUserSettings::setColorMap(CColorMap *colorMap)
+void UserSettings::setColorMap(ColorMap *colorMap)
 {
 	m_colorMap = colorMap;
 }
 
-CColorMap* CUserSettings::getColorMap()
+ColorMap* UserSettings::getColorMap()
 {
 	return m_colorMap;
 }
 
-void CUserSettings::setConnectionSize(double size)
+void UserSettings::setConnectionSize(double size)
 {
 	m_connectionSize = size;
 }
 
-double CUserSettings::getConnectionSize()
+double UserSettings::getConnectionSize()
 {
 	return m_connectionSize;
 }
 
-void CUserSettings::setEnlargeUsage(bool flag)
+void UserSettings::setEnlargeUsage(bool flag)
 {
 	m_enlargeUsage = flag;
 }
 
-bool CUserSettings::getEnlargeUsage()
+bool UserSettings::getEnlargeUsage()
 {
 	return m_enlargeUsage;
 }
 
-void CUserSettings::setTextureScale(float scale)
+void UserSettings::setTextureScale(float scale)
 {
 	m_textureScale = scale;
 }
 
-float CUserSettings::getTextureScale()
+float UserSettings::getTextureScale()
 {
 	return m_textureScale;
 }
 
-void CUserSettings::setFibreRadius(double radius)
+void UserSettings::setFibreRadius(double radius)
 {
 	m_fibreRadius = radius;
 }
 
-double CUserSettings::getFibreRadius()
+double UserSettings::getFibreRadius()
 {
 	return m_fibreRadius;
 }
 
-void CUserSettings::setExtrusionSides(int sides)
+void UserSettings::setExtrusionSides(int sides)
 {
 	m_fibreSides = sides;
 }
 
-int CUserSettings::getExtrusionSides()
+int UserSettings::getExtrusionSides()
 {
 	return m_fibreSides;
 }
 
-void CUserSettings::setCamera(CCamera *camera)
+void UserSettings::setCamera(Camera *camera)
 {
 	m_camera = camera;
 }
 
-CCamera* CUserSettings::getCamera()
+Camera* UserSettings::getCamera()
 {
 	return m_camera;
 }
 
-void CUserSettings::setRepresentation(int rep)
+void UserSettings::setRepresentation(int rep)
 {
 	m_fibreRep = rep;
 }
 
-int CUserSettings::getRepresentation()
+int UserSettings::getRepresentation()
 {
 	return m_fibreRep;
 }
 
-void CUserSettings::setBlendFibres(bool flag)
+void UserSettings::setBlendFibres(bool flag)
 {
 	m_blendFibres = flag;
 }
 
-bool CUserSettings::getBlendFibres(void)
+bool UserSettings::getBlendFibres(void)
 {
 	return m_blendFibres;
 }
 
-void CUserSettings::addHighlightPoint(double x, double y, double z, double radius)
+void UserSettings::addHighlightPoint(double x, double y, double z, double radius)
 {
-	CVec3dPtr point = new CVec3d(x, y, z);
-	m_highlightPoints.push_back(CVec3dPtr(point));
+	Vec3dPtr point = new Vec3d(x, y, z);
+	m_highlightPoints.push_back(Vec3dPtr(point));
 	m_highlightRadius.push_back(radius);
 }
 
-void CUserSettings::getHighlightPoint(int idx, double &x, double &y, double &z, double &radius)
+void UserSettings::getHighlightPoint(int idx, double &x, double &y, double &z, double &radius)
 {
 	if ((idx>=0) && (idx<m_highlightPoints.size()))
 	{
-		CVec3dPtr point;
+		Vec3dPtr point;
 		point = m_highlightPoints[idx];
 		radius = m_highlightRadius[idx];
 		point->getComponents(x, y, z);
 	}
 }
 
-int CUserSettings::getHighlightPointSize()
+int UserSettings::getHighlightPointSize()
 {
-	return m_highlightPoints.size();
+	return static_cast<int>(m_highlightPoints.size());
 }
 
-void CUserSettings::clearHighlightPoints()
+void UserSettings::clearHighlightPoints()
 {
 	m_highlightPoints.clear();
 	m_highlightRadius.clear();
 }
 
-void CUserSettings::setBreakageLimit(double limit)
+void UserSettings::setBreakageLimit(double limit)
 {
 	m_breakageLimit = limit;
 }
 
-double CUserSettings::getBreakageLimit()
+double UserSettings::getBreakageLimit()
 {
 	return m_breakageLimit;
 }
 
-void CUserSettings::setFibreLighting(bool flag)
+void UserSettings::setFibreLighting(bool flag)
 {
 	m_fibreLighting = flag;
 }
 
-bool CUserSettings::getFibreLighting()
+bool UserSettings::getFibreLighting()
 {
 	return m_fibreLighting;
 }

@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CImUiHandler::CImUiHandler(CWidgetBase* widget)
+ImUiHandler::ImUiHandler(WidgetBase* widget)
 {
 	m_widget = widget;
 	m_guiEvent = 0;
@@ -38,7 +38,7 @@ CImUiHandler::CImUiHandler(CWidgetBase* widget)
 	m_widget->setUseOverlay(true);
 }
 
-CImUiHandler::~CImUiHandler()
+ImUiHandler::~ImUiHandler()
 {
 	m_widget->removeMouseMoveEvent(this);
 	m_widget->removeMouseDownEvent(this);
@@ -47,67 +47,67 @@ CImUiHandler::~CImUiHandler()
 	m_widget->removeOverlayEvent(this);
 }
 
-void CImUiHandler::setGuiEvent(CGuiEvent* event)
+void ImUiHandler::setGuiEvent(GuiEvent* event)
 {
 	m_guiEvent = event;
 }
 
-void CImUiHandler::dispatchGuiEvent()
+void ImUiHandler::dispatchGuiEvent()
 {
 	if (m_guiEvent!=nullptr)
 		m_guiEvent->onGui();
 }
 
-void CImUiHandler::doMouseDown(int x, int y)
+void ImUiHandler::doMouseDown(int x, int y)
 {
 
 }
 
-void CImUiHandler::doMouseMove(int x, int y)
+void ImUiHandler::doMouseMove(int x, int y)
 {
 
 }
 
-void CImUiHandler::doMouseUp(int x, int y)
+void ImUiHandler::doMouseUp(int x, int y)
 {
 
 }
 
-void CImUiHandler::doResize(int width, int height)
+void ImUiHandler::doResize(int width, int height)
 {
 
 }
 
-void CImUiHandler::doOverlay()
+void ImUiHandler::doOverlay()
 {
 	dispatchGuiEvent();
 }
 
-void CImUiHandler::onMouseDown(int x, int y)
+void ImUiHandler::onMouseDown(int x, int y)
 {
 	if (isActive())
 		doMouseDown(x, y);
 }
 
-void CImUiHandler::onMouseMove(int x, int y)
+void ImUiHandler::onMouseMove(int x, int y)
 {
 	if (isActive())
 		doMouseMove(x, y);
 }
 
-void CImUiHandler::onMouseUp(int x, int y)
+void ImUiHandler::onMouseUp(int x, int y)
 {
 	if (isActive())
 		doMouseUp(x, y);
 }
 
-void CImUiHandler::onResize(int width, int height)
+void ImUiHandler::onResize(int width, int height)
 {
 	if (isActive())
 		doResize(width, height);
 }
 
-void CImUiHandler::onOverlay()
+void ImUiHandler::onOverlay()
 {
 	if (isActive())
 		doOverlay();

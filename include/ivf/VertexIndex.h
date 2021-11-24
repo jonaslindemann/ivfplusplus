@@ -29,18 +29,18 @@
 
 namespace ivf {
 
-IvfSmartPointer(CVertexIndex);
+IvfSmartPointer(VertexIndex);
 
 /**
  * Vertex index list class
  *
- * Maintains a list of vertex indices for use with the CVertexElements class.
+ * Maintains a list of vertex indices for use with the VertexElements class.
  * The list is initially 1024 elements and the size is doubled if exceeding
  * 1024. 
  *
  * @author Jonas Lindemann
  */
-class IVF_API CVertexIndex : public CIndexBase {
+class IVF_API VertexIndex : public IndexBase {
 private:
 	GLuint* m_index;
 	long m_allocSize;
@@ -48,14 +48,14 @@ private:
 	long m_blockSize;
 	long m_next;
 public:
-	/** CVertexIndex constructor */
-	CVertexIndex();
+	/** VertexIndex constructor */
+	VertexIndex();
 
-	/** CVertexIndex destructor */
-	virtual ~CVertexIndex();
+	/** VertexIndex destructor */
+	virtual ~VertexIndex();
 
-	IvfClassInfo("CVertexIndex",CIndexBase);
-	IvfStdFactory(CVertexIndex);
+	IvfClassInfo("VertexIndex",IndexBase);
+	IvfStdFactory(VertexIndex);
 
 	/** Return value at position */
 	long getIndex(long pos);
@@ -97,10 +97,10 @@ public:
 	void createConstant(long value, long size);
 
 	/** Assigns values from another index */
-	void assignFrom(CIndexBase* idx);
+	void assignFrom(IndexBase* idx);
 
 	/** Assigns \em idx the values of this index */
-	void assignTo(CIndexBase* idx);
+	void assignTo(IndexBase* idx);
 
 	/** Add values from array \em i to this index */ 
 	void addArray(long* i, long size);

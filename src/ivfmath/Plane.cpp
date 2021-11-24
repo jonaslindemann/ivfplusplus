@@ -25,7 +25,7 @@
 
 using namespace ivf;
 
-CPlane::CPlane()
+Plane::Plane()
 {
 	m_normal[0] = 0.0;
 	m_normal[1] = 0.0;
@@ -34,12 +34,12 @@ CPlane::CPlane()
 	m_distance = 0.0;
 }
 
-CPlane::~CPlane()
+Plane::~Plane()
 {
 
 }
 
-void CPlane::setNormal(double vx, double vy, double vz)
+void Plane::setNormal(double vx, double vy, double vz)
 {
 	double l;
 
@@ -50,24 +50,24 @@ void CPlane::setNormal(double vx, double vy, double vz)
 	m_normal[2] = vz/l;
 }
 
-void CPlane::getNormal(double &vx, double &vy, double &vz)
+void Plane::getNormal(double &vx, double &vy, double &vz)
 {
 	vx = m_normal[0];
 	vy = m_normal[1];
 	vz = m_normal[2];
 }
 
-void CPlane::setDistance(double d)
+void Plane::setDistance(double d)
 {
 	m_distance = d;
 }
 
-double CPlane::getDistance()
+double Plane::getDistance()
 {
 	return m_distance;
 }
 
-bool CPlane::isInFront(double x, double y, double z)
+bool Plane::isInFront(double x, double y, double z)
 {
 	if ( (m_normal[0]*x + 
 		m_normal[1]*y + 
@@ -77,7 +77,7 @@ bool CPlane::isInFront(double x, double y, double z)
 		return false;
 }
 
-bool CPlane::isSphereInFront(double x, double y, double z, double radius)
+bool Plane::isSphereInFront(double x, double y, double z, double radius)
 {
 	double distanceFromPlane;
 
@@ -110,7 +110,7 @@ bool CPlane::isSphereInFront(double x, double y, double z, double radius)
 	*/
 }
 
-void CPlane::normalFromVectors(double *v1, double *v2)
+void Plane::normalFromVectors(double *v1, double *v2)
 {
 	m_normal[0] = v1[1] * v2[2] - v1[2] * v2[1];
 	m_normal[1] = v1[2] * v2[0] - v1[0] * v2[2];
@@ -119,12 +119,12 @@ void CPlane::normalFromVectors(double *v1, double *v2)
 	this->setNormal(m_normal[0], m_normal[1], m_normal[2]);
 }
 
-void CPlane::distanceFromPoint(double x, double y, double z)
+void Plane::distanceFromPoint(double x, double y, double z)
 {
 	m_distance = -(m_normal[0]*x + m_normal[1]*y + m_normal[2]*z);
 }
 
-void CPlane::intersect(
+void Plane::intersect(
   double x0, double y0, double z0, 
   double vx, double vy, double vz, 
   double &x, double &y, double &z)

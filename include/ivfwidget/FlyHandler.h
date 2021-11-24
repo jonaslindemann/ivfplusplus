@@ -32,14 +32,14 @@
 
 namespace ivf {
 
-IvfSmartPointer(CFlyHandler);
+IvfSmartPointer(FlyHandler);
 
 /**
  * Fly view handler
  *
  * This handler implements a fly navigation mode that can
- * be used together with CWidgetBase derived classes,
- * such as CFltkBase, CIvfWin32Window, CIvfMfcBase etc.
+ * be used together with WidgetBase derived classes,
+ * such as FltkBase, CIvfWin32Window, CIvfMfcBase etc.
  * The class take a reference to the active widget and a
  * CIvfCamera derived class.
  * <br><br>
@@ -51,11 +51,11 @@ IvfSmartPointer(CFlyHandler);
  * q - Increase vertical velocity<br>
  * a - Decrease vertical velocity<br>
  */
-class IVFWIDGET_API CFlyHandler : public CHandlerBase,
-	CKeyboardEvent,
-	CMouseUpEvent,
-	CMouseMoveEvent,
-	CMouseDownEvent
+class IVFWIDGET_API FlyHandler : public HandlerBase,
+	KeyboardEvent,
+	MouseUpEvent,
+	MouseMoveEvent,
+	MouseDownEvent
 {
 private:
 	void doRedraw();
@@ -73,20 +73,25 @@ private:
 	bool m_firstFrame;
 	bool m_doRedraw;
 
-	CCameraPtr m_camera;
-	CWidgetBase* m_widget;
+	CameraPtr m_camera;
+	WidgetBase* m_widget;
 public:
 	/**
 	 * Class constructor
 	 *
-	 * @paran widget Reference to a CWidgetBase class. In most cases
+	 * @paran widget Reference to a WidgetBase class. In most cases
 	 * this parameter can be set to this.
 	 * @param camera CIvfCamera derived class which will be modified.
 	 */
-	CFlyHandler(CWidgetBase* widget, CCamera* camera);
-	virtual ~CFlyHandler();
+	FlyHandler(WidgetBase* widget, Camera* camera);
+	virtual ~FlyHandler();
 
-	IvfClassInfo("CFlyHandler",CHandlerBase);
+	IvfClassInfo("FlyHandler",HandlerBase);
+
+	static FlyHandlerPtr create(WidgetBase* widget, Camera* camera)
+	{
+		return FlyHandlerPtr(new FlyHandler(widget, camera));
+	}
 
 	/**
 	 * View update routine
@@ -151,10 +156,10 @@ protected:
 	virtual void doActivate();
 };
 /** \example fly.cpp
- * This is an example of how the CFlyHandler can be used.
+ * This is an example of how the FlyHandler can be used.
  */
 /** \example handlers.cpp
- * This is an example of how handler CHandlerBase derived
+ * This is an example of how handler HandlerBase derived
  * classes can be used.
  */
 

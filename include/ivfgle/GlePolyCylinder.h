@@ -32,19 +32,19 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGlePolyCylinder);
+IvfSmartPointer(GlePolyCylinder);
 
-class IVFGLE_API CGlePolyCylinder: public CGleExtrudedBase {
+class IVFGLE_API GlePolyCylinder: public GleExtrudedBase {
 private:
 	double	m_radius;
 public:
-	CGlePolyCylinder();
+	GlePolyCylinder();
 
 	void setRadius(double radius);
 	double getRadius();
 
-	IvfClassInfo("CGlePolyCylinder", CShape);
-	IvfStdFactory(CGlePolyCylinder);
+	IvfClassInfo("GlePolyCylinder", Shape);
+	IvfStdFactory(GlePolyCylinder);
 protected:
 	virtual void doCreateGeometry();
 };

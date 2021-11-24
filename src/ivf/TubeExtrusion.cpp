@@ -19,7 +19,7 @@
 // Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
-// Implementation of: public class CTubeExtrusion
+// Implementation of: public class TubeExtrusion
 
 #include <ivf/config.h>
 #include <ivf/TubeExtrusion.h>
@@ -28,8 +28,8 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CTubeExtrusion::CTubeExtrusion ()
-		:CExtrusion()
+TubeExtrusion::TubeExtrusion ()
+		:Extrusion()
 		//TODO: check and complete member initialisation list!
 {
 	m_calcFirstLast = TRUE;
@@ -38,38 +38,38 @@ CTubeExtrusion::CTubeExtrusion ()
 }
 
 // ------------------------------------------------------------
-CTubeExtrusion::~CTubeExtrusion ()
+TubeExtrusion::~TubeExtrusion ()
 {
 }
 
 // ------------------------------------------------------------
-void CTubeExtrusion::refresh()
+void TubeExtrusion::refresh()
 {
 	initExtrusion();
 }
 
 // ------------------------------------------------------------
-void CTubeExtrusion::setCalcFirstLast(int flag)
+void TubeExtrusion::setCalcFirstLast(int flag)
 {
 	m_calcFirstLast = flag;
 }
 
 // ------------------------------------------------------------
-void CTubeExtrusion::setSides(long n)
+void TubeExtrusion::setSides(long n)
 {
 	m_nSides = n;
 	initExtrusion();
 }
 
 // ------------------------------------------------------------
-void CTubeExtrusion::setRadius(double radius)
+void TubeExtrusion::setRadius(double radius)
 {
 	m_radius = radius;
 	initExtrusion();
 }
 
 // ------------------------------------------------------------
-void CTubeExtrusion::initExtrusion()
+void TubeExtrusion::initExtrusion()
 {
 	int i, nSides;
 	double r, angle, x, y;
@@ -95,8 +95,8 @@ void CTubeExtrusion::initExtrusion()
 	if (m_calcFirstLast==TRUE)
 	{
 		
-		CVec3d p1, p2;
-		CVec3d v1;
+		Vec3d p1, p2;
+		Vec3d v1;
 		double x, y, z, ex, ey, ez;
 		
 		this->getSpineCoord(1, x, y, z);

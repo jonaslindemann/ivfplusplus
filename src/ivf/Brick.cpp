@@ -27,8 +27,8 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CBrick::CBrick ()
-		:CQuadSet()
+Brick::Brick ()
+		:QuadSet()
 {
 	m_size[0] = 1.0;
 	m_size[1] = 1.0;
@@ -37,12 +37,12 @@ CBrick::CBrick ()
 }
 
 // ------------------------------------------------------------
-CBrick::~CBrick ()
+Brick::~Brick ()
 {
 }
 
 // ------------------------------------------------------------
-void CBrick::initBrick()
+void Brick::initBrick()
 {
 	double ox, oy, oz;
 
@@ -64,9 +64,9 @@ void CBrick::initBrick()
 	addTextureCoord(1.0, 1.0);
 	addTextureCoord(0.0, 1.0);
 
-	CIndex* idx;
+	Index* idx;
 
-	idx = new CIndex();
+	idx = new Index();
 	idx->add(1, 2, 3, 0);
 	idx->add(7, 6, 5, 4);
 	idx->add(4, 5, 1, 0);
@@ -76,7 +76,7 @@ void CBrick::initBrick()
 
 	addCoordIndex(idx);
 
-	idx = new CIndex();
+	idx = new Index();
 	idx->add(0, 1, 2, 3);
 	idx->add(0, 1, 2, 3);
 	idx->add(0, 1, 2, 3);
@@ -88,7 +88,7 @@ void CBrick::initBrick()
 }
 
 // ------------------------------------------------------------
-void CBrick::setSize (const double width, const double height, const double depth)
+void Brick::setSize (const double width, const double height, const double depth)
 {
 	m_size[0] = width;
 	m_size[1] = height;
@@ -98,7 +98,7 @@ void CBrick::setSize (const double width, const double height, const double dept
 }
 
 // ------------------------------------------------------------
-void CBrick::getSize (double &width, double &height, double &depth)
+void Brick::getSize (double &width, double &height, double &depth)
 {
 	width = m_size[0];
 	height = m_size[1];
@@ -106,7 +106,7 @@ void CBrick::getSize (double &width, double &height, double &depth)
 }
 
 // ------------------------------------------------------------
-void CBrick::setSize(CPoint3d* p1, CPoint3d* p2)
+void Brick::setSize(Point3d* p1, Point3d* p2)
 {
 	double ax, ay, az;
 	double bx, by, bz;
@@ -124,21 +124,21 @@ void CBrick::setSize(CPoint3d* p1, CPoint3d* p2)
 }
 
 // ------------------------------------------------------------
-void CBrick::doCreateSelect()
+void Brick::doCreateSelect()
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glPushMatrix();
 			//glScaled(m_size[0]*1.05,m_size[1]*1.05,m_size[2]*1.05);
 			glScaled(1.05, 1.05, 1.05);
-			CMaterial* hMaterial = this->getHightlightMaterial();
+			Material* hMaterial = this->getHightlightMaterial();
 			hMaterial->render();
-			CQuadSet::doCreateGeometry();
+			QuadSet::doCreateGeometry();
 		glPopMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 // ------------------------------------------------------------
-void CBrick::updateBrick()
+void Brick::updateBrick()
 {
 	double ox, oy, oz;
 

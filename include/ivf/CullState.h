@@ -28,14 +28,14 @@
 
 namespace ivf {
 
-IvfSmartPointer(CCullState);
+IvfSmartPointer(CullState);
 
 /**
  * Culling state class
  * 
  * Sets the polygon culling state for objects
  */
-class IVF_API CCullState : public CRenderState {
+class IVF_API CullState : public RenderState {
 public:
 	enum TCullFace {
 		CF_FRONT,
@@ -47,13 +47,13 @@ private:
 	TCullFace m_cullFace;
 public:
 	/** CIvfCullState constructor */
-	CCullState();
+	CullState();
 
 	/** CIvfCullState destructor */
-	virtual ~CCullState();
+	virtual ~CullState();
 
-	IvfClassInfo("CCullState",CRenderState);
-	IvfStdFactory(CCullState);
+	IvfClassInfo("CullState",RenderState);
+	IvfStdFactory(CullState);
 
 	/** Sets the face to be culled */
 	void setCullFace(TCullFace face);

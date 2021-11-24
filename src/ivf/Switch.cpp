@@ -19,36 +19,36 @@
 // Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
-// Implementation of: public class CSwitch
+// Implementation of: public class Switch
 
 #include <ivf/Switch.h>
 
 using namespace ivf;
 
 // ------------------------------------------------------------
-CSwitch::CSwitch ()
-		:CComposite()
+Switch::Switch ()
+		:Composite()
 {
 	m_currentChild = 0;
 }
 
 // ------------------------------------------------------------
-CSwitch::~CSwitch ()
+Switch::~Switch ()
 {
 }
 
 // ------------------------------------------------------------
-void CSwitch::doCreateGeometry()
+void Switch::doCreateGeometry()
 {
 	if (this->getSize()>0)
 	{
-		CShape* shape = this->getChild(m_currentChild);
+		Shape* shape = this->getChild(m_currentChild);
 		shape->render();
 	}
 }
 
 // ------------------------------------------------------------
-void CSwitch::setCurrentChild(int child)
+void Switch::setCurrentChild(int child)
 {
 	if ((m_currentChild>=0)&&(m_currentChild<this->getSize()))
 	{
@@ -57,13 +57,13 @@ void CSwitch::setCurrentChild(int child)
 }
 
 // ------------------------------------------------------------
-int CSwitch::getCurrentChild()
+int Switch::getCurrentChild()
 {
 	return m_currentChild;
 }
 
 // ------------------------------------------------------------
-void CSwitch::cycleForward()
+void Switch::cycleForward()
 {
 	if (m_currentChild<this->getSize()-1)
 		m_currentChild++;
@@ -72,7 +72,7 @@ void CSwitch::cycleForward()
 }
 
 // ------------------------------------------------------------
-void CSwitch::cycleBackwards()
+void Switch::cycleBackwards()
 {
 	if (m_currentChild>0)
 		m_currentChild--;

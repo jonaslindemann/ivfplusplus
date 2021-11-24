@@ -26,49 +26,49 @@
 
 using namespace ivf;
 
-CUIInteractiveBase::CUIInteractiveBase()
-:CUIBase()
+UIInteractiveBase::UIInteractiveBase()
+:UIBase()
 {
 	setUseName(true);
 }
 
-CUIInteractiveBase::~CUIInteractiveBase()
+UIInteractiveBase::~UIInteractiveBase()
 {
 
 }
 
-void CUIInteractiveBase::addChild(CShape *shape)
+void UIInteractiveBase::addChild(Shape *shape)
 {
 	shape->setUseName(false);
-	CComposite::addChild(shape);
+	Composite::addChild(shape);
 }
 
-void CUIInteractiveBase::doControlDown(CVec3d vec, int button)
+void UIInteractiveBase::doControlDown(Vec3d vec, int button)
 {
 
 }
 
-void CUIInteractiveBase::doControlOver(CVec3d vec)
+void UIInteractiveBase::doControlOver(Vec3d vec)
 {
 
 }
 
-void CUIInteractiveBase::doControlUp(CVec3d vec)
+void UIInteractiveBase::doControlUp(Vec3d vec)
 {
 
 }
 
-void CUIInteractiveBase::doControlDrag(CVec3d vec, int button)
+void UIInteractiveBase::doControlDrag(Vec3d vec, int button)
 {
 
 }
 
-void CUIInteractiveBase::doControlClick(CVec3d vec, int button)
+void UIInteractiveBase::doControlClick(Vec3d vec, int button)
 {
 
 }
 
-void CUIInteractiveBase::doControlLeave(CVec3d vec)
+void UIInteractiveBase::doControlLeave(Vec3d vec)
 {
 
 }

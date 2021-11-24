@@ -33,7 +33,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CCamera);
+IvfSmartPointer(Camera);
 
 /**
  * Camera/view class
@@ -84,7 +84,7 @@ IvfSmartPointer(CCamera);
  * 
  * @author Jonas Lindemann
  */
-class IVF_API CCamera : public CView {
+class IVF_API Camera : public View {
 public:
 	enum TStereoEye {
 		SE_LEFT,
@@ -118,21 +118,21 @@ private:
 	TStereoEye m_stereoEye;
 	double m_eyeSeparation;
 
-	CVec3d m_up;
-	CVec3d m_sideways;
-	CVec3d m_forward;
-	CVec3d m_position;
-	CVec3d m_target;
+	Vec3d m_up;
+	Vec3d m_sideways;
+	Vec3d m_forward;
+	Vec3d m_position;
+	Vec3d m_target;
 
 public:
 	/** CIvfCamera constructor. */
-	CCamera();
+	Camera();
 
 	/** CIvfCamera destructor */
-	virtual ~CCamera ();
+	virtual ~Camera ();
 
-	IvfClassInfo("CCamera", CView);
-	IvfStdFactory(CCamera);
+	IvfClassInfo("Camera", View);
+	IvfStdFactory(Camera);
 
 	/**
 	 * Set camera position
@@ -148,7 +148,7 @@ public:
 	void getPosition(GLdouble &x, GLdouble &y, GLdouble &z);
 	
 	/** Return camera position */
-	CVec3d& getPosition();
+	Vec3d& getPosition();
 
 	/**
 	 * Set camera target position
@@ -189,7 +189,7 @@ public:
 	 * updates the input frustum with the correct values for the 
 	 * current camera view.
 	 */
-	void getViewFrustum(CViewFrustum* frustum);
+	void getViewFrustum(ViewFrustum* frustum);
 
 	/** 
 	 * Retrieve pick vector
@@ -203,7 +203,7 @@ public:
 	 * @param vz Pick vector z component
 	 */
 	void pickVector(int sx, int sy, double & vx, double & vy, double & vz);
-	CVec3d& pickVector(int x, int y);
+	Vec3d& pickVector(int x, int y);
 
 	/**
 	 * Return forward vector.
@@ -278,7 +278,7 @@ public:
 	 * CT_FREE_ORIENTATION mode, to set the forward camera 
 	 * direction.
 	 */
-	void setForwardVector(CVec3d& vec);
+	void setForwardVector(Vec3d& vec);
 
 	void moveForward(double d);
 	void turn(double dx, double dy, double dz);
@@ -302,8 +302,8 @@ public:
 	void setJitterPixels(double dx, double dy);
 	void getJitterPixels(double &x, double &y);
 
-	CVec3d& getForwardVector();
-	CVec3d& getTarget();
+	Vec3d& getForwardVector();
+	Vec3d& getTarget();
 
 	void setTileRect(double left, double right, double bottom, double top);
 	void getTileRect(double &left, double &right, double &bottom, double &top);

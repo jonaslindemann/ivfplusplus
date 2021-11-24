@@ -19,7 +19,7 @@
 // Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
-// Implementation of: public class COldGrid
+// Implementation of: public class OldGrid
 
 #include <ivf/config.h>
 #include <ivf/OldGrid.h>
@@ -28,8 +28,8 @@ using namespace ivf;
 
 
 // ------------------------------------------------------------
-COldGrid::COldGrid ()
-		:CSimpleLineSet()
+OldGrid::OldGrid ()
+		:SimpleLineSet()
 		//TODO: check and complete member initialisation list!
 {
 	m_rows = 200;
@@ -53,12 +53,12 @@ COldGrid::COldGrid ()
 }
 
 // ------------------------------------------------------------
-COldGrid::~COldGrid ()
+OldGrid::~OldGrid ()
 {
 }
 
 // ------------------------------------------------------------
-void COldGrid::setSize(GLint rows, GLint cols)
+void OldGrid::setSize(GLint rows, GLint cols)
 {
 	m_rows = rows;
 	m_cols = cols;
@@ -69,7 +69,7 @@ void COldGrid::setSize(GLint rows, GLint cols)
 }
 
 // ------------------------------------------------------------
-void COldGrid::setUnits(GLdouble x, GLdouble y)
+void OldGrid::setUnits(GLdouble x, GLdouble y)
 {
 	m_xUnit = x;
 	m_yUnit = y;
@@ -79,7 +79,7 @@ void COldGrid::setUnits(GLdouble x, GLdouble y)
 }
 
 // ------------------------------------------------------------
-void COldGrid::createGrid()
+void OldGrid::createGrid()
 {
 	int i;
 	int k;
@@ -150,13 +150,13 @@ void COldGrid::createGrid()
 }
 
 // ------------------------------------------------------------
-void COldGrid::setMark(int x, int y)
+void OldGrid::setMark(int x, int y)
 {
 	m_xMark = x;
 	m_yMark = y;
 }
 
-void COldGrid::doUpdateBoundingSphere()
+void OldGrid::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=nullptr)
 	{

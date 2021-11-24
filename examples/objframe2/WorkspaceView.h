@@ -57,44 +57,44 @@ enum TScenarioType {
 	ST_CREATE_LOADS
 };
 
-class CViewModeChangeEvent {
+class ViewModeChangeEvent {
 public:
 	virtual void onViewModeChange(TViewModeEvent newMode) {};
 };
 
-class CCoordinateEvent {
+class CoordinateEvent {
 public:
 	virtual void onCoordinate(double x, double y, double z) {};
 };
 
-class CSelectionChangedEvent {
+class SelectionChangedEvent {
 public:
 	virtual void onSelectionChanged() {};
 };
 
-IvfSmartPointer(CWorkspaceView);
+IvfSmartPointer(WorkspaceView);
 
 // ------------------------------------------------------------
 // Window class definition
 // ------------------------------------------------------------
 
-class CWorkspaceView: public ivf::CFltkBase,
-	ivf::CKeyboardEvent,
-	ivf::CCreateShapeEvent,
-	ivf::CSingleSelectionEvent,
-	ivf::CMouseDownEvent,
-	ivf::CMouseUpEvent,
-	ivf::CModifierDownEvent,
-	ivf::CModifierUpEvent,
-	ivf::CHighlightEvent,
-	ivf::CMenuItemEvent,
-	ivf::CMoveSelectionEvent,
-	ivf::CMouseMove3dEvent,
-	ivf::CCopyShapeEvent,
-	ivf::CFinishCopyEvent,
-	ivf::CFinishMoveEvent,
-	ivf::CCursorUpdateEvent,
-	ivf::CMouseMoveEvent
+class WorkspaceView: public ivf::FltkBase,
+	ivf::KeyboardEvent,
+	ivf::CreateShapeEvent,
+	ivf::SingleSelectionEvent,
+	ivf::MouseDownEvent,
+	ivf::MouseUpEvent,
+	ivf::ModifierDownEvent,
+	ivf::ModifierUpEvent,
+	ivf::HighlightEvent,
+	ivf::MenuItemEvent,
+	ivf::MoveSelectionEvent,
+	ivf::MouseMove3dEvent,
+	ivf::CopyShapeEvent,
+	ivf::FinishCopyEvent,
+	ivf::FinishMoveEvent,
+	ivf::CursorUpdateEvent,
+	ivf::MouseMoveEvent
 {
 public:
 	enum TViewMode {
@@ -119,42 +119,42 @@ public:
 		ST_CREATE_LOADS
 	};
 private:
-	ivf::CCameraPtr					m_camera;
-	ivf::CLightPtr					m_light;
-	ivf::CScenePtr					m_scene;
-	ivf::CMaterialPtr					m_nodeMaterial;
-	ivf::CMaterialPtr					m_lineMaterial;
-	ivf::CMaterialPtr					m_vectorMaterial;
-	ivf::CMaterialPtr					m_movementMaterial;
+	ivf::CameraPtr					m_camera;
+	ivf::LightPtr					m_light;
+	ivf::ScenePtr					m_scene;
+	ivf::MaterialPtr				m_nodeMaterial;
+	ivf::MaterialPtr				m_lineMaterial;
+	ivf::MaterialPtr				m_vectorMaterial;
+	ivf::MaterialPtr				m_movementMaterial;
 
-	ivf::CShapeStdPtr					m_oldShape;
-	ivf::CShapeSelectionPtr			m_selection;
-	ivf::CShapeSelectionPtr			m_lineSelection;
+	ivf::ShapeStdPtr				m_oldShape;
+	ivf::ShapeSelectionPtr			m_selection;
+	ivf::ShapeSelectionPtr			m_lineSelection;
 
-	ivf::CNodeCursorPtr				m_selectionCursor;
-	ivf::CNodeCursorPtr				m_movementCursor;
-	ivf::CExtrArrowPtr				m_loadCursor;
-	CVectorCursorPtr				m_vectorCursor;
+	ivf::NodeCursorPtr				m_selectionCursor;
+	ivf::NodeCursorPtr				m_movementCursor;
+	ivf::ExtrArrowPtr				m_loadCursor;
+	VectorCursorPtr					m_vectorCursor;
 
-	ivf::CShapeStdPtr					m_moveShape;
+	ivf::ShapeStdPtr				m_moveShape;
 
-	ivf::CCompositePtr				m_nodes;
-	ivf::CCompositePtr				m_lines;
-	ivf::CCompositePtr				m_vectors;
+	ivf::CompositePtr				m_nodes;
+	ivf::CompositePtr				m_lines;
+	ivf::CompositePtr				m_vectors;
 
-	ivf::CCompositePtr				m_movementShapes;
+	ivf::CompositePtr				m_movementShapes;
 
-	ivf::CMouseViewHandlerPtr			m_mouseViewHandler;
-	ivf::CSceneHandlerPtr				m_sceneHandler;
-	ivf::CShapePlacementHandlerPtr	m_shapePlacementHandler;
-	ivf::CSelectionHandlerPtr			m_selectionHandler;
+	ivf::MouseViewHandlerPtr		m_mouseViewHandler;
+	ivf::SceneHandlerPtr			m_sceneHandler;
+	ivf::ShapePlacementHandlerPtr	m_shapePlacementHandler;
+	ivf::SelectionHandlerPtr		m_selectionHandler;
 
 	TViewMode						m_viewMode;
 	TViewMode						m_savedViewMode;
 
-	CViewModeChangeEvent*			m_viewModeChangeEvent;			
-	CCoordinateEvent*				m_coordinateEvent;
-	CSelectionChangedEvent*			m_selectionChangedEvent;
+	ViewModeChangeEvent*			m_viewModeChangeEvent;			
+	CoordinateEvent*				m_coordinateEvent;
+	SelectionChangedEvent*			m_selectionChangedEvent;
 
 	int								m_nodeCount;
 
@@ -162,7 +162,7 @@ private:
 	int								m_vectorClickCount;
 
 public:
-	CWorkspaceView(int X, int Y, int W, int H, const char* L);
+	WorkspaceView(int X, int Y, int W, int H, const char* L);
 
 	void setViewMode(TViewMode mode);
 	void restoreViewMode();
@@ -175,24 +175,24 @@ public:
 	void open(const char* filename);
 	void save();
 
-	ivf::CShapeSelection* getSelection();
+	ivf::ShapeSelection* getSelection();
 
 	void createScenario(TScenarioType scenarioType);
 	void createSimpleStructure(int rows, int cols, int stacks);
 
 
-	void setViewModeChangeEvent(CViewModeChangeEvent* event);
-	void setCoordinateEvent(CCoordinateEvent* event);
-	void setSelectionChangedEvent(CSelectionChangedEvent* event);
+	void setViewModeChangeEvent(ViewModeChangeEvent* event);
+	void setCoordinateEvent(CoordinateEvent* event);
+	void setSelectionChangedEvent(SelectionChangedEvent* event);
 
 	virtual void onInit(int width, int height);
 	virtual void onKeyboard(int key, int x, int y);
-	virtual void onFunctionKey(CWidgetBase::TFunctionKey key, int x, int y);
+	virtual void onFunctionKey(WidgetBase::TFunctionKey key, int x, int y);
 
-	virtual void onCreateShapeEvent(double x, double y, double z, ivf::CShapePtr& shape);
+	virtual void onCreateShapeEvent(double x, double y, double z, ivf::ShapePtr& shape);
 
-	virtual void onSelect(ivf::CShape* shape);
-	virtual void onHighlight(ivf::CShape* shape);
+	virtual void onSelect(ivf::Shape* shape);
+	virtual void onHighlight(ivf::Shape* shape);
 
 	virtual void onMouseDown(int x, int y);
 	virtual void onMouseMove(int x, int y);
@@ -202,7 +202,7 @@ public:
 	virtual void onModifierUp();
 
 	virtual bool onMoveSelection();
-	virtual void onCopyShape(double x, double y, double z, ivf::CShapePtr& shape, ivf::CShapePtr& newShape);
+	virtual void onCopyShape(double x, double y, double z, ivf::ShapePtr& shape, ivf::ShapePtr& newShape);
 	virtual void onFinishCopy();
 	virtual void onFinishMove();
 

@@ -19,7 +19,7 @@
 // Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
-// Implementation of: public class CMaterial
+// Implementation of: public class Material
 
 #include <ivf/config.h>
 #include <ivf/Material.h>
@@ -175,8 +175,8 @@ void hsv2rgb(float hin, float s, float v,
 }
 
 // ------------------------------------------------------------
-CMaterial::CMaterial ()
-:CGLBase()
+Material::Material ()
+:GLBase()
 //TODO: check and complete member initialisation list!
 {
 	this->setDiffuseColor(0.5, 0.5, 0.5, 1.0);
@@ -189,12 +189,12 @@ CMaterial::CMaterial ()
 }
 
 // ------------------------------------------------------------
-CMaterial::~CMaterial ()
+Material::~Material ()
 {
 }
 
 // ------------------------------------------------------------
-void CMaterial::setDiffuseColor (const float red, const float green, const float blue, const float alfa)
+void Material::setDiffuseColor (const float red, const float green, const float blue, const float alfa)
 {
 	m_diffuseColor[0] = red;
 	m_diffuseColor[1] = green;
@@ -203,7 +203,7 @@ void CMaterial::setDiffuseColor (const float red, const float green, const float
 }
 
 // ------------------------------------------------------------
-void CMaterial::setSpecularColor (const float red, const float green, const float blue, const float alfa)
+void Material::setSpecularColor (const float red, const float green, const float blue, const float alfa)
 {
 	m_specularColor[0] = red;
 	m_specularColor[1] = green;
@@ -212,7 +212,7 @@ void CMaterial::setSpecularColor (const float red, const float green, const floa
 }
 
 // ------------------------------------------------------------
-void CMaterial::setAmbientColor (const float red, const float green, const float blue, const float alfa)
+void Material::setAmbientColor (const float red, const float green, const float blue, const float alfa)
 {
 	m_ambientColor[0] = red;
 	m_ambientColor[1] = green;
@@ -221,7 +221,7 @@ void CMaterial::setAmbientColor (const float red, const float green, const float
 }
 
 // ------------------------------------------------------------
-void CMaterial::getDiffuseColor (float &red, float &green, float &blue, float &alfa)
+void Material::getDiffuseColor (float &red, float &green, float &blue, float &alfa)
 {
 	red = m_diffuseColor[0];
 	green = m_diffuseColor[1];
@@ -230,7 +230,7 @@ void CMaterial::getDiffuseColor (float &red, float &green, float &blue, float &a
 }
 
 // ------------------------------------------------------------
-void CMaterial::getSpecularColor (float &red, float &green, float &blue, float &alfa)
+void Material::getSpecularColor (float &red, float &green, float &blue, float &alfa)
 {
 	red = m_specularColor[0];
 	green = m_specularColor[1];
@@ -239,7 +239,7 @@ void CMaterial::getSpecularColor (float &red, float &green, float &blue, float &
 }
 
 // ------------------------------------------------------------
-void CMaterial::getAmbientColor (float &red, float &green, float &blue, float &alfa)
+void Material::getAmbientColor (float &red, float &green, float &blue, float &alfa)
 {
 	red = m_ambientColor[0];
 	green = m_ambientColor[1];
@@ -248,11 +248,11 @@ void CMaterial::getAmbientColor (float &red, float &green, float &blue, float &a
 }
 
 // ------------------------------------------------------------
-void CMaterial::doCreateMaterial()
+void Material::doCreateMaterial()
 {
 	if (glIsEnabled(GL_LIGHTING))
 	{
-		if (CGlobalState::getInstance()->isGreyscaleRenderingEnabled())
+		if (GlobalState::getInstance()->isGreyscaleRenderingEnabled())
 		{
 			float temp[4];
 
@@ -282,11 +282,11 @@ void CMaterial::doCreateMaterial()
 		}
 	}
 	else
-        if (CGlobalState::getInstance()->isColorOutputEnabled())
+        if (GlobalState::getInstance()->isColorOutputEnabled())
             glColor4fv(m_diffuseColor);
 }
 
-void CMaterial::setEmissionColor(const float red, const float green, const float blue, const float alfa)
+void Material::setEmissionColor(const float red, const float green, const float blue, const float alfa)
 {
 	m_emissionColor[0] = red;
 	m_emissionColor[1] = green;
@@ -294,7 +294,7 @@ void CMaterial::setEmissionColor(const float red, const float green, const float
 	m_emissionColor[3] = alfa;
 }
 
-void CMaterial::getEmissionColor(float &red, float &green, float &blue, float &alfa)
+void Material::getEmissionColor(float &red, float &green, float &blue, float &alfa)
 {
 	red = m_emissionColor[0];
 	green = m_emissionColor[1];
@@ -302,17 +302,17 @@ void CMaterial::getEmissionColor(float &red, float &green, float &blue, float &a
 	alfa = m_emissionColor[3];
 }
 
-void CMaterial::setShininess(float shininess)
+void Material::setShininess(float shininess)
 {
 	m_shininess = shininess;
 }
 
-void CMaterial::getShininess(float &shininess)
+void Material::getShininess(float &shininess)
 {
 	shininess = m_shininess;
 }
 
-void CMaterial::setAlphaValue(float alpha)
+void Material::setAlphaValue(float alpha)
 {
 	m_diffuseColor[3] = alpha;
 	m_ambientColor[3] = alpha;
@@ -320,7 +320,7 @@ void CMaterial::setAlphaValue(float alpha)
 	m_specularColor[3] = alpha;
 }
 
-void CMaterial::assignFrom(CMaterial *material)
+void Material::assignFrom(Material *material)
 {
 	float r, g, b, a, s;
 
@@ -336,7 +336,7 @@ void CMaterial::assignFrom(CMaterial *material)
 	this->setShininess(s);
 }
 
-void CMaterial::multiplySpecular(double factor)
+void Material::multiplySpecular(double factor)
 {
 	m_specularColor[0]*=factor;
 	m_specularColor[1]*=factor;
@@ -350,7 +350,7 @@ void CMaterial::multiplySpecular(double factor)
 			m_specularColor[i] = 1.0f;
 }
 
-void CMaterial::multiplyDiffuse(double factor)
+void Material::multiplyDiffuse(double factor)
 {
 	m_diffuseColor[0]*=factor;
 	m_diffuseColor[1]*=factor;
@@ -364,7 +364,7 @@ void CMaterial::multiplyDiffuse(double factor)
 			m_diffuseColor[i] = 1.0f;
 }
 
-void CMaterial::multiplyAmbient(double factor)
+void Material::multiplyAmbient(double factor)
 {
 	m_ambientColor[0]*=factor;
 	m_ambientColor[1]*=factor;
@@ -378,7 +378,7 @@ void CMaterial::multiplyAmbient(double factor)
 			m_ambientColor[i] = 1.0f;
 }
 
-void CMaterial::multiplyEmission(double factor)
+void Material::multiplyEmission(double factor)
 {
 	m_emissionColor[0]*=factor;
 	m_emissionColor[1]*=factor;
@@ -392,7 +392,7 @@ void CMaterial::multiplyEmission(double factor)
 			m_emissionColor[i] = 1.0f;
 }
 
-void CMaterial::multiplyColor(double factor)
+void Material::multiplyColor(double factor)
 {
 	multiplySpecular(factor);
 	multiplyDiffuse(factor);
@@ -400,7 +400,7 @@ void CMaterial::multiplyColor(double factor)
 	multiplyEmission(factor);
 }
 
-void CMaterial::modifyBrightness(float *color, double factor)
+void Material::modifyBrightness(float *color, double factor)
 {
 	float h, s, v;
 
@@ -422,28 +422,28 @@ void CMaterial::modifyBrightness(float *color, double factor)
 	);
 }
 
-void CMaterial::brightnessSpecular(double factor)
+void Material::brightnessSpecular(double factor)
 {
 	modifyBrightness(m_specularColor, factor);
 }
 
-void CMaterial::brightnessDiffuse(double factor)
+void Material::brightnessDiffuse(double factor)
 {
 	modifyBrightness(m_diffuseColor, factor);
 }
 
-void CMaterial::brightnessAmbient(double factor)
+void Material::brightnessAmbient(double factor)
 {
 	modifyBrightness(m_ambientColor, factor);
 }
 
-void CMaterial::brightnessEmission(double factor)
+void Material::brightnessEmission(double factor)
 {
 	modifyBrightness(m_emissionColor, factor);
 }
 
 
-void CMaterial::toGreyscale(float *color, float *grey)
+void Material::toGreyscale(float *color, float *grey)
 {
 	float mean = (color[0] + color[1] + color[2])/3.0f;
 	grey[0] = mean;
@@ -451,12 +451,12 @@ void CMaterial::toGreyscale(float *color, float *grey)
 	grey[2] = mean;
 }
 
-void CMaterial::setColorMaterial(bool flag)
+void Material::setColorMaterial(bool flag)
 {
 	m_colorMaterial = flag;
 }
 
-bool CMaterial::getColorMaterial()
+bool Material::getColorMaterial()
 {
 	return m_colorMaterial;
 }

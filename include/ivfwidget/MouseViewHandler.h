@@ -32,7 +32,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CMouseViewHandler);
+IvfSmartPointer(MouseViewHandler);
 
 /**
  * Mouse view handler
@@ -43,11 +43,11 @@ IvfSmartPointer(CMouseViewHandler);
  * Zooming is done using the right mouse button and the
  * [Shift] key.
  */
-class IVFWIDGET_API CMouseViewHandler : public CHandlerBase,
-	CMouseDownEvent,
-	CMouseMoveEvent,
-	CMouseUpEvent,
-	CResizeEvent
+class IVFWIDGET_API MouseViewHandler : public HandlerBase,
+	MouseDownEvent,
+	MouseMoveEvent,
+	MouseUpEvent,
+	ResizeEvent
 {
 public:
 	enum TKeyHandling {
@@ -76,8 +76,8 @@ private:
 
 	bool m_autoScale;
 
-	CCameraPtr m_camera;
-	CWidgetBase* m_widget;
+	CameraPtr m_camera;
+	WidgetBase* m_widget;
 
 	TKeyHandling m_keyHandling;
 
@@ -90,15 +90,20 @@ public:
 	/**
 	 * Class constructor
 	 *
-	 * @param widget reference to CWidgetBase class.
+	 * @param widget reference to WidgetBase class.
 	 * @param camera reference to a CIvfCamera to be manipulated.
 	 */
-	CMouseViewHandler(CWidgetBase* widget, CCamera* camera);
+	MouseViewHandler(WidgetBase* widget, Camera* camera);
 
 	/** Class destructor */
-	virtual ~CMouseViewHandler();
+	virtual ~MouseViewHandler();
 
-	IvfClassInfo("CMouseViewHandler",CBase);
+	IvfClassInfo("MouseViewHandler",Base);
+
+	static MouseViewHandlerPtr create(WidgetBase* widget, Camera* camera)
+	{
+		return MouseViewHandlerPtr(new MouseViewHandler(widget, camera));
+	}
 
 	/**
 	 * Set panning scale factor
@@ -148,9 +153,9 @@ public:
 
 	/**
 	 * Set type of key handling.
-	 * @param keyHandling Default set to CMouseViewHandler::KH_NORMAL.
+	 * @param keyHandling Default set to MouseViewHandler::KH_NORMAL.
 	 * this mode uses left/right buttons and the [Shift] key.
-	 * CMouseViewHandler::KH_MIDDLE_BUTTON uses the middle button (wheel)
+	 * MouseViewHandler::KH_MIDDLE_BUTTON uses the middle button (wheel)
 	 * to handle zooming
 	 */
 	void setKeyHandling(TKeyHandling keyHandling);

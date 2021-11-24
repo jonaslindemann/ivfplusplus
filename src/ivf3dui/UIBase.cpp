@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CUIBase::CUIBase()
+UIBase::UIBase()
 {
 	m_id = -1;
 	m_enabled = true;
@@ -34,55 +34,55 @@ CUIBase::CUIBase()
 	setUseName(false);
 }
 
-CUIBase::~CUIBase()
+UIBase::~UIBase()
 {
 
 }
 
-void CUIBase::setId(int id)
+void UIBase::setId(int id)
 {
 	m_id = id;
 }
 
-int CUIBase::getId()
+int UIBase::getId()
 {
 	return m_id;
 }
 
 
 
-void CUIBase::enable()
+void UIBase::enable()
 {
 	m_enabled = true;
 }
 
-void CUIBase::disable()
+void UIBase::disable()
 {
 	m_enabled = false;
 }
 
-bool CUIBase::isEnabled()
+bool UIBase::isEnabled()
 {
 	return m_enabled;
 }
 
 
-void CUIBase::doChangeState(bool enabled)
+void UIBase::doChangeState(bool enabled)
 {
 	
 }
 
-void CUIBase::setParentControl(CUIBase *parent)
+void UIBase::setParentControl(UIBase *parent)
 {
 	m_parent = parent;
 }
 
-CUIBase* CUIBase::getParentControl()
+UIBase* UIBase::getParentControl()
 {
 	return m_parent;
 }
 
-bool CUIBase::haveParent()
+bool UIBase::haveParent()
 {
 	return m_parent!=nullptr;
 }

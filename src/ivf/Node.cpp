@@ -19,7 +19,7 @@
 // Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
-// Implementation of: public class CNode
+// Implementation of: public class Node
 
 #include <ivf/config.h>
 #include <ivf/Node.h>
@@ -27,14 +27,14 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CNode::CNode ()
-		:CShape()
+Node::Node ()
+		:Shape()
 		//TODO: check and complete member initialisation list!
 {
 	m_nodeSize = 0.2;
 
-	m_sphereShape = new CSphere();
-	m_cubeShape = new CCube();
+	m_sphereShape = new Sphere();
+	m_cubeShape = new Cube();
 
 	m_sphereShape->setRadius(0.2);
 	m_cubeShape->setSize(0.2);
@@ -44,7 +44,7 @@ CNode::CNode ()
 	m_nodeShape = m_cubeShape;
 	m_nodeType = NT_CUBE;
 
-	m_selectionBox = new CSelectionBox();
+	m_selectionBox = new SelectionBox();
 	m_selectionBox->setUseName(false);
 	/*
 	m_pBC = nullptr;
@@ -54,13 +54,13 @@ CNode::CNode ()
 }
 
 // ------------------------------------------------------------
-CNode::~CNode ()
+Node::~Node ()
 {
 
 }
 
 // ------------------------------------------------------------
-void CNode::doCreateGeometry()
+void Node::doCreateGeometry()
 {
 	m_sphereShape->setRadius(m_nodeSize);
 	m_cubeShape->setSize(m_nodeSize);
@@ -70,27 +70,27 @@ void CNode::doCreateGeometry()
 }
 
 // ------------------------------------------------------------
-void CNode::doCreateSelect()
+void Node::doCreateSelect()
 {
 	m_selectionBox->setSize(m_nodeSize, m_nodeSize, m_nodeSize);
 	m_selectionBox->render();
 }
 
 // ------------------------------------------------------------
-void CNode::setSize(double size)
+void Node::setSize(double size)
 {
 	m_nodeSize = size;
 	doUpdateBoundingSphere();
 }
 
 // ------------------------------------------------------------
-double CNode::getSize()
+double Node::getSize()
 {
 	return m_nodeSize;
 }
 
 // ------------------------------------------------------------
-void CNode::setType(TNodeType nodeType)
+void Node::setType(TNodeType nodeType)
 {
 	m_nodeType = nodeType;
 	switch (m_nodeType) {
@@ -110,12 +110,12 @@ void CNode::setType(TNodeType nodeType)
 }
 
 // ------------------------------------------------------------
-CNode::TNodeType CNode::getNodeType()
+Node::TNodeType Node::getNodeType()
 {
 	return m_nodeType;
 }
 
-void CNode::doUpdateBoundingSphere()
+void Node::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=nullptr)
 	{

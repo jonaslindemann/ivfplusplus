@@ -30,13 +30,13 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase {
+class ExampleWindow: public GlutBase {
 private:
-	CCameraPtr		m_camera;
-	CCompositePtr	m_scene;
-	CLightPtr		m_light;
+	CameraPtr		m_camera;
+	CompositePtr	m_scene;
+	LightPtr		m_light;
 
 	double m_angleX;
 	double m_angleY;
@@ -51,9 +51,9 @@ private:
 	bool m_rotating;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H, bool fullScreen);
+	ExampleWindow(int X, int Y, int W, int H, bool fullScreen);
 
-	static CExampleWindowPtr CExampleWindow::create(int X, int Y, int W, int H, bool fullScreen);
+	static ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H, bool fullScreen);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -69,18 +69,18 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindowPtr CExampleWindow::create(int X, int Y, int W, int H, bool fullScreen)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H, bool fullScreen)
 {
-	return CExampleWindowPtr(new CExampleWindow(X, Y, W, H, fullScreen));
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H, fullScreen));
 }
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H, bool fullScreen)
-		:CGlutBase(X, Y, W, H, fullScreen) 
+ExampleWindow::ExampleWindow(int X, int Y, int W, int H, bool fullScreen)
+		:GlutBase(X, Y, W, H, fullScreen) 
 {
 
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -95,7 +95,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = CCamera::create();
+	m_camera = Camera::create();
 	m_camera->setPosition(-0.0, 3.0, 5.0);
 	m_camera->setTarget(-0.0, 0.0, 0.0);
 
@@ -103,11 +103,11 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create scene
 
-	m_scene = CComposite::create();
+	m_scene = Composite::create();
 
 	// Create a file reader
 
-	auto acReader = CAc3DReader::create();
+	auto acReader = Ac3DReader::create();
 
 	// Set parameters
 
@@ -134,7 +134,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a light
 
-	auto lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
@@ -149,7 +149,7 @@ void CExampleWindow::onInit(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -157,7 +157,7 @@ void CExampleWindow::onResize(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 	m_camera->render();
@@ -165,14 +165,14 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseDown(int x, int y)
+void ExampleWindow::onMouseDown(int x, int y)
 {
 	m_beginX = x;
 	m_beginY = y;
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseMove(int x, int y)
+void ExampleWindow::onMouseMove(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -196,7 +196,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CWidgetBase::MT_SHIFT)
+		if (getModifierKey() == WidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -218,7 +218,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseUp(int x, int y)
+void ExampleWindow::onMouseUp(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -229,7 +229,7 @@ void CExampleWindow::onMouseUp(int x, int y)
 }
 
 // ------------------------------------------------------------
-bool CExampleWindow::onTimeout0()
+bool ExampleWindow::onTimeout0()
 {
 	if (m_rotating)
 	{
@@ -240,7 +240,7 @@ bool CExampleWindow::onTimeout0()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'r' :
@@ -262,11 +262,11 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	auto app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 	// Create a window
 
-	auto window = CExampleWindow::create(0, 0, 512, 512, false);
+	auto window = ExampleWindow::create(0, 0, 512, 512, false);
 	window->setModeString("1280x1024");
 
 	// Set window title and show window

@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CSwitch);
+IvfSmartPointer(Switch);
 
 /**
  * Switch node
@@ -38,16 +38,16 @@ IvfSmartPointer(CSwitch);
  * currentChild property.
  * @author Jonas Lindemann
  */
-class IVF_API CSwitch : public CComposite {
+class IVF_API Switch : public Composite {
 public:
 	/** Constructor */
-	CSwitch ();
+	Switch ();
 
 	/** Destructor */
-	virtual ~CSwitch ();
+	virtual ~Switch ();
 
-	IvfClassInfo("CSwitch",CComposite);
-	IvfStdFactory(CSwitch);
+	IvfClassInfo("Switch",Composite);
+	IvfStdFactory(Switch);
 
 	/** Set current visible child */
 	void setCurrentChild(int child);

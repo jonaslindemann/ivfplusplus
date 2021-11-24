@@ -32,26 +32,26 @@
 
 namespace ivf {
 
-IvfSmartPointer(CUIInteractiveBase);
+IvfSmartPointer(UIInteractiveBase);
 
-class IVF3DUI_API CUIInteractiveBase : public CUIBase {
+class IVF3DUI_API UIInteractiveBase : public UIBase {
 private:
 
 public:
-	CUIInteractiveBase();
-	virtual ~CUIInteractiveBase();
+	UIInteractiveBase();
+	virtual ~UIInteractiveBase();
 
-	IvfClassInfo("CUIInteractiveBase",CUIBase);
-	IvfStdFactory(CUIInteractiveBase);
+	IvfClassInfo("UIInteractiveBase",UIBase);
+	IvfStdFactory(UIInteractiveBase);
 
-	void addChild(CShape* shape);
+	void addChild(Shape* shape);
 
-	virtual void doControlDown(CVec3d vec, int button);
-	virtual void doControlOver(CVec3d vec);
-	virtual void doControlLeave(CVec3d vec);
-	virtual void doControlUp(CVec3d vec);
-	virtual void doControlDrag(CVec3d vec, int button);
-	virtual void doControlClick(CVec3d vec, int button);
+	virtual void doControlDown(Vec3d vec, int button);
+	virtual void doControlOver(Vec3d vec);
+	virtual void doControlLeave(Vec3d vec);
+	virtual void doControlUp(Vec3d vec);
+	virtual void doControlDrag(Vec3d vec, int button);
+	virtual void doControlClick(Vec3d vec, int button);
 };
 
 }

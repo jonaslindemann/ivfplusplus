@@ -42,7 +42,7 @@ namespace ivf {
 #define OT_GROUP   2  
 #define OT_LIGHT   3
 
-IvfSmartPointer(CAc3DReader);
+IvfSmartPointer(Ac3DReader);
 
 /**
  * Base class for a AC3D reader
@@ -53,7 +53,7 @@ IvfSmartPointer(CAc3DReader);
  *
  * @author Jonas Lindemann
  */
-class IVFFILE_API CAc3DReader : public CFileReader {
+class IVFFILE_API Ac3DReader : public FileReader {
 public:
 	enum TSurfaceType {
 		ST_POLY,
@@ -71,23 +71,23 @@ private:
 
 	TSurfaceType m_surfaceType;
 
-	CCompositePtr m_world;
-	CCompositePtr m_currentGroup;
-	CMaterialPtr m_currentMaterial;
-	CPolySetPtr m_currentPolySet;
-	CLightPtr m_currentLight;
-	CLineStripSetPtr m_currentLineStripSet;
-	CIndexPtr m_currentIndex;
-	CMaterialSetPtr m_materialSet;
-	CShapePtr m_currentShape;
-	CTexturePtr m_lastTexture;
-	CLightingPtr m_lighting;
+	CompositePtr m_world;
+	CompositePtr m_currentGroup;
+	MaterialPtr m_currentMaterial;
+	PolySetPtr m_currentPolySet;
+	LightPtr m_currentLight;
+	LineStripSetPtr m_currentLineStripSet;
+	IndexPtr m_currentIndex;
+	MaterialSetPtr m_materialSet;
+	ShapePtr m_currentShape;
+	TexturePtr m_lastTexture;
+	LightingPtr m_lighting;
 
-	std::vector<CVec3dPtr> m_vertexList;
+	std::vector<Vec3dPtr> m_vertexList;
 
 	int			    m_lightCount;
 
-	CCompositePtr  m_groupStack[100];
+	CompositePtr    m_groupStack[100];
 	int				m_childStack[100];
 	int				m_currentLevel;
 
@@ -129,19 +129,19 @@ private:
 
 	bool haveMoreChildren();
 	void decChild();
-	CComposite* currentGroup();
+	Composite* currentGroup();
 	void popGroup();
-	void pushGroup(CComposite* group);
+	void pushGroup(Composite* group);
 	void initGroupStack();
 public:
-	/** CAc3DReader constructor */
-	CAc3DReader();
+	/** Ac3DReader constructor */
+	Ac3DReader();
 
-	/** CAc3DReader destructor */
-	virtual ~CAc3DReader();
+	/** Ac3DReader destructor */
+	virtual ~Ac3DReader();
 
-	IvfClassInfo("CAc3DReader",CFileReader);
-	IvfStdFactory(CAc3DReader);
+	IvfClassInfo("Ac3DReader",FileReader);
+	IvfStdFactory(Ac3DReader);
 
 	/** Reads AC3D file */
 	virtual void read();

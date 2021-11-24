@@ -25,22 +25,22 @@
 
 using namespace ivf;
 
-CCoordHist::CCoordHist()
+CoordHist::CoordHist()
 {
 	m_discreteTime = nullptr;
 }
 
-CCoordHist::~CCoordHist()
+CoordHist::~CoordHist()
 {
 	this->clear();
 }
 
-void CCoordHist::addList(CCoordList* list)
+void CoordHist::addList(CoordList* list)
 {
-	m_lists.push_back(CCoordListPtr(list));
+	m_lists.push_back(CoordListPtr(list));
 }
 
-CCoordList* CCoordHist::getList(long idx)
+CoordList* CoordHist::getList(long idx)
 {
 	if ( (idx>=0)&&(idx<m_lists.size()) )
 		return m_lists[idx];
@@ -48,17 +48,17 @@ CCoordList* CCoordHist::getList(long idx)
 		return nullptr;
 }
 
-long CCoordHist::getSize()
+long CoordHist::getSize()
 {
-	return m_lists.size();
+	return static_cast<int>(m_lists.size());
 }
 
-void CCoordHist::clear()
+void CoordHist::clear()
 {
 	m_lists.clear();
 }
 
-CCoordList* CCoordHist::getList()
+CoordList* CoordHist::getList()
 {
 	if (m_discreteTime!=nullptr)
 	{
@@ -72,12 +72,12 @@ CCoordList* CCoordHist::getList()
 		return m_lists[0];
 }
 
-void CCoordHist::setDiscreteTime(CDiscreteTime *discreteTime)
+void CoordHist::setDiscreteTime(DiscreteTime *discreteTime)
 {
 	m_discreteTime = discreteTime;
 }
 
-void CCoordHist::saveToStream(std::ostream &out)
+void CoordHist::saveToStream(std::ostream &out)
 {
 	using namespace std;
 	
@@ -95,12 +95,12 @@ void CCoordHist::saveToStream(std::ostream &out)
 	}
 }
 
-void CCoordHist::readFromStream(std::istream &in)
+void CoordHist::readFromStream(std::istream &in)
 {
 	using namespace std;
 	long i;
 	long nLists;
-	CCoordList* coordList;
+	CoordList* coordList;
 
 	this->clear();
 
@@ -108,7 +108,7 @@ void CCoordHist::readFromStream(std::istream &in)
 
 	for (i=0; i<nLists; i++)
 	{
-		coordList = new CCoordList();
+		coordList = new CoordList();
 		coordList->readFromStream(in);
 		m_lists.push_back(coordList);
 	}

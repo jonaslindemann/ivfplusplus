@@ -29,7 +29,7 @@
 
 #include <ivf/config.h>
 
-CDiscreteTime::CDiscreteTime()
+DiscreteTime::DiscreteTime()
 {
 	m_time = 0;
 	m_startTime = 0;
@@ -39,39 +39,39 @@ CDiscreteTime::CDiscreteTime()
 	m_loop = false;
 }
 
-CDiscreteTime::~CDiscreteTime()
+DiscreteTime::~DiscreteTime()
 {
 
 }
 
-long CDiscreteTime::getCurrentTime()
+long DiscreteTime::getCurrentTime()
 {
 	return m_time;
 }
 
-void CDiscreteTime::setInterval(long startTime, long endTime)
+void DiscreteTime::setInterval(long startTime, long endTime)
 {
 	m_startTime = startTime;
 	m_endTime = endTime;
 	m_time = m_startTime;
 }
 
-void CDiscreteTime::next()
+void DiscreteTime::next()
 {
 	this->checkStep(m_time + m_step);
 }
 
-void CDiscreteTime::rewind()
+void DiscreteTime::rewind()
 {
 	m_time = m_startTime;
 }
 
-void CDiscreteTime::previous()
+void DiscreteTime::previous()
 {
 	this->checkStep(m_time - m_step);
 }
 
-void CDiscreteTime::setTime(long time)
+void DiscreteTime::setTime(long time)
 {
 	if (time>=m_startTime)
 	{
@@ -85,31 +85,31 @@ void CDiscreteTime::setTime(long time)
 	}
 }
 
-void CDiscreteTime::setEndAction(int action)
+void DiscreteTime::setEndAction(int action)
 {
 	m_endAction = action;
 	m_time = 0;
 	m_step = 1;
 }
 
-void CDiscreteTime::last()
+void DiscreteTime::last()
 {
 	m_time = m_endTime;
 }
 
-void CDiscreteTime::setLoop(bool flag)
+void DiscreteTime::setLoop(bool flag)
 {
 	m_loop = flag;
 }
 
-void CDiscreteTime::reset()
+void DiscreteTime::reset()
 {
 	m_time = 0;
 	m_step = 1;
 	m_loop = false;
 }
 
-void CDiscreteTime::checkStep(int testStep)
+void DiscreteTime::checkStep(int testStep)
 {
 	if (testStep<m_startTime)
 	{

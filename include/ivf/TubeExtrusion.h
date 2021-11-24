@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CTubeExtrusion);
+IvfSmartPointer(TubeExtrusion);
 
 /**
  * Tube extrusion primitive
@@ -36,16 +36,16 @@ IvfSmartPointer(CTubeExtrusion);
  * Sweeps a circular section along a spine.
  * @author Jonas Lindemann
  */
-class IVF_API CTubeExtrusion : public CExtrusion {
+class IVF_API TubeExtrusion : public Extrusion {
 public:
 	/** Constructor */
-	CTubeExtrusion ();
+	TubeExtrusion ();
 
 	/** Destructor */
-	virtual ~CTubeExtrusion ();
+	virtual ~TubeExtrusion ();
 
-	IvfClassInfo("CTubeExtrusion",CExtrusion);
-	IvfStdFactory(CTubeExtrusion);
+	IvfClassInfo("TubeExtrusion",Extrusion);
+	IvfStdFactory(TubeExtrusion);
 
 	/**
 	 * Set section sides

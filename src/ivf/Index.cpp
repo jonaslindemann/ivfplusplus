@@ -29,43 +29,43 @@ using namespace ivf;
 // ------------------------------------------------------------
 // ------------------------------------------------------------
 
-CIndex::CIndex()
+Index::Index()
 {
 
 }
 
 // ------------------------------------------------------------
-CIndex::~CIndex()
+Index::~Index()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIndex::addLast(long idx)
+void Index::addLast(long idx)
 {
 	m_indices.push_back(idx);
 }
 
 // ------------------------------------------------------------
-long CIndex::getIndex(long pos)
+long Index::getIndex(long pos)
 {
 	return m_indices[pos];
 }
 
 // ------------------------------------------------------------
-long CIndex::getSize()
+long Index::getSize()
 {
-	return m_indices.size();
+	return static_cast<int>(m_indices.size());
 }
 
 // ------------------------------------------------------------
-void CIndex::clear()
+void Index::clear()
 {
 	m_indices.clear();
 }
 
 // ------------------------------------------------------------
-void CIndex::createLinear(long size)
+void Index::createLinear(long size)
 {
 	long i;
 	m_indices.clear();
@@ -74,7 +74,7 @@ void CIndex::createLinear(long size)
 }
 
 // ------------------------------------------------------------
-void CIndex::addArray(long *i, long size)
+void Index::addArray(long *i, long size)
 {
 	long j;
 
@@ -83,7 +83,7 @@ void CIndex::addArray(long *i, long size)
 }
 
 // ------------------------------------------------------------
-void CIndex::assignFrom(CIndexBase *idx)
+void Index::assignFrom(IndexBase *idx)
 {
 	long i;
 
@@ -94,14 +94,14 @@ void CIndex::assignFrom(CIndexBase *idx)
 }
 
 // ------------------------------------------------------------
-void CIndex::assignTo(CIndexBase *idx)
+void Index::assignTo(IndexBase *idx)
 {
 	idx->clear();
 	idx->assignFrom(this);
 }
 
 // ------------------------------------------------------------
-void CIndex::createLinear(long start, long size)
+void Index::createLinear(long start, long size)
 {
 	long i;
 	m_indices.clear();
@@ -110,7 +110,7 @@ void CIndex::createLinear(long start, long size)
 }
 
 // ------------------------------------------------------------
-void CIndex::createConstant(long value, long size)
+void Index::createConstant(long value, long size)
 {
 	long i;
 	m_indices.clear();
@@ -119,7 +119,7 @@ void CIndex::createConstant(long value, long size)
 }
 
 // ------------------------------------------------------------
-void CIndex::setIndex(long pos, long value)
+void Index::setIndex(long pos, long value)
 {
 	if ((pos>=0)&&(pos<(int)m_indices.size()))
 		m_indices[pos] = value;

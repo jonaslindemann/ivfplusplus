@@ -33,7 +33,7 @@
 
 namespace ivf {
 
-IvfStdPointer(CGlobalState);
+IvfStdPointer(GlobalState);
 
 /**
  * Ivf state singleton class
@@ -43,21 +43,21 @@ IvfStdPointer(CGlobalState);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CGlobalState : public CBase {
+class IVF_API GlobalState : public Base {
 private:
-	static CGlobalState* m_instance;
-	static CSingletonDestroyer<CGlobalState> m_destroyer;
+	static GlobalState* m_instance;
+	static SingletonDestroyer<GlobalState> m_destroyer;
 	bool m_renderMaterial;
 	bool m_renderTexture;
 	bool m_renderGreyscale;
     bool m_colorOutput;
 public:
 	/** Return instance of CIvfGlobalState */
-	static CGlobalState* getInstance();
+	static GlobalState* getInstance();
 
-	IvfClassInfo("CIvfGlobalState",CBase);
+	IvfClassInfo("CIvfGlobalState",Base);
 
-	virtual ~CGlobalState();
+	virtual ~GlobalState();
 
 	void enableMaterialRendering();
 	void disableMaterialRendering();
@@ -76,8 +76,8 @@ public:
     bool isColorOutputEnabled();
 
 protected:
-	CGlobalState();
-	friend class CSingletonDestroyer<CGlobalState>;
+	GlobalState();
+	friend class SingletonDestroyer<GlobalState>;
 };
 
 }

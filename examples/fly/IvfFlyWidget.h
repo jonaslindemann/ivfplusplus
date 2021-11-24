@@ -13,23 +13,26 @@
 #include "StarField.h"
 //#include "Joystick.h"
 
-IvfSmartPointer(CFlyWidget);
+IvfSmartPointer(FlyWidget);
 
-class CFlyWidget : public ivf::CGlutBase {
+class FlyWidget : public ivf::GlutBase {
 private:
-	ivf::CCameraPtr				m_camera;
-	ivf::CScenePtr				m_scene;
-	CStarFieldPtr				m_starfield;
-	ivf::CControllerGroupPtr	m_controllers;
-	ivf::CFlyHandlerPtr			m_flyHandler;
+	ivf::CameraPtr				m_camera;
+	ivf::ScenePtr				m_scene;
+	ivf::ControllerGroupPtr		m_controllers;
+	ivf::FlyHandlerPtr			m_flyHandler;
+
+	StarFieldPtr				m_starfield;
 
 	double m_t;
 	double m_dt;
 	bool m_firstFrame;
 public:
-	CFlyWidget(int X, int Y, int W, int H, const char *L=0);
-	virtual ~CFlyWidget();
+	FlyWidget(int X, int Y, int W, int H, const char *L=0);
+	virtual ~FlyWidget();
 
+	static FlyWidgetPtr create(int X, int Y, int W, int H);
+	
 	virtual void onInit(int width, int height);
 	virtual void onInitContext(int width, int height);
 	virtual void onResize(int width, int height);

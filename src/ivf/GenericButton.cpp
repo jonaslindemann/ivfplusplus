@@ -26,18 +26,18 @@
 
 using namespace ivf;
 
-CGenericButton::CGenericButton()
+GenericButton::GenericButton()
 {
 	m_state = BS_NORMAL;
 	m_id = -1;
 }
 
-CGenericButton::~CGenericButton()
+GenericButton::~GenericButton()
 {
 
 }
 
-void CGenericButton::setButtonState(TButtonState state)
+void GenericButton::setButtonState(TButtonState state)
 {
 	m_state = state;
 
@@ -63,12 +63,12 @@ void CGenericButton::setButtonState(TButtonState state)
 	}
 }
 
-void CGenericButton::setId(int id)
+void GenericButton::setId(int id)
 {
 	m_id = id;
 }
 
-int CGenericButton::getId()
+int GenericButton::getId()
 {
 	return m_id;
 }

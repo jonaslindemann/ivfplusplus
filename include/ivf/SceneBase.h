@@ -33,7 +33,7 @@
 
 namespace ivf {
 
-class IVF_API CMultipassEvent {
+class IVF_API MultipassEvent {
 public:
 	/**
 	 * onMultipass method
@@ -41,7 +41,7 @@ public:
 	virtual void onMultipass(int pass) {};
 };
 
-IvfSmartPointer(CSceneBase);
+IvfSmartPointer(SceneBase);
 
 /**
  * Base class for managing a scene 
@@ -54,12 +54,12 @@ IvfSmartPointer(CSceneBase);
  * {
  *	  // Create scene 
  *
- *	  m_scene = new CSceneBase();
+ *	  m_scene = new SceneBase();
  *	  m_scene->getCamera()->setPosition(0.0, 0.0, 8.0);
  *
  *	  // Create a light
  *
- *	  COldLight* light = new COldLight();
+ *	  OldLight* light = new OldLight();
  *	  light->setPosition(1.0, 1.0, 1.0, 0.0);
  *	  light->setAmbient(0.2f, 0.2f, 0.2f, 1.0f); 
  *
@@ -74,7 +74,7 @@ IvfSmartPointer(CSceneBase);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CSceneBase : public CShape {
+class IVF_API SceneBase : public Shape {
 public:
 	enum TLightMode {
 		LM_LOCAL,
@@ -93,14 +93,14 @@ public:
 		CP_RED_CYAN
 	};
 private:
-	CMultipassEvent* m_multipassEvent;
-	CCompositePtr m_preComposite;
-	CCompositePtr m_composite;
-	CCompositePtr m_postComposite;
-	CViewPtr m_view;
-	CLightingPtr m_lighting;
-	CCullingPtr m_culling;
-	CBufferSelectionPtr m_selection;
+	MultipassEvent* m_multipassEvent;
+	CompositePtr m_preComposite;
+	CompositePtr m_composite;
+	CompositePtr m_postComposite;
+	ViewPtr m_view;
+	LightingPtr m_lighting;
+	CullingPtr m_culling;
+	BufferSelectionPtr m_selection;
 
 	TLightMode m_lightMode;
 	TStereoMode m_stereoMode;
@@ -130,23 +130,23 @@ public:
 	virtual void doViewAndRender(int pass);
 	virtual void doMultipass(int pass);
 
-	/** CSceneBase constructor */
-	CSceneBase();
+	/** SceneBase constructor */
+	SceneBase();
 
-	/** CSceneBase destructor */
-	virtual ~CSceneBase();
+	/** SceneBase destructor */
+	virtual ~SceneBase();
 
-	IvfClassInfo("CSceneBase",CShape);
-	IvfStdFactory(CSceneBase);
+	IvfClassInfo("SceneBase",Shape);
+	IvfStdFactory(SceneBase);
 
 	/** Set scene view (required) */
-	virtual void setView(CView* view);
+	virtual void setView(View* view);
 
 	/** Returns current view */
-	CView* getView();
+	View* getView();
 
 	/** Set camera (required) */
-	void setCamera(CCamera* camera);
+	void setCamera(Camera* camera);
 
 	/**
 	 * Set light mode
@@ -159,11 +159,11 @@ public:
 	/** Return light mode */
 	TLightMode getLightMode();
 
-	CComposite* getPreComposite();
-	CComposite* getPostComposite();
+	Composite* getPreComposite();
+	Composite* getPostComposite();
 
 	/** Return scene composite */
-	CComposite* getComposite();
+	Composite* getComposite();
 
 	/** Set culling state */
 	void setUseCulling(bool flag);
@@ -178,7 +178,7 @@ public:
 	void updateSelection();
 
 	/** Return selected shape, @see CIvfBufferSelection */
-	CShape* getSelectedShape();
+	Shape* getSelectedShape();
 
 	/** Clear scene, @see CIvfComposite */
 	void clear();
@@ -187,24 +187,24 @@ public:
 	void deleteAll();
 
 	/** Remove child from scene, @see CIvfComposite */
-	CShape* removeChild(CShape* shape);
+	Shape* removeChild(Shape* shape);
 
 	/** Remove child from scene, @see CIvfComposite */
-	CShape* removeChild(int idx);
+	Shape* removeChild(int idx);
 
 	/** Add child to scene, @see CIvfComposite */
-	void addChild(CShape* shape);
+	void addChild(Shape* shape);
 
-	CCamera* getCamera();
+	Camera* getCamera();
 
 	void setStereoMode(TStereoMode mode);
 	void setAnaglyphColorPair(TAnaglyphColorPair colorPair);
 	TAnaglyphColorPair getAnaglyphColorPair();
 
-	CIvfSelectedShapesVector& getSelectedShapes();
+	SelectedShapesVector& getSelectedShapes();
 	int getSelectionSize();
-	CShape* getSelectedShape(int idx);
-	CShape* removeShape(CShape* shape);
+	Shape* getSelectedShape(int idx);
+	Shape* removeShape(Shape* shape);
 
 	void setMultipass(bool flag);
 	bool getMultipass();
@@ -212,7 +212,7 @@ public:
 	void setPasses(int passes);
 	int getPasses();
 
-	void setMultipassEvent(CMultipassEvent* evt);
+	void setMultipassEvent(MultipassEvent* evt);
     
     void setRenderFlatShadow(bool flag);
     void setShadowColor(double red, double green, double blue);

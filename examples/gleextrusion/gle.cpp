@@ -33,29 +33,31 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase,
-	CInitEvent,
-	CInitContextEvent,
-	CResizeEvent,
-	CRenderEvent,
-	CClearEvent,
-	CKeyboardEvent
+class ExampleWindow: public GlutBase,
+	InitEvent,
+	InitContextEvent,
+	ResizeEvent,
+	RenderEvent,
+	ClearEvent,
+	KeyboardEvent
 {
 private:
 
-	CScenePtr m_scene;
+	ScenePtr m_scene;
 
-	CSwitchPtr m_gleShapes;
+	SwitchPtr m_gleShapes;
 
-	CLightingPtr m_lighting;
+	LightingPtr m_lighting;
 
-	CMouseViewHandlerPtr m_mouseViewHandler;
-	CSceneHandlerPtr m_sceneHandler;
+	MouseViewHandlerPtr m_mouseViewHandler;
+	SceneHandlerPtr m_sceneHandler;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H);
+	ExampleWindow(int X, int Y, int W, int H);
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onInitContext(int width, int height);
@@ -67,8 +69,13 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-	:CGlutBase(X, Y, W, H)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
+	:GlutBase(X, Y, W, H)
 {
 	addInitEvent(this);
 	addInitContextEvent(this);
@@ -82,23 +89,23 @@ double rnd()
 	return (double)rand()/(double)RAND_MAX;
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Setup a simple scene
 
-	m_scene = new CScene();
+	m_scene = Scene::create();
 	m_scene->getCamera()->setPosition(3.0, 3.0, 3.0);
 
-	m_gleShapes = new CSwitch();
+	m_gleShapes = Switch::create();
 
-	CMaterialPtr material = new CMaterial();
+	auto material = Material::create();
 	material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	material->setColorMaterial(false);
 
 	////////////////////////////////////////////////////////////////////
 	// Testing GLE classes
 
-	CGlePtr gle = CGle::getInstance();
+	auto gle = Gle::getInstance();
 	gle->setNumSides(20);
 	gle->setJoinStyle(TUBE_JN_ANGLE|TUBE_NORM_EDGE);
 
@@ -111,10 +118,10 @@ void CExampleWindow::onInit(int width, int height)
 	double deltaX = 4*M_PI/(nPoints-1);
 	int i;
 
-	CGleColorArrayPtr colorArray = new CGleColorArray(nPoints+2);
-	CGleCoordArrayPtr coordArray = new CGleCoordArray(nPoints+2);
-	CGleScalarArrayPtr radiusArray = new CGleScalarArray(nPoints+2);
-	CGleScalarArrayPtr twistArray = new CGleScalarArray(nPoints+2);
+	GleColorArrayPtr colorArray = GleColorArray::create(nPoints+2);
+	GleCoordArrayPtr coordArray = GleCoordArray::create(nPoints+2);
+	GleScalarArrayPtr radiusArray = GleScalarArray::create(nPoints+2);
+	GleScalarArrayPtr twistArray = GleScalarArray::create(nPoints+2);
 
 	for (i=0; i<nPoints; i++)
 	{
@@ -128,7 +135,7 @@ void CExampleWindow::onInit(int width, int height)
 	
 	coordArray->calcFirstAndLast();
 
-	CGlePolyCylinderPtr polyCylinder = new CGlePolyCylinder();
+	auto polyCylinder = GlePolyCylinder::create();
 	polyCylinder->setPoints(coordArray);
 	polyCylinder->setColors(colorArray);
 	polyCylinder->setMaterial(material);
@@ -138,7 +145,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Testing poly cone
 
-	CGlePolyConePtr polyCone = new CGlePolyCone();
+	auto polyCone = GlePolyCone::create();
 	polyCone->setPoints(coordArray);
 	polyCone->setColors(colorArray);
 	polyCone->setRadius(radiusArray);
@@ -149,7 +156,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Test extrusion
 
-	CGleContourPtr contourArray = new CGleContour(5);
+	auto contourArray = GleContour::create(5);
 	contourArray->setCoord(0, -0.2, -0.2);
 	contourArray->setCoord(1,  0.2, -0.2);
 	contourArray->setCoord(2,  0.2,  0.2);
@@ -157,7 +164,7 @@ void CExampleWindow::onInit(int width, int height)
 	contourArray->setCoord(4, -0.2, -0.2);
 	contourArray->calcNormals();
 
-	CGleExtrusionPtr extrusion = new CGleExtrusion();
+	auto extrusion = GleExtrusion::create();
 	extrusion->setPoints(coordArray);
 	extrusion->setColors(colorArray);
 	extrusion->setContour(contourArray);
@@ -169,7 +176,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Test twist extrusion
 
-	CGleTwistExtrusionPtr twistExtrusion = new CGleTwistExtrusion();
+	auto twistExtrusion = GleTwistExtrusion::create();
 	twistExtrusion->setPoints(coordArray);
 	twistExtrusion->setColors(colorArray);
 	twistExtrusion->setContour(contourArray);
@@ -182,7 +189,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Test spiral
 
-	CGleSpiralPtr spiral = new CGleSpiral();
+	auto spiral = GleSpiral::create();
 	spiral->setContour(contourArray);
 	spiral->setContourUp(0.0, 1.0, 0.0);
 	spiral->setMaterial(material);
@@ -191,34 +198,34 @@ void CExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(m_gleShapes);
 
-	CAxisPtr axis = new CAxis();
+	auto axis = Axis::create();
 	m_scene->addChild(axis);
 
 	// Setup OpenGL
 
-	m_lighting = CLighting::getInstance();
+	m_lighting = Lighting::getInstance();
 	m_lighting->enable();
 	m_lighting->getLight(0)->enable();
 
 	// Create handlers
 
-	m_mouseViewHandler = new CMouseViewHandler(this, m_scene->getCamera());
-	m_sceneHandler = new CSceneHandler(this, m_scene);
+	m_mouseViewHandler = MouseViewHandler::create(this, m_scene->getCamera());
+	m_sceneHandler = SceneHandler::create(this, m_scene);
 }
 
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	m_gleShapes->cycleForward();
 	redraw();
 }
 
-void CExampleWindow::onInitContext(int width, int height)
+void ExampleWindow::onInitContext(int width, int height)
 {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 }
 
-void CExampleWindow::onClear()
+void ExampleWindow::onClear()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
@@ -237,12 +244,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
     
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
     
 	// Create a window
     
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
     
 	// Set window title and show window
     

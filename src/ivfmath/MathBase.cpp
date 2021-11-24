@@ -25,7 +25,7 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CMathBase::CMathBase()
+MathBase::MathBase()
 {
 	// Set initial reference count
 
@@ -33,26 +33,26 @@ CMathBase::CMathBase()
 }
 
 // ------------------------------------------------------------
-CMathBase::~CMathBase()
+MathBase::~MathBase()
 {
 
 }
 
 // ------------------------------------------------------------
-void CMathBase::addReference()
+void MathBase::addReference()
 {
 	m_ref++;
 }
 
 // ------------------------------------------------------------
-void CMathBase::deleteReference()
+void MathBase::deleteReference()
 {
 	if (m_ref>0)
 		m_ref--;
 }
 
 // ------------------------------------------------------------
-bool CMathBase::referenced()
+bool MathBase::referenced()
 {
 	if (m_ref>0)
 		return true;
@@ -61,19 +61,19 @@ bool CMathBase::referenced()
 }
 
 // ------------------------------------------------------------
-const std::string CMathBase::getClassNameThis()
+const std::string MathBase::getClassNameThis()
 {
-	return "CMathBase";
+	return "MathBase";
 }
 
 // ------------------------------------------------------------
-const std::string CMathBase::getClassName()
+const std::string MathBase::getClassName()
 {
-	return "CMathBase";
+	return "MathBase";
 }
 
 // ------------------------------------------------------------
-bool CMathBase::isClass(const std::string& name)
+bool MathBase::isClass(const std::string& name)
 {
 	std::string className = this->getClassNameThis();
 
@@ -89,7 +89,7 @@ bool CMathBase::isClass(const std::string& name)
 }
 
 // ------------------------------------------------------------
-int CMathBase::getRefCount()
+int MathBase::getRefCount()
 {
 	return m_ref;
 }

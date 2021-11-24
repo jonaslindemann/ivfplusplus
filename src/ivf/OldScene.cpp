@@ -19,29 +19,29 @@
 // Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
-// Implementation of: public class COldScene
+// Implementation of: public class OldScene
 
 #include <ivf/OldScene.h>
 
 using namespace ivf;
 
 // ------------------------------------------------------------
-COldScene::COldScene ()
-		:CSelectComposite()
+OldScene::OldScene ()
+		:SelectComposite()
 {
-	CCamera* camera = new CCamera();
+	Camera* camera = new Camera();
 	this->setCamera(camera);
 
-	m_world = new CCoordinateSystem();
+	m_world = new CoordinateSystem();
 	m_world->addReference();
-	m_cursor = new CCursor();
+	m_cursor = new Cursor();
 	m_cursor->addReference();
 	m_tempShape = nullptr;
 	m_transparentShape = nullptr;
 	m_objectSize = 1;
 	m_cursorLocked = false;
 
-	m_lighting = CLighting::getInstance();
+	m_lighting = Lighting::getInstance();
 
 	m_showGrid = true;
 	m_showCursor = true;
@@ -51,7 +51,7 @@ COldScene::COldScene ()
 }
 
 // ------------------------------------------------------------
-COldScene::~COldScene ()
+OldScene::~OldScene ()
 {
 	if (m_cursor!=nullptr)
 		m_cursor->deleteReference();
@@ -65,33 +65,33 @@ COldScene::~COldScene ()
 }
 
 // ------------------------------------------------------------
-void COldScene::setCamera(CCamera * camera)
+void OldScene::setCamera(Camera * camera)
 {
-	CSelectComposite::setCamera(camera);
+	SelectComposite::setCamera(camera);
 }
 
 // ------------------------------------------------------------
-CCamera* COldScene::getCamera()
+Camera* OldScene::getCamera()
 {
-	return (CCamera*) CSelectComposite::getCamera();
+	return (Camera*) SelectComposite::getCamera();
 }
 
 // ------------------------------------------------------------
-void COldScene::setView(CView *view)
+void OldScene::setView(View *view)
 {
-	CSelectComposite::setCamera(view);
+	SelectComposite::setCamera(view);
 }
 
 // ------------------------------------------------------------
-CView* COldScene::getView()
+View* OldScene::getView()
 {
-	return CSelectComposite::getCamera();
+	return SelectComposite::getCamera();
 }
 
 // ------------------------------------------------------------
-void COldScene::doCreateGeometry()
+void OldScene::doCreateGeometry()
 {
-	CSelectComposite::doCreateGeometry();
+	SelectComposite::doCreateGeometry();
 
 	if (m_showGrid)
 		if (m_world!=nullptr)
@@ -145,25 +145,25 @@ void COldScene::doCreateGeometry()
 		m_transparentShape->render();
 }
 
-void COldScene::doBeginTransform()
+void OldScene::doBeginTransform()
 {
 	glPushMatrix();
 	if (m_lightMode == IVF_LIGHT_LOCAL)
 		if (m_lighting != nullptr)
 			m_lighting->render();
-	CSelectComposite::doBeginTransform();
+	SelectComposite::doBeginTransform();
 	if (m_lightMode == IVF_LIGHT_WORLD)
 		if (m_lighting != nullptr)
 			m_lighting->render();
 }
 
-void COldScene::doEndTransform()
+void OldScene::doEndTransform()
 {
-		CSelectComposite::doEndTransform();
+		SelectComposite::doEndTransform();
 	glPopMatrix();
 }
 
-void COldScene::setWorldSystem(CCoordinateSystem * world)
+void OldScene::setWorldSystem(CoordinateSystem * world)
 {
 	if (m_world!=nullptr)
 	{
@@ -177,12 +177,12 @@ void COldScene::setWorldSystem(CCoordinateSystem * world)
 	m_world->addReference();
 }
 
-CCoordinateSystem* COldScene::getWorldSystem()
+CoordinateSystem* OldScene::getWorldSystem()
 {
 	return m_world;
 }
 
-void COldScene::setCursor(CCursor * cursor)
+void OldScene::setCursor(Cursor * cursor)
 {
 	if (m_cursor!=nullptr)
 	{
@@ -195,14 +195,14 @@ void COldScene::setCursor(CCursor * cursor)
 	m_cursor->addReference();
 }
 
-CCursor* COldScene::getCursor()
+Cursor* OldScene::getCursor()
 {
 	return m_cursor;
 }
 
 //end changes
 
-void COldScene::updateCursor(int x, int y)
+void OldScene::updateCursor(int x, int y)
 {
 	double i, j, k;
 	double ix, iy, iz;
@@ -211,7 +211,7 @@ void COldScene::updateCursor(int x, int y)
 	int viewWidth, viewHeight;
 	double dy;
 
-	CCamera* camera = (CCamera*) getCamera();
+	Camera* camera = (Camera*) getCamera();
 
 	if ((m_cursor!=nullptr)&&
 		(camera!=nullptr)&&
@@ -290,44 +290,44 @@ void COldScene::updateCursor(int x, int y)
 	m_cursorY = y;
 }
 
-void COldScene::setTempShape(CShape * shape)
+void OldScene::setTempShape(Shape * shape)
 {
 	m_tempShape = shape;
 }
 
-CShape* COldScene::getTempShape()
+Shape* OldScene::getTempShape()
 {
 	return m_tempShape;
 }
 
-void COldScene::lockCursor()
+void OldScene::lockCursor()
 {
 	m_cursorLocked = true;
 	m_cursorStartX = m_cursorX;
 	m_cursorStartY = m_cursorY;
 }
 
-void COldScene::unlockCursor()
+void OldScene::unlockCursor()
 {
 	m_cursorLocked = false;
 }
 
-int COldScene::isCursorLocked()
+int OldScene::isCursorLocked()
 {
 	return m_cursorLocked;
 }
 
-void COldScene::setObjectSize(double size)
+void OldScene::setObjectSize(double size)
 {
 	m_objectSize = size;
 }
 
-void COldScene::setNodeSize(double size)
+void OldScene::setNodeSize(double size)
 {
 	//g_nodeSize = size;
 }
 
-void COldScene::setWorkspace(double size)
+void OldScene::setWorkspace(double size)
 {
 	m_world->setWorkspace(size);
 	double snapUnit = m_world->getSnapUnit();
@@ -335,57 +335,57 @@ void COldScene::setWorkspace(double size)
 	this->setObjectSize(size/10.0f);
 }
 
-void COldScene::setTransparentShape(CShape *shape)
+void OldScene::setTransparentShape(Shape *shape)
 {
 	m_transparentShape = shape;
 }
 
-void COldScene::setShowGrid(bool flag)
+void OldScene::setShowGrid(bool flag)
 {
 	m_showGrid = flag;
 }
 
-void COldScene::setShowCursor(bool flag)
+void OldScene::setShowCursor(bool flag)
 {
 	m_showCursor = flag;
 }
 
-bool COldScene::getShowGrid()
+bool OldScene::getShowGrid()
 {
 	return m_showGrid;
 }
 
-bool COldScene::getShowCursor()
+bool OldScene::getShowCursor()
 {
 	return m_showCursor;
 }
 
-void COldScene::setTempRenderStyle(int style)
+void OldScene::setTempRenderStyle(int style)
 {
 	m_tempRenderStyle = style;
 }
 
-int COldScene::getTempRenderStyle()
+int OldScene::getTempRenderStyle()
 {
 	return m_tempRenderStyle;
 }
 
-void COldScene::setSnapToGrid(bool flag)
+void OldScene::setSnapToGrid(bool flag)
 {
 	m_snapToGrid = flag;
 }
 
-bool COldScene::getSnapToGrid()
+bool OldScene::getSnapToGrid()
 {
 	return m_snapToGrid;
 }
 
-void COldScene::setLightMode(int mode)
+void OldScene::setLightMode(int mode)
 {
 	m_lightMode = mode;
 }
 
-int COldScene::getLightMode()
+int OldScene::getLightMode()
 {
 	return m_lightMode;
 }

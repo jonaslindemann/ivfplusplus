@@ -26,32 +26,32 @@
 
 using namespace ivf;
 
-CUISwitchBase::CUISwitchBase()
+UISwitchBase::UISwitchBase()
 {
 	m_state = false;
 }
 
-CUISwitchBase::~CUISwitchBase()
+UISwitchBase::~UISwitchBase()
 {
 
 }
 
-void CUISwitchBase::doControlClick(CVec3d vec, int button)
+void UISwitchBase::doControlClick(Vec3d vec, int button)
 {
 
 }
 
-void CUISwitchBase::doControlOver(CVec3d vec)
+void UISwitchBase::doControlOver(Vec3d vec)
 {
-	this->setHighlight(CShape::HS_ON);
+	this->setHighlight(Shape::HS_ON);
 }
 
-void CUISwitchBase::doControlLeave(CVec3d vec)
+void UISwitchBase::doControlLeave(Vec3d vec)
 {
-	this->setHighlight(CShape::HS_OFF);
+	this->setHighlight(Shape::HS_OFF);
 }
 
-void CUISwitchBase::on()
+void UISwitchBase::on()
 {
 	if (!m_state)
 	{
@@ -60,7 +60,7 @@ void CUISwitchBase::on()
 	}
 }
 
-void CUISwitchBase::off()
+void UISwitchBase::off()
 {
 	if (m_state)
 	{
@@ -69,22 +69,22 @@ void CUISwitchBase::off()
 	}
 }
 
-bool CUISwitchBase::isOn()
+bool UISwitchBase::isOn()
 {
 	return m_state;
 }
 
-bool CUISwitchBase::isOff()
+bool UISwitchBase::isOff()
 {
 	return !m_state;
 }
 
-bool CUISwitchBase::getState()
+bool UISwitchBase::getState()
 {
 	return m_state;
 }
 
-void CUISwitchBase::setState(bool state)
+void UISwitchBase::setState(bool state)
 {
 	if (m_state!=state)
 	{
@@ -93,18 +93,18 @@ void CUISwitchBase::setState(bool state)
 	}
 }
 
-void CUISwitchBase::doStateChange(bool state)
+void UISwitchBase::doStateChange(bool state)
 {
 
 }
 
-void CUISwitchBase::doControlDown(CVec3d vec, int button)
+void UISwitchBase::doControlDown(Vec3d vec, int button)
 {
 	setState(!m_state);
-	this->setHighlight(CShape::HS_OFF);
+	this->setHighlight(Shape::HS_OFF);
 }
 
-void CUISwitchBase::doControlUp(CVec3d vec)
+void UISwitchBase::doControlUp(Vec3d vec)
 {
 
 }

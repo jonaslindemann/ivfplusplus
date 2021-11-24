@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfStdPointer(CFog);
+IvfStdPointer(Fog);
 
 /**
  * Fog singleton class
@@ -48,7 +48,7 @@ IvfStdPointer(CFog);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CFog : public CBase {
+class IVF_API Fog : public Base {
 public:
 	enum TFogType {
 		FT_LINEAR,
@@ -56,18 +56,18 @@ public:
 		FT_EXP2
 	};	
 private:
-	static CFog* m_instance;
-	static CSingletonDestroyer<CFog> m_destroyer;
+	static Fog* m_instance;
+	static SingletonDestroyer<Fog> m_destroyer;
 	float m_fogColor[4];
 	double m_fogStart;
 	double m_fogEnd;
 	TFogType m_type;
 public:
 	/** Returns the blending singleton */
-	static CFog* getInstance();
+	static Fog* getInstance();
 
-	IvfClassInfo("CFog",CBase);
-	IvfStdFactory(CFog);
+	IvfClassInfo("Fog",Base);
+	IvfStdFactory(Fog);
 
 	/** Enable fog */
 	void enable();
@@ -125,8 +125,8 @@ public:
 	/** Returns fog color */
 	void getColor(float &red, float &green, float &blue, float &alpha);
 protected:
-	CFog();
-	friend class CSingletonDestroyer<CFog>;
+	Fog();
+	friend class SingletonDestroyer<Fog>;
 };
 
 }

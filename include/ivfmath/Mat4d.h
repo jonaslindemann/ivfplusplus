@@ -34,23 +34,23 @@ namespace ivf {
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CMat4d : public CMathBase {
+class IVFMATH_API Mat4d : public MathBase {
 private:
 	double m_matrix[4][4];
 	int LU_Decompose  (double matrix[4][4], int* index);
 	void LU_Backsub  (double matrix[4][4], int* index, double* B);
 public:
-	/** CMat4d constructor */
-	CMat4d();
+	/** Mat4d constructor */
+	Mat4d();
 
-	/** CMat4d copy constructor */
-	CMat4d(CMat4d& M);
+	/** Mat4d copy constructor */
+	Mat4d(Mat4d& M);
 
-	/** CMat4d scalar copy constructor */
-	CMat4d(double scalar);
+	/** Mat4d scalar copy constructor */
+	Mat4d(double scalar);
 
-	/** CMat4d destructor */
-	virtual ~CMat4d();
+	/** Mat4d destructor */
+	virtual ~Mat4d();
 
 	/** Assigns all elements in matrix to one (=1.0) */
 	void one();
@@ -128,43 +128,43 @@ public:
 	void setRow(int row, double v1, double v2, double v3, double v4);
 
 	/** Returns a transpose of the matrix */
-	CMat4d& t();
+	Mat4d& t();
 
 	/** Returns the inverse of the matrix */
-	CMat4d& inv();
+	Mat4d& inv();
 
 	/** Assignment operator Matrix = Matrix */
-	CMat4d& operator=(CMat4d& A);
+	Mat4d& operator=(Mat4d& A);
 
 	/** Assignment operator Matrix = scalar */
-	CMat4d& operator=(double a);
+	Mat4d& operator=(double a);
 	
 	/** += operator assignment Matrix += Matrix */
-	CMat4d& operator+=(CMat4d& A);
+	Mat4d& operator+=(Mat4d& A);
 	
 	/** -= operator assignment Matrix -= Matrix */
-	CMat4d& operator-=(CMat4d& A);
+	Mat4d& operator-=(Mat4d& A);
 	
 	/** Matrix/Matrix multiplication operator */
-	CMat4d& operator*(CMat4d& A);
+	Mat4d& operator*(Mat4d& A);
 	
 	/** Matrix/Vector multiplication operator */
-	CVec4d& operator*(CVec4d& v);
+	Vec4d& operator*(Vec4d& v);
 	
 	/** Matrix/Vector multiplication operator */
-	//CVec4d operator*(CVec4d& v);
+	//Vec4d operator*(Vec4d& v);
 
 	/** Matrix/Scalar multiplication operator */
-	CMat4d& operator*(double scalar);
+	Mat4d& operator*(double scalar);
 	
 	/** Elemental division operator */
-	CMat4d& operator/(double scalar);
+	Mat4d& operator/(double scalar);
 	
 	/** Matrix/Matrix addition operator */
-	CMat4d& operator+(CMat4d& A);
+	Mat4d& operator+(Mat4d& A);
 };
 
-CMat4d& ivfGetTempMatrix4d();
+Mat4d& ivfGetTempMatrix4d();
 
 /** \example math.cpp */
 

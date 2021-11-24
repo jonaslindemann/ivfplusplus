@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGenericButton);
+IvfSmartPointer(GenericButton);
 
 /**
  * Base button class
@@ -38,7 +38,7 @@ IvfSmartPointer(CGenericButton);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CGenericButton : public CSwitch {
+class IVF_API GenericButton : public Switch {
 public:
 	enum TButtonState {
 		BS_NORMAL,
@@ -52,13 +52,13 @@ private:
 	int m_id;
 public:
 	/** CIvfGenericButton constructor */
-	CGenericButton();
+	GenericButton();
 
 	/** CIvfGenericButton destructor */
-	virtual ~CGenericButton();
+	virtual ~GenericButton();
 
-	IvfClassInfo("CGenericButton",CSwitch);
-	IvfStdFactory(CGenericButton);
+	IvfClassInfo("GenericButton",Switch);
+	IvfStdFactory(GenericButton);
 
 	/** Set button id */
 	void setId(int id);

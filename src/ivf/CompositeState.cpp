@@ -28,68 +28,68 @@
 
 using namespace ivf;
 
-CCompositeState::CCompositeState()
+CompositeState::CompositeState()
 {
 
 }
 
-CCompositeState::~CCompositeState()
+CompositeState::~CompositeState()
 {
 	clear();
 }
 
-void CCompositeState::doSaveState()
+void CompositeState::doSaveState()
 {
 	/*
 	int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CRenderState* state = m_children[i];
+		RenderState* state = m_children[i];
 		state->doSaveState();
 	}
 	*/
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 }
 
-void CCompositeState::doState()
+void CompositeState::doState()
 {
 	unsigned int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CRenderState* state = m_children[i];
+		RenderState* state = m_children[i];
 		state->doState();
 	}
 }
 
-void CCompositeState::doRestoreState()
+void CompositeState::doRestoreState()
 {
 	/*
 	int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CRenderState* state = m_children[i];
+		RenderState* state = m_children[i];
 		state->doRestoreState();
 	}
 	*/
 	glPopAttrib();
 }
 
-void CCompositeState::addChild(CRenderState *state)
+void CompositeState::addChild(RenderState *state)
 {
 	state->addReference();
 	m_children.push_back(state);
 }
 
-void CCompositeState::clear()
+void CompositeState::clear()
 {
 	unsigned int i;
 
 	for (i=0;i<m_children.size();i++)
 	{
-		CRenderState* state = m_children[i];
+		RenderState* state = m_children[i];
 		state->deleteReference();
 		if (!state->referenced())
 			delete state;

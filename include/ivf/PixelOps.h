@@ -30,33 +30,33 @@
 
 namespace ivf {
 
-IvfStdPointer(CPixelOps);
+IvfStdPointer(PixelOps);
 
 /**
  * PixelOps singleton 
  * 
- * The CPixelOps singleton encapsulates OpenGL pixel operations. 
- * An instance of the CPixelOps class is retrieved using the
+ * The PixelOps singleton encapsulates OpenGL pixel operations. 
+ * An instance of the PixelOps class is retrieved using the
  * getInstance() method. See the following code:
  *
  * \code
- * CIvfPixelOpsPtr pixelOps = CPixelOps::getInstance();
+ * CIvfPixelOpsPtr pixelOps = PixelOps::getInstance();
  * pixelOps->enableDepthTest();
  * ...
  * \endcode
  *
  * @author Jonas Lindemann
  */
-class IVF_API CPixelOps : public CBase {
+class IVF_API PixelOps : public Base {
 private:
-	static CPixelOps* m_instance;
-	static CSingletonDestroyer<CPixelOps> m_destroyer;
+	static PixelOps* m_instance;
+	static SingletonDestroyer<PixelOps> m_destroyer;
 public:
-	/** Get instance of CPixelOps */
-	static CPixelOps* getInstance();
+	/** Get instance of PixelOps */
+	static PixelOps* getInstance();
 
-	IvfClassInfo("CPixelOps",CBase);
-	IvfStdFactory(CPixelOps);
+	IvfClassInfo("PixelOps",Base);
+	IvfStdFactory(PixelOps);
 
 	/** Enable depth testing */
 	void enableDepthTest();
@@ -67,8 +67,8 @@ public:
 	/** Return true if depth testing is enabled */
 	bool isDepthTestEnabled();
 protected:
-	CPixelOps();
-	friend class CSingletonDestroyer<CPixelOps>;
+	PixelOps();
+	friend class SingletonDestroyer<PixelOps>;
 };
 
 }

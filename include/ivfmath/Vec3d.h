@@ -28,37 +28,37 @@
 
 namespace ivf {
 
-IvfSmartPointer(CVec3d);
+IvfSmartPointer(Vec3d);
 
 /**
  * 3d vector class.
  *
- * CVec3d implements a 3d vector and associated
+ * Vec3d implements a 3d vector and associated
  * operations and arithmetic.
  *
  * @author Jonas Lindemann
  */
-class CVec3d : public CMathBase {
+class Vec3d : public MathBase {
 private:
 	double m_vector[3];
 public:
-	/** CVec3d constructor */
-	CVec3d();
+	/** Vec3d constructor */
+	Vec3d();
 
-	/** CVec3d constructor */
-	CVec3d(double vx, double vy, double vz);
+	/** Vec3d constructor */
+	Vec3d(double vx, double vy, double vz);
 
-	/** CVec3d copy constructor */
-	CVec3d(CVec3d& v);
+	/** Vec3d copy constructor */
+	Vec3d(Vec3d& v);
 
-	/** CVec3d destructor */
-	virtual ~CVec3d();
+	/** Vec3d destructor */
+	virtual ~Vec3d();
 
-	IvfClassInfo("CVec3d",CMathBase);
-	IvfStdFactory(CVec3d);
+	IvfClassInfo("Vec3d",MathBase);
+	IvfStdFactory(Vec3d);
 
 	/** Rotate vector angle about axis */
-	void rotate(CVec3d& axis, double angle);
+	void rotate(Vec3d& axis, double angle);
 
 	/** Normalize vector */
 	void normalize();
@@ -78,7 +78,7 @@ public:
 #endif
 
 	/** Set vector from two points */
-	void setFromPoints(CVec3d& pos, CVec3d& target);
+	void setFromPoints(Vec3d& pos, Vec3d& target);
 
 	/** Add components to vector (obsolete) */
 	void add(double dx, double dy, double dz);
@@ -110,24 +110,24 @@ public:
 	/** Set x component */
 	void setX(double value);
 
-	CVec3d& operator+=(CVec3d& a);
-	CVec3d& operator-=(CVec3d& a);
-	//CVec3d& operator=(CVec3d& a);
-	CVec3d& operator=(CVec3d& a);
+	Vec3d& operator+=(Vec3d& a);
+	Vec3d& operator-=(Vec3d& a);
+	//Vec3d& operator=(Vec3d& a);
+	Vec3d& operator=(Vec3d& a);
 	double operator[](const int idx);
 
-	bool operator==(CVec3d& a);
-	bool operator!=(CVec3d& a);
+	bool operator==(Vec3d& a);
+	bool operator!=(Vec3d& a);
 
 };
 
-ivf::CVec3d& operator*(CVec3d& a, CVec3d& b);
-ivf::CVec3d& operator*(CVec3d& a, double b);
-ivf::CVec3d& operator*(double a, CVec3d& b);
-ivf::CVec3d& operator+(CVec3d& a, CVec3d& b);
-ivf::CVec3d& operator-(CVec3d& a, CVec3d& b);
+ivf::Vec3d& operator*(Vec3d& a, Vec3d& b);
+ivf::Vec3d& operator*(Vec3d& a, double b);
+ivf::Vec3d& operator*(double a, Vec3d& b);
+ivf::Vec3d& operator+(Vec3d& a, Vec3d& b);
+ivf::Vec3d& operator-(Vec3d& a, Vec3d& b);
 
-CVec3d& ivfGetTempVec3d();
+Vec3d& ivfGetTempVec3d();
 
 /** \example math.cpp
  * This is an example of how to use some of the math classes.

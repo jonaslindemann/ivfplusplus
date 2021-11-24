@@ -28,27 +28,27 @@
 
 namespace ivf {
 
-IvfSmartPointer(CTransform);
+IvfSmartPointer(Transform);
 
 /**
  * Transform class
  *
- * CTransform implements a transform node. 
+ * Transform implements a transform node. 
  *
  * @author Jonas Lindemann
  */
-class IVF_API CTransform : public CComposite {
+class IVF_API Transform : public Composite {
 private:
 
 public:
-	/** CTransform constructor */
-	CTransform();
+	/** Transform constructor */
+	Transform();
 
-	/** CTransform destructor */
-	virtual ~CTransform();
+	/** Transform destructor */
+	virtual ~Transform();
 	
-	IvfClassInfo("CTransform",CComposite);
-	IvfStdFactory(CTransform);
+	IvfClassInfo("Transform",Composite);
+	IvfStdFactory(Transform);
 };
 
 /** \example robot.cpp

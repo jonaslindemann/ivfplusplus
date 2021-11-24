@@ -29,49 +29,49 @@ using namespace ivf;
 // ------------------------------------------------------------
 // ------------------------------------------------------------
 
-CIndexBase::CIndexBase()
+IndexBase::IndexBase()
 {
 
 }
 
 // ------------------------------------------------------------
-CIndexBase::~CIndexBase()
+IndexBase::~IndexBase()
 {
 
 }
 
 // ------------------------------------------------------------
-void CIndexBase::addLast(long idx)
-{
-	addLast(idx);
-}
-
-// ------------------------------------------------------------
-void CIndexBase::add(long idx)
+void IndexBase::addLast(long idx)
 {
 	addLast(idx);
 }
 
 // ------------------------------------------------------------
-long CIndexBase::getIndex(long pos)
+void IndexBase::add(long idx)
+{
+	addLast(idx);
+}
+
+// ------------------------------------------------------------
+long IndexBase::getIndex(long pos)
 {
 	return -1;
 }
 
 // ------------------------------------------------------------
-long CIndexBase::getSize()
+long IndexBase::getSize()
 {
 	return -1;
 }
 
 // ------------------------------------------------------------
-void CIndexBase::clear()
+void IndexBase::clear()
 {
 	//m_indices.clear();
 }
 
 // ------------------------------------------------------------
-void CIndexBase::createLinear(long size)
+void IndexBase::createLinear(long size)
 {
 	/*
 	long i;
@@ -82,14 +82,14 @@ void CIndexBase::createLinear(long size)
 }
 
 // ------------------------------------------------------------
-void CIndexBase::add(long i1, long i2)
+void IndexBase::add(long i1, long i2)
 {
 	this->add(i1);
 	this->add(i2);
 }
 
 // ------------------------------------------------------------
-void CIndexBase::add(long i1, long i2, long i3)
+void IndexBase::add(long i1, long i2, long i3)
 {
 	this->add(i1);
 	this->add(i2);
@@ -97,7 +97,7 @@ void CIndexBase::add(long i1, long i2, long i3)
 }
 
 // ------------------------------------------------------------
-void CIndexBase::add(long i1, long i2, long i3, long i4)
+void IndexBase::add(long i1, long i2, long i3, long i4)
 {
 	this->add(i1);
 	this->add(i2);
@@ -106,7 +106,7 @@ void CIndexBase::add(long i1, long i2, long i3, long i4)
 }
 
 // ------------------------------------------------------------
-void CIndexBase::addArray(long *i, long size)
+void IndexBase::addArray(long *i, long size)
 {
 	/*
 	long j;
@@ -117,7 +117,7 @@ void CIndexBase::addArray(long *i, long size)
 }
 
 // ------------------------------------------------------------
-void CIndexBase::assignFrom(CIndexBase *idx)
+void IndexBase::assignFrom(IndexBase *idx)
 {
 	/*
 	long i;
@@ -130,14 +130,14 @@ void CIndexBase::assignFrom(CIndexBase *idx)
 }
 
 // ------------------------------------------------------------
-void CIndexBase::assignTo(CIndexBase *idx)
+void IndexBase::assignTo(IndexBase *idx)
 {
 	idx->clear();
 	idx->assignFrom(this);
 }
 
 // ------------------------------------------------------------
-void CIndexBase::createLinear(long start, long size)
+void IndexBase::createLinear(long start, long size)
 {
 	/*
 	long i;
@@ -148,7 +148,7 @@ void CIndexBase::createLinear(long start, long size)
 }
 
 // ------------------------------------------------------------
-void CIndexBase::createConstant(long value, long size)
+void IndexBase::createConstant(long value, long size)
 {
 	/*
 	long i;
@@ -159,7 +159,7 @@ void CIndexBase::createConstant(long value, long size)
 }
 
 // ------------------------------------------------------------
-void CIndexBase::add(long i1, long i2, long i3, long i4, long i5)
+void IndexBase::add(long i1, long i2, long i3, long i4, long i5)
 {
 	this->add(i1);
 	this->add(i2);
@@ -169,25 +169,25 @@ void CIndexBase::add(long i1, long i2, long i3, long i4, long i5)
 }
 
 // ------------------------------------------------------------
-void CIndexBase::setTopology(int topology)
+void IndexBase::setTopology(int topology)
 {
 	m_topology = topology;
 }
 
 // ------------------------------------------------------------
-int CIndexBase::getTopology()
+int IndexBase::getTopology()
 {
 	return m_topology;
 }
 
 // ------------------------------------------------------------
-void CIndexBase::setSize(int size)
+void IndexBase::setSize(int size)
 {
 
 }
 
 // ------------------------------------------------------------
-void CIndexBase::setIndex(long pos, long value)
+void IndexBase::setIndex(long pos, long value)
 {
 
 }

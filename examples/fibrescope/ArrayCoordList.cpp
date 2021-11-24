@@ -23,14 +23,14 @@
 
 #include "ArrayCoordList.h"
 
-CArrayCoordList::CArrayCoordList()
+ArrayCoordList::ArrayCoordList()
 {
 	m_size = 0;
 	m_colors = nullptr;
 	m_coords = nullptr;
 }
 
-CArrayCoordList::~CArrayCoordList()
+ArrayCoordList::~ArrayCoordList()
 {
 	if (m_coords!=nullptr)
 		delete [] m_coords;
@@ -39,7 +39,7 @@ CArrayCoordList::~CArrayCoordList()
 		delete [] m_colors;
 }
 
-void CArrayCoordList::addCoord(double x, double y, double z)
+void ArrayCoordList::addCoord(double x, double y, double z)
 {
 	this->resize(m_size+1);
 	m_coords[m_size-1][0] = x;
@@ -51,7 +51,7 @@ void CArrayCoordList::addCoord(double x, double y, double z)
 	m_colors[m_size-1][2] = 1.0f;
 }
 
-void CArrayCoordList::addCoord(double x, double y, double z, float r, float g, float b)
+void ArrayCoordList::addCoord(double x, double y, double z, float r, float g, float b)
 {
 	this->resize(m_size+1);
 	m_coords[m_size-1][0] = x;
@@ -63,7 +63,7 @@ void CArrayCoordList::addCoord(double x, double y, double z, float r, float g, f
 	m_colors[m_size-1][2] = b;
 }
 
-void CArrayCoordList::addCoord(ivf::CVec3d* coord)
+void ArrayCoordList::addCoord(ivf::Vec3d* coord)
 {
 	double x, y, z;
 	this->resize(m_size+1);
@@ -77,7 +77,7 @@ void CArrayCoordList::addCoord(ivf::CVec3d* coord)
 	m_colors[m_size-1][2] = 1.0f;
 }
 
-void CArrayCoordList::setColor(long idx, float r, float g, float b)
+void ArrayCoordList::setColor(long idx, float r, float g, float b)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -87,7 +87,7 @@ void CArrayCoordList::setColor(long idx, float r, float g, float b)
 	}
 }
 
-void CArrayCoordList::getColor(long idx, float &r, float &g, float &b)
+void ArrayCoordList::getColor(long idx, float &r, float &g, float &b)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -97,7 +97,7 @@ void CArrayCoordList::getColor(long idx, float &r, float &g, float &b)
 	}	
 }
 	
-void CArrayCoordList::getCoord(long idx, double &x, double &y, double &z)
+void ArrayCoordList::getCoord(long idx, double &x, double &y, double &z)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -107,22 +107,22 @@ void CArrayCoordList::getCoord(long idx, double &x, double &y, double &z)
 	}
 }
 
-ivf::CVec3d* CArrayCoordList::getCoord(long idx)
+ivf::Vec3d* ArrayCoordList::getCoord(long idx)
 {
 	return nullptr;
 }
 
-long CArrayCoordList::getSize()
+long ArrayCoordList::getSize()
 {
 	return m_size;
 }
 
-void CArrayCoordList::clear()
+void ArrayCoordList::clear()
 {
 	this->resize(0);
 }
 
-void CArrayCoordList::resize(int newSize)
+void ArrayCoordList::resize(int newSize)
 {
 	if (newSize>=0)
 	{
@@ -162,17 +162,17 @@ void CArrayCoordList::resize(int newSize)
 	}
 }
 
-double** CArrayCoordList::getCoordArray()
+double** ArrayCoordList::getCoordArray()
 {
 	return (double**)m_coords;
 }
-
-float** CArrayCoordList::getColorArray()
+ 
+float** ArrayCoordList::getColorArray()
 {
 	return (float**)m_colors;
 }
 
-void CArrayCoordList::setCoord(int idx, double x, double y, double z)
+void ArrayCoordList::setCoord(int idx, double x, double y, double z)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{

@@ -28,40 +28,40 @@
 
 using namespace ivf;
 
-CGle* CGle::m_instance = 0;
-CSingletonDestroyer<CGle> CGle::m_destroyer;
+Gle* Gle::m_instance = 0;
+SingletonDestroyer<Gle> Gle::m_destroyer;
 
-CGle* CGle::getInstance () 
+Gle* Gle::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CGle(); 
+		m_instance = new Gle(); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CGle::CGle()
+Gle::Gle()
 {
 	// Add protected construction code here
 }
 
-void CGle::setNumSides(int sides)
+void Gle::setNumSides(int sides)
 {
 	gleSetNumSides(sides);	
 }
 
-int CGle::getNumSides()
+int Gle::getNumSides()
 {
 	return gleGetNumSides();	
 }
 
-void CGle::setJoinStyle(int style)
+void Gle::setJoinStyle(int style)
 {
 	gleSetJoinStyle(style);
 }
 
-int CGle::getJoinStyle()
+int Gle::getJoinStyle()
 {
 	return gleGetJoinStyle();
 }

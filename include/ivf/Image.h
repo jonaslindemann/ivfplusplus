@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CImage);
+IvfSmartPointer(Image);
 
 /**
  * Image class
@@ -38,7 +38,7 @@ IvfSmartPointer(CImage);
  * The class is used as a base class for the image loaders in 
  * the ivfimage library.
  */
-class IVF_API CImage : public CBase {
+class IVF_API Image : public Base {
 private:
 	int m_size[2];
 	int m_channels;
@@ -47,13 +47,13 @@ private:
 	GLint m_internalFormat;
 public:
 	/** CIvfImage constructor */
-	CImage();
+	Image();
 
 	/** CIvfImage destructor */
-	virtual ~CImage();
+	virtual ~Image();
 
-	IvfClassInfo("CImage",CBase);
-	IvfStdFactory(CImage);
+	IvfClassInfo("Image",Base);
+	IvfStdFactory(Image);
 
 	/** 
 	 * Clear image
@@ -169,7 +169,7 @@ public:
 	/** Return image ratio */
 	double getRatio();
 
-	void copyFromImage(CImage* image, int srcStartX, int srcEndX, int srcStartY, int srcEndY, int destX, int destY);
+	void copyFromImage(Image* image, int srcStartX, int srcEndX, int srcStartY, int srcEndY, int destX, int destY);
 
 	/** Sets the image map used by the image class */
 	void setImageMap(void* image);

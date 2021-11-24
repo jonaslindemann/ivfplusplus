@@ -30,33 +30,33 @@
 
 namespace ivf {
 
-IvfSmartPointer(CSplineTube);
+IvfSmartPointer(SplineTube);
 
 /**
  * Spline extrusion class
  * 
- * Implements a extrusion using a CSpline3d spine
+ * Implements a extrusion using a Spline3d spine
  */
-class IVF_API CSplineTube : public CTubeExtrusion {
+class IVF_API SplineTube : public TubeExtrusion {
 private:
 	double m_resolution;
-	CSpline3dPtr m_spline;
+	Spline3dPtr m_spline;
 public:
-	/** CSplineTube constructor */
-	CSplineTube();
+	/** SplineTube constructor */
+	SplineTube();
 
-	/** CSplineTube destructor */
-	virtual ~CSplineTube();
+	/** SplineTube destructor */
+	virtual ~SplineTube();
 
-	IvfClassInfo("CSplineTube",CTubeExtrusion);
-	IvfStdFactory(CSplineTube);
+	IvfClassInfo("SplineTube",TubeExtrusion);
+	IvfStdFactory(SplineTube);
 
 	/** Set the number of sides in the circular section */
 	void setSides(int sides);
 
 	/** Sets the spline used as a spine */
-	void setSpline(CSpline3d* spline);
-	CSpline3d* getSpline();
+	void setSpline(Spline3d* spline);
+	Spline3d* getSpline();
 
 	/** Set the precision when creating the polyline representation */
 	void setPrecision(double resolution);

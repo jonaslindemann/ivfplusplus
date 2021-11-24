@@ -32,7 +32,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CBase);
+IvfSmartPointer(Base);
 
 /**
  * Root class for the ivf library
@@ -41,15 +41,15 @@ IvfSmartPointer(CBase);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CBase : public CRefCountBase, public CRTTIBase {
+class IVF_API Base : public RefCountBase, public RTTIBase {
 public:
 	/** CIvfBase constructor */
-	CBase();
+	Base();
 
 	/** CIvfBase destrcutor */
-	virtual ~CBase();
+	virtual ~Base();
 
-	IvfClassInfo("CBase",CRTTIBase);
+	IvfClassInfo("Base",RTTIBase);
 };
 
 }

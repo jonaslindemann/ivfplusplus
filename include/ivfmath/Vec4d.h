@@ -29,40 +29,40 @@
 
 namespace ivf {
 
-IvfSmartPointer(CVec4d);
+IvfSmartPointer(Vec4d);
 
 /**
  * 4d vector class.
  *
- * CVec3d implements a 4d vector and associated
+ * Vec3d implements a 4d vector and associated
  * operations and arithmetic.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CVec4d : public CMathBase {
+class IVFMATH_API Vec4d : public MathBase {
 private:
 	double m_vector[4];
 public:
-	/** CVec3d constructor */
-	CVec4d();
+	/** Vec3d constructor */
+	Vec4d();
 
-	/** CVec3d constructor */
-	CVec4d(double vx, double vy, double vz);
+	/** Vec3d constructor */
+	Vec4d(double vx, double vy, double vz);
 
-	/** CVec3d constructor */
-	CVec4d(double vx, double vy, double vz, double vw);
+	/** Vec3d constructor */
+	Vec4d(double vx, double vy, double vz, double vw);
 
-	/** CVec3d copy constructor */
-	CVec4d(CVec4d& v);
+	/** Vec3d copy constructor */
+	Vec4d(Vec4d& v);
 
-	/** CVec3d destructor */
-	virtual ~CVec4d();
+	/** Vec3d destructor */
+	virtual ~Vec4d();
 
-	IvfClassInfo("CVec4d",CMathBase);
-	IvfStdFactory(CVec4d);
+	IvfClassInfo("Vec4d",MathBase);
+	IvfStdFactory(Vec4d);
 
 	/** Rotate vector angle about axis */
-	void rotate(CVec4d& axis, double angle);
+	void rotate(Vec4d& axis, double angle);
 
 	/** Normalize vector */
 	void normalize();
@@ -112,14 +112,14 @@ public:
 	void setX(double value);
 
 	/** Vector/Vector += operator */
-	CVec4d& operator+=(CVec4d& a);
+	Vec4d& operator+=(Vec4d& a);
 
 	/** Vector/Vector -= operator */
-	CVec4d& operator-=(CVec4d& a);
+	Vec4d& operator-=(Vec4d& a);
 
 	
 	/** Vector/scalar = operator */
-	CVec4d& operator=(CVec4d& a);
+	Vec4d& operator=(Vec4d& a);
 
 	/** Index operator */
 	double operator[](const int idx);
@@ -127,21 +127,21 @@ public:
 };
 
 /** Vector/Vector cross product operator */
-IVFMATH_API CVec4d& operator*(CVec4d& a, CVec4d& b);
+IVFMATH_API Vec4d& operator*(Vec4d& a, Vec4d& b);
 
 /** Vector/Scalar elemental multiplication operator */
-IVFMATH_API CVec4d& operator*(CVec4d& a, double b); 
+IVFMATH_API Vec4d& operator*(Vec4d& a, double b); 
 
 /** Scalar/Vector elemental multiplication operator */
-IVFMATH_API CVec4d& operator*(double a, CVec4d& b);
+IVFMATH_API Vec4d& operator*(double a, Vec4d& b);
 
 /** Vector/Vector + operator */
-IVFMATH_API CVec4d& operator+(CVec4d& a, CVec4d& b);
+IVFMATH_API Vec4d& operator+(Vec4d& a, Vec4d& b);
 
 /** Vector/Vector - operator */
-IVFMATH_API CVec4d& operator-(CVec4d& a, CVec4d& b);
+IVFMATH_API Vec4d& operator-(Vec4d& a, Vec4d& b);
 
-IVFMATH_API CVec4d& ivfGetTempVec4d();
+IVFMATH_API Vec4d& ivfGetTempVec4d();
 
 /** \example math.cpp */
 

@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(COldLight);
+IvfSmartPointer(OldLight);
 
 static size_t IVF_MAX_LIGHTS = 8;
 
@@ -42,7 +42,7 @@ static size_t IVF_MAX_LIGHTS = 8;
  *
  * @author Carl Johan Lejdfors
  */
-class IVF_API COldLight : public CGLBase {
+class IVF_API OldLight : public GLBase {
 public:
 	enum TLightType {
 		LT_POINT,
@@ -51,18 +51,18 @@ public:
 	};
 public:
 	/** Constructor */
-	COldLight();
+	OldLight();
 
 	/** Destructor */
-	virtual ~COldLight();
+	virtual ~OldLight();
 
 	/** Assignment operator */
-	COldLight& operator = ( const COldLight& ); 
+	OldLight& operator = ( const OldLight& ); 
 	
 	/** void* operator */
 	operator void*(); 
 
-	IvfClassInfo("COldLight",CGLBase);
+	IvfClassInfo("OldLight",GLBase);
 
 	/** Set ambient light components */
 	void setAmbient( const GLfloat r, const GLfloat g, 
@@ -167,7 +167,7 @@ public:
 	
 protected:
 	// disallow copying 
-	COldLight( const COldLight& );
+	OldLight( const OldLight& );
 	
 	static long lightmask; //available lights
 	
@@ -190,7 +190,7 @@ private:
 	bool m_active;
 };
 /** \example lighting.cpp
- * This is an example of how to use the COldLight and 
- * COldLightModel classes.
+ * This is an example of how to use the OldLight and 
+ * OldLightModel classes.
  */
 }

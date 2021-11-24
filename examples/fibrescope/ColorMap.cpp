@@ -29,17 +29,17 @@
 
 using namespace ivf;
 
-CColorMap::CColorMap()
+ColorMap::ColorMap()
 {
 
 }
 
-CColorMap::~CColorMap()
+ColorMap::~ColorMap()
 {
 	this->clear();
 }
 
-void CColorMap::open(const std::string& fname)
+void ColorMap::open(const std::string& fname)
 {
 	using namespace std;
 
@@ -47,7 +47,7 @@ void CColorMap::open(const std::string& fname)
 	int nColors;
 	int i;
 	float r, g, b;
-	CColorPtr color;
+	ColorPtr color;
 
 	// Clear previous color map
 
@@ -64,7 +64,7 @@ void CColorMap::open(const std::string& fname)
 	for (i=0; i<nColors; i++)
 	{
 		f >> r >> g >> b;
-		color = new CColor();
+		color = new Color();
 		color->setColor(r, g, b);
 		m_colors.push_back(color);
 	}
@@ -74,18 +74,18 @@ void CColorMap::open(const std::string& fname)
 	f.close();
 }
 
-void CColorMap::clear()
+void ColorMap::clear()
 {
 	m_colors.clear();
 }
 
-void CColorMap::getColor(double value, float &r, float &g, float &b)
+void ColorMap::getColor(double value, float &r, float &g, float &b)
 {
 	if (m_colors.size()>0)
 	{
 		double clampedValue;
 		int colorIndex;
-		CColor* color;
+		Color* color;
 
 		// Clamp value
 

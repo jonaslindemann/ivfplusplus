@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CBrick);
+IvfSmartPointer(Brick);
 
 /**
  * Brick shape class
@@ -38,16 +38,16 @@ IvfSmartPointer(CBrick);
  * 
  * @author Jonas Lindemann
  */
-class IVF_API CBrick : public CQuadSet {
+class IVF_API Brick : public QuadSet {
 public:
 	/** CIvfBrick constructor */
-	CBrick ();
+	Brick ();
 
 	/** CIvfBrick destructor */
-	virtual ~CBrick ();
+	virtual ~Brick ();
 
-	IvfClassInfo("CBrick",CQuadSet);
-	IvfStdFactory(CBrick);
+	IvfClassInfo("Brick",QuadSet);
+	IvfStdFactory(Brick);
 
 	/**
 	 * Set brick size (2 points)
@@ -57,7 +57,7 @@ public:
 	 * @param p1 CIvfPoint instance specifying the first corner of the brick.
 	 * @param p2 CIvfPoint instance specifying the opposite corner of the brick.
 	 */
-	void setSize(CPoint3d* p1, CPoint3d* p2);
+	void setSize(Point3d* p1, Point3d* p2);
 
 	/**
 	 * Set brick size

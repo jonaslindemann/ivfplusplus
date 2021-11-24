@@ -26,14 +26,14 @@
 
 using namespace ivf;
 
-CGleContour::CGleContour()
+GleContour::GleContour()
 {
 	m_coords = nullptr;
 	m_normals = nullptr;
 	m_size = 0;
 }
 
-CGleContour::CGleContour(int size)
+GleContour::GleContour(int size)
 {
 	m_coords = nullptr;
 	m_normals = nullptr;
@@ -42,7 +42,7 @@ CGleContour::CGleContour(int size)
 	setSize(size);
 }
 
-CGleContour::~CGleContour()
+GleContour::~GleContour()
 {
 	if (m_coords!=nullptr)
 		delete [] m_coords;
@@ -51,7 +51,7 @@ CGleContour::~CGleContour()
 		delete [] m_normals;
 }
 
-void CGleContour::setSize(int size)
+void GleContour::setSize(int size)
 {
 	// Delete previous spine coords/colors if any
 	
@@ -71,7 +71,7 @@ void CGleContour::setSize(int size)
 	m_normals = new gleDouble[m_size-1][2];
 }
 
-void CGleContour::setCoord(int idx, double x, double y)
+void GleContour::setCoord(int idx, double x, double y)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -80,7 +80,7 @@ void CGleContour::setCoord(int idx, double x, double y)
 	}
 }
 
-void CGleContour::getCoord(int idx, double &x, double &y)
+void GleContour::getCoord(int idx, double &x, double &y)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -89,12 +89,12 @@ void CGleContour::getCoord(int idx, double &x, double &y)
 	}
 }
 
-int CGleContour::getSize()
+int GleContour::getSize()
 {
 	return m_size;
 }
 
-void* CGleContour::getCoordData()
+void* GleContour::getCoordData()
 {
 	if (m_coords!=nullptr)
 		return &m_coords[0];
@@ -102,7 +102,7 @@ void* CGleContour::getCoordData()
 		return nullptr;
 }
 
-void* CGleContour::getNormalData()
+void* GleContour::getNormalData()
 {
 	if (m_normals!=nullptr)
 		return &m_normals[0];
@@ -110,7 +110,7 @@ void* CGleContour::getNormalData()
 		return nullptr;
 }
 
-void CGleContour::calcNormals()
+void GleContour::calcNormals()
 {
 	int i;
 

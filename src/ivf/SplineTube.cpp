@@ -26,33 +26,33 @@
 
 using namespace ivf;
 
-CSplineTube::CSplineTube()
+SplineTube::SplineTube()
 {
 	m_spline = nullptr;
 	m_resolution = 0.1;
 }
 
-CSplineTube::~CSplineTube()
+SplineTube::~SplineTube()
 {
 
 }
 
-void CSplineTube::setSpline(CSpline3d *spline)
+void SplineTube::setSpline(Spline3d *spline)
 {
 	m_spline = spline;
 }
 
-CSpline3d* CSplineTube::getSpline()
+Spline3d* SplineTube::getSpline()
 {
 	return m_spline;
 }
 
-void CSplineTube::setPrecision(double resolution)
+void SplineTube::setPrecision(double resolution)
 {
 	m_resolution = resolution;
 }
 
-void CSplineTube::refresh()
+void SplineTube::refresh()
 {
 	if (m_spline!=nullptr)
 	{
@@ -62,7 +62,7 @@ void CSplineTube::refresh()
 
 		double nPoints = (double)m_spline->getSize()/m_resolution;
 		int iPoints = (int)nPoints + 1;
-		CVec3d p;
+		Vec3d p;
 		
 		setSpineSize(iPoints);
 
@@ -74,11 +74,11 @@ void CSplineTube::refresh()
 			t+=m_resolution;
 		}
 	}
-	CTubeExtrusion::refresh();
+	TubeExtrusion::refresh();
 }
 
-void CSplineTube::setSides(int sides)
+void SplineTube::setSides(int sides)
 {
-	CTubeExtrusion::setSides(sides);
+	TubeExtrusion::setSides(sides);
 	this->refresh();
 }

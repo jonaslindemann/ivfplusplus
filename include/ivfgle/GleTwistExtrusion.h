@@ -35,27 +35,27 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGleTwistExtrusion);
+IvfSmartPointer(GleTwistExtrusion);
 
-class IVFGLE_API CGleTwistExtrusion: public CShape {
+class IVFGLE_API GleTwistExtrusion: public Shape {
 private:
-	CGleCoordArrayPtr  m_pointArray;
-	CGleColorArrayPtr  m_colorArray;
-	CGleContourPtr	  m_contour;
-	CGleScalarArrayPtr m_twistArray;
+	GleCoordArrayPtr  m_pointArray;
+	GleColorArrayPtr  m_colorArray;
+	GleContourPtr	  m_contour;
+	GleScalarArrayPtr m_twistArray;
 	gleDouble			  m_up[3];
 public:
-	CGleTwistExtrusion();
+	GleTwistExtrusion();
 
-	IvfClassInfo("CGleTwistExtrusion", CShape);
-	IvfStdFactory(CGleTwistExtrusion);
+	IvfClassInfo("GleTwistExtrusion", Shape);
+	IvfStdFactory(GleTwistExtrusion);
 
-	void setColors(CGleColorArray* array);
-	void setPoints(CGleCoordArray* array);
-	void setContour(CGleContour* contour);
+	void setColors(GleColorArray* array);
+	void setPoints(GleCoordArray* array);
+	void setContour(GleContour* contour);
 	void setContourUp(double vx, double vy, double vz);
-	void setContourUp(CVec3d& vec);
-	void setTwist(CGleScalarArray* array);
+	void setContourUp(Vec3d& vec);
+	void setTwist(GleScalarArray* array);
 protected:
 	virtual void doCreateGeometry();
 };

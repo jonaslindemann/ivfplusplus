@@ -4,9 +4,9 @@
 #include <ivf/View.h>
 #include <ivfmath/Vec3d.h>
 
-IvfSmartPointer(CFlyCamera);
+IvfSmartPointer(FlyCamera);
 
-class CFlyCamera : public ivf::CView {
+class FlyCamera : public ivf::View {
 private:
 	double m_zFar;
 	double m_zNear;
@@ -18,12 +18,12 @@ private:
 	double m_pitch;
 	double m_bank;
 
-	ivf::CVec3d m_forward;
-	ivf::CVec3d m_sideways;
-	ivf::CVec3d m_up;
+	ivf::Vec3d m_forward;
+	ivf::Vec3d m_sideways;
+	ivf::Vec3d m_up;
 public:
-	CFlyCamera();
-	virtual ~CFlyCamera();
+	FlyCamera();
+	virtual ~FlyCamera();
 
 	void addDirection(double dHeading, double dPitch, double dBank);
 	void moveForward(double d);

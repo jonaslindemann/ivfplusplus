@@ -50,12 +50,12 @@
 
 namespace ivf {
 
-IvfSmartPointer(CFltkWorkspace);
+IvfSmartPointer(FltkWorkspace);
 
 /**
  * Fltk Workspace widget class
  */
-class IVFFLTK_API CFltkWorkspace : public Fl_Gl_Window, public CWorkspaceWidget {
+class IVFFLTK_API FltkWorkspace : public Fl_Gl_Window, public WorkspaceWidget {
 private:
 protected:
 	virtual void doRedraw();
@@ -87,9 +87,9 @@ public:
 	 * @param H Widget height.
 	 * @param L Widget title (optional)
 	 */
-	CFltkWorkspace(int X, int Y, int W, int H, const char *L=0);
+	FltkWorkspace(int X, int Y, int W, int H, const char *L=0);
 
-	IvfClassInfo("CFltkWorkspace",CWorkspaceWidget);
+	IvfClassInfo("FltkWorkspace",WorkspaceWidget);
 };
 
 }

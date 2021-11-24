@@ -29,18 +29,18 @@
 
 namespace ivf {
 
-IvfSmartPointer(CNormalList);
+IvfSmartPointer(NormalList);
 
 /**
  * Normal list class
  *
- * Maintains a list of normals for use with the CVertexElements class.
+ * Maintains a list of normals for use with the VertexElements class.
  * The list is initially 1024 elements and the size is doubled if exceeding
  * 1024.
  *
  * @author Jonas Lindemann
  */
-class IVF_API CNormalList : public CBase {
+class IVF_API NormalList : public Base {
 private:
 	GLfloat* m_normals;
 	long m_allocSize;
@@ -48,14 +48,14 @@ private:
 	long m_blockSize;
 	long m_next;
 public:
-	/** CNormalList constructor */
-	CNormalList();
+	/** NormalList constructor */
+	NormalList();
 
-	/** CNormalList destructor */
-	virtual ~CNormalList();
+	/** NormalList destructor */
+	virtual ~NormalList();
 
-	IvfClassInfo("CNormalList",CBase);
-	IvfStdFactory(CNormalList);
+	IvfClassInfo("NormalList",Base);
+	IvfStdFactory(NormalList);
 
 	/** Add a normal to the list */
 	void add(double x, double y, double z);

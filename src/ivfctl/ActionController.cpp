@@ -26,26 +26,26 @@
 
 using namespace ivf;
 
-CActionController::CActionController()
+ActionController::ActionController()
 {
 	m_actionIter = m_actionList.end();
 	m_time = 0.0;
 	m_tolerance = 1e-10;
 }
 
-CActionController::~CActionController()
+ActionController::~ActionController()
 {
 
 }
 
-void CActionController::addAction(CAction *action)
+void ActionController::addAction(Action *action)
 {
 	m_actionList.insert(action);
 	action->addReference();
 	m_actionIter = m_actionList.begin();
 }
 
-void CActionController::clear()
+void ActionController::clear()
 {
 	CActionsIter ai;
 
@@ -60,12 +60,12 @@ void CActionController::clear()
 	m_actionIter = m_actionList.end();
 }
 
-void CActionController::doUpdate(double dt)
+void ActionController::doUpdate(double dt)
 {
 	if (m_actionIter!=m_actionList.end())
 	{
-		CAction* nextAction = (*m_actionIter);
-		CAction* prevAction;
+		Action* nextAction = (*m_actionIter);
+		Action* prevAction;
 
 		if (nextAction!=nullptr)
 		{
@@ -95,21 +95,21 @@ void CActionController::doUpdate(double dt)
 		}
 	}
 	
-	CControllerGroup::doUpdate(dt);
+	ControllerGroup::doUpdate(dt);
 	m_time += dt;
 }
 
-void CActionController::doReset()
+void ActionController::doReset()
 {
 	m_time = 0.0;
 }
 
-void CActionController::setTolerance(double tol)
+void ActionController::setTolerance(double tol)
 {
 	m_tolerance = tol;
 }
 
-void CActionController::doActivate()
+void ActionController::doActivate()
 {
 	//m_time = 0.0;
 }

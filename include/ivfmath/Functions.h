@@ -30,7 +30,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CFunction2d);
+IvfSmartPointer(Function2d);
 
 /**
  * Abstract function class
@@ -39,11 +39,11 @@ IvfSmartPointer(CFunction2d);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CFunction2d : public CMathBase {
+class IVFMATH_API Function2d : public MathBase {
 private:
 
 public:
-	IvfClassInfo("CFunction2d",CMathBase);
+	IvfClassInfo("Function2d",MathBase);
 	/** 
 	 * function method 
 	 * 
@@ -53,16 +53,16 @@ public:
 	virtual double f(double x) = 0;
 };
 
-class IVFMATH_API CScalarVectorFunction : public CMathBase {
+class IVFMATH_API ScalarVectorFunction : public MathBase {
 private:
 
 public:
-	IvfClassInfo("CScalarVectorFunction",CMathBase);
+	IvfClassInfo("ScalarVectorFunction",MathBase);
 
-	virtual CVec3d& f(double x) = 0;
+	virtual Vec3d& f(double x) = 0;
 };
 
-IvfSmartPointer(CLine2d);
+IvfSmartPointer(Line2d);
 
 /**
  * 2D line function
@@ -71,7 +71,7 @@ IvfSmartPointer(CLine2d);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CLine2d : public CFunction2d {
+class IVFMATH_API Line2d : public Function2d {
 private:
 	double m_k;
 	double m_m;
@@ -82,29 +82,29 @@ public:
 	 * Initialises line by to points on line (x1, y1) and
 	 * (x2, y2)
 	 */
-	CLine2d(double x1, double y1, double x2, double y2);
+	Line2d(double x1, double y1, double x2, double y2);
 
 	/**
-	 * CLine2d constructor
+	 * Line2d constructor
 	 *
 	 * Inititialises line to f(x) = x
 	 */
-	CLine2d();
+	Line2d();
 
-	IvfClassInfo("CLine2d",CFunction2d);
+	IvfClassInfo("Line2d",Function2d);
 
 	/**
-	 * CLine2d constructor
+	 * Line2d constructor
 	 *
 	 * Initialises line using k and m 
 	 */
-	CLine2d(double k, double m);
+	Line2d(double k, double m);
 
 	/** Returns line function value */
 	virtual double f(double x);
 };
 
-IvfSmartPointer(CTheta2d);
+IvfSmartPointer(Theta2d);
 
 /**
  * Theta function
@@ -117,16 +117,16 @@ IvfSmartPointer(CTheta2d);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CTheta2d : public CFunction2d {
+class IVFMATH_API Theta2d : public Function2d {
 private:
 
 public:
-	IvfClassInfo("CTheta2d",CFunction2d);
+	IvfClassInfo("Theta2d",Function2d);
 	/** Theta function value */
 	virtual double f(double x);
 };
 
-IvfSmartPointer(CPulse2d);
+IvfSmartPointer(Pulse2d);
 
 /**
  * Pulse function
@@ -137,26 +137,26 @@ IvfSmartPointer(CPulse2d);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CPulse2d : public CFunction2d {
+class IVFMATH_API Pulse2d : public Function2d {
 private:
 	double m_delta;
-	CTheta2d m_theta;
+	Theta2d m_theta;
 public:
 	/**
-	 * CPulse2d constructor
+	 * Pulse2d constructor
 	 *
 	 * Initialises pulse function with a width
 	 * of @param delta.
 	 */
-	CPulse2d(double delta);
+	Pulse2d(double delta);
 
-	IvfClassInfo("CPulse2d",CFunction2d);
+	IvfClassInfo("Pulse2d",Function2d);
 
 	/** Pulse function value */
 	virtual double f(double x);
 };
 
-IvfSmartPointer(CEnvPos2d);
+IvfSmartPointer(EnvPos2d);
 
 /**
  * Envelope position class
@@ -165,26 +165,26 @@ IvfSmartPointer(CEnvPos2d);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CEnvPos2d : public CMathBase {
+class IVFMATH_API EnvPos2d : public MathBase {
 private:
 	double m_pos[2];
 public:
 	/** 
-	 * CEnvPos2d constructor
+	 * EnvPos2d constructor
 	 *
 	 * Default values are (0,0)
 	 */
-	CEnvPos2d();
+	EnvPos2d();
 
 	/**
-	 * CEnvPos2d constructor
+	 * EnvPos2d constructor
 	 *
 	 * @param x x-position on envelope
 	 * @param y y-position on envelope 
 	 */
-	CEnvPos2d(double x, double y);
+	EnvPos2d(double x, double y);
 
-	IvfClassInfo("CEnvPos2d",CMathBase);
+	IvfClassInfo("EnvPos2d",MathBase);
 
 	/** Return x position */
 	double getY();
@@ -197,17 +197,17 @@ public:
  * STL IvfEnvPos2d compare function
  */
 struct SIvfEnvPos2dCompare {
-    bool operator() (CEnvPos2d* p1, CEnvPos2d* p2) const {
+    bool operator() (EnvPos2d* p1, EnvPos2d* p2) const {
         return (p1->getX()<p2->getX());
     }
 };
 
-typedef std::set<CEnvPos2d*, SIvfEnvPos2dCompare> CIvfEnvelopePosSet;
-typedef std::set<CEnvPos2d*, SIvfEnvPos2dCompare>::iterator CIvfEnvelopePosSetIter;
-typedef std::vector<CEnvPos2d*> CIvfEnvelopePosVector;
-typedef std::vector<CEnvPos2d*>::iterator CIvfEnvelopePosVectorIter;
+typedef std::set<EnvPos2d*, SIvfEnvPos2dCompare> CIvfEnvelopePosSet;
+typedef std::set<EnvPos2d*, SIvfEnvPos2dCompare>::iterator CIvfEnvelopePosSetIter;
+typedef std::vector<EnvPos2d*> CIvfEnvelopePosVector;
+typedef std::vector<EnvPos2d*>::iterator CIvfEnvelopePosVectorIter;
 
-IvfSmartPointer(CEnvelope2d);
+IvfSmartPointer(Envelope2d);
 
 /**
  * 2d envelope function
@@ -217,21 +217,21 @@ IvfSmartPointer(CEnvelope2d);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CEnvelope2d : public CFunction2d {
+class IVFMATH_API Envelope2d : public Function2d {
 private:
-	double interpolate(CEnvPos2d* pos1, CEnvPos2d* pos2, double x);
+	double interpolate(EnvPos2d* pos1, EnvPos2d* pos2, double x);
 	CIvfEnvelopePosSet m_envelopeSet;
 	CIvfEnvelopePosVector m_envelope;
 	double m_range[2];
 	bool m_finished;
 public:
-	/** CEnvelope2d constructor */
-	CEnvelope2d();
+	/** Envelope2d constructor */
+	Envelope2d();
 
-	/** CEnvelope2d destructor */
-	virtual ~CEnvelope2d();
+	/** Envelope2d destructor */
+	virtual ~Envelope2d();
 
-	IvfClassInfo("CEnvelope2d",CFunction2d);
+	IvfClassInfo("Envelope2d",Function2d);
 
 	/** Adds a point to envelope (required) */
 	void addPoint(double x, double y);

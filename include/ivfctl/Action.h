@@ -25,36 +25,36 @@
 
 namespace ivf {
 
-IvfSmartPointer(CAction);
+IvfSmartPointer(Action);
 
-class CController;
+class Controller;
 
 /**
  * Action class
  *
- * Defines an action used in the CActionController class.
+ * Defines an action used in the ActionController class.
  */
-class IVFCTL_API CAction : public CBase {
+class IVFCTL_API Action : public Base {
 private:
 	double m_time;
 	int m_actionType;
 	double m_dParam;
 	int m_iParam;
-	CController* m_target;
+	Controller* m_target;
 public:
-	/** CAction constructor */
-	CAction();
+	/** Action constructor */
+	Action();
 
-	/** CAction destructor */
-	virtual ~CAction();
+	/** Action destructor */
+	virtual ~Action();
 
-	IvfClassInfo("CAction",CBase);
-	IvfStdFactory(CAction);
+	IvfClassInfo("Action",Base);
+	IvfStdFactory(Action);
 
-	/** Set type of action, \sa CController */
+	/** Set type of action, \sa Controller */
 	void setActionType(int type);
 
-	/** Return type of action \sa CController */
+	/** Return type of action \sa Controller */
 	int getActionType();
 
 	/** Set integer parameter of action */
@@ -72,7 +72,7 @@ public:
 	/** 
 	 * Set time of execution
 	 * 
-	 * Used by the CActionController class 
+	 * Used by the ActionController class 
 	 * \param time time when action is to be executed in seconds
 	 */
 	void setTime(double time);
@@ -86,10 +86,10 @@ public:
 	 * This method sets the controller to received the action at the 
 	 * specified execution time
 	 */
-	void setTarget(CController* controller);
+	void setTarget(Controller* controller);
 
 	/** Return target controller */
-	CController* getTarget();
+	Controller* getTarget();
 };
 
 }

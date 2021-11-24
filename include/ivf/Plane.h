@@ -28,12 +28,12 @@
 
 namespace ivf {
 
-class CPlane : public CShape {
+class Plane : public Shape {
 private:
 
 public:
-	CPlane();
-	virtual ~CPlane();
+	Plane();
+	virtual ~Plane();
 };
 
 }

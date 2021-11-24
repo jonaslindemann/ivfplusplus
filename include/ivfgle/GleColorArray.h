@@ -28,16 +28,16 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGleColorArray);
+IvfSmartPointer(GleColorArray);
 
-class IVFGLE_API CGleColorArray: public CBase {
+class IVFGLE_API GleColorArray: public Base {
 private:
 	int m_size;
 	float (*m_colors)[3];
 public:
-	CGleColorArray();
-	CGleColorArray(int size);
-	virtual ~CGleColorArray();
+	GleColorArray();
+	GleColorArray(int size);
+	virtual ~GleColorArray();
 
 	void setSize(int size);
 	int getSize();
@@ -47,8 +47,10 @@ public:
 
 	void* getData();
 
-	IvfClassInfo("CGleColorArray", CBase);
-	IvfStdFactory(CGleColorArray);
+	IvfClassInfo("GleColorArray", Base);
+
+	static GleColorArrayPtr create(int size) { return GleColorArrayPtr(new GleColorArray(size)); };
+	static GleColorArrayPtr create() { return GleColorArrayPtr(new GleColorArray()); };
 };
 
 }

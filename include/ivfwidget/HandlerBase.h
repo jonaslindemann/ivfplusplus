@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CHandlerBase);
+IvfSmartPointer(HandlerBase);
 
 /**
  * Handler base class
@@ -36,21 +36,21 @@ IvfSmartPointer(CHandlerBase);
  * Ivf++ 0.9.x introduces a new UI concept called
  * handlers. A handler is a class which implements
  * user interface functionality by automatically
- * attaching event handlers to CWidgetBase derived
+ * attaching event handlers to WidgetBase derived
  * classes.
  */
-class IVFWIDGET_API CHandlerBase : public CBase {
+class IVFWIDGET_API HandlerBase : public Base {
 private:
 	bool m_active;
 public:
 	/** Class constructor */
-	CHandlerBase();
+	HandlerBase();
 
 	/** Class destructor */
-	virtual ~CHandlerBase();
+	virtual ~HandlerBase();
 
-	IvfClassInfo("CHandlerBase",CBase);
-	IvfStdFactory(CHandlerBase);
+	IvfClassInfo("HandlerBase",Base);
+	IvfStdFactory(HandlerBase);
 
 	/** Return active state */
 	bool isActive();
@@ -81,7 +81,7 @@ protected:
 	virtual void doActivate();
 };
 /** \example handlers.cpp
- * This is an example of how to use CHandlerBase derived
+ * This is an example of how to use HandlerBase derived
  * handlers.
  */
 }

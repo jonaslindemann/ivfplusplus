@@ -26,12 +26,12 @@
 
 using namespace ivf;
 
-CGlePolyCylinder::CGlePolyCylinder()
+GlePolyCylinder::GlePolyCylinder()
 {
 	m_radius = 0.1;
 }
 
-void CGlePolyCylinder::doCreateGeometry()
+void GlePolyCylinder::doCreateGeometry()
 {
 	if ((m_pointArray!=nullptr)&&(m_colorArray==nullptr))
 	{
@@ -71,12 +71,12 @@ void CGlePolyCylinder::doCreateGeometry()
 	}
 }
 
-void CGlePolyCylinder::setRadius(double radius)
+void GlePolyCylinder::setRadius(double radius)
 {
 	m_radius = radius;
 }
 
-double CGlePolyCylinder::getRadius()
+double GlePolyCylinder::getRadius()
 {
 	return m_radius;
 }

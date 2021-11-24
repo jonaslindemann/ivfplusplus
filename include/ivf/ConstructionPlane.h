@@ -33,7 +33,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CConstructionPlane);
+IvfSmartPointer(ConstructionPlane);
 
 /**
  * Construction plane class
@@ -45,14 +45,14 @@ IvfSmartPointer(CConstructionPlane);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CConstructionPlane : public CShape {
+class IVF_API ConstructionPlane : public Shape {
 private:
-	CUcs3d* m_ucs;
-	CGrid* m_grid;
-	CCursor* m_cursor;
-	CCamera* m_camera;
+	Ucs3d* m_ucs;
+	Grid* m_grid;
+	Cursor* m_cursor;
+	Camera* m_camera;
 
-	CVec3d m_last;
+	Vec3d m_last;
 
 	double m_size[2];
 	bool m_cursorLocked;
@@ -78,13 +78,13 @@ private:
 	void updateCursorSize();
 public:
 	/** CIvfConstructionPlane constructor */
-	CConstructionPlane();
+	ConstructionPlane();
 
 	/** CIvfConstructionPlane destructor */
-	virtual ~CConstructionPlane();
+	virtual ~ConstructionPlane();
 
-	IvfClassInfo("CConstructionPlane",CShape);
-	IvfStdFactory(CConstructionPlane);
+	IvfClassInfo("ConstructionPlane",Shape);
+	IvfStdFactory(ConstructionPlane);
 
 	/** 
 	 * Updates 3D cursor position
@@ -159,7 +159,7 @@ public:
 	 * The camera is used to map the x/y mouse coordinates to 
 	 * the coordinates on the construction plane. 
 	 */
-	void setCamera(CCamera* camera);
+	void setCamera(Camera* camera);
 
 	/**
 	 * Set position of construction plane
@@ -180,7 +180,7 @@ public:
 	void setRotationQuat(double vx, double vy, double vz, double theta);
 
 	/** Set cursor used */
-	void setCursor(CCursor* cursor);
+	void setCursor(Cursor* cursor);
 
 	/**
 	 * Set relative axis size
@@ -219,13 +219,13 @@ public:
 	void setUpdateAxisSize(bool flag);
 
 	/** Returns the current cursor position in global coordinates */
-	CVec3d& getCursorPosition();
+	Vec3d& getCursorPosition();
 
 	/** Returns position of construction plane */
 	void getPosition(double &x, double &y, double &z);
 
 	/** Returns used defined coordinates system */
-	CUcs3d* getUcs();
+	Ucs3d* getUcs();
 
 	/** Sets grid spacing */
 	void setGridSpacing(double spacing);
@@ -233,11 +233,11 @@ public:
 	/** Updates bounding sphere for construction plane */
 	virtual void doUpdateBoundingSphere();
 
-	CGrid* getGrid();
+	Grid* getGrid();
 	double getDepth();
 	double getWidth();
     
-    CCursor* getCursor();
+    Cursor* getCursor();
 protected:
 	virtual void doCreateGeometry();
 };

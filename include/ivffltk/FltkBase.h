@@ -48,12 +48,12 @@
 
 namespace ivf {
 
-IvfSmartPointer(CFltkBase);
+IvfSmartPointer(FltkBase);
 
 /**
  * Basic fltk widget class
  */
-class IVFFLTK_API CFltkBase : public Fl_Gl_Window, public CWidgetBase {
+class IVFFLTK_API FltkBase : public Fl_Gl_Window, public WidgetBase {
 private:
 	/** 
 	 * Implements the FL_Gl_Window draw method
@@ -87,9 +87,9 @@ public:
 	 * @param H Widget height.
 	 * @param L Widget title (optional)
 	 */
-	CFltkBase(int X, int Y, int W, int H, const char *L=0);
+	FltkBase(int X, int Y, int W, int H, const char *L=0);
 
-	IvfClassInfo("CFltkBase",CWidgetBase);
+	IvfClassInfo("FltkBase",WidgetBase);
 
 	void redraw();
 

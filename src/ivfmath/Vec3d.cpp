@@ -29,15 +29,15 @@ using namespace ivf;
 
 const int ivfMaxTempVec3d = 32;
 
-CVec3d::CVec3d()
+Vec3d::Vec3d()
 {
 	setComponents(0.0, 0.0, 0.0);
 }
 
-CVec3d& ivf::ivfGetTempVec3d()
+Vec3d& ivf::ivfGetTempVec3d()
 {
 	static int nBuf = 0;
-	static CVec3d buf[ivfMaxTempVec3d];
+	static Vec3d buf[ivfMaxTempVec3d];
 	
 	if (nBuf==ivfMaxTempVec3d) nBuf = 0;
 
@@ -46,45 +46,45 @@ CVec3d& ivf::ivfGetTempVec3d()
 	return buf[nBuf++];
 }
 
-CVec3d::CVec3d(double vx, double vy, double vz)
+Vec3d::Vec3d(double vx, double vy, double vz)
 {
 	m_vector[0] = vx;
 	m_vector[1] = vy;
 	m_vector[2] = vz;
 }
 
-CVec3d::CVec3d(CVec3d& v)
+Vec3d::Vec3d(Vec3d& v)
 {
 	v.getComponents(m_vector);
 }
 
-CVec3d::~CVec3d()
+Vec3d::~Vec3d()
 {
 
 }
 
-void CVec3d::setComponents(double vx, double vy, double vz)
+void Vec3d::setComponents(double vx, double vy, double vz)
 {
 	m_vector[0] = vx;
 	m_vector[1] = vy;
 	m_vector[2] = vz;
 }
 
-void CVec3d::setComponents(const double *v)
+void Vec3d::setComponents(const double *v)
 {
 	m_vector[0] = v[0];
 	m_vector[1] = v[1];
 	m_vector[2] = v[2];
 }
 
-void CVec3d::getComponents(double &vx, double &vy, double &vz)
+void Vec3d::getComponents(double &vx, double &vy, double &vz)
 {
 	vx = m_vector[0];
 	vy = m_vector[1];
 	vz = m_vector[2];
 }
 
-CVec3d& CVec3d::operator+=(CVec3d& a)
+Vec3d& Vec3d::operator+=(Vec3d& a)
 {
 	m_vector[0] += a.m_vector[0];
 	m_vector[1] += a.m_vector[1];
@@ -92,20 +92,20 @@ CVec3d& CVec3d::operator+=(CVec3d& a)
 	return *this;
 }
 
-bool CVec3d::operator==(CVec3d& a)
+bool Vec3d::operator==(Vec3d& a)
 {
 	return ((m_vector[0] == a.m_vector[0])&&
 		(m_vector[1] == a.m_vector[1])&&
 		(m_vector[2] == a.m_vector[2]));
 }
 
-bool ivf::CVec3d::operator!=(CVec3d& a)
+bool ivf::Vec3d::operator!=(Vec3d& a)
 {
 	return false;
 }
 
 /*
-CVec3d& CVec3d::operator=(CVec3d& a)
+Vec3d& Vec3d::operator=(Vec3d& a)
 {
 	m_vector[0] = a.m_vector[0];
 	m_vector[1] = a.m_vector[1];
@@ -114,7 +114,7 @@ CVec3d& CVec3d::operator=(CVec3d& a)
 }
 */
 
-ivf::CVec3d& CVec3d::operator=(CVec3d& a)
+ivf::Vec3d& Vec3d::operator=(Vec3d& a)
 {
 	m_vector[0] = a.m_vector[0];
 	m_vector[1] = a.m_vector[1];
@@ -122,7 +122,7 @@ ivf::CVec3d& CVec3d::operator=(CVec3d& a)
 	return *this;
 }
 
-ivf::CVec3d& CVec3d::operator-=(CVec3d& a)
+ivf::Vec3d& Vec3d::operator-=(Vec3d& a)
 {
 	m_vector[0] -= a.m_vector[0];
 	m_vector[1] -= a.m_vector[1];
@@ -130,9 +130,9 @@ ivf::CVec3d& CVec3d::operator-=(CVec3d& a)
 	return *this;
 }
 
-ivf::CVec3d& ivf::operator*(CVec3d& a, CVec3d& b)
+ivf::Vec3d& ivf::operator*(Vec3d& a, Vec3d& b)
 {
-	CVec3d& r = ivfGetTempVec3d();
+	Vec3d& r = ivfGetTempVec3d();
 
 	double c1, c2, c3;
 
@@ -145,35 +145,35 @@ ivf::CVec3d& ivf::operator*(CVec3d& a, CVec3d& b)
 	return r;
 }
 
-ivf::CVec3d& ivf::operator*(CVec3d& a, double b)
+ivf::Vec3d& ivf::operator*(Vec3d& a, double b)
 {
-	CVec3d& r = ivfGetTempVec3d();
+	Vec3d& r = ivfGetTempVec3d();
 	r.setComponents(a[0] * b, a[1] * b, a[2] * b);
 	return r;
 }
 
-ivf::CVec3d& ivf::operator*(double a, CVec3d& b)
+ivf::Vec3d& ivf::operator*(double a, Vec3d& b)
 {
-	CVec3d& r = ivfGetTempVec3d();
+	Vec3d& r = ivfGetTempVec3d();
 	r.setComponents(b[0] * a, b[1] * a, b[2] * a);
 	return r;
 }
 
-ivf::CVec3d& ivf::operator+(CVec3d& a, CVec3d& b)
+ivf::Vec3d& ivf::operator+(Vec3d& a, Vec3d& b)
 {
-	CVec3d& r = ivfGetTempVec3d();
+	Vec3d& r = ivfGetTempVec3d();
 	r = a;
 	return r += b;
 }
 
-ivf::CVec3d& ivf::operator-(CVec3d& a, CVec3d& b)
+ivf::Vec3d& ivf::operator-(Vec3d& a, Vec3d& b)
 {
-	CVec3d& r = ivfGetTempVec3d();
+	Vec3d& r = ivfGetTempVec3d();
 	r = a;
 	return r -= b;
 }
 
-double CVec3d::operator[](const int idx)
+double Vec3d::operator[](const int idx)
 {
 	if ((idx>=0)&&(idx<3))
 		return m_vector[idx];
@@ -182,19 +182,19 @@ double CVec3d::operator[](const int idx)
 }
 
 
-void CVec3d::getComponents(double *v)
+void Vec3d::getComponents(double *v)
 {
 	v[0] = m_vector[0];
 	v[1] = m_vector[1];
 	v[2] = m_vector[2];
 }
 
-double CVec3d::length()
+double Vec3d::length()
 {
 	return sqrt(pow(m_vector[0],2) + pow(m_vector[1],2) + pow(m_vector[2],2));
 }
 
-void CVec3d::normalize()
+void Vec3d::normalize()
 {
 	double quote = 1.0/length();
 
@@ -204,7 +204,7 @@ void CVec3d::normalize()
 }
 
 
-void CVec3d::rotate(CVec3d &axis, double angle)
+void Vec3d::rotate(Vec3d &axis, double angle)
 {
 	double cost = cos(angle*2*M_PI/360.0);
 	double sint = sin(angle*2*M_PI/360.0);
@@ -231,14 +231,14 @@ void CVec3d::rotate(CVec3d &axis, double angle)
 	m_vector[2] = rv[2];
 }
 
-void CVec3d::getEulerAngles(double &pitch, double &heading)
+void Vec3d::getEulerAngles(double &pitch, double &heading)
 {
 	heading = atan2(m_vector[0], m_vector[2])*180.0/M_PI;
 	double t = sqrt(pow(m_vector[0],2)+pow(m_vector[2],2));
 	pitch = atan2(m_vector[1], t)*180.0/M_PI;
 }
 
-void CVec3d::negate()
+void Vec3d::negate()
 {
 	m_vector[0] = - m_vector[0];
 	m_vector[1] = - m_vector[1];
@@ -246,23 +246,23 @@ void CVec3d::negate()
 }
 
 
-void CVec3d::setX(double value)
+void Vec3d::setX(double value)
 {
 	m_vector[0] = value;
 }
 
-void CVec3d::setY(double value)
+void Vec3d::setY(double value)
 {
 	m_vector[1] = value;
 }
 
-void CVec3d::setZ(double value)
+void Vec3d::setZ(double value)
 {
 	m_vector[2] = value;
 }
 
 #ifdef IVF_HAVE_IOSTREAM
-void CVec3d::print(std::ostream &out)
+void Vec3d::print(std::ostream &out)
 {
 	using namespace std;
 
@@ -275,21 +275,21 @@ void CIvfVec3d::print(ostream &out)
 }
 #endif
 
-void CVec3d::setFromPoints(CVec3d &pos, CVec3d &target)
+void Vec3d::setFromPoints(Vec3d &pos, Vec3d &target)
 {
-	CVec3d r;
+	Vec3d r;
 	r = target - pos;
 	r.getComponents(m_vector);
 }
 
-void CVec3d::add(double dx, double dy, double dz)
+void Vec3d::add(double dx, double dy, double dz)
 {
 	m_vector[0] += dx;
 	m_vector[1] += dy;
 	m_vector[2] += dz;
 }
 
-double* CVec3d::getComponents()
+double* Vec3d::getComponents()
 {
 	return &m_vector[0];
 }

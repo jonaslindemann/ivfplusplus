@@ -47,19 +47,19 @@ using namespace ivf;
 using namespace std;
 
 // ------------------------------------------------------------
-CPolyReader::CPolyReader()
+PolyReader::PolyReader()
 {
 }
 
 // ------------------------------------------------------------
-CPolyReader::~CPolyReader()
+PolyReader::~PolyReader()
 {
 
 }
 
 
 // ------------------------------------------------------------
-int CPolyReader::getKeyword(string &row)
+int PolyReader::getKeyword(string &row)
 {
 	if (find("comment", row))
 		return KW_COMMENT;
@@ -77,7 +77,7 @@ int CPolyReader::getKeyword(string &row)
 }
 
 // ------------------------------------------------------------
-int CPolyReader::getDatatype(string &row, int &pos, int &size)
+int PolyReader::getDatatype(string &row, int &pos, int &size)
 {
 
 	if (findPos("int8", row, pos))
@@ -156,7 +156,7 @@ int CPolyReader::getDatatype(string &row, int &pos, int &size)
 }
 
 // ------------------------------------------------------------
-int CPolyReader::getElementType(string &row)
+int PolyReader::getElementType(string &row)
 {
 	if (find("face", row))
 		return KW_FACE;
@@ -171,7 +171,7 @@ int CPolyReader::getElementType(string &row)
 }
 
 // ------------------------------------------------------------
-bool CPolyReader::checkHeader(istream &in)
+bool PolyReader::checkHeader(istream &in)
 {
 	getLine(m_row);
 
@@ -198,12 +198,12 @@ bool CPolyReader::checkHeader(istream &in)
 }
 
 // ------------------------------------------------------------
-bool CPolyReader::parseElement(string &row)
+bool PolyReader::parseElement(string &row)
 {
 	using namespace std;
 
 	char buff[256];
-	int pos = row.find("element");
+	int pos = static_cast<int>(row.find("element"));
 	string options = row.substr(pos+8);
 	string parameters = "";
 	istrstream in(buff);
@@ -212,7 +212,7 @@ bool CPolyReader::parseElement(string &row)
 	case KW_FACE:
 		m_currentElementType = ET_FACE;
 		m_elementOrder.push_back(m_currentElementType);
-		pos = options.find("face");
+		pos = static_cast<int>(options.find("face"));
 		parameters = options.substr(pos+5);
 		strcpy(buff,parameters.c_str());
 		if (!(in >> m_nFaces))
@@ -223,7 +223,7 @@ bool CPolyReader::parseElement(string &row)
 	case KW_VERTEX:
 		m_currentElementType = ET_VERTEX;
 		m_elementOrder.push_back(m_currentElementType);
-		pos = options.find("vertex");
+		pos = static_cast<int>(options.find("vertex"));
 		parameters = options.substr(pos+7);
 		strcpy(buff,parameters.c_str());
 		if (!(in >> m_nVertices))
@@ -234,7 +234,7 @@ bool CPolyReader::parseElement(string &row)
 	case KW_EDGE:
 		m_currentElementType = ET_EDGE;
 		m_elementOrder.push_back(m_currentElementType);
-		pos = options.find("edge");
+		pos = static_cast<int>(options.find("edge"));
 		parameters = options.substr(pos+5);
 		strcpy(buff,parameters.c_str());
 		if (!(in >> m_nEdges))
@@ -248,22 +248,22 @@ bool CPolyReader::parseElement(string &row)
 }
 
 // ------------------------------------------------------------
-bool CPolyReader::parseComment(string &row)
+bool PolyReader::parseComment(string &row)
 {
 	using namespace std;
 
-	int pos = row.find("comment");
+	int pos = static_cast<int>(row.find("comment"));
 	string comment = row.substr(pos+8);
 	return true;
 }
 
 // ------------------------------------------------------------
-bool CPolyReader::parseProperty(string &row)
+bool PolyReader::parseProperty(string &row)
 {
 	using namespace std;
 
 	char buff[256];
-	int pos = row.find("property");
+	int pos = static_cast<int>(row.find("property"));
 	int size;
 	string options = row.substr(pos+9);
 	string parameters;
@@ -308,7 +308,7 @@ bool CPolyReader::parseProperty(string &row)
 	}
 	else
 	{
-		pos = options.find("list");
+		pos = static_cast<int>(options.find("list"));
 		parameters = options.substr(pos+5);
 		datatype1 = getDatatype(parameters,pos,size);
 		parameters.replace(pos,size,"       ");
@@ -321,7 +321,7 @@ bool CPolyReader::parseProperty(string &row)
 }
 
 // ------------------------------------------------------------
-bool CPolyReader::parseHeader(istream &in)
+bool PolyReader::parseHeader(istream &in)
 {
 	bool done;
 	bool error;
@@ -360,7 +360,7 @@ bool CPolyReader::parseHeader(istream &in)
 	return !error;
 }
 
-bool CPolyReader::readVertices(istream &in)
+bool PolyReader::readVertices(istream &in)
 {
 	int i, j;
 	long ivalue;
@@ -368,7 +368,7 @@ bool CPolyReader::readVertices(istream &in)
 
 	double x, y, z;
 
-	CPolySet* polySet = (CPolySet*) this->getShape();
+	PolySet* polySet = (PolySet*) this->getShape();
 
 	cout << "PolyFileReader: Reading vertices." << endl;
 
@@ -412,7 +412,7 @@ bool CPolyReader::readVertices(istream &in)
 	return true;
 }
 
-bool CPolyReader::readFaces(istream &in)
+bool PolyReader::readFaces(istream &in)
 {
 	int i, j;
 	int nIndices;
@@ -421,8 +421,8 @@ bool CPolyReader::readFaces(istream &in)
 
 	vector<long> indices;
 
-	CPolySet* polySet = (CPolySet*) this->getShape();
-	CIndex* idx = nullptr;
+	PolySet* polySet = (PolySet*) this->getShape();
+	Index* idx = nullptr;
 
 	oldIndices = -1;
 
@@ -438,7 +438,7 @@ bool CPolyReader::readFaces(istream &in)
 			if (idx!=nullptr)
 				polySet->addCoordIndex(idx);
 
-			idx = new CIndex();
+			idx = new Index();
 
 			if (nIndices==3)
 				idx->setTopology(IVF_IDX_TRIANGLES);
@@ -478,18 +478,18 @@ bool CPolyReader::readFaces(istream &in)
 	return true;
 }
 
-bool CPolyReader::readEdges(istream &in)
+bool PolyReader::readEdges(istream &in)
 {
 	return true;
 }
 
 // ------------------------------------------------------------
-bool CPolyReader::readData(istream &in)
+bool PolyReader::readData(istream &in)
 {
 	unsigned int i;
 	int elementType;
 
-	CShape* polySet = new CPolySet();
+	Shape* polySet = new PolySet();
 	this->setShape(polySet);
 
 	for (i=0; i<m_elementOrder.size(); i++)
@@ -517,7 +517,7 @@ bool CPolyReader::readData(istream &in)
 }
 
 // ------------------------------------------------------------
-void CPolyReader::read()
+void PolyReader::read()
 {
 	// Initiate max min calc
 

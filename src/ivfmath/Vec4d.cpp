@@ -32,10 +32,10 @@ using namespace ivf;
 
 const int ivfMaxTempVec4d = 32;
 
-CVec4d& ivf::ivfGetTempVec4d()
+Vec4d& ivf::ivfGetTempVec4d()
 {
 	static int nBuf = 0;
-	static CVec4d buf[ivfMaxTempVec4d];
+	static Vec4d buf[ivfMaxTempVec4d];
 	
 	if (nBuf==ivfMaxTempVec4d) nBuf = 0;
 	buf[nBuf].setComponents(0.0, 0.0, 0.0, 0.0);
@@ -43,12 +43,12 @@ CVec4d& ivf::ivfGetTempVec4d()
 	return buf[nBuf++];
 }
 
-CVec4d::CVec4d()
+Vec4d::Vec4d()
 {
 	setComponents(0.0, 0.0, 0.0, 0.0);
 }
 
-CVec4d::CVec4d(double vx, double vy, double vz)
+Vec4d::Vec4d(double vx, double vy, double vz)
 {
 	m_vector[0] = vx;
 	m_vector[1] = vy;
@@ -56,7 +56,7 @@ CVec4d::CVec4d(double vx, double vy, double vz)
 	m_vector[3] = 0.0;
 }
 
-CVec4d::CVec4d(double vx, double vy, double vz, double vw)
+Vec4d::Vec4d(double vx, double vy, double vz, double vw)
 {
 	m_vector[0] = vx;
 	m_vector[1] = vy;
@@ -64,17 +64,17 @@ CVec4d::CVec4d(double vx, double vy, double vz, double vw)
 	m_vector[3] = vw;
 }
 
-CVec4d::CVec4d(CVec4d& v)
+Vec4d::Vec4d(Vec4d& v)
 {
 	v.getComponents(m_vector);
 }
 
-CVec4d::~CVec4d()
+Vec4d::~Vec4d()
 {
 
 }
 
-void CVec4d::setComponents(double vx, double vy, double vz)
+void Vec4d::setComponents(double vx, double vy, double vz)
 {
 	m_vector[0] = vx;
 	m_vector[1] = vy;
@@ -82,7 +82,7 @@ void CVec4d::setComponents(double vx, double vy, double vz)
 	m_vector[3] = 0.0;
 }
 
-void CVec4d::setComponents(double vx, double vy, double vz, double vw)
+void Vec4d::setComponents(double vx, double vy, double vz, double vw)
 {
 	m_vector[0] = vx;
 	m_vector[1] = vy;
@@ -90,14 +90,14 @@ void CVec4d::setComponents(double vx, double vy, double vz, double vw)
 	m_vector[3] = vw;
 }
 
-void CVec4d::getComponents(double &vx, double &vy, double &vz)
+void Vec4d::getComponents(double &vx, double &vy, double &vz)
 {
 	vx = m_vector[0];
 	vy = m_vector[1];
 	vz = m_vector[2];
 }
 
-void CVec4d::getComponents(double &vx, double &vy, double &vz, double &vw)
+void Vec4d::getComponents(double &vx, double &vy, double &vz, double &vw)
 {
 	vx = m_vector[0];
 	vy = m_vector[1];
@@ -105,7 +105,7 @@ void CVec4d::getComponents(double &vx, double &vy, double &vz, double &vw)
 	vw = m_vector[3];
 }
 
-void CVec4d::setComponents(const double *v)
+void Vec4d::setComponents(const double *v)
 {
 	m_vector[0] = v[0];
 	m_vector[1] = v[1];
@@ -113,7 +113,7 @@ void CVec4d::setComponents(const double *v)
 	m_vector[3] = v[3];
 }
 
-CVec4d& CVec4d::operator+=(CVec4d& a)
+Vec4d& Vec4d::operator+=(Vec4d& a)
 {
 	m_vector[0] += a.m_vector[0];
 	m_vector[1] += a.m_vector[1];
@@ -122,7 +122,7 @@ CVec4d& CVec4d::operator+=(CVec4d& a)
 	return *this;
 }
 
-CVec4d& CVec4d::operator=(CVec4d& a)
+Vec4d& Vec4d::operator=(Vec4d& a)
 {
 	m_vector[0] = a.m_vector[0];
 	m_vector[1] = a.m_vector[1];
@@ -132,9 +132,9 @@ CVec4d& CVec4d::operator=(CVec4d& a)
 }
 
 /*
-CVec4d CVec4d::operator=(CVec4d& a)
+Vec4d Vec4d::operator=(Vec4d& a)
 {
-	CVec4d r;
+	Vec4d r;
 	r.m_vector[0] = a.m_vector[0];
 	r.m_vector[1] = a.m_vector[1];
 	r.m_vector[2] = a.m_vector[2];
@@ -142,9 +142,9 @@ CVec4d CVec4d::operator=(CVec4d& a)
 	return r;
 }
 
-CVec4d CVec4d::operator=(CVec4d a)
+Vec4d Vec4d::operator=(Vec4d a)
 {
-	CVec4d r;
+	Vec4d r;
 	r.m_vector[0] = a.m_vector[0];
 	r.m_vector[1] = a.m_vector[1];
 	r.m_vector[2] = a.m_vector[2];
@@ -153,7 +153,7 @@ CVec4d CVec4d::operator=(CVec4d a)
 }
 */
 
-CVec4d& CVec4d::operator-=(CVec4d& a)
+Vec4d& Vec4d::operator-=(Vec4d& a)
 {
 	m_vector[0] -= a.m_vector[0];
 	m_vector[1] -= a.m_vector[1];
@@ -162,21 +162,21 @@ CVec4d& CVec4d::operator-=(CVec4d& a)
 	return *this;
 }
 
-CVec4d& operator+(CVec4d& a, CVec4d& b)
+Vec4d& operator+(Vec4d& a, Vec4d& b)
 {
-	CVec4d& r = ivfGetTempVec4d();
+	Vec4d& r = ivfGetTempVec4d();
 	r = a;	
 	return r += b;
 }
 
-CVec4d& operator-(CVec4d& a, CVec4d& b)
+Vec4d& operator-(Vec4d& a, Vec4d& b)
 {
-	CVec4d& r = ivfGetTempVec4d();
+	Vec4d& r = ivfGetTempVec4d();
 	r = a;
 	return r -= b;
 }
 
-double CVec4d::operator[](const int idx)
+double Vec4d::operator[](const int idx)
 {
 	if ((idx>=0)&&(idx<4))
 		return m_vector[idx];
@@ -184,9 +184,9 @@ double CVec4d::operator[](const int idx)
 		return 0.0;
 }
 
-CVec4d& operator*(CVec4d& a, CVec4d& b)
+Vec4d& operator*(Vec4d& a, Vec4d& b)
 {
-	CVec4d& r = ivfGetTempVec4d();
+	Vec4d& r = ivfGetTempVec4d();
 
 	double c1, c2, c3;
 
@@ -199,21 +199,21 @@ CVec4d& operator*(CVec4d& a, CVec4d& b)
 	return r;
 }
 
-CVec4d& operator*(CVec4d& a, double b)
+Vec4d& operator*(Vec4d& a, double b)
 {
-	CVec4d& r = ivfGetTempVec4d();
+	Vec4d& r = ivfGetTempVec4d();
 	r.setComponents(a[0]*b, a[1]*b, a[2]*b);
 	return r;
 }
 
-CVec4d& operator*(double a, CVec4d& b)
+Vec4d& operator*(double a, Vec4d& b)
 {
-	CVec4d& r = ivfGetTempVec4d();
+	Vec4d& r = ivfGetTempVec4d();
 	r.setComponents(b[0]*a, b[1]*a, b[2]*a);
 	return r;
 }
 
-void CVec4d::getComponents(double *v)
+void Vec4d::getComponents(double *v)
 {
 	v[0] = m_vector[0];
 	v[1] = m_vector[1];
@@ -221,12 +221,12 @@ void CVec4d::getComponents(double *v)
 	v[3] = m_vector[3];
 }
 
-double CVec4d::length()
+double Vec4d::length()
 {
 	return sqrt(pow(m_vector[0],2) + pow(m_vector[1],2) + pow(m_vector[2],2));
 }
 
-void CVec4d::normalize()
+void Vec4d::normalize()
 {
 	double quote = 1.0/length();
 
@@ -236,7 +236,7 @@ void CVec4d::normalize()
 }
 
 
-void CVec4d::rotate(CVec4d &axis, double angle)
+void Vec4d::rotate(Vec4d &axis, double angle)
 {
 	double cost = cos(angle*2*M_PI/360.0);
 	double sint = sin(angle*2*M_PI/360.0);
@@ -263,14 +263,14 @@ void CVec4d::rotate(CVec4d &axis, double angle)
 	m_vector[2] = rv[2];
 }
 
-void CVec4d::getEulerAngles(double &pitch, double &heading)
+void Vec4d::getEulerAngles(double &pitch, double &heading)
 {
 	heading = atan2(m_vector[0], m_vector[2])*180.0/M_PI;
 	double t = sqrt(pow(m_vector[0],2)+pow(m_vector[2],2));
 	pitch = atan2(m_vector[1], t)*180.0/M_PI;
 }
 
-void CVec4d::negate()
+void Vec4d::negate()
 {
 	m_vector[0] = - m_vector[0];
 	m_vector[1] = - m_vector[1];
@@ -278,23 +278,23 @@ void CVec4d::negate()
 }
 
 
-void CVec4d::setX(double value)
+void Vec4d::setX(double value)
 {
 	m_vector[0] = value;
 }
 
-void CVec4d::setY(double value)
+void Vec4d::setY(double value)
 {
 	m_vector[1] = value;
 }
 
-void CVec4d::setZ(double value)
+void Vec4d::setZ(double value)
 {
 	m_vector[2] = value;
 }
 
 #ifdef IVF_HAVE_IOSTREAM
-void CVec4d::print(std::ostream &out)
+void Vec4d::print(std::ostream &out)
 {
 	using namespace std;
 

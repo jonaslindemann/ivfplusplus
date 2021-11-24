@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CNodeCursor::CNodeCursor()
+NodeCursor::NodeCursor()
 {
 	m_size = 0.5;
 	m_shapeSize = 0.0;
@@ -37,58 +37,58 @@ CNodeCursor::CNodeCursor()
 
 	this->setUseName(false);
 
-	m_cursorShape = new CComposite();
+	m_cursorShape = new Composite();
 
-	CMaterialPtr material = new CMaterial();
+	MaterialPtr material = new Material();
 	material->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.5f, 0.5f, 0.1f, 1.0f);
 
 	this->setMaterial(material);
 
-	m_arrow = new CArrow();
+	m_arrow = new Arrow();
 	//m_arrow->setMaterial(material);
 	m_arrow->setUseName(false);
 
-	m_arrowXZ1 = new CTransform();
+	m_arrowXZ1 = new Transform();
 	m_arrowXZ1->addChild(m_arrow);
 	m_arrowXZ1->setRotationQuat(1.0, 0.0, 0.0, 90.0);
 	m_arrowXZ1->setUseName(false);
 
-	m_arrowXZ2 = new CTransform();
+	m_arrowXZ2 = new Transform();
 	m_arrowXZ2->addChild(m_arrow);
 	m_arrowXZ2->setRotationQuat(1.0, 0.0, 0.0, -90.0);
 	m_arrowXZ2->setUseName(false);
 
-	m_arrowXZ3 = new CTransform();
+	m_arrowXZ3 = new Transform();
 	m_arrowXZ3->addChild(m_arrow);
 	m_arrowXZ3->setRotationQuat(0.0, 0.0, 1.0, 90.0);
 	m_arrowXZ3->setUseName(false);
 
-	m_arrowXZ4 = new CTransform();
+	m_arrowXZ4 = new Transform();
 	m_arrowXZ4->addChild(m_arrow);
 	m_arrowXZ4->setRotationQuat(0.0, 0.0, 1.0, -90.0);
 	m_arrowXZ4->setUseName(false);
 
-	m_arrowY1 = new CTransform();
+	m_arrowY1 = new Transform();
 	m_arrowY1->addChild(m_arrow);
-	m_arrowY1->setState(CGLBase::OS_OFF);
+	m_arrowY1->setState(GLBase::OS_OFF);
 	m_arrowY1->setUseName(false);
 
-	m_arrowY2 = new CTransform();
+	m_arrowY2 = new Transform();
 	m_arrowY2->addChild(m_arrow);
 	m_arrowY2->setRotationQuat(0.0, 0.0, 1.0, -180.0);
-	m_arrowY2->setState(CGLBase::OS_OFF);
+	m_arrowY2->setState(GLBase::OS_OFF);
 	m_arrowY2->setUseName(false);
 
-	CMaterialPtr planeMaterial = new CMaterial();
+	MaterialPtr planeMaterial = new Material();
 	planeMaterial->setDiffuseColor(0.0f, 0.0f, 0.0f, 0.5f);
 	planeMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 0.5f);
 	planeMaterial->setAmbientColor(0.0f, 0.0f, 0.0f, 0.5f);
-	m_plane = new CQuadPlane();
+	m_plane = new QuadPlane();
 	m_plane->setMaterial(planeMaterial);
-	m_plane->setState(CGLBase::OS_OFF);
-	m_plane->setOrientation(CQuadPlane::PO_XZ);
+	m_plane->setState(GLBase::OS_OFF);
+	m_plane->setOrientation(QuadPlane::PO_XZ);
 	m_plane->setSize(100.0, 100.0);
 	m_plane->setUseName(false);
 
@@ -102,23 +102,23 @@ CNodeCursor::CNodeCursor()
 	initCursor();
 }
 
-CNodeCursor::~CNodeCursor()
+NodeCursor::~NodeCursor()
 {
 
 }
 
-void CNodeCursor::setSize(double size)
+void NodeCursor::setSize(double size)
 {
 	m_size = size;
 	initCursor();
 }
 
-double CNodeCursor::getSize()
+double NodeCursor::getSize()
 {
 	return m_size;
 }
 
-void CNodeCursor::initCursor()
+void NodeCursor::initCursor()
 {
 	if (m_cursorArrowType==AT_NORMAL)
 		m_arrow->setSize(m_size*1.0, m_size*0.4);
@@ -128,68 +128,68 @@ void CNodeCursor::initCursor()
 	setDirection(m_cursorDirection);
 }
 
-void CNodeCursor::setType(TCursorType type)
+void NodeCursor::setType(TCursorType type)
 {
 	m_cursorType = type;
 
 	switch (m_cursorType) {
 	case CT_XZ:
-		m_arrowY1->setState(CGLBase::OS_OFF);
-		m_arrowY2->setState(CGLBase::OS_OFF);
-		m_arrowXZ1->setState(CGLBase::OS_ON);
-		m_arrowXZ2->setState(CGLBase::OS_ON);
-		m_arrowXZ3->setState(CGLBase::OS_ON);
-		m_arrowXZ4->setState(CGLBase::OS_ON);
+		m_arrowY1->setState(GLBase::OS_OFF);
+		m_arrowY2->setState(GLBase::OS_OFF);
+		m_arrowXZ1->setState(GLBase::OS_ON);
+		m_arrowXZ2->setState(GLBase::OS_ON);
+		m_arrowXZ3->setState(GLBase::OS_ON);
+		m_arrowXZ4->setState(GLBase::OS_ON);
 		if (m_usePlane)
-			m_plane->setState(CGLBase::OS_OFF);
+			m_plane->setState(GLBase::OS_OFF);
 		break;
 	case CT_Y:
-		m_arrowY1->setState(CGLBase::OS_ON);
-		m_arrowY2->setState(CGLBase::OS_ON);
-		m_arrowXZ1->setState(CGLBase::OS_OFF);
-		m_arrowXZ2->setState(CGLBase::OS_OFF);
-		m_arrowXZ3->setState(CGLBase::OS_OFF);
-		m_arrowXZ4->setState(CGLBase::OS_OFF);
+		m_arrowY1->setState(GLBase::OS_ON);
+		m_arrowY2->setState(GLBase::OS_ON);
+		m_arrowXZ1->setState(GLBase::OS_OFF);
+		m_arrowXZ2->setState(GLBase::OS_OFF);
+		m_arrowXZ3->setState(GLBase::OS_OFF);
+		m_arrowXZ4->setState(GLBase::OS_OFF);
 		if (m_usePlane)
-			m_plane->setState(CGLBase::OS_ON);
+			m_plane->setState(GLBase::OS_ON);
 		break;
 	case CT_XYZ:
-		m_arrowY1->setState(CGLBase::OS_ON);
-		m_arrowY2->setState(CGLBase::OS_ON);
-		m_arrowXZ1->setState(CGLBase::OS_ON);
-		m_arrowXZ2->setState(CGLBase::OS_ON);
-		m_arrowXZ3->setState(CGLBase::OS_ON);
-		m_arrowXZ4->setState(CGLBase::OS_ON);
+		m_arrowY1->setState(GLBase::OS_ON);
+		m_arrowY2->setState(GLBase::OS_ON);
+		m_arrowXZ1->setState(GLBase::OS_ON);
+		m_arrowXZ2->setState(GLBase::OS_ON);
+		m_arrowXZ3->setState(GLBase::OS_ON);
+		m_arrowXZ4->setState(GLBase::OS_ON);
 		break;
 	case CT_Y_TOP:
-		m_arrowY1->setState(CGLBase::OS_OFF);
-		m_arrowY2->setState(CGLBase::OS_ON);
-		m_arrowXZ1->setState(CGLBase::OS_OFF);
-		m_arrowXZ2->setState(CGLBase::OS_OFF);
-		m_arrowXZ3->setState(CGLBase::OS_OFF);
-		m_arrowXZ4->setState(CGLBase::OS_OFF);
+		m_arrowY1->setState(GLBase::OS_OFF);
+		m_arrowY2->setState(GLBase::OS_ON);
+		m_arrowXZ1->setState(GLBase::OS_OFF);
+		m_arrowXZ2->setState(GLBase::OS_OFF);
+		m_arrowXZ3->setState(GLBase::OS_OFF);
+		m_arrowXZ4->setState(GLBase::OS_OFF);
 		break;
 	case CT_NONE:
-		m_arrowY1->setState(CGLBase::OS_OFF);
-		m_arrowY2->setState(CGLBase::OS_OFF);
-		m_arrowXZ1->setState(CGLBase::OS_OFF);
-		m_arrowXZ2->setState(CGLBase::OS_OFF);
-		m_arrowXZ3->setState(CGLBase::OS_OFF);
-		m_arrowXZ4->setState(CGLBase::OS_OFF);
+		m_arrowY1->setState(GLBase::OS_OFF);
+		m_arrowY2->setState(GLBase::OS_OFF);
+		m_arrowXZ1->setState(GLBase::OS_OFF);
+		m_arrowXZ2->setState(GLBase::OS_OFF);
+		m_arrowXZ3->setState(GLBase::OS_OFF);
+		m_arrowXZ4->setState(GLBase::OS_OFF);
 		if (m_usePlane)
-			m_plane->setState(CGLBase::OS_OFF);
+			m_plane->setState(GLBase::OS_OFF);
 		break;
 	default:
 		break;
 	}
 }
 
-void CNodeCursor::setShape(CShape *shape)
+void NodeCursor::setShape(Shape *shape)
 {
 	m_nodeShape = shape;
 }
 
-void CNodeCursor::doCreateGeometry()
+void NodeCursor::doCreateGeometry()
 {
 	m_cursorShape->render();
 
@@ -207,28 +207,28 @@ void CNodeCursor::doCreateGeometry()
 	}
 }
 
-CShape* CNodeCursor::getShape()
+Shape* NodeCursor::getShape()
 {
 	return m_nodeShape;
 }
 
-void CNodeCursor::setUsePlaneHelper(bool flag)
+void NodeCursor::setUsePlaneHelper(bool flag)
 {
 	m_usePlane = flag;
 }
 
-bool CNodeCursor::getUsePlaneHelper()
+bool NodeCursor::getUsePlaneHelper()
 {
 	return m_usePlane;
 }
 
-void CNodeCursor::setShapeSize(double size)
+void NodeCursor::setShapeSize(double size)
 {
 	m_shapeSize = size;
 	initCursor();
 }
 
-void CNodeCursor::setDirection(TCursorDirection direction)
+void NodeCursor::setDirection(TCursorDirection direction)
 {
 	m_cursorDirection = direction;
 
@@ -252,18 +252,18 @@ void CNodeCursor::setDirection(TCursorDirection direction)
 	}
 }
 
-CNodeCursor::TCursorDirection CNodeCursor::getDirection()
+NodeCursor::TCursorDirection NodeCursor::getDirection()
 {
 	return m_cursorDirection;
 }
 
-void CNodeCursor::setArrowType(TCursorArrowType type)
+void NodeCursor::setArrowType(TCursorArrowType type)
 {
 	m_cursorArrowType = type;
 	initCursor();
 }
 
-CNodeCursor::TCursorArrowType CNodeCursor::getArrowType()
+NodeCursor::TCursorArrowType NodeCursor::getArrowType()
 {
 	return m_cursorArrowType;
 }

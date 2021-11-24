@@ -29,72 +29,72 @@ using namespace ivf;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CCoordList::CCoordList()
+CoordList::CoordList()
 {
 
 }
 
-CCoordList::~CCoordList()
+CoordList::~CoordList()
 {
 
 }
 
-void CCoordList::readFromStream(std::istream &in)
+void CoordList::readFromStream(std::istream &in)
 {
 
 }
 
-void CCoordList::saveToStream(std::ostream &out)
+void CoordList::saveToStream(std::ostream &out)
 {
 
 }
 
-void CCoordList::addCoord(double x, double y, double z)
+void CoordList::addCoord(double x, double y, double z)
 {
 
 }
 
-void CCoordList::addCoord(double x, double y, double z, float r, float g, float b)
+void CoordList::addCoord(double x, double y, double z, float r, float g, float b)
 {
 
 }
 
-void CCoordList::addCoord(CVec3d* coord)
+void CoordList::addCoord(Vec3d* coord)
 {
 
 }
 
-void CCoordList::setColor(long idx, float r, float g, float b)
+void CoordList::setColor(long idx, float r, float g, float b)
 {
 
 }
 
-void CCoordList::getColor(long idx, float &r, float &g, float &b)
+void CoordList::getColor(long idx, float &r, float &g, float &b)
 {
 
 }
 	
-void CCoordList::getCoord(long idx, double &x, double &y, double &z)
+void CoordList::getCoord(long idx, double &x, double &y, double &z)
 {
 
 }
 
-CVec3d* CCoordList::getCoord(long idx)
+Vec3d* CoordList::getCoord(long idx)
 {
 	return nullptr;
 }
 
-long CCoordList::getSize()
+long CoordList::getSize()
 {
 	return -1;
 }
 
-void CCoordList::clear()
+void CoordList::clear()
 {
 
 }
 
-void CCoordList::setCoord(int idx, double x, double y, double z)
+void CoordList::setCoord(int idx, double x, double y, double z)
 {
 	
 }

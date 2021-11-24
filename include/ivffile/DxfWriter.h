@@ -29,19 +29,19 @@
 
 namespace ivf {
 
-IvfSmartPointer(CDxfWriter);
+IvfSmartPointer(DxfWriter);
 
 /**
 * File export base class
 */
-class IVFFILE_API CDxfWriter : public CFileWriter {
+class IVFFILE_API DxfWriter : public FileWriter {
 private:
 	std::fstream m_file;
-	CMatrixStackPtr m_matrixStack;
+	MatrixStackPtr m_matrixStack;
 	std::string m_currentLayer;
 	int m_currentColor;
 protected:
-	void processShape(CShape* shape);
+	void processShape(Shape* shape);
 
 	void dxfTag(int number, const std::string& value);
 	void dxfInt(int number, int value);
@@ -96,13 +96,13 @@ protected:
 	void setCurrentLayer(const std::string& layerName);
 	void setCurrentColor(int color);
 public:
-	CDxfWriter();
-	virtual ~CDxfWriter();
+	DxfWriter();
+	virtual ~DxfWriter();
 
 	void write();
 
-	IvfClassInfo("CDxfWriter",CFileWriter);
-	IvfStdFactory(CDxfWriter);
+	IvfClassInfo("DxfWriter",FileWriter);
+	IvfStdFactory(DxfWriter);
 
 };
 

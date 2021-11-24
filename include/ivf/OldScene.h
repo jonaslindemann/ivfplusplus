@@ -37,7 +37,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(COldScene);
+IvfSmartPointer(OldScene);
 
 #define IVF_TEMP_SOLID 0
 #define IVF_TEMP_WIREFRAME 1
@@ -53,21 +53,21 @@ IvfSmartPointer(COldScene);
  * and selection. 
  * @author Jonas Lindemann
  */
-class IVF_API COldScene : public CSelectComposite {
+class IVF_API OldScene : public SelectComposite {
 public:
 	/** Constructor */
-	COldScene ();
+	OldScene ();
 
 	/** Destructor */
-	virtual ~COldScene ();
+	virtual ~OldScene ();
 
-	IvfClassInfo("COldScene",CSelectComposite);
+	IvfClassInfo("OldScene",SelectComposite);
 
-	void setCamera(CCamera * camera);
-	CCamera* getCamera();
+	void setCamera(Camera * camera);
+	Camera* getCamera();
 	
-	CView* getView();
-	void setView(CView* view);
+	View* getView();
+	void setView(View* view);
 
 	/** 
 	 * Set current coordinate system object
@@ -77,10 +77,10 @@ public:
 	 * If the coordiate system object is not referenced
 	 * by any other objects it will be deleted by IvfScene.
 	 */
-	void setWorldSystem(CCoordinateSystem* world);
+	void setWorldSystem(CoordinateSystem* world);
 
 	/** Return coordinate system object */
-	CCoordinateSystem* getWorldSystem();
+	CoordinateSystem* getWorldSystem();
 
 	/**
 	 * Set cursor object
@@ -89,8 +89,8 @@ public:
 	 * cursor. If the cursor is not referenced it will
 	 * be deleted.
 	 */
-	void setCursor(CCursor* cursor);
-	CCursor* getCursor();
+	void setCursor(Cursor* cursor);
+	Cursor* getCursor();
 
 	//changes Calle Lejdfors 990803
 
@@ -104,10 +104,10 @@ public:
 	 * scene graph and can be used to draw outlines of 
 	 * objects that is to be placed in the scene.
 	 */
-	void setTempShape(CShape* shape);
+	void setTempShape(Shape* shape);
 
 	/** Return temporary shape */
-	CShape* getTempShape();
+	Shape* getTempShape();
 
 	/** 
 	 * Set temporary drawing style
@@ -176,7 +176,7 @@ public:
 	 * rendering stage of the scene and is not contained
 	 * in the scene graph.
 	 */
-	void setTransparentShape(CShape* shape);
+	void setTransparentShape(Shape* shape);
 
 	/** Enable/disable cursor */
 	void setShowCursor(bool flag);
@@ -191,7 +191,7 @@ public:
 	bool getShowGrid();
 
 private:
-	CPoint3d m_pointOnPlane;
+	Point3d m_pointOnPlane;
 	double m_objectSize;
 	int m_cursorStartY;
 	int m_cursorStartX;
@@ -202,11 +202,11 @@ private:
 	bool m_showCursor;
 	bool m_cursorLocked;
 	bool m_snapToGrid;
-	CShape* m_tempShape;
-	CShape* m_transparentShape;
-	CCursor* m_cursor;
-	CCoordinateSystem* m_world;
-	CLighting* m_lighting;
+	Shape* m_tempShape;
+	Shape* m_transparentShape;
+	Cursor* m_cursor;
+	CoordinateSystem* m_world;
+	Lighting* m_lighting;
 	int m_lightMode;
 	//end changes
 

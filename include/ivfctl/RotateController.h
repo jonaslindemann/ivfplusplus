@@ -27,7 +27,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CRotateController);
+IvfSmartPointer(RotateController);
 
 /**
  * Rotation controller class
@@ -36,20 +36,20 @@ IvfSmartPointer(CRotateController);
  * around a given axis using a specified speed or by specifying
  * a rotation speed around the three main axes
  */
-class IVFCTL_API CRotateController : public CController {
+class IVFCTL_API RotateController : public Controller {
 private:
 	double m_rotationSpeed[3];
-	CVec3d m_axis;
+	Vec3d m_axis;
 	bool m_useAxis;
 public:
-	/** CRotateController constructor */
-	CRotateController();
+	/** RotateController constructor */
+	RotateController();
 
-	/** CRotateController destructor */
-	virtual ~CRotateController();
+	/** RotateController destructor */
+	virtual ~RotateController();
 
-	IvfClassInfo("CRotateController",CController);
-	IvfStdFactory(CRotateController);
+	IvfClassInfo("RotateController",Controller);
+	IvfStdFactory(RotateController);
 
 	/** Set rotation speeds around x, y and z axes */
 	void setRotationSpeed(double vx, double vy, double vz);

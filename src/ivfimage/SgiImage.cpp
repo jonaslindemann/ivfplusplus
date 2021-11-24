@@ -26,23 +26,23 @@
 
 using namespace ivf;
 
-CSgiImage::CSgiImage()
+SgiImage::SgiImage()
 {
 	m_alphaChannel = false;
 }
 
-CSgiImage::CSgiImage(const char *name)
-:CFileImage(name)
+SgiImage::SgiImage(const char *name)
+:FileImage(name)
 {
 	m_alphaChannel = false;
 }
 
-CSgiImage::~CSgiImage()
+SgiImage::~SgiImage()
 {
 
 }
 
-void CSgiImage::expandrow(unsigned char *optr, unsigned char *iptr, int z)
+void SgiImage::expandrow(unsigned char *optr, unsigned char *iptr, int z)
 {
 	unsigned char pixel, count;
 
@@ -74,7 +74,7 @@ void CSgiImage::expandrow(unsigned char *optr, unsigned char *iptr, int z)
 	}
 }
 
-void CSgiImage::convertLong(GLuint *array, unsigned int length)
+void SgiImage::convertLong(GLuint *array, unsigned int length)
 {
     unsigned long b1, b2, b3, b4;
     unsigned char *ptr;
@@ -89,7 +89,7 @@ void CSgiImage::convertLong(GLuint *array, unsigned int length)
     }
 }
 
-bool CSgiImage::read()
+bool SgiImage::read()
 {
 	unsigned char buf[80];
 	unsigned long i, j, k;
@@ -272,7 +272,7 @@ bool CSgiImage::read()
 }
 
 
-unsigned short CSgiImage::getshort(FILE *inf)
+unsigned short SgiImage::getshort(FILE *inf)
 {
 	unsigned char buf[2];
 	size_t s;
@@ -281,7 +281,7 @@ unsigned short CSgiImage::getshort(FILE *inf)
 	return (buf[0]<<8)+(buf[1]<<0);
 }
 
-unsigned long CSgiImage::getlong(FILE *inf)
+unsigned long SgiImage::getlong(FILE *inf)
 {
 	unsigned char buf[4];
 	size_t s;
@@ -290,7 +290,7 @@ unsigned long CSgiImage::getlong(FILE *inf)
 	return (buf[0]<<24)+(buf[1]<<16)+(buf[2]<<8)+(buf[3]<<0);
 }
 
-unsigned char CSgiImage::getbyte(FILE *inf)
+unsigned char SgiImage::getbyte(FILE *inf)
 {
 	unsigned char buf[1];
 	size_t s;
@@ -299,7 +299,7 @@ unsigned char CSgiImage::getbyte(FILE *inf)
 	return buf[0]<<0;
 }
 
-void CSgiImage::setAlphaChannel(bool flag)
+void SgiImage::setAlphaChannel(bool flag)
 {
 	m_alphaChannel = flag;
 }

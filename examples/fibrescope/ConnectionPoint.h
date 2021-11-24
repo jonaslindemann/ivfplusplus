@@ -38,32 +38,32 @@ using namespace std;
 #include "DiscreteTime.h"
 #include "UserSettings.h"
 
-IvfSmartPointer(CConnectionPoint);
+IvfSmartPointer(ConnectionPoint);
 
-class CConnectionPoint : public ivf::CShape {
+class ConnectionPoint : public ivf::Shape {
 private:
-	CCoordHistPtr m_coords;
-	CDiscreteTimePtr m_discreteTime;
-	ivf::CCameraPtr m_camera;
+	CoordHistPtr m_coords;
+	DiscreteTimePtr m_discreteTime;
+	ivf::CameraPtr m_camera;
 	bool m_useColor;
 	double m_connectionRadius;
 
 	static GLUquadricObj* m_qobj;
-	static ivf::CMaterial* m_material;
+	static ivf::Material* m_material;
 public:
-	CConnectionPoint();
-	virtual ~CConnectionPoint();
+	ConnectionPoint();
+	virtual ~ConnectionPoint();
 
-	IvfStdFactory(CConnectionPoint);
+	IvfStdFactory(ConnectionPoint);
 
-	void setCamera(ivf::CCamera* camera);
+	void setCamera(ivf::Camera* camera);
 	void setRadius(double radius);
 	void setUseColor(bool flag);
-	void setDiscreteTime(CDiscreteTime* discreteTime);
+	void setDiscreteTime(DiscreteTime* discreteTime);
 
 	void colorScale(double t, float &r, float &g, float &b);
 
-	CCoordHist* getCoordHist();
+	CoordHist* getCoordHist();
 
 	void readFromStream(istream &in);
 	void saveToStream(ostream &out);

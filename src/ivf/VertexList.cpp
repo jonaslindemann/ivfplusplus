@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CVertexList::CVertexList()
+VertexList::VertexList()
 {
 	m_size = 0;
 	m_blockSize = 1024;
@@ -36,24 +36,24 @@ CVertexList::CVertexList()
 	m_next = 0;
 }
 
-CVertexList::~CVertexList()
+VertexList::~VertexList()
 {
 	delete [] m_vertices;
 }
 
-void CVertexList::add(double x, double y, double z)
+void VertexList::add(double x, double y, double z)
 {
 	add(x);
 	add(y);
 	add(z);
 }
 
-void CVertexList::add(double comp)
+void VertexList::add(double comp)
 {
 	if (m_next==m_allocSize)
 	{
 		m_allocSize = m_allocSize*2;
-		IvfDbg1("CVertexList: Expanding to " << m_allocSize << " vertices. (allocated size)");
+		IvfDbg1("VertexList: Expanding to " << m_allocSize << " vertices. (allocated size)");
 		GLfloat* newVertices = new GLfloat[m_allocSize];
 		
 		int i;
@@ -70,12 +70,12 @@ void CVertexList::add(double comp)
 	m_next++;
 }
 
-int CVertexList::getSize()
+int VertexList::getSize()
 {
 	return m_next / 3;
 }
 
-void CVertexList::getVertex(int idx, double &x, double &y, double &z)
+void VertexList::getVertex(int idx, double &x, double &y, double &z)
 {
 	if ((idx>=0)&&(idx<m_next/3))
 	{
@@ -91,7 +91,7 @@ void CVertexList::getVertex(int idx, double &x, double &y, double &z)
 	}
 }
 
-double CVertexList::getComp(int idx)
+double VertexList::getComp(int idx)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{
@@ -101,29 +101,29 @@ double CVertexList::getComp(int idx)
 		return -1.0;
 }
 
-void* CVertexList::getData()
+void* VertexList::getData()
 {
 	return (void*)m_vertices;
 }
 
-GLenum CVertexList::getDataType()
+GLenum VertexList::getDataType()
 {
 	return GL_FLOAT;
 }
 
-GLsizei CVertexList::getStride()
+GLsizei VertexList::getStride()
 {
 	return 3*sizeof(GLfloat);
 }
 
-GLint CVertexList::getCompSize()
+GLint VertexList::getCompSize()
 {
 	return 3;
 }
 
-CVec3d& CVertexList::getVertex(int idx)
+Vec3d& VertexList::getVertex(int idx)
 {
-	CVec3d& pos = ivfGetTempVec3d();
+	Vec3d& pos = ivfGetTempVec3d();
 	double x, y, z;
 
 	this->getVertex(idx, x, y, z);
@@ -132,7 +132,7 @@ CVec3d& CVertexList::getVertex(int idx)
 	return pos;
 }
 
-void CVertexList::setSize(int size)
+void VertexList::setSize(int size)
 {
 	delete [] m_vertices;
 
@@ -141,7 +141,7 @@ void CVertexList::setSize(int size)
 	m_next = m_allocSize;
 }
 
-void CVertexList::setVertex(int idx, double x, double y, double z)
+void VertexList::setVertex(int idx, double x, double y, double z)
 {
 	if ((idx>=0)&&(idx<m_next/3))
 	{
@@ -157,7 +157,7 @@ void CVertexList::setVertex(int idx, double x, double y, double z)
 	}
 }
 
-void CVertexList::setComp(int idx, double value)
+void VertexList::setComp(int idx, double value)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{

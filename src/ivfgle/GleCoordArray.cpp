@@ -26,13 +26,13 @@
 
 using namespace ivf;
 
-CGleCoordArray::CGleCoordArray()
+GleCoordArray::GleCoordArray()
 {
 	m_coords = nullptr;
 	m_size = 0;
 }
 
-CGleCoordArray::CGleCoordArray(int size)
+GleCoordArray::GleCoordArray(int size)
 {
 	m_coords = nullptr;
 	m_size = 0;
@@ -40,13 +40,13 @@ CGleCoordArray::CGleCoordArray(int size)
 	setSize(size);
 }
 
-CGleCoordArray::~CGleCoordArray()
+GleCoordArray::~GleCoordArray()
 {
 	if (m_coords!=nullptr)
 		delete [] m_coords;
 }
 
-void CGleCoordArray::setSize(int size)
+void GleCoordArray::setSize(int size)
 {
 	// Delete previous spine coords/colors if any
 	
@@ -62,7 +62,7 @@ void CGleCoordArray::setSize(int size)
 	m_coords = new gleDouble[m_size][3];
 }
 
-void CGleCoordArray::setCoord(int idx, double x, double y, double z)
+void GleCoordArray::setCoord(int idx, double x, double y, double z)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -72,7 +72,7 @@ void CGleCoordArray::setCoord(int idx, double x, double y, double z)
 	}
 }
 
-void CGleCoordArray::getCoord(int idx, double &x, double &y, double &z)
+void GleCoordArray::getCoord(int idx, double &x, double &y, double &z)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -82,7 +82,7 @@ void CGleCoordArray::getCoord(int idx, double &x, double &y, double &z)
 	}
 }
 
-void CGleCoordArray::setCoord(int idx, CVec3d &vec)
+void GleCoordArray::setCoord(int idx, Vec3d &vec)
 {
 	if ((idx>=0)&&(idx<m_size))
 	{
@@ -95,9 +95,9 @@ void CGleCoordArray::setCoord(int idx, CVec3d &vec)
 	}
 }
 
-CVec3d& CGleCoordArray::getCoord(int idx)
+Vec3d& GleCoordArray::getCoord(int idx)
 {
-	CVec3d& r = ivfGetTempVec3d();
+	Vec3d& r = ivfGetTempVec3d();
 
 	if ((idx>=0)&&(idx<m_size))
 		r.setComponents(m_coords[idx][0], m_coords[idx][1], m_coords[idx][2]);
@@ -105,12 +105,12 @@ CVec3d& CGleCoordArray::getCoord(int idx)
 	return r;
 }
 
-int CGleCoordArray::getSize()
+int GleCoordArray::getSize()
 {
 	return m_size;
 }
 
-void* CGleCoordArray::getData()
+void* GleCoordArray::getData()
 {
 	if (m_coords!=nullptr)
 		return &m_coords[0];
@@ -118,14 +118,14 @@ void* CGleCoordArray::getData()
 		return nullptr;
 }
 
-void CGleCoordArray::calcFirstAndLast()
+void GleCoordArray::calcFirstAndLast()
 {
 	if (m_size>=4)
 	{
-		CVec3d p1;
-		CVec3d p2;
-		CVec3d p3;
-		CVec3d v;
+		Vec3d p1;
+		Vec3d p2;
+		Vec3d p3;
+		Vec3d v;
 
 		p1 = this->getCoord(1);
 		p2 = this->getCoord(2);

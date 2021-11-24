@@ -26,12 +26,12 @@
 
 using namespace ivf;
 
-CGleExtrusion::CGleExtrusion()
+GleExtrusion::GleExtrusion()
 {
 	// Add construction code here
 }
 
-void CGleExtrusion::doCreateGeometry()
+void GleExtrusion::doCreateGeometry()
 {
 	if (m_contour==nullptr)
 		return;
@@ -93,19 +93,19 @@ void CGleExtrusion::doCreateGeometry()
 	}
 }
 
-void CGleExtrusion::setContour(CGleContour *contour)
+void GleExtrusion::setContour(GleContour *contour)
 {
 	m_contour = contour;
 }
 
-void CGleExtrusion::setContourUp(double vx, double vy, double vz)
+void GleExtrusion::setContourUp(double vx, double vy, double vz)
 {
 	m_up[0] = vx;
 	m_up[1] = vy;
 	m_up[2] = vz;
 }
 
-void CGleExtrusion::setContourUp(CVec3d &vec)
+void GleExtrusion::setContourUp(Vec3d &vec)
 {
 	double vx, vy, vz;
 	vec.getComponents(vx, vy, vz);

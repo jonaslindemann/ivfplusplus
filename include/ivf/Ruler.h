@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CRuler);
+IvfSmartPointer(Ruler);
 
 /**
  * Ruler class
@@ -36,21 +36,21 @@ IvfSmartPointer(CRuler);
  * Implements a simple ruler, which draws a line
  * between two points with tickmarks.
  */
-class IVF_API CRuler : public CShape {
+class IVF_API Ruler : public Shape {
 private:
-	CVec3d m_startPoint;
-	CVec3d m_endPoint;
-	CVec3d m_direction;
+	Vec3d m_startPoint;
+	Vec3d m_endPoint;
+	Vec3d m_direction;
 	double m_tickStep;
 	double m_length;
 
 	void initRuler();
 public:
 	/** Class constructor */
-	CRuler();
+	Ruler();
 
 	/** Class destructor */
-	virtual ~CRuler();
+	virtual ~Ruler();
 
 	/** Set the distance between each tick on the ruler */
 	void setTickStep(double tickStep);
@@ -62,12 +62,12 @@ public:
 	void setStartPoint(double x, double y, double z);
 
 	/** Set ruler end point */
-	void setEndPoint(CVec3d& endPoint);
+	void setEndPoint(Vec3d& endPoint);
 
 	/** Set ruler start point */
-	void setStartPoint(CVec3d& startPoint);
+	void setStartPoint(Vec3d& startPoint);
 
-	IvfClassInfo("CRuler",CShape);
+	IvfClassInfo("Ruler",Shape);
 protected:
 	virtual void doCreateGeometry();
 };

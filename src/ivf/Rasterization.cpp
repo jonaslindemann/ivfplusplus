@@ -28,43 +28,43 @@
 
 using namespace ivf;
 
-CRasterization* CRasterization::m_instance = 0;
-CSingletonDestroyer<CRasterization> CRasterization::m_destroyer;
+Rasterization* Rasterization::m_instance = 0;
+SingletonDestroyer<Rasterization> Rasterization::m_destroyer;
 
-CRasterization* CRasterization::getInstance () 
+Rasterization* Rasterization::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CRasterization(); 
+		m_instance = new Rasterization(); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CRasterization::CRasterization()
+Rasterization::Rasterization()
 {
 
 }
 
 
-void CRasterization::enableCullFace()
+void Rasterization::enableCullFace()
 {
 	glEnable(GL_CULL_FACE);
 }
 
-void CRasterization::disableCullFace()
+void Rasterization::disableCullFace()
 {
 	glDisable(GL_CULL_FACE);
 }
 
-bool CRasterization::isCullFaceEnabled()
+bool Rasterization::isCullFaceEnabled()
 {
 	GLboolean depthTest;
 	glGetBooleanv(GL_CULL_FACE, &depthTest);
 	return (bool)depthTest;
 }
 
-void CRasterization::setCullFace(TCullFace face)
+void Rasterization::setCullFace(TCullFace face)
 {
 	switch (face) {
 	case CF_FRONT:
@@ -82,7 +82,7 @@ void CRasterization::setCullFace(TCullFace face)
 	}
 }
 
-CRasterization::TCullFace CRasterization::getCullFace()
+Rasterization::TCullFace Rasterization::getCullFace()
 {
 	GLint cullFace;
 	glGetIntegerv(GL_CULL_FACE, &cullFace);
@@ -103,7 +103,7 @@ CRasterization::TCullFace CRasterization::getCullFace()
 	}
 }
 
-void CRasterization::setPolygonMode(TTargetFace face, TPolygonMode mode)
+void Rasterization::setPolygonMode(TTargetFace face, TPolygonMode mode)
 {
 	GLenum glFace, glMode;
 
@@ -140,43 +140,43 @@ void CRasterization::setPolygonMode(TTargetFace face, TPolygonMode mode)
 	glPolygonMode(glFace, glMode);
 }
 
-void CRasterization::setLineWidth(float width)
+void Rasterization::setLineWidth(float width)
 {
 	glLineWidth(width);
 }
 
-void CRasterization::enableLineSmooth()
+void Rasterization::enableLineSmooth()
 {
 	glEnable(GL_LINE_SMOOTH);
 }
 
-void CRasterization::disableLineSmooth()
+void Rasterization::disableLineSmooth()
 {
 	glDisable(GL_LINE_SMOOTH);
 }
 
-void CRasterization::enablePolygonSmooth()
+void Rasterization::enablePolygonSmooth()
 {
 	glEnable(GL_POLYGON_SMOOTH);
 }
 
-void CRasterization::disablePolygonSmooth()
+void Rasterization::disablePolygonSmooth()
 {
 	glDisable(GL_POLYGON_SMOOTH);
 }
 
-void CRasterization::defineWireFrameMode()
+void Rasterization::defineWireFrameMode()
 {
 	this->setPolygonMode(
-		CRasterization::TF_FRONT_AND_BACK,
-		CRasterization::PM_LINE
+		Rasterization::TF_FRONT_AND_BACK,
+		Rasterization::PM_LINE
 	);
 }
 
-void CRasterization::defineSmoothShadeMode()
+void Rasterization::defineSmoothShadeMode()
 {
 	this->setPolygonMode(
-		CRasterization::TF_FRONT_AND_BACK,
-		CRasterization::PM_FILL
+		Rasterization::TF_FRONT_AND_BACK,
+		Rasterization::PM_FILL
 	);
 }

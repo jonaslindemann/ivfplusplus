@@ -27,30 +27,30 @@
 using namespace std;
 using namespace ivf;
 
-CLine2d::CLine2d()
+Line2d::Line2d()
 {
 	m_k = 1.0;
 	m_m = 0.0;
 }
 
-CLine2d::CLine2d(double x1, double y1, double x2, double y2)
+Line2d::Line2d(double x1, double y1, double x2, double y2)
 {
 	m_k = (y2 - y1)/(x2 - x1);
 	m_m = y1 - m_k*x1;
 }
 
-CLine2d::CLine2d(double k, double m)
+Line2d::Line2d(double k, double m)
 {
 	m_k = k;
 	m_m = m;
 }
 
-double CLine2d::f(double x)
+double Line2d::f(double x)
 {
 	return m_k*x + m_m;
 }
 
-double CTheta2d::f(double x)
+double Theta2d::f(double x)
 {
 	if (x<0)
 		return 0.0;
@@ -58,58 +58,58 @@ double CTheta2d::f(double x)
 		return 1.0;
 }
 
-CPulse2d::CPulse2d(double delta)
+Pulse2d::Pulse2d(double delta)
 {
 	m_delta = 1.0;
 }
 
-double CPulse2d::f(double x)
+double Pulse2d::f(double x)
 {
 	return (m_theta.f(x)-m_theta.f(x-m_delta))/m_delta;
 }
 
-CEnvPos2d::CEnvPos2d()
+EnvPos2d::EnvPos2d()
 {
 	m_pos[0] = 0.0;
 	m_pos[1] = 0.0;
 }
 
-CEnvPos2d::CEnvPos2d(double x, double y)
+EnvPos2d::EnvPos2d(double x, double y)
 {
 	m_pos[0] = x;
 	m_pos[1] = y;
 }
 
-double CEnvPos2d::getX()
+double EnvPos2d::getX()
 {
 	return m_pos[0];
 }
 
-double CEnvPos2d::getY()
+double EnvPos2d::getY()
 {
 	return m_pos[1];
 }
 
-CEnvelope2d::CEnvelope2d()
+Envelope2d::Envelope2d()
 {
 	m_range[0] = 1e300;
 	m_range[1] = -1e300;
 	m_finished = false;
 }
 
-CEnvelope2d::~CEnvelope2d()
+Envelope2d::~Envelope2d()
 {
 	this->clear();
 }
 
-void CEnvelope2d::addPoint(double x, double y)
+void Envelope2d::addPoint(double x, double y)
 {
-	CEnvPos2d* envPos = new CEnvPos2d(x, y);
+	EnvPos2d* envPos = new EnvPos2d(x, y);
 	m_envelopeSet.insert(envPos);
 }
 
 
-void CEnvelope2d::clear()
+void Envelope2d::clear()
 {
 	CIvfEnvelopePosSetIter ei;
 
@@ -124,7 +124,7 @@ void CEnvelope2d::clear()
 	m_envelope.clear();
 }
 
-double CEnvelope2d::f(double x)
+double Envelope2d::f(double x)
 {
 	if (m_finished)
 	{
@@ -141,8 +141,8 @@ double CEnvelope2d::f(double x)
 			else
 			{
 				int leftPos = 0;
-				int rightPos = m_envelope.size()-1;
-				int midPoint = m_envelope.size()/2;		
+				int rightPos = static_cast<int>(m_envelope.size())-1;
+				int midPoint = static_cast<int>(m_envelope.size())/2;
 
 				while (leftPos!=rightPos-1) {
 					
@@ -163,7 +163,7 @@ double CEnvelope2d::f(double x)
 		return 0.0;
 }
 
-void CEnvelope2d::finish()
+void Envelope2d::finish()
 {
 	CIvfEnvelopePosVectorIter vi;
 	CIvfEnvelopePosSetIter ei;
@@ -181,7 +181,7 @@ void CEnvelope2d::finish()
 
 	for (ei=m_envelopeSet.begin(); ei!=m_envelopeSet.end(); ei++)
 	{
-		CEnvPos2d* pos = (*ei);
+		EnvPos2d* pos = (*ei);
 		m_envelope.push_back(*ei);
 
 		if (pos->getX()>m_range[1])
@@ -197,17 +197,17 @@ void CEnvelope2d::finish()
 }
 
 
-double CEnvelope2d::getMaxX()
+double Envelope2d::getMaxX()
 {
 	return m_range[1];
 }
 
-double CEnvelope2d::getMinX()
+double Envelope2d::getMinX()
 {
 	return m_range[0];
 }
 
-double CEnvelope2d::interpolate(CEnvPos2d *pos1, CEnvPos2d *pos2, double x)
+double Envelope2d::interpolate(EnvPos2d *pos1, EnvPos2d *pos2, double x)
 {
 	double x1 = pos1->getX();
 	double x2 = pos2->getX();

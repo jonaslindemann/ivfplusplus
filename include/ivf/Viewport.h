@@ -28,27 +28,27 @@
 
 namespace ivf {
 
-IvfSmartPointer(CViewport);
+IvfSmartPointer(Viewport);
 
 /**
  * View port definition class
  *
  * This class defines a viewport in OpenGL. Used
- * together with CView derived classes.
+ * together with View derived classes.
  */
-class IVF_API CViewport : public CBase {
+class IVF_API Viewport : public Base {
 private:
 	int m_pos[2];
 	int m_size[2];
 public:
 	/** Class constructor */
-	CViewport();
+	Viewport();
 
 	/** Class destructor */
-	virtual ~CViewport();
+	virtual ~Viewport();
 
-	IvfClassInfo("CViewport",CBase);
-	IvfStdFactory(CViewport);
+	IvfClassInfo("Viewport",Base);
+	IvfStdFactory(Viewport);
 
 	/** Applies the current viewport */
 	void apply();

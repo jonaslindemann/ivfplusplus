@@ -27,13 +27,13 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CArrow::CArrow ()
-		:CComposite()
+Arrow::Arrow ()
+		:Composite()
 		//TODO: check and complete member initialisation list!
 {
-	m_head = new CCone();
-	m_tail = new CCylinder();
-	m_extraHead = new CCone();
+	m_head = new Cone();
+	m_tail = new Cylinder();
+	m_extraHead = new Cone();
 	m_offset = 0.0;
 	setArrowType(IVF_ARROW_STANDARD);
 	setSize(1.0,  0.2);
@@ -44,12 +44,12 @@ CArrow::CArrow ()
 }
 
 // ------------------------------------------------------------
-CArrow::~CArrow ()
+Arrow::~Arrow ()
 {
 }
 
 // ------------------------------------------------------------
-void CArrow::setSize(double length, double head)
+void Arrow::setSize(double length, double head)
 {
 	m_length = length;
 	m_headSize = head;
@@ -69,7 +69,7 @@ void CArrow::setSize(double length, double head)
 	}
 }
 
-void CArrow::setRadius(double head, double tail)
+void Arrow::setRadius(double head, double tail)
 {
 	m_headRadius = head;
 	m_tailRadius = tail;
@@ -79,27 +79,27 @@ void CArrow::setRadius(double head, double tail)
 	m_tail->setRadius(m_tailRadius);
 }
 
-void CArrow::setArrowType(int type)
+void Arrow::setArrowType(int type)
 {
 	m_arrowType = type;
 	setSize(m_length,m_headSize);
 	if (m_arrowType == IVF_ARROW_DOUBLE)
-		m_extraHead->setState(CGLBase::OS_ON);
+		m_extraHead->setState(GLBase::OS_ON);
 	else
-		m_extraHead->setState(CGLBase::OS_OFF);
+		m_extraHead->setState(GLBase::OS_OFF);
 }
 
-int CArrow::getArrowType()
+int Arrow::getArrowType()
 {
 	return m_arrowType;
 }
 
-void CArrow::alignVector(CVec3d *vec)
+void Arrow::alignVector(Vec3d *vec)
 {
 	double ex, ey, ez;
 	double l;
 	double alfa, beta;
-	CVec3d v;
+	Vec3d v;
 
 	vec->getComponents(ex, ey, ez);
 	v.setComponents(ex, ey, ez);
@@ -135,24 +135,24 @@ void CArrow::alignVector(CVec3d *vec)
 	this->setRotation(0.0, -alfa*360.0/2.0/M_PI, -beta*360.0/2.0/M_PI);
 }
 
-void CArrow::getSize(double &length, double &head)
+void Arrow::getSize(double &length, double &head)
 {
 	length = m_length;
 	head = m_headSize;
 }
 
-void CArrow::setOffset(double offset)
+void Arrow::setOffset(double offset)
 {
 	m_offset = offset;
 	this->setSize(m_length, m_headSize);
 }
 
-double CArrow::getOffset()
+double Arrow::getOffset()
 {
 	return m_offset;
 }
 
-double CArrow::getLength()
+double Arrow::getLength()
 {
 	return m_length;
 }

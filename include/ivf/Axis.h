@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CAxis);
+IvfSmartPointer(Axis);
 
 #define IVF_AXIS_STD    0
 #define IVF_AXIS_FLIPX  1
@@ -45,16 +45,16 @@ IvfSmartPointer(CAxis);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CAxis : public CComposite {
+class IVF_API Axis : public Composite {
 public:
 	/** CIvfAxis constructor. */
-	CAxis ();
+	Axis ();
 	
 	/** CIvfAxis destructor. */
-	virtual ~CAxis ();
+	virtual ~Axis ();
 
-	IvfClassInfo("CAxis",CComposite);
-	IvfStdFactory(CAxis);
+	IvfClassInfo("Axis",Composite);
+	IvfStdFactory(Axis);
 
 	/** Set axis type */
 	void setAxisType(int type);
@@ -63,16 +63,16 @@ public:
 	void setSize(double size);
 
 	/** Set or change material used for arrows */
-	void setArrowMaterial(CMaterial* material);
+	void setArrowMaterial(Material* material);
 private:
 	double m_size;
 	int m_axisType;
-	CArrowPtr m_zArrow;
-	CArrowPtr m_yArrow;
-	CArrowPtr m_xArrow;
-	CMaterialPtr m_zMaterial;
-	CMaterialPtr m_yMaterial;
-	CMaterialPtr m_xMaterial;
+	ArrowPtr m_zArrow;
+	ArrowPtr m_yArrow;
+	ArrowPtr m_xArrow;
+	MaterialPtr m_zMaterial;
+	MaterialPtr m_yMaterial;
+	MaterialPtr m_xMaterial;
 };
 
 }

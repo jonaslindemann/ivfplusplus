@@ -28,26 +28,26 @@
 
 namespace ivf {
 
-IvfSmartPointer(COldGrid);
+IvfSmartPointer(OldGrid);
 
 /**
  * Grid shape class
  *
  * CIvfGrid implements a grid with specified
  * units, size and subdivision. CIvfGrid is
- * derived from a CLineSet. (Soon obsolete)
+ * derived from a LineSet. (Soon obsolete)
  * @author Jonas Lindemann
  */
-class IVF_API COldGrid : public CSimpleLineSet {
+class IVF_API OldGrid : public SimpleLineSet {
 public:
 	/** CIvfGrid constructor. */
-	COldGrid ();
+	OldGrid ();
 
 	/** CIvfGrid destructor. */
-	virtual ~COldGrid ();
+	virtual ~OldGrid ();
 
-	IvfClassInfo("COldGrid",CSimpleLineSet);
-	IvfStdFactory(COldGrid);
+	IvfClassInfo("OldGrid",SimpleLineSet);
+	IvfStdFactory(OldGrid);
 
 	/**
 	 * Set subdivision intervals

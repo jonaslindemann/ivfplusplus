@@ -33,16 +33,16 @@ namespace ivf {
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CPlane : public CMathBase {
+class IVFMATH_API Plane : public MathBase {
 private:
 	double m_normal[3];
 	double m_distance;
 public:
-	/** CPlane constructor */
-	CPlane();
+	/** Plane constructor */
+	Plane();
 
-	/** CPlane destructor */
-	virtual ~CPlane();
+	/** Plane destructor */
+	virtual ~Plane();
 
 	/** Set plane normal */
 	void setNormal(double vx, double vy, double vz);

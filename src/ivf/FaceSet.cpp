@@ -28,8 +28,8 @@ namespace std {};
 using namespace std;
 using namespace ivf;
 
-CFaceSet::CFaceSet()
-:CShape()
+FaceSet::FaceSet()
+:Shape()
 {
 	m_nCoords = 0;
 	m_nFaces = 0;
@@ -46,7 +46,7 @@ CFaceSet::CFaceSet()
 
 }
 
-CFaceSet::~CFaceSet()
+FaceSet::~FaceSet()
 {
 	if (m_coords!=nullptr)
 		delete [] m_coords;
@@ -63,7 +63,7 @@ CFaceSet::~CFaceSet()
 }
 
 // ------------------------------------------------------------
-void CFaceSet::doCreateGeometry()
+void FaceSet::doCreateGeometry()
 {
 	int i,j;
 
@@ -98,7 +98,7 @@ void CFaceSet::doCreateGeometry()
 }
 
 // ------------------------------------------------------------
-void CFaceSet::setCoordSize(long coordSize)
+void FaceSet::setCoordSize(long coordSize)
 {
 	m_nCoords = coordSize;
 
@@ -112,7 +112,7 @@ void CFaceSet::setCoordSize(long coordSize)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::setCoord(long n, double x, double y, double z)
+void FaceSet::setCoord(long n, double x, double y, double z)
 {
 	if ( (n>=0)&&(n<m_nCoords) )
 	{
@@ -123,7 +123,7 @@ void CFaceSet::setCoord(long n, double x, double y, double z)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::getCoord(long n, double &x, double &y, double &z)
+void FaceSet::getCoord(long n, double &x, double &y, double &z)
 {
 	if ( (n>=0)&&(n<m_nCoords) )
 	{
@@ -134,7 +134,7 @@ void CFaceSet::getCoord(long n, double &x, double &y, double &z)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::setCoordIndexSize(long indexSize)
+void FaceSet::setCoordIndexSize(long indexSize)
 {
 	if (indexSize>0)
 	{
@@ -154,7 +154,7 @@ void CFaceSet::setCoordIndexSize(long indexSize)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::setTextureCoordSize(long size)
+void FaceSet::setTextureCoordSize(long size)
 {
 	if (size>0)
 	{
@@ -168,19 +168,19 @@ void CFaceSet::setTextureCoordSize(long size)
 }
 
 // ------------------------------------------------------------
-long CFaceSet::getTextureCoordSize()
+long FaceSet::getTextureCoordSize()
 {
 	return m_nTextureCoords;
 }
 
 // ------------------------------------------------------------
-void CFaceSet::setCoordIndex(long n, long i1, long i2, long i3, long i4)
+void FaceSet::setCoordIndex(long n, long i1, long i2, long i3, long i4)
 {
 	if ( (n>=0)&&(n<m_nFaces) )
 	{
-		CVec3d v;
-		CVec3d u;
-		CVec3d normal;
+		Vec3d v;
+		Vec3d u;
+		Vec3d normal;
 
 		m_coordIndex[n][0] = i1;
 		m_coordIndex[n][1] = i2;
@@ -208,7 +208,7 @@ void CFaceSet::setCoordIndex(long n, long i1, long i2, long i3, long i4)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::getCoordIndex(long n, long &i1, long &i2, long &i3, long &i4)
+void FaceSet::getCoordIndex(long n, long &i1, long &i2, long &i3, long &i4)
 {
 	if ( (n>=0)&&(n<m_nFaces) )
 	{
@@ -220,7 +220,7 @@ void CFaceSet::getCoordIndex(long n, long &i1, long &i2, long &i3, long &i4)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::setColor(long n, float r, float g, float b)
+void FaceSet::setColor(long n, float r, float g, float b)
 {
 	if ( (n>=0)&&(n<m_nCoords) )
 	{
@@ -231,7 +231,7 @@ void CFaceSet::setColor(long n, float r, float g, float b)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::getColor(long n, float &r, float &g, float &b)
+void FaceSet::getColor(long n, float &r, float &g, float &b)
 {
 	if ( (n>=0)&&(n<m_nCoords) )
 	{
@@ -242,7 +242,7 @@ void CFaceSet::getColor(long n, float &r, float &g, float &b)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::setTextureCoord(long n, double s, double t)
+void FaceSet::setTextureCoord(long n, double s, double t)
 {
 	if ( (n>=0)&&(n<m_nTextureCoords) )
 	{
@@ -252,7 +252,7 @@ void CFaceSet::setTextureCoord(long n, double s, double t)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::getTextureCoord(long n, double &s, double &t)
+void FaceSet::getTextureCoord(long n, double &s, double &t)
 {
 	if ( (n>=0)&&(n<m_nTextureCoords) )
 	{
@@ -262,7 +262,7 @@ void CFaceSet::getTextureCoord(long n, double &s, double &t)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::setTextureCoordIndex(long n, long i1, long i2, long i3, long i4)
+void FaceSet::setTextureCoordIndex(long n, long i1, long i2, long i3, long i4)
 {
 	if ( (n>=0)&&(n<m_nFaces) )
 	{
@@ -274,7 +274,7 @@ void CFaceSet::setTextureCoordIndex(long n, long i1, long i2, long i3, long i4)
 }
 
 // ------------------------------------------------------------
-void CFaceSet::getTextureCoordIndex(long n, long &i1, long &i2, long &i3, long &i4)
+void FaceSet::getTextureCoordIndex(long n, long &i1, long &i2, long &i3, long &i4)
 {
 	if ( (n>=0)&&(n<m_nFaces) )
 	{
@@ -286,25 +286,25 @@ void CFaceSet::getTextureCoordIndex(long n, long &i1, long &i2, long &i3, long &
 }
 
 // ------------------------------------------------------------
-void CFaceSet::setUseColor(bool flag)
+void FaceSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
 // ------------------------------------------------------------
-bool CFaceSet::getUseColor()
+bool FaceSet::getUseColor()
 {
 	return m_useColor;
 }
 
 // ------------------------------------------------------------
-void CFaceSet::setUseTexture(bool flag)
+void FaceSet::setUseTexture(bool flag)
 {
 	m_useTexture = flag;
 }
 
 // ------------------------------------------------------------
-bool CFaceSet::getUseTexture()
+bool FaceSet::getUseTexture()
 {
 	return m_useTexture;
 }

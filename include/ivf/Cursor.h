@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CCursor);
+IvfSmartPointer(Cursor);
 
 /**
  * Cursor shape class
@@ -39,7 +39,7 @@ IvfSmartPointer(CCursor);
  * three dimensional cross.
  * @author Jonas Lindemann
  */
-class IVF_API CCursor : public CComposite {
+class IVF_API Cursor : public Composite {
 public:
 	enum TCursorType {
 		CT_LINE_CURSOR,
@@ -48,13 +48,13 @@ public:
 	};
 public:
 	/** CIvfCursor constructor */
-	CCursor ();
+	Cursor ();
 
 	/** CIvfCursor destructor */
-	virtual ~CCursor ();
+	virtual ~Cursor ();
 
-	IvfClassInfo("CCursor",CComposite);
-	IvfStdFactory(CCursor);
+	IvfClassInfo("Cursor",Composite);
+	IvfStdFactory(Cursor);
 
 	/** 
 	 * Set cursor size
@@ -81,12 +81,12 @@ public:
 	int getCursorType();
 private:
 	int m_cursorType;
-	CMaterial* m_zMaterial;
-	CMaterial* m_yMaterial;
-	CMaterial* m_xMaterial;
-	CBrick* m_zBrick;
-	CBrick* m_yBrick;
-	CBrick* m_xBrick;
+	Material* m_zMaterial;
+	Material* m_yMaterial;
+	Material* m_xMaterial;
+	Brick* m_zBrick;
+	Brick* m_yBrick;
+	Brick* m_xBrick;
 	double m_size;
     double m_thickness;
 protected:

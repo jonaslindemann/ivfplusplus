@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CCurveSegment3d);
+IvfSmartPointer(CurveSegment3d);
 
 /**
  * Abstract curve segment class
@@ -38,29 +38,29 @@ IvfSmartPointer(CCurveSegment3d);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CCurveSegment3d : public CMathBase {
+class IVFMATH_API CurveSegment3d : public MathBase {
 private:
 	double m_t0;
 public:
 	/** CIvfCurveSegment constructor */
-	CCurveSegment3d();
+	CurveSegment3d();
 
 	/** CIvfCurveSegment destructor */
-	virtual ~CCurveSegment3d();
+	virtual ~CurveSegment3d();
 
-	IvfClassInfo("CCurveSegment3d",CMathBase);
+	IvfClassInfo("CurveSegment3d",MathBase);
 
   	/** Set start position of curve */
 	void setStartPosition(double t0);
   	
 	/** Get point on curve */
-  	virtual CVec3d* getPosition(double t)=0;
+  	virtual Vec3d* getPosition(double t)=0;
 	
 	/** Get start point on curve */
-  	virtual CVec3d* getStartPoint()=0;
+  	virtual Vec3d* getStartPoint()=0;
 	
 	/** Get end point on curve */
-  	virtual CVec3d* getEndPoint()=0;
+  	virtual Vec3d* getEndPoint()=0;
 };
 
 }

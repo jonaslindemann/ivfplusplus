@@ -28,16 +28,16 @@
 
 using namespace ivf;
 
-CShapePlacementHandler::CShapePlacementHandler(CWidgetBase* widget, CCamera* camera, CScene* scene, CComposite* composite)
-:CCoordinateInputHandler(widget, camera)
+ShapePlacementHandler::ShapePlacementHandler(WidgetBase* widget, Camera* camera, Scene* scene, Composite* composite)
+:CoordinateInputHandler(widget, camera)
 {
 	m_scene = scene;
 	m_composite = composite;
 	
-	m_cursor = new CNodeCursor();
+	m_cursor = new NodeCursor();
 	m_scene->getPostComposite()->addChild(m_cursor);
 	
-	m_ruler = new CRuler();
+	m_ruler = new Ruler();
 	m_ruler->setStartPoint(0.0, 0.0, 0.0);
 	m_ruler->setEndPoint(0.0, 0.0, 0.0);
 	m_ruler->setTickStep(0.5);
@@ -67,7 +67,7 @@ CShapePlacementHandler::CShapePlacementHandler(CWidgetBase* widget, CCamera* cam
 	this->addMouseUp3dEvent(this);
 }
 
-CShapePlacementHandler::~CShapePlacementHandler()
+ShapePlacementHandler::~ShapePlacementHandler()
 {
 	this->removeMouseDown3dEvent(this);
 	this->removeMouseMove3dEvent(this);
@@ -75,7 +75,7 @@ CShapePlacementHandler::~CShapePlacementHandler()
 }
 
 // ------------------------------------------------------------
-void CShapePlacementHandler::onMouseDown3d(double x, double y, double z)
+void ShapePlacementHandler::onMouseDown3d(double x, double y, double z)
 {
 	m_lastButtonLeft = getWidget()->isLeftButtonDown();
 	if (!m_moveDone)
@@ -93,7 +93,7 @@ void CShapePlacementHandler::onMouseDown3d(double x, double y, double z)
 }
 
 // ------------------------------------------------------------
-void CShapePlacementHandler::onMouseMove3d(double x, double y, double z)
+void ShapePlacementHandler::onMouseMove3d(double x, double y, double z)
 {
 	if (!m_moveDone)
 	{
@@ -123,7 +123,7 @@ void CShapePlacementHandler::onMouseMove3d(double x, double y, double z)
 }
 
 // ------------------------------------------------------------
-void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
+void ShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 {
 	if (m_lastButtonLeft)
 	{
@@ -134,8 +134,8 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 		m_ruler->setStartPoint(x, 0.0, z);
 		m_ruler->setEndPoint(x, y, z);
 		
-		CCubePtr cube;
-		CShapePtr node;
+		CubePtr cube;
+		ShapePtr node;
 		
 		switch (m_inputMethod) {
 		case IM_CLICK_MODIFIER:
@@ -143,7 +143,7 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 			{
 				if (m_createShapeEvent!=nullptr)
 				{
-					CShapePtr newShape;
+					ShapePtr newShape;
 					m_createShapeEvent->onCreateShapeEvent(x, y, z, newShape);
 					
 					if (newShape!=nullptr)
@@ -164,7 +164,7 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 			if (m_clickCount==0)
 			{
 				this->setLockXZ(true);
-				m_cursor->setType(CNodeCursor::CT_Y);
+				m_cursor->setType(NodeCursor::CT_Y);
 				m_clickCount++;
 			}
 			else
@@ -173,7 +173,7 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 				{
 					if (m_createShapeEvent!=nullptr)
 					{
-						CShapePtr newShape;
+						ShapePtr newShape;
 						m_createShapeEvent->onCreateShapeEvent(x, y, z, newShape);
 						
 						if (newShape!=nullptr)
@@ -220,8 +220,8 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 
 							for (i=0; i<m_shapeSelection->getSize(); i++)
 							{
-								CShapePtr newShape;
-								CShapePtr shape = m_shapeSelection->getShape(i);
+								ShapePtr newShape;
+								ShapePtr shape = m_shapeSelection->getShape(i);
 								
 								shape->getPosition(nx, ny, nz);
 								m_moveDelta.getComponents(dx, dy, dz);
@@ -249,13 +249,13 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 					m_startPoint.setComponents(x, y, z);
 					m_shapeSelection->setOffset(0.0, 0.0, 0.0);
 					m_moveDone = true;
-					m_cursor->setState(CGLBase::OS_OFF);
-					m_ruler->setState(CGLBase::OS_OFF);
+					m_cursor->setState(GLBase::OS_OFF);
+					m_ruler->setState(GLBase::OS_OFF);
 				}
 
 				m_clickCount = 0;
 				this->setLockXZNoEvent(false);
-				m_cursor->setType(CNodeCursor::CT_XZ);
+				m_cursor->setType(NodeCursor::CT_XZ);
 			}
 			break;
 		default:
@@ -267,64 +267,64 @@ void CShapePlacementHandler::onMouseUp3d(double x, double y, double z)
 	m_lastButtonLeft = false;
 }
 
-void CShapePlacementHandler::setCreateShapeEvent(CCreateShapeEvent *event)
+void ShapePlacementHandler::setCreateShapeEvent(CreateShapeEvent *event)
 {
 	m_createShapeEvent = event;
 }
 
-void CShapePlacementHandler::setMoveSelectionEvent(CMoveSelectionEvent *event)
+void ShapePlacementHandler::setMoveSelectionEvent(MoveSelectionEvent *event)
 {
 	m_moveSelectionEvent = event;
 }
 
-void CShapePlacementHandler::setInputMethod(TInputMethod method)
+void ShapePlacementHandler::setInputMethod(TInputMethod method)
 {
 	m_inputMethod = method;
 }
 
-CShapePlacementHandler::TInputMethod CShapePlacementHandler::getInputMethod()
+ShapePlacementHandler::TInputMethod ShapePlacementHandler::getInputMethod()
 {
 	return m_inputMethod;
 }
 
-void CShapePlacementHandler::setShapeRepresentation(CShape *shape)
+void ShapePlacementHandler::setShapeRepresentation(Shape *shape)
 {
 	m_shapeRepresentation = shape;
 	m_cursor->setShape(shape);
 }
 
-void CShapePlacementHandler::doActivate()
+void ShapePlacementHandler::doActivate()
 {
-	m_cursor->setState(CGLBase::OS_ON);
+	m_cursor->setState(GLBase::OS_ON);
 }
 
-void CShapePlacementHandler::doDeactivate()
+void ShapePlacementHandler::doDeactivate()
 {
-	m_cursor->setState(CGLBase::OS_OFF);
+	m_cursor->setState(GLBase::OS_OFF);
 	m_clickCount = 0;
 	this->setLockXZNoEvent(false);
-	m_cursor->setType(CNodeCursor::CT_XZ);
+	m_cursor->setType(NodeCursor::CT_XZ);
 }
 
-void CShapePlacementHandler::doLockXZ(bool flag)
+void ShapePlacementHandler::doLockXZ(bool flag)
 {
 	if (flag)
-		m_cursor->setType(CNodeCursor::CT_Y);
+		m_cursor->setType(NodeCursor::CT_Y);
 	else
-		m_cursor->setType(CNodeCursor::CT_XZ);
+		m_cursor->setType(NodeCursor::CT_XZ);
 }
 
-CNodeCursor* CShapePlacementHandler::getCursor()
+NodeCursor* ShapePlacementHandler::getCursor()
 {
 	return m_cursor;
 }
 
-void CShapePlacementHandler::setMoveShape(CShape *shape)
+void ShapePlacementHandler::setMoveShape(Shape *shape)
 {
 	m_moveShape = shape;
 }
 
-void CShapePlacementHandler::setOperatingMode(TOperatingMode mode)
+void ShapePlacementHandler::setOperatingMode(TOperatingMode mode)
 {
 	m_operatingMode = mode;
 
@@ -337,74 +337,74 @@ void CShapePlacementHandler::setOperatingMode(TOperatingMode mode)
 	}
 }
 
-CShapePlacementHandler::TOperatingMode CShapePlacementHandler::getOperatingMode()
+ShapePlacementHandler::TOperatingMode ShapePlacementHandler::getOperatingMode()
 {
 	return m_operatingMode;
 }
 
-void CShapePlacementHandler::setShapeSelection(CShapeSelection *shapeSelection)
+void ShapePlacementHandler::setShapeSelection(ShapeSelection *shapeSelection)
 {
 	m_shapeSelection = shapeSelection;
 }
 
-void CShapePlacementHandler::initiateMove(double x, double y, double z)
+void ShapePlacementHandler::initiateMove(double x, double y, double z)
 {
 	m_moveDone = false;
 	m_moving = true;
 	m_startPoint.setComponents(x, y, z);
 	setPlanePosition(x, y, z);
 	m_cursor->setPosition(x, y, z);
-	m_cursor->setState(CGLBase::OS_ON);
-	m_ruler->setState(CGLBase::OS_ON);
+	m_cursor->setState(GLBase::OS_ON);
+	m_ruler->setState(GLBase::OS_ON);
 }
 
-void CShapePlacementHandler::initiateMove(CVec3d &vec)
+void ShapePlacementHandler::initiateMove(Vec3d &vec)
 {
 	m_moveDone = false;
 	m_moving = true;
 	m_startPoint = vec;
 	m_cursor->setPosition(vec);
-	m_cursor->setState(CGLBase::OS_ON);
-	m_ruler->setState(CGLBase::OS_ON);
+	m_cursor->setState(GLBase::OS_ON);
+	m_ruler->setState(GLBase::OS_ON);
 	setPlanePosition(vec);
 }
 
-void CShapePlacementHandler::finalizeMove()
+void ShapePlacementHandler::finalizeMove()
 {
 	setPlanePosition(0.0, 0.0, 0.0);
 	if (m_shapeSelection!=nullptr)
 		m_shapeSelection->setOffset(0.0, 0.0, 0.0);
-	m_cursor->setState(CGLBase::OS_OFF);
+	m_cursor->setState(GLBase::OS_OFF);
 	//m_ruler->setState(CIvfGLBase::OS_OFF);
 	m_moving = false;
 }
 
-bool CShapePlacementHandler::isMoving()
+bool ShapePlacementHandler::isMoving()
 {
 	return m_moving;
 }
 
-void CShapePlacementHandler::setCopyShapeEvent(CCopyShapeEvent *event)
+void ShapePlacementHandler::setCopyShapeEvent(CopyShapeEvent *event)
 {
 	m_copyShapeEvent = event;
 }
 
-void CShapePlacementHandler::setFinishCopyEvent(CFinishCopyEvent *event)
+void ShapePlacementHandler::setFinishCopyEvent(FinishCopyEvent *event)
 {
 	m_finishCopyEvent = event;
 }
 
-void CShapePlacementHandler::setFinishMoveEvent(CFinishMoveEvent *event)
+void ShapePlacementHandler::setFinishMoveEvent(FinishMoveEvent *event)
 {
 	m_finishMoveEvent = event;
 }
 
-void CShapePlacementHandler::setCursorUpdateEvent(CCursorUpdateEvent *event)
+void ShapePlacementHandler::setCursorUpdateEvent(CursorUpdateEvent *event)
 {
 	m_cursorUpdateEvent = event;
 }
 
-void CShapePlacementHandler::reset()
+void ShapePlacementHandler::reset()
 {
 	setPlanePosition(0.0, 0.0, 0.0);
 	if (m_shapeSelection!=nullptr)

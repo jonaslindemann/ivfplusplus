@@ -33,13 +33,13 @@
 #include "VectorCoordList.h"
 #include "ArrayCoordList.h"
 
-IvfSmartPointer(CFibre);
+IvfSmartPointer(Fibre);
 
-class CFibre : public ivf::CShape {
+class Fibre : public ivf::Shape {
 private:
-	CCoordHistPtr m_coords;
-	CDiscreteTimePtr m_discreteTime;
-	ivf::CCameraPtr m_camera;
+	CoordHistPtr m_coords;
+	DiscreteTimePtr m_discreteTime;
+	ivf::CameraPtr m_camera;
 
 	double (*m_sectionCoords)[2];
 	double (*m_sectionNormals)[2];
@@ -48,15 +48,15 @@ private:
 
 	void initSection();
 public:
-	CFibre();
-	virtual ~CFibre();
+	Fibre();
+	virtual ~Fibre();
 
-	IvfStdFactory(CFibre);
+	IvfStdFactory(Fibre);
 
 	void refresh();
 
-	CCoordHist* getCoordHist();
-	void setDiscreteTime(CDiscreteTime* discreteTime);
+	CoordHist* getCoordHist();
+	void setDiscreteTime(DiscreteTime* discreteTime);
 	void setFibreRadius(double radius);
 
 	void readFromStream(std::istream &in);

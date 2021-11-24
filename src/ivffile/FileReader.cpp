@@ -28,26 +28,26 @@ using namespace std;
 using namespace ivf;
 
 // ------------------------------------------------------------
-CFileReader::CFileReader()
+FileReader::FileReader()
 {
 	m_scaleFactor = 1.0;
 	m_reverseFace = true;
 }
 
 // ------------------------------------------------------------
-CFileReader::~CFileReader()
+FileReader::~FileReader()
 {
 
 }
 
 // ------------------------------------------------------------
-void CFileReader::read()
+void FileReader::read()
 {
 
 }
 
 // ------------------------------------------------------------
-void CFileReader::resetSize()
+void FileReader::resetSize()
 {
 	m_min[0] = 1e300;
 	m_min[1] = 1e300;
@@ -59,7 +59,7 @@ void CFileReader::resetSize()
 }
 
 // ------------------------------------------------------------
-void CFileReader::maxMinCalc(double x, double y, double z)
+void FileReader::maxMinCalc(double x, double y, double z)
 {
 	if (x>m_max[0])
 		m_max[0] = x;
@@ -76,7 +76,7 @@ void CFileReader::maxMinCalc(double x, double y, double z)
 }
 
 // ------------------------------------------------------------
-void CFileReader::getSize(double *min, double *max)
+void FileReader::getSize(double *min, double *max)
 {
 	min[0] = m_min[0];
 	min[1] = m_min[1];
@@ -87,16 +87,16 @@ void CFileReader::getSize(double *min, double *max)
 }
 
 // ------------------------------------------------------------
-void CFileReader::getLine(string &row)
+void FileReader::getLine(string &row)
 {
 	m_inputFile.getline(m_rawRow, 256);
 	row = m_rawRow;
 }
 
 // ------------------------------------------------------------
-bool CFileReader::find(const char *keyword, string &row)
+bool FileReader::find(const char *keyword, string &row)
 {
-	int pos = row.find(keyword);
+	int pos = static_cast<int>(row.find(keyword));
 	if (pos>=0)
 	{
 		if (pos>0)
@@ -111,9 +111,9 @@ bool CFileReader::find(const char *keyword, string &row)
 }
 
 // ------------------------------------------------------------
-bool CFileReader::findPos(const char *keyword, string &row, int &pos)
+bool FileReader::findPos(const char *keyword, string &row, int &pos)
 {
-	pos = row.find(keyword);
+	pos = static_cast<int>(row.find(keyword));
 	if (pos>=0)
 	{
 		if (pos>0)
@@ -128,38 +128,38 @@ bool CFileReader::findPos(const char *keyword, string &row, int &pos)
 }
 
 // ------------------------------------------------------------
-void CFileReader::getLine(istream &in, string &row)
+void FileReader::getLine(istream &in, string &row)
 {
 	in.getline(m_rawRow, 256);
 	row = m_rawRow;
 }
 
 // ------------------------------------------------------------
-void CFileReader::setScaling(double scaleFactor)
+void FileReader::setScaling(double scaleFactor)
 {
 	m_scaleFactor = scaleFactor;
 }
 
 // ------------------------------------------------------------
-void CFileReader::setReverseFace(bool flag)
+void FileReader::setReverseFace(bool flag)
 {
 	m_reverseFace = flag;
 }
 
 // ------------------------------------------------------------
-bool CFileReader::getReverseFace()
+bool FileReader::getReverseFace()
 {
 	return m_reverseFace;
 }
 
 // ------------------------------------------------------------
-double CFileReader::getScaling()
+double FileReader::getScaling()
 {
 	return m_scaleFactor;
 }
 
 // ------------------------------------------------------------
-void CFileReader::getMidpoint(double &x, double &y, double &z)
+void FileReader::getMidpoint(double &x, double &y, double &z)
 {
 	x = (m_max[0] - m_min[0])/2.0;
 	y = (m_max[1] - m_min[1])/2.0;

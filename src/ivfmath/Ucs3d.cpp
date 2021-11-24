@@ -24,7 +24,7 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CUcs3d::CUcs3d()
+Ucs3d::Ucs3d()
 {
 	m_vx = 0.0;
 	m_vy = 1.0;
@@ -38,13 +38,13 @@ CUcs3d::CUcs3d()
 }
 
 // ------------------------------------------------------------
-CUcs3d::~CUcs3d()
+Ucs3d::~Ucs3d()
 {
 
 }
 
 // ------------------------------------------------------------
-void CUcs3d::setRotation(double vx, double vy, double vz, double theta)
+void Ucs3d::setRotation(double vx, double vy, double vz, double theta)
 {
 	m_vx = vx;
 	m_vy = vy;
@@ -54,7 +54,7 @@ void CUcs3d::setRotation(double vx, double vy, double vz, double theta)
 }
 
 // ------------------------------------------------------------
-void CUcs3d::setTranslation(double tx, double ty, double tz)
+void Ucs3d::setTranslation(double tx, double ty, double tz)
 {
 	m_tx = tx;
 	m_ty = ty;
@@ -63,7 +63,7 @@ void CUcs3d::setTranslation(double tx, double ty, double tz)
 }
 
 // ------------------------------------------------------------
-void CUcs3d::getRotation(double & vx, double & vy, double & vz, double & theta)
+void Ucs3d::getRotation(double & vx, double & vy, double & vz, double & theta)
 {
 	vx = m_vx;
 	vy = m_vy;
@@ -72,7 +72,7 @@ void CUcs3d::getRotation(double & vx, double & vy, double & vz, double & theta)
 }
 
 // ------------------------------------------------------------
-void CUcs3d::getTranslation(double & tx, double & ty, double & tz)
+void Ucs3d::getTranslation(double & tx, double & ty, double & tz)
 {
 	tx = m_tx;
 	ty = m_ty;
@@ -80,7 +80,7 @@ void CUcs3d::getTranslation(double & tx, double & ty, double & tz)
 }
 
 // ------------------------------------------------------------
-void CUcs3d::transform(double wx, double wy, double wz, double & sx, double & sy, double & sz)
+void Ucs3d::transform(double wx, double wy, double wz, double & sx, double & sy, double & sz)
 {
 	m_pointWorld.setComponents(wx-m_tx, wy-m_ty, wz-m_tz, 1.0);
 	m_pointTransformed = m_transformationMatrix * m_pointWorld;
@@ -88,7 +88,7 @@ void CUcs3d::transform(double wx, double wy, double wz, double & sx, double & sy
 }
 
 // ------------------------------------------------------------
-void CUcs3d::calcMatrix()
+void Ucs3d::calcMatrix()
 {
 	double x, y, z;
 
@@ -107,7 +107,7 @@ void CUcs3d::calcMatrix()
 }
 
 // ------------------------------------------------------------
-void CUcs3d::transformWorld(double sx, double sy, double sz, double & wx, double & wy, double & wz)
+void Ucs3d::transformWorld(double sx, double sy, double sz, double & wx, double & wy, double & wz)
 {
 	m_pointTransformed.setComponents(sx, sy, sz, 1.0);
 
@@ -120,7 +120,7 @@ void CUcs3d::transformWorld(double sx, double sy, double sz, double & wx, double
 }
 
 // ------------------------------------------------------------
-void CUcs3d::intersect(double x0, double y0, double z0, double i, double j, double k, double &x, double &y, double &z)
+void Ucs3d::intersect(double x0, double y0, double z0, double i, double j, double k, double &x, double &y, double &z)
 {
 	double a, b, c, d;
 	double t;
@@ -137,12 +137,12 @@ void CUcs3d::intersect(double x0, double y0, double z0, double i, double j, doub
 }
 
 // ------------------------------------------------------------
-CVec3d& CUcs3d::intersect(CVec3d &origin, CVec3d &vec)
+Vec3d& Ucs3d::intersect(Vec3d &origin, Vec3d &vec)
 {
 	double x, y, z;
 	double vx, vy, vz;
 	double ix, iy, iz;
-	CVec3d& intersection = ivfGetTempVec3d();
+	Vec3d& intersection = ivfGetTempVec3d();
 
 	origin.getComponents(x, y, z);
 	vec.getComponents(vx, vy, vz);
@@ -153,19 +153,19 @@ CVec3d& CUcs3d::intersect(CVec3d &origin, CVec3d &vec)
 }
 
 // ------------------------------------------------------------
-void CUcs3d::setSnapUnit(double unit)
+void Ucs3d::setSnapUnit(double unit)
 {
 	m_snapUnit = unit;
 }
 
 // ------------------------------------------------------------
-double CUcs3d::getSnapUnit()
+double Ucs3d::getSnapUnit()
 {
 	return m_snapUnit;
 }
 
 // ------------------------------------------------------------
-void CUcs3d::snap(double & x, double & y, double & z)
+void Ucs3d::snap(double & x, double & y, double & z)
 {
 	if (x>0)
 		x = (double)((long)((x + (m_snapUnit/2)) / m_snapUnit) * m_snapUnit);
@@ -184,7 +184,7 @@ void CUcs3d::snap(double & x, double & y, double & z)
 }
 
 // ------------------------------------------------------------
-void CUcs3d::transform(CPoint3d * point)
+void Ucs3d::transform(Point3d * point)
 {
 	double x, y, z;
 	point->getComponents(x, y, z);
@@ -193,7 +193,7 @@ void CUcs3d::transform(CPoint3d * point)
 }
 
 // ------------------------------------------------------------
-void CUcs3d::transformWorld(CPoint3d * point)
+void Ucs3d::transformWorld(Point3d * point)
 {
 	double x, y, z;
 	point->getComponents(x, y, z);
@@ -202,15 +202,15 @@ void CUcs3d::transformWorld(CPoint3d * point)
 }
 
 // ------------------------------------------------------------
-CVec3d& CUcs3d::getYAxis()
+Vec3d& Ucs3d::getYAxis()
 {
 	return m_yAxis;
 }
 
 // ------------------------------------------------------------
-CVec3d& CUcs3d::transformWorld(CVec3d& vec)
+Vec3d& Ucs3d::transformWorld(Vec3d& vec)
 {
-	CVec3d& r = ivfGetTempVec3d();
+	Vec3d& r = ivfGetTempVec3d();
 	double x, y, z;
 	vec.getComponents(x, y, z);
 	transformWorld(x, y, z, x, y, z);
@@ -219,9 +219,9 @@ CVec3d& CUcs3d::transformWorld(CVec3d& vec)
 }
 
 // ------------------------------------------------------------
-CVec3d& CUcs3d::transform(CVec3d& vec)
+Vec3d& Ucs3d::transform(Vec3d& vec)
 {
-	CVec3d& r = ivfGetTempVec3d();
+	Vec3d& r = ivfGetTempVec3d();
 	double x, y, z;
 	vec.getComponents(x, y, z);
 	transform(x, y, z, x, y, z);
@@ -230,9 +230,9 @@ CVec3d& CUcs3d::transform(CVec3d& vec)
 }
 
 // ------------------------------------------------------------
-CVec3d& CUcs3d::snap(CVec3d& vec)
+Vec3d& Ucs3d::snap(Vec3d& vec)
 {
-	CVec3d& r = ivfGetTempVec3d();
+	Vec3d& r = ivfGetTempVec3d();
 	double x, y, z;
 	vec.getComponents(x, y, z);
 	snap(x, y, z);

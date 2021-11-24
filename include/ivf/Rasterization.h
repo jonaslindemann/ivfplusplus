@@ -30,7 +30,7 @@
 
 namespace ivf {
 
-IvfStdPointer(CRasterization);
+IvfStdPointer(Rasterization);
 
 /**
  * Rasterisation singleton class
@@ -40,10 +40,10 @@ IvfStdPointer(CRasterization);
  * The class is accesssed in the following way:
  *
  * \code
- * CIvfRasterizationPtr rasterOps = CRasterization::getInstance();
+ * CIvfRasterizationPtr rasterOps = Rasterization::getInstance();
  * \endcode
  */
-class IVF_API CRasterization : public CBase {
+class IVF_API Rasterization : public Base {
 public:
 	enum TCullFace {
 		CF_FRONT,
@@ -61,14 +61,14 @@ public:
 		PM_FILL
 	};
 private:
-	static CRasterization* m_instance;
-	static CSingletonDestroyer<CRasterization> m_destroyer;
+	static Rasterization* m_instance;
+	static SingletonDestroyer<Rasterization> m_destroyer;
 public:
 	/** Singleton access method */
-	static CRasterization* getInstance();
+	static Rasterization* getInstance();
 
-	IvfClassInfo("CRasterization",CBase);
-	IvfStdFactory(CRasterization);
+	IvfClassInfo("Rasterization",Base);
+	IvfStdFactory(Rasterization);
 
 	/** Sets OpenGL polygon mode see TPolygonMode */
 	void setPolygonMode(TTargetFace face, TPolygonMode mode);
@@ -109,8 +109,8 @@ public:
 	/** Set the face to be culled, see TCullFace */
 	void setCullFace(TCullFace face);
 protected:
-	CRasterization();
-	friend class CSingletonDestroyer<CRasterization>;
+	Rasterization();
+	friend class SingletonDestroyer<Rasterization>;
 
 };
 

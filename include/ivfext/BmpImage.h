@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CBmpImage);
+IvfSmartPointer(BmpImage);
 
 /**
  * BMP image loader class
@@ -36,7 +36,7 @@ IvfSmartPointer(CBmpImage);
  * This class implements a loader for Windows BMP image
  * files.
  */
-class IVFEXT_API CBmpImage : public CFileImage {
+class IVFEXT_API BmpImage : public FileImage {
 private:
 	bool m_alphaChannel;
 	unsigned char *imageData;
@@ -80,17 +80,17 @@ unsigned char * bmp_load(const char *filename,
                          int *numComponents_ret);
 
 public:
-	/** CBmpImage constructor */
-	CBmpImage();
+	/** BmpImage constructor */
+	BmpImage();
 
-	/** CBmpImage constructor */
-	CBmpImage(const std::string& name);
+	/** BmpImage constructor */
+	BmpImage(const std::string& name);
 
-	/** CBmpImage destructor */
-	virtual ~CBmpImage();
+	/** BmpImage destructor */
+	virtual ~BmpImage();
 
-	IvfClassInfo("CBmpImage",CFileImage);
-    IvfStdFactory(CBmpImage);
+	IvfClassInfo("BmpImage",FileImage);
+    IvfStdFactory(BmpImage);
 
 	/** Reads Bmp image */
 	virtual bool read();

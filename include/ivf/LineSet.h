@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CLineSet);
+IvfSmartPointer(LineSet);
 
 /**
  * LineSet class
@@ -37,7 +37,7 @@ IvfSmartPointer(CLineSet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CLineSet : public CGLPrimitive {
+class IVF_API LineSet : public GLPrimitive {
 private:
 	bool m_useColor;
 	bool m_useAlpha;
@@ -45,14 +45,14 @@ private:
 protected:
 	virtual void doCreateGeometry();
 public:
-	/** CLineSet constructor */
-	CLineSet();
+	/** LineSet constructor */
+	LineSet();
 
-	/** CLineSet destructor */
-	virtual ~CLineSet();
+	/** LineSet destructor */
+	virtual ~LineSet();
 
-	IvfClassInfo("CLineSet",CGLPrimitive);
-	IvfStdFactory(CLineSet);
+	IvfClassInfo("LineSet",GLPrimitive);
+	IvfStdFactory(LineSet);
 
 	/** Enable usage of color set */
 	void setUseColor(bool flag);

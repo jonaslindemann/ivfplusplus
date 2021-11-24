@@ -36,12 +36,12 @@ namespace ivf {
  * Ivf++. To implement in new classes use the
  * IvfClassInfo("ClassName",ParentClass) macro.
  */
-class IVF_API CRTTIBase {
+class IVF_API RTTIBase {
 private:
 
 public:
-	CRTTIBase();
-	virtual ~CRTTIBase();
+	RTTIBase();
+	virtual ~RTTIBase();
 
 	/**
 	 * Class name query.

@@ -26,39 +26,39 @@
 
 using namespace ivf;
 
-CHandlerBase::CHandlerBase()
+HandlerBase::HandlerBase()
 {
 	m_active = true;
 }
 
-CHandlerBase::~CHandlerBase()
+HandlerBase::~HandlerBase()
 {
 
 }
 
-void CHandlerBase::activate()
+void HandlerBase::activate()
 {
 	m_active = true;
 	doActivate();
 }
 
-void CHandlerBase::deactivate()
+void HandlerBase::deactivate()
 {
 	m_active = false;
 	doDeactivate();
 }
 
-bool CHandlerBase::isActive()
+bool HandlerBase::isActive()
 {
 	return m_active;
 }
 
-void CHandlerBase::doActivate()
+void HandlerBase::doActivate()
 {
 
 }
 
-void CHandlerBase::doDeactivate()
+void HandlerBase::doDeactivate()
 {
 
 }

@@ -26,19 +26,19 @@
 
 using namespace ivf;
 
-CGrid::CGrid()
+Grid::Grid()
 {
 	m_p1.setComponents(-1.0,  0.0, -1.0);
 	m_p2.setComponents( 1.0,  0.0,  1.0);
 
-	m_corners = new CLineSet();
-	m_outline = new CLineSet();
-	m_gridLines = new CLineSet();
-	m_surface = new CQuadSet();
-	m_axis = new CAxis();
-    m_axis->setState(CShape::OS_OFF);
-    m_corners->setState(CShape::OS_OFF);
-    m_outline->setState(CShape::OS_OFF);
+	m_corners = new LineSet();
+	m_outline = new LineSet();
+	m_gridLines = new LineSet();
+	m_surface = new QuadSet();
+	m_axis = new Axis();
+    m_axis->setState(Shape::OS_OFF);
+    m_corners->setState(Shape::OS_OFF);
+    m_outline->setState(Shape::OS_OFF);
 
 	m_gridSpacing = 0.1;
 
@@ -50,7 +50,7 @@ CGrid::CGrid()
 
 	m_gridInterval = 1;
 
-	m_surfaceMaterial = new CMaterial();
+	m_surfaceMaterial = new Material();
 	m_surfaceMaterial->setDiffuseColor(0.3f, 0.3f, 0.3f, 0.2f);
 
 	m_cornerColor[0] = 0.8f; m_cornerColor[1] = 0.8f; m_cornerColor[2] = 0.8f; m_cornerColor[3] = 1.0f;
@@ -61,7 +61,7 @@ CGrid::CGrid()
 	initGrid();
 }
 
-CGrid::~CGrid()
+Grid::~Grid()
 {
 	delete m_corners;
 	delete m_outline;
@@ -70,7 +70,7 @@ CGrid::~CGrid()
 	delete m_axis;
 }
 
-void CGrid::initGrid()
+void Grid::initGrid()
 {
 	double x1, y1, z1;
 	double x2, y2, z2;
@@ -102,7 +102,7 @@ void CGrid::initGrid()
 
 	m_corners->setLineWidth(2);
 
-	CIndex* idx = new CIndex();
+	Index* idx = new Index();
 	idx->add(0,1);
 	idx->add(0,2);
 	idx->add(3,4);
@@ -116,7 +116,7 @@ void CGrid::initGrid()
 
 	m_corners->addColor(m_cornerColor[0], m_cornerColor[1], m_cornerColor[2], m_cornerColor[3]);
 
-	CIndex* colorIdx = new CIndex();
+	Index* colorIdx = new Index();
 	colorIdx->createConstant(0, idx->getSize());
 
 	m_corners->addColorIndex(colorIdx);
@@ -139,7 +139,7 @@ void CGrid::initGrid()
 	m_outline->addCoord(x1, y1, z1+cs);
 	m_outline->addCoord(x1, y1, z2-cs);
 
-	idx = new CIndex();
+	idx = new Index();
 
 	idx->add(0,1);
 	idx->add(2,3);
@@ -150,7 +150,7 @@ void CGrid::initGrid()
 
 	m_outline->addColor(m_outlineColor[0], m_outlineColor[1], m_outlineColor[2], m_outlineColor[3]);
 
-	colorIdx = new CIndex();
+	colorIdx = new Index();
 	colorIdx->createConstant(0, idx->getSize());
 
 	m_outline->addColorIndex(colorIdx);
@@ -165,7 +165,7 @@ void CGrid::initGrid()
 	m_surface->addCoord(x2, y1, z1);
 	m_surface->addCoord(x1, y1, z1);
 
-	idx = new CIndex();
+	idx = new Index();
 	idx->createLinear(0,4);
 
 	m_surface->addCoordIndex(idx);
@@ -187,14 +187,14 @@ void CGrid::initGrid()
 	m_gridLines->addCoord(x1, y1, 0);
 	m_gridLines->addCoord(x2, y1, 0);
 
-	idx = new CIndex();
+	idx = new Index();
 	idx->add(0,1);
 	idx->add(2,3);
 
 	m_gridLines->addColor(m_majorColor[0], m_majorColor[1], m_majorColor[2], m_majorColor[3]);
 	m_gridLines->addColor(m_minorColor[0], m_minorColor[1], m_minorColor[2], m_minorColor[3]);
 
-	colorIdx = new CIndex();
+	colorIdx = new Index();
 	colorIdx->add(0,0);
 	colorIdx->add(0,0);
 
@@ -243,12 +243,12 @@ void CGrid::initGrid()
 	m_gridLines->setUseColor(true);
 }
 
-void CGrid::refresh()
+void Grid::refresh()
 {
 	initGrid();
 }
 
-void CGrid::doCreateGeometry()
+void Grid::doCreateGeometry()
 {
 	if (m_useAxis) m_axis->render();
 	if (m_useSurface) m_surface->render();
@@ -257,48 +257,48 @@ void CGrid::doCreateGeometry()
 	if (m_useGrid) m_gridLines->render();
 }
 
-bool CGrid::isRoughly(double x, double value)
+bool Grid::isRoughly(double x, double value)
 {
 	return (x>(value-0.00001))&&(x<(value+0.00001));
 }
 
-void CGrid::setSize(double width, double height)
+void Grid::setSize(double width, double height)
 {
 	m_p1.setComponents(-width/2.0, 0.0, -height/2.0);
 	m_p2.setComponents( width/2.0, 0.0,  height/2.0);
 }
 
-void CGrid::setGridSpacing(double spacing)
+void Grid::setGridSpacing(double spacing)
 {
 	m_gridSpacing = spacing;
 }
 
-void CGrid::setUseCorners(bool flag)
+void Grid::setUseCorners(bool flag)
 {
 	m_useCorners = flag;
 }
 
-void CGrid::setUseOutline(bool flag)
+void Grid::setUseOutline(bool flag)
 {
 	m_useOutline = flag;
 }
 
-void CGrid::setUseGrid(bool flag)
+void Grid::setUseGrid(bool flag)
 {
 	m_useGrid = flag;
 }
 
-void CGrid::setUseAxis(bool flag)
+void Grid::setUseAxis(bool flag)
 {
 	m_useAxis = flag;
 }
 
-void CGrid::setUseSurface(bool flag)
+void Grid::setUseSurface(bool flag)
 {
 	m_useSurface = flag;
 }
 
-void CGrid::doUpdateBoundingSphere()
+void Grid::doUpdateBoundingSphere()
 {
 	// This is very simple
 
@@ -311,45 +311,45 @@ void CGrid::doUpdateBoundingSphere()
 	}
 }
 
-void CGrid::setAxisSize(double size)
+void Grid::setAxisSize(double size)
 {
 	m_axis->setSize(size);
 }
 
-CAxis* CGrid::getAxisShape()
+Axis* Grid::getAxisShape()
 {
 	return m_axis;
 }
 
 
-void CGrid::setGridInterval(int interval)
+void Grid::setGridInterval(int interval)
 {
 	m_gridInterval = interval;
 	initGrid();
 }
 
-void CGrid::setCornerColor(float red, float green, float blue, float alpha)
+void Grid::setCornerColor(float red, float green, float blue, float alpha)
 {
 	m_cornerColor[0] = red; m_cornerColor[1] = green; m_cornerColor[2] = blue; m_cornerColor[3] = alpha;
 }
 
-void CGrid::setOutlineColor(float red, float green, float blue, float alpha)
+void Grid::setOutlineColor(float red, float green, float blue, float alpha)
 {
 	m_outlineColor[0] = red; m_outlineColor[1] = green; m_outlineColor[2] = blue; m_outlineColor[3] = alpha;
 }
 
-void CGrid::setSurfaceMaterial(CMaterial* material)
+void Grid::setSurfaceMaterial(Material* material)
 {
 	m_surfaceMaterial = material;
 }
 
-void CGrid::setMajorColor(float red, float green, float blue, float alpha)
+void Grid::setMajorColor(float red, float green, float blue, float alpha)
 {
 	m_majorColor[0] = red; m_majorColor[1] = green; m_majorColor[2] = blue; m_majorColor[3] = alpha; 
 
 }
 
-void CGrid::setMinorColor(float red, float green, float blue, float alpha)
+void Grid::setMinorColor(float red, float green, float blue, float alpha)
 {
 	m_minorColor[0] = red; m_minorColor[1] = green; m_minorColor[2] = blue; m_minorColor[3] = alpha; 
 }

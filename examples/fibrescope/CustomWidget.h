@@ -55,11 +55,11 @@
 #include <FL/Fl_Slider.H>
 #include <FL/Fl_Output.H>
 
-class CCustomWidget : public ivf::CFltkBase,
-	ivf::CInitEvent,
-	ivf::CKeyboardEvent,
-	ivf::CTimeoutEvent,
-	ivf::CClearEvent {
+class CustomWidget : public ivf::FltkBase,
+	ivf::InitEvent,
+	ivf::KeyboardEvent,
+	ivf::TimeoutEvent,
+	ivf::ClearEvent {
 public:
 	enum TStereoMode {
 		SM_NONE,
@@ -78,43 +78,43 @@ private:
 	double							m_fogNear;
 	double							m_fogFar;
 	int								m_timeSteps;
-	char							m_fileName[255];
+	std::string 					m_filename;
 	int								m_representation;
 	int								m_startTime;
 	int								m_endTime;
 	int								m_count;
 	int								m_renderingInterval;
 
-	ivf::CCompositePtr				m_connections;
-	ivf::CMaterialPtr				m_currentMaterial;
-	ivf::CWireBrickPtr				m_origBox;
-	ivf::CTexturePtr				m_fibreTexture;
-	ivf::CLineSetPtr				m_boundingVolume;
+	ivf::CompositePtr				m_connections;
+	ivf::MaterialPtr				m_currentMaterial;
+	ivf::WireBrickPtr				m_origBox;
+	ivf::TexturePtr				m_fibreTexture;
+	ivf::LineSetPtr				m_boundingVolume;
 
-	ivf::CCameraPtr					m_camera;
-	ivf::CLightPtr					m_light;
-	ivf::CScenePtr					m_scene;
-	ivf::CMouseViewHandlerPtr		m_mouseViewHandler;
-	ivf::CFlyHandlerPtr				m_flyHandler;
-	ivf::CSceneHandlerPtr			m_sceneHandler;
+	ivf::CameraPtr					m_camera;
+	ivf::LightPtr					m_light;
+	ivf::ScenePtr					m_scene;
+	ivf::MouseViewHandlerPtr		m_mouseViewHandler;
+	ivf::FlyHandlerPtr				m_flyHandler;
+	ivf::SceneHandlerPtr			m_sceneHandler;
 
-	ivf::CLightingPtr				m_lighting;
-	ivf::CFogPtr					m_fog;
-	ivf::CPixelOpsPtr				m_pixelOps;
-	ivf::CBlendingPtr				m_blending;
+	ivf::LightingPtr				m_lighting;
+	ivf::FogPtr					m_fog;
+	ivf::PixelOpsPtr				m_pixelOps;
+	ivf::BlendingPtr				m_blending;
 
-	CFibreCompositePtr				m_fibres;
+	FibreCompositePtr				m_fibres;
 
-	ivf::CMultiplyPtr				m_multiply;
+	ivf::MultiplyPtr				m_multiply;
 
-	CDiscreteTimePtr				m_discreteTime;
-	CUserSettingsPtr				m_userSettings;
+	DiscreteTimePtr				m_discreteTime;
+	UserSettingsPtr				m_userSettings;
 
-	CHighlightRendererPtr			m_highlightRenderer;
+	HighlightRendererPtr			m_highlightRenderer;
 	
-	std::vector<ivf::CMaterialPtr>	m_meshMaterials;
+	std::vector<ivf::MaterialPtr>	m_meshMaterials;
 	
-	CColorMapPtr					m_colorMap;
+	ColorMapPtr					m_colorMap;
 
 	std::vector<double>				m_sigX;
 	std::vector<double>				m_epsX;
@@ -137,12 +137,12 @@ private:
 	bool							m_useDisplayLists;
 	bool							m_vertexFollowPath;
 
-	void readMesh(char* name);
-	void readMeshCSV(char* name);
+	void readMesh(std::string name);
+	void readMeshCSV(std::string name);
 
 public:
 		void setExtrusionTextureMode(int mode);
-	CCustomWidget(int X, int Y, int W, int H, const char *L=0);
+	CustomWidget(int X, int Y, int W, int H, const char *L=0);
 	
 	// Implemented widget methods
 
@@ -165,7 +165,7 @@ public:
 	void storeCamera();
 	void openCSV();
 	void openNEF();
-	void readMeshNEF(char * name);
+	void readMeshNEF(std::string name);
 
 	void disableFullscreen();
 	void enableFullscreen();

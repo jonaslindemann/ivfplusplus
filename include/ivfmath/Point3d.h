@@ -25,7 +25,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CPoint3d);
+IvfSmartPointer(Point3d);
 
 /**
  * Simple point class.
@@ -35,14 +35,14 @@ IvfSmartPointer(CPoint3d);
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CPoint3d : public CVec3d {
+class IVFMATH_API Point3d : public Vec3d {
 private:
 public:
-	IvfClassInfo("CPoint3d",CVec3d);
-	IvfStdFactory(CPoint3d);
+	IvfClassInfo("Point3d",Vec3d);
+	IvfStdFactory(Point3d);
 };
 
-//class IVFMATH_API CIvfPojnt3d : public CMathBase {
+//class IVFMATH_API CIvfPojnt3d : public MathBase {
 //public:
 //	/** CIvfPojnt3d constructor. */
 //	CIvfPojnt3d ();

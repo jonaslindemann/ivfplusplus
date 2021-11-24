@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-CColorList::CColorList()
+ColorList::ColorList()
 {
 	m_size = 0;
 	m_blockSize = 1024;
@@ -36,19 +36,19 @@ CColorList::CColorList()
 	m_next = 0;
 }
 
-CColorList::~CColorList()
+ColorList::~ColorList()
 {
 	delete [] m_color;
 }
 
-void CColorList::add(float red, float green, float blue)
+void ColorList::add(float red, float green, float blue)
 {
 	add(red);
 	add(green);
 	add(blue);
 }
 
-void CColorList::add(float comp)
+void ColorList::add(float comp)
 {
 	if (m_next==m_allocSize)
 	{
@@ -70,12 +70,12 @@ void CColorList::add(float comp)
 	m_next++;
 }
 
-int CColorList::getSize()
+int ColorList::getSize()
 {
 	return m_next / 3;
 }
 
-void CColorList::getColor(int idx, float &x, float &y, float &z)
+void ColorList::getColor(int idx, float &x, float &y, float &z)
 {
 	if ((idx>=0)&&(idx<m_next/3))
 	{
@@ -85,7 +85,7 @@ void CColorList::getColor(int idx, float &x, float &y, float &z)
 	}
 }
 
-float CColorList::getComp(int idx)
+float ColorList::getComp(int idx)
 {
 	if ((idx>=0)&&(idx<m_next))
 	{
@@ -95,27 +95,27 @@ float CColorList::getComp(int idx)
 		return -1.0;
 }
 
-void* CColorList::getData()
+void* ColorList::getData()
 {
 	return (void*)m_color;
 }
 
-GLenum CColorList::getDataType()
+GLenum ColorList::getDataType()
 {
 	return GL_FLOAT;
 }
 
-GLsizei CColorList::getStride()
+GLsizei ColorList::getStride()
 {
 	return 3*sizeof(GLfloat);
 }
 
-GLint CColorList::getCompSize()
+GLint ColorList::getCompSize()
 {
 	return 3;
 }
 
-void CColorList::clear()
+void ColorList::clear()
 {
 	delete [] m_color;
 

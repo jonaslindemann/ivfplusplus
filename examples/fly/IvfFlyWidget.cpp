@@ -15,62 +15,67 @@
 
 using namespace ivf;
 
-CFlyWidget::CFlyWidget(int X, int Y, int W, int H, const char *L)
-:CGlutBase(X, Y, W, H)
+FlyWidget::FlyWidget(int X, int Y, int W, int H, const char *L)
+:GlutBase(X, Y, W, H)
 {
 }
 
-CFlyWidget::~CFlyWidget()
+FlyWidget::~FlyWidget()
 {
 }
 
-void CFlyWidget::onInit(int width, int height)
+FlyWidgetPtr FlyWidget::create(int X, int Y, int W, int H)
 {
-	CVec3d forward;
+	return FlyWidgetPtr(new FlyWidget(X, Y, W, H));
+}
+
+void FlyWidget::onInit(int width, int height)
+{
+	Vec3d forward;
 
 	forward.setComponents(0.0, 0.0, 1.0);
 
-	m_camera = new CCamera();
-	m_camera->setType(CCamera::CT_FLY);
+	m_camera = new Camera();
+	m_camera->setType(Camera::CT_FLY);
 	m_camera->setPosition(0.0, 0.0, 0.0);
 	m_camera->setPerspective(45.0, 1.0, 200.0);
 	m_camera->setForwardVector(forward);
 	
-	m_scene = new CScene();
+	m_scene = new Scene();
 	m_scene->setCamera(m_camera);
-	m_scene->setLightMode(CSceneBase::LM_WORLD);
+	m_scene->setLightMode(SceneBase::LM_WORLD);
 
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 	lighting->enable();
 	lighting->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-	CLightPtr light = lighting->getLight(0);
+	auto light = lighting->getLight(0);
 	light->setPosition(1.0f, 1.0f, 1.0f);
 	light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f);
 	light->enable();
 
-	m_flyHandler = new CFlyHandler(this, m_camera);
+	m_flyHandler = new FlyHandler(this, m_camera);
 	m_flyHandler->setRedraw(false);
 
-	m_starfield = new CStarField(m_camera);
+	m_starfield = new StarField(m_camera);
 
 	m_scene->addChild(m_starfield);
 
-	CMaterial* redMaterial = new CMaterial();
+	auto redMaterial = Material::create();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 
 	int i;
 	double x, y, z;
 	double vx, vy, vz;
 
-	m_controllers = new CControllerGroup();
+	m_controllers = new ControllerGroup();
 	m_controllers->activate();
 
-	CAc3DReader* fileReader = new CAc3DReader();
+	auto fileReader = Ac3DReader::create();
 	fileReader->setFileName("data/models/asteroid01.ac");
 	fileReader->read();
 
-	CShapePtr asteroid = fileReader->getShape();
+	ShapePtr asteroid = fileReader->getShape();
 	
 	for (i=0; i<50; i++)
 	{
@@ -82,13 +87,13 @@ void CFlyWidget::onInit(int width, int height)
 		vy = (1.0 - 2.0*(double)(rand())/(double)RAND_MAX);
 		vz = (1.0 - 2.0*(double)(rand())/(double)RAND_MAX);
 
-		CTransformPtr asteroidXf = new CTransform();
+		auto asteroidXf = Transform::create();
 		asteroidXf->addChild(asteroid);
 		asteroidXf->setPosition(x, y, z);
 		asteroidXf->setRotationQuat(vx, vy, vz, 0.0);
 		m_scene->addChild(asteroidXf);
 
-		CRotateControllerPtr rotateController = new CRotateController();
+		auto rotateController = RotateController::create();
 		rotateController->setRotationSpeed(40);
 		rotateController->setShape(asteroidXf);
 		rotateController->activate();
@@ -101,30 +106,30 @@ void CFlyWidget::onInit(int width, int height)
 	m_dt = 0.0;
 }
 
-void CFlyWidget::onInitContext(int width, int height)
+void FlyWidget::onInitContext(int width, int height)
 {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 }
 
-void CFlyWidget::onResize(int width, int height)
+void FlyWidget::onResize(int width, int height)
 {
 	m_camera->setViewPort(width, height);
 	m_camera->initialize();
 }
 
-void CFlyWidget::onRender()
+void FlyWidget::onRender()
 {
 	m_scene->render();
 }
 
-void CFlyWidget::onClear()
+void FlyWidget::onClear()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-bool CFlyWidget::onAppLoop()
+bool FlyWidget::onAppLoop()
 {
 	m_flyHandler->update();
 
@@ -145,22 +150,22 @@ bool CFlyWidget::onAppLoop()
 	return true;
 }
 
-void CFlyWidget::onMouseDown(int x, int y)
+void FlyWidget::onMouseDown(int x, int y)
 {
 	m_flyHandler->doMouseDown(x, y);
 }
 
-void CFlyWidget::onMouseMove(int x, int y)
+void FlyWidget::onMouseMove(int x, int y)
 {
 	m_flyHandler->doMouseMove(x, y);
 }
 
-void CFlyWidget::onMouseUp(int x, int y)
+void FlyWidget::onMouseUp(int x, int y)
 {
 	m_flyHandler->doMouseUp(x, y);
 }
 
-void CFlyWidget::onKeyboard(int key, int x, int y)
+void FlyWidget::onKeyboard(int key, int x, int y)
 {
 	m_flyHandler->doKeyboard(key, x, y);
 }

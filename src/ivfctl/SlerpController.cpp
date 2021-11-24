@@ -26,9 +26,9 @@
 
 using namespace ivf;
 
-CSlerpController::CSlerpController()
+SlerpController::SlerpController()
 {
-	m_slerp = new CSlerp();
+	m_slerp = new Slerp();
 	m_slerp->addReference();
 	
 	m_t = 0.0;
@@ -42,13 +42,13 @@ CSlerpController::CSlerpController()
 	m_startAction = SA_STOP;
 }
 
-CSlerpController::~CSlerpController()
+SlerpController::~SlerpController()
 {
 }
 
-void CSlerpController::doUpdate(double dt)
+void SlerpController::doUpdate(double dt)
 {
-	CShape* shape = this->getShape();
+	Shape* shape = this->getShape();
 	if (shape!=nullptr)
 	{
 		m_v += m_a0*dt;
@@ -114,12 +114,12 @@ void CSlerpController::doUpdate(double dt)
 	}
 }
 
-void CSlerpController::doReset()
+void SlerpController::doReset()
 {
 	m_t = m_t0;
 	m_v = m_v0;
 
-	CShape* shape = this->getShape();
+	Shape* shape = this->getShape();
 	if (shape!=nullptr)
 	{
 		if (m_slerp!=nullptr)
@@ -130,35 +130,35 @@ void CSlerpController::doReset()
 }
 
 
-void CSlerpController::setSlerp(CSlerp *slerp)
+void SlerpController::setSlerp(Slerp *slerp)
 {
 	m_slerp = slerp;
 }
 
-void CSlerpController::setInitialSpeed(double value)
+void SlerpController::setInitialSpeed(double value)
 {
 	m_v0 = value;
 	doReset();
 }
 
-void CSlerpController::setInitialPos(double value)
+void SlerpController::setInitialPos(double value)
 {
 	m_t0 = value;
 	m_t = value;
 	doReset();
 }
 
-void CSlerpController::setStartActionType(TStartAction action)
+void SlerpController::setStartActionType(TStartAction action)
 {
 	m_startAction = action;
 }
 
-void CSlerpController::setEndActionType(TEndAction action)
+void SlerpController::setEndActionType(TEndAction action)
 {
 	m_endAction = action;
 }
 
-CSlerp* CSlerpController::getSlerp()
+Slerp* SlerpController::getSlerp()
 {
 	return m_slerp;
 }

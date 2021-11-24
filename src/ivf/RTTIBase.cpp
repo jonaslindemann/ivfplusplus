@@ -26,30 +26,30 @@
 
 using namespace ivf;
 
-CRTTIBase::CRTTIBase()
+RTTIBase::RTTIBase()
 {
 
 }
 
-CRTTIBase::~CRTTIBase()
+RTTIBase::~RTTIBase()
 {
 
 }
 
 // ------------------------------------------------------------
-const std::string CRTTIBase::getClassNameThis()
+const std::string RTTIBase::getClassNameThis()
 {
-	return "CRTTIBase";
+	return "RTTIBase";
 }
 
 // ------------------------------------------------------------
-const std::string CRTTIBase::getClassName()
+const std::string RTTIBase::getClassName()
 {
-	return "CRTTIBase";
+	return "RTTIBase";
 }
 
 // ------------------------------------------------------------
-bool CRTTIBase::isClass(const std::string& name)
+bool RTTIBase::isClass(const std::string& name)
 {
 	std::string className = this->getClassNameThis();
 

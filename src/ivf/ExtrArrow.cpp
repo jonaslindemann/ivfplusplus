@@ -33,8 +33,8 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CExtrArrow::CExtrArrow()
-:CShape()
+ExtrArrow::ExtrArrow()
+:Shape()
 {
 	m_direction[0] = 1.0;
 	m_direction[1] = 0.0;
@@ -47,19 +47,19 @@ CExtrArrow::CExtrArrow()
 }
 
 // ------------------------------------------------------------
-CExtrArrow::~CExtrArrow()
+ExtrArrow::~ExtrArrow()
 {
 
 }
 
 // ------------------------------------------------------------
-void CExtrArrow::doCreateGeometry()
+void ExtrArrow::doCreateGeometry()
 {
 	glePolyCone(6,m_coords,nullptr,m_radius);
 }
 
 // ------------------------------------------------------------
-void CExtrArrow::setDirection(double ex, double ey, double ez)
+void ExtrArrow::setDirection(double ex, double ey, double ez)
 {
 	double l;
 	l = sqrt(pow(ex,2) + pow(ey,2) + pow(ez,2));
@@ -70,7 +70,7 @@ void CExtrArrow::setDirection(double ex, double ey, double ez)
 }
 
 // ------------------------------------------------------------
-void CExtrArrow::getDirection(double &ex, double &ey, double &ez)
+void ExtrArrow::getDirection(double &ex, double &ey, double &ez)
 {
 	ex = m_direction[0];
 	ey = m_direction[1];
@@ -78,7 +78,7 @@ void CExtrArrow::getDirection(double &ex, double &ey, double &ez)
 }
 
 // ------------------------------------------------------------
-void CExtrArrow::initExtrusion()
+void ExtrArrow::initExtrusion()
 {
 	m_coords[0][0] = (m_offset-1.0)*m_direction[0];
 	m_coords[0][1] = (m_offset-1.0)*m_direction[1];
@@ -112,7 +112,7 @@ void CExtrArrow::initExtrusion()
 }
 
 // ------------------------------------------------------------
-void CExtrArrow::setSize(double length, double head)
+void ExtrArrow::setSize(double length, double head)
 {
 	m_length = length;
 	m_head = head;
@@ -120,7 +120,7 @@ void CExtrArrow::setSize(double length, double head)
 }
 
 // ------------------------------------------------------------
-void CExtrArrow::setRadius(double head, double tail)
+void ExtrArrow::setRadius(double head, double tail)
 {
 	m_headRadius = head;
 	m_tailRadius = tail;
@@ -128,41 +128,41 @@ void CExtrArrow::setRadius(double head, double tail)
 }
 
 // ------------------------------------------------------------
-void CExtrArrow::getSize(double &length, double &head)
+void ExtrArrow::getSize(double &length, double &head)
 {
 	length = m_length;
 	head = m_head;
 }
 
 // ------------------------------------------------------------
-void CExtrArrow::getRadius(double &head, double &tail)
+void ExtrArrow::getRadius(double &head, double &tail)
 {
 	head = m_headRadius;
 	tail = m_tailRadius;
 }
 
 // ------------------------------------------------------------
-void CExtrArrow::doUpdateBoundingSphere()
+void ExtrArrow::doUpdateBoundingSphere()
 {
 	if (getBoundingSphere()!=nullptr)
 	{
-		CBoundingSphere* bSphere = getBoundingSphere();
+		BoundingSphere* bSphere = getBoundingSphere();
 		bSphere->setRadius(m_length/2.0);
 	}
 }
 
-void CExtrArrow::setOffset(double offset)
+void ExtrArrow::setOffset(double offset)
 {
 	m_offset = offset;
 	initExtrusion();
 }
 
-double CExtrArrow::getOffset()
+double ExtrArrow::getOffset()
 {
 	return m_offset;
 }
 
-void CExtrArrow::setDirection(CVec3d &vec)
+void ExtrArrow::setDirection(Vec3d &vec)
 {
 	double vx, vy, vz;
 	vec.getComponents(vx, vy, vz);

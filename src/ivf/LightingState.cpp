@@ -26,18 +26,18 @@
 
 using namespace ivf;
 
-CLightingState::CLightingState()
+LightingState::LightingState()
 {
 	m_lightingState = true;
-	m_lighting = CLighting::getInstance();
+	m_lighting = Lighting::getInstance();
 }
 
-CLightingState::~CLightingState()
+LightingState::~LightingState()
 {
 
 }
 
-void CLightingState::doState()
+void LightingState::doState()
 {
 	if (m_lightingState)
 		m_lighting->enable();
@@ -45,23 +45,23 @@ void CLightingState::doState()
 		m_lighting->disable();
 }
 
-void CLightingState::doSaveState()
+void LightingState::doSaveState()
 {
 	m_lighting->saveState();
 }
 
-void CLightingState::doRestoreState()
+void LightingState::doRestoreState()
 {
 	m_lighting->restoreState();
 }
 
 
-void CLightingState::setLighting(bool flag)
+void LightingState::setLighting(bool flag)
 {
 	m_lightingState = flag;
 }
 
-bool CLightingState::getLighting()
+bool LightingState::getLighting()
 {
 	return m_lightingState;
 }

@@ -27,21 +27,21 @@ using namespace ivf;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CQuadStripSet::CQuadStripSet()
+QuadStripSet::QuadStripSet()
 {
 	m_useColor = false;
 }
 
-CQuadStripSet::~CQuadStripSet()
+QuadStripSet::~QuadStripSet()
 {
 
 }
 
-void CQuadStripSet::doCreateGeometry()
+void QuadStripSet::doCreateGeometry()
 {
-	CIndex* coordIdx;
-	CIndex* colorIdx;
-	CIndex* textureIdx;
+	Index* coordIdx;
+	Index* colorIdx;
+	Index* textureIdx;
 	long i, j;
 
 	glPushAttrib(GL_COLOR_MATERIAL);
@@ -83,34 +83,34 @@ void CQuadStripSet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CQuadStripSet::setUseColor(bool flag)
+void QuadStripSet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CQuadStripSet::getUseColor()
+bool QuadStripSet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CQuadStripSet::calcNormal(CIndex *idx)
+void QuadStripSet::calcNormal(Index *idx)
 {
 	long i;
-	CVec3d* p1;
-	CVec3d* p2;
-	CVec3d* p3;
-	CVec3d u;
-	CVec3d v;
-	CIndex* normalIdx;
+	Vec3d* p1;
+	Vec3d* p2;
+	Vec3d* p3;
+	Vec3d u;
+	Vec3d v;
+	Index* normalIdx;
 	//double n[3];
 	bool evenPoint = true;
 
-	normalIdx = new CIndex();
+	normalIdx = new Index();
 
 
 	for (i=0; i<idx->getSize()-2; i+=2)
 	{
-		CVec3d* normal = new CVec3d();
+		Vec3d* normal = new Vec3d();
 
 		p1 = m_coordSet[idx->getIndex(i)];
 		p2 = m_coordSet[idx->getIndex(i+1)];
@@ -128,14 +128,14 @@ void CQuadStripSet::calcNormal(CIndex *idx)
 		*/
 		m_normalSet.push_back(normal);
 
-		normalIdx->add(m_normalSet.size()-1);
+		normalIdx->add(static_cast<int>(m_normalSet.size())-1);
 
 		// Add normal idx to each vertex
 
-		m_vertexNormalIndexSet[idx->getIndex(i)]->add(m_normalSet.size()-1);
-		m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(m_normalSet.size()-1);
-		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
-		m_vertexNormalIndexSet[idx->getIndex(i+3)]->add(m_normalSet.size()-1);
+		m_vertexNormalIndexSet[idx->getIndex(i)]->add(static_cast<int>(m_normalSet.size())-1);
+		m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(static_cast<int>(m_normalSet.size())-1);
+		m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(static_cast<int>(m_normalSet.size())-1);
+		m_vertexNormalIndexSet[idx->getIndex(i+3)]->add(static_cast<int>(m_normalSet.size())-1);
 	}
 
 	m_normalIndexSet.push_back(normalIdx);
@@ -145,12 +145,12 @@ void CQuadStripSet::calcNormal(CIndex *idx)
 }
 
 
-void CQuadStripSet::updateVertexNormals()
+void QuadStripSet::updateVertexNormals()
 {
 	long i, j;
-	CVec3d* vertexNormal;
-	CVec3d* normal;
-	CVec3d averageNormal;
+	Vec3d* vertexNormal;
+	Vec3d* normal;
+	Vec3d averageNormal;
 	double sx, sy, sz;
 	double nx, ny, nz;
 

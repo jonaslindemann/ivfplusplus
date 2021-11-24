@@ -32,19 +32,21 @@
 
 namespace ivf {
 
-IvfSmartPointer(CGleCoordArray);
+IvfSmartPointer(GleCoordArray);
 
-class IVFGLE_API CGleCoordArray: public CBase {
+class IVFGLE_API GleCoordArray: public Base {
 private:
 	int m_size;
 	gleDouble (*m_coords)[3];
 public:
-	CGleCoordArray();
-	CGleCoordArray(int size);
-	virtual ~CGleCoordArray();
+	GleCoordArray();
+	GleCoordArray(int size);
+	virtual ~GleCoordArray();
 
-	IvfClassInfo("CGleCoordArray", CBase);
-	IvfStdFactory(CGleCoordArray);
+	IvfClassInfo("GleCoordArray", Base);
+
+	static GleCoordArrayPtr create(int size) { return GleCoordArrayPtr(new GleCoordArray(size)); };
+	static GleCoordArrayPtr create() { return GleCoordArrayPtr(new GleCoordArray()); };
 
 	void calcFirstAndLast();
 
@@ -54,8 +56,8 @@ public:
 	void setCoord(int idx, double x, double y, double z);
 	void getCoord(int idx, double& x, double& y, double& z);
 
-	void setCoord(int idx, CVec3d& vec);
-	CVec3d& getCoord(int idx);
+	void setCoord(int idx, Vec3d& vec);
+	Vec3d& getCoord(int idx);
 
 	void* getData();
 

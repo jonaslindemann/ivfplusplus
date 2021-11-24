@@ -23,7 +23,7 @@
 
 using namespace ivf;
 
-CColorController::CColorController()
+ColorController::ColorController()
 {
 	m_redFunc = nullptr;
 	m_greenFunc = nullptr;
@@ -33,35 +33,35 @@ CColorController::CColorController()
 	m_colorMode = CM_DIFFUSE;
 }
 
-CColorController::~CColorController()
+ColorController::~ColorController()
 {
 }
 
-void CColorController::setRedFunction(CFunction2d *func)
+void ColorController::setRedFunction(Function2d *func)
 {
 	m_redFunc = func;
 }
 
-void CColorController::setGreenFunction(CFunction2d *func)
+void ColorController::setGreenFunction(Function2d *func)
 {
 	m_greenFunc = func;
 }
 
-void CColorController::setBlueFunction(CFunction2d *func)
+void ColorController::setBlueFunction(Function2d *func)
 {
 	m_blueFunc = func;
 }
 
-void CColorController::doUpdate(double dt)
+void ColorController::doUpdate(double dt)
 {
 	float red, green, blue, alpha;
 
-	CShape* shape = this->getShape();
+	Shape* shape = this->getShape();
 
 	if (shape==nullptr)
 		return;
 
-	CMaterial* material = shape->getMaterial();
+	Material* material = shape->getMaterial();
 
 	if (material==nullptr)
 		return;
@@ -117,22 +117,22 @@ void CColorController::doUpdate(double dt)
 	m_time += dt;
 }
 
-void CColorController::setAlphaFunction(CFunction2d *func)
+void ColorController::setAlphaFunction(Function2d *func)
 {
 	m_alphaFunc = func;
 }
 
-void CColorController::setColorMode(TColorMode mode)
+void ColorController::setColorMode(TColorMode mode)
 {
 	m_colorMode = mode;
 }
 
-CColorController::TColorMode CColorController::getColorMode()
+ColorController::TColorMode ColorController::getColorMode()
 {
 	return m_colorMode;
 }
 
-void CColorController::doReset()
+void ColorController::doReset()
 {
 	m_time = 0.0;
 }

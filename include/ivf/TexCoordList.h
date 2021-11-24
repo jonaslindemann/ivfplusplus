@@ -31,18 +31,18 @@
 
 namespace ivf {
 
-IvfSmartPointer(CTexCoordList);
+IvfSmartPointer(TexCoordList);
 
 /**
  * Normal list class
  *
- * Maintains a list of texture coords for use with the CVertexElements class.
+ * Maintains a list of texture coords for use with the VertexElements class.
  * The list is initially 1024 elements and the size is doubled if exceeding
  * 1024. 
  *
  * @author Jonas Lindemann
  */
-class IVF_API CTexCoordList : public CBase {
+class IVF_API TexCoordList : public Base {
 private:
 	GLfloat* m_vertices;
 	long m_allocSize;
@@ -50,14 +50,14 @@ private:
 	long m_blockSize;
 	long m_next;
 public:
-	/** CTexCoordList constructor */
-	CTexCoordList();
+	/** TexCoordList constructor */
+	TexCoordList();
 
-	/** CTexCoordList destructor */
-	virtual ~CTexCoordList();
+	/** TexCoordList destructor */
+	virtual ~TexCoordList();
 
-	IvfClassInfo("CTexCoordList",CBase);
-	IvfStdFactory(CTexCoordList);
+	IvfClassInfo("TexCoordList",Base);
+	IvfStdFactory(TexCoordList);
 
 	/** Add a texture coordinate */
 	void add(double s, double t);

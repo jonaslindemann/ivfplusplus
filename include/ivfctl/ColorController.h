@@ -26,7 +26,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CColorController);
+IvfSmartPointer(ColorController);
 
 /**
  * Color controller class
@@ -34,7 +34,7 @@ IvfSmartPointer(CColorController);
  * This controller controls the color component of the
  * controlled object
  */
-class IVFCTL_API CColorController : public CController {
+class IVFCTL_API ColorController : public Controller {
 public:
 	enum TColorMode {
 		CM_DIFFUSE,
@@ -43,21 +43,21 @@ public:
 		CM_EMISSION
 	};
 private:
-	CFunction2dPtr m_redFunc;
-	CFunction2dPtr m_greenFunc;
-	CFunction2dPtr m_blueFunc;
-	CFunction2dPtr m_alphaFunc;
+	Function2dPtr m_redFunc;
+	Function2dPtr m_greenFunc;
+	Function2dPtr m_blueFunc;
+	Function2dPtr m_alphaFunc;
 	double m_time;
 	TColorMode m_colorMode;
 public:
-	/** CColorController constructor */
-	CColorController();
+	/** ColorController constructor */
+	ColorController();
 
-	/** CColorController */
-	virtual ~CColorController();
+	/** ColorController */
+	virtual ~ColorController();
 
-	IvfClassInfo("CColorController",CController);
-	IvfStdFactory(CColorController);
+	IvfClassInfo("ColorController",Controller);
+	IvfStdFactory(ColorController);
 
 	/** 
 	 * Set color mode
@@ -73,14 +73,14 @@ public:
 	/** 
 	 * Set the function controlling the red color
 	 *
-	 * \param func CFunction2d derived class controlling the 
+	 * \param func Function2d derived class controlling the 
 	 * color value over time. Max value of the function should be
 	 * 1.0.
 	 */
-	void setRedFunction(CFunction2d* func);
-	void setGreenFunction(CFunction2d* func);
-	void setBlueFunction(CFunction2d* func);
-	void setAlphaFunction(CFunction2d* func);
+	void setRedFunction(Function2d* func);
+	void setGreenFunction(Function2d* func);
+	void setBlueFunction(Function2d* func);
+	void setAlphaFunction(Function2d* func);
 
 	virtual void doUpdate(double dt);
 	virtual void doReset();

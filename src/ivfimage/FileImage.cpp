@@ -26,32 +26,32 @@
 
 using namespace ivf;
 
-CFileImage::CFileImage()
+FileImage::FileImage()
 {
 	m_fileName = "";
 }
 
-CFileImage::CFileImage(const std::string& name)
+FileImage::FileImage(const std::string& name)
 {
 	m_fileName = name;
 }
 
-CFileImage::~CFileImage()
+FileImage::~FileImage()
 {
 
 }
 
-void CFileImage::setFileName(const std::string& name)
+void FileImage::setFileName(const std::string& name)
 {
     m_fileName = name;
 }
 
-const std::string CFileImage::getFileName()
+const std::string FileImage::getFileName()
 {
 	return m_fileName;
 }
 
-bool CFileImage::read()
+bool FileImage::read()
 {
 	return true;
 }

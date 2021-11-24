@@ -28,14 +28,14 @@
 
 namespace ivf {
 
-IvfSmartPointer(CTgaImage);
+IvfSmartPointer(TgaImage);
 
 /**
  * TGA image loader class
  *
  * This class implements a TGA image loader
  */
-class IVFEXT_API CTgaImage : public CFileImage {
+class IVFEXT_API TgaImage : public FileImage {
 private:
 	bool m_alphaChannel;
 
@@ -77,17 +77,17 @@ bool LoadUncompressedTGA(Texture *, char *, FILE *);	// Load an Uncompressed fil
 bool LoadCompressedTGA(Texture *, char *, FILE *);		// Load a Compressed file
 
 public:
-	/** CTgaImage constructor */
-	CTgaImage();
+	/** TgaImage constructor */
+	TgaImage();
 
-	/** CTgaImage constructor */
-	CTgaImage(const std::string& name);
+	/** TgaImage constructor */
+	TgaImage(const std::string& name);
 
-	/** CTgaImage destructor */
-	virtual ~CTgaImage();
+	/** TgaImage destructor */
+	virtual ~TgaImage();
 
-	IvfClassInfo("CTgaImage",CFileImage);
-	IvfStdFactory(CTgaImage);
+	IvfClassInfo("TgaImage",FileImage);
+	IvfStdFactory(TgaImage);
 
 	/** Reads Tga image */
 	virtual bool read();

@@ -26,23 +26,23 @@
 
 using namespace ivf;
 
-CUIComposite::CUIComposite()
+UIComposite::UIComposite()
 {
 
 }
 
-CUIComposite::~CUIComposite()
+UIComposite::~UIComposite()
 {
 
 }
 
-void CUIComposite::addChild(CShape *shape)
+void UIComposite::addChild(Shape *shape)
 {
 	shape->setUseName(false);
-	CComposite::addChild(shape);
+	Composite::addChild(shape);
 }
 
-void CUIComposite::setHighlight(THighlightState state)
+void UIComposite::setHighlight(THighlightState state)
 {
-	CShape::setHighlight(state);
+	Shape::setHighlight(state);
 }

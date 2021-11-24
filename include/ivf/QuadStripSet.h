@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CQuadStripSet);
+IvfSmartPointer(QuadStripSet);
 
 /**
  * Quad strip set class
@@ -37,18 +37,18 @@ IvfSmartPointer(CQuadStripSet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CQuadStripSet : public CGLPrimitive {
+class IVF_API QuadStripSet : public GLPrimitive {
 private:
 	bool m_useColor;
 public:
-	/** CQuadStripSet constructor */
-	CQuadStripSet();
+	/** QuadStripSet constructor */
+	QuadStripSet();
 
-	/** CQuadStripSet destructor */
-	virtual ~CQuadStripSet();
+	/** QuadStripSet destructor */
+	virtual ~QuadStripSet();
 
-	IvfClassInfo("CQuadStripSet",CGLPrimitive);
-	IvfStdFactory(CQuadStripSet);
+	IvfClassInfo("QuadStripSet",GLPrimitive);
+	IvfStdFactory(QuadStripSet);
 
 	/** Enable or disable the use of color values when rendering */
 	void setUseColor(bool flag);
@@ -57,7 +57,7 @@ public:
 	bool getUseColor();
 protected:
 	virtual void updateVertexNormals();
-	virtual void calcNormal(CIndex* idx);
+	virtual void calcNormal(Index* idx);
 	virtual void doCreateGeometry();
 };
 /** \example advgeom.cpp */

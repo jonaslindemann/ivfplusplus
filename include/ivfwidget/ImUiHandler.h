@@ -33,7 +33,7 @@
 namespace ivf {
 
 /** Single selection event class */
-class IVFWIDGET_API CGuiEvent : public CEventBase {
+class IVFWIDGET_API GuiEvent : public EventBase {
 public:
 	/**
 	 * Single select method
@@ -44,36 +44,41 @@ public:
 	virtual void onGui() {};
 };
 
-IvfSmartPointer(CImUiHandler);
+IvfSmartPointer(ImUiHandler);
 
-class IVFWIDGET_API CImUiHandler : public CHandlerBase,
-	CMouseDownEvent,
-	CMouseMoveEvent,
-	CMouseUpEvent,
-	CResizeEvent,
-	COverlayEvent
+class IVFWIDGET_API ImUiHandler : public HandlerBase,
+	MouseDownEvent,
+	MouseMoveEvent,
+	MouseUpEvent,
+	ResizeEvent,
+	OverlayEvent
 {
 public:
 
 private:
-	CWidgetBase* m_widget;
-	CGuiEvent* m_guiEvent;
+	WidgetBase* m_widget;
+	GuiEvent* m_guiEvent;
 public:
 	/**
 	 * Class constructor
 	 *
-	 * @param widget reference to CWidgetBase class.
+	 * @param widget reference to WidgetBase class.
 	 * @param camera reference to a CIvfCamera to be manipulated.
 	 */
-	CImUiHandler(CWidgetBase* widget);
+	ImUiHandler(WidgetBase* widget);
 
 	/** Class destructor */
-	virtual ~CImUiHandler();
+	virtual ~ImUiHandler();
 	
-	void setGuiEvent(CGuiEvent* event);
+	void setGuiEvent(GuiEvent* event);
 	void dispatchGuiEvent();
 
-	IvfClassInfo("CImUiHandler",CBase);
+	IvfClassInfo("ImUiHandler",Base);
+
+	static ImUiHandlerPtr create(WidgetBase* widget)
+	{
+		return ImUiHandlerPtr(new ImUiHandler(widget));
+	}
 
 	virtual void doResize(int width, int height);
 	virtual void doMouseDown(int x, int y);

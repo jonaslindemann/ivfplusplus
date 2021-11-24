@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CExtrArrow);
+IvfSmartPointer(ExtrArrow);
 
 /**
  * Extruded arrow class
@@ -37,7 +37,7 @@ IvfSmartPointer(CExtrArrow);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CExtrArrow : public CShape {
+class IVF_API ExtrArrow : public Shape {
 private:
 	void initExtrusion();
 	int arrowType;
@@ -52,15 +52,15 @@ private:
 	double m_position[3];
 	double m_offset;
 public:
-	void setDirection(CVec3d& vec);
+	void setDirection(Vec3d& vec);
 	/** CIvfExtrArrow constructor */
-	CExtrArrow();
+	ExtrArrow();
 
 	/** CIvfExtrArrow destructor */
-	virtual ~CExtrArrow();
+	virtual ~ExtrArrow();
 
-	IvfClassInfo("CExtrArrow",CShape);
-	IvfStdFactory(CExtrArrow);
+	IvfClassInfo("ExtrArrow",Shape);
+	IvfStdFactory(ExtrArrow);
 
 	/** Set the arrow radiuses */
 	void setRadius(double head, double tail);

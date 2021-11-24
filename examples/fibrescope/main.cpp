@@ -31,11 +31,11 @@ main(int argc, char **argv)
 	Fl::gl_visual(FL_DOUBLE|FL_RGB|FL_ALPHA);
 	Fl::get_system_colors();
 	
-	CMainFrame *frame = new CMainFrame();
+	MainFrame* frame = new MainFrame();
 	frame->center();
     frame->show();
 
-	CSplashFrame* splash = new CSplashFrame();
+	SplashFrame* splash = new SplashFrame();
 	splash->setTimer(true);
 	splash->center();
 	splash->show();

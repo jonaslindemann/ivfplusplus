@@ -29,7 +29,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CSolidLine);
+IvfSmartPointer(SolidLine);
 
 #define IVF_LINE_SIMPLE 0
 #define IVF_LINE_SOLID	1
@@ -41,21 +41,21 @@ IvfSmartPointer(CSolidLine);
 /**
  * Solid line class
  *
- * CSolidLine implements a solid line between
- * two CNode instances. The radius and number
+ * SolidLine implements a solid line between
+ * two Node instances. The radius and number
  * of sides can be defined.
  * @author Jonas Lindemann
  */
-class IVF_API CSolidLine : public CExtrusion {
+class IVF_API SolidLine : public Extrusion {
 public:
-	/** CSolidLine constructor */
-	CSolidLine ();
+	/** SolidLine constructor */
+	SolidLine ();
 
-	/** CSolidLine destructor */
-	virtual ~CSolidLine ();
+	/** SolidLine destructor */
+	virtual ~SolidLine ();
 
-	IvfClassInfo("CSolidLine",CExtrusion);
-	IvfStdFactory(CSolidLine);
+	IvfClassInfo("SolidLine",Extrusion);
+	IvfStdFactory(SolidLine);
 
 	/** 
 	 * Refreshes object data
@@ -81,19 +81,19 @@ public:
 	/**
 	 * Set nodes
 	 *
-	 * The solid line is constructed between two CNode instances.
+	 * The solid line is constructed between two Node instances.
 	 * The reference count of the node is increased when assigned to 
 	 * the solid line. If the node are not referenced they are deleted
 	 * when the solid line is destroyed.
 	 */
-	void setNodes(CNode* n1, CNode* n2);
+	void setNodes(Node* n1, Node* n2);
 
 	/** 
 	 * Returns a node
 	 *
 	 * @param idx Idx of node to be retrieved. (0, 1)
 	 */
-	CNode* getNode(int idx);
+	Node* getNode(int idx);
 
 	/**
 	 * Set refresh mode
@@ -108,15 +108,15 @@ public:
 	double getLength();
 protected:
 	virtual void initExtrusion();
-	virtual void onSetNodes(CNode* n1, CNode* n2);
+	virtual void onSetNodes(Node* n1, Node* n2);
 private:
 	void initNodes();
 	void initSection();
 	double m_radius;
 	long m_nSides;
 	double m_offsets[2];
-	CNodePtr m_node2;
-	CNodePtr m_node1;
+	NodePtr m_node2;
+	NodePtr m_node1;
 	int m_refreshMode;
 public:
 	void setOffsets(double offset1, double offset2);

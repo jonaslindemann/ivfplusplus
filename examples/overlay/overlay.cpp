@@ -30,20 +30,20 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase,
-	CInitEvent,
-	CRenderEvent,
-	COverlayEvent,
-	CResizeEvent
+class ExampleWindow: public GlutBase,
+	InitEvent,
+	RenderEvent,
+	OverlayEvent,
+	ResizeEvent
 {
 private:
-	CCameraPtr		m_camera;
-	CCompositePtr	m_scene;
-	CLightPtr		m_light;
+	CameraPtr		m_camera;
+	CompositePtr	m_scene;
+	LightPtr		m_light;
 	
-	CMouseViewHandlerPtr m_mouseViewHandler;
+	MouseViewHandlerPtr m_mouseViewHandler;
 
 	double m_angleX;
 	double m_angleY;
@@ -56,7 +56,9 @@ private:
 	int m_beginY;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H);
+	ExampleWindow(int X, int Y, int W, int H);
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onRender();
@@ -68,8 +70,14 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-:CGlutBase(X, Y, W, H)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+
+ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
+:GlutBase(X, Y, W, H)
 {
 	this->addInitEvent(this);
 	this->addRenderEvent(this);
@@ -77,61 +85,61 @@ CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
 	this->addResizeEvent(this);
 }
 
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
 	m_camera->initialize();
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {	
 	// Initialize variables
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CCamera();
+	m_camera = Camera::create();
 	m_camera->setPosition(0.0, 5.0, 5.0);
 
 	// Create a materials
 
-	CMaterialPtr yellowMaterial = new CMaterial();
+	auto yellowMaterial = Material::create();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene composite
 
-	m_scene = new CComposite();
+	m_scene = Composite::create();
 
-	CCubePtr cube = new CCube();
+	auto cube = Cube::create();
 	
 	cube->setMaterial(yellowMaterial);
 	m_scene->addChild(cube);
 
 	// First point
 	
-	CAxisPtr axis = new CAxis();
+	auto axis = Axis::create();
 	m_scene->addChild(axis);
 	
 	// Create a light
 
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 
-	m_light = new CLight();
+	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
 	this->setUseOverlay(true);
 	
-	m_mouseViewHandler = new CMouseViewHandler(this, m_camera);
+	m_mouseViewHandler = MouseViewHandler::create(this, m_camera);
 	m_mouseViewHandler->activate();
 	
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 	m_camera->render();
@@ -139,7 +147,7 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onOverlay()
+void ExampleWindow::onOverlay()
 {
 	glColor3f(1.0f, 1.0f, 0.0f);
 	glBegin(GL_LINES);
@@ -156,12 +164,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_DEPTH|IVF_MULTISAMPLE|IVF_RGBA);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = new ExampleWindow(0, 0, 512, 512);
 
 	// Set window title and show window
 

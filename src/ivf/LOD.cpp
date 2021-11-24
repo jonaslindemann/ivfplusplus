@@ -25,8 +25,8 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CLOD::CLOD ()
-		:CSwitch()
+LOD::LOD ()
+		:Switch()
 		//TODO: check and complete member initialisation list!
 {
 	m_camera = nullptr;
@@ -35,12 +35,12 @@ CLOD::CLOD ()
 }
 
 // ------------------------------------------------------------
-CLOD::~CLOD ()
+LOD::~LOD ()
 {
 }
 
 // ------------------------------------------------------------
-void CLOD::doCreateGeometry()
+void LOD::doCreateGeometry()
 {
 	if (m_camera!=nullptr)
 	{
@@ -60,11 +60,11 @@ void CLOD::doCreateGeometry()
 	{
 		this->setCurrentChild(0);
 	}
-	CSwitch::doCreateGeometry();
+	Switch::doCreateGeometry();
 }
 
 // ------------------------------------------------------------
-double CLOD::lodFunction(double dist)
+double LOD::lodFunction(double dist)
 {
 	double g = (1/(m_farLimit-m_nearLimit))*dist - m_nearLimit/(m_farLimit - m_nearLimit);
 	double f = (theta(dist - m_nearLimit) - theta(dist - m_farLimit))*g + theta(dist - m_farLimit);;
@@ -72,32 +72,32 @@ double CLOD::lodFunction(double dist)
 }
 
 // ------------------------------------------------------------
-double CLOD::theta(double x)
+double LOD::theta(double x)
 {
 	return 1.0*(double)(x>=0);
 }
 
 // ------------------------------------------------------------
-void CLOD::setCamera(CCamera *camera)
+void LOD::setCamera(Camera *camera)
 {
 	m_camera = camera;
 }
 
 // ------------------------------------------------------------
-CCamera* CLOD::getCamera()
+Camera* LOD::getCamera()
 {
 	return m_camera;
 }
 
 // ------------------------------------------------------------
-void CLOD::setLimits(double nearLimit, double farLimit)
+void LOD::setLimits(double nearLimit, double farLimit)
 {
 	m_nearLimit = nearLimit;
 	m_farLimit = farLimit;
 }
 
 // ------------------------------------------------------------
-void CLOD::getLimits(double &nearLimit, double &farLimit)
+void LOD::getLimits(double &nearLimit, double &farLimit)
 {
 	nearLimit = m_nearLimit;
 	farLimit = m_farLimit;

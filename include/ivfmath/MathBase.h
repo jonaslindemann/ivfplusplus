@@ -26,24 +26,24 @@
 
 namespace ivf {
 
-IvfSmartPointer(CMathBase);
+IvfSmartPointer(MathBase);
 
 /**
  * Root class for the ivf library
  *
- * CMathBase handles class type information and reference counting.
+ * MathBase handles class type information and reference counting.
  *
  * @author Jonas Lindemann
  */
-class IVFMATH_API CMathBase {
+class IVFMATH_API MathBase {
 private:
 	int m_ref;
 public:
-	/** CMathBase constructor */
-	CMathBase();
+	/** MathBase constructor */
+	MathBase();
 
-	/** CMathBase destrcutor */
-	virtual ~CMathBase();
+	/** MathBase destrcutor */
+	virtual ~MathBase();
 
 	/** Returns current reference count */
 	int getRefCount();

@@ -22,7 +22,7 @@
 // Written by Jonas Lindemann
 //
 
-// IvfAction.cpp: implementation of the CAction class.
+// IvfAction.cpp: implementation of the Action class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -36,7 +36,7 @@ using namespace ivf;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CAction::CAction()
+Action::Action()
 {
 	m_time = 0.0;
 	m_actionType = 0;
@@ -45,57 +45,57 @@ CAction::CAction()
 	m_target = nullptr;
 }
 
-CAction::~CAction()
+Action::~Action()
 {
 
 }
 
-void CAction::setTime(double time)
+void Action::setTime(double time)
 {
 	m_time = time;
 }
 
-void CAction::setDoubleParam(double param)
+void Action::setDoubleParam(double param)
 {
 	m_dParam = param;
 }
 
-void CAction::setIntParam(int param)
+void Action::setIntParam(int param)
 {
 	m_iParam = param;
 }
 
-double CAction::getTime()
+double Action::getTime()
 {
 	return m_time;
 }
 
-double CAction::getDoubleParam()
+double Action::getDoubleParam()
 {
 	return m_dParam;
 }
 
-int CAction::getIntParam()
+int Action::getIntParam()
 {
 	return m_iParam;
 }
 
-void CAction::setActionType(int type)
+void Action::setActionType(int type)
 {
 	m_actionType = type;
 }
 
-int CAction::getActionType()
+int Action::getActionType()
 {
 	return m_actionType;
 }
 
-void CAction::setTarget(CController *controller)
+void Action::setTarget(Controller *controller)
 {
 	m_target = controller;
 }
 
-CController* CAction::getTarget()
+Controller* Action::getTarget()
 {
 	return m_target;
 }

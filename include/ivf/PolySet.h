@@ -28,7 +28,7 @@
 
 namespace ivf {
 
-IvfSmartPointer(CPolySet);
+IvfSmartPointer(PolySet);
 
 /**
  * Poly set class
@@ -39,18 +39,18 @@ IvfSmartPointer(CPolySet);
  *
  * @author Jonas Lindemann
  */
-class IVF_API CPolySet : public CGLPrimitive {
+class IVF_API PolySet : public GLPrimitive {
 private:
 	bool m_useColor;
 public:
-	/** CPolySet constructor */
-	CPolySet();
+	/** PolySet constructor */
+	PolySet();
 
-	/** CPolySet destructor */
-	virtual ~CPolySet();
+	/** PolySet destructor */
+	virtual ~PolySet();
 
-	IvfClassInfo("CPolySet",CGLPrimitive);
-	IvfStdFactory(CPolySet);
+	IvfClassInfo("PolySet",GLPrimitive);
+	IvfStdFactory(PolySet);
 
 	/** Enable or disable the use of color values when rendering */
 	void setUseColor(bool flag);
@@ -59,7 +59,7 @@ public:
 	bool getUseColor();
 protected:
 	virtual void updateVertexNormals();
-	virtual void calcNormal(CIndex* idx);
+	virtual void calcNormal(Index* idx);
 	void doCreateGeometry();
 };
 /** \example advgeom.cpp */

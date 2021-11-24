@@ -28,35 +28,35 @@
 
 using namespace ivf;
 
-CPixelOps* CPixelOps::m_instance = 0;
-CSingletonDestroyer<CPixelOps> CPixelOps::m_destroyer;
+PixelOps* PixelOps::m_instance = 0;
+SingletonDestroyer<PixelOps> PixelOps::m_destroyer;
 
-CPixelOps* CPixelOps::getInstance () 
+PixelOps* PixelOps::getInstance () 
 {
     if (m_instance == 0)  
     {  
-		m_instance = new CPixelOps(); 
+		m_instance = new PixelOps(); 
 		m_destroyer.setSingleton(m_instance);
     }
     return m_instance; 
 }
 
-CPixelOps::CPixelOps()
+PixelOps::PixelOps()
 {
 
 }
 
-void CPixelOps::enableDepthTest()
+void PixelOps::enableDepthTest()
 {
 	glEnable(GL_DEPTH_TEST);
 }
 
-void CPixelOps::disableDepthTest()
+void PixelOps::disableDepthTest()
 {
 	glDisable(GL_DEPTH_TEST);
 }
 
-bool CPixelOps::isDepthTestEnabled()
+bool PixelOps::isDepthTestEnabled()
 {
 	GLboolean depthTest;
 	glGetBooleanv(GL_DEPTH_TEST, &depthTest);

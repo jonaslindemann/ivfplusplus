@@ -28,27 +28,27 @@
 
 namespace ivf {
 
-IvfSmartPointer(CScene);
+IvfSmartPointer(Scene);
 
 /**
  * Scene class
  *
  * This is the main scene class in Ivf++ which handles
  * all details of rendering a scene graph. For more
- * details see CSceneBase.
+ * details see SceneBase.
  */
-class IVF_API CScene : public CSceneBase {
+class IVF_API Scene : public SceneBase {
 private:
 
 public:
 	/** Class constructor */
-	CScene();
+	Scene();
 
 	/** Class destructor */
-	virtual ~CScene();
+	virtual ~Scene();
 
-	IvfClassInfo("CScene",CSceneBase);
-	IvfStdFactory(CScene);
+	IvfClassInfo("Scene",SceneBase);
+	IvfStdFactory(Scene);
 };
 
 }

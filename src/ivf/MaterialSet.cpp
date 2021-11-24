@@ -27,27 +27,27 @@
 using namespace ivf;
 
 
-CMaterialSet::CMaterialSet()
+MaterialSet::MaterialSet()
 {
 
 }
 
-CMaterialSet::~CMaterialSet()
+MaterialSet::~MaterialSet()
 {
 	clear();
 }
 
-void CMaterialSet::addMaterial(CMaterial *material)
+void MaterialSet::addMaterial(Material *material)
 {
-	m_materials.push_back(CMaterialPtr(material));
+	m_materials.push_back(MaterialPtr(material));
 }
 
-void CMaterialSet::clear()
+void MaterialSet::clear()
 {
 	m_materials.clear();
 }
 
-CMaterial* CMaterialSet::getMaterial(int pos)
+Material* MaterialSet::getMaterial(int pos)
 {
 	if ( (pos>=0)&&(pos<(int)m_materials.size()) )
 		return m_materials[pos];
@@ -55,7 +55,7 @@ CMaterial* CMaterialSet::getMaterial(int pos)
 		return nullptr;
 }
 
-int CMaterialSet::getSize()
+int MaterialSet::getSize()
 {
-	return m_materials.size();
+	return static_cast<int>(m_materials.size());
 }

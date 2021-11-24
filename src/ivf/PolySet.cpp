@@ -24,22 +24,22 @@
 
 using namespace ivf;
 
-CPolySet::CPolySet()
+PolySet::PolySet()
 {
 	m_useColor = false;
 }
 
-CPolySet::~CPolySet()
+PolySet::~PolySet()
 {
 
 }
 
-void CPolySet::doCreateGeometry()
+void PolySet::doCreateGeometry()
 {
-	CIndex* coordIdx;
-	CIndex* colorIdx;
-	CIndex* normalIdx;
-	CIndex* textureIdx;
+	Index* coordIdx;
+	Index* colorIdx;
+	Index* normalIdx;
+	Index* textureIdx;
 	int topoHop = 4;
 
 	long i, j;
@@ -54,10 +54,10 @@ void CPolySet::doCreateGeometry()
 	{
 		if (!m_useColor)
 		{
-			if (CGlobalState::getInstance()->isMaterialRenderingEnabled())
+			if (GlobalState::getInstance()->isMaterialRenderingEnabled())
 			{
 				int idx = this->getMaterialIndex(i);
-				CMaterial* material;
+				Material* material;
 
 				if (idx>=0)
 				{
@@ -156,35 +156,35 @@ void CPolySet::doCreateGeometry()
 	glPopAttrib();
 }
 
-void CPolySet::setUseColor(bool flag)
+void PolySet::setUseColor(bool flag)
 {
 	m_useColor = flag;
 }
 
-bool CPolySet::getUseColor()
+bool PolySet::getUseColor()
 {
 	return m_useColor;
 }
 
-void CPolySet::calcNormal(CIndex *idx)
+void PolySet::calcNormal(Index *idx)
 {
 	long i;
-	CVec3d* p1;
-	CVec3d* p2;
-	CVec3d* p3;
-	CVec3d u;
-	CVec3d v;
-	CIndex* normalIdx;
-	CVec3d n;
+	Vec3d* p1;
+	Vec3d* p2;
+	Vec3d* p3;
+	Vec3d u;
+	Vec3d v;
+	Index* normalIdx;
+	Vec3d n;
 	//double n[3];
 
-	normalIdx = new CIndex();
+	normalIdx = new Index();
 
 	if (idx->getTopology()==IVF_IDX_QUADS)
 	{
 		for (i=0; i<idx->getSize(); i+=4)
 		{
-			CVec3d* normal = new CVec3d();
+			Vec3d* normal = new Vec3d();
 
 			p1 = m_coordSet[idx->getIndex(i)];
 			p2 = m_coordSet[idx->getIndex(i+1)];
@@ -204,21 +204,21 @@ void CPolySet::calcNormal(CIndex *idx)
 
 			m_normalSet.push_back(normal);
 
-			normalIdx->add(m_normalSet.size()-1);
+			normalIdx->add(static_cast<int>(m_normalSet.size())-1);
 
 			// Add normal idx to each vertex
 
-			m_vertexNormalIndexSet[idx->getIndex(i)]->add(m_normalSet.size()-1);
-			m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(m_normalSet.size()-1);
-			m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
-			m_vertexNormalIndexSet[idx->getIndex(i+3)]->add(m_normalSet.size()-1);
+			m_vertexNormalIndexSet[idx->getIndex(i)]->add(static_cast<int>(m_normalSet.size())-1);
+			m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(static_cast<int>(m_normalSet.size())-1);
+			m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(static_cast<int>(m_normalSet.size())-1);
+			m_vertexNormalIndexSet[idx->getIndex(i+3)]->add(static_cast<int>(m_normalSet.size())-1);
 		}
 	}
 	else
 	{
 		for (i=0; i<idx->getSize(); i+=3)
 		{
-			CVec3d* normal = new CVec3d();
+			Vec3d* normal = new Vec3d();
 
 			p1 = m_coordSet[idx->getIndex(i)];
 			p2 = m_coordSet[idx->getIndex(i+1)];
@@ -237,13 +237,13 @@ void CPolySet::calcNormal(CIndex *idx)
 
 			m_normalSet.push_back(normal);
 
-			normalIdx->add(m_normalSet.size()-1);
+			normalIdx->add(static_cast<int>(m_normalSet.size())-1);
 
 			// Add normal idx to each vertex
 
-			m_vertexNormalIndexSet[idx->getIndex(i)]->add(m_normalSet.size()-1);
-			m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(m_normalSet.size()-1);
-			m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(m_normalSet.size()-1);
+			m_vertexNormalIndexSet[idx->getIndex(i)]->add(static_cast<int>(m_normalSet.size())-1);
+			m_vertexNormalIndexSet[idx->getIndex(i+1)]->add(static_cast<int>(m_normalSet.size())-1);
+			m_vertexNormalIndexSet[idx->getIndex(i+2)]->add(static_cast<int>(m_normalSet.size())-1);
 		}
 	}
 
@@ -251,12 +251,12 @@ void CPolySet::calcNormal(CIndex *idx)
 }
 
 
-void CPolySet::updateVertexNormals()
+void PolySet::updateVertexNormals()
 {
 	long i, j;
-	CVec3d* vertexNormal;
-	CVec3d* normal;
-	CVec3d averageNormal;
+	Vec3d* vertexNormal;
+	Vec3d* normal;
+	Vec3d averageNormal;
 	double sx, sy, sz;
 	double nx, ny, nz;
 

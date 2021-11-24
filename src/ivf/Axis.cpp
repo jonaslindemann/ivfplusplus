@@ -26,33 +26,33 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CAxis::CAxis ()
-		:CComposite()
+Axis::Axis ()
+		:Composite()
 		//TODO: check and complete member initialisation list!
 {
 	m_axisType = IVF_AXIS_STD;
-	m_xArrow = new CArrow();
-	m_yArrow = new CArrow();
-	m_zArrow = new CArrow();
+	m_xArrow = new Arrow();
+	m_yArrow = new Arrow();
+	m_zArrow = new Arrow();
 
 	this->setSize(1.0);
 
 	m_xArrow->setRotationQuat(0.0, 0.0, 1.0, -90.0);
 	m_zArrow->setRotationQuat(1.0, 0.0, 0.0, 90.0);
 
-	m_xMaterial = new CMaterial();
+	m_xMaterial = new Material();
 	m_xMaterial->setSpecularColor(1.0, 1.0, 1.0, 1.0);
 	m_xMaterial->setDiffuseColor(1.0, 0.0, 0.0, 1.0);
 	m_xMaterial->setAmbientColor(0.5, 0.0, 0.0, 1.0);
 	m_xArrow->setMaterial(m_xMaterial);
 
-	m_yMaterial = new CMaterial();
+	m_yMaterial = new Material();
 	m_yMaterial->setSpecularColor(1.0, 1.0, 1.0, 1.0);
 	m_yMaterial->setDiffuseColor(0.0, 1.0, 0.0, 1.0);
 	m_yMaterial->setAmbientColor(0.0, 0.5, 0.0, 1.0);
 	m_yArrow->setMaterial(m_yMaterial);
 
-	m_zMaterial = new CMaterial();
+	m_zMaterial = new Material();
 	m_zMaterial->setSpecularColor(1.0, 1.0, 1.0, 1.0);
 	m_zMaterial->setDiffuseColor(0.0, 0.0, 1.0, 1.0);
 	m_zMaterial->setAmbientColor(0.0, 0.0, 0.5, 1.0);
@@ -64,12 +64,12 @@ CAxis::CAxis ()
 }
 
 // ------------------------------------------------------------
-CAxis::~CAxis ()
+Axis::~Axis ()
 {
 }
 
 // ------------------------------------------------------------
-void CAxis::setAxisType(int type)
+void Axis::setAxisType(int type)
 {
 	m_axisType = type;
 
@@ -91,7 +91,7 @@ void CAxis::setAxisType(int type)
 
 
 // ------------------------------------------------------------
-void CAxis::setSize(double size)
+void Axis::setSize(double size)
 {
 	m_size = size;
 	m_xArrow->setPosition(size/2.0, 0.0, 0.0);
@@ -107,7 +107,7 @@ void CAxis::setSize(double size)
 }
 
 // ------------------------------------------------------------
-void CAxis::setArrowMaterial(CMaterial *material)
+void Axis::setArrowMaterial(Material *material)
 {
 	m_xArrow->setMaterial(material);
 	m_yArrow->setMaterial(material);

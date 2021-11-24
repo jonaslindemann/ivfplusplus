@@ -24,19 +24,19 @@
 
 using namespace ivf;
 
-CBillBoard::CBillBoard()
+BillBoard::BillBoard()
 {
 	m_camera = nullptr;
 	m_alignObject = IVF_ALIGN_CAMERA;
 	this->setBillboardType(IVF_BILLBOARD_Y);
 }
 
-CBillBoard::~CBillBoard()
+BillBoard::~BillBoard()
 {
 
 }
 
-void CBillBoard::updateRotation()
+void BillBoard::updateRotation()
 {
 	if (m_camera!=nullptr)
 	{
@@ -80,49 +80,49 @@ void CBillBoard::updateRotation()
 	}
 }
 
-void CBillBoard::setCamera(CCamera *camera)
+void BillBoard::setCamera(Camera *camera)
 {
 	m_camera = camera;
 }
 
-void CBillBoard::setBillboardType(int type)
+void BillBoard::setBillboardType(int type)
 {
 	m_billboardType = type;
 }
 
-int CBillBoard::getBillboardType()
+int BillBoard::getBillboardType()
 {
 	return m_billboardType;
 }
 
-void CBillBoard::doCreateGeometry()
+void BillBoard::doCreateGeometry()
 {
 	this->updateRotation();
 	glPushMatrix();
 	glRotated(-m_angle1*180.0/M_PI+90, 0.0, 1.0, 0.0);
 	glPushMatrix();
 	glRotated(m_angle2*180.0/M_PI-90, 1.0, 0.0, 0.0);
-	CComposite::doCreateGeometry();
+	Composite::doCreateGeometry();
 	glPopMatrix();
 	glPopMatrix();
 }
 
 
-void CBillBoard::setVector(double vx, double vy, double vz)
+void BillBoard::setVector(double vx, double vy, double vz)
 {
 	m_forward[0] = vx;
 	m_forward[1] = vy;
 	m_forward[2] = vz;
 }
 
-void CBillBoard::setVector(double *v)
+void BillBoard::setVector(double *v)
 {
 	m_forward[0] = v[0];
 	m_forward[1] = v[1];
 	m_forward[2] = v[2];
 }
 
-void CBillBoard::setAlignObject(int objectType)
+void BillBoard::setAlignObject(int objectType)
 {
 	m_alignObject = objectType;
 }

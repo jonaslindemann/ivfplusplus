@@ -19,29 +19,29 @@
 // Please report all bugs and problems to "jonas.lindemann@lunarc.lu.se".
 //
 
-// Implementation of: public class CWireBrick
+// Implementation of: public class WireBrick
 
 #include <ivf/WireBrick.h>
 
 using namespace ivf;
 
 // ------------------------------------------------------------
-CWireBrick::CWireBrick ()
-		:CBrick()
+WireBrick::WireBrick ()
+		:Brick()
 		//TODO: check and complete member initialisation list!
 {
 }
 
 // ------------------------------------------------------------
-CWireBrick::~CWireBrick ()
+WireBrick::~WireBrick ()
 {
 }
 
 // ------------------------------------------------------------
-void CWireBrick::doCreateGeometry()
+void WireBrick::doCreateGeometry()
 {
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	CBrick::doCreateGeometry();
+	Brick::doCreateGeometry();
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }
 

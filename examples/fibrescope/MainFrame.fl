@@ -1,434 +1,442 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0106 
-header_name {.h} 
+version 1.0400
+header_name {.h}
 code_name {.cpp}
-decl {\#include "SplashFrame.h"} {public
-} 
+decl {\#include "SplashFrame.h"} {public local
+}
 
-decl {CMainFrame* g_mainFrame} {} 
+decl {MainFrame* g_mainFrame} {private local
+}
 
-decl {float g_event_spacing = 1.0} {} 
+decl {float g_event_spacing = 1.0} {private local
+}
 
-decl {bool g_playing = false;} {} 
+decl {bool g_playing = false;} {private local
+}
 
 Function {timer_callback(void * v)} {open
 } {
   code {if (g_playing)
 {
-	CIvfCustomWidget* widget = (CIvfCustomWidget*)v;
+	CustomWidget* widget = (CustomWidget*)v;
 	widget->nextStep();
 	g_mainFrame->sldTimeStep->value(widget->getTimeStep());
 }
 Fl::add_timeout(g_event_spacing, timer_callback, v);} {}
-} 
+}
 
 Function {idle_callback(void* p)} {open
 } {
-  code {CIvfCustomWidget* widget = (CIvfCustomWidget*)p;
+  code {CustomWidget* widget = (CustomWidget*)p;
 widget->nextStep();} {}
-} 
+}
 
-class CMainFrame {open
+class MainFrame {open
 } {
-  decl {int m_x} {}
-  decl {int m_y} {}
-  decl {int m_w} {}
-  decl {int m_h} {}
-  decl {CSplashFrame* m_splash} {}
-  Function {CMainFrame()} {open
+  decl {int m_x} {private local
+  }
+  decl {int m_y} {private local
+  }
+  decl {int m_w} {private local
+  }
+  decl {int m_h} {private local
+  }
+  decl {SplashFrame* m_splash} {private local
+  }
+  Function {MainFrame()} {open selected
   } {
     Fl_Window wndMain {
       label {FibreScope - version 1.2}
       callback {wndMain->hide();} open
-      xywh {338 134 684 557} type Double when 1 resizable visible
+      xywh {1653 282 684 557} type Double when 1 resizable visible
     } {
       Fl_Menu_Bar mnuMain {open
         xywh {0 0 656 26} box NO_BOX labelsize 12 textsize 12
       } {
-        submenu mnuFile {
+        Submenu mnuFile {
           label {&File} open
           xywh {10 10 100 20} labelsize 12
         } {
-          menuitem mnuNew {
+          MenuItem mnuNew {
             label {&New}
-            callback {ivfCustomWidget->clearAll();}
+            callback {customWidget->clearAll();}
             xywh {0 0 100 20} labelsize 12
           }
-          menuitem mnuFileOpen {
+          MenuItem mnuFileOpen {
             label {&Open FIB...}
-            callback {ivfCustomWidget->open();
-inpScaleFactor->value(ivfCustomWidget->getScaling());
-sldTimeStep->maximum(ivfCustomWidget->getSteps()-1);
-sldFogNear->value(ivfCustomWidget->getFogNear());
-sldFogFar->value(ivfCustomWidget->getFogFar());
-sldScale->value(ivfCustomWidget->getScaleFactor());
-sldConnectionSize->value(ivfCustomWidget->getConnectionSize());
-if (ivfCustomWidget->getEnlargeUsage())
+            callback {customWidget->open();
+inpScaleFactor->value(customWidget->getScaling());
+sldTimeStep->maximum(customWidget->getSteps()-1);
+sldFogNear->value(customWidget->getFogNear());
+sldFogFar->value(customWidget->getFogFar());
+sldScale->value(customWidget->getScaleFactor());
+sldConnectionSize->value(customWidget->getConnectionSize());
+if (customWidget->getEnlargeUsage())
 	chkEnlargeUsage->value(1);
 else
 	chkEnlargeUsage->value(0);}
             xywh {0 0 100 20} labelsize 12
           }
-          menuitem mnuFileOpenCSV {
+          MenuItem mnuFileOpenCSV {
             label {Open &CSV...}
-            callback {ivfCustomWidget->openCSV();
-inpScaleFactor->value(ivfCustomWidget->getScaling());
-sldTimeStep->maximum(ivfCustomWidget->getSteps()-1);
-sldFogNear->value(ivfCustomWidget->getFogNear());
-sldFogFar->value(ivfCustomWidget->getFogFar());
-sldScale->value(ivfCustomWidget->getScaleFactor());
-sldConnectionSize->value(ivfCustomWidget->getConnectionSize());
-if (ivfCustomWidget->getEnlargeUsage())
+            callback {customWidget->openCSV();
+inpScaleFactor->value(customWidget->getScaling());
+sldTimeStep->maximum(customWidget->getSteps()-1);
+sldFogNear->value(customWidget->getFogNear());
+sldFogFar->value(customWidget->getFogFar());
+sldScale->value(customWidget->getScaleFactor());
+sldConnectionSize->value(customWidget->getConnectionSize());
+if (customWidget->getEnlargeUsage())
 	chkEnlargeUsage->value(1);
 else
 	chkEnlargeUsage->value(0);}
             xywh {10 10 100 20} shortcut 0x4006f labelsize 12
           }
-          menuitem mnuFileOpenNEF {
+          MenuItem mnuFileOpenNEF {
             label {Open NEF...}
-            callback {ivfCustomWidget->openNEF();
-inpScaleFactor->value(ivfCustomWidget->getScaling());
-sldTimeStep->maximum(ivfCustomWidget->getSteps()-1);
-sldFogNear->value(ivfCustomWidget->getFogNear());
-sldFogFar->value(ivfCustomWidget->getFogFar());
-sldScale->value(ivfCustomWidget->getScaleFactor());
-sldConnectionSize->value(ivfCustomWidget->getConnectionSize());
-if (ivfCustomWidget->getEnlargeUsage())
+            callback {customWidget->openNEF();
+inpScaleFactor->value(customWidget->getScaling());
+sldTimeStep->maximum(customWidget->getSteps()-1);
+sldFogNear->value(customWidget->getFogNear());
+sldFogFar->value(customWidget->getFogFar());
+sldScale->value(customWidget->getScaleFactor());
+sldConnectionSize->value(customWidget->getConnectionSize());
+if (customWidget->getEnlargeUsage())
 	chkEnlargeUsage->value(1);
 else
 	chkEnlargeUsage->value(0);}
             xywh {0 0 100 20} labelsize 12 divider
           }
-          menuitem mnuFileExit {
+          MenuItem mnuFileExit {
             label {&Exit}
             callback {wndMain->hide();}
             xywh {0 0 100 20} shortcut 0x8ffc1 value 1 labelsize 12
           }
         }
-        submenu mnuOptions {
+        Submenu mnuOptions {
           label Options open
           xywh {0 0 100 20} labelsize 12
         } {
-          submenu mnuColorMap {
+          Submenu mnuColorMap {
             label {&Colormap}
             xywh {0 0 100 20} labelsize 12
           } {
-            menuitem mnuCmHSV {
+            MenuItem mnuCmHSV {
               label HSV
-              callback {ivfCustomWidget->setColorMap(0);}
+              callback {customWidget->setColorMap(0);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmHot {
+            MenuItem mnuCmHot {
               label Hot
-              callback {ivfCustomWidget->setColorMap(1);}
+              callback {customWidget->setColorMap(1);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmGray {
+            MenuItem mnuCmGray {
               label Gray
-              callback {ivfCustomWidget->setColorMap(2);}
+              callback {customWidget->setColorMap(2);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmBone {
+            MenuItem mnuCmBone {
               label Bone
-              callback {ivfCustomWidget->setColorMap(3);}
+              callback {customWidget->setColorMap(3);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmCopper {
+            MenuItem mnuCmCopper {
               label Copper
-              callback {ivfCustomWidget->setColorMap(4);}
+              callback {customWidget->setColorMap(4);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmPink {
+            MenuItem mnuCmPink {
               label Pink
-              callback {ivfCustomWidget->setColorMap(5);}
+              callback {customWidget->setColorMap(5);}
               xywh {12 12 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmWhite {
+            MenuItem mnuCmWhite {
               label White
-              callback {ivfCustomWidget->setColorMap(6);}
+              callback {customWidget->setColorMap(6);}
               xywh {20 20 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmFlag {
+            MenuItem mnuCmFlag {
               label Flag
-              callback {ivfCustomWidget->setColorMap(7);}
+              callback {customWidget->setColorMap(7);}
               xywh {32 32 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmLines {
+            MenuItem mnuCmLines {
               label Lines
-              callback {ivfCustomWidget->setColorMap(8);}
+              callback {customWidget->setColorMap(8);}
               xywh {40 40 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmColorCube {
+            MenuItem mnuCmColorCube {
               label ColorCube
-              callback {ivfCustomWidget->setColorMap(9);}
+              callback {customWidget->setColorMap(9);}
               xywh {52 52 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmJet {
+            MenuItem mnuCmJet {
               label Jet
-              callback {ivfCustomWidget->setColorMap(10);}
+              callback {customWidget->setColorMap(10);}
               xywh {60 60 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmPrism {
+            MenuItem mnuCmPrism {
               label Prism
-              callback {ivfCustomWidget->setColorMap(11);}
+              callback {customWidget->setColorMap(11);}
               xywh {12 12 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmCool {
+            MenuItem mnuCmCool {
               label Cool
-              callback {ivfCustomWidget->setColorMap(12);}
+              callback {customWidget->setColorMap(12);}
               xywh {20 20 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmAutumn {
+            MenuItem mnuCmAutumn {
               label Autumn
-              callback {ivfCustomWidget->setColorMap(13);}
+              callback {customWidget->setColorMap(13);}
               xywh {32 32 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmSpring {
+            MenuItem mnuCmSpring {
               label Spring
-              callback {ivfCustomWidget->setColorMap(14);}
+              callback {customWidget->setColorMap(14);}
               xywh {40 40 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmWinter {
+            MenuItem mnuCmWinter {
               label Winter
-              callback {ivfCustomWidget->setColorMap(15);}
+              callback {customWidget->setColorMap(15);}
               xywh {52 52 100 20} type Radio labelsize 12
             }
-            menuitem mnuCmSummer {
+            MenuItem mnuCmSummer {
               label Summer
-              callback {ivfCustomWidget->setColorMap(16);}
+              callback {customWidget->setColorMap(16);}
               xywh {60 60 100 20} type Radio labelsize 12
             }
           }
-          submenu mnuTexture {
+          Submenu mnuTexture {
             label {&Fibre texture}
             xywh {0 0 100 20} labelsize 12
           } {
-            menuitem mnuTx1 {
+            MenuItem mnuTx1 {
               label {&Texture 1}
-              callback {ivfCustomWidget->setTexture(0);}
+              callback {customWidget->setTexture(0);}
               xywh {0 0 100 20} labelsize 12
             }
-            menuitem mnuTx2 {
+            MenuItem mnuTx2 {
               label {&Texture 2}
-              callback {ivfCustomWidget->setTexture(1);}
+              callback {customWidget->setTexture(1);}
               xywh {12 12 100 20} labelsize 12
             }
-            menuitem mnuTx3 {
+            MenuItem mnuTx3 {
               label {&Texture 3}
-              callback {ivfCustomWidget->setTexture(2);}
+              callback {customWidget->setTexture(2);}
               xywh {20 20 100 20} labelsize 12
             }
-            menuitem mnuTx4 {
+            MenuItem mnuTx4 {
               label {&Texture 4}
-              callback {ivfCustomWidget->setTexture(3);}
+              callback {customWidget->setTexture(3);}
               xywh {32 32 100 20} labelsize 12
             }
-            menuitem mnuTx5 {
+            MenuItem mnuTx5 {
               label {&Texture 5}
-              callback {ivfCustomWidget->setTexture(4);}
+              callback {customWidget->setTexture(4);}
               xywh {40 40 100 20} labelsize 12
             }
-            menuitem mnuTx6 {
+            MenuItem mnuTx6 {
               label {&Texture 6}
-              callback {ivfCustomWidget->setTexture(5);}
+              callback {customWidget->setTexture(5);}
               xywh {52 52 100 20} labelsize 12
             }
-            menuitem mnuTx7 {
+            MenuItem mnuTx7 {
               label {&Texture 7}
-              callback {ivfCustomWidget->setTexture(6);}
+              callback {customWidget->setTexture(6);}
               xywh {60 60 100 20} labelsize 12
             }
-            menuitem mnuTx8 {
+            MenuItem mnuTx8 {
               label {&Texture 8}
-              callback {ivfCustomWidget->setTexture(7);}
+              callback {customWidget->setTexture(7);}
               xywh {72 72 100 20} labelsize 12
             }
-            menuitem mnuTx9 {
+            MenuItem mnuTx9 {
               label {&Texture 9}
-              callback {ivfCustomWidget->setTexture(8);}
+              callback {customWidget->setTexture(8);}
               xywh {84 84 100 20} labelsize 12
             }
-            menuitem mnuTx10 {
+            MenuItem mnuTx10 {
               label {&Texture 10}
-              callback {ivfCustomWidget->setTexture(9);}
+              callback {customWidget->setTexture(9);}
               xywh {92 92 100 20} labelsize 12
             }
-            menuitem mnuTx11 {
+            MenuItem mnuTx11 {
               label {&Texture 11}
-              callback {ivfCustomWidget->setTexture(10);}
+              callback {customWidget->setTexture(10);}
               xywh {104 104 100 20} labelsize 12
             }
-            menuitem mnuTx12 {
+            MenuItem mnuTx12 {
               label {&Texture 12}
-              callback {ivfCustomWidget->setTexture(11);}
+              callback {customWidget->setTexture(11);}
               xywh {112 112 100 20} labelsize 12 divider
             }
-            menuitem mnuExtTx1 {
+            MenuItem mnuExtTx1 {
               label {Extr. Texture 1}
-              callback {ivfCustomWidget->setTexture(12);}
+              callback {customWidget->setTexture(12);}
               xywh {0 0 100 20}
             }
           }
-          submenu mnuOptionsFibreNetwork {
+          Submenu mnuOptionsFibreNetwork {
             label {Fibre network} open
             xywh {0 0 100 20} labelsize 12
           } {
-            menuitem mnuOptionFibreNetworkBlendFibres {
+            MenuItem mnuOptionFibreNetworkBlendFibres {
               label {Blend fibres (Additive)}
               callback {if (mnuOptionFibreNetworkBlendFibres->value()>0)
-	ivfCustomWidget->setBlendFibres(true);
+	customWidget->setBlendFibres(true);
 else
-	ivfCustomWidget->setBlendFibres(false);}
+	customWidget->setBlendFibres(false);}
               xywh {0 0 100 20} type Toggle labelsize 12
             }
-            menuitem mnuOptionFibreNetworkFibreLighting {
+            MenuItem mnuOptionFibreNetworkFibreLighting {
               label {Fibre lighting}
               callback {if (mnuOptionFibreNetworkFibreLighting->value()>0)
-	ivfCustomWidget->setFibreLighting(true);
+	customWidget->setFibreLighting(true);
 else
-	ivfCustomWidget->setFibreLighting(false);}
+	customWidget->setFibreLighting(false);}
               xywh {0 0 100 20} type Toggle value 1 labelsize 12
             }
           }
-          submenu mnuOptionsStereo {
+          Submenu mnuOptionsStereo {
             label {Stereo options} open
             xywh {0 0 100 20} labelsize 12
           } {
-            menuitem mnuOptionsStereoNone {
+            MenuItem mnuOptionsStereoNone {
               label None
-              callback {ivfCustomWidget->setStereoMode(CIvfCustomWidget::SM_NONE);}
+              callback {customWidget->setStereoMode(CustomWidget::SM_NONE);}
               xywh {0 0 100 20} type Radio value 1 labelsize 12
             }
-            menuitem mnuOptionsStereoAnaglyph {
+            MenuItem mnuOptionsStereoAnaglyph {
               label Anaglyph
-              callback {ivfCustomWidget->setStereoMode(CIvfCustomWidget::SM_ANAGLYPH);}
+              callback {customWidget->setStereoMode(CustomWidget::SM_ANAGLYPH);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem mnuOptionsStereoQuadBuffer {
+            MenuItem mnuOptionsStereoQuadBuffer {
               label {Quad buffered}
-              callback {ivfCustomWidget->setStereoMode(CIvfCustomWidget::SM_QUAD_BUFFER);}
+              callback {customWidget->setStereoMode(CustomWidget::SM_QUAD_BUFFER);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
           }
-          submenu mnuOptionsViewMode {
+          Submenu mnuOptionsViewMode {
             label Viewing open
             xywh {0 0 100 20} labelsize 12
           } {
-            menuitem mnuOptionsViewModeExaminer {
+            MenuItem mnuOptionsViewModeExaminer {
               label Examiner
-              callback {ivfCustomWidget->setViewMode(CIvfCustomWidget::VM_EXAMINER);}
+              callback {customWidget->setViewMode(CustomWidget::VM_EXAMINER);}
               xywh {0 0 100 20}
             }
-            menuitem mnuOptionsViewModeFly {
+            MenuItem mnuOptionsViewModeFly {
               label Fly
-              callback {ivfCustomWidget->setViewMode(CIvfCustomWidget::VM_FLY);}
+              callback {customWidget->setViewMode(CustomWidget::VM_FLY);}
               xywh {0 0 100 20}
             }
           }
-          submenu mnuOptionsPerf {
+          Submenu mnuOptionsPerf {
             label Performance open
             xywh {0 0 100 20} labelsize 12
           } {
-            menuitem mnuOptionsPerfDL {
+            MenuItem mnuOptionsPerfDL {
               label {Use Display Lists}
               callback {if (mnuOptionsPerfDL->value()>0)
-	ivfCustomWidget->setUseDisplayLists(true);
+	customWidget->setUseDisplayLists(true);
 else
-	ivfCustomWidget->setUseDisplayLists(false);}
+	customWidget->setUseDisplayLists(false);}
               xywh {0 0 100 20} type Toggle labelsize 12
             }
-            menuitem mnuOptionsPerfVFollowPath {
+            MenuItem mnuOptionsPerfVFollowPath {
               label {Vertex normal follow path}
               callback {if (mnuOptionsPerfVFollowPath->value()!=0)
-	ivfCustomWidget->setVertexNormalFollowPath(true);
+	customWidget->setVertexNormalFollowPath(true);
 else
-	ivfCustomWidget->setVertexNormalFollowPath(false);}
+	customWidget->setVertexNormalFollowPath(false);}
               xywh {0 0 100 20} type Toggle labelsize 12
             }
           }
-          submenu mnuOptionsExtrTextureMode {
-            label {Extrusion texture mode}
+          Submenu mnuOptionsExtrTextureMode {
+            label {Extrusion texture mode} open
             xywh {0 0 100 20} labelsize 12
           } {
-            menuitem {} {
+            MenuItem {} {
               label {No texture}
-              callback {ivfCustomWidget->setExtrusionTextureMode(0);}
+              callback {customWidget->setExtrusionTextureMode(0);}
               xywh {0 0 100 20} type Radio value 1 labelsize 12 divider
             }
-            menuitem {} {
+            MenuItem {} {
               label VERTEX_FLAT
-              callback {ivfCustomWidget->setExtrusionTextureMode(1);}
+              callback {customWidget->setExtrusionTextureMode(1);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label NORMAL_FLAT
-              callback {ivfCustomWidget->setExtrusionTextureMode(2);}
+              callback {customWidget->setExtrusionTextureMode(2);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label VERTEX_CYL
-              callback {ivfCustomWidget->setExtrusionTextureMode(3);}
+              callback {customWidget->setExtrusionTextureMode(3);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label NORMAL_CYL
-              callback {ivfCustomWidget->setExtrusionTextureMode(4);}
+              callback {customWidget->setExtrusionTextureMode(4);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label VERTEX_SPH
-              callback {ivfCustomWidget->setExtrusionTextureMode(5);}
+              callback {customWidget->setExtrusionTextureMode(5);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label NORMAL_SPH
-              callback {ivfCustomWidget->setExtrusionTextureMode(6);}
+              callback {customWidget->setExtrusionTextureMode(6);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label VERTEX_MODEL_FLAT
-              callback {ivfCustomWidget->setExtrusionTextureMode(7);}
+              callback {customWidget->setExtrusionTextureMode(7);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label NORMAL_MODEL_FLAT
-              callback {ivfCustomWidget->setExtrusionTextureMode(8);}
+              callback {customWidget->setExtrusionTextureMode(8);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label VERTEX_MODEL_CYL
-              callback {ivfCustomWidget->setExtrusionTextureMode(9);}
+              callback {customWidget->setExtrusionTextureMode(9);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label NORMAL_MODEL_CYL
-              callback {ivfCustomWidget->setExtrusionTextureMode(10);}
+              callback {customWidget->setExtrusionTextureMode(10);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label VERTEX_MODEL_SPH
-              callback {ivfCustomWidget->setExtrusionTextureMode(11);}
+              callback {customWidget->setExtrusionTextureMode(11);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
-            menuitem {} {
+            MenuItem {} {
               label NORMAL_MODEL_SPH
-              callback {ivfCustomWidget->setExtrusionTextureMode(12);}
+              callback {customWidget->setExtrusionTextureMode(12);}
               xywh {0 0 100 20} type Radio labelsize 12
             }
           }
         }
-        submenu mnuHelp {
+        Submenu mnuHelp {
           label {&Help} open
           xywh {0 0 100 20} labelsize 12
         } {
-          menuitem mnuHelpAbout {
+          MenuItem mnuHelpAbout {
             label {&About FibreScope...}
             callback {if (m_splash!=NULL)
 {
 	m_splash->hide();
 	delete m_splash;
 }
-m_splash = new CSplashFrame();
+m_splash = new SplashFrame();
 m_splash->setTimer(false);
 m_splash->center();
 m_splash->show();}
@@ -436,17 +444,17 @@ m_splash->show();}
           }
         }
       }
-      Fl_Box ivfCustomWidget {selected
+      Fl_Box customWidget {
         xywh {33 58 559 469} box DOWN_BOX when 1 resizable
-        code0 {\#include "IvfCustomWidget.h"}
-        class CIvfCustomWidget
+        code0 {\#include "CustomWidget.h"}
+        class CustomWidget
       }
       Fl_Scroll scrTop {
         xywh {0 25 683 32} box ENGRAVED_BOX
       } {
         Fl_Value_Slider sldTimeStep {
           label Step
-          callback {ivfCustomWidget->setTimeStep((double)sldTimeStep->value());}
+          callback {customWidget->setTimeStep((double)sldTimeStep->value());}
           xywh {224 30 135 22} type {Horz Knob} labelsize 10 align 4 maximum 100 step 1
         }
         Fl_Button btnPlay {
@@ -471,75 +479,75 @@ btnPlay->value(0);}
           xywh {404 30 125 22} type {Horz Knob} labelsize 10 align 4 minimum 0.01 value 1
         }
         Fl_Button btnRewind {
-          callback {ivfCustomWidget->rewind();}
+          callback {customWidget->rewind();}
           image {./images/tlFirst.xpm} xywh {36 29 25 25} box THIN_UP_BOX down_box THIN_DOWN_BOX labelsize 12
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
         }
         Fl_Button btnLast {
-          callback {ivfCustomWidget->last();}
+          callback {customWidget->last();}
           image {./images/tlLast.xpm} xywh {111 29 25 25} box THIN_UP_BOX down_box THIN_DOWN_BOX labelsize 12
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
         }
         Fl_Button chkLoop {
           callback {if (chkLoop->value()==1)
-	ivfCustomWidget->setLoop(true);
+	customWidget->setLoop(true);
 else
-	ivfCustomWidget->setLoop(false);}
+	customWidget->setLoop(false);}
           image {./images/tlLoop.xpm} xywh {143 29 25 25} type Toggle box THIN_UP_BOX down_box THIN_DOWN_BOX
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
         }
         Fl_Button chkForwardBack {
           callback {if (chkForwardBack->value()==1)
-	ivfCustomWidget->setReverse(true);
+	customWidget->setReverse(true);
 else
-	ivfCustomWidget->setReverse(false);}
+	customWidget->setReverse(false);}
           image {./images/tlForwardBack.xpm} xywh {168 29 25 25} type Toggle box THIN_UP_BOX down_box THIN_DOWN_BOX
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
         }
         Fl_Button btnShowConnections {
           callback {if (btnShowConnections->value()==1)
-	ivfCustomWidget->setShowConnections(true);
+	customWidget->setShowConnections(true);
 else
-	ivfCustomWidget->setShowConnections(false);}
+	customWidget->setShowConnections(false);}
           image {./images/tlConnections.xpm} xywh {535 30 23 22} type Toggle box THIN_UP_BOX down_box THIN_DOWN_BOX value 1 labelsize 10
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
         }
         Fl_Button btnShowUsage {
           callback {if (btnShowUsage->value()==1)
-	ivfCustomWidget->setShowUsage(true);
+	customWidget->setShowUsage(true);
 else
-	ivfCustomWidget->setShowUsage(false);}
+	customWidget->setShowUsage(false);}
           image {./images/tlUsage.xpm} xywh {558 30 22 22} type Toggle box THIN_UP_BOX down_box THIN_DOWN_BOX labelsize 10
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
         }
         Fl_Button btnShowDiagram {
           callback {if (btnShowDiagram->value()==1)
-	ivfCustomWidget->setShowStressDiagram(true);
+	customWidget->setShowStressDiagram(true);
 else
-	ivfCustomWidget->setShowStressDiagram(false);}
+	customWidget->setShowStressDiagram(false);}
           image {./images/tlDiagram.xpm} xywh {580 30 22 22} type Toggle box THIN_UP_BOX down_box THIN_DOWN_BOX labelsize 10
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
         }
         Fl_Button btnOpen {
-          callback {ivfCustomWidget->open();
-inpScaleFactor->value(ivfCustomWidget->getScaling());
-sldTimeStep->maximum(ivfCustomWidget->getSteps()-1);
-sldFogNear->value(ivfCustomWidget->getFogNear());
-sldFogFar->value(ivfCustomWidget->getFogFar());
-sldScale->value(ivfCustomWidget->getScaleFactor());}
+          callback {customWidget->open();
+inpScaleFactor->value(customWidget->getScaling());
+sldTimeStep->maximum(customWidget->getSteps()-1);
+sldFogNear->value(customWidget->getFogNear());
+sldFogFar->value(customWidget->getFogFar());
+sldScale->value(customWidget->getScaleFactor());}
           image {./images/tlOpen.xpm} xywh {5 29 25 25} box THIN_UP_BOX down_box THIN_DOWN_BOX labelsize 12
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
         }
         Fl_Button btnFullScreen {
-          callback {ivfCustomWidget->enableFullscreen();}
+          callback {customWidget->enableFullscreen();}
           image {./images/tlFullscreen.xpm} xywh {603 30 22 22} box THIN_UP_BOX down_box THIN_DOWN_BOX labelsize 10
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
@@ -550,7 +558,7 @@ sldScale->value(ivfCustomWidget->getScaleFactor());}
       } {
         Fl_Value_Slider sldFogNear {
           label Near
-          callback {ivfCustomWidget->setFogNear((double)sldFogNear->value());}
+          callback {customWidget->setFogNear((double)sldFogNear->value());}
           xywh {5 92 23 115} type {Vert Knob} labelsize 10 align 1 minimum 5 maximum 2000 step 1 value 150
         }
         Fl_Box lblFog {
@@ -559,7 +567,7 @@ sldScale->value(ivfCustomWidget->getScaleFactor());}
         }
         Fl_Value_Slider sldFogFar {
           label Far
-          callback {ivfCustomWidget->setFogFar((double)sldFogFar->value());}
+          callback {customWidget->setFogFar((double)sldFogFar->value());}
           xywh {5 228 23 115} type {Vert Knob} labelsize 10 align 1 minimum 5 maximum 2000 step 1 value 300
         }
         Fl_Button btnViewZoom {
@@ -575,13 +583,13 @@ sldScale->value(ivfCustomWidget->getScaleFactor());}
           class Fl_HoverButton
         }
         Fl_Button btnStoreCamera {
-          callback {ivfCustomWidget->storeCamera();}
+          callback {customWidget->storeCamera();}
           image {images/tlExport.xpm} xywh {4 405 25 24} box THIN_UP_BOX down_box THIN_DOWN_BOX
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
         }
         Fl_Button btnLoadCamera {
-          callback {ivfCustomWidget->loadCamera();}
+          callback {customWidget->loadCamera();}
           image {images/tlImport.xpm} xywh {4 429 25 24} box THIN_UP_BOX down_box THIN_DOWN_BOX
           code0 {\#include "Fl_HoverButton.h"}
           class Fl_HoverButton
@@ -596,7 +604,7 @@ sldScale->value(ivfCustomWidget->getScaleFactor());}
         }
         Fl_Button btnApplyScale {
           label Apply
-          callback {ivfCustomWidget->setScaling((double)inpScaleFactor->value());}
+          callback {customWidget->setScaling((double)inpScaleFactor->value());}
           xywh {168 532 44 20} box THIN_UP_BOX down_box THIN_DOWN_BOX labelsize 10
         }
         Fl_Slider sldProgress {
@@ -610,77 +618,77 @@ sldScale->value(ivfCustomWidget->getScaleFactor());}
         xywh {593 55 90 474} box ENGRAVED_BOX
       } {
         Fl_Button btnRed {
-          callback {ivfCustomWidget->setColor(0);}
+          callback {customWidget->setColor(0);}
           xywh {598 60 25 25} color 88
         }
         Fl_Button btnGreen {
-          callback {ivfCustomWidget->setColor(1);}
+          callback {customWidget->setColor(1);}
           xywh {624 60 25 25} color 63
         }
         Fl_Button btnWhite {
-          callback {ivfCustomWidget->setColor(2);}
+          callback {customWidget->setColor(2);}
           xywh {649 85 25 25} color 7
         }
         Fl_Button btnBlue {
-          callback {ivfCustomWidget->setColor(3);}
+          callback {customWidget->setColor(3);}
           xywh {649 60 25 25} color 216
         }
         Fl_Button btnYellow {
-          callback {ivfCustomWidget->setColor(4);}
+          callback {customWidget->setColor(4);}
           xywh {598 85 25 25} color 3
         }
         Fl_Button btnCyan {
-          callback {ivfCustomWidget->setColor(5);}
+          callback {customWidget->setColor(5);}
           xywh {624 85 25 25} color 6
         }
         Fl_Value_Slider sldScale {
           label {Fib.}
-          callback {ivfCustomWidget->setScaleFactor((double)sldScale->value());}
+          callback {customWidget->setScaleFactor((double)sldScale->value());}
           xywh {598 153 25 140} type {Vert Knob} labelsize 10 align 1 maximum 20 value 1
         }
         Fl_Button btnGray1 {
-          callback {ivfCustomWidget->setColor(6);}
+          callback {customWidget->setColor(6);}
           xywh {598 110 25 25} color 52
         }
         Fl_Button btnGray2 {
-          callback {ivfCustomWidget->setColor(7);}
+          callback {customWidget->setColor(7);}
           xywh {624 110 25 25} color 48
         }
         Fl_Button btnGray3 {
-          callback {ivfCustomWidget->setColor(8);}
+          callback {customWidget->setColor(8);}
           xywh {649 110 25 25} color 43
         }
         Fl_Value_Slider sldConnectionSize {
           label {Con.}
-          callback {ivfCustomWidget->setConnectionSize((double)sldConnectionSize->value());}
+          callback {customWidget->setConnectionSize((double)sldConnectionSize->value());}
           xywh {626 153 25 140} type {Vert Knob} labelsize 10 align 1 maximum 20 value 1
         }
         Fl_Check_Button chkEnlargeUsage {
           label Enlarge
           callback {if (chkEnlargeUsage->value()==1)
-	ivfCustomWidget->setEnlargeUsage(true);
+	customWidget->setEnlargeUsage(true);
 else
-	ivfCustomWidget->setEnlargeUsage(false);}
+	customWidget->setEnlargeUsage(false);}
           xywh {596 295 80 23} down_box DIAMOND_DOWN_BOX value 1 labelsize 11
         }
         Fl_Counter cntSectionSides {
           label sides
-          callback {ivfCustomWidget->setSectionSides(cntSectionSides->value());}
+          callback {customWidget->setSectionSides(cntSectionSides->value());}
           xywh {601 321 70 16} type Simple labelsize 10 minimum 3 maximum 20 step 1 value 6 textsize 10
         }
         Fl_Counter cntRenderingInterval {
           label interval
-          callback {ivfCustomWidget->setRenderingInterval(cntRenderingInterval->value());}
+          callback {customWidget->setRenderingInterval(cntRenderingInterval->value());}
           xywh {601 352 70 17} type Simple labelsize 10 minimum 1 maximum 20 step 1 value 1 textsize 10
         }
         Fl_Counter cntTexScale {
           label {Tex. scale}
-          callback {ivfCustomWidget->setTextureScale(cntTexScale->value());}
+          callback {customWidget->setTextureScale(cntTexScale->value());}
           xywh {601 382 70 17} type Simple labelsize 10 minimum 0.01 maximum 1 step 0.01 value 1 textsize 10
         }
         Fl_Value_Slider sldBreakageLimit {
           label {Br.}
-          callback {ivfCustomWidget->setBreakageLimit((double)sldBreakageLimit->value());}
+          callback {customWidget->setBreakageLimit((double)sldBreakageLimit->value());}
           xywh {654 153 25 140} type {Vert Knob} labelsize 10 align 1 value 0.75
         }
       }
@@ -689,25 +697,26 @@ else
   Function {show()} {open
   } {
     code {wndMain->show();
-ivfCustomWidget->show();
+customWidget->show();
 sldProgress->hide();
 outMessage->hide();
-ivfCustomWidget->setWidgets(outMessage, sldProgress, wndMain);
-Fl::add_timeout(g_event_spacing, timer_callback,(void*)ivfCustomWidget);
+customWidget->setWidgets(outMessage, sldProgress, wndMain);
+Fl::add_timeout(g_event_spacing, timer_callback,(void*)customWidget);
 g_mainFrame = this;
 m_splash = NULL;} {}
   }
-  Function {getWindow()} {return_type {Fl_Window*}
+  Function {getWindow()} {open return_type {Fl_Window*}
   } {
     code {return wndMain;} {}
   }
-  Function {center()} {} {
+  Function {center()} {open
+  } {
     code {wndMain->position(Fl::w()/2-wndMain->w()/2,Fl::h()/2-wndMain->h()/2);} {}
   }
   Function {redraw()} {} {
     code {wndMain->redraw();} {}
   }
-  Function {~CMainFrame()} {} {
+  Function {~MainFrame()} {} {
     code {delete wndMain;} {}
   }
-} 
+}

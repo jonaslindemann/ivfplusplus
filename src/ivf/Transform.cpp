@@ -24,14 +24,14 @@
 using namespace ivf;
 
 // ------------------------------------------------------------
-CTransform::CTransform()
-:CComposite()
+Transform::Transform()
+:Composite()
 {
 
 }
 
 // ------------------------------------------------------------
-CTransform::~CTransform()
+Transform::~Transform()
 {
 
 }

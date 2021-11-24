@@ -34,24 +34,24 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CGlutBase,
-	CInitEvent,
-	CKeyboardEvent,
-	CTimeoutEvent,
-	CSingleSelectionEvent,
-	CMultipleSelectionEvent
+class ExampleWindow: public GlutBase,
+	InitEvent,
+	KeyboardEvent,
+	TimeoutEvent,
+	SingleSelectionEvent,
+	MultipleSelectionEvent
 {
 private:
-	CCameraPtr		m_camera;
-	CScenePtr		m_scene;
-	CLightPtr		m_light;
+	CameraPtr		m_camera;
+	ScenePtr		m_scene;
+	LightPtr		m_light;
 
-	CMouseViewHandlerPtr m_mouseHandler;
-	CSelectionHandlerPtr m_selectionHandler;
-	CFlyHandlerPtr		m_flyHandler;
-	CSceneHandlerPtr		m_sceneHandler;
+	MouseViewHandlerPtr m_mouseHandler;
+	SelectionHandlerPtr m_selectionHandler;
+	FlyHandlerPtr		m_flyHandler;
+	SceneHandlerPtr		m_sceneHandler;
 
 	double m_angleX;
 	double m_angleY;
@@ -66,28 +66,35 @@ private:
 	bool m_rotating;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H);
+	ExampleWindow(int X, int Y, int W, int H);
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onKeyboard(int key, int x, int y);
 	virtual bool onTimeout();
-	virtual void onSelect(CShape* shape);
-	virtual void onSelectMultiple(CIvfSelectedShapesVector& shapes);
+	virtual void onSelect(Shape* shape);
+	virtual void onSelectMultiple(SelectedShapesVector& shapes);
 };
 
 // ------------------------------------------------------------
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-	:CGlutBase(X, Y, W, H) 
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
+	:GlutBase(X, Y, W, H) 
 {
 	addInitEvent(this);
 	addKeyboardEvent(this);
 	assignTimeoutEvent(0, this);
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -102,67 +109,67 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CCamera();
+	m_camera = Camera::create();
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setPosition(-0.0, 3.0, 5.0);
 	m_camera->setTarget(-0.0, 0.0, 0.0);
 
 	// Create scene
 
-	m_scene = new CScene();
+	m_scene = Scene::create();
 	m_scene->setView(m_camera);
 
 	// Create a materials
 
-	CMaterialPtr redMaterial = new CMaterial();
+	auto redMaterial = Material::create();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
-	CMaterialPtr greenMaterial = new CMaterial();
+	auto greenMaterial = Material::create();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 	
-	CMaterialPtr blueMaterial = new CMaterial();
+	auto blueMaterial = Material::create();
 	blueMaterial->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	blueMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	blueMaterial->setAmbientColor(0.0f, 0.0f, 0.5f, 1.0f);
 
-	CMaterialPtr yellowMaterial = new CMaterial();
+	auto yellowMaterial = Material::create();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create objects
 	
-	CCubePtr cube = new CCube();
+	auto cube = Cube::create();
 	cube->setMaterial(redMaterial);
 	cube->setPosition(2.0, 0.0, 2.0);
 	m_scene->addChild(cube);
 
-	CSpherePtr sphere = new CSphere();
+	auto sphere = Sphere::create();
 	sphere->setMaterial(greenMaterial);
 	sphere->setPosition(-2.0, 0.0, 2.0);
 	m_scene->addChild(sphere);
 
-	CCylinderPtr cylinder = new CCylinder();
+	auto cylinder = Cylinder::create();
 	cylinder->setMaterial(blueMaterial);
 	cylinder->setPosition(-2.0, 0.0, -2.0);
 	m_scene->addChild(cylinder);
 
-	CConePtr cone = new CCone();
+	auto cone = Cone::create();
 	cone->setMaterial(yellowMaterial);
 	cone->setPosition(2.0, 0.0, -2.0);
 	cone->setRotationQuat(0.0, 0.0, 1.0, 45.0);
 	m_scene->addChild(cone);
 
-	CAxisPtr axis = new CAxis();
+	auto axis = Axis::create();
 	m_scene->addChild(axis);
 
 	// Create a light
 
-	CLightingPtr lighting = CLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
@@ -173,25 +180,25 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create event handlers
 
-	m_mouseHandler = new CMouseViewHandler(this, m_camera);
+	m_mouseHandler = MouseViewHandler::create(this, m_camera);
 	m_mouseHandler->deactivate();
 	
-	m_selectionHandler = new CSelectionHandler(this, m_scene);
+	m_selectionHandler = SelectionHandler::create(this, m_scene);
 	m_selectionHandler->setSingleSelectionEvent(this);
 	m_selectionHandler->setMultipleSelectionEvent(this);
 	m_selectionHandler->activate();
 	
-	m_flyHandler = new CFlyHandler(this, m_camera);
+	m_flyHandler = FlyHandler::create(this, m_camera);
 	m_flyHandler->deactivate();
 
-	m_sceneHandler = new CSceneHandler(this, m_scene);
+	m_sceneHandler = SceneHandler::create(this, m_scene);
 	m_sceneHandler->activate();
 
 	enableTimeout(0.01, 0);
 }
 
 // ------------------------------------------------------------
-bool CExampleWindow::onTimeout()
+bool ExampleWindow::onTimeout()
 {
 	if (m_flyHandler->isActive())
 		redraw();
@@ -202,7 +209,7 @@ bool CExampleWindow::onTimeout()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onSelect(CShape* shape)
+void ExampleWindow::onSelect(Shape* shape)
 {
 	if (shape!=nullptr)
 		cout << shape->getClassName() << " selected." << endl;
@@ -211,20 +218,20 @@ void CExampleWindow::onSelect(CShape* shape)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onSelectMultiple(CIvfSelectedShapesVector& shapes)
+void ExampleWindow::onSelectMultiple(SelectedShapesVector& shapes)
 {
-	CIvfSelectedShapesIterator it;
+	SelectedShapesIterator it;
 
 	cout << "Multiple selection:" << endl;
 	for (it=shapes.begin(); it!=shapes.end(); it++)
 	{
-		CShapePtr shape = *it;
+		auto shape = *it;
 		cout << "\t" << shape->getClassName() << " selected." << endl;
 	}
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case '1' :
@@ -255,12 +262,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CGlutApplication* app = CGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

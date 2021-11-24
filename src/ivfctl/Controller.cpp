@@ -23,7 +23,7 @@
 
 using namespace ivf;
 
-CController::CController()
+Controller::Controller()
 {
 	m_active = false;
 	m_controlledShape = nullptr;
@@ -32,7 +32,7 @@ CController::CController()
 	m_light = nullptr;
 }
 
-CController::~CController()
+Controller::~Controller()
 {
 	if (m_startAction!=nullptr)
 	{
@@ -49,24 +49,24 @@ CController::~CController()
 	}
 }
 
-void CController::activate()
+void Controller::activate()
 {
 	m_active = true;
 	doActivate();
 }
 
-void CController::deactivate()
+void Controller::deactivate()
 {
 	m_active = false;
 	doDeactivate();
 }
 
-bool CController::isActive()
+bool Controller::isActive()
 {
 	return m_active;
 }
 
-void CController::setShape(CShape *shape)
+void Controller::setShape(Shape *shape)
 {
 	m_controlledShape = shape;
 
@@ -98,12 +98,12 @@ void CController::setShape(CShape *shape)
 	);
 }
 
-CShape* CController::getShape()
+Shape* Controller::getShape()
 {
 	return m_controlledShape;
 }
 
-void CController::reset()
+void Controller::reset()
 {
 	if (m_controlledShape!=nullptr)
 	{
@@ -148,30 +148,30 @@ void CController::reset()
 	doReset();
 }
 
-void CController::update(double dt)
+void Controller::update(double dt)
 {
 	if (m_active)
 		doUpdate(dt);
 }
 
-void CController::doUpdate(double dt)
+void Controller::doUpdate(double dt)
 {
 
 }
 
-void CController::doReset()
+void Controller::doReset()
 {
 
 }
 
-void CController::action(CAction* action)
+void Controller::action(Action* action)
 {
 	this->doAction(action);
 }
 
-void CController::doAction(CAction* action)
+void Controller::doAction(Action* action)
 {
-	CController* target = action->getTarget();
+	Controller* target = action->getTarget();
 	if ((target==this)||(target==nullptr))
 	{
 		switch (action->getActionType()) {
@@ -190,17 +190,17 @@ void CController::doAction(CAction* action)
 	}
 }
 
-void CController::doActivate()
+void Controller::doActivate()
 {
 
 }
 
-void CController::doDeactivate()
+void Controller::doDeactivate()
 {
 
 }
 
-void CController::setStartAction(CAction *action)
+void Controller::setStartAction(Action *action)
 {
 	if (m_startAction!=nullptr)
 	{
@@ -212,7 +212,7 @@ void CController::setStartAction(CAction *action)
 	m_startAction->addReference();
 }
 
-void CController::setEndAction(CAction *action)
+void Controller::setEndAction(Action *action)
 {
 	if (m_endAction!=nullptr)
 	{
@@ -224,30 +224,30 @@ void CController::setEndAction(CAction *action)
 	m_endAction->addReference();
 }
 
-void CController::doStartAction()
+void Controller::doStartAction()
 {
 	if (m_startAction!=nullptr)
 	{
-		CController* target = m_startAction->getTarget();
+		Controller* target = m_startAction->getTarget();
 		target->action(m_startAction);
 	}
 }
 
-void CController::doEndAction()
+void Controller::doEndAction()
 {
 	if (m_endAction!=nullptr)
 	{
-		CController* target = m_endAction->getTarget();
+		Controller* target = m_endAction->getTarget();
 		target->action(m_endAction);
 	}
 }
 
-void CController::setLight(CLight *light)
+void Controller::setLight(Light *light)
 {
 	m_light = light;
 }
 
-CLight* CController::getLight()
+Light* Controller::getLight()
 {
 	return m_light;
 }

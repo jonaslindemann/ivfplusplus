@@ -2,18 +2,18 @@
 
 using namespace ivf;
 
-CFlyCamera::CFlyCamera()
+FlyCamera::FlyCamera()
 {
 	setPosition(0.0, 0.0, 0.0);
 	setDirection(0.0, 0.0, 1.0);
 	setPerspective(45.0, 1.0, 200.0);
 }
 
-CFlyCamera::~CFlyCamera()
+FlyCamera::~FlyCamera()
 {
 }
 
-void CFlyCamera::viewTransform()
+void FlyCamera::viewTransform()
 {
 	gluLookAt(
 		m_position[0], m_position[1], m_position[2],
@@ -22,26 +22,26 @@ void CFlyCamera::viewTransform()
 	);
 }
 
-void CFlyCamera::projectionTransform()
+void FlyCamera::projectionTransform()
 {
 	gluPerspective(m_fov, getAspect(), m_zNear, m_zFar);	
 }
 
-void CFlyCamera::setPerspective(double fov, double zNear, double zFar)
+void FlyCamera::setPerspective(double fov, double zNear, double zFar)
 {
 	m_fov = fov;
 	m_zNear = zNear;
 	m_zFar = zFar;
 }
 
-void CFlyCamera::setPosition(double x, double y, double z)
+void FlyCamera::setPosition(double x, double y, double z)
 {
 	m_position[0] = x;
 	m_position[1] = y;
 	m_position[2] = z;
 }
 
-void CFlyCamera::setDirection(double heading, double pitch, double bank)
+void FlyCamera::setDirection(double heading, double pitch, double bank)
 {
 	m_heading = heading;
 	m_pitch = pitch;
@@ -49,7 +49,7 @@ void CFlyCamera::setDirection(double heading, double pitch, double bank)
 	calcOrientation();
 }
 
-void CFlyCamera::calcOrientation()
+void FlyCamera::calcOrientation()
 {
 	double ex, ey, ez;
 
@@ -68,7 +68,7 @@ void CFlyCamera::calcOrientation()
 	m_up.normalize();
 }
 
-void CFlyCamera::addDirection(double dHeading, double dPitch, double dBank)
+void FlyCamera::addDirection(double dHeading, double dPitch, double dBank)
 {
 	m_heading += dHeading;
 	m_pitch   += dPitch;
@@ -76,7 +76,7 @@ void CFlyCamera::addDirection(double dHeading, double dPitch, double dBank)
 	calcOrientation();
 }
 
-void CFlyCamera::moveForward(double d)
+void FlyCamera::moveForward(double d)
 {
 	m_position[0] += m_forward[0]*d;
 	m_position[1] += m_forward[1]*d;
@@ -84,7 +84,7 @@ void CFlyCamera::moveForward(double d)
 }
 
 
-void CFlyCamera::turn(double dx, double dy, double dz)
+void FlyCamera::turn(double dx, double dy, double dz)
 {
 	m_forward.rotate(m_up, -dy);
 	m_sideways.rotate(m_up, -dy);
@@ -96,7 +96,7 @@ void CFlyCamera::turn(double dx, double dy, double dz)
 	m_sideways.rotate(m_forward, -dz);
 }
 
-void CFlyCamera::getPosition(double &x, double &y, double &z)
+void FlyCamera::getPosition(double &x, double &y, double &z)
 {
 	x = m_position[0];
 	y = m_position[1];
