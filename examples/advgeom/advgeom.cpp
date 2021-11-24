@@ -11,47 +11,49 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfSphere.h>
-#include <ivf/IvfCylinder.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLighting.h> 
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfTexture.h>
+#include <ivf/Camera.h>
+#include <ivf/Sphere.h>
+#include <ivf/Cylinder.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Lighting.h> 
+#include <ivf/Material.h>
+#include <ivf/Texture.h>
 
 // CIvfGLPrimitive derived classes
 
-#include <ivf/IvfPointSet.h>
-#include <ivf/IvfLineSet.h>
-#include <ivf/IvfLineStripSet.h>
-#include <ivf/IvfTriSet.h>
-#include <ivf/IvfTriStripSet.h>
-#include <ivf/IvfQuadSet.h>
+#include <ivf/PointSet.h>
+#include <ivf/LineSet.h>
+#include <ivf/LineStripSet.h>
+#include <ivf/TriSet.h>
+#include <ivf/TriStripSet.h>
+#include <ivf/QuadSet.h>
 
 // From the image library
 
-#include <ivfimage/IvfPngImage.h>
+#include <ivfimage/PngImage.h>
 
 // From the file library
 
-#include <ivffile/IvfDxfWriter.h>
+#include <ivffile/DxfWriter.h>
+
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class ExampleWindow: public GlutBase {
 private:
-	CIvfCameraPtr		m_camera;
-	CIvfCompositePtr	m_scene;
-	CIvfLightPtr		m_light;
+	CameraPtr		m_camera;
+	CompositePtr	m_scene;
+	LightPtr		m_light;
 
 	double m_angleX;
 	double m_angleY;
@@ -63,8 +65,10 @@ private:
 	int m_beginX;
 	int m_beginY;
 public:
-	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+	ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H) {};
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -78,7 +82,12 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-void CExampleWindow::onInit(int width, int height)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -91,38 +100,38 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = Camera::create();
 	m_camera->setPosition(-6.6, 9.2, 10.5);
 	m_camera->setTarget(1.1, 0.1, 0.6);
 
 	// Create a materials
 
-	CIvfMaterialPtr greenMaterial = new CIvfMaterial();
+	auto greenMaterial = Material::create();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.2f, 0.0f, 1.0f);
 	
-	CIvfMaterialPtr redMaterial = new CIvfMaterial();
+	auto redMaterial = Material::create();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.2f, 0.0f, 0.0f, 1.0f);
 
 	// Create textures
 
-	CIvfPngImagePtr logoImage = new CIvfPngImage();
+	auto logoImage = PngImage::create();
 	logoImage->setFileName("images/ivf.png");
 	logoImage->read();
 
-	CIvfTexturePtr logoTexture = new CIvfTexture();
+	auto logoTexture = Texture::create();
 	logoTexture->setImage(logoImage);
 
 	// Create scene composite
 
-	m_scene = new CIvfComposite();
+	m_scene = Composite::create();;
 
 	// Create a PointSet
 
-	CIvfPointSetPtr pointSet = new CIvfPointSet();
+	auto pointSet = PointSet::create();
 
 	pointSet->addCoord(0.0, 0.0, 0.0);
 	pointSet->addCoord(0.0, 0.0, 1.0);
@@ -133,7 +142,7 @@ void CExampleWindow::onInit(int width, int height)
 	pointSet->addCoord(3.0, 0.0, 0.0);
 	pointSet->addCoord(3.0, 0.0, 1.0);
 	
-	CIvfIndexPtr coordIdx = new CIvfIndex();
+	auto coordIdx = Index::create();
 	coordIdx->createLinear(8);
 
 	pointSet->addCoordIndex(coordIdx);
@@ -147,7 +156,7 @@ void CExampleWindow::onInit(int width, int height)
 	pointSet->addColor(1.0, 1.0, 1.0);
 	pointSet->addColor(0.0, 0.0, 1.0);
 
-	CIvfIndexPtr colorIdx = new CIvfIndex();
+	auto colorIdx = Index::create();
 	colorIdx->createLinear(8);
 	pointSet->addColorIndex(colorIdx);
 	pointSet->setUseColor(true);
@@ -159,7 +168,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a LineSet
 
-	CIvfLineSetPtr lineSet = new CIvfLineSet();	
+	auto lineSet = LineSet::create();
 	
 	lineSet->addCoord(0.0, 0.0, 0.0);
 	lineSet->addCoord(0.0, 0.0, 1.0);
@@ -170,7 +179,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineSet->addCoord(3.0, 0.0, 0.0);
 	lineSet->addCoord(3.0, 0.0, 1.0);
 	
-	coordIdx = new CIvfIndex();
+	coordIdx = Index::create();
 	coordIdx->createLinear(8);
 
 	lineSet->addCoordIndex(coordIdx);
@@ -184,7 +193,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineSet->addColor(1.0, 1.0, 1.0);
 	lineSet->addColor(0.0, 0.0, 1.0);
 
-	colorIdx = new CIvfIndex();
+	colorIdx = Index::create();
 	colorIdx->createLinear(8);
 
 	lineSet->addColorIndex(colorIdx);
@@ -198,7 +207,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a LineStripSet
 	
-	CIvfLineStripSetPtr lineStripSet = new CIvfLineStripSet();
+	auto lineStripSet = LineStripSet::create();
 
 	lineStripSet->addCoord(0.0, 0.0, 0.0);
 	lineStripSet->addCoord(0.0, 0.0, 1.0);
@@ -209,7 +218,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineStripSet->addCoord(3.0, 0.0, 0.0);
 	lineStripSet->addCoord(3.0, 0.0, 1.0);
 	
-	coordIdx = new CIvfIndex();
+	coordIdx = Index::create();
 	coordIdx->createLinear(8);
 
 	lineStripSet->addCoordIndex(coordIdx);
@@ -223,7 +232,7 @@ void CExampleWindow::onInit(int width, int height)
 	lineStripSet->addColor(1.0, 1.0, 1.0);
 	lineStripSet->addColor(0.0, 0.0, 1.0);
 
-	colorIdx = new CIvfIndex();
+	colorIdx = Index::create();
 	colorIdx->createLinear(8);
 
 	lineStripSet->addColorIndex(colorIdx);
@@ -236,7 +245,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a TriSet
 
-	CIvfTriSetPtr triSet = new CIvfTriSet();
+	auto triSet = TriSet::create();
 	
 	triSet->addCoord(0.0,0.0,2.0);
 	triSet->addCoord(1.0,0.3,2.0);
@@ -248,7 +257,7 @@ void CExampleWindow::onInit(int width, int height)
 	triSet->addCoord(1.0,0.3,0.0);
 	triSet->addCoord(2.0,0.0,0.0);
 
-	coordIdx = new CIvfIndex();
+	coordIdx = Index::create();
 	coordIdx->add(0,1,4);
 	coordIdx->add(0,4,3);
 	coordIdx->add(1,2,5);
@@ -270,7 +279,7 @@ void CExampleWindow::onInit(int width, int height)
 	triSet->addTextureCoord(0.5,1.0);
 	triSet->addTextureCoord(1.0,1.0);
 
-	CIvfIndexPtr textureIdx = new CIvfIndex();
+	auto textureIdx = Index::create();
 	textureIdx->assignFrom(coordIdx);
 
 	triSet->addTextureIndex(textureIdx);
@@ -284,7 +293,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a TriStripSet
 
-	CIvfTriStripSetPtr triStripSet = new CIvfTriStripSet();
+	auto triStripSet = TriStripSet::create();
 
 	triStripSet->addCoord(0.0, 0.0, 0.0);
 	triStripSet->addCoord(0.0, 0.0, 1.0);
@@ -304,12 +313,12 @@ void CExampleWindow::onInit(int width, int height)
 	triStripSet->addCoord(3.0, 1.0, 0.0);
 	triStripSet->addCoord(3.0, 1.0, 1.0);
 
-	coordIdx = new CIvfIndex();
+	coordIdx = Index::create();
 	coordIdx->createLinear(8);
 
 	triStripSet->addCoordIndex(coordIdx);
 
-	coordIdx = new CIvfIndex();
+	coordIdx = Index::create();
 	coordIdx->createLinear(8,8);
 
 	triStripSet->addCoordIndex(coordIdx);
@@ -323,7 +332,7 @@ void CExampleWindow::onInit(int width, int height)
 	triStripSet->addColor(1.0, 1.0, 1.0);
 	triStripSet->addColor(0.0, 0.0, 1.0);
 
-	colorIdx = new CIvfIndex();
+	colorIdx = Index::create();
 	colorIdx->createLinear(8);
 
 	triStripSet->addColorIndex(colorIdx);
@@ -337,7 +346,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a QuadSet
 
-	CIvfQuadSetPtr quadSet = new CIvfQuadSet();
+	auto quadSet = QuadSet::create();
 	
 	quadSet->addCoord(0.0,0.0,1.0);
 	quadSet->addCoord(1.0,0.0,1.0);
@@ -348,7 +357,7 @@ void CExampleWindow::onInit(int width, int height)
 	quadSet->addCoord(1.0,1.0,0.0);
 	quadSet->addCoord(0.0,1.0,0.0);
 
-	coordIdx = new CIvfIndex();
+	coordIdx = Index::create();
 	coordIdx->add(0,1,5,4);
 	coordIdx->add(1,2,6,5);
 	coordIdx->add(2,3,7,6);
@@ -367,7 +376,7 @@ void CExampleWindow::onInit(int width, int height)
 	quadSet->addColor(1.0, 1.0, 1.0);
 	quadSet->addColor(0.0, 0.0, 1.0);
 	
-	colorIdx = new CIvfIndex();
+	colorIdx = Index::create();
 	colorIdx->assignFrom(coordIdx);
 	
 	quadSet->addColorIndex(colorIdx);
@@ -377,13 +386,13 @@ void CExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(quadSet);
 
-	CIvfAxisPtr axis = new CIvfAxis();
+	auto axis = Axis::create();
 	axis->setSize(1.5);
 	m_scene->addChild(axis);
 	
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
@@ -394,7 +403,7 @@ void CExampleWindow::onInit(int width, int height)
 	// Export all to a DXF file
 
 	/*
-	CIvfDxfWriterPtr dxfWriter = new CIvfDxfWriter();
+	CIvfDxfWriterPtr dxfWriter = new DxfWriter();
 	dxfWriter->setFileName("advgeom.dxf");
 	dxfWriter->setShape(m_scene);
 	dxfWriter->write();
@@ -402,7 +411,7 @@ void CExampleWindow::onInit(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -410,7 +419,7 @@ void CExampleWindow::onResize(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 	m_camera->render();
@@ -418,14 +427,14 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseDown(int x, int y)
+void ExampleWindow::onMouseDown(int x, int y)
 {
 	m_beginX = x;
 	m_beginY = y;
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseMove(int x, int y)
+void ExampleWindow::onMouseMove(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -447,7 +456,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
+		if (getModifierKey() == WidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -469,7 +478,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseUp(int x, int y)
+void ExampleWindow::onMouseUp(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -487,12 +496,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

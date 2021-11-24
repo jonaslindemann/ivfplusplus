@@ -53,7 +53,7 @@ inline float perlinNoise::randNoiseFloat() {
 // convert a 2D vector into unit length
 
 void perlinNoise::normalize2d(float vector[2]) {
-  float length = sqrt((vector[0] * vector[0]) + (vector[1] * vector[1]));
+  float length = sqrtf((vector[0] * vector[0]) + (vector[1] * vector[1]));
   vector[0] /= length;
   vector[1] /= length;
 }
@@ -62,7 +62,7 @@ void perlinNoise::normalize2d(float vector[2]) {
 // convert a 3D vector into unit length
 
 void perlinNoise::normalize3d(float vector[3]) {
-  float length = sqrt((vector[0] * vector[0]) + 
+  float length = sqrtf((vector[0] * vector[0]) + 
                       (vector[1] * vector[1]) +
                       (vector[2] * vector[2]));
   vector[0] /= length;
@@ -225,7 +225,7 @@ float perlinNoise::noise(float x, float y, float z) {
 // reinitialize with new, random values.
 
 void perlinNoise::reseed() {
-  srand((unsigned int) (time(NULL) + rand()));
+  srand((unsigned int) (time(nullptr) + rand()));
   generateLookupTables();
 }
 

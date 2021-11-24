@@ -1,19 +1,21 @@
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
 #include "IvfFlyWidget.h"
+
+using namespace ivf;
 
 int
 main(int argc, char **argv) 
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGBA|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CIvfFlyWidgetPtr window = new CIvfFlyWidget(0, 0, 512, 512);
+	auto window = FlyWidget::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

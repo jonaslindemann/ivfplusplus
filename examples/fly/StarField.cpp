@@ -1,30 +1,32 @@
 #include "StarField.h"
 
-#include <ivfmath/IvfVec3d.h>
+#include <ivfmath/Vec3d.h>
 
-#include <ivfimage/IvfSgiImage.h>
+#include <ivfimage/SgiImage.h>
 
 #include <time.h>
 
-CStarField::CStarField(CIvfCamera* camera)
+using namespace ivf;
+
+StarField::StarField(Camera* camera)
 {
-	m_texturedStars = new CIvfQuadSet();
+	m_texturedStars = new QuadSet();
 	m_texturedStars->setUseColor(false);
 
-	m_pointStars = new CIvfPointSet();
+	m_pointStars = new PointSet();
 	m_pointStars->setUseColor(true);
 
-	m_nebulaSphere = new CIvfSphere();
+	m_nebulaSphere = new Sphere();
 	m_nebulaSphere->setRadius(61.0);
 
-	m_planets = new CIvfQuadSet();
+	m_planets = new QuadSet();
 	m_planets->setUseColor(false);
 
-	CIvfSgiImagePtr image = new CIvfSgiImage();
-	image->setFileName("images/nebula02.rgb");
+	auto image = SgiImage::create();
+	image->setFileName("data/images/nebula02.rgb");
 	image->read();
 
-	CIvfTexturePtr texture = new CIvfTexture();
+	auto texture = Texture::create();
 	texture->setImage(image);
 	//texture->load("textures/nebula02.rgb");
 	m_nebulaSphere->setTexture(texture);
@@ -33,11 +35,11 @@ CStarField::CStarField(CIvfCamera* camera)
 	initializeStars();
 }
 
-CStarField::~CStarField()
+StarField::~StarField()
 {
 }
 
-void CStarField::doCreateGeometry()
+void StarField::doCreateGeometry()
 {
 	double x, y, z;
 	m_camera->getPosition(x, y, z);
@@ -68,18 +70,18 @@ void CStarField::doCreateGeometry()
 
 }
 
-void CStarField::initializeStars()
+void StarField::initializeStars()
 {
 	int i;
 
-	CIvfVec3d p1;
-	CIvfVec3d p2;
-	CIvfVec3d p3;
-	CIvfVec3d p4;
-	CIvfVec3d pos;
-	CIvfVec3d normal;
-	CIvfVec3d s;
-	CIvfVec3d t;
+	Vec3d p1;
+	Vec3d p2;
+	Vec3d p3;
+	Vec3d p4;
+	Vec3d pos;
+	Vec3d normal;
+	Vec3d s;
+	Vec3d t;
 
 	double x, y, z;
 	double alfa, beta;
@@ -93,17 +95,17 @@ void CStarField::initializeStars()
 
 	m_texturedStars->clear();
 
-	CIvfSgiImagePtr image = new CIvfSgiImage();
-	image->setFileName("images/star02.rgb");
+	auto image = SgiImage::create();
+	image->setFileName("data/images/star02.rgb");
 	image->read();
 
-	CIvfTexturePtr texture = new CIvfTexture();
+	auto texture = Texture::create();
 	texture->setImage(image);
 	texture->setTextureMode(GL_DECAL);
 
 	m_texturedStars->setTexture(texture);
 
-	srand( (unsigned)time( NULL ) );
+	srand( (unsigned)time( nullptr ) );
 
 	for (i=0; i<nTexturedStars*4; i++)
 	{
@@ -132,11 +134,11 @@ void CStarField::initializeStars()
 		m_texturedStars->addTextureCoord(0.0, 1.0);
 	}
 
-	CIvfIndexPtr idx = new CIvfIndex();
+	IndexPtr idx = Index::create();
 	idx->createLinear(0, nTexturedStars*4);
 	m_texturedStars->addCoordIndex(idx);
 
-	idx = new CIvfIndex();
+	idx = Index::create();
 	idx->createLinear(0, nTexturedStars*4);
 	m_texturedStars->addTextureIndex(idx);
 
@@ -155,23 +157,23 @@ void CStarField::initializeStars()
 		m_pointStars->addColor(c * 0.8f, c * 0.8f,  c);
 	}
 
-	idx = new CIvfIndex();
+	idx = new Index();
 	idx->createLinear(0, nPointStars);
 	m_pointStars->addCoordIndex(idx);
 
-	idx = new CIvfIndex();
+	idx = new Index();
 	idx->createLinear(0, nPointStars);
 	m_pointStars->addColorIndex(idx);
 
-	image = new CIvfSgiImage();
-	image->setFileName("images/planet01.rgb");
+	image = SgiImage::create();
+	image->setFileName("data/images/planet01.rgb");
 	image->setAlphaChannel(true);
 	image->read();
 	image->createAlphaMask(255,0,0,255);
 	image->replaceColor(255, 255, 255, 0, 0, 0);
 	image->setInternalFormat(GL_RGB10_A2);
 
-	texture = new CIvfTexture();
+	texture = Texture::create();
 	texture->setImage(image);
 	texture->setTextureMode(GL_BLEND);
 
@@ -202,21 +204,21 @@ void CStarField::initializeStars()
 		m_planets->addTextureCoord(0.0, 1.0);
 	}
 
-	idx = new CIvfIndex();
+	idx = new Index();
 	idx->createLinear(0, nPlanets*4);
 	m_planets->addCoordIndex(idx);
 
-	idx = new CIvfIndex();
+	idx = new Index();
 	idx->createLinear(0, nPlanets*4);
 	m_planets->addTextureIndex(idx);
 }
 
-void CStarField::setCamera(CIvfCamera *camera)
+void StarField::setCamera(Camera *camera)
 {
 	m_camera = camera;
 }
 
-void CStarField::getPolarVectors(double alfa, double beta, CIvfVec3d &normal, CIvfVec3d &s, CIvfVec3d &t)
+void StarField::getPolarVectors(double alfa, double beta, Vec3d &normal, Vec3d &s, Vec3d &t)
 {
 	double x, y, z;
 

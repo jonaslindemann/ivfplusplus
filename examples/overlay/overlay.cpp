@@ -11,37 +11,39 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivfwidget/IvfMouseViewHandler.h>
+#include <ivfwidget/MouseViewHandler.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfCube.h>
+#include <ivf/Camera.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Lighting.h>
+#include <ivf/Material.h>
+#include <ivf/Cube.h>
+
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase,
-	CIvfInitEvent,
-	CIvfRenderEvent,
-	CIvfOverlayEvent,
-	CIvfResizeEvent
+class ExampleWindow: public GlutBase,
+	InitEvent,
+	RenderEvent,
+	OverlayEvent,
+	ResizeEvent
 {
 private:
-	CIvfCameraPtr		m_camera;
-	CIvfCompositePtr	m_scene;
-	CIvfLightPtr		m_light;
+	CameraPtr		m_camera;
+	CompositePtr	m_scene;
+	LightPtr		m_light;
 	
-	CIvfMouseViewHandlerPtr m_mouseViewHandler;
+	MouseViewHandlerPtr m_mouseViewHandler;
 
 	double m_angleX;
 	double m_angleY;
@@ -54,7 +56,9 @@ private:
 	int m_beginY;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H);
+	ExampleWindow(int X, int Y, int W, int H);
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onRender();
@@ -66,8 +70,14 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-:CIvfGlutBase(X, Y, W, H)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+
+ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
+:GlutBase(X, Y, W, H)
 {
 	this->addInitEvent(this);
 	this->addRenderEvent(this);
@@ -75,61 +85,61 @@ CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
 	this->addResizeEvent(this);
 }
 
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
 	m_camera->initialize();
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {	
 	// Initialize variables
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = Camera::create();
 	m_camera->setPosition(0.0, 5.0, 5.0);
 
 	// Create a materials
 
-	CIvfMaterialPtr yellowMaterial = new CIvfMaterial();
+	auto yellowMaterial = Material::create();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene composite
 
-	m_scene = new CIvfComposite();
+	m_scene = Composite::create();
 
-	CIvfCubePtr cube = new CIvfCube();
+	auto cube = Cube::create();
 	
 	cube->setMaterial(yellowMaterial);
 	m_scene->addChild(cube);
 
 	// First point
 	
-	CIvfAxisPtr axis = new CIvfAxis();
+	auto axis = Axis::create();
 	m_scene->addChild(axis);
 	
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 
-	m_light = new CIvfLight();
+	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
 	this->setUseOverlay(true);
 	
-	m_mouseViewHandler = new CIvfMouseViewHandler(this, m_camera);
+	m_mouseViewHandler = MouseViewHandler::create(this, m_camera);
 	m_mouseViewHandler->activate();
 	
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 	m_camera->render();
@@ -137,7 +147,7 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onOverlay()
+void ExampleWindow::onOverlay()
 {
 	glColor3f(1.0f, 1.0f, 0.0f);
 	glBegin(GL_LINES);
@@ -154,12 +164,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_DEPTH|IVF_MULTISAMPLE|IVF_RGBA);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = new ExampleWindow(0, 0, 512, 512);
 
 	// Set window title and show window
 

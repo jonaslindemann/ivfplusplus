@@ -8,10 +8,10 @@ void cbHide(void* w);
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
 
-class CSplashFrame {
-  bool m_timer; 
+class SplashFrame {
+  bool m_timer;
 public:
-  CSplashFrame();
+  SplashFrame();
   Fl_Double_Window *wndSplash;
   Fl_Box *boxImage;
   Fl_Button *btnClose;

@@ -11,40 +11,42 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLighting.h>
+#include <ivf/Camera.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Lighting.h>
 
-#include <ivffile/IvfAc3DReader.h>
+#include <ivffile/Ac3DReader.h>
 
-#include <ivfctl/IvfControllerGroup.h>
-#include <ivfctl/IvfRotateController.h>
-#include <ivfctl/IvfCameraController.h>
-#include <ivfctl/IvfSlerpController.h>
+#include <ivfctl/ControllerGroup.h>
+#include <ivfctl/RotateController.h>
+#include <ivfctl/CameraController.h>
+#include <ivfctl/SlerpController.h>
+
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class ExampleWindow: public GlutBase {
 private:
-	CIvfCameraPtr		m_camera;
-	CIvfCompositePtr	m_scene;
-	CIvfLightPtr		m_light;
+	CameraPtr		m_camera;
+	CompositePtr	m_scene;
+	LightPtr		m_light;
 
-	CIvfControllerGroupPtr m_controllers;
-	CIvfRotateControllerPtr m_propCtl;
-	CIvfRotateControllerPtr m_headCtl;
-	CIvfCameraControllerPtr m_cameraCtl;
+	ControllerGroupPtr m_controllers;
+	RotateControllerPtr m_propCtl;
+	RotateControllerPtr m_headCtl;
+	CameraControllerPtr m_cameraCtl;
 
-	CIvfSlerpControllerPtr m_slerpCtl;
+	SlerpControllerPtr m_slerpCtl;
 
 	double m_angleX;
 	double m_angleY;
@@ -59,8 +61,10 @@ private:
 	bool m_rotating;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+	ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H) {};
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -76,7 +80,12 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-void CExampleWindow::onInit(int width, int height)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -91,28 +100,28 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = Camera::create();
 	m_camera->setPosition(10.0, 20.0, 20.0);
 	m_camera->setTarget(0.0, 8.0, 0.0);
 
 	// Create a materials
 
-	CIvfMaterialPtr material = new CIvfMaterial();
+	auto material = Material::create();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene
 
-	m_scene = new CIvfComposite();
+	m_scene = Composite::create();
 
 	// Create a file reader
 
-	CIvfAc3DReaderPtr acReader = new CIvfAc3DReader();
+	auto acReader = Ac3DReader::create();
 
 	// Set parameters
 
-	acReader->setFileName("models/controllers.ac");
+	acReader->setFileName("data/models/controllers.ac");
 	acReader->setScaling(1.0);
 
 	// Read file
@@ -121,25 +130,24 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Retrieve poly set
 
-	CIvfCompositePtr model = (CIvfComposite*)acReader->getShape();
+	auto model = (Composite*)acReader->getShape();
 
-	CIvfShapePtr propeller = model->findShape("propeller");
+	auto propeller = model->findShape("propeller");
 	propeller->setRotationQuat(0.0, 0.0, 1.0, 0.0);
-	CIvfShapePtr head = model->findShape("head");
+	auto head = model->findShape("head");
 	head->setRotationQuat(0.0, 1.0, 0.0, 0.0);
 
-
-	m_propCtl = new CIvfRotateController();
+	m_propCtl = RotateController::create();
 	m_propCtl->setShape(propeller);
 	m_propCtl->setRotationSpeed(100.0);
 	m_propCtl->activate();
 
-	m_headCtl = new CIvfRotateController();
+	m_headCtl = RotateController::create();
 	m_headCtl->setShape(head);
 	m_headCtl->setRotationSpeed(10.0);
 	m_headCtl->activate();
 
-	CIvfSpline3dPtr positionSpline = new CIvfSpline3d();
+	auto positionSpline = Spline3d::create();
 	positionSpline->setSize(5);
 	positionSpline->getPoint(0)->setComponents(15.0, 10.0, 15.0);
 	positionSpline->getPoint(1)->setComponents(-15.0,  5.0, 15.0);
@@ -149,7 +157,7 @@ void CExampleWindow::onInit(int width, int height)
 	positionSpline->update();
 
 	/*
-	CIvfSpline3d* targetSpline = new CIvfSpline3d();
+	Spline3d* targetSpline = new Spline3d();
 	targetSpline->setSize(5);
 	targetSpline->getPoint(0)->setComponents(15.0, 10.0, 15.0);
 	targetSpline->getPoint(1)->setComponents(-15.0,  5.0, 15.0);
@@ -159,25 +167,25 @@ void CExampleWindow::onInit(int width, int height)
 	targetSpline->update();
 	*/
 
-	m_cameraCtl = new CIvfCameraController();
+	m_cameraCtl = CameraController::create();
 	m_cameraCtl->setCamera(m_camera);
 	m_cameraCtl->setPath(positionSpline);
 	m_cameraCtl->setFollowPath(false);
 	//m_cameraCtl->setTargetPath(targetSpline);
 	m_cameraCtl->setInitialSpeed(0.2);
 	//m_cameraCtl->setInitialTargetSpeed(0.2);
-	m_cameraCtl->setEndActionType(CIvfCameraController::EA_RESET);
-	m_cameraCtl->setStartActionType(CIvfCameraController::SA_RESET);
-	//m_cameraCtl->setTargetEndAction(CIvfCameraController::EA_REVERSE);
-	//m_cameraCtl->setTargetStartAction(CIvfCameraController::SA_REVERSE);
+	m_cameraCtl->setEndActionType(CameraController::EA_RESET);
+	m_cameraCtl->setStartActionType(CameraController::SA_RESET);
+	//m_cameraCtl->setTargetEndAction(CameraController::EA_REVERSE);
+	//m_cameraCtl->setTargetStartAction(CameraController::SA_REVERSE);
 	m_cameraCtl->deactivate();
 
-	CIvfAxisPtr axis = new CIvfAxis();
+	auto axis = Axis::create();
 	axis->setPosition(3.0, 3.0, 3.0);
 	axis->setSize(2.0);
 	m_scene->addChild(axis);
 
-	CIvfSlerpPtr slerp = new CIvfSlerp();
+	auto slerp = Slerp::create();
 	slerp->setSize(4);
 	slerp->setQuatAxisAngle(0, 0.0, 0.0, 1.0, 10.0);
 	slerp->setQuatAxisAngle(1, 0.0, 0.0, 1.0, 90.0);
@@ -185,25 +193,25 @@ void CExampleWindow::onInit(int width, int height)
 	slerp->setQuatAxisAngle(3, 0.0, 1.0, 0.0, 30.0);
 	slerp->update();
 
-	CIvfActionPtr action1 = new CIvfAction();
+	auto action1 = Action::create();
 	action1->setActionType(IVF_ACTION_ACTIVATE);
 	action1->setTarget(m_cameraCtl);
 
-	CIvfActionPtr action2 = new CIvfAction();
+	auto action2 = Action::create();
 	action2->setActionType(IVF_ACTION_DEACTIVATE);
 	action2->setTarget(m_cameraCtl);
 
-	m_slerpCtl = new CIvfSlerpController();
+	m_slerpCtl = SlerpController::create();
 	m_slerpCtl->setSlerp(slerp);
 	m_slerpCtl->setShape(axis);
 	m_slerpCtl->setInitialSpeed(1.0);
-	m_slerpCtl->setEndActionType(CIvfSlerpController::EA_REVERSE);
+	m_slerpCtl->setEndActionType(SlerpController::EA_REVERSE);
 	m_slerpCtl->setEndAction(action1);
-	m_slerpCtl->setStartActionType(CIvfSlerpController::SA_REVERSE);
+	m_slerpCtl->setStartActionType(SlerpController::SA_REVERSE);
 	m_slerpCtl->setStartAction(action2);
 	m_slerpCtl->activate();
 
-	m_controllers = new CIvfControllerGroup();
+	m_controllers = ControllerGroup::create();
 	m_controllers->addChild(m_propCtl);
 	m_controllers->addChild(m_headCtl);
 	m_controllers->addChild(m_cameraCtl);
@@ -214,7 +222,7 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 
 	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
@@ -225,7 +233,7 @@ void CExampleWindow::onInit(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -233,7 +241,7 @@ void CExampleWindow::onResize(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 
@@ -248,14 +256,14 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseDown(int x, int y)
+void ExampleWindow::onMouseDown(int x, int y)
 {
 	m_beginX = x;
 	m_beginY = y;
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseMove(int x, int y)
+void ExampleWindow::onMouseMove(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -275,7 +283,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
+		if (getModifierKey() == WidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -293,7 +301,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseUp(int x, int y)
+void ExampleWindow::onMouseUp(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -304,7 +312,7 @@ void CExampleWindow::onMouseUp(int x, int y)
 }
 
 // ------------------------------------------------------------
-bool CExampleWindow::onTimeout0()
+bool ExampleWindow::onTimeout0()
 {
 	m_controllers->update(0.01);
 	redraw();
@@ -312,7 +320,7 @@ bool CExampleWindow::onTimeout0()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'p' :
@@ -346,12 +354,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

@@ -11,32 +11,33 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfBrick.h>
-#include <ivf/IvfCube.h>
-#include <ivf/IvfSphere.h>
-#include <ivf/IvfCylinder.h>
-#include <ivf/IvfCone.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLight.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfLighting.h>
+#include <ivf/Camera.h>
+#include <ivf/Brick.h>
+#include <ivf/Cube.h>
+#include <ivf/Sphere.h>
+#include <ivf/Cylinder.h>
+#include <ivf/Cone.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Light.h>
+#include <ivf/Material.h>
+#include <ivf/Lighting.h>
 
-#include <ivfwidget/IvfMouseViewHandler.h>
-#include <ivfwidget/IvfSceneHandler.h>
-#include <ivfwidget/IvfInteractionHandler.h>
+#include <ivfwidget/MouseViewHandler.h>
+#include <ivfwidget/SceneHandler.h>
+#include <ivfwidget/InteractionHandler.h>
 
-#include <ivf3dui/IvfUIButton.h>
-#include <ivf3dui/IvfUISwitch.h>
-#include <ivf3dui/IvfUIButtonGroup.h>
-#include <ivf3dui/IvfUIComposite.h>
+#include <ivf3dui/UIButton.h>
+#include <ivf3dui/UISwitch.h>
+#include <ivf3dui/UIButtonGroup.h>
+#include <ivf3dui/UIComposite.h>
 
 using namespace std;
+using namespace ivf;
 
 #define VIEW_MODE			100
 #define INTERACTION_MODE	101
@@ -45,148 +46,155 @@ using namespace std;
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase,
-	CIvfInitEvent,
-	CIvfShapeOverEvent,
-	CIvfShapeLeaveEvent,
-	CIvfShapeEnterEvent,
-	CIvfShapeDownEvent,
-	CIvfShapeUpEvent,
-	CIvfShapeClickEvent,
-	CIvfControlOverEvent,
-	CIvfControlLeaveEvent,
-	CIvfControlEnterEvent,
-	CIvfControlDownEvent,
-	CIvfControlUpEvent,
-	CIvfControlClickEvent,
-	CIvfTimeoutEvent
+class ExampleWindow: public GlutBase,
+	InitEvent,
+	ShapeOverEvent,
+	ShapeLeaveEvent,
+	ShapeEnterEvent,
+	ShapeDownEvent,
+	ShapeUpEvent,
+	ShapeClickEvent,
+	ControlOverEvent,
+	ControlLeaveEvent,
+	ControlEnterEvent,
+	ControlDownEvent,
+	ControlUpEvent,
+	ControlClickEvent,
+	TimeoutEvent
 {
 private:
 
 	// Camera movement state variables
 
-	CIvfCameraPtr		m_camera;
-	CIvfScenePtr		m_scene;
-	CIvfLightPtr		m_light;
+	CameraPtr		m_camera;
+	ScenePtr		m_scene;
+	LightPtr		m_light;
 
-	CIvfCubePtr			m_cube;
-	CIvfSpherePtr		m_sphere;
-	CIvfCylinderPtr		m_cylinder;
-	CIvfConePtr			m_cone;
+	CubePtr			m_cube;
+	SpherePtr		m_sphere;
+	CylinderPtr		m_cylinder;
+	ConePtr			m_cone;
 
-	CIvfTransformPtr	m_xfm;
+	TransformPtr	m_xfm;
 
-	CIvfShapePtr		m_rotateShape;
+	ShapePtr		m_rotateShape;
 
-	CIvfMouseViewHandlerPtr		m_mouseHandler;
-	CIvfSceneHandlerPtr			m_sceneHandler;
-	CIvfInteractionHandlerPtr	m_interactionHandler;
+	MouseViewHandlerPtr		m_mouseHandler;
+	SceneHandlerPtr			m_sceneHandler;
+	InteractionHandlerPtr	m_interactionHandler;
 public:
-	CExampleWindow(int X, int Y, int W, int H);
+	ExampleWindow(int X, int Y, int W, int H);
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual bool onTimeout();
 
-	virtual void onShapeDown(CIvfShape* shape);
-	virtual void onShapeClick(CIvfShape* shape);
-	virtual void onShapeUp(CIvfShape* shape);
-	virtual void onShapeEnter(CIvfShape* shape);
-	virtual void onShapeOver(CIvfShape* shape);
-	virtual void onShapeLeave(CIvfShape* shape);
-	virtual void onShapeDrag(CIvfShape* shape);
+	virtual void onShapeDown(Shape* shape);
+	virtual void onShapeClick(Shape* shape);
+	virtual void onShapeUp(Shape* shape);
+	virtual void onShapeEnter(Shape* shape);
+	virtual void onShapeOver(Shape* shape);
+	virtual void onShapeLeave(Shape* shape);
+	virtual void onShapeDrag(Shape* shape);
 
-	virtual void onControlClick(CIvfUIInteractiveBase* uiControl);
-	virtual void onControlDrag(CIvfUIInteractiveBase* uiControl);
-	virtual void onControlUp(CIvfUIInteractiveBase* uiControl);
-	virtual void onControlDown(CIvfUIInteractiveBase* uiControl);
-	virtual void onControlEnter(CIvfUIInteractiveBase* uiControl);
-	virtual void onControlOver(CIvfUIInteractiveBase* uiControl);
-	virtual void onControlLeave(CIvfUIInteractiveBase* uiControl);
+	virtual void onControlClick(UIInteractiveBase* uiControl);
+	virtual void onControlDrag(UIInteractiveBase* uiControl);
+	virtual void onControlUp(UIInteractiveBase* uiControl);
+	virtual void onControlDown(UIInteractiveBase* uiControl);
+	virtual void onControlEnter(UIInteractiveBase* uiControl);
+	virtual void onControlOver(UIInteractiveBase* uiControl);
+	virtual void onControlLeave(UIInteractiveBase* uiControl);
 };
 
 // ------------------------------------------------------------
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H)
 {
 	addInitEvent(this);
 	assignTimeoutEvent(0, this);
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = Camera::create();
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setPosition(-0.0, 6.0, 10.0);
 	m_camera->setTarget(-0.0, 0.0, 0.0);
 
 	// Create scene
 
-	m_scene = new CIvfScene();
+	m_scene = Scene::create();
 	m_scene->setView(m_camera);
 
 	// Create a materials
 
-	CIvfMaterialPtr redMaterial = new CIvfMaterial();
+	auto redMaterial = Material::create();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
-	CIvfMaterialPtr greenMaterial = new CIvfMaterial();
+	auto greenMaterial = Material::create();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 	
-	CIvfMaterialPtr blueMaterial = new CIvfMaterial();
+	auto blueMaterial = Material::create();
 	blueMaterial->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	blueMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	blueMaterial->setAmbientColor(0.0f, 0.0f, 0.5f, 1.0f);
 
-	CIvfMaterialPtr yellowMaterial = new CIvfMaterial();
+	auto yellowMaterial = Material::create();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create objects
 
-	m_xfm = new CIvfTransform();
+	m_xfm = Transform::create();
 
 	m_scene->addChild(m_xfm);
 	
-	m_cube = new CIvfCube();
+	m_cube = Cube::create();
 	m_cube->setMaterial(redMaterial);
 	m_cube->setPosition(2.0, 0.0, 2.0);
 	m_xfm->addChild(m_cube);
 
-	m_sphere = new CIvfSphere();
+	m_sphere = Sphere::create();
 	m_sphere->setMaterial(greenMaterial);
 	m_sphere->setPosition(-2.0, 0.0, 2.0);
 	m_xfm->addChild(m_sphere);
 
-	m_cylinder = new CIvfCylinder();
+	m_cylinder = Cylinder::create();
 	m_cylinder->setMaterial(blueMaterial);
 	m_cylinder->setPosition(-2.0, 0.0, -2.0);
 	m_xfm->addChild(m_cylinder);
 
-	m_cone = new CIvfCone();
+	m_cone = Cone::create();
 	m_cone->setMaterial(yellowMaterial);
 	m_cone->setPosition(2.0, 0.0, -2.0);
 	m_cone->setRotationQuat(0.0, 0.0, 1.0, 45.0);
 	m_xfm->addChild(m_cone);
 
-	CIvfBrickPtr buttonShape = new CIvfBrick();
+	auto buttonShape = Brick::create();
 	buttonShape->setSize(0.3, 0.1, 0.3);
 	buttonShape->setMaterial(yellowMaterial);
 
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 	lighting->enable();
 
 	m_light = lighting->getLight(0);
@@ -195,20 +203,20 @@ void CExampleWindow::onInit(int width, int height)
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
-	CIvfUIButtonGroupPtr buttonGroup = new CIvfUIButtonGroup();
+	auto buttonGroup = UIButtonGroup::create();
 	buttonGroup->setPosition(0.0, 0.0, 0.0);
 	//buttonGroup->setRotationQuat(1.0, 0.0, 0.0, 0.0);
 
 	int i, j;
 
-	CIvfUIButtonPtr button;
+	UIButtonPtr button;
 
 	for (i=0; i<2; i++)
 	{
 		for (j=0; j<2; j++)
 		{
-			button = new CIvfUIButton();
-			button->setVisualAction(CIvfUIButton::VA_MOVING);
+			button = UIButton::create();
+			button->setVisualAction(UIButton::VA_MOVING);
 			button->setId(1001+j+i*2);
 			button->setMovementDirection(0.0, -1.0, 0.0);
 			button->setMovementDistance(0.2);
@@ -220,8 +228,8 @@ void CExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(buttonGroup);
 
-	button = new CIvfUIButton();
-	button->setVisualAction(CIvfUIButton::VA_MOVING);
+	button = UIButton::create();
+	button->setVisualAction(UIButton::VA_MOVING);
 	button->setId(1005);
 	button->setMovementDirection(0.0, -1.0, 0.0);
 	button->setMovementDistance(0.2);
@@ -232,10 +240,10 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create event handlers
 
-	m_mouseHandler = new CIvfMouseViewHandler(this, m_camera);
+	m_mouseHandler = MouseViewHandler::create(this, m_camera);
 	m_mouseHandler->activate();
 
-	m_interactionHandler = new CIvfInteractionHandler(this, m_scene);
+	m_interactionHandler = InteractionHandler::create(this, m_scene);
 	m_interactionHandler->activate();
 	m_interactionHandler->setShapeEnterEvent(this);
 	m_interactionHandler->setShapeOverEvent(this);
@@ -250,15 +258,15 @@ void CExampleWindow::onInit(int width, int height)
 	m_interactionHandler->setControlUpEvent(this);
 	m_interactionHandler->setControlClickEvent(this);
 	
-	m_sceneHandler = new CIvfSceneHandler(this, m_scene);
+	m_sceneHandler = SceneHandler::create(this, m_scene);
 	m_sceneHandler->activate();
 
 	enableTimeout(0.01, 0);
 }
 
-bool CExampleWindow::onTimeout()
+bool ExampleWindow::onTimeout()
 {
-	if (m_rotateShape!=NULL)
+	if (m_rotateShape!=nullptr)
 	{
 		double v1, v2, v3, angle;
 		m_rotateShape->getRotationQuat(v1, v2, v3, angle);
@@ -270,51 +278,51 @@ bool CExampleWindow::onTimeout()
 	return true;
 }
 
-void CExampleWindow::onShapeDown(CIvfShape* shape)
+void ExampleWindow::onShapeDown(Shape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeDown: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeClick(CIvfShape* shape)
+void ExampleWindow::onShapeClick(Shape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeClick: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeUp(CIvfShape* shape)
+void ExampleWindow::onShapeUp(Shape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeUp: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeEnter(CIvfShape* shape)
+void ExampleWindow::onShapeEnter(Shape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeEnter: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeOver(CIvfShape* shape)
+void ExampleWindow::onShapeOver(Shape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeOver: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeLeave(CIvfShape* shape)
+void ExampleWindow::onShapeLeave(Shape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeLeave: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onShapeDrag(CIvfShape* shape)
+void ExampleWindow::onShapeDrag(Shape* shape)
 {
-	if (shape!=NULL)
+	if (shape!=nullptr)
 		cout << "onShapeDrag: " << shape->getClassName() << endl;
 }
 
-void CExampleWindow::onControlClick(CIvfUIInteractiveBase *uiControl)
+void ExampleWindow::onControlClick(UIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 	{
 		switch (uiControl->getId()) {
 		case 1001:
@@ -337,16 +345,16 @@ void CExampleWindow::onControlClick(CIvfUIInteractiveBase *uiControl)
 	}
 }
 
-void CExampleWindow::onControlOver(CIvfUIInteractiveBase *uiControl)
+void ExampleWindow::onControlOver(UIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 		cout << "onControlOver: " << uiControl->getClassName() 
 		<< ", " << uiControl->getId() << endl;
 }
 
-void CExampleWindow::onControlDown(CIvfUIInteractiveBase *uiControl)
+void ExampleWindow::onControlDown(UIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 	{
 		if (uiControl->getId()==1005)
 			m_rotateShape = m_xfm;
@@ -356,51 +364,50 @@ void CExampleWindow::onControlDown(CIvfUIInteractiveBase *uiControl)
 	}
 }
 
-void CExampleWindow::onControlUp(CIvfUIInteractiveBase *uiControl)
+void ExampleWindow::onControlUp(UIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 	{
 		if (uiControl->getId()==1005)
-			m_rotateShape = NULL;
+			m_rotateShape = nullptr;
 
 		cout << "onControlUp: " << uiControl->getClassName()
 		<< ", " << uiControl->getId() << endl;
 	}
 }
 
-void CExampleWindow::onControlDrag(CIvfUIInteractiveBase *uiControl)
+void ExampleWindow::onControlDrag(UIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 		cout << "onControlDrag: " << uiControl->getClassName() << endl;
 }
 
-void CExampleWindow::onControlLeave(CIvfUIInteractiveBase *uiControl)
+void ExampleWindow::onControlLeave(UIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 		cout << "onControlLeave: " << uiControl->getClassName() << endl;
 }
 
-void CExampleWindow::onControlEnter(CIvfUIInteractiveBase *uiControl)
+void ExampleWindow::onControlEnter(UIInteractiveBase *uiControl)
 {
-	if (uiControl!=NULL)
+	if (uiControl!=nullptr)
 		cout << "onControlEnter: " << uiControl->getClassName() << endl;
 }
 
 // ------------------------------------------------------------
 // Main program
 // ------------------------------------------------------------
-	
 
 int main(int argc, char **argv) 
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

@@ -8,7 +8,7 @@ void timer_callback(void * v);
 void idle_callback(void* p);
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Menu_Bar.H>
-#include "IvfCustomWidget.h"
+#include "CustomWidget.h"
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Value_Slider.H>
 #include "Fl_HoverButton.h"
@@ -20,14 +20,14 @@ void idle_callback(void* p);
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Counter.H>
 
-class CMainFrame {
-  int m_x; 
-  int m_y; 
-  int m_w; 
-  int m_h; 
-  CSplashFrame* m_splash; 
+class MainFrame {
+  int m_x;
+  int m_y;
+  int m_w;
+  int m_h;
+  SplashFrame* m_splash;
 public:
-  CMainFrame();
+  MainFrame();
   Fl_Double_Window *wndMain;
 private:
   inline void cb_wndMain_i(Fl_Double_Window*, void*);
@@ -298,7 +298,7 @@ private:
   inline void cb_mnuHelpAbout_i(Fl_Menu_*, void*);
   static void cb_mnuHelpAbout(Fl_Menu_*, void*);
 public:
-  CIvfCustomWidget *ivfCustomWidget;
+  CustomWidget *customWidget;
   Fl_Scroll *scrTop;
   Fl_Value_Slider *sldTimeStep;
 private:
@@ -491,6 +491,6 @@ public:
   Fl_Window* getWindow();
   void center();
   void redraw();
-  ~CMainFrame();
+  ~MainFrame();
 };
 #endif

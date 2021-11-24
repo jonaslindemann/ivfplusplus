@@ -8,7 +8,7 @@ main(int argc, char **argv)
     Fl::gl_visual(FL_DOUBLE|FL_RGB|FL_ALPHA|FL_MULTISAMPLE|FL_DEPTH);
     Fl::get_system_colors();
 	
-    CMainFrame *frame = new CMainFrame();
+    auto frame = new MainFrame();
     frame->workspaceView->mode(FL_DOUBLE|FL_RGB|FL_ALPHA|FL_MULTISAMPLE|FL_DEPTH);
     frame->show();
 

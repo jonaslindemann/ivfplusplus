@@ -1,24 +1,26 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0103 
-header_name {.h} 
+version 1.0400
+header_name {.h}
 code_name {.cpp}
-decl {int x;} {} 
+decl {int x;} {private local
+}
 
 Function {cbHide(void* w)} {open
 } {
   code {Fl_Window* window = (Fl_Window*)w;
 window->hide();} {}
-} 
+}
 
-class CSplashFrame {open
+class SplashFrame {open
 } {
-  decl {bool m_timer} {}
-  Function {CSplashFrame()} {open
+  decl {bool m_timer} {private local
+  }
+  Function {SplashFrame()} {open selected
   } {
     Fl_Window wndSplash {open
-      xywh {444 111 401 301} noborder visible
+      xywh {444 111 401 301} type Double noborder visible
     } {
-      Fl_Box boxImage {selected
+      Fl_Box boxImage {
         image {C:/Work/Jonas/Projekt/Byggmek/fibreapp/images/splash.xpm} xywh {0 0 400 300} box THIN_UP_BOX
       }
       Fl_Button btnClose {
@@ -47,4 +49,4 @@ wndSplash->show();} {}
   } {
     code {wndSplash->hide();} {}
   }
-} 
+}

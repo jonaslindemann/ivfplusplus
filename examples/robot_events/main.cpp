@@ -11,45 +11,47 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfSphere.h>
-#include <ivf/IvfCylinder.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfLight.h>
-#include <ivf/IvfMaterial.h>
+#include <ivf/Camera.h>
+#include <ivf/Sphere.h>
+#include <ivf/Cylinder.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Lighting.h>
+#include <ivf/Light.h>
+#include <ivf/Material.h>
 
-#include <ivfwidget/IvfMouseViewHandler.h>
+#include <ivfwidget/MouseViewHandler.h>
+
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase, 
-	CIvfRenderEvent,
-	CIvfResizeEvent,
-	CIvfInitEvent,
-	CIvfDestroyEvent,
-	CIvfKeyboardEvent
+class ExampleWindow: public GlutBase, 
+	RenderEvent,
+	ResizeEvent,
+	InitEvent,
+	DestroyEvent,
+	KeyboardEvent
 {
 private:
-	CIvfCameraPtr		m_camera;
-	CIvfCompositePtr	m_scene;
-	CIvfLightPtr		m_light;
+	CameraPtr		m_camera;
+	CompositePtr	m_scene;
+	LightPtr		m_light;
 
-	CIvfTransformPtr  m_part1;
-	CIvfTransformPtr  m_part2;
-	CIvfTransformPtr  m_part3;
-	CIvfTransformPtr  m_arm;
+	TransformPtr  m_part1;
+	TransformPtr  m_part2;
+	TransformPtr  m_part3;
+	TransformPtr  m_arm;
 
-	CIvfMouseViewHandlerPtr m_mouseViewHandler;
+	MouseViewHandlerPtr m_mouseViewHandler;
 
 	double m_alfa;
 	double m_beta;
@@ -59,7 +61,9 @@ private:
 	void updateArm();
 
 public:
-	CExampleWindow(int X, int Y, int W, int H);
+	ExampleWindow(int X, int Y, int W, int H);
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	void onInit(int width, int height);
 	void onResize(int width, int height);
@@ -71,8 +75,13 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) 
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H) 
 { 
 	addRenderEvent(this);
 	addResizeEvent(this);
@@ -80,7 +89,7 @@ CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
 	addKeyboardEvent(this);
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -91,43 +100,43 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = new Camera();
 	m_camera->setPosition(0.0, 5.0, 5.0);
 
 	// Create a materials
 
-	CIvfMaterialPtr redMaterial = new CIvfMaterial();
+	auto redMaterial = Material::create();
 	redMaterial->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	redMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	redMaterial->setAmbientColor(0.5f, 0.0f, 0.0f, 1.0f);
 
-	CIvfMaterialPtr greenMaterial = new CIvfMaterial();
+	auto greenMaterial = Material::create();
 	greenMaterial->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	greenMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	greenMaterial->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 	
-	CIvfMaterialPtr blueMaterial = new CIvfMaterial();
+	auto blueMaterial = Material::create();
 	blueMaterial->setDiffuseColor(0.0f, 0.0f, 1.0f, 1.0f);
 	blueMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	blueMaterial->setAmbientColor(0.0f, 0.0f, 0.5f, 1.0f);
 
-	CIvfMaterialPtr yellowMaterial = new CIvfMaterial();
+	auto yellowMaterial = Material::create();
 	yellowMaterial->setDiffuseColor(1.0f, 1.0f, 0.0f, 1.0f);
 	yellowMaterial->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	yellowMaterial->setAmbientColor(0.5f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene composite
 
-	m_scene = new CIvfComposite();
+	m_scene = Composite::create();
 
 	// Create robot base
 
-	CIvfCylinderPtr lowerBase = new CIvfCylinder();
+	auto lowerBase = Cylinder::create();
 	lowerBase->setHeight(0.2);
 	lowerBase->setMaterial(yellowMaterial);
 	m_scene->addChild(lowerBase);
 
-	CIvfCylinderPtr upperBase = new CIvfCylinder();
+	auto upperBase = Cylinder::create();
 	upperBase->setHeight(0.3);
 	upperBase->setRadius(0.5);
 	upperBase->setPosition(0.0, 0.1 + 0.15, 0.0);
@@ -136,14 +145,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create part1
 
-	m_part1 = new CIvfTransform();
+	m_part1 = Transform::create();
 
-	CIvfSpherePtr sphere = new CIvfSphere();
+	auto sphere = Sphere::create();
 	sphere->setRadius(0.1);
 	sphere->setMaterial(redMaterial);
 	m_part1->addChild(sphere);
 
-	CIvfCylinderPtr cylinder = new CIvfCylinder();
+	auto cylinder = Cylinder::create();
 	cylinder->setRadius(0.1);
 	cylinder->setHeight(1.0);
 	cylinder->setMaterial(greenMaterial);
@@ -155,14 +164,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create part2
 
-	m_part2 = new CIvfTransform();
+	m_part2 = Transform::create();
 
-	sphere = new CIvfSphere();
+	sphere = Sphere::create();
 	sphere->setRadius(0.1);
 	sphere->setMaterial(redMaterial);
 	m_part2->addChild(sphere);
 
-	cylinder = new CIvfCylinder();
+	cylinder = Cylinder::create();
 	cylinder->setRadius(0.1);
 	cylinder->setHeight(1.0);
 	cylinder->setMaterial(greenMaterial);
@@ -174,14 +183,14 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create part3
 
-	m_part3 = new CIvfTransform();
+	m_part3 = Transform::create();
 
-	sphere = new CIvfSphere();
+	sphere = Sphere::create();
 	sphere->setRadius(0.1);
 	sphere->setMaterial(redMaterial);
 	m_part3->addChild(sphere);
 
-	cylinder = new CIvfCylinder();
+	cylinder = Cylinder::create();
 	cylinder->setRadius(0.1);
 	cylinder->setHeight(1.0);
 	cylinder->setMaterial(greenMaterial);
@@ -193,31 +202,31 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create complete arm
 
-	m_arm = new CIvfTransform();
+	m_arm = Transform::create();
 	m_arm->addChild(m_part3);
 	m_arm->setPosition(0.0, 0.1+0.4, 0.0);
 	m_arm->setRotationQuat(0.0, 1.0, 0.0, m_alfa);
 
 	m_scene->addChild(m_arm);
 
-	CIvfAxisPtr axis = new CIvfAxis();
+	auto axis = Axis::create();
 	axis->setSize(1.5);
 	m_scene->addChild(axis);
 	
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 
 	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
-	m_mouseViewHandler = new CIvfMouseViewHandler(this, m_camera);
+	m_mouseViewHandler = MouseViewHandler::create(this, m_camera);
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -225,7 +234,7 @@ void CExampleWindow::onResize(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 	m_camera->render();
@@ -233,7 +242,7 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'a':
@@ -274,7 +283,7 @@ void CExampleWindow::onKeyboard(int key, int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::updateArm()
+void ExampleWindow::updateArm()
 {
 	m_arm->setRotationQuat(0.0, 1.0, 0.0, m_alfa);
 	m_part1->setRotationQuat(0.0, 0.0, 1.0, m_delta);
@@ -292,12 +301,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

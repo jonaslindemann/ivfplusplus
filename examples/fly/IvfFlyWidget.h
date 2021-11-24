@@ -1,35 +1,38 @@
 #ifndef _CIvfFlyWidget_h_
 #define _CIvfFlyWidget_h_
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfScene.h>
+#include <ivf/Camera.h>
+#include <ivf/Scene.h>
 
-#include <ivfctl/IvfControllerGroup.h>
+#include <ivfctl/ControllerGroup.h>
 
-#include <ivfwidget/IvfFlyHandler.h>
+#include <ivfwidget/FlyHandler.h>
 
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutBase.h>
 
 #include "StarField.h"
 //#include "Joystick.h"
 
-IvfSmartPointer(CIvfFlyWidget);
+IvfSmartPointer(FlyWidget);
 
-class CIvfFlyWidget : public CIvfGlutBase {
+class FlyWidget : public ivf::GlutBase {
 private:
-	CIvfCameraPtr			m_camera;
-	CIvfScenePtr			m_scene;
-	CStarFieldPtr			m_starfield;
-	CIvfControllerGroupPtr	m_controllers;
-	CIvfFlyHandlerPtr		m_flyHandler;
+	ivf::CameraPtr				m_camera;
+	ivf::ScenePtr				m_scene;
+	ivf::ControllerGroupPtr		m_controllers;
+	ivf::FlyHandlerPtr			m_flyHandler;
+
+	StarFieldPtr				m_starfield;
 
 	double m_t;
 	double m_dt;
 	bool m_firstFrame;
 public:
-	CIvfFlyWidget(int X, int Y, int W, int H, const char *L=0);
-	virtual ~CIvfFlyWidget();
+	FlyWidget(int X, int Y, int W, int H, const char *L=0);
+	virtual ~FlyWidget();
 
+	static FlyWidgetPtr create(int X, int Y, int W, int H);
+	
 	virtual void onInit(int width, int height);
 	virtual void onInitContext(int width, int height);
 	virtual void onResize(int width, int height);

@@ -11,30 +11,31 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivf/IvfCamera.h>
-#include <ivf/IvfAxis.h>
-#include <ivf/IvfComposite.h>
-#include <ivf/IvfTransform.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfLight.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfSphere.h>
-#include <ivf/IvfLOD.h>
-#include <ivf/IvfCube.h>
-#include <ivf/IvfCylinder.h>
+#include <ivf/Camera.h>
+#include <ivf/Axis.h>
+#include <ivf/Composite.h>
+#include <ivf/Transform.h>
+#include <ivf/Lighting.h>
+#include <ivf/Light.h>
+#include <ivf/Material.h>
+#include <ivf/Sphere.h>
+#include <ivf/LOD.h>
+#include <ivf/Cube.h>
+#include <ivf/Cylinder.h>
 
 using namespace std;
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase {
+class ExampleWindow: public GlutBase {
 private:
 
 	// Camera movement state variables
@@ -51,23 +52,25 @@ private:
 
 	// Ivf++ object declarations
 
-	CIvfCameraPtr		m_camera;
-	CIvfLightPtr		m_light;
-	CIvfCompositePtr	m_scene;
+	CameraPtr		m_camera;
+	LightPtr		m_light;
+	CompositePtr	m_scene;
 
-	CIvfLODPtr			m_lod1;
-	CIvfLODPtr			m_lod2;
-	CIvfLODPtr			m_lod3;
-	CIvfLODPtr			m_lod4;
-	CIvfSwitchPtr		m_switch;
+	LODPtr			m_lod1;
+	LODPtr			m_lod2;
+	LODPtr			m_lod3;
+	LODPtr			m_lod4;
+	SwitchPtr		m_switch;
 
 	double m_lodNear;
 	double m_lodFar;
 
 	void updateLOD();
 public:
-	CExampleWindow(int X, int Y, int W, int H)
-		:CIvfGlutBase(X, Y, W, H) {};
+	ExampleWindow(int X, int Y, int W, int H)
+		:GlutBase(X, Y, W, H) {};
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
@@ -82,7 +85,12 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-void CExampleWindow::onInit(int width, int height)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+void ExampleWindow::onInit(int width, int height)
 {
 	// Initialize variables
 
@@ -100,41 +108,41 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Initialize Ivf++ camera
 
-	m_camera = new CIvfCamera();
+	m_camera = Camera::create();
 	m_camera->setPosition(0.0, 5.0, 20.0);
 
 	// Create a materials
 
-	CIvfMaterialPtr material = new CIvfMaterial();
+	auto material = Material::create();
 	material->setDiffuseColor(0.0f, 1.0f, 0.0f, 1.0f);
 	material->setSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	material->setAmbientColor(0.0f, 0.5f, 0.0f, 1.0f);
 
 	// Create scene
 
-	m_scene = new CIvfComposite();
+	m_scene = Composite::create();
 
 	// Create four spheres with different complexity
 
-	CIvfSpherePtr sphereDetailed = new CIvfSphere();
+	auto sphereDetailed = Sphere::create();
 	sphereDetailed->setSlices(12);
 	sphereDetailed->setStacks(12);
 	
-	CIvfSpherePtr sphereNormal = new CIvfSphere();
+	auto sphereNormal = Sphere::create();
 	sphereNormal->setSlices(10);
 	sphereNormal->setStacks(8);
 
-	CIvfSpherePtr sphereSmall = new CIvfSphere();
+	auto sphereSmall = Sphere::create();
 	sphereSmall->setSlices(8);
 	sphereSmall->setStacks(6);
 	
-	CIvfSpherePtr sphereTiny = new CIvfSphere();
+	auto sphereTiny = Sphere::create();
 	sphereTiny->setSlices(6);
 	sphereTiny->setStacks(4);
 
 	// Create LOD objects
 
-	m_lod1 = new CIvfLOD();
+	m_lod1 = LOD::create();
 	m_lod1->addChild(sphereDetailed);
 	m_lod1->addChild(sphereNormal);
 	m_lod1->addChild(sphereSmall);
@@ -145,7 +153,7 @@ void CExampleWindow::onInit(int width, int height)
 	m_lod1->setLimits(m_lodNear, m_lodFar);
 	m_scene->addChild(m_lod1);
 	
-	m_lod2 = new CIvfLOD();
+	m_lod2 = LOD::create();
 	m_lod2->addChild(sphereDetailed);
 	m_lod2->addChild(sphereNormal);
 	m_lod2->addChild(sphereSmall);
@@ -156,7 +164,7 @@ void CExampleWindow::onInit(int width, int height)
 	m_lod2->setLimits(m_lodNear, m_lodFar);
 	m_scene->addChild(m_lod2);
 
-	m_lod3 = new CIvfLOD();
+	m_lod3 = LOD::create();
 	m_lod3->addChild(sphereDetailed);
 	m_lod3->addChild(sphereNormal);
 	m_lod3->addChild(sphereSmall);
@@ -167,7 +175,7 @@ void CExampleWindow::onInit(int width, int height)
 	m_lod3->setLimits(m_lodNear, m_lodFar);
 	m_scene->addChild(m_lod3);
 
-	m_lod4 = new CIvfLOD();
+	m_lod4 = LOD::create();
 	m_lod4->addChild(sphereDetailed);
 	m_lod4->addChild(sphereNormal);
 	m_lod4->addChild(sphereSmall);
@@ -180,12 +188,12 @@ void CExampleWindow::onInit(int width, int height)
 
 	// Create a switch object
 
-	CIvfCubePtr cube = new CIvfCube();
+	auto cube = Cube::create();
 	cube->setMaterial(material);
-	CIvfCylinderPtr cylinder = new CIvfCylinder();
+	auto cylinder = Cylinder::create();
 	cylinder->setMaterial(material);
 	
-	m_switch = new CIvfSwitch();
+	m_switch = new Switch();
 	m_switch->addChild(cube);
 	m_switch->addChild(cylinder);
 
@@ -193,7 +201,7 @@ void CExampleWindow::onInit(int width, int height)
 	
 	// Create a light
 
-	CIvfLightingPtr lighting = CIvfLighting::getInstance();
+	auto lighting = Lighting::getInstance();
 	
 	m_light = lighting->getLight(0);
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
@@ -202,7 +210,7 @@ void CExampleWindow::onInit(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onResize(int width, int height)
+void ExampleWindow::onResize(int width, int height)
 {
 	m_camera->setPerspective(45.0, 0.1, 100.0);
 	m_camera->setViewPort(width, height);
@@ -210,7 +218,7 @@ void CExampleWindow::onResize(int width, int height)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onRender()
+void ExampleWindow::onRender()
 {
 	m_light->render();
 	m_camera->render();
@@ -218,14 +226,14 @@ void CExampleWindow::onRender()
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseDown(int x, int y)
+void ExampleWindow::onMouseDown(int x, int y)
 {
 	m_beginX = x;
 	m_beginY = y;
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseMove(int x, int y)
+void ExampleWindow::onMouseMove(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -249,7 +257,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 
 	if (isRightButtonDown())
 	{
-		if (getModifierKey() == CIvfWidgetBase::MT_SHIFT)
+		if (getModifierKey() == WidgetBase::MT_SHIFT)
 		{
 			m_zoomX = (x - m_beginX);
 			m_zoomY = (y - m_beginY);
@@ -271,7 +279,7 @@ void CExampleWindow::onMouseMove(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onMouseUp(int x, int y)
+void ExampleWindow::onMouseUp(int x, int y)
 {
 	m_angleX = 0.0;
 	m_angleY = 0.0;
@@ -282,7 +290,7 @@ void CExampleWindow::onMouseUp(int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	switch (key) {
 	case 'a':
@@ -315,7 +323,7 @@ void CExampleWindow::onKeyboard(int key, int x, int y)
 }
 
 // ------------------------------------------------------------
-void CExampleWindow::updateLOD()
+void ExampleWindow::updateLOD()
 {
 	m_lod1->setLimits(m_lodNear, m_lodFar);
 	m_lod2->setLimits(m_lodNear, m_lodFar);
@@ -333,12 +341,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window
 
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
 
 	// Set window title and show window
 

@@ -2,59 +2,62 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/IvfGlutApplication.h>
-#include <ivfglut/IvfGlutBase.h>
+#include <ivfglut/GlutApplication.h>
+#include <ivfglut/GlutBase.h>
 
-#include <ivfwidget/IvfMouseViewHandler.h>
-#include <ivfwidget/IvfSceneHandler.h>
+#include <ivfwidget/MouseViewHandler.h>
+#include <ivfwidget/SceneHandler.h>
 
-#include <ivf/IvfScene.h>
-#include <ivf/IvfCube.h>
-#include <ivf/IvfMaterial.h>
-#include <ivf/IvfLighting.h>
-#include <ivf/IvfSwitch.h>
-#include <ivf/IvfAxis.h>
+#include <ivf/Scene.h>
+#include <ivf/Cube.h>
+#include <ivf/Material.h>
+#include <ivf/Lighting.h>
+#include <ivf/Switch.h>
+#include <ivf/Axis.h>
 
-#include <ivfgle/IvfGleCoordArray.h>
-#include <ivfgle/IvfGleColorArray.h>
-#include <ivfgle/IvfGleScalarArray.h>
-#include <ivfgle/IvfGlePolyCylinder.h>
-#include <ivfgle/IvfGlePolyCone.h>
-#include <ivfgle/IvfGle.h>
-#include <ivfgle/IvfGleExtrusion.h>
-#include <ivfgle/IvfGleContour.h>
-#include <ivfgle/IvfGleTwistExtrusion.h>
-#include <ivfgle/IvfGleSpiral.h>
+#include <ivfgle/GleCoordArray.h>
+#include <ivfgle/GleColorArray.h>
+#include <ivfgle/GleScalarArray.h>
+#include <ivfgle/GlePolyCylinder.h>
+#include <ivfgle/GlePolyCone.h>
+#include <ivfgle/Gle.h>
+#include <ivfgle/GleExtrusion.h>
+#include <ivfgle/GleContour.h>
+#include <ivfgle/GleTwistExtrusion.h>
+#include <ivfgle/GleSpiral.h>
 
 using namespace std;
+using namespace ivf;
 
 // ------------------------------------------------------------
 // Window class definition
 // ------------------------------------------------------------
 
-IvfSmartPointer(CExampleWindow);
+IvfSmartPointer(ExampleWindow);
 
-class CExampleWindow: public CIvfGlutBase,
-	CIvfInitEvent,
-	CIvfInitContextEvent,
-	CIvfResizeEvent,
-	CIvfRenderEvent,
-	CIvfClearEvent,
-	CIvfKeyboardEvent
+class ExampleWindow: public GlutBase,
+	InitEvent,
+	InitContextEvent,
+	ResizeEvent,
+	RenderEvent,
+	ClearEvent,
+	KeyboardEvent
 {
 private:
 
-	CIvfScenePtr m_scene;
+	ScenePtr m_scene;
 
-	CIvfSwitchPtr m_gleShapes;
+	SwitchPtr m_gleShapes;
 
-	CIvfLightingPtr m_lighting;
+	LightingPtr m_lighting;
 
-	CIvfMouseViewHandlerPtr m_mouseViewHandler;
-	CIvfSceneHandlerPtr m_sceneHandler;
+	MouseViewHandlerPtr m_mouseViewHandler;
+	SceneHandlerPtr m_sceneHandler;
 
 public:
-	CExampleWindow(int X, int Y, int W, int H);
+	ExampleWindow(int X, int Y, int W, int H);
+
+	static ExampleWindowPtr create(int X, int Y, int W, int H);
 
 	virtual void onInit(int width, int height);
 	virtual void onInitContext(int width, int height);
@@ -66,8 +69,13 @@ public:
 // Window class implementation
 // ------------------------------------------------------------
 
-CExampleWindow::CExampleWindow(int X, int Y, int W, int H)
-	:CIvfGlutBase(X, Y, W, H)
+ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
+{
+	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+}
+
+ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
+	:GlutBase(X, Y, W, H)
 {
 	addInitEvent(this);
 	addInitContextEvent(this);
@@ -81,23 +89,23 @@ double rnd()
 	return (double)rand()/(double)RAND_MAX;
 }
 
-void CExampleWindow::onInit(int width, int height)
+void ExampleWindow::onInit(int width, int height)
 {
 	// Setup a simple scene
 
-	m_scene = new CIvfScene();
+	m_scene = Scene::create();
 	m_scene->getCamera()->setPosition(3.0, 3.0, 3.0);
 
-	m_gleShapes = new CIvfSwitch();
+	m_gleShapes = Switch::create();
 
-	CIvfMaterialPtr material = new CIvfMaterial();
+	auto material = Material::create();
 	material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
 	material->setColorMaterial(false);
 
 	////////////////////////////////////////////////////////////////////
 	// Testing GLE classes
 
-	CIvfGlePtr gle = CIvfGle::getInstance();
+	auto gle = Gle::getInstance();
 	gle->setNumSides(20);
 	gle->setJoinStyle(TUBE_JN_ANGLE|TUBE_NORM_EDGE);
 
@@ -110,10 +118,10 @@ void CExampleWindow::onInit(int width, int height)
 	double deltaX = 4*M_PI/(nPoints-1);
 	int i;
 
-	CIvfGleColorArrayPtr colorArray = new CIvfGleColorArray(nPoints+2);
-	CIvfGleCoordArrayPtr coordArray = new CIvfGleCoordArray(nPoints+2);
-	CIvfGleScalarArrayPtr radiusArray = new CIvfGleScalarArray(nPoints+2);
-	CIvfGleScalarArrayPtr twistArray = new CIvfGleScalarArray(nPoints+2);
+	GleColorArrayPtr colorArray = GleColorArray::create(nPoints+2);
+	GleCoordArrayPtr coordArray = GleCoordArray::create(nPoints+2);
+	GleScalarArrayPtr radiusArray = GleScalarArray::create(nPoints+2);
+	GleScalarArrayPtr twistArray = GleScalarArray::create(nPoints+2);
 
 	for (i=0; i<nPoints; i++)
 	{
@@ -127,7 +135,7 @@ void CExampleWindow::onInit(int width, int height)
 	
 	coordArray->calcFirstAndLast();
 
-	CIvfGlePolyCylinderPtr polyCylinder = new CIvfGlePolyCylinder();
+	auto polyCylinder = GlePolyCylinder::create();
 	polyCylinder->setPoints(coordArray);
 	polyCylinder->setColors(colorArray);
 	polyCylinder->setMaterial(material);
@@ -137,7 +145,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Testing poly cone
 
-	CIvfGlePolyConePtr polyCone = new CIvfGlePolyCone();
+	auto polyCone = GlePolyCone::create();
 	polyCone->setPoints(coordArray);
 	polyCone->setColors(colorArray);
 	polyCone->setRadius(radiusArray);
@@ -148,7 +156,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Test extrusion
 
-	CIvfGleContourPtr contourArray = new CIvfGleContour(5);
+	auto contourArray = GleContour::create(5);
 	contourArray->setCoord(0, -0.2, -0.2);
 	contourArray->setCoord(1,  0.2, -0.2);
 	contourArray->setCoord(2,  0.2,  0.2);
@@ -156,7 +164,7 @@ void CExampleWindow::onInit(int width, int height)
 	contourArray->setCoord(4, -0.2, -0.2);
 	contourArray->calcNormals();
 
-	CIvfGleExtrusionPtr extrusion = new CIvfGleExtrusion();
+	auto extrusion = GleExtrusion::create();
 	extrusion->setPoints(coordArray);
 	extrusion->setColors(colorArray);
 	extrusion->setContour(contourArray);
@@ -168,7 +176,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Test twist extrusion
 
-	CIvfGleTwistExtrusionPtr twistExtrusion = new CIvfGleTwistExtrusion();
+	auto twistExtrusion = GleTwistExtrusion::create();
 	twistExtrusion->setPoints(coordArray);
 	twistExtrusion->setColors(colorArray);
 	twistExtrusion->setContour(contourArray);
@@ -181,7 +189,7 @@ void CExampleWindow::onInit(int width, int height)
 	////////////////////////////////////////////////////////////////////
 	// Test spiral
 
-	CIvfGleSpiralPtr spiral = new CIvfGleSpiral();
+	auto spiral = GleSpiral::create();
 	spiral->setContour(contourArray);
 	spiral->setContourUp(0.0, 1.0, 0.0);
 	spiral->setMaterial(material);
@@ -190,34 +198,34 @@ void CExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(m_gleShapes);
 
-	CIvfAxisPtr axis = new CIvfAxis();
+	auto axis = Axis::create();
 	m_scene->addChild(axis);
 
 	// Setup OpenGL
 
-	m_lighting = CIvfLighting::getInstance();
+	m_lighting = Lighting::getInstance();
 	m_lighting->enable();
 	m_lighting->getLight(0)->enable();
 
 	// Create handlers
 
-	m_mouseViewHandler = new CIvfMouseViewHandler(this, m_scene->getCamera());
-	m_sceneHandler = new CIvfSceneHandler(this, m_scene);
+	m_mouseViewHandler = MouseViewHandler::create(this, m_scene->getCamera());
+	m_sceneHandler = SceneHandler::create(this, m_scene);
 }
 
-void CExampleWindow::onKeyboard(int key, int x, int y)
+void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	m_gleShapes->cycleForward();
 	redraw();
 }
 
-void CExampleWindow::onInitContext(int width, int height)
+void ExampleWindow::onInitContext(int width, int height)
 {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 }
 
-void CExampleWindow::onClear()
+void ExampleWindow::onClear()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
@@ -236,12 +244,12 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
     
-	CIvfGlutApplication* app = CIvfGlutApplication::getInstance(&argc, argv);
+	auto app = GlutApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
     
 	// Create a window
     
-	CExampleWindowPtr window = new CExampleWindow(0, 0, 512, 512);
+	auto window = ExampleWindow::create(0, 0, 512, 512);
     
 	// Set window title and show window
     
