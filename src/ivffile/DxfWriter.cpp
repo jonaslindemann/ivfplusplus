@@ -307,7 +307,7 @@ void DxfWriter::processShape(Shape *shape)
 
 	cout << "shape = " << shape->getClassName() << endl;
 
-	if (shape->isClass("CIvfComposite"))
+	if (shape->isClass("Composite"))
 	{
 		int i;
 		double x, y, z;

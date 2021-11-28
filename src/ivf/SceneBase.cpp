@@ -204,7 +204,7 @@ void SceneBase::doCreateGeometry()
 		defaultRendering();
 		break;
 	case SM_ANAGLYPH:
-		if (m_view->isClass("CIvfCamera"))
+		if (m_view->isClass("Camera"))
 		{
 			View* view = m_view;
 			Camera* camera = (Camera*)view;
@@ -287,7 +287,7 @@ void SceneBase::doCreateGeometry()
 			defaultRendering();
 		break;
 	case SM_QUAD_BUFFER:
-		if (m_view->isClass("CIvfCamera"))
+		if (m_view->isClass("Camera"))
 		{
 			View* view = m_view;
 			Camera* camera = (Camera*)view;

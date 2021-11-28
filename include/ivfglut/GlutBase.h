@@ -2,11 +2,9 @@
 
 #include <string>
 
-#include <ivfwidget/WidgetBase.h>
+#include <Windows.h>
 
-#ifdef WIN32
-#include <windows.h>
-#endif
+#include <ivfwidget/WidgetBase.h>
 
 namespace ivf {
 

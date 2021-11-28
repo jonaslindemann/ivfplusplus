@@ -1,4 +1,4 @@
-set(IVF_DIRS gle ivfmath ivf ivffile ivfctl ivf3dui ivfwidget)
+set(IVF_DIRS glad gle ivfmath ivf ivffile ivfctl ivf3dui ivfwidget)
 
 if (IVF_UI)
 

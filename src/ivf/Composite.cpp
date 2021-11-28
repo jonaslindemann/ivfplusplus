@@ -223,7 +223,7 @@ void Composite::compositeRemove(Composite* composite, Shape* deleteChild)
 			composite->removeChild(i);
 		}
 		else
-			if (child->isClass("CIvfComposite"))
+			if (child->isClass("Composite"))
 			{
 				Composite* tree = (Composite*)child;
 				compositeRemove(tree, deleteChild);
