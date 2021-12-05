@@ -23,21 +23,13 @@
 
 #include <FL/Fl.H>
 
-#if defined(__APPLE__)
-#  include <OpenGL/gl3.h> // defines OpenGL 3.0+ functions
-#else
-#  if defined(WIN32)
-#    define GLEW_STATIC 1
-#    include <Windows.h>
-#  endif
-#  include <GL/glew.h>
+#ifdef WIN32
+#include <Windows.h>
 #endif
 
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
+#include <glad/glad.h>
+
 #include <GL/glu.h>
-#endif
 
 #include <FL/Fl_Gl_Window.H>
 

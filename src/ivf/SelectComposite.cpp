@@ -185,7 +185,7 @@ void SelectComposite::nameChildren(Shape* shape)
 
 	int i;
 
-	if (shape->isClass("CIvfComposite"))
+	if (shape->isClass("Composite"))
 	{
 		// Name all children of composite
 
