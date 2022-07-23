@@ -55,3 +55,11 @@ bool FileImage::read()
 {
 	return true;
 }
+
+bool ivf::FileImage::load(const std::string& filename)
+{
+	this->setFileName(filename);
+	return this->read();
+}
+
+

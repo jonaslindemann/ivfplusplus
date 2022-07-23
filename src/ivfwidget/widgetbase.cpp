@@ -241,6 +241,11 @@ void WidgetBase::doResize(int width, int height)
 	if (!m_initDone)
 	{
 		m_initDone = true;
+
+		if (!gladLoadGL()) {
+			std::cout << "Failed to initialize OpenGL context" << std::endl;
+		}
+
 		doInit(width, height);
 	}
 

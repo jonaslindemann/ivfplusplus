@@ -21,7 +21,6 @@
 
 // Implementation of: public class CIvfArrow
 
-#include <ivf/config.h>
 #include <ivf/Arrow.h>
 
 using namespace ivf;

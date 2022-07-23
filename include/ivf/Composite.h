@@ -24,7 +24,6 @@
 
 #pragma once
 
-#include <ivf/config.h>
 #include <ivf/Shape.h>
 
 namespace ivf {

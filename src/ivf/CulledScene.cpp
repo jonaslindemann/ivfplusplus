@@ -83,7 +83,7 @@ void CulledScene::cullChildren(Shape *shape)
 	double wx, wy, wz;
 	double vx, vy, vz, theta;
 
-	if (shape->isClass("CIvfComposite"))
+	if (shape->isClass("Composite"))
 	{
 		Composite* composite = (Composite*) shape;
 

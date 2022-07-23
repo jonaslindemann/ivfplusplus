@@ -32,7 +32,7 @@ Workspace::Workspace()
     m_rootPlane->setSize(10.0, 10.0);
     m_rootPlane->disableCursor();
 
-    if (this->getView()->isClass("CIvfCamera"))
+    if (this->getView()->isClass("Camera"))
         m_rootPlane->setCamera((Camera*)this->getView());
 
     m_workplanes.push_back(m_rootPlane);
@@ -56,7 +56,7 @@ Workspace::~Workspace()
 void Workspace::addPlane(ConstructionPlane *plane)
 {
     m_workplanes.push_back(plane);
-    if (this->getView()->isClass("CIvfCamera"))
+    if (this->getView()->isClass("Camera"))
         plane->setCamera((Camera*)this->getView());
     plane->addReference();
 }
@@ -222,7 +222,7 @@ Vec3d& Workspace::getCursorPosition()
 void Workspace::setView(View *view)
 {
     SceneBase::setView(view);
-    if (view->isClass("CIvfCamera"))
+    if (view->isClass("Camera"))
         m_currentPlane->setCamera((Camera*)view);
 }
 

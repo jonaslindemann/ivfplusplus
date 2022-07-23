@@ -11,17 +11,16 @@
 
 #pragma once
 
+#ifdef WIN32
+#include <Windows.h>
+#endif
 
-#include <ivfdef/SingletonDestroyer.h>
+#include <glad/glad.h>
 
-#ifndef __APPLE__
-#include <GL/glew.h>
 #define FREEGLUT_STATIC
 #include <GL/freeglut.h>
-#else
-#include <ApplicationServices/ApplicationServices.h>
-#include <GLUT/glut.h>
-#endif 
+
+#include <ivfdef/SingletonDestroyer.h>
 
 #define  IVF_RGB                           0x0000
 #define  IVF_RGBA                          0x0000
