@@ -97,14 +97,22 @@ int BillBoard::getBillboardType()
 
 void BillBoard::doCreateGeometry()
 {
-	this->updateRotation();
-	glPushMatrix();
-	glRotated(-m_angle1*180.0/M_PI+90, 0.0, 1.0, 0.0);
-	glPushMatrix();
-	glRotated(m_angle2*180.0/M_PI-90, 1.0, 0.0, 0.0);
+	if (m_camera != nullptr)
+	{
+		this->updateRotation();
+		glPushMatrix();
+		glRotated(-m_angle1 * 180.0 / M_PI + 90, 0.0, 1.0, 0.0);
+		glPushMatrix();
+		glRotated(m_angle2 * 180.0 / M_PI - 90, 1.0, 0.0, 0.0);
+	}
+
 	Composite::doCreateGeometry();
-	glPopMatrix();
-	glPopMatrix();
+
+	if (m_camera != nullptr)
+	{
+		glPopMatrix();
+		glPopMatrix();
+	}
 }
 
 

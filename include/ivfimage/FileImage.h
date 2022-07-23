@@ -69,6 +69,8 @@ public:
 	 * Derived classes should override this method.
 	 */
 	virtual bool read();
+
+	bool load(const std::string& filename);
 };
 /** \example textures.cpp */
 
