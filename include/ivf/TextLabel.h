@@ -28,6 +28,7 @@ private:
 	VerticalAlignment m_alignY;
 private:
 	void updateText();
+	void updateExistingText();
 public:
 	TextLabel();
 

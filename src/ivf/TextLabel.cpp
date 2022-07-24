@@ -73,6 +73,48 @@ void ivf::TextLabel::updateText()
 	}
 }
 
+void ivf::TextLabel::updateExistingText()
+{
+	if (m_font != nullptr)
+	{
+		double currX = 0.0;
+		auto totalHeight = m_font->charset().base;
+
+		for (auto i = 0; i < m_textQuads->getSize(); i++)
+		{
+			unsigned int id = m_text[i];
+			auto x = m_font->charset().chars[m_text[i]].x;
+			auto y = 512 - m_font->charset().chars[m_text[i]].y;
+			auto width = m_font->charset().chars[m_text[i]].width;
+			auto height = m_font->charset().chars[m_text[i]].height;
+			float swidth = m_textSize * float(m_font->charset().chars[m_text[i]].width) / totalHeight;
+			float sheight = m_textSize * float(m_font->charset().chars[m_text[i]].height) / totalHeight;
+			float offsetX = m_textSize * float(m_font->charset().chars[m_text[i]].xOffset) / totalHeight;
+			float offsetY = m_textSize * float(m_font->charset().chars[m_text[i]].yOffset) / totalHeight;
+			float xAdvance = m_textSize * float(m_font->charset().chars[m_text[i]].xAdvance) / totalHeight;
+
+			ivf::QuadPlane* plane = static_cast<ivf::QuadPlane*>(m_textQuads->getChild(i));
+
+			plane->setCoord(0, currX + offsetX, -offsetY, 0.0);
+			plane->setCoord(1, swidth + currX + offsetX, -offsetY, 0.0);
+			plane->setCoord(2, swidth + currX + offsetX, -offsetY - sheight, 0.0);
+			plane->setCoord(3, currX + offsetX, -offsetY - sheight, 0.0);
+
+			plane->setTextureCoord(3, float(x) / float(m_font->charset().width), float(y - height) / float(m_font->charset().height));
+			plane->setTextureCoord(2, float(x + width) / float(m_font->charset().width), float(y - height) / float(m_font->charset().height));
+			plane->setTextureCoord(1, float(x + width) / float(m_font->charset().width), float(y) / float(m_font->charset().height));
+			plane->setTextureCoord(0, float(x) / float(m_font->charset().width), float(y) / float(m_font->charset().height));
+
+			currX += xAdvance;
+		}
+
+		m_textWidth = currX;
+		m_textHeight = m_textSize;
+
+		this->setAlignment(m_alignX, m_alignY);
+	}
+}
+
 void ivf::TextLabel::setFont(ivf::BitmapFont* font)
 {
 	m_font = font;
@@ -103,7 +145,7 @@ const std::string ivf::TextLabel::text()
 void ivf::TextLabel::setSize(float size)
 {
 	m_textSize = size;
-	this->updateText();
+	this->updateExistingText();
 }
 
 float ivf::TextLabel::size()

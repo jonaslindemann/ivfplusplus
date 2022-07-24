@@ -47,6 +47,7 @@ Grid::Grid()
 	m_useOutline = true;
 	m_useCorners = true;
 	m_useSurface = false;
+	m_useAxisLabels = false;
 
 	m_gridInterval = 1;
 

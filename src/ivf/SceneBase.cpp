@@ -58,6 +58,9 @@ SceneBase::SceneBase()
     m_shadowColor[0] = 0.35;
     m_shadowColor[1] = 0.35;
     m_shadowColor[2] = 0.35;
+
+	m_preShadow = true;
+	m_postShadow = true;
 }
 
 SceneBase::~SceneBase()
@@ -137,10 +140,16 @@ void SceneBase::defaultSceneRender(int pass)
         GlobalState::getInstance()->disableColorOutput();
         GlobalState::getInstance()->disableTextureRendering();
         glColor3d(m_shadowColor[0], m_shadowColor[1], m_shadowColor[2]);
-        m_preComposite->render();
-        m_composite->render();
-        m_postComposite->render();
-        GlobalState::getInstance()->enableColorOutput();
+
+		if (m_preShadow)
+			m_preComposite->render();
+
+		m_composite->render();
+
+		if (m_postShadow)
+			m_postComposite->render();
+
+		GlobalState::getInstance()->enableColorOutput();
         GlobalState::getInstance()->enableTextureRendering();
         glPopAttrib();
         glPopMatrix();
@@ -546,5 +555,11 @@ void SceneBase::setShadowColor(double red, double green, double blue)
     m_shadowColor[0] = red;
     m_shadowColor[1] = green;
     m_shadowColor[2] = blue;
+}
+
+void ivf::SceneBase::setShadowPrePost(bool renderPre, bool renderPost)
+{
+	m_preShadow = renderPre;
+	m_postShadow = renderPost;
 }
 
