@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.0)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/modules) 
 
-option(IVF_UI "Build user interface integration libraries." ON)
+option(IVF_UI "Build user interface integration libraries." ON) 
 option(IVF_UI_FLTK "Build user interface integration libraries." ON)
 option(IVF_UI_WIN32 "Build user interface integration libraries." OFF)
 option(IVF_UI_GLUT "Build user interface integration libraries." ON)

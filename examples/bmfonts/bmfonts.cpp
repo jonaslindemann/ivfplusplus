@@ -25,6 +25,7 @@
 #include <ivf/QuadPlane.h>
 #include <ivf/SolidLine.h>
 #include <ivf/BitmapFont.h>
+#include <ivf/TextLabel.h>
 
 #include <ivfimage/SgiImage.h>
 #include <ivfimage/JpegImage.h>
@@ -37,6 +38,11 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
+float random()
+{
+	return ((double)(rand()) / (double)RAND_MAX);
+}
+
 IvfSmartPointer(ExampleWindow);
 
 class ExampleWindow: public GlutBase {
@@ -46,6 +52,7 @@ private:
 	LightPtr		m_light;
 
 	BitmapFontPtr m_font;
+	TextLabelPtr m_textLabel;
 
 	double m_angleX;
 	double m_angleY;
@@ -115,8 +122,29 @@ void ExampleWindow::onInit(int width, int height)
 	m_scene = Composite::create();
 
 	m_font = BitmapFont::create("data/fonts/white_font.fnt");
-	//m_font->setCamera(m_camera);
-	m_font->setText("Ivf++", 2.0);
+
+	m_textLabel = TextLabel::create();
+	m_textLabel->setFont(m_font);
+	m_textLabel->setText("Ivf++", 2.0);
+ 	m_textLabel->setCamera(m_camera);
+
+	auto texts = ivf::Composite::create();
+
+	for (auto i = 0; i < 20; i++)
+	{
+		auto text = TextLabel::create();
+
+		double x = 10.0 - 20.0 * random();
+		double y = 10.0 - 20.0 * random();
+		double z = 10.0 - 20.0 * random();
+
+		text->setFont(m_font);
+		text->setText("A");
+		text->setPosition(x, y, z);
+		text->setCamera(m_camera);
+		text->setBillboardType(IVF_BILLBOARD_XY);
+		texts->addChild(text);
+	}
 
 	auto quad = QuadPlane::create();
 	quad->setMaterial(material);
@@ -127,7 +155,8 @@ void ExampleWindow::onInit(int width, int height)
 
 	m_scene->addChild(quad);
 	m_scene->addChild(axis);
-	m_scene->addChild(m_font);
+	m_scene->addChild(m_textLabel);
+	m_scene->addChild(texts);
 
 	// Create a light
 
@@ -166,23 +195,23 @@ void ExampleWindow::onRender()
 void ExampleWindow::onKeyboard(int key, int x, int y)
 {
 	if (key=='1')
-		m_font->setAlignment(HorizontalAlignment::Right, VerticalAlignment::Top);
+		m_textLabel->setAlignment(HorizontalAlignment::Right, VerticalAlignment::Top);
 	if (key == '2')
-		m_font->setAlignment(HorizontalAlignment::Right, VerticalAlignment::Middle);
+		m_textLabel->setAlignment(HorizontalAlignment::Right, VerticalAlignment::Middle);
 	if (key == '3')
-		m_font->setAlignment(HorizontalAlignment::Right, VerticalAlignment::Bottom);
+		m_textLabel->setAlignment(HorizontalAlignment::Right, VerticalAlignment::Bottom);
 	if (key == '4')
-		m_font->setAlignment(HorizontalAlignment::Center, VerticalAlignment::Top);
+		m_textLabel->setAlignment(HorizontalAlignment::Center, VerticalAlignment::Top);
 	if (key == '5')
-		m_font->setAlignment(HorizontalAlignment::Center, VerticalAlignment::Middle);
+		m_textLabel->setAlignment(HorizontalAlignment::Center, VerticalAlignment::Middle);
 	if (key == '6')
-		m_font->setAlignment(HorizontalAlignment::Center, VerticalAlignment::Bottom);
+		m_textLabel->setAlignment(HorizontalAlignment::Center, VerticalAlignment::Bottom);
 	if (key == '7')
-		m_font->setAlignment(HorizontalAlignment::Left, VerticalAlignment::Top);
+		m_textLabel->setAlignment(HorizontalAlignment::Left, VerticalAlignment::Top);
 	if (key == '8')
-		m_font->setAlignment(HorizontalAlignment::Left, VerticalAlignment::Middle);
+		m_textLabel->setAlignment(HorizontalAlignment::Left, VerticalAlignment::Middle);
 	if (key == '9')
-		m_font->setAlignment(HorizontalAlignment::Left, VerticalAlignment::Bottom);
+		m_textLabel->setAlignment(HorizontalAlignment::Left, VerticalAlignment::Bottom);
 
 	this->redraw();
 }
