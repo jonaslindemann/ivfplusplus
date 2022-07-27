@@ -49,8 +49,6 @@ void ivf::TextLabel::updateText()
 
 			auto plane = ivf::QuadPlane::create();
 
-			cout << offsetY << endl;
-
 			plane->setCoord(0, currX + offsetX, -offsetY, 0.0);
 			plane->setCoord(1, swidth + currX + offsetX, -offsetY, 0.0);
 			plane->setCoord(2, swidth + currX + offsetX, -offsetY - sheight, 0.0);

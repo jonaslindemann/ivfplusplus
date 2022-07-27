@@ -37,6 +37,7 @@ IvfSmartPointer(BillBoard);
 
 #define IVF_ALIGN_CAMERA 0
 #define IVF_ALIGN_VECTOR 1
+#define IVF_ALIGN_NONE   2
 
 /**
  * Billboard object
