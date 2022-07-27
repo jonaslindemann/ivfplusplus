@@ -65,6 +65,7 @@ private:
 	bool m_useOutline;
 	bool m_useCorners;
 	bool m_useAxis;
+	bool m_useAxisLabels;
 
 	int m_gridInterval;
 

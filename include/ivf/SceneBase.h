@@ -112,6 +112,8 @@ private:
 	bool m_multiPass;
 	int m_nPasses;
     bool m_renderFlatShadow;
+	bool m_preShadow;
+	bool m_postShadow;
     double m_shadowColor[3];
 
 public:
@@ -216,6 +218,8 @@ public:
     
     void setRenderFlatShadow(bool flag);
     void setShadowColor(double red, double green, double blue);
+
+	void setShadowPrePost(bool renderPre, bool renderPost);
 
 protected:
     virtual void doPostClear();

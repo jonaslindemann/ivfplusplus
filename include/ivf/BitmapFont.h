@@ -32,52 +32,31 @@ struct Charset
 	CharDescriptor chars[256];
 };
 
-enum class HorizontalAlignment { Left, Center, Right };
-enum class VerticalAlignment {Top, Middle, Bottom };
-
 IvfSmartPointer(BitmapFont);
 
-class BitmapFont : public ivf::BillBoard {
+class BitmapFont : public ivf::Base {
 private:
 	Charset m_charset;
 	std::string m_filename;
 	std::string m_textureFilename;
-	std::string m_text;
 	ivf::TexturePtr m_fontTexture;
 	ivf::MaterialPtr m_fontMaterial;
-	ivf::CompositePtr m_textQuads;
-	float m_textWidth;
-	float m_textHeight;
-
-	float m_textSize;
-
-	HorizontalAlignment m_alignX;
-	VerticalAlignment m_alignY;
-private:
-	void updateText();
 public:
 	BitmapFont(const std::string filename);
 
-	IvfClassInfo("BitmapFont", Composite);
+	IvfClassInfo("BitmapFont", Base);
 
 	static BitmapFontPtr create(const std::string filename) { return BitmapFontPtr(new BitmapFont(filename)); }
 
 	void setFilename(const std::string filename);
 	std::string filename();
 
-	void setText(const std::string text, float size=1.0);
-	const std::string text();
+	Charset& charset();
 
-	void setSize(float size);
-	float size();
-
-	void setAlignment(HorizontalAlignment alignX, VerticalAlignment alignY = ivf::VerticalAlignment::Bottom);
+	ivf::Texture* texture();
+	ivf::Material* material();
 
 	void load();
-
-protected:
-	virtual void doPreGeometry() override;
-	virtual void doPostGeometry() override;
 };
 
 }

@@ -38,49 +38,46 @@ BillBoard::~BillBoard()
 
 void BillBoard::updateRotation()
 {
-	if (m_camera!=nullptr)
-	{
-		double ex, ey, ez, e;
+	double ex, ey, ez, e;
 
-		switch (m_alignObject) {
-		case IVF_ALIGN_CAMERA:
+	switch (m_alignObject) {
+	case IVF_ALIGN_CAMERA:
+		if (m_camera!=nullptr)
 			m_camera->getForwardVector(ex, ey, ez);
-			break;
-		case IVF_ALIGN_VECTOR:
-			ex = m_forward[0];
-			ey = m_forward[1];
-			ez = m_forward[2];
-			break;
-		default:
+		break;
+	case IVF_ALIGN_VECTOR:
+		ex = m_forward[0];
+		ey = m_forward[1];
+		ez = m_forward[2];
+		break;
+	default:
+		if (m_camera!=nullptr)
 			m_camera->getForwardVector(ex, ey, ez);
-			break;
-		}
+		break;
+	}
 
-		ex = -ex;
-		ey = -ey;
-		ez = -ez;
+	ex = -ex;
+	ey = -ey;
+	ez = -ez;
 
-		e = sqrt(pow(ex,2) + pow(ez,2));
+	e = sqrt(pow(ex, 2) + pow(ez, 2));
 
-		m_angle1 = atan2(ez,ex);
-		m_angle2 = atan2(e,ey);
+	m_angle1 = atan2(ez, ex);
+	m_angle2 = atan2(e, ey);
 
-		switch (m_billboardType) {
-		case IVF_BILLBOARD_X:
-			m_angle1 = M_PI/2;
-			break;
-		case IVF_BILLBOARD_Y:
-			m_angle2 = M_PI/2;
-			break;
-		default:
-			break;
-		}
-
-		//this->setRotationQuat(1.0, 0.0, 0.0, m_angle2*180.0/M_PI-90);
+	switch (m_billboardType) {
+	case IVF_BILLBOARD_X:
+		m_angle1 = M_PI / 2;
+		break;
+	case IVF_BILLBOARD_Y:
+		m_angle2 = M_PI / 2;
+		break;
+	default:
+		break;
 	}
 }
 
-void BillBoard::setCamera(Camera *camera)
+void BillBoard::setCamera(Camera* camera)
 {
 	m_camera = camera;
 }
@@ -97,7 +94,7 @@ int BillBoard::getBillboardType()
 
 void BillBoard::doCreateGeometry()
 {
-	if (m_camera != nullptr)
+	if (m_alignObject!=IVF_ALIGN_NONE)
 	{
 		this->updateRotation();
 		glPushMatrix();
@@ -108,7 +105,7 @@ void BillBoard::doCreateGeometry()
 
 	Composite::doCreateGeometry();
 
-	if (m_camera != nullptr)
+	if (m_alignObject != IVF_ALIGN_NONE)
 	{
 		glPopMatrix();
 		glPopMatrix();
@@ -123,7 +120,7 @@ void BillBoard::setVector(double vx, double vy, double vz)
 	m_forward[2] = vz;
 }
 
-void BillBoard::setVector(double *v)
+void BillBoard::setVector(double* v)
 {
 	m_forward[0] = v[0];
 	m_forward[1] = v[1];
