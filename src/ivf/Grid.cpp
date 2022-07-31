@@ -37,8 +37,8 @@ Grid::Grid()
 	m_surface = new QuadSet();
 	m_axis = new Axis();
     m_axis->setState(Shape::OS_OFF);
-    m_corners->setState(Shape::OS_OFF);
-    m_outline->setState(Shape::OS_OFF);
+    m_corners->setState(Shape::OS_ON);
+    m_outline->setState(Shape::OS_ON);
 
 	m_gridSpacing = 0.1;
 
@@ -101,8 +101,6 @@ void Grid::initGrid()
 	m_corners->addCoord(x1+cs, y1, z2);		// 10
 	m_corners->addCoord(x1, y1, z2-cs);		// 11
 
-	m_corners->setLineWidth(2);
-
 	Index* idx = new Index();
 	idx->add(0,1);
 	idx->add(0,2);
@@ -115,6 +113,9 @@ void Grid::initGrid()
 
 	m_corners->addCoordIndex(idx);
 
+	m_corners->clearIndexWidths();
+	m_corners->addIndexLineWidth(4.0f);
+
 	m_corners->addColor(m_cornerColor[0], m_cornerColor[1], m_cornerColor[2], m_cornerColor[3]);
 
 	Index* colorIdx = new Index();
@@ -126,7 +127,7 @@ void Grid::initGrid()
 	// Define outline
 
 	m_outline->clear();
-	m_outline->setLineWidth(1);
+	m_outline->setLineWidth(3);
 
 	m_outline->addCoord(x1+cs, y1, z1);
 	m_outline->addCoord(x2-cs, y1, z1);
@@ -146,6 +147,9 @@ void Grid::initGrid()
 	idx->add(2,3);
 	idx->add(4,5);
 	idx->add(6,7);
+
+	m_outline->clearIndexWidths();
+	m_outline->addIndexLineWidth(4.0f);
 
 	m_outline->addCoordIndex(idx);
 
@@ -180,7 +184,6 @@ void Grid::initGrid()
 	// Create grid lines
 
 	m_gridLines->clear();
-	m_gridLines->setLineWidth(1);
 
 	m_gridLines->addCoord(0, y1, z1);
 	m_gridLines->addCoord(0, y1, z2);
@@ -188,22 +191,35 @@ void Grid::initGrid()
 	m_gridLines->addCoord(x1, y1, 0);
 	m_gridLines->addCoord(x2, y1, 0);
 
-	idx = new Index();
-	idx->add(0,1);
-	idx->add(2,3);
+	auto axisIdx = new Index();
+    axisIdx->add(0, 1);
+    axisIdx->add(2, 3);
 
 	m_gridLines->addColor(m_majorColor[0], m_majorColor[1], m_majorColor[2], m_majorColor[3]);
 	m_gridLines->addColor(m_minorColor[0], m_minorColor[1], m_minorColor[2], m_minorColor[3]);
 
+	auto axisColorIdx = new Index();
+    axisColorIdx->add(0, 0);
+    axisColorIdx->add(0, 0);
+
+	m_gridLines->clearIndexWidths();
+    m_gridLines->addIndexLineWidth(2.0f);
+
+	m_gridLines->addCoordIndex(axisIdx);
+    m_gridLines->addColorIndex(axisColorIdx);
+
+	idx = new Index();
 	colorIdx = new Index();
-	colorIdx->add(0,0);
-	colorIdx->add(0,0);
+
+    m_gridLines->addIndexLineWidth(1.0f);
 
 	double x, z;
 	int i = 4 ;
 	int j = 0;
 
-	for (x=x1; x<x2; x+=m_gridSpacing)
+	idx = new Index();
+
+	for (x = x1; x < x2; x += m_gridSpacing)
 	{
 		if (!isRoughly(x,0.0))
 		{
@@ -213,7 +229,10 @@ void Grid::initGrid()
 				m_gridLines->addCoord(x, y1, z1);
 				m_gridLines->addCoord(x, y1, z2);
 				idx->add(i,i+1);
-				colorIdx->add(1,1);
+				if (j%5==0)
+					colorIdx->add(0, 0);
+				else
+					colorIdx->add(1, 1);
 				i+=2;
 			}
 		}
@@ -232,7 +251,10 @@ void Grid::initGrid()
 				m_gridLines->addCoord(x1, y1, z);
 				m_gridLines->addCoord(x2, y1, z);
 				idx->add(i,i+1);
-				colorIdx->add(1,1);
+				if (j % 5 == 0)
+					colorIdx->add(0, 0);
+				else
+					colorIdx->add(1, 1);
 				i+=2;
 			}
 		}

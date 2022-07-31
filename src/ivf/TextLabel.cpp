@@ -29,7 +29,7 @@ void ivf::TextLabel::updateText()
 {
 	if (m_font != nullptr)
 	{
-		m_textQuads->clear();
+        m_textQuads->deleteAll();
 
 		double currX = 0.0;
 		auto totalHeight = m_font->charset().base;

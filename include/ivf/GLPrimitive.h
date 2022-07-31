@@ -253,7 +253,7 @@ public:
 	Index* getTextureIndex(long pos);
 
 	/** Recomputes normals if geometry has been modified */
-	void refresh();
+	virtual void refresh() override;
 
 	/** Enables or disables the use of vertex normals */
 	void setUseVertexNormals(bool flag);
@@ -275,7 +275,7 @@ public:
 	 *
 	 * Upates the radius of the assigned bounding sphere, if any.
 	 */
-	void doUpdateBoundingSphere();
+	virtual void doUpdateBoundingSphere() override;
 };
 /** \example advgeom.cpp
  * This is an example of how to use the CIvfGLPrimitive 

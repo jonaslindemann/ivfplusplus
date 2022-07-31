@@ -56,9 +56,9 @@ public:
 	/** Return color usage */
 	bool getUseColor();
 protected:
-	void updateVertexNormals();
-	void calcNormal(Index* idx);
-	void doCreateGeometry();
+	virtual void updateVertexNormals() override;
+	virtual void calcNormal(Index* idx) override;
+	virtual void doCreateGeometry() override; 
 };
 /** \example advgeom.cpp */
 }

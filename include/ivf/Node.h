@@ -81,7 +81,7 @@ public:
 	TNodeType getNodeType();
 
 	/** Updates bounding sphere for node */
-	virtual void doUpdateBoundingSphere();
+	virtual void doUpdateBoundingSphere() override;
 private:
 	double m_nodeSize;
 	SelectionBoxPtr m_selectionBox;
@@ -90,7 +90,7 @@ private:
 	CubePtr m_cubeShape;
 	SpherePtr m_sphereShape;
 protected:
-	virtual void doCreateSelect();
-	virtual void doCreateGeometry();
+	virtual void doCreateSelect() override;
+	virtual void doCreateGeometry() override;
 };
 }

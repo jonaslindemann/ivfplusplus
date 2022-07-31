@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2021 by Structural Mechanics, Lund University.
+// Copyright 1999-2022 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -42,8 +42,9 @@ private:
 	bool m_useColor;
 	bool m_useAlpha;
 	float m_lineWidth;
+	std::vector<float> m_idxLineWidth;
 protected:
-	virtual void doCreateGeometry();
+	virtual void doCreateGeometry() override;
 public:
 	/** LineSet constructor */
 	LineSet();
@@ -75,6 +76,11 @@ public:
 
 	/** Return line width */
 	float getLineWidth();
+
+	void addIndexLineWidth(float w);
+
+	void clearIndexWidths();
+
 };
 /** \example advgeom.cpp */
 }

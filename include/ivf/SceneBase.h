@@ -223,7 +223,7 @@ public:
 
 protected:
     virtual void doPostClear();
-	virtual void doCreateGeometry();
+	virtual void doCreateGeometry() override;
 };
 
 }

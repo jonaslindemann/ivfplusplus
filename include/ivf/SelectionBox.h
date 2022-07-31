@@ -48,7 +48,7 @@ public:
 	IvfClassInfo("SelectionBox",WireBrick);
 	IvfStdFactory(SelectionBox);
 protected:
-	virtual void doCreateGeometry();
+	virtual void doCreateGeometry() override;
 private:
 };
 

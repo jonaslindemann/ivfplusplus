@@ -63,7 +63,7 @@ public:
 private:
 	int m_currentChild;
 protected:
-	virtual void doCreateGeometry();
+    virtual void doCreateGeometry() override;
 };
 
 /** \example lod.cpp */

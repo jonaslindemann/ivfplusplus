@@ -147,6 +147,6 @@ private:
 	void modifyBrightness(float* color, double factor);
 	void toGreyscale(float* color, float* grey);
 protected:
-	virtual void doCreateMaterial();
+	virtual void doCreateMaterial() override;
 };
 }

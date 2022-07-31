@@ -41,7 +41,7 @@ IvfSmartPointer(Grid);
  * This class implements a grid used in conjunction with
  * the construction plane class @see CIvfConstructionPlane
  */
-class IVF_API Grid : public Shape {
+class Grid : public Shape {
 private:
 	Point3d m_p1;
 	Point3d m_p2;
@@ -131,10 +131,10 @@ public:
 	void setAxisSize(double size);
 
 	/** Updates grid geometry */
-	virtual void refresh();
+	virtual void refresh() override;
 
 	/** Updates grid bounding box */
-	virtual void doUpdateBoundingSphere();
+	virtual void doUpdateBoundingSphere() override;
 
 	/** Returns axis shape */
 	Axis* getAxisShape();
@@ -148,7 +148,7 @@ public:
 	void setMajorColor(float red, float green, float blue, float alpha);
 	void setMinorColor(float red, float green, float blue, float alpha);
 protected:
-	virtual void doCreateGeometry();
+	virtual void doCreateGeometry() override;
 };
 
 }

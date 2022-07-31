@@ -121,9 +121,9 @@ protected:
 
 	// virtual methods for view and perspective transforms
 
-	void doBeginTransform();
-	virtual void viewTransform();
-	virtual void projectionTransform();
+	virtual void doBeginTransform() override;
+    virtual void viewTransform();
+    virtual void projectionTransform();
 };
 
 }

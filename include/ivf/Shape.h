@@ -295,11 +295,11 @@ private:
 	bool m_normalize;
 protected:
 	/** Forces an object recalculation. */
-	virtual void doCreateGeometry();
-	virtual void doCreateSelect();
-	virtual void doEndTransform();
-	virtual void doBeginTransform();
-	virtual void doCreateMaterial();
+	virtual void doCreateGeometry() override;
+    virtual void doCreateSelect() override;
+    virtual void doEndTransform() override;
+    virtual void doBeginTransform() override;
+    virtual void doCreateMaterial() override;
 };
 
 }

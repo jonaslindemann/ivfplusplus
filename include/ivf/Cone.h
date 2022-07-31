@@ -98,7 +98,7 @@ public:
 	 *
 	 * Upates the radius of the assigned bounding sphere, if any.
 	 */
-	void doUpdateBoundingSphere();
+	virtual void doUpdateBoundingSphere() override;
 private:
 	void updateSelectBox();
 	SelectionBox* m_selectionBox;
@@ -108,8 +108,8 @@ private:
 	double	m_topRadius;
 	double	m_bottomRadius;
 protected:
-	virtual void doCreateSelect();
-	virtual void doCreateGeometry();
+	virtual void doCreateSelect() override;
+	virtual void doCreateGeometry() override;
 };
 
 }

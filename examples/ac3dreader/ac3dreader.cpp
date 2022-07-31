@@ -126,7 +126,6 @@ void ExampleWindow::onInit(int width, int height)
 
 	auto shape = acReader->getShape();
 	shape->initBoundingSphere();
-	std::cout << shape->getBoundingSphere()->getRadius() << std::endl;
 
 	m_camera->setPosition(0.0, 0.0, shape->getBoundingSphere()->getRadius());
 

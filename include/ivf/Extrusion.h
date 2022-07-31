@@ -289,7 +289,7 @@ public:
 	 *
 	 * Upates the radius of the assigned bounding sphere, if any.
 	 */
-	void doUpdateBoundingSphere();
+	virtual void doUpdateBoundingSphere() override;
 private:
 	double m_selectScale;
 	bool m_useColors;
@@ -309,8 +309,8 @@ private:
 	float (*m_spineColors)[3];
 	gleDouble (*m_twist);
 protected:
-	virtual void doCreateSelect();
-	virtual void doCreateGeometry();
+	virtual void doCreateSelect() override;
+	virtual void doCreateGeometry() override;
 };
 
 /** \example extrusion.cpp

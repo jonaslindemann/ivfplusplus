@@ -28,108 +28,120 @@ using namespace ivf;
 
 LineSet::LineSet()
 {
-	m_useColor = false;
-	m_useAlpha = false;
-	m_lineWidth = 1.0;
+    m_useColor = false;
+    m_useAlpha = false;
+    m_lineWidth = 1.0;
 }
 
 LineSet::~LineSet()
 {
-
 }
 
 void LineSet::doCreateGeometry()
 {
-	Index* coordIdx;
-	Index* colorIdx;
-	Index* textureIdx;
+    Index* coordIdx;
+    Index* colorIdx;
+    Index* textureIdx;
 
-	long i, j;
-	float oldWidth[1];
+    long i, j;
+    float oldWidth[1];
 
-	glPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
-	glDisable(GL_LIGHTING);
+    glPushAttrib(GL_LIGHTING | GL_COLOR_MATERIAL);
+    glDisable(GL_LIGHTING);
 
-	glGetFloatv(GL_LINE_WIDTH, oldWidth);
+    glGetFloatv(GL_LINE_WIDTH, oldWidth);
 
-	glLineWidth(m_lineWidth);
+    glLineWidth(m_lineWidth);
 
-	if (m_useColor)
-		glEnable(GL_COLOR_MATERIAL);
+    if (m_useColor)
+        glEnable(GL_COLOR_MATERIAL);
 
-	for (i=0; i<(int)m_coordIndexSet.size(); i++)
-	{
-		glBegin(GL_LINES);
+    for (i = 0; i < (int)m_coordIndexSet.size(); i++)
+    {
+        if (m_idxLineWidth.size() > 0)
+        {
+            if (i < m_idxLineWidth.size())
+                glLineWidth(m_idxLineWidth[i]);
+        }
+        glBegin(GL_LINES);
 
-		coordIdx = m_coordIndexSet[i];
-		if (m_useColor)
-		{
-			if (i<(int)m_colorIndexSet.size())
-				colorIdx = m_colorIndexSet[i];
-		}
+        coordIdx = m_coordIndexSet[i];
+        if (m_useColor)
+        {
+            if (i < (int)m_colorIndexSet.size())
+                colorIdx = m_colorIndexSet[i];
+        }
 
-		if (i<(int)m_textureIndexSet.size())
-			textureIdx = m_textureIndexSet[i];
-		else
-			textureIdx = nullptr;
+        if (i < (int)m_textureIndexSet.size())
+            textureIdx = m_textureIndexSet[i];
+        else
+            textureIdx = nullptr;
 
-		for (j=0; j<coordIdx->getSize(); j++)
-		{
-			if (m_useColor)
-			{
-				if (m_useAlpha)
-					glColor4fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
-				else
-					glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
-			}
-			else
-				if (Shape::getMaterial()!=nullptr)
-					Shape::getMaterial()->render();
-				else
-					if (Shape::getMaterial()!=nullptr)
-						Shape::getMaterial()->render();
-					else
-						glColor3f(1.0f, 1.0f, 1.0f);
+        for (j = 0; j < coordIdx->getSize(); j++)
+        {
+            if (m_useColor)
+            {
+                if (m_useAlpha)
+                    glColor4fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+                else
+                    glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+            }
+            else if (Shape::getMaterial() != nullptr)
+                Shape::getMaterial()->render();
+            else if (Shape::getMaterial() != nullptr)
+                Shape::getMaterial()->render();
+            else
+                glColor3f(1.0f, 1.0f, 1.0f);
 
-			if (textureIdx!=nullptr)
-				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
+            if (textureIdx != nullptr)
+                glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
 
-			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
-		}
-		glEnd();
-	}
+            glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
+        }
+        glEnd();
+    }
 
-	glLineWidth(oldWidth[0]);
+    glLineWidth(oldWidth[0]);
 
-	glPopAttrib();
+    glPopAttrib();
 }
 
 void LineSet::setUseColor(bool flag)
 {
-	m_useColor = flag;
+    m_useColor = flag;
 }
 
 bool LineSet::getUseColor()
 {
-	return m_useColor;
+    return m_useColor;
 }
 
 void LineSet::setUseAlpha(bool flag)
 {
-	m_useAlpha = flag;
+    m_useAlpha = flag;
 }
 
 bool LineSet::getUseAlpha()
 {
-	return m_useAlpha;
+    return m_useAlpha;
 }
 
 void LineSet::setLineWidth(float width)
 {
-	m_lineWidth = width;
+    m_lineWidth = width;
 }
 
 float LineSet::getLineWidth()
 {
-	return m_lineWidth;
+    return m_lineWidth;
+}
+
+void ivf::LineSet::addIndexLineWidth(float w)
+{
+    m_idxLineWidth.push_back(w);
+}
+
+void ivf::LineSet::clearIndexWidths()
+{
+    m_idxLineWidth.clear();
 }

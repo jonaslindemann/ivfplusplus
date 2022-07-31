@@ -99,7 +99,7 @@ public:
 protected:
 	bool intersectFrustum(BoundingSphere* bSphere);
 	void cull();
-	virtual void doCreateGeometry();
+	virtual void doCreateGeometry() override;
 };
 
 }
