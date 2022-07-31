@@ -88,16 +88,16 @@ public:
 	GLint pick(int x, int y);
 
 	/** Add child to scene */
-	void addChild(Shape* shape);
+	virtual void addChild(Shape* shape) override;
 
 	/** Removes a specific child from the scene */
-	Shape* removeChild(int index);
+	virtual Shape* removeChild(int index) override;
 
 	/** Removes a specific shape from the scene */
-	Shape* removeShape(Shape *removeShape);
+	virtual Shape* removeShape(Shape *removeShape) override;
 
 	/** Deletes a specific shape from the scene */
-	void deleteChild(int index);
+	virtual void deleteChild(int index) override;
 
 	void renameChildren();
 private:
@@ -113,9 +113,9 @@ private:
 	void nameChildren(Shape* shape);
 protected:
 	void processHits(GLint hits, GLuint buffer[]);
-	virtual void doEndTransform();
-	virtual void doBeginTransform();
-	virtual void doCreateGeometry();
+	virtual void doEndTransform() override;
+	virtual void doBeginTransform() override;
+	virtual void doCreateGeometry() override;
 	virtual void initializeSelect(int x, int y, int w, int h);
 	virtual void customView();
 };

@@ -107,7 +107,7 @@ public:
 	bool isCursorLocked();
 
 	/** Set view used (required) */
-	virtual void setView(View* view);
+    virtual void setView(View* view) override;
 
 	/** Set size of workspace */
 	void setWorkspaceSize(double size);
@@ -150,8 +150,8 @@ public:
     void showCursor();
 
 protected:
-    virtual void doPostClear();
-	virtual void doCreateGeometry();
+    virtual void doPostClear() override;
+    virtual void doCreateGeometry() override;
 };
 
 }

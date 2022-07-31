@@ -90,7 +90,7 @@ private:
 	double m_size;
     double m_thickness;
 protected:
-	virtual void doCreateGeometry();
+	virtual void doCreateGeometry() override;
 };
 
 }

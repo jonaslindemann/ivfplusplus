@@ -189,7 +189,7 @@ public:
 	 * updates the input frustum with the correct values for the 
 	 * current camera view.
 	 */
-	void getViewFrustum(ViewFrustum* frustum);
+	virtual void getViewFrustum(ViewFrustum* frustum) override;
 
 	/** 
 	 * Retrieve pick vector
@@ -316,8 +316,8 @@ public:
 
 protected:
 	void calcOrientation();
-	void projectionTransform();
-	void viewTransform();
+	virtual void projectionTransform() override;
+	virtual void viewTransform() override;
 	void stereoTransform();
 };
 

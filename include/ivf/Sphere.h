@@ -65,7 +65,7 @@ public:
 	int getSlices();
 
 	/** Update bounding sphere size */
-	void doUpdateBoundingSphere();
+	virtual void doUpdateBoundingSphere() override;
 
 private:
 	void updateSelectBox();
@@ -75,8 +75,8 @@ private:
 	double	m_radius;
 	GLUquadricObj* m_qobj;
 protected:
-	virtual void doCreateSelect();
-	virtual void doCreateGeometry();
+    virtual void doCreateSelect() override;
+    virtual void doCreateGeometry() override;
 
 };
 

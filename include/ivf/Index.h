@@ -52,13 +52,13 @@ public:
 	IvfStdFactory(Index);
 
 	/** Return value at position */
-	long getIndex(long pos);
+	virtual long getIndex(long pos) override;
 
 	/** Return size of index */
-	long getSize();
+	virtual long getSize() override;
 
 	/** Clear all values */
-	void clear();
+	virtual void clear() override;
 
 	/**
 	 * Creates a linear index
@@ -66,7 +66,7 @@ public:
 	 * Creates a linear index starting at 
 	 * \em 0 going to \em size-1
 	 */
-	void createLinear(long size);
+	virtual void createLinear(long size) override;
 
 	/**
 	 * Creates a linear index
@@ -74,7 +74,7 @@ public:
 	 * Creates a linear index starting at 
 	 * \em start going to \em start+size-1
 	 */
-	void createLinear(long start, long size);
+	virtual void createLinear(long start, long size) override;
 
 	/**
 	 * Creates a constant index
@@ -82,18 +82,18 @@ public:
 	 * Creates a constant index with each value
 	 * assigned \em value and the \em size long.
 	 */
-	void createConstant(long value, long size);
+	virtual void createConstant(long value, long size) override;
 
 	/** Assigns values from another index */
-	void assignFrom(IndexBase* idx);
+	virtual void assignFrom(IndexBase* idx) override;
 
 	/** Assigns \em idx the values of this index */
-	void assignTo(IndexBase* idx);
+	virtual void assignTo(IndexBase* idx) override;
 
 	/** Add values from array \em i to this index */ 
-	void addArray(long* i, long size);
+	virtual void addArray(long* i, long size) override;
 
-	void addLast(long idx);
+	virtual void addLast(long idx) override;
 
 	void setIndex(long pos, long value);
 

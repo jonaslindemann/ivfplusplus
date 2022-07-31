@@ -116,7 +116,6 @@ void BitmapFont::load()
 				if (key == "id")
 				{
 					converter >> charId;
-					cout << charId << endl;
 				}
 				else if (key == "x")
 					converter >> m_charset.chars[charId].x;

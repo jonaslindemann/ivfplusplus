@@ -63,7 +63,8 @@ public:
 	/** CIvfBillboard destructor */
 	virtual ~BillBoard();
 
-	IvfClassInfo("CBillboard",Composite);
+	IvfClassInfo("Billboard",Composite);
+	IvfStdFactory(BillBoard);
 
 	/** Assign the camera used to align the object. */
 	void setCamera(Camera* camera);
@@ -95,7 +96,7 @@ public:
 	void setVector(double vx, double vy, double vz);
 
 protected:
-	virtual void doCreateGeometry();
+	virtual void doCreateGeometry() override;
 };
 
 }

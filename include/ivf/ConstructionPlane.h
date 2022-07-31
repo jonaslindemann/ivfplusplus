@@ -168,7 +168,7 @@ public:
 	 * local coordinate system used when calculating 3d 
 	 * coordinates.
 	 */
-	virtual void setPosition(const double x, const double y, const double z);
+	virtual void setPosition(const double x, const double y, const double z) override;
 
 	/**
 	 * Set rotation of construction plane
@@ -222,7 +222,7 @@ public:
 	Vec3d& getCursorPosition();
 
 	/** Returns position of construction plane */
-	void getPosition(double &x, double &y, double &z);
+	virtual void getPosition(double &x, double &y, double &z) override;
 
 	/** Returns used defined coordinates system */
 	Ucs3d* getUcs();
@@ -231,7 +231,7 @@ public:
 	void setGridSpacing(double spacing);
 
 	/** Updates bounding sphere for construction plane */
-	virtual void doUpdateBoundingSphere();
+	virtual void doUpdateBoundingSphere() override;
 
 	Grid* getGrid();
 	double getDepth();
@@ -239,7 +239,7 @@ public:
     
     Cursor* getCursor();
 protected:
-	virtual void doCreateGeometry();
+	virtual void doCreateGeometry() override;
 };
 
 }

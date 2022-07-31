@@ -52,7 +52,7 @@ public:
 	IvfStdFactory(PngImage);
 
 	/** Reads PNG image */
-	virtual bool read();
+	virtual bool read() override;
 };
 /** \example textures.cpp */
 

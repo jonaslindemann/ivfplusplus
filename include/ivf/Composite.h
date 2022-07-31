@@ -86,7 +86,7 @@ public:
 	IvfStdFactory(Composite);
 
 	/** Force object refresh */
-	virtual void refresh();
+	virtual void refresh() override;
 
 	/**
 	 * Determines if objects should be referenced.
@@ -124,7 +124,7 @@ public:
 	 * @param state HS_ON highlights all child objects.
 	 * HS_OFF removes highlight from child objects.
 	 */
-	void setHighlight(THighlightState state);
+	virtual void setHighlight(THighlightState state) override;
 
 	void setHighlightComposite(THighlightState state);
 	/**
@@ -212,7 +212,7 @@ public:
 	 *
 	 * Upates the radius of the assigned bounding sphere, if any.
 	 */
-	void doUpdateBoundingSphere();
+	virtual void doUpdateBoundingSphere() override;
 
 	/**
 	 * Finds a named shape
@@ -232,7 +232,7 @@ private:
 	std::vector<Shape*> m_children;
 protected:
 	void compositeRemove(Composite* composite, Shape* deleteChild);
-	virtual void doCreateGeometry();
+	virtual void doCreateGeometry() override;
 };
 /** \example placement.cpp
  * This is an example of how to position objects in a scene.

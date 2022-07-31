@@ -47,6 +47,6 @@ public:
 	IvfClassInfo("WireBrick",Brick);
 	IvfStdFactory(WireBrick);
 protected:
-	virtual void doCreateGeometry();
+    virtual void doCreateGeometry() override;
 };
 }

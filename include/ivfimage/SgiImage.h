@@ -62,7 +62,7 @@ public:
 	IvfStdFactory(SgiImage);
 
 	/** Reads sgi image */
-	virtual bool read();
+	virtual bool read() override;
 
 	/** 
 	 * Alpha channel flag

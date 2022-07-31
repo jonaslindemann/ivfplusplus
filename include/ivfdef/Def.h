@@ -215,8 +215,8 @@
 
 #define IvfClassInfo(ivfclassname,ivfparent) \
 	const std::string getClassNameThis() { return ivfclassname; } \
-	virtual const std::string getClassName() { return ivfclassname; } \
-	virtual bool isClass(const std::string& name) { \
+	virtual const std::string getClassName() override { return ivfclassname; } \
+	virtual bool isClass(const std::string& name) override { \
 		std::string className; \
 		className = getClassNameThis(); \
 		if (!className.empty()) { \

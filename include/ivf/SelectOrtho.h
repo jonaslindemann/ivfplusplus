@@ -46,8 +46,8 @@ public:
 	IvfClassInfo("SelectOrtho",SelectComposite);
 	IvfStdFactory(SelectOrtho);
 
-	void initializeSelect(int x, int y, int w, int h);
-	void customView();
+	virtual void initializeSelect(int x, int y, int w, int h) override;
+	virtual void customView() override;
 
 	void setViewport(int width, int height);
 	void getViewport(int &width, int &height);

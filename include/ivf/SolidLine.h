@@ -64,7 +64,7 @@ public:
 	 * data for the extrusion is updated by calling
 	 * this method.
 	 */
-	virtual void refresh();
+	virtual void refresh() override;
 
 	/**
 	 * Set section sides

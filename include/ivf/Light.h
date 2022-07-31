@@ -164,7 +164,7 @@ public:
 	TLightType getType();
 
 protected:
-	virtual void doCreateGeometry();
+	virtual void doCreateGeometry() override;
 };
 
 }
