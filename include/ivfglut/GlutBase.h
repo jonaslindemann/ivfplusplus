@@ -2,7 +2,9 @@
 
 #include <string>
 
+#ifdef WIN32
 #include <Windows.h>
+#endif 
 
 #include <ivfwidget/WidgetBase.h>
 

@@ -49,7 +49,7 @@ class IVF_API ConstructionPlane : public Shape {
 private:
 	Ucs3d* m_ucs;
 	Grid* m_grid;
-	Cursor* m_cursor;
+	ivf::Cursor* m_cursor;
 	Camera* m_camera;
 
 	Vec3d m_last;

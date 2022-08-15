@@ -53,7 +53,7 @@ private:
 public:
 	ExampleWindow(int X, int Y, int W, int H, bool fullScreen);
 
-	static ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H, bool fullScreen);
+	static ExampleWindowPtr create(int X, int Y, int W, int H, bool fullScreen);
 
 	virtual void onInit(int width, int height);
 	virtual void onResize(int width, int height);
