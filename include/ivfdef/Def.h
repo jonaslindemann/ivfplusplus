@@ -25,8 +25,6 @@
 #ifndef IVFDEF_H
 #define IVFDEF_H
 
-#include <ivf/ivfconfig.h>
-
 #define IVF_VERSION_MAJOR	1
 #define IVF_VERSION_MINOR	0
 #define IVF_VERSION_RELEASE 0

@@ -1,1 +1,1 @@
-SUBDIRS(ivfdef ivfmath ivf ivfwidget ivfui ivffltk ivffile ivfimage ivfctl ivfext ivf3dui ivfwin32 ivffont ivfgle vc)
+SUBDIRS(glad GL ivfdef ivfmath ivf ivfwidget ivfui ivffltk ivffile ivfimage ivfctl ivfext ivf3dui ivfwin32 ivffont ivfgle vc)

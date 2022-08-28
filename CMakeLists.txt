@@ -71,10 +71,6 @@ else()
         set(JPEG_LIBRARY "jpeg")
 endif()
 
-include(cmake/CPM.cmake)
-
-
-
 #find_package(GLEW)
 #find_package(GLUT)
 #find_package(OpenGL)
