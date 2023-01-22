@@ -43,9 +43,9 @@ IvfSmartPointer(Workspace);
  */
 class IVF_API Workspace : public SceneBase {
 private:
-	std::vector<ConstructionPlane*> m_workplanes;
-	ConstructionPlane* m_currentPlane;
-	ConstructionPlane* m_rootPlane;
+	std::vector<ConstructionPlanePtr> m_workplanes;
+	ConstructionPlanePtr m_currentPlane;
+	ConstructionPlanePtr m_rootPlane;
 
     ShapePtr m_cursorShape;
 
@@ -79,6 +79,7 @@ public:
 	 * mapped to the current constructionplane.
 	 */
 	void updateCursor(int x, int y);
+    void updateCursor(double x, double y, double z);
 
 	/** 
 	 * Update relative cursor and axis sizes 

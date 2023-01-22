@@ -47,10 +47,10 @@ IvfSmartPointer(ConstructionPlane);
  */
 class IVF_API ConstructionPlane : public Shape {
 private:
-	Ucs3d* m_ucs;
-	Grid* m_grid;
-	ivf::Cursor* m_cursor;
-	Camera* m_camera;
+	Ucs3dPtr m_ucs;
+	GridPtr m_grid;
+	CursorPtr m_cursor;
+	CameraPtr m_camera;
 
 	Vec3d m_last;
 
@@ -97,6 +97,8 @@ public:
 	 * @param y - y position of mouse in current viewport
 	 */
 	void updateCursor(int x, int y);
+
+	void updateCursor(double x, double y, double z);
 
 	/**
 	 * Updates sizes of axis and cursor objects

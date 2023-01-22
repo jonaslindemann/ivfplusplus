@@ -24,9 +24,10 @@
 
 #pragma once
 
-
 #ifdef WIN32
+#ifndef _WINDOWS_
 #include <Windows.h>
+#endif
 #endif
 
 #include <glad/glad.h>

@@ -37,24 +37,12 @@ SelectComposite::SelectComposite ()
 // ------------------------------------------------------------
 SelectComposite::~SelectComposite ()
 {
-	if (m_camera!=nullptr)
-		m_camera->deleteReference();
-
-	if (!m_camera->referenced())
-		delete m_camera;
 }
 
 // ------------------------------------------------------------
 void SelectComposite::setCamera(View * camera)
 {
-	if (m_camera!=nullptr)
-	{
-		m_camera->deleteReference();
-		if (!m_camera->referenced())
-			delete m_camera;
-	}
 	m_camera = camera;
-	m_camera->addReference();
 }
 
 // ------------------------------------------------------------

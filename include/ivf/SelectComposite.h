@@ -104,7 +104,7 @@ private:
 	Shape* m_selectedShape;
 	int m_childCount;
 	GLuint m_selectBuf[512];
-	View* m_camera;
+	ViewPtr m_camera;
 	std::vector<Shape*> m_allObjects;
 	bool m_useCustomTransform;
 	bool m_renderCamera;
