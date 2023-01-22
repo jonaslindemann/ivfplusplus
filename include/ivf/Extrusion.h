@@ -283,6 +283,8 @@ public:
 	 * the setUseTwist method.
 	 */
 	void getSpineTwist(int pos, double &twist);
+
+	void setSpineScale(int pos, double sx, double sy);
 	
 	/** 
 	 * Updates bounding sphere
@@ -308,7 +310,8 @@ private:
 	gleDouble (*m_spineCoords)[3];
 	float (*m_spineColors)[3];
 	gleDouble (*m_twist);
-protected:
+    gleDouble (*m_sectionTransform)[2][3];
+ protected:
 	virtual void doCreateSelect() override;
 	virtual void doCreateGeometry() override;
 };

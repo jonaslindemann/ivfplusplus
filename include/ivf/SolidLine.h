@@ -31,12 +31,13 @@ namespace ivf {
 
 IvfSmartPointer(SolidLine);
 
-#define IVF_LINE_SIMPLE 0
-#define IVF_LINE_SOLID	1
+enum LineRefreshMode
+{
+	rmAll,
+	rmNodes,
+	rmSection
+};
 
-#define IVF_REFRESH_ALL     0
-#define IVF_REFRESH_NODES   1
-#define IVF_REFRESH_SECTION 2
 
 /**
  * Solid line class
@@ -102,7 +103,10 @@ public:
      * IVF_REFRESH_NODES   - Only nodes
 	 * IVF_REFRESH_SECTION - Only section
 	 */
-	void setRefresh(int mode);
+    void setRefresh(LineRefreshMode mode);
+
+	void setUseOffsetConeCap(bool flag);
+    void setOffsetConeCapRadius(double r);
 
 	double getRadius();
 	double getLength();
@@ -117,9 +121,14 @@ private:
 	double m_offsets[2];
 	NodePtr m_node2;
 	NodePtr m_node1;
-	int m_refreshMode;
+    LineRefreshMode m_refreshMode;
+    bool m_offsetConeCap;
+    double m_offsetConeRadius;
+    double m_startOffset[2];
+
 public:
 	void setOffsets(double offset1, double offset2);
+    void setStartOffsets(double offset1, double offset2);
 };
 
 }

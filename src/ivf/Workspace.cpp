@@ -28,7 +28,7 @@ using namespace ivf;
 
 Workspace::Workspace()
 {
-    m_rootPlane = new ConstructionPlane();
+    m_rootPlane = ConstructionPlane::create();
     m_rootPlane->setSize(10.0, 10.0);
     m_rootPlane->disableCursor();
 
@@ -50,7 +50,6 @@ Workspace::Workspace()
 Workspace::~Workspace()
 {
     clearPlanes();
-    delete m_rootPlane;
 }
 
 void Workspace::addPlane(ConstructionPlane *plane)
@@ -58,24 +57,10 @@ void Workspace::addPlane(ConstructionPlane *plane)
     m_workplanes.push_back(plane);
     if (this->getView()->isClass("Camera"))
         plane->setCamera((Camera*)this->getView());
-    plane->addReference();
 }
 
 void Workspace::clearPlanes()
 {
-    int i;
-
-    for (i = 0; i < (int)m_workplanes.size(); i++)
-    {
-        if (i != 0)
-        {
-            ConstructionPlane* plane = m_workplanes[i];
-            plane->deleteReference();
-
-            if (!plane->referenced())
-                delete plane;
-        }
-    }
     m_workplanes.clear();
     m_workplanes.push_back(m_rootPlane);
 }
@@ -130,6 +115,11 @@ void Workspace::updateCursor(int x, int y)
     m_currentPlane->updateCursor(x, y);
 }
 
+void Workspace::updateCursor(double x, double y, double z)
+{
+    m_currentPlane->updateCursor(x, y, z);
+}
+
 void Workspace::doCreateGeometry()
 {
     SceneBase::doCreateGeometry();
@@ -179,6 +169,14 @@ void Workspace::doCreateGeometry()
                 glColor3f(0.3, 0.3, 0.3);
                 glVertex3d(x, 0.0, z);
                 glVertex3d(x, y, z);
+                glEnd();
+
+                glBegin(GL_LINES);
+                glColor3f(0.3, 0.3, 0.3);
+                glVertex3d(-w / 2.0, 0.002, z);
+                glVertex3d(+w / 2.0, 0.002, z);
+                glVertex3d(x, 0.002, -w / 2.0);
+                glVertex3d(x, 0.002, w / 2.0);
                 glEnd();
             }
             else

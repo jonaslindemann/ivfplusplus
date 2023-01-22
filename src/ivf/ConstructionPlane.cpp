@@ -28,11 +28,9 @@ using namespace ivf;
 
 ConstructionPlane::ConstructionPlane()
 {
-	m_ucs = new Ucs3d();
-	m_cursor = new Cursor();
-	m_cursor->addReference();
-	m_grid = new Grid();
-	m_grid->addReference();
+	m_ucs = Ucs3d::create();
+	m_cursor = Cursor::create();
+	m_grid = Grid::create();;
 
 	m_size[0] = 10.0;
 	m_size[1] = 10.0;
@@ -53,19 +51,6 @@ ConstructionPlane::ConstructionPlane()
 
 ConstructionPlane::~ConstructionPlane()
 {
-	delete m_ucs;
-
-	m_camera->deleteReference();
-	if (!m_camera->referenced())
-		delete m_camera;
-
-	m_cursor->deleteReference();
-	if (!m_cursor->referenced())
-		delete m_cursor;
-
-	m_grid->deleteReference();
-	if (!m_grid->referenced())
-		delete m_grid;
 }
 
 void ConstructionPlane::setSize(double width, double height)
@@ -161,8 +146,8 @@ void ConstructionPlane::updateCursor(int x, int y)
 
 			intersection = m_ucs->transform(intersection);
 
-			if (m_snapToGrid)
-				intersection = m_ucs->snap(intersection);
+			//if (m_snapToGrid)
+			//	intersection = m_ucs->snap(intersection);
 
 			Vec3d delta;
 			delta = m_last - intersection;
@@ -177,6 +162,9 @@ void ConstructionPlane::updateCursor(int x, int y)
 			wlast = m_ucs->transformWorld(m_last);
 			Vec3d newPos;
 			newPos = wlast + sign*delta.length()*m_ucs->getYAxis();
+
+			if (m_snapToGrid)
+				newPos = m_ucs->snap(newPos);
 
 			//m_ucs->transformWorld(newPos);
 			m_cursor->setPosition(newPos);
@@ -212,6 +200,11 @@ void ConstructionPlane::updateCursor(int x, int y)
 		m_cursorX = x;
 		m_cursorY = y;
 	}
+}
+
+void ivf::ConstructionPlane::updateCursor(double x, double y, double z)
+{
+    m_cursor->setPosition(x, y, z);
 }
 
 
