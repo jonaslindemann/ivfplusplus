@@ -38,7 +38,7 @@ using namespace ivf;
 // Window class definition
 // ------------------------------------------------------------
 
-float random()
+float my_rand()
 {
 	return ((double)(rand()) / (double)RAND_MAX);
 }
@@ -134,9 +134,9 @@ void ExampleWindow::onInit(int width, int height)
 	{
 		auto text = TextLabel::create();
 
-		double x = 10.0 - 20.0 * random();
-		double y = 10.0 - 20.0 * random();
-		double z = 10.0 - 20.0 * random();
+		double x = 10.0 - 20.0 * my_rand();
+		double y = 10.0 - 20.0 * my_rand();
+		double z = 10.0 - 20.0 * my_rand();
 
 		text->setFont(m_font);
 		text->setText("A");

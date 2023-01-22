@@ -26,7 +26,7 @@
 
 using namespace ivf;
 
-#include <FL/x.H>
+//#include <FL/x.H>
 
 static void cb_fltkWorkspaceIdle(void* p)
 {
