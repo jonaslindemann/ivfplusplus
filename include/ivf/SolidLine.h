@@ -75,6 +75,7 @@ public:
 	 * @param n Number of sides in polygon.
 	 */
 	void setSides(long n);
+	long getSides();
 
 	/** Set polygon radius */
 	void setRadius(double radius);
