@@ -97,6 +97,11 @@ void SolidLine::setSides(long n)
     initExtrusion();
 }
 
+long ivf::SolidLine::getSides()
+{
+    return m_nSides;
+}
+
 void SolidLine::refresh()
 {
     switch (m_refreshMode)
