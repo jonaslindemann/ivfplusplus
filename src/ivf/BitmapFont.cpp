@@ -140,7 +140,9 @@ void BitmapFont::load()
 	// Load font texture
 
 	auto fontImage = ivf::PngImage::create();
-	fontImage->load(m_textureFilename);
+	
+	if (!fontImage->load(m_textureFilename))
+		std::cout << "Could not load " << m_textureFilename << "\n";
 
 	m_fontTexture = ivf::Texture::create();
 	m_fontTexture->setFilters(GL_LINEAR, GL_LINEAR);
