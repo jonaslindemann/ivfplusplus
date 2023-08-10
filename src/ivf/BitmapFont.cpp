@@ -19,7 +19,7 @@ BitmapFont::BitmapFont(const std::string filename)
 	m_textureFilename{ "" },
 	m_fontTexture{ nullptr }
 {
-	string baseFilename = m_filename.substr(0, m_filename.find("."));
+    string baseFilename = m_filename.substr(0, m_filename.find(".", 2));
 	m_textureFilename = baseFilename + "_0.png";
 	this->load();
 }
