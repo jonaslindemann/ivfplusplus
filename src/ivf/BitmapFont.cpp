@@ -19,7 +19,7 @@ BitmapFont::BitmapFont(const std::string filename)
 	m_textureFilename{ "" },
 	m_fontTexture{ nullptr }
 {
-	string baseFilename = m_filename.substr(0, m_filename.find("."));
+    string baseFilename = m_filename.substr(0, m_filename.find(".", 2));
 	m_textureFilename = baseFilename + "_0.png";
 	this->load();
 }
@@ -140,7 +140,9 @@ void BitmapFont::load()
 	// Load font texture
 
 	auto fontImage = ivf::PngImage::create();
-	fontImage->load(m_textureFilename);
+	
+	if (!fontImage->load(m_textureFilename))
+		std::cout << "Could not load " << m_textureFilename << "\n";
 
 	m_fontTexture = ivf::Texture::create();
 	m_fontTexture->setFilters(GL_LINEAR, GL_LINEAR);
