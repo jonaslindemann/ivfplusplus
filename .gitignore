@@ -4,4 +4,3 @@ build-release/*
 bin/Release/*
 lib/*
 *.pyc
-doc/html
