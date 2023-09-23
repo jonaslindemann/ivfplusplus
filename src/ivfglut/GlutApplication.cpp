@@ -215,7 +215,7 @@ void GlutApplication::runAppLoop(GlutBase *window)
 
 	while (!finished)
 	{
-		glutMainLoopEvent();
+		glutMainLoop();
 		finished = (!window->doAppLoop());
 	}
 #else

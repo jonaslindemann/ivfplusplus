@@ -17,8 +17,7 @@
 
 #include <glad/glad.h>
 
-#define FREEGLUT_STATIC
-#include <GL/freeglut.h>
+#include <GL/glut.h>
 
 #include <ivfdef/SingletonDestroyer.h>
 
