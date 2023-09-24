@@ -2,24 +2,44 @@ if (IVF_EXAMPLES)
 
 	if (IVF_EXAMPLES_GENERIC)
 	
-		set(IVF_EXAMPLE_DIRS cube handlers ac3dreader actionctl advgeom culling
-		controllers fly lighting lod manip math overlay placement robot robot2 robot_events selection bmfonts
-		texture viewports imui objframe2 fibrescope gleextrusion ) 
+		add_subdirectory(cube)
+		add_subdirectory(handlers)
+		add_subdirectory(ac3dreader)
+		add_subdirectory(actionctl)
+		add_subdirectory(advgeom)
+		add_subdirectory(culling)
+		add_subdirectory(controllers)
+		add_subdirectory(fly)
+		add_subdirectory(lighting)
+		add_subdirectory(lod)
+		add_subdirectory(manip)
+		add_subdirectory(math)
+		add_subdirectory(overlay)
+		add_subdirectory(placement)
+		add_subdirectory(robot)
+		add_subdirectory(robot2)
+		add_subdirectory(robot_events)
+		add_subdirectory(selection)
+		add_subdirectory(bmfonts)
+		add_subdirectory(texture)
+		add_subdirectory(viewports)
+		add_subdirectory(imui)
+		add_subdirectory(objframe2)
+		add_subdirectory(fibrescope)
+		add_subdirectory(gleextrusion)
 	
 	endif (IVF_EXAMPLES_GENERIC)
 	
 	if (IVF_EXAMPLES_ASSIMP)
 	
-		set(IVF_EXAMPLE_DIRS ${IVF_EXAMPLE_DIRS} assimp)
+		add_subdirectory(assimp)
 		
 	endif (IVF_EXAMPLES_ASSIMP)
 	
 	if (IVF_EXAMPLES_FONTS)
 	
-		set(IVF_EXAMPLE_DIRS ${IVF_EXAMPLE_DIRS} fonts)
+		add_subdirectory(fonts)
 		
 	endif (IVF_EXAMPLES_FONTS)
-
-	subdirs(${IVF_EXAMPLE_DIRS})
 
 endif (IVF_EXAMPLES)

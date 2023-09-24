@@ -1,10 +1,31 @@
-@echo off
-python -V 1>NUL 2>NUL
-if errorlevel 1 goto needpython
-python ivfbuild.py %1 %2 %3 %4 %5
-goto end
-:needpython
-echo ------------------------------------------
-echo Python is required for Ivf++ build system.
-echo ------------------------------------------
-:end
+@echo off 
+
+set DEBUG_DIR=build-debug
+set RELEASE_DIR=build-release
+
+echo.
+echo ******************************
+echo *** Building Ivf++ library ***
+echo ******************************
+echo.
+
+echo.
+echo *** Configuring debug build
+echo.
+cmake -B %DEBUG_DIR% -DCMAKE_BUILD_TYPE=Debug --preset default
+echo.
+echo *** Building debug build
+echo.
+cmake --build %DEBUG_DIR% --clean-first --config Debug
+echo.
+echo *** Configuring release build
+echo.
+cmake -B %RELEASE_DIR% -DCMAKE_BUILD_TYPE=Release --preset default
+echo.
+echo *** Building release build
+echo.
+cmake --build %RELEASE_DIR% --clean-first --config Release
+
+
+
+
