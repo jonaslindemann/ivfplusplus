@@ -16,7 +16,7 @@ cmake -B %DEBUG_DIR% -DCMAKE_BUILD_TYPE=Debug --preset default
 echo.
 echo *** Building debug build
 echo.
-cmake --build %DEBUG_DIR% --clean-first --config Debug
+cmake --build %DEBUG_DIR% --config Debug -- /m
 echo.
 echo *** Configuring release build
 echo.
@@ -24,7 +24,7 @@ cmake -B %RELEASE_DIR% -DCMAKE_BUILD_TYPE=Release --preset default
 echo.
 echo *** Building release build
 echo.
-cmake --build %RELEASE_DIR% --clean-first --config Release
+cmake --build %RELEASE_DIR% --config Release -- /m
 
 
 
