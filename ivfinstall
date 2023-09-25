@@ -1,0 +1,19 @@
+#!/bin/sh
+
+DEBUG_DIR=./build-debug
+RELEASE_DIR=./build-release
+
+echo
+echo '********************************'
+echo '*** Installing Ivf++ library ***'
+echo '********************************'
+echo
+
+echo
+echo '*** Installing debug build'
+echo
+cmake --build $DEBUG_DIR --config Debug --target install -- -j
+echo
+echo '*** Installing release build'
+echo
+cmake --build $RELEASE_DIR --config Release --target install -- -j
