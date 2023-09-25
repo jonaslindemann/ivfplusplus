@@ -1,31 +1,38 @@
-INCLUDE_DIRECTORIES(${ivf_SOURCE_DIR}/include)
-FILE(GLOB SOURCE_FILES *.cpp)
-FILE(GLOB INCLUDE_FILES ${ivf_SOURCE_DIR}/include/ivffltk/*.h)
+include_directories(${ivf_SOURCE_DIR}/include)
+file(GLOB SOURCE_FILES *.cpp)
+file(GLOB INCLUDE_FILES ${ivf_SOURCE_DIR}/include/ivffltk/*.h)
 
-IF(BUILD_SHARED_LIBS)
-	IF(WIN32)
-		ADD_DEFINITIONS(-DFL_DLL -DIVF_DLL -DIVFFLTK_LIB)
-	ENDIF(WIN32)
-	SET(FLTKLIBS_DEBUG fltkdlld)
-	SET(FLTKLIBS_RELEASE fltkdll)
-ELSE(BUILD_SHARED_LIBS)
-	SET(IVFLIBS_DEBUG fltkd fltkgld)
-	SET(IVFLIBS_RELEASE fltk fltkgl)
-ENDIF(BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS)
+  if(WIN32)
+    add_definitions(-DFL_DLL -DIVF_DLL -DIVFFLTK_LIB)
+  endif(WIN32)
+  set(FLTKLIBS_DEBUG fltkdlld)
+  set(FLTKLIBS_RELEASE fltkdll)
+else(BUILD_SHARED_LIBS)
+  set(IVFLIBS_DEBUG fltkd fltkgld)
+  set(IVFLIBS_RELEASE fltk fltkgl)
+endif(BUILD_SHARED_LIBS)
 
-IF(WIN32)
-	IF(IVF_DEBUG)
-		ADD_LIBRARY(ivffltkd ${INCLUDE_FILES} ${SOURCE_FILES})
-		TARGET_LINK_LIBRARIES( ivffltkd ivfd ivfwidgetd fltk fltk_gl fltk_forms fltk_images wsock32 comctl32 )
-		INSTALL_TARGETS( /lib ivffltkd )
-	ELSE(IVF_DEBUG)
-		ADD_LIBRARY(ivffltk ${INCLUDE_FILES} ${SOURCE_FILES})
-		TARGET_LINK_LIBRARIES( ivffltk ivf ivfwidget fltk fltk_gl fltk_forms fltk_images wsock32 comctl32 )
-		INSTALL_TARGETS( /lib ivffltk )
-	ENDIF(IVF_DEBUG)
-ELSE(WIN32)
-	ADD_LIBRARY(ivffltk ${SOURCE_FILES})
-	TARGET_LINK_LIBRARIES( ivffltk fltk fltk_gl fltk_forms fltk_images)
-	INSTALL_TARGETS( /lib ivffltk )
-ENDIF(WIN32)
-
+if(IVF_DEBUG)
+  add_library(ivffltkd ${INCLUDE_FILES} ${SOURCE_FILES})
+  target_link_libraries(
+    ivffltkd
+    ivfd
+    ivfwidgetd
+    fltk
+    fltk_gl
+    fltk_forms
+    fltk_images)
+  install_targets(/lib ivffltkd)
+else(IVF_DEBUG)
+  add_library(ivffltk ${INCLUDE_FILES} ${SOURCE_FILES})
+  target_link_libraries(
+    ivffltk
+    ivf
+    ivfwidget
+    fltk
+    fltk_gl
+    fltk_forms
+    fltk_images)
+  install_targets(/lib ivffltk)
+endif(IVF_DEBUG)

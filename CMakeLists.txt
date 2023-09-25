@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.20)
 
 project(ivf)
 
@@ -21,12 +21,18 @@ option(IVF_SHARED "Build Ivf++ as shared libraries." OFF)
 find_package(PNG REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(ZLIB REQUIRED)
+
+set(FLTK_SKIP_FLUID TRUE) 
 find_package(FLTK CONFIG REQUIRED)
+
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(FreeGLUT CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
+
+if(IVF_EXAMPLES_ASSIMP)
 find_package(assimp CONFIG REQUIRED)
+endif()
 
 set( LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib )
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin )

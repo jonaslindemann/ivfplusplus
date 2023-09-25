@@ -4,6 +4,10 @@
       {
         "name": "default",
         "toolchainFile": "E:/Users/Jonas/Development/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      },
+      {
+        "name": "linux",
+        "toolchainFile": "/home/lindemann/vcpkg/scripts/buildsystems/vcpkg.cmake"
       }
     ]
   }
