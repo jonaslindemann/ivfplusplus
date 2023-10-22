@@ -123,7 +123,7 @@ void Composite::deleteChild(int index)
         m_children.erase(pos);
 
         if (m_useReference)
-            if (!shape->isReferenced())
+            if (!shape->referenced())
                 delete shape;
     }
 }
@@ -145,7 +145,7 @@ void Composite::clear()
         if (m_useReference)
         {
             shape->deleteReference();
-            if (!shape->isReferenced())
+            if (!shape->referenced())
                 delete shape;
         }
     }
