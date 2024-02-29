@@ -8,23 +8,24 @@
 #include <ivfwidget/MouseViewHandler.h>
 #include <ivfwidget/SceneHandler.h>
 
-#include <ivf/Scene.h>
-#include <ivf/Cube.h>
-#include <ivf/Material.h>
-#include <ivf/Lighting.h>
-#include <ivf/Switch.h>
 #include <ivf/Axis.h>
+#include <ivf/Cube.h>
+#include <ivf/Lighting.h>
+#include <ivf/Material.h>
+#include <ivf/Scene.h>
+#include <ivf/Switch.h>
 
-#include <ivfgle/GleCoordArray.h>
-#include <ivfgle/GleColorArray.h>
-#include <ivfgle/GleScalarArray.h>
-#include <ivfgle/GlePolyCylinder.h>
-#include <ivfgle/GlePolyCone.h>
 #include <ivfgle/Gle.h>
-#include <ivfgle/GleExtrusion.h>
+#include <ivfgle/GleColorArray.h>
 #include <ivfgle/GleContour.h>
-#include <ivfgle/GleTwistExtrusion.h>
+#include <ivfgle/GleCoordArray.h>
+#include <ivfgle/GleExtrusion.h>
+#include <ivfgle/GlePolyCone.h>
+#include <ivfgle/GlePolyCylinder.h>
+#include <ivfgle/GleScalarArray.h>
 #include <ivfgle/GleSpiral.h>
+#include <ivfgle/GleSpiralCylinder.h>
+#include <ivfgle/GleTwistExtrusion.h>
 
 using namespace std;
 using namespace ivf;
@@ -35,34 +36,33 @@ using namespace ivf;
 
 IvfSmartPointer(ExampleWindow);
 
-class ExampleWindow: public GlutBase,
-	InitEvent,
-	InitContextEvent,
-	ResizeEvent,
-	RenderEvent,
-	ClearEvent,
-	KeyboardEvent
+class ExampleWindow : public GlutBase
+    , InitEvent
+    , InitContextEvent
+    , ResizeEvent
+    , RenderEvent
+    , ClearEvent
+    , KeyboardEvent
 {
 private:
+    ScenePtr m_scene;
 
-	ScenePtr m_scene;
+    SwitchPtr m_gleShapes;
 
-	SwitchPtr m_gleShapes;
+    LightingPtr m_lighting;
 
-	LightingPtr m_lighting;
-
-	MouseViewHandlerPtr m_mouseViewHandler;
-	SceneHandlerPtr m_sceneHandler;
+    MouseViewHandlerPtr m_mouseViewHandler;
+    SceneHandlerPtr m_sceneHandler;
 
 public:
-	ExampleWindow(int X, int Y, int W, int H);
+    ExampleWindow(int X, int Y, int W, int H);
 
-	static ExampleWindowPtr create(int X, int Y, int W, int H);
+    static ExampleWindowPtr create(int X, int Y, int W, int H);
 
-	virtual void onInit(int width, int height);
-	virtual void onInitContext(int width, int height);
-	virtual void onClear();
-	virtual void onKeyboard(int key, int x, int y);
+    virtual void onInit(int width, int height);
+    virtual void onInitContext(int width, int height);
+    virtual void onClear();
+    virtual void onKeyboard(int key, int x, int y);
 };
 
 // ------------------------------------------------------------
@@ -71,194 +71,209 @@ public:
 
 ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
 {
-	return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
+    return ExampleWindowPtr(new ExampleWindow(X, Y, W, H));
 }
 
 ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
-	:GlutBase(X, Y, W, H)
+    : GlutBase(X, Y, W, H)
 {
-	addInitEvent(this);
-	addInitContextEvent(this);
-	addResizeEvent(this);
-	addRenderEvent(this);
-	addClearEvent(this);
+    addInitEvent(this);
+    addInitContextEvent(this);
+    addResizeEvent(this);
+    addRenderEvent(this);
+    addClearEvent(this);
 }
 
 double rnd()
 {
-	return (double)rand()/(double)RAND_MAX;
+    return (double)rand() / (double)RAND_MAX;
 }
 
 void ExampleWindow::onInit(int width, int height)
 {
-	// Setup a simple scene
+    // Setup a simple scene
 
-	m_scene = Scene::create();
-	m_scene->getCamera()->setPosition(3.0, 3.0, 3.0);
+    m_scene = Scene::create();
+    m_scene->getCamera()->setPosition(3.0, 3.0, 3.0);
 
-	m_gleShapes = Switch::create();
+    m_gleShapes = Switch::create();
 
-	auto material = Material::create();
-	material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
-	material->setColorMaterial(false);
+    auto material = Material::create();
+    material->setDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
+    material->setColorMaterial(false);
 
-	////////////////////////////////////////////////////////////////////
-	// Testing GLE classes
+    ////////////////////////////////////////////////////////////////////
+    // Testing GLE classes
 
-	auto gle = Gle::getInstance();
-	gle->setNumSides(20);
-	gle->setJoinStyle(TUBE_JN_ANGLE|TUBE_NORM_EDGE);
+    auto gle = Gle::getInstance();
+    gle->setNumSides(20);
+    gle->setJoinStyle(TUBE_JN_ANGLE | TUBE_NORM_EDGE);
 
-	////////////////////////////////////////////////////////////////////
-	// Testing poly cylinder
+    ////////////////////////////////////////////////////////////////////
+    // Testing poly cylinder
 
-	int nPoints = 100;
-	double x = -2*M_PI;
-	double y;
-	double deltaX = 4*M_PI/(nPoints-1);
-	int i;
+    int nPoints = 100;
+    double x = -2 * M_PI;
+    double y;
+    double deltaX = 4 * M_PI / (nPoints - 1);
+    int i;
 
-	GleColorArrayPtr colorArray = GleColorArray::create(nPoints+2);
-	GleCoordArrayPtr coordArray = GleCoordArray::create(nPoints+2);
-	GleScalarArrayPtr radiusArray = GleScalarArray::create(nPoints+2);
-	GleScalarArrayPtr twistArray = GleScalarArray::create(nPoints+2);
+    GleColorArrayPtr colorArray = GleColorArray::create(nPoints + 2);
+    GleCoordArrayPtr coordArray = GleCoordArray::create(nPoints + 2);
+    GleScalarArrayPtr radiusArray = GleScalarArray::create(nPoints + 2);
+    GleScalarArrayPtr twistArray = GleScalarArray::create(nPoints + 2);
 
-	for (i=0; i<nPoints; i++)
-	{
-		y = sin(x);
-		coordArray->setCoord(i+1, x, y, 0.0);
-		colorArray->setColor(i+1, rnd(), rnd(), rnd());
-		radiusArray->setValue(i+1, rnd()*0.2);
-		twistArray->setValue(i+1, 10.0 - 20.0*rnd());
-		x += deltaX;
-	}
-	
-	coordArray->calcFirstAndLast();
+    for (i = 0; i < nPoints; i++)
+    {
+        y = sin(x);
+        coordArray->setCoord(i + 1, x, y, 0.0);
+        colorArray->setColor(i + 1, rnd(), rnd(), rnd());
+        radiusArray->setValue(i + 1, rnd() * 0.2);
+        twistArray->setValue(i + 1, 10.0 - 20.0 * rnd());
+        x += deltaX;
+    }
 
-	auto polyCylinder = GlePolyCylinder::create();
-	polyCylinder->setPoints(coordArray);
-	polyCylinder->setColors(colorArray);
-	polyCylinder->setMaterial(material);
+    coordArray->calcFirstAndLast();
 
-	m_gleShapes->addChild(polyCylinder);
+    auto polyCylinder = GlePolyCylinder::create();
+    polyCylinder->setPoints(coordArray);
+    polyCylinder->setColors(colorArray);
+    polyCylinder->setMaterial(material);
 
-	////////////////////////////////////////////////////////////////////
-	// Testing poly cone
+    m_gleShapes->addChild(polyCylinder);
 
-	auto polyCone = GlePolyCone::create();
-	polyCone->setPoints(coordArray);
-	polyCone->setColors(colorArray);
-	polyCone->setRadius(radiusArray);
-	polyCone->setMaterial(material);
+    ////////////////////////////////////////////////////////////////////
+    // Testing poly cone
 
-	m_gleShapes->addChild(polyCone);
+    auto polyCone = GlePolyCone::create();
+    polyCone->setPoints(coordArray);
+    polyCone->setColors(colorArray);
+    polyCone->setRadius(radiusArray);
+    polyCone->setMaterial(material);
 
-	////////////////////////////////////////////////////////////////////
-	// Test extrusion
+    m_gleShapes->addChild(polyCone);
 
-	auto contourArray = GleContour::create(5);
-	contourArray->setCoord(0, -0.2, -0.2);
-	contourArray->setCoord(1,  0.2, -0.2);
-	contourArray->setCoord(2,  0.2,  0.2);
-	contourArray->setCoord(3, -0.2,  0.2);
-	contourArray->setCoord(4, -0.2, -0.2);
-	contourArray->calcNormals();
+    ////////////////////////////////////////////////////////////////////
+    // Test extrusion
 
-	auto extrusion = GleExtrusion::create();
-	extrusion->setPoints(coordArray);
-	extrusion->setColors(colorArray);
-	extrusion->setContour(contourArray);
-	extrusion->setContourUp(0.0, 1.0, 0.0);
-	extrusion->setMaterial(material);
+    auto contourArray = GleContour::create(5);
+    contourArray->setCoord(0, -0.2, -0.2);
+    contourArray->setCoord(1, 0.2, -0.2);
+    contourArray->setCoord(2, 0.2, 0.2);
+    contourArray->setCoord(3, -0.2, 0.2);
+    contourArray->setCoord(4, -0.2, -0.2);
+    contourArray->calcNormals();
 
-	m_gleShapes->addChild(extrusion);
-	
-	////////////////////////////////////////////////////////////////////
-	// Test twist extrusion
+    auto extrusion = GleExtrusion::create();
+    extrusion->setPoints(coordArray);
+    extrusion->setColors(colorArray);
+    extrusion->setContour(contourArray);
+    extrusion->setContourUp(0.0, 1.0, 0.0);
+    extrusion->setMaterial(material);
 
-	auto twistExtrusion = GleTwistExtrusion::create();
-	twistExtrusion->setPoints(coordArray);
-	twistExtrusion->setColors(colorArray);
-	twistExtrusion->setContour(contourArray);
-	twistExtrusion->setContourUp(0.0, 1.0, 0.0);
-	twistExtrusion->setTwist(twistArray);
-	twistExtrusion->setMaterial(material);
+    m_gleShapes->addChild(extrusion);
 
-	m_gleShapes->addChild(twistExtrusion);
+    ////////////////////////////////////////////////////////////////////
+    // Test twist extrusion
 
-	////////////////////////////////////////////////////////////////////
-	// Test spiral
+    auto twistExtrusion = GleTwistExtrusion::create();
+    twistExtrusion->setPoints(coordArray);
+    twistExtrusion->setColors(colorArray);
+    twistExtrusion->setContour(contourArray);
+    twistExtrusion->setContourUp(0.0, 1.0, 0.0);
+    twistExtrusion->setTwist(twistArray);
+    twistExtrusion->setMaterial(material);
 
-	auto spiral = GleSpiral::create();
-	spiral->setContour(contourArray);
-	spiral->setContourUp(0.0, 1.0, 0.0);
-	spiral->setMaterial(material);
+    m_gleShapes->addChild(twistExtrusion);
 
-	m_gleShapes->addChild(spiral);
+    ////////////////////////////////////////////////////////////////////
+    // Test spiral
 
-	m_scene->addChild(m_gleShapes);
+    auto spiral = GleSpiral::create();
+    spiral->setContour(contourArray);
+    spiral->setContourUp(0.0, 1.0, 0.0);
+    spiral->setMaterial(material);
 
-	auto axis = Axis::create();
-	m_scene->addChild(axis);
+    m_gleShapes->addChild(spiral);
 
-	// Setup OpenGL
+    m_scene->addChild(m_gleShapes);
 
-	m_lighting = Lighting::getInstance();
-	m_lighting->enable();
-	m_lighting->getLight(0)->enable();
+    ////////////////////////////////////////////////////////////////////
+    // Test spiral 2
 
-	// Create handlers
+    auto spiralCyl = GleSpiralCylinder::create();
+    spiralCyl->setContourUp(0.0, 1.0, 0.0);
+    spiralCyl->setStartRadius(2.0);
+    spiralCyl->setRadiusChangePerRev(0.0);
+    spiralCyl->setStartZ(0.0);
+    spiralCyl->setZChangePerRev(0.0);
+    spiralCyl->setStartAngle(0.0);
+    spiralCyl->setTotalSpiralAngle(270.0);
+    spiralCyl->setMaterial(material);
 
-	m_mouseViewHandler = MouseViewHandler::create(this, m_scene->getCamera());
-	m_sceneHandler = SceneHandler::create(this, m_scene);
+    m_gleShapes->addChild(spiralCyl);
+    m_gleShapes->setCurrentChild(m_gleShapes->getSize() - 1);
+
+    auto axis = Axis::create();
+    m_scene->addChild(axis);
+
+    // Setup OpenGL
+
+    m_lighting = Lighting::getInstance();
+    m_lighting->enable();
+    m_lighting->getLight(0)->enable();
+
+    // Create handlers
+
+    m_mouseViewHandler = MouseViewHandler::create(this, m_scene->getCamera());
+    m_sceneHandler = SceneHandler::create(this, m_scene);
 }
 
 void ExampleWindow::onKeyboard(int key, int x, int y)
 {
-	m_gleShapes->cycleForward();
-	redraw();
+    m_gleShapes->cycleForward();
+    redraw();
 }
 
 void ExampleWindow::onInitContext(int width, int height)
 {
-	glEnable(GL_LIGHTING);
-	glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
 }
 
 void ExampleWindow::onClear()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 }
 
 // ------------------------------------------------------------
 // Main program
 // ------------------------------------------------------------
 
-
 // ------------------------------------------------------------
 // Main program
 // ------------------------------------------------------------
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-	// Create Ivf++ application object.
-    
-	auto app = GlutApplication::getInstance(&argc, argv);
-	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
-    
-	// Create a window
-    
-	auto window = ExampleWindow::create(0, 0, 512, 512);
-    
-	// Set window title and show window
-    
-	window->setWindowTitle("Ivf++ event handler examples");
-	window->show();
-    
-	// Enter main application loop
-    
-	app->run();
-    
-	return 0;
+    // Create Ivf++ application object.
+
+    auto app = GlutApplication::getInstance(&argc, argv);
+    app->setDisplayMode(IVF_DOUBLE | IVF_RGB | IVF_DEPTH | IVF_MULTISAMPLE);
+
+    // Create a window
+
+    auto window = ExampleWindow::create(0, 0, 512, 512);
+
+    // Set window title and show window
+
+    window->setWindowTitle("Ivf++ event handler examples");
+    window->show();
+
+    // Enter main application loop
+
+    app->run();
+
+    return 0;
 }

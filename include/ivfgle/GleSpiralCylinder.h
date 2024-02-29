@@ -1,5 +1,5 @@
 //
-// Copyright 1999-2021 by Structural Mechanics, Lund University.
+// Copyright 1999-2024 by Structural Mechanics, Lund University.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -24,46 +24,41 @@
 
 #pragma once
 
-#include <ivf/Base.h>
+#include <ivf/Shape.h>
 
 #include <GL/gle.h>
+
+#include <ivfgle/GleColorArray.h>
+#include <ivfgle/GleContour.h>
+#include <ivfgle/GleCoordArray.h>
+#include <ivfgle/GleSpiral.h>
 
 namespace ivf
 {
 
-IvfSmartPointer(GleContour);
+IvfSmartPointer(GleSpiralCylinder);
 
-class IVFGLE_API GleContour : public Base
+class IVFGLE_API GleSpiralCylinder : public GleSpiral
 {
 private:
-    int m_size;
-    gleDouble (*m_coords)[2];
-    gleDouble (*m_normals)[2];
-    bool m_closed;
+    int m_sides;
+    double m_radius;
+
+    GleContourPtr m_contour;
+
+    void initContour();
 
 public:
-    GleContour();
-    GleContour(int size);
-    virtual ~GleContour();
+    GleSpiralCylinder();
 
-    IvfClassInfo("GleContour", Base);
+    IvfClassInfo("GleSpiralCylinder", GleSpiral);
+    IvfStdFactory(GleSpiralCylinder);
 
-    static GleContourPtr create(int size) { return GleContourPtr(new GleContour(size)); };
-    static GleContourPtr create() { return GleContourPtr(new GleContour()); };
+    void setSides(int sides);
+    int sides() const;
 
-    void setClosed(bool closed);
-    bool closed();
-
-    void calcNormals();
-
-    void setSize(int size);
-    int getSize();
-
-    void setCoord(int idx, double x, double y);
-    void getCoord(int idx, double& x, double& y);
-
-    void* getCoordData();
-    void* getNormalData();
+    void setRadius(double radius);
+    double radius() const;
 };
 
 }
