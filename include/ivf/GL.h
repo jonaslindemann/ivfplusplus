@@ -30,5 +30,5 @@
 #endif
 #endif
 
-#include <glad/glad.h>
 #include <GL/glu.h>
+#include <glad/glad.h>
