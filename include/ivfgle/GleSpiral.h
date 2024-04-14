@@ -28,31 +28,59 @@
 
 #include <GL/gle.h>
 
-#include <ivfgle/GleCoordArray.h>
 #include <ivfgle/GleColorArray.h>
 #include <ivfgle/GleContour.h>
+#include <ivfgle/GleCoordArray.h>
 
-namespace ivf {
+namespace ivf
+{
 
 IvfSmartPointer(GleSpiral);
 
-class IVFGLE_API GleSpiral: public Shape {
+class IVFGLE_API GleSpiral : public Shape
+{
 private:
-	GleContourPtr	 m_contour;
-	gleDouble			 m_up[3];
-	gleDouble			 m_startXfm[2][3];
-	gleDouble			 m_xfmTheta[2][3];
+    GleContourPtr m_contour;
+    gleDouble m_up[3];
+    gleDouble m_startXfm[2][3];
+    gleDouble m_xfmTheta[2][3];
+
+    gleDouble m_startRadius;
+    gleDouble m_radiusChangePerRev;
+    gleDouble m_startZ;
+    gleDouble m_zChangePerRev;
+    gleDouble m_startAngle;
+    gleDouble m_totalSpiralAngle;
+    int m_sides;
+
 public:
-	GleSpiral();
+    GleSpiral();
 
-	IvfClassInfo("GleSpiral", Shape);
-	IvfStdFactory(GleSpiral);
+    IvfClassInfo("GleSpiral", Shape);
+    IvfStdFactory(GleSpiral);
 
-	void setContour(GleContour* contour);
-	void setContourUp(double vx, double vy, double vz);
-	void setContourUp(Vec3d& vec);
+    void setContour(GleContour* contour);
+    void setContourUp(double vx, double vy, double vz);
+    void setContourUp(Vec3d& vec);
+
+    void setStartRadius(double valkue);
+    void setRadiusChangePerRev(double value);
+    void setStartZ(double value);
+    void setZChangePerRev(double value);
+    void setStartAngle(double value);
+    void setTotalSpiralAngle(double value);
+    void setSides(int value);
+
+    double startRadius() const;
+    double radiusChangePerRev() const;
+    double startZ() const;
+    double zChangePerRev() const;
+    double startAngle() const;
+    double totalSpiralAngle() const;
+    int sides() const;
+
 protected:
-	virtual void doCreateGeometry();
+    virtual void doCreateGeometry();
 };
 
 }
