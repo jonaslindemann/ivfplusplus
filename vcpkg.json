@@ -1,0 +1,19 @@
+{
+  "name": "ivfplusplus",
+  "version": "1.5.8",
+  "dependencies": [
+    "assimp",
+    {
+      "name": "fltk",
+      "features": [
+        "opengl"
+      ]
+    },
+    "freeglut",
+    "glew",
+    "glfw3",
+    "libjpeg-turbo",
+    "libpng",
+    "opengl"
+  ]
+}
