@@ -1,0 +1,14 @@
+{
+  "name": "ivfplusplus",
+  "version-string": "1.5.0",
+  "dependencies": [
+    "glew",
+    "glfw3",
+    "libjpeg-turbo",
+    "libpng",
+    "zlib",
+    "opengl",
+    "fltk", 
+    "freeglut"
+  ]
+}
