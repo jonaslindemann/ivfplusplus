@@ -5,4 +5,10 @@ bin/Release/*
 lib/*
 *.pyc
 doc/html/*
+/vcpkg_installed
+/.vscode
+*.exe
+*.ilk
+*.pdb
+*.dll
 /.vscode
