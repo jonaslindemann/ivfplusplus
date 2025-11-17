@@ -11,3 +11,4 @@ doc/html/*
 *.ilk
 *.pdb
 *.dll
+/.vscode
