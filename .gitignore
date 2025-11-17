@@ -5,3 +5,4 @@ bin/Release/*
 lib/*
 *.pyc
 doc/html/*
+/.vscode
