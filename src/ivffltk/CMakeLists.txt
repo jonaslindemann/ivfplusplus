@@ -13,26 +13,7 @@ else(BUILD_SHARED_LIBS)
   set(IVFLIBS_RELEASE fltk fltkgl)
 endif(BUILD_SHARED_LIBS)
 
-if(IVF_DEBUG)
-  add_library(ivffltkd ${INCLUDE_FILES} ${SOURCE_FILES})
-  target_link_libraries(
-    ivffltkd
-    ivfd
-    ivfwidgetd
-    fltk
-    fltk_gl
-    fltk_forms
-    fltk_images)
-  install_targets(/lib ivffltkd)
-else(IVF_DEBUG)
-  add_library(ivffltk ${INCLUDE_FILES} ${SOURCE_FILES})
-  target_link_libraries(
-    ivffltk
-    ivf
-    ivfwidget
-    fltk
-    fltk_gl
-    fltk_forms
-    fltk_images)
-  install_targets(/lib ivffltk)
-endif(IVF_DEBUG)
+add_library(ivffltk ${INCLUDE_FILES} ${SOURCE_FILES})
+target_link_libraries(ivffltk ivf ivfwidget fltk fltk_gl fltk_forms fltk_images)
+set_target_properties(ivffltk PROPERTIES DEBUG_POSTFIX "d")
+install(TARGETS ivffltk DESTINATION lib)

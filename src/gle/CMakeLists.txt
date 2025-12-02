@@ -2,10 +2,8 @@ include_directories(${ivf_SOURCE_DIR}/include)
 file(GLOB SOURCE_FILES *.c)
 file(GLOB INCLUDE_FILES ${ivf_SOURCE_DIR}/include/GL/*.h)
 
-if(IVF_DEBUG)
-  add_library(gleivfd ${INCLUDE_FILES} ${SOURCE_FILES})
-  install_targets(/lib gleivfd)
-else()
-  add_library(gleivf ${INCLUDE_FILES} ${SOURCE_FILES})
-  install_targets(/lib gleivf)
-endif()
+add_library(gleivf ${INCLUDE_FILES} ${SOURCE_FILES})
+set_target_properties(gleivf PROPERTIES
+  DEBUG_POSTFIX "d"
+  OUTPUT_NAME "gleivf")
+install(TARGETS gleivf DESTINATION lib)
