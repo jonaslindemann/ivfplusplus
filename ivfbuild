@@ -8,20 +8,49 @@ echo '******************************'
 echo '*** Building Ivf++ library ***'
 echo '******************************'
 echo
+echo 'NOTE: This script uses automatic vcpkg detection.'
+echo 'Vcpkg will be detected from VCPKG_ROOT or common locations ($HOME/vcpkg, /usr/local/vcpkg).'
+echo 'To use a custom location, set VCPKG_ROOT environment variable before running this script.'
+echo
 
 echo
 echo '*** Configuring debug build'
 echo
-cmake -B $DEBUG_DIR -DCMAKE_BUILD_TYPE=Debug --preset linux
+cmake -B $DEBUG_DIR -S . -DCMAKE_BUILD_TYPE=Debug -DIVF_DEBUG=ON
+if [ $? -ne 0 ]; then
+    echo "ERROR: Debug configuration failed"
+    exit 1
+fi
+
 echo
 echo '*** Building debug build'
 echo
 cmake --build $DEBUG_DIR --config Debug -- -j
+if [ $? -ne 0 ]; then
+    echo "ERROR: Debug build failed"
+    exit 1
+fi
+
 echo
 echo '*** Configuring release build'
 echo
-cmake -B $RELEASE_DIR -DCMAKE_BUILD_TYPE=Release --preset linux
+cmake -B $RELEASE_DIR -S . -DCMAKE_BUILD_TYPE=Release
+if [ $? -ne 0 ]; then
+    echo "ERROR: Release configuration failed"
+    exit 1
+fi
+
 echo
 echo '*** Building release build'
 echo
 cmake --build $RELEASE_DIR --config Release -- -j
+if [ $? -ne 0 ]; then
+    echo "ERROR: Release build failed"
+    exit 1
+fi
+
+echo
+echo '*** Build completed successfully! ***'
+echo 'Debug libraries: lib/Debug'
+echo 'Release libraries: lib/Release'
+echo

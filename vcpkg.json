@@ -1,0 +1,16 @@
+{
+  "name": "ivfplusplus",
+  "version-string": "1.0.0",
+  "description": "Interactive Visualization Framework - C++ wrapper library for OpenGL",
+  "homepage": "http://sourceforge.net/projects/ivfplusplus",
+  "supports": "!uwp",
+  "dependencies": [
+    "zlib",
+    "libpng",
+    "libjpeg-turbo",
+    "glew",
+    "freeglut",
+    "glfw3",
+    "opengl"
+  ]
+}
