@@ -47,7 +47,7 @@ option(IVF_EXAMPLES_ASSIMP "Build Ivf++ assimp examples" OFF)
 option(IVF_DEBUG "Build Ivf++ with debug information." OFF)
 option(IVF_SHARED "Build Ivf++ as shared libraries." OFF)
 
-find_package(PNG CONFIG REQUIRED)
+find_package(PNG REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(ZLIB REQUIRED)
 
