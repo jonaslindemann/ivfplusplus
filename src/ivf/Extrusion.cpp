@@ -93,6 +93,9 @@ Extrusion::~Extrusion()
 // ------------------------------------------------------------
 void Extrusion::doCreateGeometry()
 {
+    gleTextureMode(m_textureMode);
+    gleSetJoinStyle(TUBE_JN_ANGLE);
+
     if ((m_spineStart >= 0) && (m_spineEnd > 0))
         m_spineDelta = m_spineEnd - m_spineStart + 1;
     else

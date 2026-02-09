@@ -1,5 +1,34 @@
 cmake_minimum_required(VERSION 3.20)
 
+set(_vcpkg_toolchain_already_set FALSE)
+if(DEFINED CMAKE_TOOLCHAIN_FILE)
+        set(_vcpkg_toolchain_already_set TRUE)
+endif()
+
+if(NOT _vcpkg_toolchain_already_set OR CMAKE_TOOLCHAIN_FILE MATCHES ".*[\\/]Microsoft Visual Studio[\\/].*[\\/]VC[\\/]vcpkg[\\/].*")
+        set(_vcpkg_candidate_paths
+                "${CMAKE_SOURCE_DIR}/vcpkg"
+                "${CMAKE_SOURCE_DIR}/../vcpkg"
+                "C:/vcpkg"
+        )
+
+        if(DEFINED ENV{VCPKG_ROOT})
+                list(APPEND _vcpkg_candidate_paths "$ENV{VCPKG_ROOT}")
+        endif()
+
+        if(DEFINED ENV{VCPKG_INSTALLATION_ROOT})
+                list(APPEND _vcpkg_candidate_paths "$ENV{VCPKG_INSTALLATION_ROOT}")
+        endif()
+
+        foreach(_vcpkg_root IN LISTS _vcpkg_candidate_paths)
+                if(EXISTS "${_vcpkg_root}/scripts/buildsystems/vcpkg.cmake")
+                        set(CMAKE_TOOLCHAIN_FILE "${_vcpkg_root}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file" FORCE)
+                        message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
+                        break()
+                endif()
+        endforeach()
+endif()
+
 project(ivf)
 
 option(IVF_UI "Build user interface integration libraries." ON) 
@@ -18,7 +47,7 @@ option(IVF_EXAMPLES_ASSIMP "Build Ivf++ assimp examples" OFF)
 option(IVF_DEBUG "Build Ivf++ with debug information." OFF)
 option(IVF_SHARED "Build Ivf++ as shared libraries." OFF)
 
-find_package(PNG REQUIRED)
+find_package(PNG CONFIG REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(ZLIB REQUIRED)
 

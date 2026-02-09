@@ -249,8 +249,9 @@ void GLPrimitive::clearCoordIndex()
 void GLPrimitive::clearTextureCoord()
 {
 	long i;
-	for (i=0; i<(int)m_coordSet.size(); i++)
+	for (i=0; i<(int)m_textureCoordSet.size(); i++)
 		delete m_textureCoordSet[i];
+	m_textureCoordSet.clear();
 }
 
 void GLPrimitive::clear()
