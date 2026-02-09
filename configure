@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# This is a legacy configure script
+# For modern builds, use ivfbuild script instead or CMake directly:
+# 
+#   ./ivfbuild                    # Build both debug and release
+#   cmake -B build -S .           # Configure
+#   cmake --build build           # Build
+#
+# vcpkg is auto-detected from VCPKG_ROOT or common locations
+
+echo "WARNING: This is a legacy configure script."
+echo "Consider using './ivfbuild' or CMake directly for better control."
+echo
+
 if [ -d ./build ]
 then
 	echo "Build dir exists. Removing."
@@ -7,10 +20,10 @@ then
 fi
 
 mkdir build
-
 cd build
 
 export CXXFLAGS=-O3
+echo "Configuring release build with automatic vcpkg detection..."
 cmake -DCMAKE_BUILD_TYPE=RELEASE ..
 
 

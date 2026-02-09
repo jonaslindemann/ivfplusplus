@@ -3,11 +3,53 @@
     "configurePresets": [
       {
         "name": "default",
-        "toolchainFile": "c:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        "generator": "Ninja Multi-Config",
+        "toolchainFile": "c:/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "binaryDir": "${sourceDir}/build"
       },
       {
         "name": "linux",
-        "toolchainFile": "/home/lindemann/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        "generator": "Ninja Multi-Config",
+        "toolchainFile": "/home/lindemann/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "binaryDir": "${sourceDir}/build"
+      },
+      {
+        "name": "vs2022",
+        "generator": "Visual Studio 17 2022",
+        "toolchainFile": "c:/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "binaryDir": "${sourceDir}/build"
+      }
+    ],
+    "buildPresets": [
+      {
+        "name": "default-debug",
+        "configurePreset": "default",
+        "configuration": "Debug"
+      },
+      {
+        "name": "default-release",
+        "configurePreset": "default",
+        "configuration": "Release"
+      },
+      {
+        "name": "linux-debug",
+        "configurePreset": "linux",
+        "configuration": "Debug"
+      },
+      {
+        "name": "linux-release",
+        "configurePreset": "linux",
+        "configuration": "Release"
+      },
+      {
+        "name": "vs2022-debug",
+        "configurePreset": "vs2022",
+        "configuration": "Debug"
+      },
+      {
+        "name": "vs2022-release",
+        "configurePreset": "vs2022",
+        "configuration": "Release"
       }
     ]
   }

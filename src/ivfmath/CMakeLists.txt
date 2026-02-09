@@ -2,10 +2,8 @@ include_directories(${ivf_SOURCE_DIR}/include)
 file(GLOB SOURCE_FILES *.cpp)
 file(GLOB INCLUDE_FILES ${ivf_SOURCE_DIR}/include/ivfmath/*.h)
 
-if(IVF_DEBUG)
-  add_library(ivfmathd ${INCLUDE_FILES} ${SOURCE_FILES})
-  install_targets(/lib ivfmathd)
-else()
-  add_library(ivfmath ${INCLUDE_FILES} ${SOURCE_FILES})
-  install_targets(/lib ivfmath)
-endif()
+add_library(ivfmath ${INCLUDE_FILES} ${SOURCE_FILES})
+set_target_properties(ivfmath PROPERTIES
+  DEBUG_POSTFIX "d"
+  OUTPUT_NAME "ivfmath")
+install(TARGETS ivfmath DESTINATION lib)

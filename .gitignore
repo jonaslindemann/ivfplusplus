@@ -5,3 +5,5 @@ bin/Release/*
 lib/*
 *.pyc
 doc/html/*
+/.vscode
+/vcpkg_installed

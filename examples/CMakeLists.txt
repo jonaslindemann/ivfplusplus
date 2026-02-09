@@ -1,3 +1,28 @@
+# Helper function to create ivfplusplus examples with simplified dependency management
+function(add_ivfplusplus_example name)
+    cmake_parse_arguments(ARG "" "" "SOURCES;LIBS;DEBUG_LIBS" ${ARGN})
+    
+    if(NOT ARG_SOURCES)
+        set(ARG_SOURCES ${name}.cpp)
+    endif()
+    
+    file(GLOB HEADER_FILES *.h)
+    
+    if(IVF_DEBUG)
+        add_executable(${name}d ${ARG_SOURCES} ${HEADER_FILES})
+        target_link_libraries(${name}d PRIVATE ${ARG_DEBUG_LIBS})
+        set_target_properties(${name}d PROPERTIES 
+            FOLDER "examples"
+        )
+    else()
+        add_executable(${name} ${ARG_SOURCES} ${HEADER_FILES})
+        target_link_libraries(${name} PRIVATE ${ARG_LIBS})
+        set_target_properties(${name} PROPERTIES 
+            FOLDER "examples"
+        )
+    endif()
+endfunction()
+
 if (IVF_EXAMPLES)
 
 	if (IVF_EXAMPLES_GENERIC)
@@ -24,8 +49,10 @@ if (IVF_EXAMPLES)
 		add_subdirectory(texture)
 		add_subdirectory(viewports)
 		add_subdirectory(imui)
+	if (IVF_EXAMPLES_FLTK)
 		add_subdirectory(objframe2)
 		add_subdirectory(fibrescope)
+	endif (IVF_EXAMPLES_FLTK)
 		add_subdirectory(gleextrusion)
 	
 	endif (IVF_EXAMPLES_GENERIC)
