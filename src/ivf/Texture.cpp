@@ -27,11 +27,14 @@
 
 using namespace ivf;
 
+static GLuint s_currentBoundTexture = 0;
+
 // ------------------------------------------------------------
 Texture::Texture ()
 :GLBase()
 {
 	m_bound = false;
+	m_textureDataUploaded = false;
 	m_generateMipmaps = false;
 	m_imageMap = nullptr;
 	m_ivfImage = nullptr;
@@ -61,7 +64,11 @@ Texture::~Texture ()
 {
 	if (m_generateName)
 		if (isBound() == TRUE)
+		{
 			glDeleteTextures(1, &m_textureName);
+			if (s_currentBoundTexture == m_textureName)
+				s_currentBoundTexture = 0;
+		}
 }
 
 // ------------------------------------------------------------
@@ -82,49 +89,59 @@ GLuint Texture::getName()
 void Texture::bind()
 {
 #ifndef _NO_TEXTURE_NAMES
-	if (isBound())
-		glDeleteTextures(1, &m_textureName);
-	
-	if (m_generateName)
+	// Only generate texture name once
+	if (!isBound() && m_generateName)
+	{
 		glGenTextures(1, &m_textureName);
+		m_bound = true;
+	}
 
-	glBindTexture(GL_TEXTURE_2D, m_textureName);
+	// Bind texture only if not already bound
+	if (s_currentBoundTexture != m_textureName)
+	{
+		glBindTexture(GL_TEXTURE_2D, m_textureName);
+		s_currentBoundTexture = m_textureName;
+	}
 #endif
+	// Set texture parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_minFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_magFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrapS);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrapT);
-	
+
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
 	glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
 
 	if (!m_loadImages)
 	{
-		m_bound = true;
 		return;
 	}
 
-	if (m_ivfImage!=nullptr)
+	// Only upload texture data once
+	if (!m_textureDataUploaded)
 	{
-		if (!m_generateMipmaps)
-			glTexImage2D(GL_TEXTURE_2D, 0, m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(),
-				0, m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
-		else
-			gluBuild2DMipmaps(GL_TEXTURE_2D, /*0,*/ m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(), 
-			/*0,*/ m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
-	}
+		if (m_ivfImage!=nullptr)
+		{
+			if (!m_generateMipmaps)
+				glTexImage2D(GL_TEXTURE_2D, 0, m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(),
+					0, m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
+			else
+				gluBuild2DMipmaps(GL_TEXTURE_2D, /*0,*/ m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(), 
+				/*0,*/ m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
+		}
 
-	if (m_imageMap!=nullptr)
-	{
-		if (!m_generateMipmaps)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height,
-				0, GL_RGBA, GL_UNSIGNED_BYTE, m_imageMap);
-		else
-			gluBuild2DMipmaps(GL_TEXTURE_2D, /*0,*/ GL_RGBA, m_width, m_height, 
-			/*0,*/ GL_RGBA, GL_UNSIGNED_BYTE, m_imageMap);
+		if (m_imageMap!=nullptr)
+		{
+			if (!m_generateMipmaps)
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height,
+					0, GL_RGBA, GL_UNSIGNED_BYTE, m_imageMap);
+			else
+				gluBuild2DMipmaps(GL_TEXTURE_2D, /*0,*/ GL_RGBA, m_width, m_height, 
+				/*0,*/ GL_RGBA, GL_UNSIGNED_BYTE, m_imageMap);
+		}
+
+		m_textureDataUploaded = true;
 	}
-	
-	m_bound = true;
 
 	if (!m_active)
 		glDisable(GL_TEXTURE_2D);
@@ -135,8 +152,13 @@ void Texture::apply()
 {
 	if (m_active)
 	{
-		glBindTexture(GL_TEXTURE_2D, m_textureName);
-		
+		// Only bind if not already bound
+		if (s_currentBoundTexture != m_textureName)
+		{
+			glBindTexture(GL_TEXTURE_2D, m_textureName);
+			s_currentBoundTexture = m_textureName;
+		}
+
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
 		glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
 
@@ -263,12 +285,14 @@ void Texture::setSize(int width, int height)
 void Texture::setImageMap(void *imageMap)
 {
 	m_imageMap = imageMap;
+	m_textureDataUploaded = false;
 }
 
 // ------------------------------------------------------------
 void Texture::setImage(Image *image)
 {
 	m_ivfImage = image;
+	m_textureDataUploaded = false;
 }
 
 // ------------------------------------------------------------
@@ -276,10 +300,15 @@ void Texture::setName(GLuint name)
 {
 	if (m_generateName)
 		if (isBound() == TRUE)
+		{
 			glDeleteTextures(1, &m_textureName);
-	
+			if (s_currentBoundTexture == m_textureName)
+				s_currentBoundTexture = 0;
+		}
+
 	m_textureName = name;
 	m_bound = true;
+	m_textureDataUploaded = false;
 }
 
 // ------------------------------------------------------------
@@ -324,4 +353,10 @@ void Texture::deactivate()
 bool Texture::isActive()
 {
 	return m_active;
+}
+
+// ------------------------------------------------------------
+void Texture::refresh()
+{
+	m_textureDataUploaded = false;
 }

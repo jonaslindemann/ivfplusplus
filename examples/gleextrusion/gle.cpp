@@ -93,6 +93,10 @@ void ExampleWindow::onInit(int width, int height)
 {
     // Setup a simple scene
 
+    gleInitVBOCache(10000);
+    gleInitTessCache();  
+    gleSetVBOMode(1); 
+
     m_scene = Scene::create();
     m_scene->getCamera()->setPosition(3.0, 3.0, 3.0);
 
@@ -261,6 +265,9 @@ int main(int argc, char** argv)
 
     auto app = GlutApplication::getInstance(&argc, argv);
     app->setDisplayMode(IVF_DOUBLE | IVF_RGB | IVF_DEPTH | IVF_MULTISAMPLE);
+
+
+
 
     // Create a window
 

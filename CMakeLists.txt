@@ -14,7 +14,7 @@ if(NOT _vcpkg_toolchain_already_set OR CMAKE_TOOLCHAIN_FILE MATCHES ".*[\\/]Micr
 
         if(DEFINED ENV{VCPKG_ROOT})
                 list(APPEND _vcpkg_candidate_paths "$ENV{VCPKG_ROOT}")
-        endif()
+        endif() 
 
         if(DEFINED ENV{VCPKG_INSTALLATION_ROOT})
                 list(APPEND _vcpkg_candidate_paths "$ENV{VCPKG_INSTALLATION_ROOT}")

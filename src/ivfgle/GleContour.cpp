@@ -141,7 +141,7 @@ void GleContour::calcNormals()
         m_normals[i][0] = -(-y2 + y1);
         m_normals[i][1] = -(x2 - x1);
 
-        l = sqrt(pow(m_normals[i][0], 2) + pow(m_normals[i][1], 2));
+        l = sqrt(m_normals[i][0]* m_normals[i][0] + m_normals[i][1] * m_normals[i][1]);
 
         m_normals[i][0] /= l;
         m_normals[i][1] /= l;

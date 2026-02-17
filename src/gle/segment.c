@@ -257,33 +257,52 @@ void draw_segment_c_and_facet_n (int ncp,	/* number of contour points */
  * This routine draws a segment with normals specified at each end.
  */
 
-void draw_binorm_segment_edge_n (int ncp,      /* number of contour points */
-                           double front_contour[][3],
-                           double back_contour[][3],
-                           double front_norm[][3],
-                           double back_norm[][3],
-                           int inext, double len)
+void draw_binorm_segment_edge_n(int ncp,
+    double front_contour[][3],
+    double back_contour[][3],
+    double front_norm[][3],
+    double back_norm[][3],
+    int inext, double len)
 {
-   int j;
+    int j;
+    int use_texture = (_gle_gc->v3d_gen_texture != NULL) || (_gle_gc->n3d_gen_texture != NULL);
 
-   /* draw the tube segment */
-   BGNTMESH (inext, len);
-   for (j=0; j<ncp; j++) {
-      N3F_D (front_norm[j]);
-      V3F_D (front_contour[j], j, FRONT);
-      N3F_D (back_norm[j]);
-      V3F_D (back_contour[j], j, BACK);
-   }
+    BGNTMESH(inext, len);
 
-   if (__TUBE_CLOSE_CONTOUR) {
-      /* connect back up to first point of contour */
-      N3F_D (front_norm[0]);
-      V3F_D (front_contour[0], 0, FRONT);
-      N3F_D (back_norm[0]);
-      V3F_D (back_contour[0], 0, BACK);
-   }
-   ENDTMESH ();
+    if (use_texture) {
+        // Original path with texture generation
+        for (j = 0; j < ncp; j++) {
+            N3F_D(front_norm[j]);
+            V3F_D(front_contour[j], j, FRONT);
+            N3F_D(back_norm[j]);
+            V3F_D(back_contour[j], j, BACK);
+        }
+    }
+    else {
+        // Fast path without function pointer overhead
+        for (j = 0; j < ncp; j++) {
+            glNormal3dv(front_norm[j]);
+            glVertex3dv(front_contour[j]);
+            glNormal3dv(back_norm[j]);
+            glVertex3dv(back_contour[j]);
+        }
+    }
 
+    if (__TUBE_CLOSE_CONTOUR) {
+        if (use_texture) {
+            N3F_D(front_norm[0]);
+            V3F_D(front_contour[0], 0, FRONT);
+            N3F_D(back_norm[0]);
+            V3F_D(back_contour[0], 0, BACK);
+        }
+        else {
+            glNormal3dv(front_norm[0]);
+            glVertex3dv(front_contour[0]);
+            glNormal3dv(back_norm[0]);
+            glVertex3dv(back_contour[0]);
+        }
+    }
+    ENDTMESH();
 }
 
 #endif /* COLOR_SIGNATURE */

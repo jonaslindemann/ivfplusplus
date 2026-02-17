@@ -200,7 +200,7 @@ typedef double gleVector[3];
 #include <OpenGL/OpenGL.h>
 #include <OpenGL/glu.h>
 #else
-#include <GL/gl.h>
+#include <glad/glad.h>
 #include <GL/glu.h>
 #endif
 

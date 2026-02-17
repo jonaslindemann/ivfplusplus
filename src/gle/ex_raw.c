@@ -30,6 +30,7 @@
 #include "extrude.h"
 #include "intersect.h"
 #include "segment.h"
+#include <GL/segment_vbo.h>
 
 /* ============================================================ */
 #ifndef COLOR_SIGNATURE
@@ -908,11 +909,15 @@ void extrusion_raw_join (int ncp,		/* number of contour points */
                                                  (gleVector *) back_norm,
                                                  inext, len);
             } else {
-               draw_binorm_segment_edge_n (ncp, (gleVector *) front_loop, 
-                                                (gleVector *) back_loop, 
-                                                (gleVector *) front_norm, 
-                                                (gleVector *) back_norm,
-                                                inext, len);
+               if (__TUBE_USE_VBO) {
+                  draw_binorm_segment_edge_n_vbo (ncp, front_loop, back_loop, front_norm, back_norm, inext, len);
+               } else {
+                  draw_binorm_segment_edge_n (ncp, (gleVector *) front_loop, 
+                                                   (gleVector *) back_loop, 
+                                                   (gleVector *) front_norm, 
+                                                   (gleVector *) back_norm,
+                                                   inext, len);
+               }
             }
             if (__TUBE_DRAW_CAP) {
                 nrmv[2] = 1.0; N3F (nrmv);

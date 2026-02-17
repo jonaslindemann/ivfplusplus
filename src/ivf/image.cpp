@@ -116,6 +116,18 @@ void Image::setPixel(int x, int y, GLubyte red, GLubyte green, GLubyte blue)
 	setValue(x, y, 2, blue);
 }
 
+void ivf::Image::setPixelAllX(int x, GLubyte red, GLubyte green, GLubyte blue)
+{
+	for (int y=0; y<m_size[1]; y++)
+		setPixel(x, y, red, green, blue);
+}
+
+void ivf::Image::setPixelAllY(int y, GLubyte red, GLubyte green, GLubyte blue)
+{
+	for (int x=0; x<m_size[0]; x++)
+		setPixel(x, y, red, green, blue);
+}
+
 void Image::setPixelAlpha(int x, int y, GLubyte alpha)
 {
 	setValue(x, y, 3, alpha);

@@ -289,6 +289,17 @@ public:
 	/** Returns texture active state */
 	bool isActive();
 
+	/**
+	 * Force texture data refresh
+	 *
+	 * Marks the texture data as needing to be re-uploaded.
+	 * The next call to bind() will upload the texture data
+	 * to the GPU again. This is useful when the underlying
+	 * image data has been modified and needs to be updated
+	 * on the graphics card.
+	 */
+	void refresh();
+
 private:
 	GLenum m_wrapT;
 	GLenum m_wrapS;
@@ -299,6 +310,7 @@ private:
 	float m_textureEnvColor[4];
 	bool m_generateMipmaps;
 	bool m_bound;
+	bool m_textureDataUploaded;
 	bool m_generateName;
 	bool m_loadImages;
 	ImagePtr m_ivfImage;

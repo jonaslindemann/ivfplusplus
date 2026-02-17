@@ -44,6 +44,19 @@ int gleGetJoinStyle (void)
    return (extrusion_join_style);
 }
 
+/* Set/Get VBO rendering mode */
+void gleSetVBOMode (int enable)
+{
+   INIT_GC();
+   _gle_gc->use_vbo = enable;
+}
+
+int gleGetVBOMode (void)
+{
+   INIT_GC();
+   return (_gle_gc->use_vbo);
+}
+
 #endif /* COLOR_SIGNATURE */
 /* ============================================================ */
 /*

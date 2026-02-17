@@ -47,6 +47,7 @@ gleCreateGC (void)
    retval -> save_end_gen_texture = 0x0;
 
    retval -> join_style = TUBE_JN_ANGLE | TUBE_JN_CAP | TUBE_NORM_FACET;
+   retval -> use_vbo = 0;  /* VBO rendering disabled by default */
 
    retval -> slices = 0;
    retval -> circle = 0x0;

@@ -49,11 +49,12 @@ if (IVF_EXAMPLES)
 		add_subdirectory(texture)
 		add_subdirectory(viewports)
 		add_subdirectory(imui)
+		add_subdirectory(gleextrusion)
+		add_subdirectory(vbo_test)
 	if (IVF_EXAMPLES_FLTK)
 		add_subdirectory(objframe2)
 		add_subdirectory(fibrescope)
 	endif (IVF_EXAMPLES_FLTK)
-		add_subdirectory(gleextrusion)
 	
 	endif (IVF_EXAMPLES_GENERIC)
 	

@@ -74,6 +74,9 @@ public:
 	/** Set an image pixel */
 	void setPixel(int x, int y, GLubyte red, GLubyte green, GLubyte blue);
 
+	void setPixelAllX(int x, GLubyte red, GLubyte green, GLubyte blue);
+	void setPixelAllY(int y, GLubyte red, GLubyte green, GLubyte blue);
+
 	/** Set an image pixel by specifying channel and value */
 	void setValue(int x, int y, int channel, GLubyte value);
 
