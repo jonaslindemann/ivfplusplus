@@ -23,8 +23,11 @@
 //
 
 #include <ivf/Light.h>
+#include <ivf/rc.h>
 
 #include <ivf/GL.h>
+
+#include <glm/glm.hpp>
 
 using namespace ivf;
 
@@ -126,6 +129,25 @@ void Light::doCreateGeometry()
 		glLighti( light, GL_CONSTANT_ATTENUATION, m_constatt );
 		glLighti( light, GL_LINEAR_ATTENUATION, m_linatt );
 		glLighti( light, GL_QUADRATIC_ATTENUATION, m_quadatt );
+
+		// Modern path: build LightData and add to RenderContext.
+		// The light position is transformed to view space the same way OpenGL does:
+		// view * model * position (model matrix is current from Shape::doBeginTransform).
+		LightData data;
+		glm::mat4 vm = rcView() * rcModelMatrix();
+		data.position     = vm * glm::vec4(m_position[0], m_position[1], m_position[2], m_position[3]);
+		data.ambient      = glm::vec4(m_ambient[0],  m_ambient[1],  m_ambient[2],  m_ambient[3]);
+		data.diffuse      = glm::vec4(m_diffuse[0],  m_diffuse[1],  m_diffuse[2],  m_diffuse[3]);
+		data.specular     = glm::vec4(m_specular[0], m_specular[1], m_specular[2], m_specular[3]);
+		data.spotDirection = glm::vec3(m_spotDirection[0], m_spotDirection[1], m_spotDirection[2]);
+		data.spotCutoff   = (m_lightType == LT_SPOT) ? m_spotCutoff : 180.0f;
+		data.spotExponent = m_spotExponent;
+		data.constAtt     = (float)m_constatt;
+		data.linearAtt    = (float)m_linatt;
+		data.quadAtt      = (float)m_quadatt;
+		data.type         = (int)m_lightType; // LT_POINT=0, LT_DIRECTIONAL=1, LT_SPOT=2
+		data.enabled      = true;
+		rcAddLight(data);
 	}
 }
 

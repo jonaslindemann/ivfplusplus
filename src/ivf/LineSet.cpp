@@ -39,6 +39,8 @@ LineSet::~LineSet()
 
 void LineSet::doCreateGeometry()
 {
+	if (buildAndDrawVAO(GL_LINES)) return;
+
     Index* coordIdx;
     Index* colorIdx;
     Index* textureIdx;

@@ -24,6 +24,9 @@
 #include <ivf/config.h>
 #include <ivf/Shape.h>
 #include <ivf/GlobalState.h>
+#include <ivf/rc.h>
+
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace ivf;
 
@@ -199,26 +202,47 @@ void Shape::doBeginTransform()
 
 	glPushMatrix();
 
+	// Mirror transform into RenderContext for the modern shader path.
+	rcPushMatrix();
+
 	if (!((m_position[0]==0.0)&&(m_position[1]==0.0)&&(m_position[2]==0.0)))
+	{
 		glTranslated(m_position[0],m_position[1],m_position[2]);
+		rcTranslate((float)m_position[0], (float)m_position[1], (float)m_position[2]);
+	}
 
 	if (m_rotation[0]!=0.0)
+	{
 		glRotated(m_rotation[0], 1.0, 0.0, 0.0);
+		rcRotate((float)m_rotation[0], 1.0f, 0.0f, 0.0f);
+	}
 
 	if (m_rotation[1]!=0.0)
+	{
 		glRotated(m_rotation[1], 0.0, 1.0, 0.0);
+		rcRotate((float)m_rotation[1], 0.0f, 1.0f, 0.0f);
+	}
 
 	if (m_rotation[2]!=0.0)
+	{
 		glRotated(m_rotation[2], 0.0, 0.0, 1.0);
+		rcRotate((float)m_rotation[2], 0.0f, 0.0f, 1.0f);
+	}
 
 	if (m_rotQuat[3]!=0.0)
+	{
 		glRotated(m_rotQuat[3], m_rotQuat[0], m_rotQuat[1], m_rotQuat[2]);
+		rcRotate((float)m_rotQuat[3], (float)m_rotQuat[0], (float)m_rotQuat[1], (float)m_rotQuat[2]);
+	}
 
 	if (m_normalize)
 		glEnable(GL_NORMALIZE);
 
 	if (!((m_scale[0]==0.0)&&(m_scale[1]==0.0)&&(m_scale[2]==0.0)))
+	{
 		glScaled(m_scale[0],m_scale[1],m_scale[2]);
+		rcScale((float)m_scale[0], (float)m_scale[1], (float)m_scale[2]);
+	}
 
 	if (m_texture!=nullptr)
 	{
@@ -253,6 +277,7 @@ void Shape::doEndTransform()
 		}
 	}
 	glPopMatrix();
+	rcPopMatrix();
 
 	if (m_normalize)
 		glDisable(GL_NORMALIZE);

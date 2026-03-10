@@ -24,6 +24,9 @@
 #include <ivf/config.h>
 #include <ivf/Material.h>
 #include <ivf/GlobalState.h>
+#include <ivf/rc.h>
+
+#include <glm/glm.hpp>
 
 using namespace ivf;
 
@@ -284,6 +287,10 @@ void Material::doCreateMaterial()
 	else
         if (GlobalState::getInstance()->isColorOutputEnabled())
             glColor4fv(m_diffuseColor);
+
+	// Modern path: upload to active shader if one is set in RenderContext.
+	if (rcIsShaderActive())
+		uploadToShader(rcShader());
 }
 
 void Material::setEmissionColor(const float red, const float green, const float blue, const float alfa)
@@ -459,4 +466,13 @@ void Material::setColorMaterial(bool flag)
 bool Material::getColorMaterial()
 {
 	return m_colorMaterial;
+}
+
+void Material::uploadToShader(ShaderProgram* prog)
+{
+	prog->setUniformVec4("uMatAmbient",  glm::vec4(m_ambientColor[0],  m_ambientColor[1],  m_ambientColor[2],  m_ambientColor[3]));
+	prog->setUniformVec4("uMatDiffuse",  glm::vec4(m_diffuseColor[0],  m_diffuseColor[1],  m_diffuseColor[2],  m_diffuseColor[3]));
+	prog->setUniformVec4("uMatSpecular", glm::vec4(m_specularColor[0], m_specularColor[1], m_specularColor[2], m_specularColor[3]));
+	prog->setUniformVec4("uMatEmission", glm::vec4(m_emissionColor[0], m_emissionColor[1], m_emissionColor[2], m_emissionColor[3]));
+	prog->setUniformFloat("uMatShininess", m_shininess);
 }

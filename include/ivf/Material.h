@@ -25,6 +25,7 @@
 #pragma once
 
 #include <ivf/GLBase.h>
+#include <ivf/ShaderProgram.h>
 
 namespace ivf {
 
@@ -134,6 +135,15 @@ public:
 	void brightnessAmbient(double factor);
 	void brightnessDiffuse(double factor);
 	void brightnessSpecular(double factor);
+
+	/**
+	 * Upload material properties to a shader program.
+	 *
+	 * Sets uMatAmbient, uMatDiffuse, uMatSpecular, uMatEmission, uMatShininess.
+	 * Called automatically from doCreateMaterial() when an active shader is set
+	 * in RenderContext. Can also be called directly.
+	 */
+	void uploadToShader(ShaderProgram* prog);
 
 private:
 	float	m_shininess;

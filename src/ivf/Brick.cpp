@@ -67,6 +67,7 @@ void Brick::initBrick()
 	Index* idx;
 
 	idx = new Index();
+	idx->setTopology(IVF_IDX_QUADS);
 	idx->add(1, 2, 3, 0);
 	idx->add(7, 6, 5, 4);
 	idx->add(4, 5, 1, 0);
@@ -74,7 +75,7 @@ void Brick::initBrick()
 	idx->add(6, 7, 3, 2);
 	idx->add(3, 7, 4, 0);
 
-	addCoordIndex(idx);
+	addCoordIndex(idx); // also calls calcNormal → fills m_normalSet and m_normalIndexSet[0]
 
 	idx = new Index();
 	idx->add(0, 1, 2, 3);

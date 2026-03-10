@@ -25,6 +25,7 @@
 #include <ivf/LOD.h>
 #include <ivf/Cube.h>
 #include <ivf/Cylinder.h>
+#include <ivf/rc.h>
 
 using namespace std;
 using namespace ivf;
@@ -207,6 +208,9 @@ void ExampleWindow::onInit(int width, int height)
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
+
+	rcUseBlinnPhong();
+	rcSetGlobalAmbient(0.05f, 0.05f, 0.05f, 1.0f);
 }
 
 // ------------------------------------------------------------
@@ -220,6 +224,8 @@ void ExampleWindow::onResize(int width, int height)
 // ------------------------------------------------------------
 void ExampleWindow::onRender()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	rcBeginFrame();
 	m_light->render();
 	m_camera->render();
 	m_scene->render();

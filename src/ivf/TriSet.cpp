@@ -40,6 +40,8 @@ TriSet::~TriSet()
 
 void TriSet::doCreateGeometry()
 {
+	if (buildAndDrawVAO(GL_TRIANGLES)) return;
+
 	Index* coordIdx;
 	Index* colorIdx;
 	Index* normalIdx;

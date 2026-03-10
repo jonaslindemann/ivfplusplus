@@ -17,6 +17,7 @@
 #include <ivf/Camera.h>
 #include <ivf/Lighting.h>
 #include <ivf/Cube.h>
+#include <ivf/rc.h>
 
 using namespace ivf;
 
@@ -53,6 +54,10 @@ ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
 
 void ExampleWindow::onInit(int width, int height)
 {
+	// Activate modern shader
+
+
+
 	// Initialize Ivf++ camera
 
 	m_camera = Camera::create();
@@ -78,6 +83,12 @@ void ExampleWindow::onInit(int width, int height)
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
+
+	rcUseBlinnPhong();
+	rcSetGlobalAmbient(0.05f, 0.05f, 0.05f);
+
+	glEnable(GL_DEPTH_TEST);
+	glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
 }
 
 // ------------------------------------------------------------
@@ -91,8 +102,11 @@ void ExampleWindow::onResize(int width, int height)
 // ------------------------------------------------------------
 void ExampleWindow::onRender()
 {
-	m_light->render();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	rcBeginFrame();
 	m_camera->render();
+	m_light->render();
 	m_cube->render();
 }
 

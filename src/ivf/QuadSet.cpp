@@ -35,6 +35,8 @@ QuadSet::~QuadSet()
 
 void QuadSet::doCreateGeometry()
 {
+	if (buildAndDrawVAO(GL_QUADS)) return;
+
 	Index* coordIdx;
 	Index* colorIdx;
 	Index* normalIdx;

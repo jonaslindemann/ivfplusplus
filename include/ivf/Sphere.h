@@ -26,6 +26,7 @@
 
 #include <ivf/Shape.h>
 #include <ivf/SelectionBox.h>
+#include <ivf/GL.h>
 
 namespace ivf {
 
@@ -69,11 +70,21 @@ public:
 
 private:
 	void updateSelectBox();
-	SelectionBox* m_selectionBox;
-	int m_stacks;
-	int m_slices;
-	double	m_radius;
+	void buildVAO();
+
+	SelectionBox*  m_selectionBox;
+	int            m_stacks;
+	int            m_slices;
+	double         m_radius;
 	GLUquadricObj* m_qobj;
+
+	// Modern OpenGL path
+	GLuint  m_vao        = 0;
+	GLuint  m_vbo        = 0;
+	GLuint  m_ebo        = 0;
+	int     m_eboCount   = 0;
+	bool    m_vaoDirty   = true;
+
 protected:
     virtual void doCreateSelect() override;
     virtual void doCreateGeometry() override;

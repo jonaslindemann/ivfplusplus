@@ -28,8 +28,10 @@
 #include <ivf/GLBase.h>
 
 #include <ivfmath/ViewFrustum.h>
-#include <ivfmath/Point3d.h>	
+#include <ivfmath/Point3d.h>
 #include <ivfmath/Vec3d.h>
+
+#include <glm/glm.hpp>
 
 namespace ivf {
 
@@ -307,6 +309,23 @@ public:
 
 	void setTileRect(double left, double right, double bottom, double top);
 	void getTileRect(double &left, double &right, double &bottom, double &top);
+
+	/**
+	 * Compute the projection matrix using glm.
+	 *
+	 * Returns the same perspective matrix that projectionTransform() sets via
+	 * gluPerspective, but as a glm::mat4 suitable for use with shaders.
+	 * Stereo, jitter, and tile modes use the standard perspective as a fallback.
+	 */
+	glm::mat4 glmProjectionMatrix();
+
+	/**
+	 * Compute the view matrix using glm.
+	 *
+	 * Returns the same look-at matrix that viewTransform() sets via gluLookAt,
+	 * but as a glm::mat4 suitable for use with shaders.
+	 */
+	glm::mat4 glmViewMatrix();
 
 	// Unsupported
 

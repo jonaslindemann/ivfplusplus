@@ -23,6 +23,10 @@
 
 #include <ivf/config.h>
 #include <ivf/Sphere.h>
+#include <ivf/rc.h>
+
+#include <cmath>
+#include <vector>
 
 using namespace ivf;
 
@@ -46,14 +50,93 @@ Sphere::Sphere ()
 // ------------------------------------------------------------
 Sphere::~Sphere ()
 {
+	if (m_vao) { glDeleteVertexArrays(1, &m_vao); m_vao = 0; }
+	if (m_vbo) { glDeleteBuffers(1, &m_vbo); m_vbo = 0; }
+	if (m_ebo) { glDeleteBuffers(1, &m_ebo); m_ebo = 0; }
 	gluDeleteQuadric(m_qobj);
 	delete m_selectionBox;
+}
+
+// ------------------------------------------------------------
+void Sphere::buildVAO()
+{
+	struct GpuVertex {
+		float position[3];
+		float normal[3];
+		float texcoord[2];
+		float color[4];
+	};
+
+	std::vector<GpuVertex> verts;
+	std::vector<unsigned int> indices;
+
+	float r = (float)m_radius;
+
+	for (int i = 0; i <= m_stacks; ++i) {
+		float phi   = (float)M_PI * i / m_stacks;
+		float sinPhi = sinf(phi);
+		float cosPhi = cosf(phi);
+		for (int j = 0; j <= m_slices; ++j) {
+			float theta    = 2.0f * (float)M_PI * j / m_slices;
+			float sinTheta = sinf(theta);
+			float cosTheta = cosf(theta);
+
+			float nx = sinPhi * cosTheta;
+			float ny = cosPhi;
+			float nz = sinPhi * sinTheta;
+
+			GpuVertex v;
+			v.position[0] = r * nx; v.position[1] = r * ny; v.position[2] = r * nz;
+			v.normal[0]   = nx;     v.normal[1]   = ny;     v.normal[2]   = nz;
+			v.texcoord[0] = (float)j / m_slices;
+			v.texcoord[1] = (float)i / m_stacks;
+			v.color[0]    = 1.0f; v.color[1] = 1.0f; v.color[2] = 1.0f; v.color[3] = 1.0f;
+			verts.push_back(v);
+		}
+	}
+
+	for (int i = 0; i < m_stacks; ++i) {
+		for (int j = 0; j < m_slices; ++j) {
+			unsigned int a = i * (m_slices + 1) + j;
+			unsigned int b = a + m_slices + 1;
+			indices.push_back(a);   indices.push_back(b);   indices.push_back(a + 1);
+			indices.push_back(b);   indices.push_back(b + 1); indices.push_back(a + 1);
+		}
+	}
+
+	m_eboCount = (int)indices.size();
+
+	if (m_vao == 0) glGenVertexArrays(1, &m_vao);
+	if (m_vbo == 0) glGenBuffers(1, &m_vbo);
+	if (m_ebo == 0) glGenBuffers(1, &m_ebo);
+
+	glBindVertexArray(m_vao);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+	glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)(verts.size() * sizeof(GpuVertex)), verts.data(), GL_DYNAMIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)(indices.size() * sizeof(unsigned int)), indices.data(), GL_DYNAMIC_DRAW);
+
+	GLsizei stride = sizeof(GpuVertex);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, position));
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, normal));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, texcoord));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, color));
+	glEnableVertexAttribArray(3);
+
+	glBindVertexArray(0);
+	m_vaoDirty = false;
 }
 
 // ------------------------------------------------------------
 void Sphere::setRadius (const double radius)
 {
 	m_radius = radius;
+	m_vaoDirty = true;
 	updateSelectBox();
 }
 
@@ -66,10 +149,21 @@ double Sphere::getRadius ()
 // ------------------------------------------------------------
 void Sphere::doCreateGeometry()
 {
+	if (rcIsShaderActive()) {
+		if (m_vaoDirty)
+			buildVAO();
+		rcUseShader();
+		rcUpdateShader();
+		glBindVertexArray(m_vao);
+		glDrawElements(GL_TRIANGLES, m_eboCount, GL_UNSIGNED_INT, nullptr);
+		glBindVertexArray(0);
+		return;
+	}
+
+	// Legacy path
 	glPushMatrix();
 		glRotated(90, 1.0, 0.0, 0.0);
 		gluSphere(m_qobj, m_radius, m_slices, m_stacks);
-		//glutSolidSphere(m_radius,m_slices,m_stacks);
 	glPopMatrix();
 }
 
@@ -77,6 +171,7 @@ void Sphere::doCreateGeometry()
 void Sphere::setSlices(const int slices)
 {
 	m_slices = slices;
+	m_vaoDirty = true;
 }
 
 // ------------------------------------------------------------
@@ -89,6 +184,7 @@ int Sphere::getSlices()
 void Sphere::setStacks(const int stacks)
 {
 	m_stacks = stacks;
+	m_vaoDirty = true;
 }
 
 // ------------------------------------------------------------

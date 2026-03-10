@@ -36,6 +36,10 @@ PolySet::~PolySet()
 
 void PolySet::doCreateGeometry()
 {
+	// Mixed topology (GL_QUADS or GL_TRIANGLES per coordIndex): use GL_TRIANGLES
+	// as the VAO primitive — the builder triangulates quads automatically.
+	if (buildAndDrawVAO(GL_QUADS)) return;
+
 	Index* coordIdx;
 	Index* colorIdx;
 	Index* normalIdx;

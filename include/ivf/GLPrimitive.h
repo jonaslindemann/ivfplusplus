@@ -32,6 +32,7 @@
 #include <ivf/Color.h>
 #include <ivf/Material.h>
 #include <ivf/MaterialSet.h>
+#include <ivf/GL.h>
 
 #include <ivfmath/Vec3d.h>
 #include <ivfmath/Point3d.h>
@@ -80,8 +81,28 @@ IvfSmartPointer(GLPrimitive);
 class IVF_API GLPrimitive : public Shape {
 private:
 	bool m_useVertexNormals;
+
+	// Modern OpenGL path — VAO/VBO built once from the indexed data.
+	GLuint   m_vao = 0;
+	GLuint   m_vbo = 0;
+	GLsizei  m_vaoVertexCount = 0;
+	bool     m_vaoDirty = true;
+
 protected:
 	virtual void calcNormal(Index* idx);
+
+	/**
+	 * Build (if dirty) and draw a VAO using the active shader from RenderContext.
+	 *
+	 * legacyPrimitive — the GL primitive the subclass would use in the legacy path:
+	 *   GL_TRIANGLES, GL_QUADS, GL_TRIANGLE_STRIP, GL_QUAD_STRIP,
+	 *   GL_LINES, GL_LINE_STRIP, GL_POINTS.
+	 *
+	 * GL_QUADS and GL_QUAD_STRIP are triangulated automatically.
+	 * Returns true if drawn (shader was active), false to fall through to legacy code.
+	 */
+	bool buildAndDrawVAO(GLenum legacyPrimitive);
+
 	std::vector<Vec3d*>		m_coordSet;
 	std::vector<Color*>		m_colorSet;
 	std::vector<Vec3d*>		m_normalSet;

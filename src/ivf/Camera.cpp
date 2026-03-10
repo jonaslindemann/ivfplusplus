@@ -23,12 +23,15 @@
 
 #include <ivf/config.h>
 #include <ivf/Camera.h>
+#include <ivf/rc.h>
 
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>
 #endif
+
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace ivf;
 
@@ -481,12 +484,12 @@ void Camera::projectionTransform()
 		{
 			// CHECK THIS CODE. Selection fails using the code below....
 			if (!m_jitter)
-				tilePerspective(m_fov, getAspect(), m_zNear, m_zFar, 
-					0.0, 0.0, 0.0, 0.0, 1.0, 
-					m_tileLeft, m_tileRight, m_tileBottom, m_tileTop);	
+				tilePerspective(m_fov, getAspect(), m_zNear, m_zFar,
+					0.0, 0.0, 0.0, 0.0, 1.0,
+					m_tileLeft, m_tileRight, m_tileBottom, m_tileTop);
 			else
-				tilePerspective(m_fov, getAspect(), m_zNear, m_zFar, m_jitterX, m_jitterY, 
-					0.0, 0.0, 0.1, 
+				tilePerspective(m_fov, getAspect(), m_zNear, m_zFar, m_jitterX, m_jitterY,
+					0.0, 0.0, 0.1,
 					m_tileLeft, m_tileRight, m_tileBottom, m_tileTop);
 		}
 		else
@@ -497,6 +500,9 @@ void Camera::projectionTransform()
 				accPerspective(m_fov, getAspect(), m_zNear, m_zFar, m_jitterX, m_jitterY, 0.0, 0.0, 0.1);
 		}
 	}
+
+	// Also push the projection matrix into RenderContext for the modern shader path.
+	rcSetProjection(glmProjectionMatrix());
 }
 
 // ------------------------------------------------------------
@@ -554,10 +560,12 @@ void Camera::viewTransform()
 
 	//std::cout << upX << ", " << upY << ", " << upZ << std::endl;
 
-	gluLookAt(eyeX, eyeY, eyeZ, 
-		centerX, centerY, centerZ, 
+	gluLookAt(eyeX, eyeY, eyeZ,
+		centerX, centerY, centerZ,
 		upX, upY, upZ);
 
+	// Also push the view matrix into RenderContext for the modern shader path.
+	rcSetView(glmViewMatrix());
 }
 
 // ------------------------------------------------------------
@@ -842,4 +850,61 @@ void Camera::getTileRect(double &left, double &right, double &bottom, double &to
 	right = m_tileRight;
 	bottom = m_tileBottom;
 	top = m_tileTop;
+}
+
+// ------------------------------------------------------------
+glm::mat4 Camera::glmProjectionMatrix()
+{
+	return glm::perspective(
+		glm::radians((float)m_fov),
+		(float)getAspect(),
+		(float)m_zNear,
+		(float)m_zFar);
+}
+
+// ------------------------------------------------------------
+glm::mat4 Camera::glmViewMatrix()
+{
+	double eyeX, eyeY, eyeZ;
+	double centerX, centerY, centerZ;
+	double upX, upY, upZ;
+
+	if (m_stereo)
+	{
+		Vec3d pos    = m_position;
+		Vec3d target = (m_cameraType != CT_NORMAL) ? m_position + m_forward : m_target;
+
+		if (m_stereoEye == SE_LEFT)
+		{
+			pos    = pos    + m_sideways * (m_eyeSeparation / 2.0);
+			target = target + m_sideways * (m_eyeSeparation / 2.0);
+		}
+		else
+		{
+			pos    = pos    - m_sideways * (m_eyeSeparation / 2.0);
+			target = target - m_sideways * (m_eyeSeparation / 2.0);
+		}
+
+		pos.getComponents(eyeX, eyeY, eyeZ);
+		target.getComponents(centerX, centerY, centerZ);
+	}
+	else
+	{
+		m_position.getComponents(eyeX, eyeY, eyeZ);
+
+		if (m_cameraType == CT_NORMAL)
+			m_target.getComponents(centerX, centerY, centerZ);
+		else
+		{
+			Vec3d center = m_position + m_forward;
+			center.getComponents(centerX, centerY, centerZ);
+		}
+	}
+
+	m_up.getComponents(upX, upY, upZ);
+
+	return glm::lookAt(
+		glm::vec3((float)eyeX,    (float)eyeY,    (float)eyeZ),
+		glm::vec3((float)centerX, (float)centerY, (float)centerZ),
+		glm::vec3((float)upX,     (float)upY,     (float)upZ));
 }

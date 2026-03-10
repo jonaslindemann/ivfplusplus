@@ -35,6 +35,8 @@ TriStripSet::~TriStripSet()
 
 void TriStripSet::doCreateGeometry()
 {
+	if (buildAndDrawVAO(GL_TRIANGLE_STRIP)) return;
+
 	Index* coordIdx;
 	Index* colorIdx;
 	Index* normalIdx;
