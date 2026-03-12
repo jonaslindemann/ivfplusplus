@@ -36,8 +36,8 @@ Sphere::Sphere ()
 		//TODO: check and complete member initialisation list!
 {
 	m_radius = 1.0;
-	m_slices = 8;
-	m_stacks = 8;
+	m_slices = 16;
+	m_stacks = 16;
 	m_selectionBox = new SelectionBox();
 	m_selectionBox->setUseName(false);
 	m_qobj = gluNewQuadric();

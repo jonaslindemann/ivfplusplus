@@ -189,11 +189,15 @@ void RenderContext::updateShader(ShaderProgram* prog) const
         const LightData& l = m_lights[i];
         std::string base = "uLights[" + std::to_string(i) + "].";
 
-        prog->setUniformVec4(base + "position",      l.position);
+        // Transform light position and spot direction from world space to view space.
+        glm::vec4 posView      = m_view * l.position;
+        glm::vec3 spotDirView  = glm::mat3(m_view) * l.spotDirection;
+
+        prog->setUniformVec4(base + "position",      posView);
         prog->setUniformVec4(base + "ambient",       l.ambient);
         prog->setUniformVec4(base + "diffuse",       l.diffuse);
         prog->setUniformVec4(base + "specular",      l.specular);
-        prog->setUniformVec3(base + "spotDirection", l.spotDirection);
+        prog->setUniformVec3(base + "spotDirection", spotDirView);
         prog->setUniformFloat(base + "spotCutoff",   l.spotCutoff);
         prog->setUniformFloat(base + "spotExponent", l.spotExponent);
         prog->setUniformFloat(base + "constAtt",     l.constAtt);

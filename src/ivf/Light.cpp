@@ -131,11 +131,12 @@ void Light::doCreateGeometry()
 		glLighti( light, GL_QUADRATIC_ATTENUATION, m_quadatt );
 
 		// Modern path: build LightData and add to RenderContext.
-		// The light position is transformed to view space the same way OpenGL does:
-		// view * model * position (model matrix is current from Shape::doBeginTransform).
+		// Store the light position in world space (model matrix only).
+		// RenderContext::updateShader() will transform it to view space at upload
+		// time, so the render order of lights vs camera does not matter.
 		LightData data;
-		glm::mat4 vm = rcView() * rcModelMatrix();
-		data.position     = vm * glm::vec4(m_position[0], m_position[1], m_position[2], m_position[3]);
+		glm::mat4 model = rcModelMatrix();
+		data.position     = model * glm::vec4(m_position[0], m_position[1], m_position[2], m_position[3]);
 		data.ambient      = glm::vec4(m_ambient[0],  m_ambient[1],  m_ambient[2],  m_ambient[3]);
 		data.diffuse      = glm::vec4(m_diffuse[0],  m_diffuse[1],  m_diffuse[2],  m_diffuse[3]);
 		data.specular     = glm::vec4(m_specular[0], m_specular[1], m_specular[2], m_specular[3]);

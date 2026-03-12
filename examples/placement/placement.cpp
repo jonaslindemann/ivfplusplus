@@ -24,6 +24,7 @@
 #include <ivf/Lighting.h>
 #include <ivf/Light.h>
 #include <ivf/Material.h>
+#include <ivf/rc.h>
 
 using namespace ivf;
 
@@ -155,6 +156,9 @@ void ExampleWindow::onInit(int width, int height)
 	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
+
+	rcUseBlinnPhong();
+	rcSetGlobalAmbient(0.2f, 0.2f, 0.2f, 1.0f);
 }
 
 // ------------------------------------------------------------
@@ -167,6 +171,7 @@ void ExampleWindow::onResize(int width, int height)
 // ------------------------------------------------------------
 void ExampleWindow::onRender()
 {
+	rcBeginFrame();
 	m_light->render();
 	m_camera->render();
 	m_scene->render();

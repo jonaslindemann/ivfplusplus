@@ -26,6 +26,8 @@
 
 #include <ivfwidget/MouseViewHandler.h>
 
+#include <ivf/rc.h>
+
 using namespace ivf;
 
 // ------------------------------------------------------------
@@ -212,6 +214,9 @@ void ExampleWindow::onInit(int width, int height)
 	auto axis = Axis::create();
 	axis->setSize(1.5);
 	m_scene->addChild(axis);
+
+	rcUseBlinnPhong();
+	rcSetGlobalAmbient(0.2f, 0.2f, 0.2f, 1.0f);
 	
 	// Create a light
 
@@ -236,6 +241,7 @@ void ExampleWindow::onResize(int width, int height)
 // ------------------------------------------------------------
 void ExampleWindow::onRender()
 {
+	rcBeginFrame();
 	m_light->render();
 	m_camera->render();
 	m_scene->render();
