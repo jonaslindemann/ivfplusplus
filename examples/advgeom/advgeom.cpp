@@ -408,6 +408,8 @@ void ExampleWindow::onInit(int width, int height)
 	dxfWriter->setShape(m_scene);
 	dxfWriter->write();
 	*/
+
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
 }
 
 // ------------------------------------------------------------

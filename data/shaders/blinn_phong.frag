@@ -17,6 +17,10 @@ uniform float uMatShininess;
 uniform bool      uUseTexture;
 uniform sampler2D uTexture;
 
+// ---- Vertex-color / unlit modes ----
+uniform bool uUseVertexColor;  // replace uMatDiffuse with vColor in lighting
+uniform bool uUnlit;           // skip lighting, output vColor directly
+
 // ---- Global scene ambient ----
 uniform vec4 uGlobalAmbient;
 
@@ -42,7 +46,7 @@ uniform Light uLights[8];
 out vec4 fragColor;
 
 // ---- Blinn-Phong for a single light ----
-vec4 computeLight(Light light, vec3 N, vec3 V)
+vec4 computeLight(Light light, vec3 N, vec3 V, vec4 diffuseColor)
 {
     vec3 L;
     float attenuation = 1.0;
@@ -77,7 +81,7 @@ vec4 computeLight(Light light, vec3 N, vec3 V)
 
     // Diffuse
     float NdotL  = max(dot(N, L), 0.0);
-    vec4 diffuse = NdotL * light.diffuse * uMatDiffuse;
+    vec4 diffuse = NdotL * light.diffuse * diffuseColor;
 
     // Specular (Blinn-Phong half-vector)
     vec4 specular = vec4(0.0);
@@ -92,14 +96,23 @@ vec4 computeLight(Light light, vec3 N, vec3 V)
 
 void main()
 {
+    // Unlit path: output vertex color directly (used for points, lines)
+    if (uUnlit) {
+        fragColor = vColor;
+        return;
+    }
+
     vec3 N = normalize(vNormal);
     vec3 V = normalize(-vFragPos); // view direction in view space
+
+    // Choose diffuse source: per-vertex color or material uniform
+    vec4 diffuseColor = uUseVertexColor ? vColor : uMatDiffuse;
 
     // Start with emission and global ambient
     vec4 color = uMatEmission + uGlobalAmbient * uMatAmbient;
 
     for (int i = 0; i < uLightCount; ++i) {
-        color += computeLight(uLights[i], N, V);
+        color += computeLight(uLights[i], N, V, diffuseColor);
     }
 
     // Texture modulation
@@ -107,8 +120,8 @@ void main()
         color *= texture(uTexture, vTexCoord);
     }
 
-    // Clamp final alpha to material diffuse alpha
-    color.a = uMatDiffuse.a;
+    // Clamp final alpha to diffuse alpha
+    color.a = diffuseColor.a;
 
     fragColor = clamp(color, 0.0, 1.0);
 }

@@ -144,7 +144,9 @@ void ExampleWindow::onInit(int width, int height)
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 1);	
-	m_scene->setUselist(true);
+	// m_scene->setUselist(true);
+
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
 }
 
 // ------------------------------------------------------------

@@ -78,6 +78,9 @@ uniform float uMatShininess;
 uniform bool      uUseTexture;
 uniform sampler2D uTexture;
 
+uniform bool uUseVertexColor;
+uniform bool uUnlit;
+
 uniform vec4 uGlobalAmbient;
 
 struct Light {
@@ -99,7 +102,7 @@ uniform Light uLights[8];
 
 out vec4 fragColor;
 
-vec4 computeLight(Light light, vec3 N, vec3 V)
+vec4 computeLight(Light light, vec3 N, vec3 V, vec4 diffuseColor)
 {
     vec3 L;
     float attenuation = 1.0;
@@ -125,7 +128,7 @@ vec4 computeLight(Light light, vec3 N, vec3 V)
 
     vec4  ambient  = light.ambient * uMatAmbient;
     float NdotL    = max(dot(N, L), 0.0);
-    vec4  diffuse  = NdotL * light.diffuse * uMatDiffuse;
+    vec4  diffuse  = NdotL * light.diffuse * diffuseColor;
 
     vec4 specular = vec4(0.0);
     if (NdotL > 0.0 && uMatShininess > 0.0) {
@@ -139,18 +142,25 @@ vec4 computeLight(Light light, vec3 N, vec3 V)
 
 void main()
 {
+    if (uUnlit) {
+        fragColor = vColor;
+        return;
+    }
+
     vec3 N = normalize(vNormal);
     vec3 V = normalize(-vFragPos);
+
+    vec4 diffuseColor = uUseVertexColor ? vColor : uMatDiffuse;
 
     vec4 color = uMatEmission + uGlobalAmbient * uMatAmbient;
 
     for (int i = 0; i < uLightCount; ++i)
-        color += computeLight(uLights[i], N, V);
+        color += computeLight(uLights[i], N, V, diffuseColor);
 
     if (uUseTexture)
         color *= texture(uTexture, vTexCoord);
 
-    color.a = uMatDiffuse.a;
+    color.a = diffuseColor.a;
     fragColor = clamp(color, 0.0, 1.0);
 }
 )GLSL";

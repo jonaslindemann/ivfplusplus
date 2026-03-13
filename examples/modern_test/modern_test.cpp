@@ -20,8 +20,6 @@
 #include <ivf/Lighting.h>
 #include <ivf/Material.h>
 #include <ivf/Sphere.h>
-#include <ivf/rc.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -97,8 +95,7 @@ public:
         m_sphere->setMaterial((Material*)m_material);
 
         // ---- Activate modern shader ----
-        rcUseBlinnPhong();
-        rcSetGlobalAmbient(0.05f, 0.05f, 0.05f);
+        enableBlinnPhongShader(0.05f, 0.05f, 0.05f);
 
         glEnable(GL_DEPTH_TEST);
         glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
@@ -115,9 +112,8 @@ public:
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        rcBeginFrame();                          // resets state, activates shader
-        m_camera->render();                      // pushes projection + view
-        m_light->render();                       // pushes light data
+        m_camera->render();
+        m_light->render();
 
         // Sphere::doCreateGeometry detects the active shader and draws via VAO.
         // The material was assigned to the sphere so doCreateMaterial uploads it.

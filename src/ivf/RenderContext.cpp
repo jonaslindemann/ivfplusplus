@@ -181,7 +181,9 @@ void RenderContext::updateShader(ShaderProgram* prog) const
     prog->setUniformMat3("uNormalMatrix", normalMatrix);
 
     prog->setUniformVec4("uGlobalAmbient", m_globalAmbient);
-    prog->setUniformInt("uUseTexture",    m_useTexture ? 1 : 0);
+    prog->setUniformInt("uUseTexture",     m_useTexture ? 1 : 0);
+    prog->setUniformInt("uUnlit",          0); // reset; GLPrimitive sets 1 for points/lines
+    prog->setUniformInt("uUseVertexColor", 0); // reset; GLPrimitive sets 1 for colored geometry
 
     prog->setUniformInt("uLightCount", m_lightCount);
 

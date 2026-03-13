@@ -17,8 +17,6 @@
 #include <ivf/Camera.h>
 #include <ivf/Lighting.h>
 #include <ivf/Cube.h>
-#include <ivf/rc.h>
-
 using namespace ivf;
 
 // ------------------------------------------------------------
@@ -84,8 +82,7 @@ void ExampleWindow::onInit(int width, int height)
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
-	rcUseBlinnPhong();
-	rcSetGlobalAmbient(0.05f, 0.05f, 0.05f);
+	enableBlinnPhongShader(0.05f, 0.05f, 0.05f);
 
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
@@ -104,7 +101,6 @@ void ExampleWindow::onRender()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	rcBeginFrame();
 	m_camera->render();
 	m_light->render();
 	m_cube->render();

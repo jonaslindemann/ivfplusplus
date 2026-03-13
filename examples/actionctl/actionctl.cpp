@@ -29,7 +29,6 @@
 #include <ivfctl/CameraController.h>
 #include <ivfctl/SlerpController.h>
 #include <ivfctl/PathController.h>
-
 using namespace ivf;
 
 // ------------------------------------------------------------
@@ -184,7 +183,11 @@ void ExampleWindow::onInit(int width, int height)
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
 	enableTimeout(0.01, 0);
+
+
 }
 
 // ------------------------------------------------------------

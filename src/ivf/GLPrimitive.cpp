@@ -203,6 +203,14 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 	rcUseShader();
 	rcUpdateShader(prog);
 
+	// Unlit mode for point/line primitives (legacy path disabled GL_LIGHTING for these).
+	bool isUnlit = (legacyPrimitive == GL_POINTS ||
+	                legacyPrimitive == GL_LINES  ||
+	                legacyPrimitive == GL_LINE_STRIP);
+	bool hasVertexColors = !m_colorSet.empty() && !m_colorIndexSet.empty();
+	prog->setUniformInt("uUnlit",           isUnlit ? 1 : 0);
+	prog->setUniformInt("uUseVertexColor",  (!isUnlit && hasVertexColors) ? 1 : 0);
+
 	glBindVertexArray(m_vao);
 	glDrawArrays(drawMode, 0, m_vaoVertexCount);
 	glBindVertexArray(0);
