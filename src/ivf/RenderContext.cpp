@@ -29,7 +29,9 @@
 #include <glm/gtc/matrix_inverse.hpp>
 
 #include <cassert>
+#include <cstddef>
 #include <iostream>
+#include <vector>
 
 namespace ivf {
 
@@ -146,6 +148,7 @@ bool RenderContext::addLight(const LightData& light)
 {
     if (m_lightCount >= IVF_MAX_LIGHTS) {
         std::cerr << "RenderContext: maximum light count (" << IVF_MAX_LIGHTS << ") exceeded\n";
+		std::cerr << "\t light count: " << m_lightCount << "\n";
         return false;
     }
     m_lights[m_lightCount++] = light;
@@ -209,6 +212,66 @@ void RenderContext::updateShader(ShaderProgram* prog) const
     }
 }
 
+bool RenderContext::drawUnlit(GLenum primitive, const float* positions, const float* colors, int vertexCount) const
+{
+    if (!m_shader || !m_shader->isLinked() || positions == nullptr || vertexCount <= 0)
+        return false;
+
+    struct GpuVertex {
+        float position[3];
+        float normal[3];
+        float texcoord[2];
+        float color[4];
+    };
+
+    std::vector<GpuVertex> vertices;
+    vertices.reserve(vertexCount);
+
+    for (int i = 0; i < vertexCount; ++i) {
+        GpuVertex v = {};
+        v.position[0] = positions[i * 3 + 0];
+        v.position[1] = positions[i * 3 + 1];
+        v.position[2] = positions[i * 3 + 2];
+        v.color[0] = colors ? colors[i * 4 + 0] : 1.0f;
+        v.color[1] = colors ? colors[i * 4 + 1] : 1.0f;
+        v.color[2] = colors ? colors[i * 4 + 2] : 1.0f;
+        v.color[3] = colors ? colors[i * 4 + 3] : 1.0f;
+        vertices.push_back(v);
+    }
+
+    GLuint vao = 0;
+    GLuint vbo = 0;
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)(vertices.size() * sizeof(GpuVertex)), vertices.data(), GL_STREAM_DRAW);
+
+    GLsizei stride = sizeof(GpuVertex);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, position));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, normal));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, texcoord));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, color));
+    glEnableVertexAttribArray(3);
+
+    m_shader->use();
+    updateShader(m_shader);
+    m_shader->setUniformInt("uUnlit", 1);
+    m_shader->setUniformInt("uUseVertexColor", colors ? 1 : 0);
+
+    glDrawArrays(primitive, 0, vertexCount);
+
+    glBindVertexArray(0);
+    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
+
+    return true;
+}
+
 // ---- Active shader ----
 
 void RenderContext::useBlinnPhong()
@@ -244,6 +307,11 @@ void RenderContext::setGlobalAmbient(float r, float g, float b, float a)
 void RenderContext::setUseTexture(bool flag)
 {
     m_useTexture = flag;
+}
+
+bool RenderContext::useTexture() const
+{
+    return m_useTexture;
 }
 
 } // namespace ivf

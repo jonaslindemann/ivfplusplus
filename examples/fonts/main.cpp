@@ -69,6 +69,8 @@ CFontsWindow::CFontsWindow(int X, int Y, int W, int H)
 
 void CFontsWindow::onInit(int width, int height)
 {
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
 	// Initialize Ivf++ camera
 
 	m_camera = new CIvfCamera();

@@ -257,6 +257,7 @@ void Shape::doBeginTransform()
 					m_texture->bind();
 				else
 					m_texture->apply();
+				rcSetUseTexture(true);
 			}
 		}
 	}
@@ -270,6 +271,7 @@ void Shape::doEndTransform()
 		{
 			if (m_texture->isActive())
 			{
+				rcSetUseTexture(false);
 				glDisable(GL_TEXTURE_2D);
 				glDisable(GL_TEXTURE_1D);
 				glPopAttrib();

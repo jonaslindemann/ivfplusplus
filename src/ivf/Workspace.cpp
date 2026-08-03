@@ -23,6 +23,7 @@
 //
 
 #include <ivf/Workspace.h>
+#include <ivf/rc.h>
 
 using namespace ivf;
 
@@ -165,6 +166,25 @@ void Workspace::doCreateGeometry()
 
             if (m_currentPlane->isCursorLocked())
             {
+                float positions[] = {
+                    (float)x, 0.0f, (float)z,
+                    (float)x, (float)y, (float)z,
+                    (float)(-w / 2.0), 0.002f, (float)z,
+                    (float)(+w / 2.0), 0.002f, (float)z,
+                    (float)x, 0.002f, (float)(-w / 2.0),
+                    (float)x, 0.002f, (float)(w / 2.0)
+                };
+                float colors[] = {
+                    0.3f, 0.3f, 0.3f, 1.0f,  0.3f, 0.3f, 0.3f, 1.0f,
+                    0.3f, 0.3f, 0.3f, 1.0f,  0.3f, 0.3f, 0.3f, 1.0f,
+                    0.3f, 0.3f, 0.3f, 1.0f,  0.3f, 0.3f, 0.3f, 1.0f
+                };
+                if (rcDrawUnlit(GL_LINES, positions, colors, 6))
+                {
+                    glPopAttrib();
+                    return;
+                }
+
                 glBegin(GL_LINES);
                 glColor3f(0.3, 0.3, 0.3);
                 glVertex3d(x, 0.0, z);
@@ -181,6 +201,22 @@ void Workspace::doCreateGeometry()
             }
             else
             {
+                float positions[] = {
+                    (float)(-w / 2.0), (float)(y + 0.002), (float)z,
+                    (float)(+w / 2.0), (float)(y + 0.002), (float)z,
+                    (float)x, (float)(y + 0.002), (float)(-w / 2.0),
+                    (float)x, (float)(y + 0.002), (float)(w / 2.0)
+                };
+                float colors[] = {
+                    0.3f, 0.3f, 0.3f, 1.0f,  0.3f, 0.3f, 0.3f, 1.0f,
+                    0.3f, 0.3f, 0.3f, 1.0f,  0.3f, 0.3f, 0.3f, 1.0f
+                };
+                if (rcDrawUnlit(GL_LINES, positions, colors, 4))
+                {
+                    glPopAttrib();
+                    return;
+                }
+
                 glBegin(GL_LINES);
                 glColor3f(0.3, 0.3, 0.3);
                 glVertex3d(-w / 2.0, y + 0.002, z);

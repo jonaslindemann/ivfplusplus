@@ -23,6 +23,8 @@ CRobotView::CRobotView(int X, int Y, int W, int H, const char* L)
 
 void CRobotView::onInit(int width, int height)
 {
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
 	// Initialize variables
 
 	m_alfa = 0.0;

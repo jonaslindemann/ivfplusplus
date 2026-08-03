@@ -25,6 +25,9 @@
 #include <ivf/Ruler.h>
 
 #include <ivf/Lighting.h>
+#include <ivf/rc.h>
+
+#include <vector>
 
 using namespace ivf;
 
@@ -70,6 +73,41 @@ void Ruler::doCreateGeometry()
 	nSteps = (int)(m_length/m_tickStep);
 
 	glLineWidth(1.0);
+
+	if (rcIsShaderActive())
+	{
+		std::vector<float> positions;
+		std::vector<float> colors;
+
+		auto addVertex = [&](double vx, double vy, double vz, float r, float g, float b) {
+			positions.push_back((float)vx);
+			positions.push_back((float)vy);
+			positions.push_back((float)vz);
+			colors.push_back(r);
+			colors.push_back(g);
+			colors.push_back(b);
+			colors.push_back(1.0f);
+		};
+
+		const double* s = m_startPoint.getComponents();
+		const double* e = m_endPoint.getComponents();
+		addVertex(s[0], s[1], s[2], 0.3f, 0.3f, 0.3f);
+		addVertex(e[0], e[1], e[2], 0.3f, 0.3f, 0.3f);
+
+		for (i=0; i<nSteps; i++)
+		{
+			p = m_startPoint + i*m_tickStep*m_direction;
+			p.getComponents(x, y, z);
+
+			addVertex(x - m_tickStep*0.1, y, z, 0.6f, 0.6f, 0.6f);
+			addVertex(x + m_tickStep*0.1, y, z, 0.6f, 0.6f, 0.6f);
+			addVertex(x, y, z - m_tickStep*0.1, 0.6f, 0.6f, 0.6f);
+			addVertex(x, y, z + m_tickStep*0.1, 0.6f, 0.6f, 0.6f);
+		}
+
+		if (rcDrawUnlit(GL_LINES, positions.data(), colors.data(), (int)(positions.size() / 3)))
+			return;
+	}
 
 	Lighting::getInstance()->disable();
 	glColor4f(0.3f, 0.3f, 0.3f, 1.0f);

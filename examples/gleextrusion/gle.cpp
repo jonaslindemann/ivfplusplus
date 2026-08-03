@@ -91,6 +91,8 @@ double rnd()
 
 void ExampleWindow::onInit(int width, int height)
 {
+    enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
     // Setup a simple scene
 
     gleInitVBOCache(10000);

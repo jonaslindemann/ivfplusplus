@@ -143,7 +143,7 @@ vec4 computeLight(Light light, vec3 N, vec3 V, vec4 diffuseColor)
 void main()
 {
     if (uUnlit) {
-        fragColor = vColor;
+        fragColor = uUseVertexColor ? vColor : uMatDiffuse;
         return;
     }
 

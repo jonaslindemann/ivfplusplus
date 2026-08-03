@@ -22,6 +22,7 @@
 // Implementation of: public class CIvfCursor
 
 #include <ivf/Cursor.h>
+#include <ivf/rc.h>
 
 using namespace ivf;
 
@@ -98,6 +99,20 @@ void Cursor::doCreateGeometry()
 		Composite::doCreateGeometry();
 	else
 	{
+		float h = (float)(m_size / 2.0);
+		float positions[] = {
+			-h, 0.0f, 0.0f,  h, 0.0f, 0.0f,
+			0.0f, -h, 0.0f,  0.0f, h, 0.0f,
+			0.0f, 0.0f, -h,  0.0f, 0.0f, h
+		};
+		float colors[] = {
+			1.0f, 1.0f, 0.0f, 1.0f,  1.0f, 1.0f, 0.0f, 1.0f,
+			1.0f, 1.0f, 0.0f, 1.0f,  1.0f, 1.0f, 0.0f, 1.0f,
+			1.0f, 1.0f, 0.0f, 1.0f,  1.0f, 1.0f, 0.0f, 1.0f
+		};
+		if (rcDrawUnlit(GL_LINES, positions, colors, 6))
+			return;
+
 		glPushAttrib(GL_LIGHTING);
 		glDisable(GL_LIGHTING);
         glLineWidth(2.0);

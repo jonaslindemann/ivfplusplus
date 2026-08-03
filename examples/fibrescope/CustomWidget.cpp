@@ -53,6 +53,8 @@ CustomWidget::CustomWidget(int X, int Y, int W, int H, const char *L)
 
 void CustomWidget::onInit(int width, int height)
 {
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
 	// Set up widget / workspace
 
 	// Initial state variables

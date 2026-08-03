@@ -48,6 +48,11 @@ GLPrimitive::~GLPrimitive()
 	this->clear();
 }
 
+void GLPrimitive::markVAODirty()
+{
+	m_vaoDirty = true;
+}
+
 // ------------------------------------------------------------
 bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 {
@@ -209,7 +214,7 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 	                legacyPrimitive == GL_LINE_STRIP);
 	bool hasVertexColors = !m_colorSet.empty() && !m_colorIndexSet.empty();
 	prog->setUniformInt("uUnlit",           isUnlit ? 1 : 0);
-	prog->setUniformInt("uUseVertexColor",  (!isUnlit && hasVertexColors) ? 1 : 0);
+	prog->setUniformInt("uUseVertexColor",  hasVertexColors ? 1 : 0);
 
 	glBindVertexArray(m_vao);
 	glDrawArrays(drawMode, 0, m_vaoVertexCount);
@@ -227,6 +232,7 @@ void GLPrimitive::addCoord(double x, double y, double z)
 	m_coordSet.push_back(point);
 	m_vertexNormalIndexSet.push_back(vertexIndex);
 	m_vertexNormalSet.push_back(vertexNormal);
+	markVAODirty();
 }
 
 void GLPrimitive::addCoord(Vec3d &coord)
@@ -238,6 +244,7 @@ void GLPrimitive::addCoord(Vec3d &coord)
 	m_coordSet.push_back(point);
 	m_vertexNormalIndexSet.push_back(vertexIndex);
 	m_vertexNormalSet.push_back(vertexNormal);
+	markVAODirty();
 }
 
 void GLPrimitive::addColor(float red, float green, float blue)
@@ -245,6 +252,7 @@ void GLPrimitive::addColor(float red, float green, float blue)
 	Color* color = new Color();
 	color->setColor(red, green, blue);
 	m_colorSet.push_back(color);
+	markVAODirty();
 }
 
 void GLPrimitive::addNormal(double n1, double n2, double n3)
@@ -253,6 +261,7 @@ void GLPrimitive::addNormal(double n1, double n2, double n3)
 	vector->setComponents(n1, n2, n3);
 	vector->normalize();
 	m_normalSet.push_back(vector);
+	markVAODirty();
 }
 
 void GLPrimitive::addTextureCoord(double s, double t)
@@ -260,6 +269,7 @@ void GLPrimitive::addTextureCoord(double s, double t)
 	Vec3d* point = new Vec3d();
 	point->setComponents(s, t, 0.0);
 	m_textureCoordSet.push_back(point);
+	markVAODirty();
 }
 
 void GLPrimitive::addMaterial(Material *material)
@@ -330,21 +340,25 @@ void GLPrimitive::addCoordIndex(Index* index)
 {
 	m_coordIndexSet.push_back(IndexPtr(index));
 	this->calcNormal(index);
+	markVAODirty();
 }
 
 void GLPrimitive::addColorIndex(Index* index)
 {
 	m_colorIndexSet.push_back(IndexPtr(index));
+	markVAODirty();
 }
 
 void GLPrimitive::addNormalIndex(Index* index)
 {
 	m_normalIndexSet.push_back(IndexPtr(index));
+	markVAODirty();
 }
 
 void GLPrimitive::addTextureIndex(Index* index)
 {
 	m_textureIndexSet.push_back(IndexPtr(index));
+	markVAODirty();
 }
 
 
@@ -385,6 +399,7 @@ void GLPrimitive::setUseVertexNormals(bool flag)
 	m_useVertexNormals = flag;
 
 	this->updateVertexNormals();
+	markVAODirty();
 }
 
 void GLPrimitive::updateVertexNormals()
@@ -415,11 +430,13 @@ void GLPrimitive::clearCoord()
 	m_coordSet.clear();
 	m_vertexNormalSet.clear();
 	m_vertexNormalIndexSet.clear();
+	markVAODirty();
 }
 
 void GLPrimitive::clearCoordIndex()
 {
 	m_coordIndexSet.clear();
+	markVAODirty();
 }
 
 void GLPrimitive::clearTextureCoord()
@@ -428,6 +445,7 @@ void GLPrimitive::clearTextureCoord()
 	for (i=0; i<(int)m_textureCoordSet.size(); i++)
 		delete m_textureCoordSet[i];
 	m_textureCoordSet.clear();
+	markVAODirty();
 }
 
 void GLPrimitive::clear()
@@ -460,24 +478,34 @@ void GLPrimitive::clear()
 	m_vertexNormalIndexSet.clear();
 	m_textureCoordSet.clear();
 	m_textureIndexSet.clear();
+	markVAODirty();
 }
 
 void GLPrimitive::setCoord(int pos, double x, double y, double z)
 {
 	if ( (pos>=0)&&(pos<(int)m_coordSet.size()) )
+	{
 		m_coordSet[pos]->setComponents(x, y, z);
+		markVAODirty();
+	}
 }
 
 void GLPrimitive::setColor(int pos, float red, float green, float blue)
 {
 	if ( (pos>=0)&&(pos<(int)m_colorSet.size()) )
+	{
 		m_colorSet[pos]->setColor(red, green, blue);
+		markVAODirty();
+	}
 }
 
 void GLPrimitive::setTextureCoord(int pos, double s, double t)
 {
 	if ( (pos>=0)&&(pos<(int)m_textureCoordSet.size()) )
+	{
 		m_textureCoordSet[pos]->setComponents(s, t, 0.0);
+		markVAODirty();
+	}
 }
 
 void GLPrimitive::refresh()
@@ -509,6 +537,7 @@ void GLPrimitive::invertNormals()
 		Vec3d* normal = m_normalSet[i];
 		normal->negate();
 	}
+	markVAODirty();
 }
 
 
@@ -518,6 +547,7 @@ void GLPrimitive::addColor(float red, float green, float blue, float alfa)
 	color->setColor(red, green, blue);
 	color->setAlfa(alfa);
 	m_colorSet.push_back(color);
+	markVAODirty();
 }
 
 void GLPrimitive::setColor(int pos, float red, float green, float blue, float alfa)
@@ -526,6 +556,7 @@ void GLPrimitive::setColor(int pos, float red, float green, float blue, float al
 	{
 		m_colorSet[pos]->setColor(red, green, blue);
 		m_colorSet[pos]->setAlfa(alfa);
+		markVAODirty();
 	}
 }
 
@@ -534,6 +565,7 @@ void GLPrimitive::setAlfa(int pos, float alfa)
 	if ( (pos>=0)&&(pos<(int)m_colorSet.size()) )
 	{
 		m_colorSet[pos]->setAlfa(alfa);
+		markVAODirty();
 	}
 }
 
@@ -602,6 +634,7 @@ void GLPrimitive::doUpdateBoundingSphere()
 void GLPrimitive::addMaterialIndex(int idx)
 {
 	m_materialIndexSet.push_back(idx);
+	markVAODirty();
 }
 
 int GLPrimitive::getMaterialIndex(int pos)
@@ -615,6 +648,7 @@ int GLPrimitive::getMaterialIndex(int pos)
 void GLPrimitive::clearMaterialIndex()
 {
 	m_materialIndexSet.clear();
+	markVAODirty();
 }
 
 void GLPrimitive::setMaterialSet(MaterialSet *materialSet)

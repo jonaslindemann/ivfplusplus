@@ -89,6 +89,7 @@ private:
 	bool     m_vaoDirty = true;
 
 protected:
+	void markVAODirty();
 	virtual void calcNormal(Index* idx);
 
 	/**

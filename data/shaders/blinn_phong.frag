@@ -18,8 +18,8 @@ uniform bool      uUseTexture;
 uniform sampler2D uTexture;
 
 // ---- Vertex-color / unlit modes ----
-uniform bool uUseVertexColor;  // replace uMatDiffuse with vColor in lighting
-uniform bool uUnlit;           // skip lighting, output vColor directly
+uniform bool uUseVertexColor;  // replace uMatDiffuse with vColor
+uniform bool uUnlit;           // skip lighting for points, lines, and helpers
 
 // ---- Global scene ambient ----
 uniform vec4 uGlobalAmbient;
@@ -96,9 +96,9 @@ vec4 computeLight(Light light, vec3 N, vec3 V, vec4 diffuseColor)
 
 void main()
 {
-    // Unlit path: output vertex color directly (used for points, lines)
+    // Unlit path: use vertex color when present, otherwise material diffuse.
     if (uUnlit) {
-        fragColor = vColor;
+        fragColor = uUseVertexColor ? vColor : uMatDiffuse;
         return;
     }
 

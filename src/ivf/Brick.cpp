@@ -155,5 +155,6 @@ void Brick::updateBrick()
 	setCoord(5, ox + m_size[0], oy + m_size[1], oz);
 	setCoord(6, ox + m_size[0], oy + m_size[1], oz + m_size[2]);
 	setCoord(7, ox, oy + m_size[1], oz + m_size[2]);
+	refresh();
 }
 

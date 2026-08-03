@@ -31,6 +31,8 @@ FlyWidgetPtr FlyWidget::create(int X, int Y, int W, int H)
 
 void FlyWidget::onInit(int width, int height)
 {
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
 	Vec3d forward;
 
 	forward.setComponents(0.0, 0.0, 1.0);

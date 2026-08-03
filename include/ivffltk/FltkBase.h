@@ -37,6 +37,7 @@
 #include <FL/Fl_Gl_Window.H>
 
 #include <ivfwidget/WidgetBase.h>
+#include <ivf/rc.h>
 
 namespace ivf {
 
@@ -59,6 +60,8 @@ private:
 #endif
 	double		m_elapsedTime;
 	double		m_zeroTime;
+	bool		m_blinnPhongEnabled;
+	float		m_globalAmbient[4];
 
 public:
 	/**
@@ -85,11 +88,17 @@ public:
 
 	void redraw();
 
+	void enableBlinnPhongShader(float ambR = 0.2f, float ambG = 0.2f, float ambB = 0.2f, float ambA = 1.0f);
+	void disableBlinnPhongShader();
+	bool isBlinnPhongShaderEnabled() const;
+
 	virtual void doDisableIdleProcessing();
 	virtual void doEnableIdleProcessing();
 	virtual void doEnableTimeout(float time, int nbr);
 	virtual void doDisableTimeout(int nbr);
 	virtual void doRedraw();
+protected:
+	virtual void doRender() override;
 };
 
 }

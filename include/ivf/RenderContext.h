@@ -25,6 +25,7 @@
 #pragma once
 
 #include <ivf/ShaderProgram.h>
+#include <ivf/GL.h>
 
 #include <glm/glm.hpp>
 
@@ -162,6 +163,16 @@ public:
      */
     void updateShader(ShaderProgram* prog) const;
 
+    /**
+     * Draw simple unlit helper geometry with the active shader.
+     *
+     * Positions are tightly packed xyz floats. Colors are optional tightly
+     * packed rgba floats; when omitted, the active material diffuse color is used.
+     * Returns false when no linked shader is active, so callers can use their
+     * legacy fixed-function fallback.
+     */
+    bool drawUnlit(GLenum primitive, const float* positions, const float* colors, int vertexCount) const;
+
     // ---- Active shader ----
 
     /**
@@ -191,6 +202,7 @@ public:
      * Default is false.
      */
     void setUseTexture(bool flag);
+    bool useTexture() const;
 
 private:
     RenderContext();

@@ -24,11 +24,14 @@ inline void rcUpdateShader() {
     RenderContext::instance().updateShader(RenderContext::instance().shader());
 }
 inline void rcUpdateShader(ShaderProgram* prog)          { RenderContext::instance().updateShader(prog); }
+inline bool rcDrawUnlit(GLenum primitive, const float* positions, const float* colors, int vertexCount)
+    { return RenderContext::instance().drawUnlit(primitive, positions, colors, vertexCount); }
 
 // ---- Global shader params ----
 inline void rcSetGlobalAmbient(float r, float g, float b, float a = 1.0f)
     { RenderContext::instance().setGlobalAmbient(r, g, b, a); }
 inline void rcSetUseTexture(bool flag)                   { RenderContext::instance().setUseTexture(flag); }
+inline bool rcUseTexture()                               { return RenderContext::instance().useTexture(); }
 
 // ---- Matrices ----
 inline void rcSetProjection(const glm::mat4& m)          { RenderContext::instance().setProjection(m); }

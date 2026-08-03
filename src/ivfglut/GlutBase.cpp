@@ -324,10 +324,9 @@ bool GlutBase::isBlinnPhongShaderEnabled() const
 
 void GlutBase::doRender()
 {
-	if (m_blinnPhongEnabled) {
+	rcBeginFrame();
+	if (m_blinnPhongEnabled)
 		rcSetGlobalAmbient(m_globalAmbient[0], m_globalAmbient[1], m_globalAmbient[2], m_globalAmbient[3]);
-		rcBeginFrame();
-	}
 	WidgetBase::doRender();
 }
 

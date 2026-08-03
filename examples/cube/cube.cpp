@@ -78,7 +78,7 @@ void ExampleWindow::onInit(int width, int height)
 	auto lighting = Lighting::getInstance();
 
 	m_light = lighting->getLight(0);
-	m_light->setLightPosition(1.0, 1.0, 1.0, 0.0);
+	m_light->setLightPosition(1.0, 1.0, 0.5, 0.0);
 	m_light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f); 
 	m_light->enable();
 
