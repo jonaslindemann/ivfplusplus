@@ -94,6 +94,8 @@ void ExampleWindow::onResize(int width, int height)
 
 void ExampleWindow::onInit(int width, int height)
 {	
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
 	// Initialize variables
 
 	// Initialize Ivf++ camera

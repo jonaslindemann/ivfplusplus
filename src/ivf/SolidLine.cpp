@@ -317,4 +317,10 @@ void ivf::SolidLine::setStartOffsets(double offset1, double offset2)
 {
     m_startOffset[0] = offset1;
     m_startOffset[1] = offset2;
+
+    // Unlike the other offset setters this one does not re-run initNodes(), so
+    // the spine is only rebuilt on the next explicit refresh. Mark the list
+    // anyway -- a stale list is a visible bug, an extra recompile is not.
+
+    markListDirty();
 }

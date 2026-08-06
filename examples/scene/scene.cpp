@@ -42,6 +42,7 @@ public:
 
 void CExampleWindow::onInit(int width, int height)
 {
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
 }
 
 void CExampleWindow::onCursor(double x, double y, double z)

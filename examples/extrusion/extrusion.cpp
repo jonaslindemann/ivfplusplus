@@ -62,6 +62,8 @@ public:
 
 void CExampleWindow::onInit(int width, int height)
 {
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
 	// Initialize variables
 
 	m_angleX = 0.0;

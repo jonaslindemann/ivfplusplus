@@ -32,7 +32,6 @@
 #include "extrude.h"
 #include "intersect.h"
 #include "segment.h"
-#include <GL/segment_vbo.h>
 
 typedef void (*gleCapCallback) (int iloop,
                                 double cap[][3], 
@@ -1176,12 +1175,8 @@ extrusion_round_or_cut_join (int ncp,	/* number of contour points */
                draw_segment_facet_n (ncp, (gleVector *) front_loop, (gleVector *) back_loop, (gleVector *) norm_loop, 
                                      inext, seg_len);
             } else {
-               if (__TUBE_USE_VBO) {
-                  draw_segment_edge_n_vbo (ncp, front_loop, back_loop, norm_loop, inext, seg_len);
-               } else {
-                  draw_segment_edge_n (ncp, (gleVector *) front_loop, (gleVector *) back_loop, (gleVector *) norm_loop,
-                                       inext, seg_len);
-               }
+               draw_segment_edge_n (ncp, (gleVector *) front_loop, (gleVector *) back_loop, (gleVector *) norm_loop,
+                                    inext, seg_len);
             }
          } else {
             if (cont_normal == NULL) {
@@ -1211,13 +1206,9 @@ extrusion_round_or_cut_join (int ncp,	/* number of contour points */
                                                  (gleVector *) front_norm, (gleVector *) back_norm, 
                                                  inext, seg_len);
             } else {
-               if (__TUBE_USE_VBO) {
-                  draw_binorm_segment_edge_n_vbo (ncp, front_loop, back_loop, front_norm, back_norm, inext, seg_len);
-               } else {
-                  draw_binorm_segment_edge_n (ncp, (gleVector *) front_loop, (gleVector *) back_loop,
-                                                   (gleVector *) front_norm, (gleVector *) back_norm,
-                                                   inext, seg_len);
-               }
+               draw_binorm_segment_edge_n (ncp, (gleVector *) front_loop, (gleVector *) back_loop,
+                                                (gleVector *) front_norm, (gleVector *) back_norm,
+                                                inext, seg_len);
             }
          } else {
             if (cont_normal == NULL) {

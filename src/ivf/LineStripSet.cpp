@@ -36,6 +36,8 @@ LineStripSet::~LineStripSet()
 
 void LineStripSet::doCreateGeometry()
 {
+	if (buildAndDrawVAO(GL_LINE_STRIP)) return;
+
 	Index* coordIdx;
 	Index* colorIdx;
 	long i, j;

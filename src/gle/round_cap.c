@@ -23,7 +23,6 @@
 #include "tube_gc.h"
 #include "intersect.h"
 #include "segment.h"
-#include <GL/segment_vbo.h>
 
 
 /* ============================================================ */
@@ -186,15 +185,11 @@ void draw_round_style_cap_callback (int ncp,
                                (gleVector *) next_norm, 
                                (gleVector *) last_norm, 0, 0.0);
       } else {
-         if (__TUBE_USE_VBO) {
-            draw_binorm_segment_edge_n_vbo (ncp, next_contour, last_contour, next_norm, last_norm, 0, 0.0);
-         } else {
-            draw_binorm_segment_edge_n (ncp,
-                                  (gleVector *) next_contour, 
-                                  (gleVector *) last_contour,
-                                  (gleVector *) next_norm, 
-                                  (gleVector *) last_norm, 0, 0.0);
-         }
+         draw_binorm_segment_edge_n (ncp,
+                               (gleVector *) next_contour,
+                               (gleVector *) last_contour,
+                               (gleVector *) next_norm,
+                               (gleVector *) last_norm, 0, 0.0);
      }
 
       /* swap contours */

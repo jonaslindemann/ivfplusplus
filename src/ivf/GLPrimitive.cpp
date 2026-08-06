@@ -23,8 +23,12 @@
 //
 
 #include <ivf/GLPrimitive.h>
+#include <ivf/rc.h>
+#include <ivf/ShaderProgram.h>
 
 #include <ivf/config.h>
+
+#include <vector>
 
 using namespace ivf;
 
@@ -39,7 +43,184 @@ GLPrimitive::GLPrimitive()
 
 GLPrimitive::~GLPrimitive()
 {
+	if (m_vao) { glDeleteVertexArrays(1, &m_vao); m_vao = 0; }
+	if (m_vbo) { glDeleteBuffers(1, &m_vbo); m_vbo = 0; }
 	this->clear();
+}
+
+void GLPrimitive::markVAODirty()
+{
+	m_vaoDirty = true;
+}
+
+// ------------------------------------------------------------
+bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
+{
+	ShaderProgram* prog = rcShader();
+	if (!rcIsShaderActive())
+		return false;
+
+	if (m_vaoDirty) {
+		struct GpuVertex {
+			float position[3];
+			float normal[3];
+			float texcoord[2];
+			float color[4];
+		};
+
+		std::vector<GpuVertex> packed;
+
+		for (int i = 0; i < (int)m_coordIndexSet.size(); ++i) {
+			Index* coordIdx = m_coordIndexSet[i];
+			Index* normalIdx  = (i < (int)m_normalIndexSet.size())  ? (Index*)m_normalIndexSet[i]  : nullptr;
+			Index* texIdx     = (i < (int)m_textureIndexSet.size())  ? (Index*)m_textureIndexSet[i]  : nullptr;
+			Index* colorIdx   = (i < (int)m_colorIndexSet.size())   ? (Index*)m_colorIndexSet[i]   : nullptr;
+			int n = coordIdx->getSize();
+
+			// Determine effective primitive for this coordIndex.
+			// GL_QUADS is used as the "mixed-topology" sentinel: the actual topology
+			// is read from coordIdx itself (IVF_IDX_QUADS=1, else triangles).
+			GLenum effPrim = legacyPrimitive;
+			if (legacyPrimitive == GL_QUADS)
+				effPrim = (coordIdx->getTopology() == 1) ? GL_QUADS : GL_TRIANGLES;
+
+			// How many vertices form one primitive unit (for face-normal indexing).
+			int vertsPerFace = 3;
+			if (effPrim == GL_QUADS)      vertsPerFace = 4;
+			else if (effPrim == GL_LINES)  vertsPerFace = 2;
+			else if (effPrim == GL_POINTS) vertsPerFace = 1;
+
+			// Pack one vertex at flat position j within this coordIndex.
+			auto getVertex = [&](int j, int faceIdx) -> GpuVertex {
+				GpuVertex v = {};
+				int ci = coordIdx->getIndex(j);
+
+				// Position
+				if (ci < (int)m_coordSet.size()) {
+					const double* p = m_coordSet[ci]->getComponents();
+					v.position[0] = (float)p[0];
+					v.position[1] = (float)p[1];
+					v.position[2] = (float)p[2];
+				}
+
+				// Normal: vertex normal takes priority over face normal
+				if (getUseVertexNormals() && ci < (int)m_vertexNormalSet.size()) {
+					const double* n3 = m_vertexNormalSet[ci]->getComponents();
+					v.normal[0] = (float)n3[0]; v.normal[1] = (float)n3[1]; v.normal[2] = (float)n3[2];
+				} else if (normalIdx && faceIdx < normalIdx->getSize()) {
+					int ni = normalIdx->getIndex(faceIdx);
+					if (ni < (int)m_normalSet.size()) {
+						const double* n3 = m_normalSet[ni]->getComponents();
+						v.normal[0] = (float)n3[0]; v.normal[1] = (float)n3[1]; v.normal[2] = (float)n3[2];
+					}
+				}
+
+				// Texture coordinate
+				if (texIdx && j < texIdx->getSize()) {
+					int ti = texIdx->getIndex(j);
+					if (ti < (int)m_textureCoordSet.size()) {
+						const double* tc = m_textureCoordSet[ti]->getComponents();
+						v.texcoord[0] = (float)tc[0]; v.texcoord[1] = (float)tc[1];
+					}
+				}
+
+				// Color
+				if (colorIdx && j < colorIdx->getSize()) {
+					int ki = colorIdx->getIndex(j);
+					if (ki < (int)m_colorSet.size()) {
+						const float* c = m_colorSet[ki]->getColor();
+						v.color[0] = c[0]; v.color[1] = c[1]; v.color[2] = c[2];
+						v.color[3] = m_colorSet[ki]->getAlfa();
+					}
+				} else {
+					v.color[0] = v.color[1] = v.color[2] = v.color[3] = 1.0f;
+				}
+
+				return v;
+			};
+
+			if (effPrim == GL_QUADS) {
+				// Split each quad (j, j+1, j+2, j+3) into two triangles.
+				for (int j = 0; j + 3 < n; j += 4) {
+					int fi = j / 4;
+					packed.push_back(getVertex(j,   fi));
+					packed.push_back(getVertex(j+1, fi));
+					packed.push_back(getVertex(j+2, fi));
+					packed.push_back(getVertex(j,   fi));
+					packed.push_back(getVertex(j+2, fi));
+					packed.push_back(getVertex(j+3, fi));
+				}
+			} else if (effPrim == GL_QUAD_STRIP) {
+				// GL_QUAD_STRIP pairs: (j,j+1,j+3,j+2) → 2 triangles each step.
+				for (int j = 0; j + 3 < n; j += 2) {
+					int fi = j / 2;
+					packed.push_back(getVertex(j,   fi));
+					packed.push_back(getVertex(j+1, fi));
+					packed.push_back(getVertex(j+3, fi));
+					packed.push_back(getVertex(j,   fi));
+					packed.push_back(getVertex(j+3, fi));
+					packed.push_back(getVertex(j+2, fi));
+				}
+			} else {
+				// GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_LINES, GL_LINE_STRIP, GL_POINTS
+				for (int j = 0; j < n; ++j) {
+					int fi = (vertsPerFace > 1) ? j / vertsPerFace : j;
+					packed.push_back(getVertex(j, fi));
+				}
+			}
+		}
+
+		m_vaoVertexCount = (GLsizei)packed.size();
+
+		if (m_vao == 0) glGenVertexArrays(1, &m_vao);
+		if (m_vbo == 0) glGenBuffers(1, &m_vbo);
+
+		glBindVertexArray(m_vao);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+		glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)(packed.size() * sizeof(GpuVertex)),
+		             packed.data(), GL_DYNAMIC_DRAW);
+
+		GLsizei stride = sizeof(GpuVertex);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, position));
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, normal));
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, texcoord));
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, color));
+		glEnableVertexAttribArray(3);
+
+		glBindVertexArray(0);
+		m_vaoDirty = false;
+	}
+
+	if (m_vaoVertexCount == 0)
+		return true; // nothing to draw, but still handled
+
+	// Determine actual draw mode (quads → triangles in core profile).
+	GLenum drawMode;
+	switch (legacyPrimitive) {
+		case GL_QUADS:      drawMode = GL_TRIANGLES; break;
+		case GL_QUAD_STRIP: drawMode = GL_TRIANGLES; break;
+		default:            drawMode = legacyPrimitive; break;
+	}
+
+	rcUseShader();
+	rcUpdateShader(prog);
+
+	// Unlit mode for point/line primitives (legacy path disabled GL_LIGHTING for these).
+	bool isUnlit = (legacyPrimitive == GL_POINTS ||
+	                legacyPrimitive == GL_LINES  ||
+	                legacyPrimitive == GL_LINE_STRIP);
+	bool hasVertexColors = !m_colorSet.empty() && !m_colorIndexSet.empty();
+	prog->setUniformInt("uUnlit",           isUnlit ? 1 : 0);
+	prog->setUniformInt("uUseVertexColor",  hasVertexColors ? 1 : 0);
+
+	glBindVertexArray(m_vao);
+	glDrawArrays(drawMode, 0, m_vaoVertexCount);
+	glBindVertexArray(0);
+
+	return true;
 }
 
 void GLPrimitive::addCoord(double x, double y, double z)
@@ -51,6 +232,7 @@ void GLPrimitive::addCoord(double x, double y, double z)
 	m_coordSet.push_back(point);
 	m_vertexNormalIndexSet.push_back(vertexIndex);
 	m_vertexNormalSet.push_back(vertexNormal);
+	markVAODirty();
 }
 
 void GLPrimitive::addCoord(Vec3d &coord)
@@ -62,6 +244,7 @@ void GLPrimitive::addCoord(Vec3d &coord)
 	m_coordSet.push_back(point);
 	m_vertexNormalIndexSet.push_back(vertexIndex);
 	m_vertexNormalSet.push_back(vertexNormal);
+	markVAODirty();
 }
 
 void GLPrimitive::addColor(float red, float green, float blue)
@@ -69,6 +252,7 @@ void GLPrimitive::addColor(float red, float green, float blue)
 	Color* color = new Color();
 	color->setColor(red, green, blue);
 	m_colorSet.push_back(color);
+	markVAODirty();
 }
 
 void GLPrimitive::addNormal(double n1, double n2, double n3)
@@ -77,6 +261,7 @@ void GLPrimitive::addNormal(double n1, double n2, double n3)
 	vector->setComponents(n1, n2, n3);
 	vector->normalize();
 	m_normalSet.push_back(vector);
+	markVAODirty();
 }
 
 void GLPrimitive::addTextureCoord(double s, double t)
@@ -84,6 +269,7 @@ void GLPrimitive::addTextureCoord(double s, double t)
 	Vec3d* point = new Vec3d();
 	point->setComponents(s, t, 0.0);
 	m_textureCoordSet.push_back(point);
+	markVAODirty();
 }
 
 void GLPrimitive::addMaterial(Material *material)
@@ -154,21 +340,25 @@ void GLPrimitive::addCoordIndex(Index* index)
 {
 	m_coordIndexSet.push_back(IndexPtr(index));
 	this->calcNormal(index);
+	markVAODirty();
 }
 
 void GLPrimitive::addColorIndex(Index* index)
 {
 	m_colorIndexSet.push_back(IndexPtr(index));
+	markVAODirty();
 }
 
 void GLPrimitive::addNormalIndex(Index* index)
 {
 	m_normalIndexSet.push_back(IndexPtr(index));
+	markVAODirty();
 }
 
 void GLPrimitive::addTextureIndex(Index* index)
 {
 	m_textureIndexSet.push_back(IndexPtr(index));
+	markVAODirty();
 }
 
 
@@ -209,6 +399,7 @@ void GLPrimitive::setUseVertexNormals(bool flag)
 	m_useVertexNormals = flag;
 
 	this->updateVertexNormals();
+	markVAODirty();
 }
 
 void GLPrimitive::updateVertexNormals()
@@ -239,11 +430,13 @@ void GLPrimitive::clearCoord()
 	m_coordSet.clear();
 	m_vertexNormalSet.clear();
 	m_vertexNormalIndexSet.clear();
+	markVAODirty();
 }
 
 void GLPrimitive::clearCoordIndex()
 {
 	m_coordIndexSet.clear();
+	markVAODirty();
 }
 
 void GLPrimitive::clearTextureCoord()
@@ -252,6 +445,7 @@ void GLPrimitive::clearTextureCoord()
 	for (i=0; i<(int)m_textureCoordSet.size(); i++)
 		delete m_textureCoordSet[i];
 	m_textureCoordSet.clear();
+	markVAODirty();
 }
 
 void GLPrimitive::clear()
@@ -284,24 +478,34 @@ void GLPrimitive::clear()
 	m_vertexNormalIndexSet.clear();
 	m_textureCoordSet.clear();
 	m_textureIndexSet.clear();
+	markVAODirty();
 }
 
 void GLPrimitive::setCoord(int pos, double x, double y, double z)
 {
 	if ( (pos>=0)&&(pos<(int)m_coordSet.size()) )
+	{
 		m_coordSet[pos]->setComponents(x, y, z);
+		markVAODirty();
+	}
 }
 
 void GLPrimitive::setColor(int pos, float red, float green, float blue)
 {
 	if ( (pos>=0)&&(pos<(int)m_colorSet.size()) )
+	{
 		m_colorSet[pos]->setColor(red, green, blue);
+		markVAODirty();
+	}
 }
 
 void GLPrimitive::setTextureCoord(int pos, double s, double t)
 {
 	if ( (pos>=0)&&(pos<(int)m_textureCoordSet.size()) )
+	{
 		m_textureCoordSet[pos]->setComponents(s, t, 0.0);
+		markVAODirty();
+	}
 }
 
 void GLPrimitive::refresh()
@@ -321,6 +525,8 @@ void GLPrimitive::refresh()
 
 	if (m_useVertexNormals)
 		this->updateVertexNormals();
+
+	m_vaoDirty = true; // geometry changed — rebuild VAO next draw
 }
 
 void GLPrimitive::invertNormals()
@@ -331,6 +537,7 @@ void GLPrimitive::invertNormals()
 		Vec3d* normal = m_normalSet[i];
 		normal->negate();
 	}
+	markVAODirty();
 }
 
 
@@ -340,6 +547,7 @@ void GLPrimitive::addColor(float red, float green, float blue, float alfa)
 	color->setColor(red, green, blue);
 	color->setAlfa(alfa);
 	m_colorSet.push_back(color);
+	markVAODirty();
 }
 
 void GLPrimitive::setColor(int pos, float red, float green, float blue, float alfa)
@@ -348,6 +556,7 @@ void GLPrimitive::setColor(int pos, float red, float green, float blue, float al
 	{
 		m_colorSet[pos]->setColor(red, green, blue);
 		m_colorSet[pos]->setAlfa(alfa);
+		markVAODirty();
 	}
 }
 
@@ -356,6 +565,7 @@ void GLPrimitive::setAlfa(int pos, float alfa)
 	if ( (pos>=0)&&(pos<(int)m_colorSet.size()) )
 	{
 		m_colorSet[pos]->setAlfa(alfa);
+		markVAODirty();
 	}
 }
 
@@ -424,6 +634,7 @@ void GLPrimitive::doUpdateBoundingSphere()
 void GLPrimitive::addMaterialIndex(int idx)
 {
 	m_materialIndexSet.push_back(idx);
+	markVAODirty();
 }
 
 int GLPrimitive::getMaterialIndex(int pos)
@@ -437,6 +648,7 @@ int GLPrimitive::getMaterialIndex(int pos)
 void GLPrimitive::clearMaterialIndex()
 {
 	m_materialIndexSet.clear();
+	markVAODirty();
 }
 
 void GLPrimitive::setMaterialSet(MaterialSet *materialSet)

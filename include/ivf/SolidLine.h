@@ -25,18 +25,12 @@
 #pragma once
 
 #include <ivf/Extrusion.h>
+#include <ivf/LineRefresh.h>
 #include <ivf/Node.h>
 
 namespace ivf {
 
 IvfSmartPointer(SolidLine);
-
-enum LineRefreshMode
-{
-	rmAll,
-	rmNodes,
-	rmSection
-};
 
 
 /**

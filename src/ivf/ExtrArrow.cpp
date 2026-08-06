@@ -25,10 +25,14 @@
 #include <ivf/ExtrArrow.h>
 
 #include <ivf/config.h>
+#include <ivf/rc.h>
 
 #include <ivfmath/BoundingSphere.h>
+#include <ivfmath/Vec3d.h>
 
 #include <GL/gle.h>
+
+#include <vector>
 
 using namespace ivf;
 
@@ -55,6 +59,68 @@ ExtrArrow::~ExtrArrow()
 // ------------------------------------------------------------
 void ExtrArrow::doCreateGeometry()
 {
+	if (rcIsShaderActive())
+	{
+		Vec3d axis(m_direction[0], m_direction[1], m_direction[2]);
+		axis.normalize();
+
+		Vec3d up(0.0, 1.0, 0.0);
+		double ax, ay, az;
+		double ux, uy, uz;
+		axis.getComponents(ax, ay, az);
+		up.getComponents(ux, uy, uz);
+		if (fabs(ax * ux + ay * uy + az * uz) > 0.95)
+			up.setComponents(1.0, 0.0, 0.0);
+
+		Vec3d side = axis * up;
+		side.normalize();
+		Vec3d binormal = side * axis;
+		binormal.normalize();
+
+		const int sides = 24;
+		std::vector<float> positions;
+
+		auto ringPoint = [&](int ring, int sideIdx) {
+			double angle = 2.0 * M_PI * (double)sideIdx / (double)sides;
+			double c = cos(angle);
+			double s = sin(angle);
+			Vec3d p(m_coords[ring][0], m_coords[ring][1], m_coords[ring][2]);
+			p = p + side * (m_radius[ring] * c) + binormal * (m_radius[ring] * s);
+			return p;
+		};
+
+		auto addPoint = [&](Vec3d& p) {
+			double x, y, z;
+			p.getComponents(x, y, z);
+			positions.push_back((float)x);
+			positions.push_back((float)y);
+			positions.push_back((float)z);
+		};
+
+		for (int ring = 0; ring < 5; ++ring)
+		{
+			for (int sideIdx = 0; sideIdx < sides; ++sideIdx)
+			{
+				int nextSide = (sideIdx + 1) % sides;
+				Vec3d p0 = ringPoint(ring, sideIdx);
+				Vec3d p1 = ringPoint(ring + 1, sideIdx);
+				Vec3d p2 = ringPoint(ring + 1, nextSide);
+				Vec3d p3 = ringPoint(ring, nextSide);
+
+				addPoint(p0);
+				addPoint(p1);
+				addPoint(p2);
+
+				addPoint(p0);
+				addPoint(p2);
+				addPoint(p3);
+			}
+		}
+
+		if (rcDrawUnlit(GL_TRIANGLES, positions.data(), nullptr, (int)(positions.size() / 3)))
+			return;
+	}
+
 	glePolyCone(6,m_coords,nullptr,m_radius);
 }
 

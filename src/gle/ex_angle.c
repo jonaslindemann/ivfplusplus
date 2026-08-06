@@ -30,7 +30,6 @@
 #include "extrude.h"
 #include "intersect.h"
 #include "segment.h"
-#include <GL/segment_vbo.h>
 
 /* ============================================================ */
 /*
@@ -491,14 +490,9 @@ void extrusion_angle_join (int ncp,		/* number of contour points */
                                           (gleVector *) back_loop, 
                                           (gleVector *) norm_loop, inext, len_seg);
             } else {
-               if (__TUBE_USE_VBO) {
-                  draw_segment_edge_n_vbo (ncp, front_loop, back_loop, 
-                                           norm_loop, inext, len_seg);
-               } else {
-                  draw_segment_edge_n (ncp, (gleVector *) front_loop, 
-                                            (gleVector *) back_loop, 
-                                            (gleVector *) norm_loop, inext, len_seg);
-               }
+               draw_segment_edge_n (ncp, (gleVector *) front_loop,
+                                         (gleVector *) back_loop,
+                                         (gleVector *) norm_loop, inext, len_seg);
             }
          } else {
             if (cont_normal == NULL) {
@@ -536,17 +530,11 @@ void extrusion_angle_join (int ncp,		/* number of contour points */
                                                  (gleVector *) back_norm,
                                                  inext, len_seg);
             } else {
-               if (__TUBE_USE_VBO) {
-                  draw_binorm_segment_edge_n_vbo (ncp, front_loop, back_loop,
-                                                  front_norm, back_norm,
-                                                  inext, len_seg);
-               } else {
-                  draw_binorm_segment_edge_n (ncp, (gleVector *) front_loop, 
-                                                   (gleVector *) back_loop,
-                                                   (gleVector *) front_norm,
-                                                   (gleVector *) back_norm,
-                                                   inext, len_seg);
-               }
+               draw_binorm_segment_edge_n (ncp, (gleVector *) front_loop,
+                                                (gleVector *) back_loop,
+                                                (gleVector *) front_norm,
+                                                (gleVector *) back_norm,
+                                                inext, len_seg);
             }
          } else {
             if (cont_normal == NULL) {

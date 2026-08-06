@@ -25,6 +25,7 @@
 #pragma once
 
 #include <ivf/GLBase.h>
+#include <ivf/ShaderProgram.h>
 
 namespace ivf {
 
@@ -134,6 +135,40 @@ public:
 	void brightnessAmbient(double factor);
 	void brightnessDiffuse(double factor);
 	void brightnessSpecular(double factor);
+
+	/**
+	 * Upload material properties to a shader program.
+	 *
+	 * Sets uMatAmbient, uMatDiffuse, uMatSpecular, uMatEmission, uMatShininess.
+	 * Called automatically from doCreateMaterial() when an active shader is set
+	 * in RenderContext. Can also be called directly.
+	 */
+	void uploadToShader(ShaderProgram* prog);
+
+	/**
+	 * Discards the redundant-material-state cache.
+	 *
+	 * doCreateMaterial() skips the glMaterialfv() calls when the requested
+	 * material values are identical to the ones already applied. That shortcut is
+	 * only valid while Material is the sole author of GL material state, so any
+	 * code that changes it behind the class's back -- glMaterialfv() by hand,
+	 * glColorMaterial(), or a glPushAttrib()/glPopAttrib() pair spanning material
+	 * state -- must call this afterwards.
+	 *
+	 * Note the cache compares values rather than Material identity, so distinct
+	 * Material instances holding equal values still collapse to a single upload.
+	 */
+	static void invalidateStateCache();
+
+	/**
+	 * Enables or disables the redundant-material-state cache, returning the
+	 * previous setting.
+	 *
+	 * Must be disabled while recording a display list: inside glNewList() the
+	 * material calls are captured rather than executed, so what the cache believes
+	 * is current says nothing about what the list contains.
+	 */
+	static bool setStateCacheEnabled(bool flag);
 
 private:
 	float	m_shininess;

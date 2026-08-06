@@ -41,6 +41,8 @@ PointSet::~PointSet()
 
 void PointSet::doCreateGeometry()
 {
+	if (buildAndDrawVAO(GL_POINTS)) return;
+
 	Index* coordIdx;
 	Index* colorIdx;
 	long i, j;

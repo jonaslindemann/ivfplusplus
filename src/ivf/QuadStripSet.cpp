@@ -39,6 +39,8 @@ QuadStripSet::~QuadStripSet()
 
 void QuadStripSet::doCreateGeometry()
 {
+	if (buildAndDrawVAO(GL_QUAD_STRIP)) return;
+
 	Index* coordIdx;
 	Index* colorIdx;
 	Index* textureIdx;

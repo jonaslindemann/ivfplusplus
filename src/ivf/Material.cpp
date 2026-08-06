@@ -24,8 +24,44 @@
 #include <ivf/config.h>
 #include <ivf/Material.h>
 #include <ivf/GlobalState.h>
+#include <ivf/rc.h>
+
+#include <glm/glm.hpp>
+
+#include <cstring>
 
 using namespace ivf;
+
+namespace {
+
+// Redundant-material-state cache.
+//
+// Applying a material costs five glMaterialfv()/glMaterialf() calls, and a scene
+// typically draws long runs of shapes whose materials hold identical values --
+// often as separate Material instances, so identity comparison would never hit.
+// Remembering the values last pushed to GL lets those runs collapse to a single
+// upload. See Material::invalidateStateCache() for the validity rules.
+
+struct AppliedMaterial {
+	float ambient[4];
+	float diffuse[4];
+	float specular[4];
+	float emission[4];
+	float shininess;
+	bool  colorMaterial;
+	bool  greyscale;
+	bool  valid;
+};
+
+AppliedMaterial g_applied = {};
+bool g_cacheEnabled = true;
+
+bool sameColor(const float* a, const float* b)
+{
+	return std::memcmp(a, b, 4 * sizeof(float)) == 0;
+}
+
+} // namespace
 
 // Needed by rgb2hsv()
 float maxrgb(float r,float g,float b)
@@ -248,42 +284,99 @@ void Material::getAmbientColor (float &red, float &green, float &blue, float &al
 }
 
 // ------------------------------------------------------------
+void Material::invalidateStateCache()
+{
+	g_applied.valid = false;
+}
+
+bool Material::setStateCacheEnabled(bool flag)
+{
+	const bool previous = g_cacheEnabled;
+	g_cacheEnabled = flag;
+	g_applied.valid = false;
+	return previous;
+}
+
 void Material::doCreateMaterial()
 {
 	if (glIsEnabled(GL_LIGHTING))
 	{
-		if (GlobalState::getInstance()->isGreyscaleRenderingEnabled())
-		{
-			float temp[4];
+		const bool greyscale = GlobalState::getInstance()->isGreyscaleRenderingEnabled();
 
-			toGreyscale(m_ambientColor, temp); glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, temp);
-			toGreyscale(m_diffuseColor, temp); glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, temp);
-			toGreyscale(m_specularColor, temp); glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, temp);
-			toGreyscale(m_emissionColor, temp); glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, temp);
-			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_shininess);
+		float ambient[4];
+		float diffuse[4];
+		float specular[4];
+		float emission[4];
+
+		if (greyscale)
+		{
+			toGreyscale(m_ambientColor, ambient);
+			toGreyscale(m_diffuseColor, diffuse);
+			toGreyscale(m_specularColor, specular);
+			toGreyscale(m_emissionColor, emission);
 		}
 		else
 		{
-			if (!m_colorMaterial)
+			std::memcpy(ambient, m_ambientColor, sizeof(ambient));
+			std::memcpy(diffuse, m_diffuseColor, sizeof(diffuse));
+			std::memcpy(specular, m_specularColor, sizeof(specular));
+			std::memcpy(emission, m_emissionColor, sizeof(emission));
+		}
+
+		// Greyscale rendering always writes the full material; only the plain
+		// path defers ambient and diffuse to glColorMaterial().
+
+		const bool colorMaterial = greyscale ? false : m_colorMaterial;
+
+		// Ambient and diffuse are only compared when they are actually uploaded.
+		// When colorMaterial flips, the mode comparison already forces a rewrite,
+		// so the values recorded during a colorMaterial pass can never be trusted
+		// into a non-colorMaterial one.
+
+		const bool redundant =
+			g_cacheEnabled && g_applied.valid &&
+			(g_applied.greyscale == greyscale) &&
+			(g_applied.colorMaterial == colorMaterial) &&
+			(g_applied.shininess == m_shininess) &&
+			sameColor(g_applied.specular, specular) &&
+			sameColor(g_applied.emission, emission) &&
+			(colorMaterial || (sameColor(g_applied.ambient, ambient) &&
+			                   sameColor(g_applied.diffuse, diffuse)));
+
+		if (!redundant)
+		{
+			if (!colorMaterial)
 			{
-				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, m_ambientColor);
-				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, m_diffuseColor);
-				glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, m_specularColor);
-				glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, m_emissionColor);
-				glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_shininess);
+				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 			}
 			else
-			{
 				glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-				glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, m_specularColor);
-				glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, m_emissionColor);
-				glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_shininess);
+
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
+			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_shininess);
+
+			if (g_cacheEnabled)
+			{
+				std::memcpy(g_applied.ambient, ambient, sizeof(ambient));
+				std::memcpy(g_applied.diffuse, diffuse, sizeof(diffuse));
+				std::memcpy(g_applied.specular, specular, sizeof(specular));
+				std::memcpy(g_applied.emission, emission, sizeof(emission));
+				g_applied.shininess = m_shininess;
+				g_applied.colorMaterial = colorMaterial;
+				g_applied.greyscale = greyscale;
+				g_applied.valid = true;
 			}
 		}
 	}
 	else
         if (GlobalState::getInstance()->isColorOutputEnabled())
             glColor4fv(m_diffuseColor);
+
+	// Modern path: upload to active shader if one is set in RenderContext.
+	if (rcIsShaderActive())
+		uploadToShader(rcShader());
 }
 
 void Material::setEmissionColor(const float red, const float green, const float blue, const float alfa)
@@ -459,4 +552,13 @@ void Material::setColorMaterial(bool flag)
 bool Material::getColorMaterial()
 {
 	return m_colorMaterial;
+}
+
+void Material::uploadToShader(ShaderProgram* prog)
+{
+	prog->setUniformVec4("uMatAmbient",  glm::vec4(m_ambientColor[0],  m_ambientColor[1],  m_ambientColor[2],  m_ambientColor[3]));
+	prog->setUniformVec4("uMatDiffuse",  glm::vec4(m_diffuseColor[0],  m_diffuseColor[1],  m_diffuseColor[2],  m_diffuseColor[3]));
+	prog->setUniformVec4("uMatSpecular", glm::vec4(m_specularColor[0], m_specularColor[1], m_specularColor[2], m_specularColor[3]));
+	prog->setUniformVec4("uMatEmission", glm::vec4(m_emissionColor[0], m_emissionColor[1], m_emissionColor[2], m_emissionColor[3]));
+	prog->setUniformFloat("uMatShininess", m_shininess);
 }

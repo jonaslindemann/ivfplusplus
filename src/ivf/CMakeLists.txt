@@ -7,7 +7,7 @@ if(BUILD_SHARED_LIBS)
 endif(BUILD_SHARED_LIBS)
 
 add_library(ivf ${INCLUDE_FILES} ${SOURCE_FILES})
-target_link_libraries(ivf ivfmath gleivf)
+target_link_libraries(ivf ivfmath gleivf glm::glm)
 set_target_properties(ivf PROPERTIES DEBUG_POSTFIX "d")
 install(TARGETS ivf DESTINATION lib)
 

@@ -122,10 +122,6 @@ extern void gleDestroyGC (void);
 extern int gleGetJoinStyle (void);
 extern void gleSetJoinStyle (int style);	/* bitwise OR of flags */
 
-/* control VBO rendering mode (0=disabled, 1=enabled) */
-extern int gleGetVBOMode (void);
-extern void gleSetVBOMode (int enable);
-
 /* control number of sides used to draw cylinders, cones */
 extern int gleGetNumSides(void);
 extern void gleSetNumSides(int slices); 
@@ -304,25 +300,6 @@ extern void uviewpoint (gleDouble m[4][4],	/* returned */
 /* Performance Optimization Functions                     */
 /* Added for improved rendering performance on modern GPUs*/
 /* ====================================================== */
-
-/* Initialize VBO cache for improved rendering performance
- * Call once during application initialization.
- * max_vertices: estimated maximum vertices per draw call (e.g., 10000)
- *
- * Example usage:
- *   gleInitVBOCache(10000);  // Pre-allocate for 10K vertices
- *
- * Requires: OpenGL 1.5+ or ARB_vertex_buffer_object extension
- * Falls back to immediate mode if VBO not available
- */
-extern void gleInitVBOCache(int max_vertices);
-
-/* Destroy VBO cache - call during application cleanup
- *
- * Example usage:
- *   gleDestroyVBOCache();  // Free VBO resources
- */
-extern void gleDestroyVBOCache(void);
 
 /* Initialize tessellator cache to avoid recreating tessellators
  * Call once during application initialization.

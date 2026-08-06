@@ -212,7 +212,9 @@ void ExampleWindow::onInit(int width, int height)
 	auto axis = Axis::create();
 	axis->setSize(1.5);
 	m_scene->addChild(axis);
-	
+
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
 	// Create a light
 
 	auto lighting = Lighting::getInstance();

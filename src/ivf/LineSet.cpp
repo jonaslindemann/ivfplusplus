@@ -39,6 +39,9 @@ LineSet::~LineSet()
 
 void LineSet::doCreateGeometry()
 {
+	if (m_idxLineWidth.empty())
+		if (buildAndDrawVAO(GL_LINES)) return;
+
     Index* coordIdx;
     Index* colorIdx;
     Index* textureIdx;
@@ -129,6 +132,7 @@ bool LineSet::getUseAlpha()
 void LineSet::setLineWidth(float width)
 {
     m_lineWidth = width;
+    markVAODirty();
 }
 
 float LineSet::getLineWidth()
@@ -139,9 +143,11 @@ float LineSet::getLineWidth()
 void ivf::LineSet::addIndexLineWidth(float w)
 {
     m_idxLineWidth.push_back(w);
+    markVAODirty();
 }
 
 void ivf::LineSet::clearIndexWidths()
 {
     m_idxLineWidth.clear();
+    markVAODirty();
 }

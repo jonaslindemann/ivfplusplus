@@ -6,25 +6,6 @@
 /* Added for improved rendering performance on modern GPUs*/
 /* ====================================================== */
 
-/* Initialize VBO cache for improved rendering performance
- * Call once during application initialization.
- * max_vertices: estimated maximum vertices per draw call (e.g., 10000)
- * 
- * Example usage:
- *   gleInitVBOCache(10000);  // Pre-allocate for 10K vertices
- * 
- * Requires: OpenGL 1.5+ or ARB_vertex_buffer_object extension
- * Falls back to immediate mode if VBO not available
- */
-extern void gleInitVBOCache(int max_vertices);
-
-/* Destroy VBO cache - call during application cleanup
- * 
- * Example usage:
- *   gleDestroyVBOCache();  // Free VBO resources
- */
-extern void gleDestroyVBOCache(void);
-
 /* Initialize tessellator cache to avoid recreating tessellators
  * Call once during application initialization.
  * 

@@ -4,9 +4,10 @@
 
 #ifdef WIN32
 #include <Windows.h>
-#endif 
+#endif
 
 #include <ivfwidget/WidgetBase.h>
+#include <ivf/rc.h>
 
 namespace ivf {
 
@@ -25,6 +26,8 @@ private:
 	double		m_elapsedTime;
 	double		m_zeroTime;
 	bool		m_fullScreen;
+	bool		m_blinnPhongEnabled;
+	float		m_globalAmbient[4];
 public:
 	GlutBase(int X, int Y, int W, int H, bool fullScreen = false);
 	virtual ~GlutBase();
@@ -68,6 +71,13 @@ public:
 
 	void setModeString(const std::string& modeString);
 	void enterFullscreen();
+
+	void enableBlinnPhongShader(float ambR = 0.2f, float ambG = 0.2f, float ambB = 0.2f, float ambA = 1.0f);
+	void disableBlinnPhongShader();
+	bool isBlinnPhongShaderEnabled() const;
+
+protected:
+	virtual void doRender() override;
 };
 
 }

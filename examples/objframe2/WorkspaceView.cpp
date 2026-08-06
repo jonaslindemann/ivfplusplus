@@ -19,6 +19,8 @@ WorkspaceView::WorkspaceView(int X, int Y, int W, int H, const char* L)
 // ------------------------------------------------------------
 void WorkspaceView::onInit(int width, int height)
 {
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
 	// Initialize variables
 	
 	m_viewMode = VM_CREATE_SHAPES;

@@ -24,6 +24,11 @@ GlutBase::GlutBase(int X, int Y, int W, int H, bool fullScreen)
 :WidgetBase()
 {
 	m_fullScreen = fullScreen;
+	m_blinnPhongEnabled = false;
+	m_globalAmbient[0] = 0.2f;
+	m_globalAmbient[1] = 0.2f;
+	m_globalAmbient[2] = 0.2f;
+	m_globalAmbient[3] = 1.0f;
 	m_id = -1;
 	m_caption = "Glut Window";
 	m_pos[0] = X;
@@ -294,5 +299,34 @@ void GlutBase::enterFullscreen()
 {
 	glutGameModeString(m_modeString.c_str());
 	glutEnterGameMode();
+}
+
+void GlutBase::enableBlinnPhongShader(float ambR, float ambG, float ambB, float ambA)
+{
+	m_globalAmbient[0] = ambR;
+	m_globalAmbient[1] = ambG;
+	m_globalAmbient[2] = ambB;
+	m_globalAmbient[3] = ambA;
+	rcUseBlinnPhong();
+	m_blinnPhongEnabled = true;
+}
+
+void GlutBase::disableBlinnPhongShader()
+{
+	m_blinnPhongEnabled = false;
+	rcSetShader(nullptr);
+}
+
+bool GlutBase::isBlinnPhongShaderEnabled() const
+{
+	return m_blinnPhongEnabled;
+}
+
+void GlutBase::doRender()
+{
+	rcBeginFrame();
+	if (m_blinnPhongEnabled)
+		rcSetGlobalAmbient(m_globalAmbient[0], m_globalAmbient[1], m_globalAmbient[2], m_globalAmbient[3]);
+	WidgetBase::doRender();
 }
 

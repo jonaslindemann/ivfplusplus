@@ -293,11 +293,19 @@ private:
 	MaterialPtr	m_material;
 	TexturePtr    m_texture;
 	bool m_normalize;
+
+	/**
+	 * Whether the RenderContext transform mirror was engaged by the matching
+	 * doBeginTransform(). Latched there and read back in doEndTransform() so the
+	 * push/pop pairing cannot break if a shader is activated mid-frame.
+	 */
+	bool m_mirrorTransform;
 protected:
 	/** Forces an object recalculation. */
 	virtual void doCreateGeometry() override;
     virtual void doCreateSelect() override;
     virtual void doEndTransform() override;
+    virtual bool useDisplayList() override;
     virtual void doBeginTransform() override;
     virtual void doCreateMaterial() override;
 };

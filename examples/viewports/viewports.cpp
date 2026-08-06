@@ -85,6 +85,8 @@ ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
 
 void ExampleWindow::onInit(int width, int height)
 {
+	enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
+
     // State variables
 
     m_angleX = 0.0f;

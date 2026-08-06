@@ -35,6 +35,8 @@ QuadSet::~QuadSet()
 
 void QuadSet::doCreateGeometry()
 {
+	if (buildAndDrawVAO(GL_QUADS)) return;
+
 	Index* coordIdx;
 	Index* colorIdx;
 	Index* normalIdx;
@@ -137,6 +139,9 @@ bool QuadSet::getUseColor()
 
 void QuadSet::calcNormal(Index *idx)
 {
+	// Mark this index as quad topology so buildAndDrawVAO handles it correctly.
+	idx->setTopology(IVF_IDX_QUADS);
+
 	long i;
 	Vec3d* p1;
 	Vec3d* p2;

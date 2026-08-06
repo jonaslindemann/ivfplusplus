@@ -38,9 +38,6 @@ typedef struct {
    /* The joinstyle is set by the JoinStyle subroutine,
     * and controls the rendering of the tubing joins. */
    int join_style;
-   
-   /* VBO rendering mode flag */
-   int use_vbo;
 
    /* The 'slices' parameter controls the number of 'pie slices'
     * used to generate cones and cylinders. */
@@ -95,8 +92,6 @@ extern gleGC * gleCreateGC (void);
 #define __TUBE_CUT_JOIN (extrusion_join_style & TUBE_JN_CUT)
 #define __TUBE_ANGLE_JOIN (extrusion_join_style & TUBE_JN_ANGLE)
 #define __TUBE_ROUND_JOIN (extrusion_join_style & TUBE_JN_ROUND)
-
-#define __TUBE_USE_VBO (_gle_gc->use_vbo)
 
 #endif /* GLE_TUBE_GC_H_ */
 

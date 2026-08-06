@@ -26,6 +26,8 @@
 
 #include <ivf/Shape.h>
 #include <ivf/SelectionBox.h>
+#include <ivf/MeshBuffer.h>
+#include <ivf/GL.h>
 
 namespace ivf {
 
@@ -33,6 +35,13 @@ IvfSmartPointer(Sphere);
 
 /**
  * Sphere primitive
+ *
+ * The sphere is tessellated once into a vertex buffer and drawn from there,
+ * through the shader pipeline or the fixed-function one depending on what is
+ * active. There is a single tessellation behind both, so the two pipelines
+ * cannot disagree about what a sphere looks like, and no display list is
+ * needed to keep it cheap -- see useDisplayList().
+ *
  * @author Jonas Lindemann
  */
 class IVF_API Sphere : public Shape {
@@ -67,17 +76,39 @@ public:
 	/** Update bounding sphere size */
 	virtual void doUpdateBoundingSphere() override;
 
+	/**
+	 * Marks the tessellation as out of date.
+	 *
+	 * Rebuilt on the next render. The property setters do this themselves.
+	 */
+	virtual void markListDirty() override;
+
 private:
 	void updateSelectBox();
-	SelectionBox* m_selectionBox;
-	int m_stacks;
-	int m_slices;
-	double	m_radius;
-	GLUquadricObj* m_qobj;
+
+	/** Regenerates the tessellation into the vertex buffer. */
+	void updateGeometry();
+
+	SelectionBox*  m_selectionBox;
+	int            m_stacks;
+	int            m_slices;
+	double         m_radius;
+
+	MeshBuffer     m_buffer;
+	bool           m_meshDirty;
+
 protected:
     virtual void doCreateSelect() override;
     virtual void doCreateGeometry() override;
 
+	/**
+	 * Never replays a display list.
+	 *
+	 * The vertex buffer is already the cached representation. Wrapping a
+	 * buffer draw in a display list caches nothing and adds a second thing to
+	 * keep in step, so setUselist() has no effect on a sphere.
+	 */
+	virtual bool useDisplayList() override;
 };
 
 }

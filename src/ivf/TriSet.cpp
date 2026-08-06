@@ -40,6 +40,9 @@ TriSet::~TriSet()
 
 void TriSet::doCreateGeometry()
 {
+	if (m_drawInterval == 1)
+		if (buildAndDrawVAO(GL_TRIANGLES)) return;
+
 	Index* coordIdx;
 	Index* colorIdx;
 	Index* normalIdx;
@@ -223,4 +226,5 @@ void TriSet::updateVertexNormals()
 void TriSet::setDrawInterval(int interval)
 {
 	m_drawInterval = interval;
+	markVAODirty();
 }

@@ -67,6 +67,7 @@ void Brick::initBrick()
 	Index* idx;
 
 	idx = new Index();
+	idx->setTopology(IVF_IDX_QUADS);
 	idx->add(1, 2, 3, 0);
 	idx->add(7, 6, 5, 4);
 	idx->add(4, 5, 1, 0);
@@ -74,7 +75,7 @@ void Brick::initBrick()
 	idx->add(6, 7, 3, 2);
 	idx->add(3, 7, 4, 0);
 
-	addCoordIndex(idx);
+	addCoordIndex(idx); // also calls calcNormal → fills m_normalSet and m_normalIndexSet[0]
 
 	idx = new Index();
 	idx->add(0, 1, 2, 3);
@@ -90,11 +91,18 @@ void Brick::initBrick()
 // ------------------------------------------------------------
 void Brick::setSize (const double width, const double height, const double depth)
 {
+	// updateBrick() rebuilds the whole vertex set, and callers commonly re-assert
+	// an unchanged size every frame, so skip the rebuild when nothing moved.
+
+	if ((m_size[0] == width) && (m_size[1] == height) && (m_size[2] == depth))
+		return;
+
 	m_size[0] = width;
 	m_size[1] = height;
 	m_size[2] = depth;
 	updateBrick();
 	doUpdateBoundingSphere();
+	markListDirty();
 }
 
 // ------------------------------------------------------------
@@ -154,5 +162,6 @@ void Brick::updateBrick()
 	setCoord(5, ox + m_size[0], oy + m_size[1], oz);
 	setCoord(6, ox + m_size[0], oy + m_size[1], oz + m_size[2]);
 	setCoord(7, ox, oy + m_size[1], oz + m_size[2]);
+	refresh();
 }
 

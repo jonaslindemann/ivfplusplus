@@ -58,6 +58,7 @@ find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(FreeGLUT CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
 
 if(IVF_EXAMPLES_ASSIMP)
 find_package(assimp CONFIG REQUIRED)
@@ -93,7 +94,7 @@ macro(IVFAPP_SETUP)
 	add_executable(${IVFAPP_NAME} ${SOURCE_FILES} ${INCLUDE_FILES})
 	target_link_libraries(${IVFAPP_NAME} PRIVATE 
 		${IVFAPP_LIBS}
-		PNG::PNG JPEG::JPEG ZLIB::ZLIB glfw GLEW::GLEW OpenGL::GL FreeGLUT::freeglut)
+		PNG::PNG JPEG::JPEG ZLIB::ZLIB glfw GLEW::GLEW OpenGL::GL FreeGLUT::freeglut glm::glm)
 	install(TARGETS ${IVFAPP_NAME} DESTINATION bin)
 
 endmacro(IVFAPP_SETUP)

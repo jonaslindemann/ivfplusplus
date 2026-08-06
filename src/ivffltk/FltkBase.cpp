@@ -122,6 +122,11 @@ Fl_Gl_Window(X, Y, W, H, L), WidgetBase()
 	m_zeroTime = (double)tv.tv_sec + 1e-6*(double)tv.tv_usec;
 #endif
 	m_elapsedTime = 0.0;
+	m_blinnPhongEnabled = false;
+	m_globalAmbient[0] = 0.2f;
+	m_globalAmbient[1] = 0.2f;
+	m_globalAmbient[2] = 0.2f;
+	m_globalAmbient[3] = 1.0f;
 }
 
 void FltkBase::draw()
@@ -514,6 +519,35 @@ void FltkBase::doDisableTimeout(int nbr)
 void FltkBase::doRedraw()
 {
 	Fl_Gl_Window::redraw();
+}
+
+void FltkBase::enableBlinnPhongShader(float ambR, float ambG, float ambB, float ambA)
+{
+	m_globalAmbient[0] = ambR;
+	m_globalAmbient[1] = ambG;
+	m_globalAmbient[2] = ambB;
+	m_globalAmbient[3] = ambA;
+	rcUseBlinnPhong();
+	m_blinnPhongEnabled = true;
+}
+
+void FltkBase::disableBlinnPhongShader()
+{
+	m_blinnPhongEnabled = false;
+	rcSetShader(nullptr);
+}
+
+bool FltkBase::isBlinnPhongShaderEnabled() const
+{
+	return m_blinnPhongEnabled;
+}
+
+void FltkBase::doRender()
+{
+	rcBeginFrame();
+	if (m_blinnPhongEnabled)
+		rcSetGlobalAmbient(m_globalAmbient[0], m_globalAmbient[1], m_globalAmbient[2], m_globalAmbient[3]);
+	WidgetBase::doRender();
 }
 
 
