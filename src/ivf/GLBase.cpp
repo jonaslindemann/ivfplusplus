@@ -23,6 +23,7 @@
 
 #include <ivf/config.h>
 #include <ivf/GLBase.h>
+#include <ivf/Material.h>
 
 using namespace ivf;
 
@@ -37,6 +38,8 @@ GLBase::GLBase ()
 	// Default drawing behavior
 
 	m_useList = false;
+	m_listDirty = true;
+	m_displayList = 0;
 
 	m_tag = -1;
 
@@ -65,7 +68,10 @@ GLBase::GLBase (const GLBase&)
 // ------------------------------------------------------------
 GLBase::~GLBase ()
 {
-	if (m_useList)
+	// A list can outlive the flag that created it -- setUselist(false) is not the
+	// only way m_useList becomes false -- so release on the list itself.
+
+	if (m_displayList != 0)
 		if (glIsList(m_displayList))
 			glDeleteLists(m_displayList,1);
 }
@@ -81,33 +87,59 @@ void GLBase::render ()
 {
 	if ((m_state == OS_ON)&&(!m_culled))
 	{
-		if (!m_useList)
+		if (useDisplayList())
 		{
-			if (m_renderState!=nullptr)
-				m_renderState->apply();
+			// Deliberately no glIsList() probe here. It is a server-side query
+			// that can force a driver flush, and paying one per object per frame
+			// on the hot path costs more than the list saves. m_listDirty and a
+			// non-zero m_displayList are sufficient to track validity.
 
-			doBeginTransform();
+			if (m_listDirty)
+				compileList();
 
-			if ((m_selectState == SS_ON)&&(m_useSelectShape))
-				doCreateSelect();
+			// compileList() clears m_useList if the driver refused to hand out a
+			// list, so re-check rather than calling an invalid one.
 
-			if (m_renderMaterial)
-				doCreateMaterial();
-
-			doPreGeometry();
-			doCreateGeometry();
-			doPostGeometry();
-			doEndTransform();
-
-			if (m_renderState!=nullptr)
-				m_renderState->remove();
+			if (m_displayList != 0)
+				glCallList(m_displayList);
+			else
+				renderImmediate();
 		}
 		else
 		{
-			glCallList(getDisplayList());
+			renderImmediate();
 		}
 	}
 	m_culled = false;
+}
+
+// ------------------------------------------------------------
+void GLBase::renderImmediate ()
+{
+	if (m_renderState!=nullptr)
+		m_renderState->apply();
+
+	doBeginTransform();
+
+	if ((m_selectState == SS_ON)&&(m_useSelectShape))
+		doCreateSelect();
+
+	if (m_renderMaterial)
+		doCreateMaterial();
+
+	doPreGeometry();
+	doCreateGeometry();
+	doPostGeometry();
+	doEndTransform();
+
+	if (m_renderState!=nullptr)
+		m_renderState->remove();
+}
+
+// ------------------------------------------------------------
+bool GLBase::useDisplayList ()
+{
+	return m_useList && !m_dynamic;
 }
 
 // ------------------------------------------------------------
@@ -154,12 +186,28 @@ void GLBase::compileList()
 {
 	// Remove any existing display list
 
-	if (glIsList(m_displayList))
+	if ((m_displayList != 0) && glIsList(m_displayList))
 		glDeleteLists(m_displayList,1);
 
 	// Assign a new displaylist name
 
 	m_displayList = glGenLists(1);
+
+	if (m_displayList == 0)
+	{
+		// No list available -- most likely no current context. Stop asking for one
+		// every frame and fall back to drawing directly.
+
+		m_useList = false;
+		m_listDirty = false;
+		return;
+	}
+
+	// Inside glNewList() the material calls are recorded rather than executed, so
+	// what the material cache believes is currently applied says nothing about
+	// what this list will contain. Suppress it for the duration.
+
+	const bool materialCacheWasEnabled = Material::setStateCacheEnabled(false);
 
 	// Render display list
 
@@ -183,6 +231,10 @@ void GLBase::compileList()
 		if (m_renderState!=nullptr)
 			m_renderState->remove();
 	glEndList();
+
+	Material::setStateCacheEnabled(materialCacheWasEnabled);
+
+	m_listDirty = false;
 }
 
 // ------------------------------------------------------------
@@ -192,12 +244,18 @@ void GLBase::setUselist(bool flag)
 
 	if (m_useList)
 	{
-		compileList();
+		// Compile lazily, on the next render(). Deferring it keeps this callable
+		// from a constructor, or at any other point where no context is current.
+
+		m_listDirty = true;
 	}
 	else
 	{
-		if (glIsList(m_displayList))
+		if ((m_displayList != 0) && glIsList(m_displayList))
 			glDeleteLists(m_displayList,1);
+
+		m_displayList = 0;
+		m_listDirty = true;
 	}
 }
 
@@ -205,6 +263,36 @@ void GLBase::setUselist(bool flag)
 bool GLBase::getUselist()
 {
 	return m_useList;
+}
+
+// ------------------------------------------------------------
+void GLBase::markListDirty()
+{
+	m_listDirty = true;
+}
+
+// ------------------------------------------------------------
+bool GLBase::isListDirty()
+{
+	return m_listDirty;
+}
+
+// ------------------------------------------------------------
+void GLBase::setDynamic(bool flag)
+{
+	m_dynamic = flag;
+
+	// Whatever was compiled describes a stale frame, so make sure the list is
+	// rebuilt if the object later goes static again.
+
+	if (m_dynamic)
+		m_listDirty = true;
+}
+
+// ------------------------------------------------------------
+bool GLBase::getDynamic()
+{
+	return m_dynamic;
 }
 
 // ------------------------------------------------------------

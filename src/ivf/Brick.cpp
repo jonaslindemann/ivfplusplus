@@ -91,11 +91,18 @@ void Brick::initBrick()
 // ------------------------------------------------------------
 void Brick::setSize (const double width, const double height, const double depth)
 {
+	// updateBrick() rebuilds the whole vertex set, and callers commonly re-assert
+	// an unchanged size every frame, so skip the rebuild when nothing moved.
+
+	if ((m_size[0] == width) && (m_size[1] == height) && (m_size[2] == depth))
+		return;
+
 	m_size[0] = width;
 	m_size[1] = height;
 	m_size[2] = depth;
 	updateBrick();
 	doUpdateBoundingSphere();
+	markListDirty();
 }
 
 // ------------------------------------------------------------

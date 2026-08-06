@@ -63,6 +63,7 @@ Shape::Shape ()
 	m_highlight = HS_OFF;
 	m_highlightType = HT_MATERIAL;
 	m_normalize = false;
+	m_mirrorTransform = false;
 }
 
 // ------------------------------------------------------------
@@ -195,6 +196,17 @@ void Shape::doCreateMaterial()
 	}
 }
 
+bool Shape::useDisplayList()
+{
+	// A compiled list bakes in whichever material doCreateMaterial() picked and
+	// any geometry doCreateSelect() emitted, both of which depend on the select
+	// and highlight state. Draw live while either is engaged rather than
+	// recompiling the list on every state flip -- selection and hover change far
+	// more often than geometry does.
+
+	return GLBase::useDisplayList() && (getSelect() == SS_OFF) && (getHighlight() == HS_OFF);
+}
+
 void Shape::doBeginTransform()
 {
 	if (m_renderName)
@@ -202,46 +214,62 @@ void Shape::doBeginTransform()
 
 	glPushMatrix();
 
-	// Mirror transform into RenderContext for the modern shader path.
-	rcPushMatrix();
+	// Mirror the transform into RenderContext for the modern shader path. This
+	// costs a glm::mat4 stack push plus a matrix product per transform component,
+	// so it is skipped entirely when no shader is active and the fixed-function
+	// matrix stack above is the only consumer.
+
+	m_mirrorTransform = rcIsShaderActive();
+
+	if (m_mirrorTransform)
+		rcPushMatrix();
 
 	if (!((m_position[0]==0.0)&&(m_position[1]==0.0)&&(m_position[2]==0.0)))
 	{
 		glTranslated(m_position[0],m_position[1],m_position[2]);
-		rcTranslate((float)m_position[0], (float)m_position[1], (float)m_position[2]);
+		if (m_mirrorTransform)
+			rcTranslate((float)m_position[0], (float)m_position[1], (float)m_position[2]);
 	}
 
 	if (m_rotation[0]!=0.0)
 	{
 		glRotated(m_rotation[0], 1.0, 0.0, 0.0);
-		rcRotate((float)m_rotation[0], 1.0f, 0.0f, 0.0f);
+		if (m_mirrorTransform)
+			rcRotate((float)m_rotation[0], 1.0f, 0.0f, 0.0f);
 	}
 
 	if (m_rotation[1]!=0.0)
 	{
 		glRotated(m_rotation[1], 0.0, 1.0, 0.0);
-		rcRotate((float)m_rotation[1], 0.0f, 1.0f, 0.0f);
+		if (m_mirrorTransform)
+			rcRotate((float)m_rotation[1], 0.0f, 1.0f, 0.0f);
 	}
 
 	if (m_rotation[2]!=0.0)
 	{
 		glRotated(m_rotation[2], 0.0, 0.0, 1.0);
-		rcRotate((float)m_rotation[2], 0.0f, 0.0f, 1.0f);
+		if (m_mirrorTransform)
+			rcRotate((float)m_rotation[2], 0.0f, 0.0f, 1.0f);
 	}
 
 	if (m_rotQuat[3]!=0.0)
 	{
 		glRotated(m_rotQuat[3], m_rotQuat[0], m_rotQuat[1], m_rotQuat[2]);
-		rcRotate((float)m_rotQuat[3], (float)m_rotQuat[0], (float)m_rotQuat[1], (float)m_rotQuat[2]);
+		if (m_mirrorTransform)
+			rcRotate((float)m_rotQuat[3], (float)m_rotQuat[0], (float)m_rotQuat[1], (float)m_rotQuat[2]);
 	}
 
 	if (m_normalize)
 		glEnable(GL_NORMALIZE);
 
-	if (!((m_scale[0]==0.0)&&(m_scale[1]==0.0)&&(m_scale[2]==0.0)))
+	// The identity scale is (1,1,1), not (0,0,0) -- testing against zero meant
+	// this early-out never fired and every shape paid for a redundant glScaled().
+
+	if (!((m_scale[0]==1.0)&&(m_scale[1]==1.0)&&(m_scale[2]==1.0)))
 	{
 		glScaled(m_scale[0],m_scale[1],m_scale[2]);
-		rcScale((float)m_scale[0], (float)m_scale[1], (float)m_scale[2]);
+		if (m_mirrorTransform)
+			rcScale((float)m_scale[0], (float)m_scale[1], (float)m_scale[2]);
 	}
 
 	if (m_texture!=nullptr)
@@ -279,7 +307,9 @@ void Shape::doEndTransform()
 		}
 	}
 	glPopMatrix();
-	rcPopMatrix();
+
+	if (m_mirrorTransform)
+		rcPopMatrix();
 
 	if (m_normalize)
 		glDisable(GL_NORMALIZE);

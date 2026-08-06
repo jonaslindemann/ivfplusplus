@@ -24,6 +24,7 @@
 
 #include <ivf/SceneBase.h>
 #include <ivf/GlobalState.h>
+#include <ivf/Material.h>
 
 using namespace ivf;
 
@@ -205,6 +206,12 @@ void SceneBase::doMultipass(int pass)
 
 void SceneBase::doCreateGeometry()
 {
+	// Anything may have touched GL material state since the previous frame --
+	// overlays, UI toolkits, application code -- so start each scene traversal
+	// without assumptions about what is currently applied.
+
+	Material::invalidateStateCache();
+
 	if (m_useCulling)
 		m_culling->cull();
 

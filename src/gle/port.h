@@ -254,9 +254,19 @@ typedef double gleVector[3];
 	glNormal3fv(x); 				\
 }
 
+/* The contour and spine arrays are gleDouble, but the fixed-function pipeline
+ * is float throughout -- glNormal3dv()/glVertex3dv() only move twice the bytes
+ * and hand the driver a conversion it does on a slower generic path. Narrow to
+ * float here and hit the native entry point instead. Nothing is lost: the same
+ * conversion happens either way, just earlier. */
+
 #define N3F_D(x) { 					\
+	float nnn[3];					\
 	if(_gle_gc -> n3d_gen_texture) (*(_gle_gc -> n3d_gen_texture))(x); \
-	glNormal3dv(x); 				\
+	nnn[0] = (float) (x)[0];			\
+	nnn[1] = (float) (x)[1];			\
+	nnn[2] = (float) (x)[2];			\
+	glNormal3fv(nnn); 				\
 }
 
 #define V3F_F(x,j,id) { 					\
@@ -265,8 +275,12 @@ typedef double gleVector[3];
 }
 
 #define V3F_D(x,j,id) { 					\
+	float vvv[3];					\
 	if(_gle_gc -> v3d_gen_texture) (*(_gle_gc -> v3d_gen_texture))(x,j,id); \
-	glVertex3dv(x); 				\
+	vvv[0] = (float) (x)[0];			\
+	vvv[1] = (float) (x)[1];			\
+	vvv[2] = (float) (x)[2];			\
+	glVertex3fv(vvv); 				\
 }
 
 #define ENDTMESH() {					\
@@ -286,9 +300,26 @@ typedef double gleVector[3];
 #define BGNPOLYGON() 	glBegin (GL_POLYGON);
 
 #define	N3F_F(x)	glNormal3fv(x)
-#define	N3F_D(x)	glNormal3dv(x)
 #define V3F_F(x,j,id)	glVertex3fv(x);
-#define V3F_D(x,j,id)	glVertex3dv(x);
+
+/* See the AUTO_TEXTURE branch above for why the double entry points are
+ * avoided. */
+
+#define	N3F_D(x) {					\
+	float nnn[3];					\
+	nnn[0] = (float) (x)[0];			\
+	nnn[1] = (float) (x)[1];			\
+	nnn[2] = (float) (x)[2];			\
+	glNormal3fv(nnn);				\
+}
+
+#define V3F_D(x,j,id) {					\
+	float vvv[3];					\
+	vvv[0] = (float) (x)[0];			\
+	vvv[1] = (float) (x)[1];			\
+	vvv[2] = (float) (x)[2];			\
+	glVertex3fv(vvv);				\
+}
 
 #define ENDTMESH()	glEnd ()
 #define ENDPOLYGON()	glEnd()

@@ -130,6 +130,12 @@ ivf::BitmapFont* ivf::TextLabel::font()
 
 void ivf::TextLabel::setText(const std::string text, float size)
 {
+	// Rebuilding the glyph quads is expensive, so skip it when nothing changed.
+	// Callers commonly re-assert the same text every frame.
+
+	if ((m_text == text) && (m_textSize == size))
+		return;
+
 	m_text = text;
 	m_textSize = size;
 	this->updateText();
@@ -142,6 +148,12 @@ const std::string ivf::TextLabel::text()
 
 void ivf::TextLabel::setSize(float size)
 {
+	// updateExistingText() recomputes every glyph quad, so only pay for it
+	// when the size actually changed.
+
+	if (m_textSize == size)
+		return;
+
 	m_textSize = size;
 	this->updateExistingText();
 }

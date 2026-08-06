@@ -30,8 +30,21 @@
 /* #undef LENIENT_TESSELATOR */
 #define DELICATE_TESSELATOR 1
 
-/* Enable texture mapping by default. */
+/* Enable automatic texture coordinate generation (gleTextureMode).
+ *
+ * When enabled, every emitted vertex and normal first tests a callback pointer
+ * in the GLE graphics context and dispatches through it when set. That check is
+ * paid per vertex whether or not texture generation is in use -- and it is only
+ * in use after a gleTextureMode() call carrying GLE_TEXTURE_ENABLE.
+ *
+ * Define IVF_GLE_NO_AUTO_TEXTURE (see the GLE_AUTO_TEXTURE CMake option) to
+ * compile the leaner vertex path instead. Extrusions still draw and light
+ * correctly; only generated texture coordinates are lost. Leave this enabled if
+ * anything in the application calls Extrusion::setTextureMode() with a mode
+ * other than 0. */
+#ifndef IVF_GLE_NO_AUTO_TEXTURE
 #define AUTO_TEXTURE 1
+#endif
 
 /* assume a modern C compiler */
 /* #undef FUNKY_C */

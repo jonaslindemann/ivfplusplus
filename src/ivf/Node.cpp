@@ -41,6 +41,12 @@ Node::Node ()
 	m_cubeShape->setUseName(false);
 	m_sphereShape->setUseName(false);
 
+	// Sphere keeps its tessellation in a vertex buffer and rebuilds it only when
+	// setRadius/setSlices/setStacks actually change something, so it no longer
+	// needs a display list to stay cheap. This call is now a no-op, kept only so
+	// the intent survives if the sphere ever goes back to immediate mode.
+	m_sphereShape->setUselist(true);
+
 	m_nodeShape = m_cubeShape;
 	m_nodeType = NT_CUBE;
 

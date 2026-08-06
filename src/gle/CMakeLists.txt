@@ -6,4 +6,15 @@ add_library(gleivf ${INCLUDE_FILES} ${SOURCE_FILES})
 set_target_properties(gleivf PROPERTIES
   DEBUG_POSTFIX "d"
   OUTPUT_NAME "gleivf")
-install(TARGETS gleivf DESTINATION lib)   
+
+# Automatic texture coordinate generation costs a callback test per emitted
+# vertex and normal, paid whether or not the feature is in use. Turn this off
+# when nothing calls Extrusion::setTextureMode() with a non-zero mode.
+# See src/gle/config.h.
+option(GLE_AUTO_TEXTURE "Enable GLE automatic texture coordinate generation" ON)
+
+if(NOT GLE_AUTO_TEXTURE)
+  target_compile_definitions(gleivf PRIVATE IVF_GLE_NO_AUTO_TEXTURE)
+endif()
+
+install(TARGETS gleivf DESTINATION lib)

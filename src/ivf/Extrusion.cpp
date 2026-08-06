@@ -246,6 +246,8 @@ void Extrusion::setSpineSize(int size)
         m_sectionTransform[i][1][2] = 0.0;
 
     }
+
+    markListDirty();
 }
 
 // ------------------------------------------------------------
@@ -272,6 +274,8 @@ void Extrusion::setSectionSize(int size)
     m_sectionNormals = new gleDouble[m_sectionSize][2];
     m_selectSectionCoords = new gleDouble[m_sectionSize][2];
     m_selectSectionNormals = new gleDouble[m_sectionSize][2];
+
+    markListDirty();
 }
 
 int Extrusion::getSpineSize()
@@ -295,6 +299,7 @@ void Extrusion::setSectionCoord(int pos, double x, double y)
             m_sectionCoords[pos][1] = y;
             m_selectSectionCoords[pos][0] = x * m_selectScale;
             m_selectSectionCoords[pos][1] = y * m_selectScale;
+            markListDirty();
         }
     }
 }
@@ -310,6 +315,7 @@ void Extrusion::setSectionNormal(int pos, double x, double y)
             m_sectionNormals[pos][1] = y;
             m_selectSectionNormals[pos][0] = x;
             m_selectSectionNormals[pos][1] = y;
+            markListDirty();
         }
     }
 }
@@ -324,6 +330,7 @@ void Extrusion::setSpineCoord(int pos, double x, double y, double z)
             m_spineCoords[pos][0] = x;
             m_spineCoords[pos][1] = y;
             m_spineCoords[pos][2] = z;
+            markListDirty();
         }
     }
 }
@@ -378,6 +385,7 @@ void Extrusion::setSpineColor(int pos, float red, float green, float blue)
             m_spineColors[pos][0] = red;
             m_spineColors[pos][1] = green;
             m_spineColors[pos][2] = blue;
+            markListDirty();
         }
     }
 }
@@ -400,6 +408,7 @@ void Extrusion::getSpineColor(int pos, float& red, float& green, float& blue)
 void Extrusion::setUseColor(bool flag)
 {
     m_useColors = flag;
+    markListDirty();
 }
 
 // ------------------------------------------------------------
@@ -414,6 +423,7 @@ void Extrusion::setUpVector(double x, double y, double z)
     m_upVector[0] = x;
     m_upVector[1] = y;
     m_upVector[2] = z;
+    markListDirty();
 }
 
 // ------------------------------------------------------------
@@ -473,6 +483,7 @@ void Extrusion::doCreateSelect()
 void Extrusion::setSelectScale(double scale)
 {
     m_selectScale = scale;
+    markListDirty();
 }
 
 // ------------------------------------------------------------
@@ -480,6 +491,7 @@ void Extrusion::setTextureMode(int mode)
 {
     m_textureMode = mode;
     gleTextureMode(mode);
+    markListDirty();
 }
 
 // ------------------------------------------------------------
@@ -505,6 +517,7 @@ void Extrusion::setUseTwist(bool flag)
             m_twist = nullptr;
         }
     }
+    markListDirty();
 }
 
 // ------------------------------------------------------------
@@ -521,6 +534,7 @@ void Extrusion::setSpineTwist(int pos, double twist)
         if ((pos >= 0) && (pos < m_spineSize))
         {
             m_twist[pos] = twist;
+            markListDirty();
         }
     }
 }
@@ -550,6 +564,7 @@ void ivf::Extrusion::setSpineScale(int pos, double sx, double sy)
             m_sectionTransform[pos][1][0] = 0.0;
             m_sectionTransform[pos][1][1] = sy;
             m_sectionTransform[pos][1][2] = 0.0;
+            markListDirty();
         }
     }
 }
@@ -558,11 +573,13 @@ void Extrusion::setStartEnd(int startIdx, int endIdx)
 {
     m_spineStart = startIdx;
     m_spineEnd = endIdx;
+    markListDirty();
 }
 
 void Extrusion::setJoinStyle(int style)
 {
     ivfSetGLEJoinStyle(style);
+    markListDirty();
 }
 
 void Extrusion::doUpdateBoundingSphere()

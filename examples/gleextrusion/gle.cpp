@@ -95,9 +95,7 @@ void ExampleWindow::onInit(int width, int height)
 
     // Setup a simple scene
 
-    gleInitVBOCache(10000);
-    gleInitTessCache();  
-    gleSetVBOMode(1); 
+    gleInitTessCache();
 
     m_scene = Scene::create();
     m_scene->getCamera()->setPosition(3.0, 3.0, 3.0);

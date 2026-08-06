@@ -63,6 +63,7 @@ private:
 	BoundingSpherePtr m_boundSphere;
 	GLuint m_displayList;
 	bool m_useList;
+	bool m_listDirty;
 	bool m_dynamic;
 	bool m_useSelectShape;
 	bool m_culled;
@@ -160,13 +161,54 @@ public:
 	/**
 	 * Sets display list usage.
 	 *
-	 * Determines if display lists are to be used when
-	 * drawing the object. To be implemented.
+	 * When enabled the object's geometry is compiled into a display list and
+	 * replayed on subsequent frames instead of being regenerated. This is worth
+	 * doing for anything whose doCreateGeometry() is expensive -- tessellated or
+	 * swept geometry in particular.
+	 *
+	 * Compilation is deferred to the next render(), so this is safe to call from a
+	 * constructor or before an OpenGL context exists.
+	 *
+	 * The list captures the object's transform, its material, and its geometry.
+	 * Any change to those invalidates it, so mutators must call markListDirty().
+	 * The stock geometry classes do this for their own properties, but a material
+	 * mutated behind the object's back is not detected -- mark the object dirty
+	 * from wherever that happens.
+	 *
+	 * Objects whose geometry changes every frame should use setDynamic(true)
+	 * rather than turning lists off, so the choice can be reversed cheaply.
 	 */
 	void setUselist(bool flag);
 
-	/** Returns diusplay list usage. */
+	/** Returns display list usage. */
 	bool getUselist();
+
+	/**
+	 * Marks the object's cached representation as out of date.
+	 *
+	 * For an object using display lists the list is recompiled on the next
+	 * render(). Objects that cache their geometry some other way -- in a vertex
+	 * buffer, say -- override this to invalidate that instead, so a caller can
+	 * say "this object changed behind your back" without knowing which strategy
+	 * the object uses. Cheap to call redundantly.
+	 */
+	virtual void markListDirty();
+
+	/** Returns true when a compiled display list is awaiting recompilation. */
+	bool isListDirty();
+
+	/**
+	 * Marks the object as changing every frame.
+	 *
+	 * A dynamic object never replays a display list, because recompiling one per
+	 * frame costs more than regenerating the geometry directly. Use this to
+	 * suspend list usage during animation or interactive dragging, then clear it
+	 * when the object comes to rest.
+	 */
+	void setDynamic(bool flag);
+
+	/** Returns the dynamic flag. */
+	bool getDynamic();
 
 	/**
 	 * Renders the object
@@ -185,6 +227,15 @@ public:
 	 *\endcode
 	 */
 	virtual void	render ();
+
+	/**
+	 * Renders the object without going through its display list.
+	 *
+	 * Used when the object has to be drawn in a state the compiled list does not
+	 * describe -- highlighted or selected, for instance -- and by render() itself
+	 * whenever lists are disabled or the object is dynamic.
+	 */
+	void renderImmediate();
 
 	/**
 	 * Initializes use of bounding sphere
@@ -242,9 +293,18 @@ protected:
 	virtual void doPostGeometry();
 
 	/**
-	 * Compiles display list.
+	 * Decides whether render() may replay a display list this frame.
 	 *
-	 * To be implemented.
+	 * The base implementation allows it whenever lists are enabled and the object
+	 * is not dynamic. Override to add conditions under which the compiled list
+	 * does not describe the object's current appearance.
+	 */
+	virtual bool useDisplayList();
+
+	/**
+	 * Compiles the display list.
+	 *
+	 * Called from render() when the list is missing or has been marked dirty.
 	 */
 	virtual void compileList();
 
