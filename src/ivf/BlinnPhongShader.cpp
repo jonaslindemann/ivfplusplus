@@ -102,7 +102,7 @@ uniform Light uLights[8];
 
 out vec4 fragColor;
 
-vec4 computeLight(Light light, vec3 N, vec3 V, vec4 diffuseColor)
+vec4 computeLight(Light light, vec3 N, vec3 V, vec4 ambientColor, vec4 diffuseColor)
 {
     vec3 L;
     float attenuation = 1.0;
@@ -126,7 +126,7 @@ vec4 computeLight(Light light, vec3 N, vec3 V, vec4 diffuseColor)
         }
     }
 
-    vec4  ambient  = light.ambient * uMatAmbient;
+    vec4  ambient  = light.ambient * ambientColor;
     float NdotL    = max(dot(N, L), 0.0);
     vec4  diffuse  = NdotL * light.diffuse * diffuseColor;
 
@@ -150,12 +150,15 @@ void main()
     vec3 N = normalize(vNormal);
     vec3 V = normalize(-vFragPos);
 
+    // Vertex colour replaces ambient as well as diffuse, matching the
+    // GL_AMBIENT_AND_DIFFUSE default of legacy glColorMaterial.
+    vec4 ambientColor = uUseVertexColor ? vColor : uMatAmbient;
     vec4 diffuseColor = uUseVertexColor ? vColor : uMatDiffuse;
 
-    vec4 color = uMatEmission + uGlobalAmbient * uMatAmbient;
+    vec4 color = uMatEmission + uGlobalAmbient * ambientColor;
 
     for (int i = 0; i < uLightCount; ++i)
-        color += computeLight(uLights[i], N, V, diffuseColor);
+        color += computeLight(uLights[i], N, V, ambientColor, diffuseColor);
 
     if (uUseTexture)
         color *= texture(uTexture, vTexCoord);

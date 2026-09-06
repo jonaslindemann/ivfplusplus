@@ -134,7 +134,11 @@ void Ruler::doCreateGeometry()
 	}
 	glEnd();
 	glEnable(GL_DEPTH_TEST);
-	glLineWidth(0.0);
+
+	// Restore the default width. Zero is not a legal line width -- it raises
+	// GL_INVALID_VALUE -- so the intended "put it back" value is 1.0.
+
+	glLineWidth(1.0);
 	if (oldLightingState)
 		Lighting::getInstance()->enable();
 	else

@@ -46,7 +46,7 @@ uniform Light uLights[8];
 out vec4 fragColor;
 
 // ---- Blinn-Phong for a single light ----
-vec4 computeLight(Light light, vec3 N, vec3 V, vec4 diffuseColor)
+vec4 computeLight(Light light, vec3 N, vec3 V, vec4 ambientColor, vec4 diffuseColor)
 {
     vec3 L;
     float attenuation = 1.0;
@@ -77,7 +77,7 @@ vec4 computeLight(Light light, vec3 N, vec3 V, vec4 diffuseColor)
     }
 
     // Ambient
-    vec4 ambient = light.ambient * uMatAmbient;
+    vec4 ambient = light.ambient * ambientColor;
 
     // Diffuse
     float NdotL  = max(dot(N, L), 0.0);
@@ -105,14 +105,19 @@ void main()
     vec3 N = normalize(vNormal);
     vec3 V = normalize(-vFragPos); // view direction in view space
 
-    // Choose diffuse source: per-vertex color or material uniform
+    // Per-vertex colour stands in for the material the same way legacy
+    // glColorMaterial does, and its default mode is GL_AMBIENT_AND_DIFFUSE --
+    // so the vertex colour has to replace ambient as well as diffuse. Replacing
+    // diffuse alone left vertex-coloured geometry visibly duller than the
+    // fixed-function path drew it.
+    vec4 ambientColor = uUseVertexColor ? vColor : uMatAmbient;
     vec4 diffuseColor = uUseVertexColor ? vColor : uMatDiffuse;
 
     // Start with emission and global ambient
-    vec4 color = uMatEmission + uGlobalAmbient * uMatAmbient;
+    vec4 color = uMatEmission + uGlobalAmbient * ambientColor;
 
     for (int i = 0; i < uLightCount; ++i) {
-        color += computeLight(uLights[i], N, V, diffuseColor);
+        color += computeLight(uLights[i], N, V, ambientColor, diffuseColor);
     }
 
     // Texture modulation

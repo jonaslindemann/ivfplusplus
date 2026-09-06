@@ -36,18 +36,24 @@ LineStripSet::~LineStripSet()
 
 void LineStripSet::doCreateGeometry()
 {
-	if (buildAndDrawVAO(GL_LINE_STRIP)) return;
-
 	Index* coordIdx;
 	Index* colorIdx;
 	long i, j;
 	float oldWidth[1];
 
-	glPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
-	glDisable(GL_LIGHTING);
+	// Applied before the modern path draws -- see the note in LineSet.cpp.
 
 	glGetFloatv(GL_LINE_WIDTH, oldWidth);
 	glLineWidth(m_lineWidth);
+
+	if (buildAndDrawVAO(GL_LINE_STRIP))
+	{
+		glLineWidth(oldWidth[0]);
+		return;
+	}
+
+	glPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
+	glDisable(GL_LIGHTING);
 
 	if (m_useColor)
 		glEnable(GL_COLOR_MATERIAL);

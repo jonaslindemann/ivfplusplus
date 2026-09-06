@@ -285,11 +285,37 @@ void RenderContext::useBlinnPhong()
     }
     m_shader = (ShaderProgram*)m_ownedShader;
     m_shader->use();
+    applyDefaultMaterial();
 }
 
 void RenderContext::setShader(ShaderProgram* prog)
 {
     m_shader = prog;
+    applyDefaultMaterial();
+}
+
+void RenderContext::applyDefaultMaterial()
+{
+    // Seed the material uniforms with OpenGL's own fixed-function defaults.
+    //
+    // Shape::doCreateMaterial() uploads nothing when a shape has no material,
+    // which mirrors the legacy path: there, an unmaterialled shape simply draws
+    // with whatever glMaterial state the previous one left behind. The shader
+    // path inherits that same stickiness, but it starts from zero-initialised
+    // uniforms rather than from GL's defaults -- so the first object drawn
+    // without a material came out black, and every later one took the colour of
+    // whichever object happened to precede it. Starting where GL starts makes
+    // the two paths agree.
+
+    if (!m_shader || !m_shader->isLinked())
+        return;
+
+    m_shader->use();
+    m_shader->setUniformVec4("uMatAmbient",  glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+    m_shader->setUniformVec4("uMatDiffuse",  glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
+    m_shader->setUniformVec4("uMatSpecular", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    m_shader->setUniformVec4("uMatEmission", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    m_shader->setUniformFloat("uMatShininess", 0.0f);
 }
 
 ShaderProgram* RenderContext::shader() const

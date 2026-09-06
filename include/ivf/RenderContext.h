@@ -207,6 +207,15 @@ public:
 private:
     RenderContext();
 
+    /**
+     * Seed the uMat* uniforms with OpenGL's fixed-function default material.
+     *
+     * Called whenever the active shader changes. Without it, a shape drawn
+     * before any material has been applied renders black instead of picking up
+     * GL's defaults the way the legacy path does.
+     */
+    void applyDefaultMaterial();
+
     glm::mat4 m_projection;
     glm::mat4 m_view;
     std::stack<glm::mat4> m_modelStack;

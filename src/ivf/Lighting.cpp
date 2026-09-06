@@ -62,10 +62,20 @@ Lighting::~Lighting()
 { 
     int i;
 
+	// The constructor took a reference on each light, so drop that reference
+	// rather than deleting outright. An application that kept a LightPtr --
+	// getLight() hands out a pointer callers are expected to hold -- still owns
+	// its light after the singleton goes away, and deleting here would leave that
+	// pointer dangling. Since this runs during static destruction, the resulting
+	// double free lands as heap corruption at process exit with no useful stack.
+
 	for (i=0; i<8; i++)
 	{
 		Light* light = m_lights[i];
-		delete light;
+		light->deleteReference();
+
+		if (!light->referenced())
+			delete light;
 	}
 }
 

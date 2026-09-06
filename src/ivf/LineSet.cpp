@@ -39,9 +39,6 @@ LineSet::~LineSet()
 
 void LineSet::doCreateGeometry()
 {
-	if (m_idxLineWidth.empty())
-		if (buildAndDrawVAO(GL_LINES)) return;
-
     Index* coordIdx;
     Index* colorIdx;
     Index* textureIdx;
@@ -49,12 +46,23 @@ void LineSet::doCreateGeometry()
     long i, j;
     float oldWidth[1];
 
-    glPushAttrib(GL_LIGHTING | GL_COLOR_MATERIAL);
-    glDisable(GL_LIGHTING);
+    // Line width has to be applied before the modern path draws. It is ordinary
+    // state the VAO knows nothing about, and the early return below used to skip
+    // it, so every line came out one pixel wide. glLineWidth is valid in core, so
+    // this stays a plain gl call.
 
     glGetFloatv(GL_LINE_WIDTH, oldWidth);
-
     glLineWidth(m_lineWidth);
+
+	if (m_idxLineWidth.empty())
+		if (buildAndDrawVAO(GL_LINES))
+		{
+			glLineWidth(oldWidth[0]);
+			return;
+		}
+
+    glPushAttrib(GL_LIGHTING | GL_COLOR_MATERIAL);
+    glDisable(GL_LIGHTING);
 
     if (m_useColor)
         glEnable(GL_COLOR_MATERIAL);
