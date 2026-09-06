@@ -48,8 +48,63 @@ RenderContext::RenderContext()
     , m_shader(nullptr)
     , m_globalAmbient(0.0f, 0.0f, 0.0f, 1.0f)
     , m_useTexture(false)
+    , m_profile(RenderProfile::Mixed)
+    , m_legacyDrawDepth(0)
 {
     m_modelStack.push(glm::mat4(1.0f));
+}
+
+void RenderContext::setProfile(RenderProfile profile)
+{
+    m_profile = profile;
+}
+
+RenderProfile RenderContext::profile() const
+{
+    return m_profile;
+}
+
+bool RenderContext::legacyAllowed() const
+{
+    return m_profile != RenderProfile::Core;
+}
+
+bool RenderContext::shaderPathActive() const
+{
+    if (m_profile == RenderProfile::Legacy)
+        return false;
+
+    // While an object is drawing with the program unbound, there is no active
+    // shader as far as anything it calls is concerned. Reporting otherwise sends
+    // Material and Shape off to set uniforms on program 0.
+
+    if (m_legacyDrawDepth > 0)
+        return false;
+
+    return (m_shader != nullptr) && m_shader->isLinked();
+}
+
+void RenderContext::beginLegacyDraw()
+{
+    m_legacyDrawDepth++;
+}
+
+void RenderContext::endLegacyDraw()
+{
+    if (m_legacyDrawDepth > 0)
+        m_legacyDrawDepth--;
+}
+
+bool RenderContext::needsLegacyDraw(bool objectHasModernPath) const
+{
+    // Only Mixed has anything to fall back to. Legacy never binds a program in
+    // the first place, and in Core there is no fixed-function pipeline waiting
+    // behind the shader -- an unconverted object simply cannot draw there.
+
+    if (m_profile != RenderProfile::Mixed)
+        return false;
+
+    return shaderPathActive() && !objectHasModernPath;
 }
 
 void RenderContext::beginFrame()
@@ -61,9 +116,18 @@ void RenderContext::beginFrame()
 
     clearLights();
 
-    // Activate the shader so it is ready for per-shape uploads.
-    if (m_shader && m_shader->isLinked())
+    // Activate the shader so it is ready for per-shape uploads -- but only if the
+    // profile actually wants it. Binding it unconditionally meant that selecting
+    // RenderProfile::Legacy did nothing once a shader had been created: the
+    // program was rebound at the top of every frame, and the fixed-function
+    // drawing underneath then had a program bound over it. Unbinding in the
+    // other direction is what makes the switch take effect on its own, without
+    // the caller having to remember to unbind.
+
+    if (shaderPathActive())
         m_shader->use();
+    else
+        glUseProgram(0);
 }
 
 // ---- Projection / view ----
@@ -214,7 +278,11 @@ void RenderContext::updateShader(ShaderProgram* prog) const
 
 bool RenderContext::drawUnlit(GLenum primitive, const float* positions, const float* colors, int vertexCount) const
 {
-    if (!m_shader || !m_shader->isLinked() || positions == nullptr || vertexCount <= 0)
+    // Respect the profile, not merely the presence of a linked shader. Returning
+    // true here in Legacy would draw helper geometry through the shader while
+    // everything around it drew fixed-function.
+
+    if (!shaderPathActive() || positions == nullptr || vertexCount <= 0)
         return false;
 
     struct GpuVertex {

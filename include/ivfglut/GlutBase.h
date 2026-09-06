@@ -76,6 +76,20 @@ public:
 	void disableBlinnPhongShader();
 	bool isBlinnPhongShaderEnabled() const;
 
+	/**
+	 * Choose the pipeline the library renders with.
+	 *
+	 * RenderProfile::Legacy turns the shader path off entirely and gives back
+	 * the fixed-function behaviour, which is what an application that has not
+	 * been ported wants. RenderProfile::Mixed, the default, draws converted
+	 * classes through the shader and lets the rest fall back. Setting it does
+	 * not create or discard a shader, so the two can be compared at runtime.
+	 */
+	void setRenderProfile(RenderProfile profile);
+
+	/** Returns the profile the library is rendering with. */
+	RenderProfile renderProfile() const;
+
 protected:
 	virtual void doRender() override;
 };

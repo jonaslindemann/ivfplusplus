@@ -562,3 +562,9 @@ void Material::uploadToShader(ShaderProgram* prog)
 	prog->setUniformVec4("uMatEmission", glm::vec4(m_emissionColor[0], m_emissionColor[1], m_emissionColor[2], m_emissionColor[3]));
 	prog->setUniformFloat("uMatShininess", m_shininess);
 }
+
+// ------------------------------------------------------------
+bool Material::hasModernPath()
+{
+	return true;
+}

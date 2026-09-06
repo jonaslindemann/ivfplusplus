@@ -852,3 +852,9 @@ void SweptExtrusion::doUpdateBoundingSphere()
 
     getBoundingSphere()->setRadius(m_boundingRadius);
 }
+
+// ------------------------------------------------------------
+bool SweptExtrusion::hasModernPath()
+{
+	return true;
+}

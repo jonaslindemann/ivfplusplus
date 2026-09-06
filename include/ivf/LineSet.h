@@ -55,6 +55,13 @@ public:
 	IvfClassInfo("LineSet",GLPrimitive);
 	IvfStdFactory(LineSet);
 
+	/**
+	 * Per-index line widths force the legacy branch, because one draw call
+	 * cannot vary line width. Without them the modern path handles it.
+	 */
+	virtual bool hasModernPath() override;
+
+
 	/** Enable usage of color set */
 	void setUseColor(bool flag);
 

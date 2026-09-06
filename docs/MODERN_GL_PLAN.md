@@ -309,29 +309,86 @@ two profiles, and `QuadSet+colors` dropped from a mean absolute difference of
   extra edges. Phase 4 needs an edge-list path for wireframe quads.
 - `ExtrArrow` — proportions differ from `Arrow`; needs checking in Phase 4.
 
-### Phase 1 — Make the switch explicit *(small)*
+### Phase 1 — Make the switch explicit — **done**
 
-1. Add `RenderProfile` plus `setProfile`/`profile`/`legacyAllowed`/
-   `shaderPathActive` to `RenderContext`; expose `rcSetProfile`/`rcProfile`/
-   `rcLegacyAllowed` in `rc.h`.
-2. Redefine `rcIsShaderActive()` in terms of `shaderPathActive()`.
-3. `GlutBase`/`FltkBase`: add `setRenderProfile()` alongside
-   `enableBlinnPhongShader()`; `disableBlinnPhongShader()` sets `Legacy`.
-4. **Fix E:** `GLBase::useDisplayList()` returns `false` whenever
-   `rcIsShaderActive()`. Document display lists as a legacy-profile feature.
-5. Add `LegacyGL.h` (section 2.2) but convert nothing yet.
-6. **Fix §3.1's structural defect — make `mixed` actually fall back.** Add a
-   virtual `GLBase::hasModernPath()` returning false by default and true on the
-   classes that have been converted. In `Mixed`, `Shape::render()` unbinds the
-   program (`glUseProgram(0)`) around `doCreateGeometry()` for any object that
-   answers false, and restores it afterwards — so unconverted classes get real
-   fixed-function rendering instead of a shader they never fed. In `Core` the
-   same query instead means "this object cannot be drawn", which is the honest
-   answer and lets `profile_test` say so rather than silently drawing nothing.
+1. ✅ `RenderProfile { Legacy, Mixed, Core }` on `RenderContext`, with
+   `setProfile`/`profile`/`legacyAllowed`/`shaderPathActive`/`needsLegacyDraw`,
+   and `rcSetProfile`/`rcProfile`/`rcLegacyAllowed`/`rcUnuseShader` in `rc.h`.
+2. ✅ `rcIsShaderActive()` now reports `shaderPathActive()`, so `Legacy` turns
+   the whole library back into its fixed-function self without unlinking
+   anything.
+3. ✅ `GlutBase`/`FltkBase::setRenderProfile()` and `renderProfile()`;
+   `disableBlinnPhongShader()` also selects `Legacy`.
+4. ✅ **Fix E:** `GLBase::useDisplayList()` returns false whenever the shader
+   path is active. Display lists are documented as a legacy-profile feature.
+5. ✅ `include/ivf/LegacyGL.h` — the `lg*` shim. Nothing calls it yet; Phase 2
+   converts the library file by file. Calls that stay legal in core deliberately
+   have no wrapper, so the header doubles as the whitelist's complement.
+6. ✅ **The fallback.** `GLBase::hasModernPath()` is virtual, defaults to false,
+   and is overridden true on the converted classes, on containers that only
+   render children, and on the state objects (`Material`, `Texture`, `View`).
+   `GLBase::renderImmediate()` brackets an object that answers false with
+   `glUseProgram(0)` … `rcUseShader()`, so its fixed-function code reaches the
+   fixed-function pipeline.
 
-*Exit criterion: `profile_test legacy` and `profile_test mixed` both pass the
-error gate, **and** `compare_shots.py` reports no coverage problems between
-them, with every case rendered in isolation.*
+   Defaulting to false is deliberate: a missed override costs performance, not
+   correctness — the object simply renders the old way.
+
+#### What this took beyond the sketch
+
+Three things the design did not anticipate, each found by the gates:
+
+- **`Material` derives from `GLBase`.** With the default of false it got
+  bracketed like geometry, so `Material::doCreateMaterial()` skipped its
+  uniform upload and every lit object rendered with the default material. State
+  objects have to answer true. `Texture` is the same case.
+- **Unbinding the program is not enough.** `rcIsShaderActive()` still reported
+  true inside the bracket, so `Material` uploaded uniforms with no program bound
+  — 140 `GL_INVALID_OPERATION`s per run. `RenderContext::beginLegacyDraw()` /
+  `endLegacyDraw()` make `shaderPathActive()` report false for the duration,
+  which is simply the truth for the object being drawn.
+- **`beginFrame()` re-bound the shader every frame**, and `drawUnlit()` checked
+  only whether a shader was linked, never the profile. Between them, selecting
+  `Legacy` did almost nothing once a shader existed. Both now respect the
+  profile, and `beginFrame()` actively unbinds when the profile does not want a
+  shader — which is what makes the switch work on its own, without the caller
+  remembering to unbind.
+
+#### Results
+
+`profile_test` gained a fourth mode, `legacy-shader`: build and link the shader,
+then select `RenderProfile::Legacy` anyway. That is exactly ObjectiveFrame's
+position, and it must be indistinguishable from never having built one.
+
+| Comparison | Result |
+| --- | --- |
+| `legacy` vs `legacy-shader` | **all 31 cases pixel-identical** (max channel difference 0) |
+| `legacy` vs `mixed` | 0 coverage problems; residual differences are shading-model only |
+| error gate, `legacy` / `legacy-shader` / `mixed` | 31/31 clean |
+| error gate, `core` | 32/32 failing, unchanged — that is Phase 2's job |
+
+The four classes that used to draw **nothing** under `mixed` — `Grid`,
+`Extrusion`, `TubeExtrusion`, `SolidLine` — are now pixel-identical to legacy.
+
+Two conversion bugs were fixed on the way:
+
+- `ExtrArrow` swept all five gaps between its six control points. `glePolyCone()`
+  treats the first and last as phantom endpoints that only set the angle of the
+  end cuts, so the modern path was drawing two segments of geometry gle never
+  draws, and the arrow came out a unit too long at each end.
+- `WireBrick` (and `SelectionBox`) now answer `hasModernPath() == false` on
+  purpose. The inherited path triangulates the quads, and under
+  `glPolygonMode(GL_LINE)` every diagonal showed as an extra edge. Saying "no
+  modern path" is the honest answer until `GLPrimitive` grows an edge-list path
+  for wireframe quads; Phase 4 flips it back.
+
+What still differs between `legacy` and `mixed`, and should:
+`QuadSet+colors` 14.5% of pixels (mean 1.28), `Cone` 3.7%, `Sphere` 3.5` — all
+per-vertex versus per-fragment shading. `ExtrArrow` 1.7%, because its modern path
+draws unlit; worth revisiting in Phase 4.
+
+*Exit criterion met: both gates pass for `legacy`, `legacy-shader` and `mixed`,
+with every case rendered in isolation.*
 
 ### Phase 2 — Core-clean the shared path *(medium)*
 
@@ -447,7 +504,7 @@ compile-time signal before anything is removed. Delete `src/gle`, `OldLight`,
 | Phase | Depends on | Parallel-safe? |
 | --- | --- | --- |
 | 0 Baseline and `profile_test` — **done** | — | yes |
-| 1 `RenderProfile` plus display-list fix | 0 | — |
+| 1 `RenderProfile`, fallback, display-list fix - **done** | 0 | - |
 | 2 Core-clean shared path | 1 | — |
 | 3 Camera completeness | 1 | yes, with 2 |
 | 4 Remaining geometry | 2 | yes, per class |

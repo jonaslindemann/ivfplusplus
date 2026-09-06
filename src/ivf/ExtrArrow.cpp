@@ -97,7 +97,14 @@ void ExtrArrow::doCreateGeometry()
 			positions.push_back((float)z);
 		};
 
-		for (int ring = 0; ring < 5; ++ring)
+		// glePolyCone() treats the first and last points as phantom endpoints:
+		// they only set the direction the end joins are cut at, and no surface is
+		// generated between points 0-1 or 4-5. initArrow() places them a unit
+		// before the tail and a unit past the tip precisely for that. Sweeping
+		// all five gaps drew those two phantom segments as real geometry, which
+		// is why the arrow came out longer than the fixed-function one.
+
+		for (int ring = 1; ring < 4; ++ring)
 		{
 			for (int sideIdx = 0; sideIdx < sides; ++sideIdx)
 			{
@@ -233,4 +240,10 @@ void ExtrArrow::setDirection(Vec3d &vec)
 	double vx, vy, vz;
 	vec.getComponents(vx, vy, vz);
 	this->setDirection(vx, vy, vz);
+}
+
+// ------------------------------------------------------------
+bool ExtrArrow::hasModernPath()
+{
+	return true;
 }

@@ -40,6 +40,42 @@ namespace ivf {
 static constexpr int IVF_MAX_LIGHTS = 8;
 
 /**
+ * Which rendering pipeline the library is expected to use.
+ *
+ * This is the explicit form of a decision that used to be a side effect of
+ * whether a shader happened to be linked. Applications that depend on the
+ * fixed-function pipeline -- ObjectiveFrame, principally -- can now ask for it
+ * rather than getting it by accident.
+ */
+enum class RenderProfile {
+    /**
+     * Fixed function only. No shader is used even if one is set, and every
+     * object draws exactly as it did before the modern path existed.
+     * Requires a compatibility context.
+     */
+    Legacy,
+
+    /**
+     * Shader drawing on a compatibility context, which is the default.
+     *
+     * Objects that have a modern path draw through the shader. Objects that do
+     * not have the shader unbound around their geometry, so their
+     * fixed-function code runs against the fixed-function pipeline as it always
+     * did. Without that unbinding their glBegin/glVertex calls would be fed
+     * through a shader nobody had given matrices to -- which is what used to
+     * happen, and why some classes drew nothing at all.
+     */
+    Mixed,
+
+    /**
+     * Shader only. Every legacy GL call is suppressed, so this is the profile a
+     * core context can run. Classes that have not been converted yet cannot
+     * draw here; profile_test reports which.
+     */
+    Core
+};
+
+/**
  * Per-light data passed to the shader.
  *
  * Mirrors the Light class properties. Populated by Light::render() during
@@ -84,6 +120,55 @@ public:
     // Prevent copying
     RenderContext(const RenderContext&) = delete;
     RenderContext& operator=(const RenderContext&) = delete;
+
+    // ---- Render profile ----
+
+    /**
+     * Select the pipeline the library should use. Default is Mixed.
+     *
+     * Setting Legacy does not discard the shader; it only stops it being used,
+     * so a caller can switch back and forth to compare the two.
+     */
+    void setProfile(RenderProfile profile);
+
+    /** Returns the active profile. */
+    RenderProfile profile() const;
+
+    /**
+     * True when fixed-function calls are permitted, i.e. anywhere but Core.
+     *
+     * Call sites that must not emit deprecated GL in a core context test this.
+     */
+    bool legacyAllowed() const;
+
+    /**
+     * True when drawing should go through the shader.
+     *
+     * False in Legacy, and false anywhere if no linked shader is set. This is
+     * what rcIsShaderActive() reports, and what every geometry class branches on.
+     */
+    bool shaderPathActive() const;
+
+    /**
+     * True when this object's geometry must be drawn with no program bound.
+     *
+     * Answers "is this a Mixed-profile object that has no modern path", which is
+     * the case where the shader has to be unbound so the object's
+     * fixed-function code reaches the fixed-function pipeline.
+     */
+    bool needsLegacyDraw(bool objectHasModernPath) const;
+
+    /**
+     * Mark the start and end of a draw made with no program bound.
+     *
+     * Between these calls shaderPathActive() reports false, which is the truth
+     * for the object being drawn: there is no program bound, so anything that
+     * tried to talk to one -- Material uploading its uniforms, Shape mirroring
+     * its transform -- would raise GL_INVALID_OPERATION for no purpose. Nesting
+     * is counted, so a legacy object inside another one behaves.
+     */
+    void beginLegacyDraw();
+    void endLegacyDraw();
 
     // ---- Frame lifecycle ----
 
@@ -227,6 +312,8 @@ private:
     ShaderProgramPtr  m_ownedShader;   // keeps BlinnPhong shader alive when created via useBlinnPhong()
     glm::vec4         m_globalAmbient;
     bool              m_useTexture;
+    RenderProfile     m_profile;
+    int               m_legacyDrawDepth;
 };
 
 } // namespace ivf

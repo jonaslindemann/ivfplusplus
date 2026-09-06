@@ -24,6 +24,7 @@
 #include <ivf/config.h>
 #include <ivf/GLBase.h>
 #include <ivf/Material.h>
+#include <ivf/rc.h>
 
 using namespace ivf;
 
@@ -114,8 +115,30 @@ void GLBase::render ()
 }
 
 // ------------------------------------------------------------
+bool GLBase::hasModernPath ()
+{
+	return false;
+}
 void GLBase::renderImmediate ()
 {
+	// An object with no modern path has to draw against the fixed-function
+	// pipeline, which means no program may be bound while it runs. Binding one
+	// globally and leaving it bound was the reason unported classes drew nothing:
+	// their glVertex calls went through a shader whose matrices nobody had
+	// uploaded, so every vertex collapsed to a point.
+	//
+	// The bracket covers the transform and material calls as well as the
+	// geometry, because those are where the fixed-function state the legacy
+	// drawing code reads gets established.
+
+	const bool suppressShader = rcNeedsLegacyDraw(this->hasModernPath());
+
+	if (suppressShader)
+	{
+		rcUnuseShader();
+		rcBeginLegacyDraw();
+	}
+
 	if (m_renderState!=nullptr)
 		m_renderState->apply();
 
@@ -134,11 +157,26 @@ void GLBase::renderImmediate ()
 
 	if (m_renderState!=nullptr)
 		m_renderState->remove();
+
+	if (suppressShader)
+	{
+		rcEndLegacyDraw();
+		rcUseShader();
+	}
 }
 
 // ------------------------------------------------------------
 bool GLBase::useDisplayList ()
 {
+	// Display lists are a legacy-profile feature and cannot be combined with the
+	// shader path. glNewList records drawing commands, but glUniform calls
+	// execute immediately rather than being recorded -- so a replayed list draws
+	// with whatever matrices were current when it was compiled. The result is
+	// silently wrong rather than an error, which is the worst way to fail.
+
+	if (rcIsShaderActive())
+		return false;
+
 	return m_useList && !m_dynamic;
 }
 

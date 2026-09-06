@@ -63,6 +63,10 @@ public:
 	IvfClassInfo("View",GLBase);
 	IvfStdFactory(View);
 
+	/** Sets up matrices in the render context; draws no geometry. */
+	virtual bool hasModernPath() override;
+
+
 	/**
 	 * Initialize perspective and viewport
 	 *

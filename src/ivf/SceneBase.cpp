@@ -570,3 +570,9 @@ void ivf::SceneBase::setShadowPrePost(bool renderPre, bool renderPost)
 	m_postShadow = renderPost;
 }
 
+
+// ------------------------------------------------------------
+bool SceneBase::hasModernPath()
+{
+	return true;
+}

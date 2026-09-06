@@ -56,6 +56,14 @@ public:
 
 	IvfClassInfo("Node",Base);
 	IvfStdFactory(Node);
+
+	/**
+	 * Draws no geometry of its own -- it renders children, and each child
+	 * answers for itself. A container must report true, or the shader would be
+	 * unbound across the whole subtree below it.
+	 */
+	virtual bool hasModernPath() override;
+
 	
 	/**
 	 * Set node size.

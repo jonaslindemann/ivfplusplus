@@ -267,3 +267,9 @@ NodeCursor::TCursorArrowType NodeCursor::getArrowType()
 {
 	return m_cursorArrowType;
 }
+
+// ------------------------------------------------------------
+bool NodeCursor::hasModernPath()
+{
+	return true;
+}

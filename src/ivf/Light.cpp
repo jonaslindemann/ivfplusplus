@@ -318,3 +318,9 @@ void Light::setNumber(int number)
 {
 	m_lightn = number;
 }
+
+// ------------------------------------------------------------
+bool Light::hasModernPath()
+{
+	return true;
+}

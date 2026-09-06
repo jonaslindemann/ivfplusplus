@@ -315,6 +315,21 @@ void GlutBase::disableBlinnPhongShader()
 {
 	m_blinnPhongEnabled = false;
 	rcSetShader(nullptr);
+
+	// Turning the shader off means the fixed-function pipeline is the only one
+	// left, so say so rather than leaving the profile claiming otherwise.
+
+	rcSetProfile(RenderProfile::Legacy);
+}
+
+void GlutBase::setRenderProfile(RenderProfile profile)
+{
+	rcSetProfile(profile);
+}
+
+RenderProfile GlutBase::renderProfile() const
+{
+	return rcProfile();
 }
 
 bool GlutBase::isBlinnPhongShaderEnabled() const

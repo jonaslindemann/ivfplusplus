@@ -339,3 +339,9 @@ void Composite::setHighlightComposite(THighlightState state)
 {
     Shape::setHighlight(state);
 }
+
+// ------------------------------------------------------------
+bool Composite::hasModernPath()
+{
+	return true;
+}

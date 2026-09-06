@@ -71,6 +71,13 @@ public:
 	IvfClassInfo("Texture",GLBase);
 	IvfStdFactory(Texture);
 
+	/**
+	 * A state object, not geometry. Nothing here needs the fixed-function
+	 * pipeline, so the program stays bound across it.
+	 */
+	virtual bool hasModernPath() override;
+
+
 	/** 
 	 * Set texture environment color (Obsolete! Use setEnvColor() instead)
 	 *

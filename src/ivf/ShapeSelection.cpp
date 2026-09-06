@@ -221,3 +221,9 @@ void ShapeSelection::setHighlightMaterial(Material *material)
 {
 	m_hlMaterial = material;
 }
+
+// ------------------------------------------------------------
+bool ShapeSelection::hasModernPath()
+{
+	return true;
+}

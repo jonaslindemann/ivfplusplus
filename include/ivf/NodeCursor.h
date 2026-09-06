@@ -92,6 +92,14 @@ public:
 	IvfClassInfo("NodeCursor",Shape);
 	IvfStdFactory(NodeCursor);
 
+	/**
+	 * Draws no geometry of its own -- it renders children, and each child
+	 * answers for itself. A container must report true, or the shader would be
+	 * unbound across the whole subtree below it.
+	 */
+	virtual bool hasModernPath() override;
+
+
 	/** Set size of cursor */
 	void setSize(double size);
 

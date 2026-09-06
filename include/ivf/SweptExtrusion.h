@@ -197,6 +197,10 @@ public:
     IvfClassInfo("SweptExtrusion", Shape);
     IvfStdFactory(SweptExtrusion);
 
+	/** Draws through the shader when one is active. */
+	virtual bool hasModernPath() override;
+
+
     /**
      * Sets section size
      *

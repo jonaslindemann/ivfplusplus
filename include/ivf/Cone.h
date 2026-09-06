@@ -52,6 +52,10 @@ public:
 	IvfClassInfo("Cone",Shape);
 	IvfStdFactory(Cone);
 
+	/** Draws through the shader when one is active. */
+	virtual bool hasModernPath() override;
+
+
 	/** Set top radius */
 	void setTopRadius (const double radius);
 

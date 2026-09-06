@@ -62,6 +62,10 @@ public:
 	IvfClassInfo("ExtrArrow",Shape);
 	IvfStdFactory(ExtrArrow);
 
+	/** Draws through the shader when one is active. */
+	virtual bool hasModernPath() override;
+
+
 	/** Set the arrow radiuses */
 	void setRadius(double head, double tail);
 

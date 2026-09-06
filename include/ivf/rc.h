@@ -7,17 +7,36 @@ namespace ivf {
 // ---- Frame lifecycle ----
 inline void rcBeginFrame()                               { RenderContext::instance().beginFrame(); }
 
+// ---- Render profile ----
+inline void rcSetProfile(RenderProfile p)                { RenderContext::instance().setProfile(p); }
+inline RenderProfile rcProfile()                         { return RenderContext::instance().profile(); }
+inline bool rcLegacyAllowed()                            { return RenderContext::instance().legacyAllowed(); }
+inline bool rcNeedsLegacyDraw(bool objectHasModernPath)
+    { return RenderContext::instance().needsLegacyDraw(objectHasModernPath); }
+inline void rcBeginLegacyDraw()                          { RenderContext::instance().beginLegacyDraw(); }
+inline void rcEndLegacyDraw()                            { RenderContext::instance().endLegacyDraw(); }
+
 // ---- Shader activation ----
 inline void rcUseBlinnPhong()                            { RenderContext::instance().useBlinnPhong(); }
 inline void rcSetShader(ShaderProgram* prog)             { RenderContext::instance().setShader(prog); }
 inline ShaderProgram* rcShader()                         { return RenderContext::instance().shader(); }
-inline bool rcIsShaderActive() {
-    auto* s = RenderContext::instance().shader();
-    return s && s->isLinked();
-}
+
+/**
+ * True when geometry should be drawn through the shader.
+ *
+ * Every geometry class branches on this to choose its modern path. It now also
+ * respects the render profile, so RenderProfile::Legacy turns the whole library
+ * back into its fixed-function self without unlinking anything.
+ */
+inline bool rcIsShaderActive()                           { return RenderContext::instance().shaderPathActive(); }
+
 inline void rcUseShader() {
-    if (auto* s = RenderContext::instance().shader()) s->use();
+    if (RenderContext::instance().shaderPathActive())
+        RenderContext::instance().shader()->use();
 }
+
+/** Unbind any program, so following calls reach the fixed-function pipeline. */
+inline void rcUnuseShader()                              { glUseProgram(0); }
 
 // ---- Shader update ----
 inline void rcUpdateShader() {

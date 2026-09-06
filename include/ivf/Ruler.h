@@ -68,6 +68,10 @@ public:
 	void setStartPoint(Vec3d& startPoint);
 
 	IvfClassInfo("Ruler",Shape);
+
+	/** Draws through the shader when one is active. */
+	virtual bool hasModernPath() override;
+
 protected:
 	virtual void doCreateGeometry();
 };

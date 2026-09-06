@@ -535,6 +535,21 @@ void FltkBase::disableBlinnPhongShader()
 {
 	m_blinnPhongEnabled = false;
 	rcSetShader(nullptr);
+
+	// Turning the shader off means the fixed-function pipeline is the only one
+	// left, so say so rather than leaving the profile claiming otherwise.
+
+	rcSetProfile(RenderProfile::Legacy);
+}
+
+void FltkBase::setRenderProfile(RenderProfile profile)
+{
+	rcSetProfile(profile);
+}
+
+RenderProfile FltkBase::renderProfile() const
+{
+	return rcProfile();
 }
 
 bool FltkBase::isBlinnPhongShaderEnabled() const

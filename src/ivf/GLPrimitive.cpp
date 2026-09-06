@@ -671,3 +671,9 @@ int GLPrimitive::getCoordIndexSetSize()
 {
 	return static_cast<int>(m_coordIndexSet.size());
 }
+
+// ------------------------------------------------------------
+bool GLPrimitive::hasModernPath()
+{
+	return true;
+}

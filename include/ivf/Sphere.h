@@ -55,6 +55,10 @@ public:
 	IvfClassInfo("Sphere",Shape);
 	IvfStdFactory(Sphere);
 
+	/** Draws through the shader when one is active. */
+	virtual bool hasModernPath() override;
+
+
 	/** Set sphere radius */
 	void setRadius (double radius);
 

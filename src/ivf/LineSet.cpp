@@ -159,3 +159,9 @@ void ivf::LineSet::clearIndexWidths()
     m_idxLineWidth.clear();
     markVAODirty();
 }
+
+// ------------------------------------------------------------
+bool LineSet::hasModernPath()
+{
+	return m_idxLineWidth.empty();
+}

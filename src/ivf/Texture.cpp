@@ -360,3 +360,9 @@ void Texture::refresh()
 {
 	m_textureDataUploaded = false;
 }
+
+// ------------------------------------------------------------
+bool Texture::hasModernPath()
+{
+	return true;
+}

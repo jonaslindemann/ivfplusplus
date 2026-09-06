@@ -339,3 +339,9 @@ void Cone::doUpdateBoundingSphere()
 		getBoundingSphere()->setRadius(radius);
 	}
 }
+
+// ------------------------------------------------------------
+bool Cone::hasModernPath()
+{
+	return true;
+}

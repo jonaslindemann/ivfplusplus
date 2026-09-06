@@ -238,6 +238,31 @@ public:
 	void renderImmediate();
 
 	/**
+	 * Whether this object can draw itself through the shader.
+	 *
+	 * The default is false: assume an object still draws with glBegin and the
+	 * fixed-function matrix stack. Classes that have been ported to the modern
+	 * path override this, as do container classes that draw no geometry of their
+	 * own and simply render children -- a container must answer true, or the
+	 * whole subtree below it is treated as unported.
+	 *
+	 * The answer may depend on the object's state rather than only its class.
+	 * LineSet, for instance, has a modern path only while no per-index line
+	 * widths are set, because the widths force it down the legacy branch.
+	 *
+	 * Under RenderProfile::Mixed, an object answering false has the program
+	 * unbound around its geometry so its fixed-function calls reach the
+	 * fixed-function pipeline. Leaving it bound is what made unported classes
+	 * draw nothing at all: their vertices went through a shader that nobody had
+	 * given matrices to.
+	 *
+	 * Defaulting to false makes a missed override cost nothing but performance --
+	 * the object renders the old way, which is correct. Defaulting to true would
+	 * make a missed override produce invisible geometry.
+	 */
+	virtual bool hasModernPath();
+
+	/**
 	 * Initializes use of bounding sphere
 	 *
 	 * If no bounding sphere is assigned to object, one is

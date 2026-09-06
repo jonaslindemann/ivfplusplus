@@ -161,3 +161,9 @@ void Ruler::setTickStep(double tickStep)
 {
 	m_tickStep = tickStep;
 }
+
+// ------------------------------------------------------------
+bool Ruler::hasModernPath()
+{
+	return true;
+}

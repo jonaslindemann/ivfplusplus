@@ -128,6 +128,13 @@ public:
 	IvfClassInfo("GLPrimitive",Shape);
 	IvfStdFactory(GLPrimitive);
 
+	/**
+	 * Every subclass draws through buildAndDrawVAO(), which packs the indexed
+	 * sets into a VBO and feeds the shader itself.
+	 */
+	virtual bool hasModernPath() override;
+
+
 	/** Clear all sets */
 	void clear();
 

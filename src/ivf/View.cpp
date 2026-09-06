@@ -183,3 +183,9 @@ void View::setViewport(Viewport *viewport)
 {
 	m_viewport = viewport;
 }
+
+// ------------------------------------------------------------
+bool View::hasModernPath()
+{
+	return true;
+}

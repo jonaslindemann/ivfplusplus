@@ -45,3 +45,9 @@ void WireBrick::doCreateGeometry()
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }
 
+
+// ------------------------------------------------------------
+bool WireBrick::hasModernPath()
+{
+	return false;
+}
