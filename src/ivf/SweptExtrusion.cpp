@@ -859,3 +859,15 @@ bool SweptExtrusion::hasModernPath()
 {
 	return true;
 }
+
+// ------------------------------------------------------------
+void SweptExtrusion::drawGeometry()
+{
+    doCreateGeometry();
+}
+
+// ------------------------------------------------------------
+void SweptExtrusion::drawSelectGeometry()
+{
+    doCreateSelect();
+}

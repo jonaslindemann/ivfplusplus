@@ -69,6 +69,9 @@ inline void lgColor3f(GLfloat r, GLfloat g, GLfloat b)
                                                   { if (rcLegacyAllowed()) glColor3f(r, g, b); }
 inline void lgColor4f(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
                                                   { if (rcLegacyAllowed()) glColor4f(r, g, b, a); }
+inline void lgColor3d(GLdouble r, GLdouble g, GLdouble b)
+                                                  { if (rcLegacyAllowed()) glColor3d(r, g, b); }
+inline void lgColor3dv(const GLdouble* v)         { if (rcLegacyAllowed()) glColor3dv(v); }
 inline void lgColor3fv(const GLfloat* v)          { if (rcLegacyAllowed()) glColor3fv(v); }
 inline void lgColor4fv(const GLfloat* v)          { if (rcLegacyAllowed()) glColor4fv(v); }
 

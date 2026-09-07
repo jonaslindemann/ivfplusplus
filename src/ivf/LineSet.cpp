@@ -55,12 +55,26 @@ void LineSet::doCreateGeometry()
     glGetFloatv(GL_LINE_WIDTH, oldWidth);
     lgLineWidth(m_lineWidth);
 
+	// Per-index widths used to force the legacy path, because one draw call
+	// cannot vary line width. buildAndDrawVAO() now issues one call per index
+	// set instead, so both cases go through the modern path.
+
 	if (m_idxLineWidth.empty())
+	{
 		if (buildAndDrawVAO(GL_LINES))
 		{
 			lgLineWidth(oldWidth[0]);
 			return;
 		}
+	}
+	else
+	{
+		if (buildAndDrawVAO(GL_LINES, false, &m_idxLineWidth))
+		{
+			lgLineWidth(oldWidth[0]);
+			return;
+		}
+	}
 
     lgPushAttrib(GL_LIGHTING | GL_COLOR_MATERIAL);
     lgDisableLegacy(GL_LIGHTING);
@@ -164,5 +178,5 @@ void ivf::LineSet::clearIndexWidths()
 // ------------------------------------------------------------
 bool LineSet::hasModernPath()
 {
-	return m_idxLineWidth.empty();
+	return true;
 }

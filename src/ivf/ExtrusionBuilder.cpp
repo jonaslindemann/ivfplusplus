@@ -65,14 +65,26 @@ glm::vec2 transformNormal(const glm::vec2 &n, const SectionTransform &st)
     return glm::vec2(q.x * c - q.y * s, q.x * s + q.y * c);
 }
 
+// Both of these apply the frame's mitre stretch, so every caller gets it --
+// walls, facetted walls and caps alike. It is the identity except at an
+// angle-join corner, so the straight-path case is unchanged. See
+// PathFrame::mitre.
+
 glm::vec3 placePoint(const PathFrame &f, const glm::vec2 &q)
 {
-    return f.position + q.x * f.normal + q.y * f.binormal;
+    const glm::vec2 m = f.mitre * q;
+    return f.position + m.x * f.normal + m.y * f.binormal;
 }
 
 glm::vec3 worldNormal(const PathFrame &f, const glm::vec2 &n2)
 {
-    glm::vec3 n = n2.x * f.normal + n2.y * f.binormal;
+    // A normal transforms by the inverse transpose of whatever moved the
+    // surface. The mitre is symmetric, so that is just its inverse, but spell it
+    // out rather than relying on the symmetry holding forever.
+
+    const glm::vec2 m = glm::transpose(glm::inverse(f.mitre)) * n2;
+
+    glm::vec3 n = m.x * f.normal + m.y * f.binormal;
     float len = glm::length(n);
     return (len > kEps) ? n / len : f.normal;
 }

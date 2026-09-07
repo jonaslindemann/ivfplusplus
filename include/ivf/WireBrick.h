@@ -48,13 +48,12 @@ public:
 	IvfStdFactory(WireBrick);
 
 	/**
-	 * Reports false on purpose, so Mixed draws this the fixed-function way.
+	 * Drawn as an edge list on the modern path.
 	 *
-	 * The inherited modern path triangulates the quads, and under
-	 * glPolygonMode(GL_LINE) every triangulation diagonal then shows up as an
-	 * extra edge -- a box drawn with its faces crossed out. Wireframe quads
-	 * need an edge-list path rather than a triangulated one; until GLPrimitive
-	 * grows one, the honest answer is that this class has no modern path.
+	 * The inherited fill path triangulates the quads, and outlining that
+	 * would show every triangulation diagonal as an extra edge -- a box with
+	 * its faces crossed out. buildAndDrawVAO()'s wireframe mode emits the
+	 * real face edges instead.
 	 */
 	virtual bool hasModernPath() override;
 

@@ -87,6 +87,13 @@ private:
 	GLuint   m_vbo = 0;
 	GLsizei  m_vaoVertexCount = 0;
 	bool     m_vaoDirty = true;
+	bool     m_vaoWireframe = false;
+
+	// First vertex and vertex count of each coordinate index set within the
+	// packed buffer, so they can be drawn separately when they need different
+	// state. Parallel to m_coordIndexSet.
+	std::vector<GLsizei> m_vaoRangeStart;
+	std::vector<GLsizei> m_vaoRangeCount;
 
 protected:
 	void markVAODirty();
@@ -100,9 +107,24 @@ protected:
 	 *   GL_LINES, GL_LINE_STRIP, GL_POINTS.
 	 *
 	 * GL_QUADS and GL_QUAD_STRIP are triangulated automatically.
+	 *
+	 * wireframe — draw the outline of each face rather than the filled face,
+	 * for subclasses that would have used glPolygonMode(GL_LINE). Do not
+	 * triangulate and then set polygon mode: every triangulation diagonal shows
+	 * up as an extra edge, so a box comes out with its faces crossed out. This
+	 * emits the real face edges instead.
+	 *
+	 * indexSetLineWidths — one line width per coordinate index set. A single draw
+	 * call cannot vary line width, so when this is given the buffer is drawn as
+	 * one call per index set with the matching width. Without it, per-index
+	 * widths would force the whole class down the legacy path -- which is what
+	 * kept Grid, whose outline and corners are drawn thicker than its rules,
+	 * from ever reaching the modern path.
+	 *
 	 * Returns true if drawn (shader was active), false to fall through to legacy code.
 	 */
-	bool buildAndDrawVAO(GLenum legacyPrimitive);
+	bool buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe = false,
+	                     const std::vector<float>* indexSetLineWidths = nullptr);
 
 	std::vector<Vec3d*>		m_coordSet;
 	std::vector<Color*>		m_colorSet;

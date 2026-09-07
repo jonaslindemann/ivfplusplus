@@ -316,6 +316,20 @@ public:
     void setSelectScale(double scale);
 
     /**
+     * Draw only the swept surface, with no transform or material of its own.
+     *
+     * Lets another shape borrow this class's geometry from inside its own
+     * render pass -- Extrusion delegates its modern path here rather than
+     * duplicating the sweep, so both classes produce the same surface from the
+     * same code. Assumes the caller has already established the transform and
+     * material, which is exactly what doCreateGeometry() can rely on.
+     */
+    void drawGeometry();
+
+    /** As drawGeometry(), for the scaled select shape. */
+    void drawSelectGeometry();
+
+    /**
      * Set the up vector
      *
      * Determines the orientation of the section at the start of the spine.

@@ -56,8 +56,9 @@ public:
 	IvfStdFactory(LineSet);
 
 	/**
-	 * Per-index line widths force the legacy branch, because one draw call
-	 * cannot vary line width. Without them the modern path handles it.
+	 * Drawn through buildAndDrawVAO(), including the per-index line width case:
+	 * the buffer is issued as one draw call per index set so each can carry its
+	 * own width.
 	 */
 	virtual bool hasModernPath() override;
 

@@ -24,6 +24,7 @@
 
 #include <ivf/GLPrimitive.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 #include <ivf/ShaderProgram.h>
 
 #include <ivf/config.h>
@@ -54,11 +55,20 @@ void GLPrimitive::markVAODirty()
 }
 
 // ------------------------------------------------------------
-bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
+bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
+                                  const std::vector<float>* indexSetLineWidths)
 {
 	ShaderProgram* prog = rcShader();
 	if (!rcIsShaderActive())
 		return false;
+
+	// Filled and wireframe need different vertex data, so a subclass that
+	// switches between them has to rebuild rather than replay.
+
+	if (wireframe != m_vaoWireframe) {
+		m_vaoWireframe = wireframe;
+		m_vaoDirty = true;
+	}
 
 	if (m_vaoDirty) {
 		struct GpuVertex {
@@ -70,7 +80,11 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 
 		std::vector<GpuVertex> packed;
 
+		m_vaoRangeStart.clear();
+		m_vaoRangeCount.clear();
+
 		for (int i = 0; i < (int)m_coordIndexSet.size(); ++i) {
+			const GLsizei rangeStart = (GLsizei)packed.size();
 			Index* coordIdx = m_coordIndexSet[i];
 			Index* normalIdx  = (i < (int)m_normalIndexSet.size())  ? (Index*)m_normalIndexSet[i]  : nullptr;
 			Index* texIdx     = (i < (int)m_textureIndexSet.size())  ? (Index*)m_textureIndexSet[i]  : nullptr;
@@ -139,7 +153,22 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 				return v;
 			};
 
-			if (effPrim == GL_QUADS) {
+			if (wireframe && ((effPrim == GL_QUADS) || (effPrim == GL_TRIANGLES))) {
+				// One GL_LINES pair per real face edge. Triangulating first and
+				// then asking for GL_LINE polygon mode would draw the
+				// triangulation diagonals as well.
+
+				const int per = (effPrim == GL_QUADS) ? 4 : 3;
+
+				for (int j = 0; j + per - 1 < n; j += per) {
+					int fi = j / per;
+
+					for (int e = 0; e < per; e++) {
+						packed.push_back(getVertex(j + e, fi));
+						packed.push_back(getVertex(j + ((e + 1) % per), fi));
+					}
+				}
+			} else if (effPrim == GL_QUADS) {
 				// Split each quad (j, j+1, j+2, j+3) into two triangles.
 				for (int j = 0; j + 3 < n; j += 4) {
 					int fi = j / 4;
@@ -168,6 +197,9 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 					packed.push_back(getVertex(j, fi));
 				}
 			}
+
+			m_vaoRangeStart.push_back(rangeStart);
+			m_vaoRangeCount.push_back((GLsizei)packed.size() - rangeStart);
 		}
 
 		m_vaoVertexCount = (GLsizei)packed.size();
@@ -205,6 +237,9 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 		default:            drawMode = legacyPrimitive; break;
 	}
 
+	if (wireframe)
+		drawMode = GL_LINES;
+
 	rcUseShader();
 	rcUpdateShader(prog);
 
@@ -217,7 +252,31 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 	prog->setUniformInt("uUseVertexColor",  hasVertexColors ? 1 : 0);
 
 	glBindVertexArray(m_vao);
-	glDrawArrays(drawMode, 0, m_vaoVertexCount);
+
+	if ((indexSetLineWidths != nullptr) && !indexSetLineWidths->empty() &&
+	    (m_vaoRangeStart.size() == m_vaoRangeCount.size()))
+	{
+		// One draw per index set, because line width is per draw call.
+
+		GLfloat oldWidth = 1.0f;
+		glGetFloatv(GL_LINE_WIDTH, &oldWidth);
+
+		for (size_t i = 0; i < m_vaoRangeStart.size(); ++i)
+		{
+			if (m_vaoRangeCount[i] <= 0)
+				continue;
+
+			const size_t w = (i < indexSetLineWidths->size()) ? i : indexSetLineWidths->size() - 1;
+			lgLineWidth((*indexSetLineWidths)[w]);
+
+			glDrawArrays(drawMode, m_vaoRangeStart[i], m_vaoRangeCount[i]);
+		}
+
+		lgLineWidth(oldWidth);
+	}
+	else
+		glDrawArrays(drawMode, 0, m_vaoVertexCount);
+
 	glBindVertexArray(0);
 
 	return true;

@@ -466,7 +466,79 @@ thin — which is why `LineSet` covers 488 pixels in legacy and 244 in core. Rea
 wide lines in core have to be built from triangles; that belongs with the other
 shader-side feature parity in Phase 7.
 
-### Phase 4 — Remaining geometry *(the bulk of the work)*
+### Phase 4 — Remaining geometry — **mostly done**
+
+Done so far:
+
+- ✅ **`Extrusion`, `TubeExtrusion`, `SolidLine`** — retargeted onto
+  `SweptExtrusion` rather than reimplementing the sweep. `Extrusion` keeps a
+  `SweptExtrusion`, feeds it the same section and spine on demand, and calls its
+  new `drawGeometry()` / `drawSelectGeometry()`. `setSpineScale()` turned out to
+  be the only public writer of the gle section transform, and it only ever writes
+  a diagonal, so the mapping between the two APIs is complete.
+- ✅ **`WireBrick` / `SelectionBox`** — `buildAndDrawVAO()` gained a wireframe
+  mode that emits real face edges. Triangulating and then setting
+  `glPolygonMode(GL_LINE)` drew every triangulation diagonal, so a box came out
+  with its faces crossed out.
+- ✅ **`Grid`** — its `LineSet`s carry per-index line widths, which used to force
+  the whole class onto the legacy path. `buildAndDrawVAO()` now records the
+  vertex range of each coordinate index set and issues one draw call per set, so
+  each can carry its own width.
+- ✅ **`SimpleLineSet`** — drawn as unlit line segments through `drawUnlit()`.
+- ⬜ **`FaceSet`, `Mesh`, `VertexElements`** — measured and still unconverted.
+  They render correctly in `mixed` (the fallback handles them) and draw nothing
+  in `core`. Each keeps its own vertex data rather than using `GLPrimitive`, so
+  each needs its own `MeshBuffer` path.
+- ⬜ **`src/ivfgle`**, **`src/ivf3dui`** — not started.
+
+#### Two real bugs found on the way
+
+**`SweptExtrusion` pinched at every mitred corner.** `swept_test` reported IoU
+1.0000 on every case, but every one of those cases used a *straight* spine — the
+entire join-style path was dead code under test. Adding a bent-spine case
+immediately showed IoU 0.934.
+
+The cause: gle mitres by sliding each contour point along the segment axis until
+it meets the bisecting plane (`ex_angle.c`, the `INNERSECT` calls), which keeps
+the cross-section measured perpendicular to each leg exactly equal to the
+profile. `PathFrames` instead placed the profile *in* the bisecting plane
+unchanged, which foreshortens it by cos(a) and pinches the tube. `PathFrame`
+gained a `mitre` matrix — a pure stretch by 1/cos(a) along the one profile axis
+lying in the plane of the bend — applied in `ExtrusionBuilder::placePoint()` and
+`worldNormal()`. Both bent cases now read **IoU 1.0000**, and every straight case
+is unchanged.
+
+Worth noting how it was nearly missed twice: computing the stretch inside
+`buildPolylineStations()` produced byte-identical output, because `normal` and
+`binormal` are not assigned until `assignFrameOrientations()` runs and the
+tangent is not normalised until after that either. It has to be a post-pass.
+
+**`SimpleLineSet` could wedge the GL context.** It opened
+`glBegin(GL_LINE_STRIP)` and only closed it on meeting a `-1` terminator in the
+index array. An index array without one — which nothing documents as required —
+left the primitive open, and from that point every call in the frame failed with
+"invalid from the current immediate mode state". In `mixed` it went on to crash
+with an access violation. Present in master. It now tracks whether a strip is
+open and closes it at the end.
+
+#### Results
+
+| Comparison | Result |
+| --- | --- |
+| error gate, all four profiles | 35/35 clean |
+| `legacy` vs `legacy-shader` | pixel-identical |
+| `legacy` vs `mixed` | **0 coverage problems across all 35 cases** |
+| `legacy` vs `core` | 5 coverage problems, down from 8 |
+| `swept_test` | 92 checks, 0 failures (was 84 checks; the 8 new ones are the bent-spine cases) |
+
+All extrusion classes now cover exactly the same pixels as the gle originals
+(1860 for the bent extrusions, 1976 for the solid lines) in every profile.
+
+The five remaining `core` gaps are `FaceSet`, `Mesh` and `VertexElements`, which
+have no modern path yet, plus `LineSet` and `LineStripSet`, which draw but thin
+because of the core wide-line limit — Phase 7.
+
+### Phase 4 — original plan *(for reference)*
 
 Ordered by ObjectiveFrame's dependency list, so its cutover unblocks earliest:
 
@@ -554,7 +626,7 @@ compile-time signal before anything is removed. Delete `src/gle`, `OldLight`,
 | 1 `RenderProfile`, fallback, display-list fix - **done** | 0 | - |
 | 2 Core-clean shared path - **done** | 1 | - |
 | 3 Camera completeness - **done** | 1 | - |
-| 4 Remaining geometry | 2 | yes, per class |
+| 4 Remaining geometry - **mostly done** | 2 | yes, per class |
 | 5 Colour picking | 2, 3 | yes, with 4 |
 | 6 Text and textures | 2 | yes, with 4 and 5 |
 | 7 Shader feature parity | 2 | yes, with 4, 5 and 6 |

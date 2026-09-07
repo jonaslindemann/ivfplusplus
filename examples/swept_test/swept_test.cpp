@@ -357,6 +357,29 @@ template <typename T> static void configureTwistedExtrusion(T extrusion)
     configureExtrusion(extrusion, skISection, 25.0);
 }
 
+// A spine with an actual corner in it.
+//
+// Every other case here runs the section along a straight line, which never
+// exercises the join style at all -- the whole TUBE_JN_ANGLE / IVF_JN_ANGLE
+// mitring path is dead code on a straight spine. A corner is where the two
+// implementations have the most room to disagree, so it needs its own case.
+//
+// As always the first and last spine points are lead-in and lead-out: they
+// orient the end cuts and are not themselves swept.
+
+template <typename T> static void configureBentExtrusion(T extrusion, SectionKind kind)
+{
+    configureExtrusion(extrusion, kind, 0.0);
+
+    extrusion->setSpineSize(5);
+    extrusion->setSpineCoord(0, -3.6, -2.0, 0.0);
+    extrusion->setSpineCoord(1, -3.0, 0.0, 0.0);
+    extrusion->setSpineCoord(2, 0.0, 1.2, 0.0);
+    extrusion->setSpineCoord(3, 3.0, 0.0, 0.0);
+    extrusion->setSpineCoord(4, 3.6, -2.0, 0.0);
+    extrusion->setUpVector(0.0, 1.0, 0.0);
+}
+
 template <typename T> static void configureSolidLine(T line, Node *n1, Node *n2, bool coneCap, double nodeSize)
 {
     line->setRadius(0.35);
@@ -682,6 +705,26 @@ static void runChecks()
         configureExtrusion(swept, ec.kind, ec.twist);
 
         comparePair(ec.name, legacy, swept, 12.0, 0.95);
+    }
+
+    SectionKind bentKinds[] = {skSquare, skLSection};
+    const char *bentNames[] = {"bent spine, square section", "bent spine, L section"};
+
+    for (int i = 0; i < 2; i++)
+    {
+        ExtrusionPtr legacyBent = Extrusion::create();
+        legacyBent->setMaterial(material);
+        legacyBent->setUseName(false);
+        legacyBent->setUseSelectShape(false);
+        configureBentExtrusion(legacyBent, bentKinds[i]);
+
+        SweptExtrusionPtr sweptBent = SweptExtrusion::create();
+        sweptBent->setMaterial(material);
+        sweptBent->setUseName(false);
+        sweptBent->setUseSelectShape(false);
+        configureBentExtrusion(sweptBent, bentKinds[i]);
+
+        comparePair(bentNames[i], legacyBent, sweptBent, 12.0, 0.95);
     }
 
     ExtrusionPtr legacyExtr = Extrusion::create();

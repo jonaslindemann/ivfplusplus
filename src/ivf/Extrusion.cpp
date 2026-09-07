@@ -63,6 +63,7 @@ Extrusion::Extrusion()
     m_spineEnd = 0;
     m_spineSize = 0;
     m_textureMode = 0;
+    m_sweptDirty = true;
 
     // m_coords = new GLdouble[m_nCoords][3];
 }
@@ -94,6 +95,16 @@ Extrusion::~Extrusion()
 // ------------------------------------------------------------
 void Extrusion::doCreateGeometry()
 {
+    // Modern path: hand the sweep to SweptExtrusion rather than repeating it.
+    // See hasModernPath() for why borrowing rather than reimplementing matters.
+
+    if (rcIsShaderActive())
+    {
+        syncSwept();
+        m_swept->drawGeometry();
+        return;
+    }
+
     gleTextureMode(m_textureMode);
     gleSetJoinStyle(TUBE_JN_ANGLE);
 
@@ -430,6 +441,13 @@ void Extrusion::setUpVector(double x, double y, double z)
 // ------------------------------------------------------------
 void Extrusion::doCreateSelect()
 {
+    if (rcIsShaderActive())
+    {
+        syncSwept();
+        m_swept->drawSelectGeometry();
+        return;
+    }
+
     gleTextureMode(m_textureMode);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     lgPushAttrib(GL_LIGHTING_BIT);
@@ -613,4 +631,88 @@ void Extrusion::doUpdateBoundingSphere()
 
         getBoundingSphere()->setRadius(radius);
     }
+}
+
+// ------------------------------------------------------------
+bool Extrusion::hasModernPath()
+{
+    return true;
+}
+
+// ------------------------------------------------------------
+void Extrusion::markListDirty()
+{
+    Shape::markListDirty();
+    m_sweptDirty = true;
+}
+
+// ------------------------------------------------------------
+void Extrusion::syncSwept()
+{
+    // Rebuild the delegate only when something actually changed. Every mutator
+    // on this class already calls markListDirty(), so that flag is exactly the
+    // signal needed and there is no second bookkeeping scheme to keep in step.
+
+    if ((m_swept != nullptr) && !m_sweptDirty)
+        return;
+
+    if (m_swept == nullptr)
+        m_swept = SweptExtrusion::create();
+
+    m_sweptDirty = false;
+
+    if ((m_sectionCoords == nullptr) || (m_sectionNormals == nullptr) ||
+        (m_spineCoords == nullptr) || (m_sectionSize <= 0) || (m_spineSize <= 0))
+    {
+        m_swept->setSectionSize(0);
+        m_swept->setSpineSize(0);
+        return;
+    }
+
+    m_swept->setSectionSize(m_sectionSize);
+
+    for (int i = 0; i < m_sectionSize; i++)
+    {
+        m_swept->setSectionCoord(i, m_sectionCoords[i][0], m_sectionCoords[i][1]);
+        m_swept->setSectionNormal(i, m_sectionNormals[i][0], m_sectionNormals[i][1]);
+    }
+
+    m_swept->setUseTwist(m_useTwist);
+    m_swept->setSpineSize(m_spineSize);
+
+    for (int i = 0; i < m_spineSize; i++)
+    {
+        m_swept->setSpineCoord(i, m_spineCoords[i][0], m_spineCoords[i][1], m_spineCoords[i][2]);
+
+        if (m_spineColors != nullptr)
+            m_swept->setSpineColor(i, m_spineColors[i][0], m_spineColors[i][1], m_spineColors[i][2]);
+
+        // setSpineScale() is the only public writer of the section transform,
+        // and it only ever writes a diagonal, so the scale factors are all that
+        // needs carrying across.
+
+        if (m_sectionTransform != nullptr)
+            m_swept->setSpineScale(i, m_sectionTransform[i][0][0], m_sectionTransform[i][1][1]);
+    }
+
+    if (m_useTwist && (m_twist != nullptr))
+    {
+        // The twist array is allocated with m_sectionSize entries but indexed by
+        // spine position, so only the overlap is safe to read.
+
+        const int n = (m_sectionSize < m_spineSize) ? m_sectionSize : m_spineSize;
+
+        for (int i = 0; i < n; i++)
+            m_swept->setSpineTwist(i, m_twist[i]);
+    }
+
+    m_swept->setUseColor(m_useColors);
+    m_swept->setUpVector(m_upVector[0], m_upVector[1], m_upVector[2]);
+    m_swept->setTextureMode(m_textureMode);
+    m_swept->setJoinStyle(ivfGetGLEJoinStyle());
+    m_swept->setSelectScale(m_selectScale);
+    m_swept->setMaterial(this->getMaterial());
+
+    if ((m_spineStart >= 0) && (m_spineEnd > 0))
+        m_swept->setStartEnd(m_spineStart, m_spineEnd);
 }

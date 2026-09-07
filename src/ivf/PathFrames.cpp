@@ -40,6 +40,48 @@ float length2(const glm::vec3 &v)
     return glm::dot(v, v);
 }
 
+// The in-plane stretch that turns a profile placed in the bisecting plane into
+// a properly mitred corner. See PathFrame::mitre for why it is needed.
+//
+// The profile plane is perpendicular to the frame tangent, which at a corner is
+// the bisector of the two segments. A profile point offset along the one axis of
+// that plane lying in the plane of the bend is foreshortened by cos(a) when
+// measured perpendicular to either leg, where a is the angle between a segment
+// and the bisector. Stretching that axis by 1/cos(a) cancels it exactly, and
+// nothing perpendicular to the bend needs touching -- so this is a pure
+// one-axis stretch, not a general shear.
+
+glm::mat2 mitreMatrix(const PathFrame &frame, const glm::vec3 &segmentDir)
+{
+    const float cosAlpha = glm::dot(segmentDir, frame.tangent);
+
+    // Straight through, or so close to a reversal that the stretch would blow
+    // up. A doubled-back spine has no meaningful mitre anyway.
+
+    if (cosAlpha > 1.0f - 1e-6f || cosAlpha < 1e-3f)
+        return glm::mat2(1.0f);
+
+    // The stretch axis: the outgoing segment projected into the profile plane.
+    // It lies in the plane of the bend by construction.
+
+    glm::vec3 axis = segmentDir - frame.tangent * cosAlpha;
+
+    if (length2(axis) < kEps)
+        return glm::mat2(1.0f);
+
+    axis = glm::normalize(axis);
+
+    // Express it in the profile's own (normal, binormal) basis.
+
+    const glm::vec2 s(glm::dot(axis, frame.normal), glm::dot(axis, frame.binormal));
+    const float k = 1.0f / cosAlpha - 1.0f;
+
+    // I + k * s s^T -- identity everywhere except along s, which scales by 1/cos(a).
+
+    return glm::mat2(1.0f + k * s.x * s.x, k * s.x * s.y,
+                     k * s.x * s.y,        1.0f + k * s.y * s.y);
+}
+
 // Pick an axis least aligned with t, used to seed an initial normal.
 
 glm::vec3 pickReferenceAxis(const glm::vec3 &t)
@@ -118,8 +160,13 @@ void computeArcLength(std::vector<PathFrame> &frames)
 // Build stations (position and tangent) for a piecewise linear spine,
 // honouring the join style.
 
+// mitreDirs, when given, receives the outgoing segment direction for each
+// station, or a zero vector where the station is not a mitred corner. The mitre
+// stretch cannot be computed here: it is expressed in the frame's normal and
+// binormal, and those are not assigned until assignFrameOrientations() has run.
 std::vector<PathFrame> buildPolylineStations(const std::vector<glm::vec3> &pts, JoinStyle join, bool closed,
-                                             float cornerRadius, int cornerSegments)
+                                             float cornerRadius, int cornerSegments,
+                                             std::vector<glm::vec3> *mitreDirs = nullptr)
 {
     std::vector<PathFrame> stations;
 
@@ -155,6 +202,9 @@ std::vector<PathFrame> buildPolylineStations(const std::vector<glm::vec3> &pts, 
         f.tangent = tan;
         f.source = source;
         stations.push_back(f);
+
+        if (mitreDirs != nullptr)
+            mitreDirs->push_back(glm::vec3(0.0f));
     };
 
     // Closed polylines only support mitered (Angle) joins for now.
@@ -183,6 +233,8 @@ std::vector<PathFrame> buildPolylineStations(const std::vector<glm::vec3> &pts, 
         for (int i = 0; i < n; i++)
         {
             glm::vec3 t;
+            glm::vec3 mitreDir(0.0f);
+            bool mitred = false;
 
             if (i == 0)
                 t = segDir(0, 1);
@@ -193,6 +245,12 @@ std::vector<PathFrame> buildPolylineStations(const std::vector<glm::vec3> &pts, 
                 glm::vec3 dIn = segDir(i - 1, i);
                 glm::vec3 dOut = segDir(i, i + 1);
                 t = dIn + dOut;
+
+                // Remember the outgoing segment so the mitre stretch can be
+                // worked out once the frame axes exist.
+
+                mitreDir = dOut;
+                mitred = true;
 
                 if (length2(t) < kEps)
                 {
@@ -209,10 +267,14 @@ std::vector<PathFrame> buildPolylineStations(const std::vector<glm::vec3> &pts, 
                     // end of every solid line.
 
                     t = stations.empty() ? dOut : stations.back().tangent;
+                    mitred = false;
                 }
             }
 
             pushStation(pts[i], t, static_cast<float>(i));
+
+            if (mitred && (mitreDirs != nullptr) && !mitreDirs->empty())
+                mitreDirs->back() = mitreDir;
         }
 
         return stations;
@@ -556,12 +618,21 @@ std::vector<PathFrame> ivf::buildPathFrames(const std::vector<glm::vec3> &contro
 
         computeTangents(frames, closed);
     }
-    else
-        frames = buildPolylineStations(controlPoints, join, closed, cornerRadius, cornerSegments);
+    std::vector<glm::vec3> mitreDirs;
+
+    if (interp != SpineInterp::CatmullRom)
+        frames = buildPolylineStations(controlPoints, join, closed, cornerRadius, cornerSegments, &mitreDirs);
 
     normalizeTangents(frames);
     computeArcLength(frames);
     assignFrameOrientations(frames, frameMethod, upHint, closed);
+
+    // Only now are normal and binormal known, and only now is the tangent a unit
+    // vector -- both of which the mitre stretch is expressed in terms of.
+
+    for (std::size_t i = 0; (i < mitreDirs.size()) && (i < frames.size()); i++)
+        if (glm::dot(mitreDirs[i], mitreDirs[i]) > kEps)
+            frames[i].mitre = mitreMatrix(frames[i], mitreDirs[i]);
 
     return frames;
 }

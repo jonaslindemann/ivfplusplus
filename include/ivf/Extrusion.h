@@ -27,6 +27,7 @@
 #include <GL/gle.h>
 
 #include <ivf/Shape.h>
+#include <ivf/SweptExtrusion.h>
 
 namespace ivf {
 
@@ -97,6 +98,22 @@ public:
 
 	IvfClassInfo("Extrusion",Shape);
 	IvfStdFactory(Extrusion);
+
+	/**
+	 * Drawn through SweptExtrusion when the shader path is live.
+	 *
+	 * The sweep itself is not reimplemented here: this class keeps a
+	 * SweptExtrusion, feeds it the same section and spine, and lets it draw. The
+	 * two gle conventions that make a hand-rolled sweep disagree with gle -- the
+	 * first and last spine points are never swept, and gle's section frame is
+	 * left-handed -- are already reproduced and verified there by
+	 * examples/swept_test, so borrowing that is the only way to be sure both
+	 * classes produce the same surface.
+	 */
+	virtual bool hasModernPath() override;
+
+	/** Also invalidates the SweptExtrusion this class delegates its modern path to. */
+	virtual void markListDirty() override;
 
 	/** 
 	 * Sets section size
@@ -311,6 +328,15 @@ private:
 	float (*m_spineColors)[3];
 	gleDouble (*m_twist);
     gleDouble (*m_sectionTransform)[2][3];
+
+	// Modern path. Built on demand and refilled whenever this object is marked
+	// dirty, so an application that never activates a shader never pays for it.
+	SweptExtrusionPtr m_swept;
+	bool m_sweptDirty;
+
+	/** Copy section, spine and options across to m_swept if anything changed. */
+	void syncSwept();
+
  protected:
 	virtual void doCreateSelect() override;
 	virtual void doCreateGeometry() override;
