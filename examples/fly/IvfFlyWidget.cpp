@@ -16,7 +16,7 @@
 using namespace ivf;
 
 FlyWidget::FlyWidget(int X, int Y, int W, int H, const char *L)
-:GlutBase(X, Y, W, H)
+:GlfwWindow(X, Y, W, H)
 {
 }
 

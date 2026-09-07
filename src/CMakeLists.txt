@@ -17,9 +17,10 @@ if (IVF_UI)
 		add_subdirectory(ivfwin32)
 	endif (IVF_UI_WIN32)
 
-	if (IVF_UI_GLUT)
-		add_subdirectory(ivfglut)
-	endif (IVF_UI_GLUT)
+
+	if (IVF_UI_GLFW)
+		add_subdirectory(ivfglfw)
+	endif (IVF_UI_GLFW)
 
 endif(IVF_UI)
 

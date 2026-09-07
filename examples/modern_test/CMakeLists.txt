@@ -2,7 +2,7 @@ file(GLOB SOURCE_FILES *.cpp)
 file(GLOB INCLUDE_FILES *.h)
 
 SET(IVFAPP_NAME modern_test)
-SET(IVFAPP_LIBS ivf ivfglut glad)
-SET(IVFAPP_DEBUG_LIBS ivfd ivfglutd gladd)
+SET(IVFAPP_LIBS ivf ivfglfw glad)
+SET(IVFAPP_DEBUG_LIBS ivfd ivfglfwd gladd)
 
 IVFAPP_SETUP()

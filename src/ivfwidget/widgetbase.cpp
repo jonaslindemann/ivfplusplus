@@ -26,6 +26,7 @@
 #include <ivfwidget/WidgetBase.h>
 
 #include <ivf/GL.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -210,25 +211,30 @@ void WidgetBase::doDraw()
 	// Drawing code
 
 	doClear();
-	
-	glPushMatrix();
+
+	// The matrix and attribute stacks are gone in a core profile, so these go
+	// through the LegacyGL wrappers rather than straight to GL. Under
+	// RenderProfile::Core they become no-ops and the frame draws through the
+	// shader path alone; under Legacy and Mixed they behave exactly as before.
+
+	lgPushMatrix();
 
 	doRender();
 	
 	if (m_doOverlay)
 	{
-		glPushAttrib(GL_ENABLE_BIT);
+		lgPushAttrib(GL_ENABLE_BIT);
 
 		doInitOverlay(m_size[0], m_size[1]);
 		doOverlay();
 
-		glPopAttrib();
+		lgPopAttrib();
 
 		if (m_initDone)
 			doResize(m_size[0], m_size[1]);
 	}
 	
-	glPopMatrix();
+	lgPopMatrix();
 }
 
 void WidgetBase::doResize(int width, int height)

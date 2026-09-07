@@ -13,8 +13,8 @@
 //
 // ------------------------------------------------------------
 
-#include <ivfglut/GlutApplication.h>
-#include <ivfglut/GlutBase.h>
+#include <ivfglfw/GlfwApplication.h>
+#include <ivfglfw/GlfwWindow.h>
 
 #include <ivf/Camera.h>
 #include <ivf/Lighting.h>
@@ -31,7 +31,7 @@ using namespace ivf;
 
 IvfSmartPointer(ModernTestWindow);
 
-class ModernTestWindow : public GlutBase {
+class ModernTestWindow : public GlfwWindow {
 private:
     CameraPtr   m_camera;
     LightPtr    m_light;
@@ -57,7 +57,7 @@ private:
 
 public:
     ModernTestWindow(int X, int Y, int W, int H)
-        : GlutBase(X, Y, W, H) {}
+        : GlfwWindow(X, Y, W, H) {}
 
     static ModernTestWindowPtr create(int X, int Y, int W, int H)
     {
@@ -138,7 +138,7 @@ public:
 // ============================================================
 int main(int argc, char** argv)
 {
-    auto app = GlutApplication::getInstance(&argc, argv);
+    auto app = GlfwApplication::getInstance(&argc, argv);
     app->setDisplayMode(IVF_DOUBLE | IVF_RGB | IVF_DEPTH);
 
     auto window = ModernTestWindow::create(0, 0, 640, 640);

@@ -34,7 +34,7 @@ project(ivf)
 option(IVF_UI "Build user interface integration libraries." ON) 
 option(IVF_UI_FLTK "Build user interface integration libraries." ON)
 option(IVF_UI_WIN32 "Build user interface integration libraries." OFF)
-option(IVF_UI_GLUT "Build user interface integration libraries." ON)
+option(IVF_UI_GLFW "Build the GLFW integration library." ON)
 option(IVF_IMAGE "Build Ivf++ image support." ON)
 option(IVF_FONT "Build Ivf++ with font support." OFF)
 option(IVF_EXAMPLES "Build Ivf++ examples." ON)
@@ -42,7 +42,6 @@ option(IVF_EXAMPLES_GENERIC "Build Ivf++ generic examples" ON)
 option(IVF_EXAMPLES_GLE "Build Ivf++ GLE examples" ON)
 option(IVF_EXAMPLES_FLTK "Build Ivf++ FLTK examples" ON)
 option(IVF_EXAMPLES_WIN32 "Build Ivf++ WIN32 examples" OFF)
-option(IVF_EXAMPLES_FONTS "Build Ivf++ font support examples" OFF)
 option(IVF_EXAMPLES_ASSIMP "Build Ivf++ assimp examples" OFF)
 option(IVF_DEBUG "Build Ivf++ with debug information." OFF)
 option(IVF_SHARED "Build Ivf++ as shared libraries." OFF)
@@ -79,7 +78,6 @@ else()
 endif()
 
 message(STATUS "Ivf++ GLU library: ${IVF_GLU_LIBRARY}")
-find_package(FreeGLUT CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
@@ -118,7 +116,7 @@ macro(IVFAPP_SETUP)
 	target_link_libraries(${IVFAPP_NAME} PRIVATE 
 		${IVFAPP_LIBS}
 		PNG::PNG JPEG::JPEG ZLIB::ZLIB glfw GLEW::GLEW OpenGL::GL ${IVF_GLU_LIBRARY}
-		FreeGLUT::freeglut glm::glm)
+		glm::glm)
 	install(TARGETS ${IVFAPP_NAME} DESTINATION bin)
 
 endmacro(IVFAPP_SETUP)

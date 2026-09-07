@@ -69,10 +69,4 @@ if (IVF_EXAMPLES)
 		
 	endif (IVF_EXAMPLES_ASSIMP)
 	
-	if (IVF_EXAMPLES_FONTS)
-	
-		add_subdirectory(fonts)
-		
-	endif (IVF_EXAMPLES_FONTS)
-
 endif (IVF_EXAMPLES)

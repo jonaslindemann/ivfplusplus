@@ -9,7 +9,6 @@
     "zlib",
     "opengl",
     "fltk",
-    "freeglut",
     "glm"
     ]
 }
