@@ -684,6 +684,26 @@ pixels wide and put its coverage 60% over legacy.
 `LineSet` (488 → 514 px), `LineStripSet` (745 → 841) and `Grid` (5300 → 5804)
 now draw at the right width in core; all three were coverage failures before.
 
+#### Build fixes found on a second machine
+
+- **Nothing ever linked GLU.** The library calls `gluPerspective`, `gluLookAt`,
+  `gluPickMatrix`, the quadrics, `gluBuild2DMipmaps` and the whole GLU
+  tessellator inside vendored gle, but no target listed it. It linked only where
+  some other package happened to drag `glu32` in, and failed with eighteen
+  unresolved externals where none did. `IVF_GLU_LIBRARY` is now resolved once in
+  the root `CMakeLists.txt` and attached to `ivf` and `gleivf`, so consumers --
+  ObjectiveFrame included -- inherit it. It can go when the last GLU call does.
+- **`Texture.cpp` included `glm/gtx/matrix_transform_2d.hpp`**, which is a GLM
+  *experimental* extension and refuses to compile without
+  `GLM_ENABLE_EXPERIMENTAL`. My mistake, and one that only shows up on a GLM
+  recent enough to carry the guard. The texture matrix is now built from three
+  literal `glm::mat3` values, which needs no extension at all.
+
+Worth noting for later: `gluBuild2DMipmaps` in `Texture::bind()` is the one GLU
+call that runs on *every* profile rather than only the legacy path. It should
+become `glGenerateMipmap`, which is core. No test covers mipmapped textures yet,
+so it is currently unexercised either way.
+
 #### Still open
 
 - **`FaceSet`, `Mesh`, `VertexElements`** draw nothing in core — Phase 4's

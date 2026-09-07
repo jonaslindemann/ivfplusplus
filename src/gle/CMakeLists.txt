@@ -3,6 +3,7 @@ file(GLOB SOURCE_FILES CONFIGURE_DEPENDS *.c)
 file(GLOB INCLUDE_FILES ${ivf_SOURCE_DIR}/include/GL/*.h )
 
 add_library(gleivf ${INCLUDE_FILES} ${SOURCE_FILES})
+target_link_libraries(gleivf OpenGL::GL ${IVF_GLU_LIBRARY})
 set_target_properties(gleivf PROPERTIES
   DEBUG_POSTFIX "d"
   OUTPUT_NAME "gleivf")

@@ -27,7 +27,9 @@
 #include <ivf/LegacyGL.h>
 #include <ivf/rc.h>
 
-#include <glm/gtx/matrix_transform_2d.hpp>
+#include <glm/glm.hpp>
+
+#include <cmath>
 
 using namespace ivf;
 
@@ -396,18 +398,33 @@ void Texture::syncToRenderContext()
 	                     m_textureEnvColor[2], m_textureEnvColor[3]);
 
 	// The same translate, rotate, scale the legacy path builds above, as one 3x3
-	// affine transform on texture coordinates.
+	// affine transform on texture coordinates, in that order.
+	//
+	// Built by hand rather than with glm::translate/rotate/scale for mat3: those
+	// live in GLM_GTX_matrix_transform_2d, which is an experimental extension and
+	// refuses to compile without GLM_ENABLE_EXPERIMENTAL. Three literals are
+	// cheaper than taking that on.
 
-	glm::mat3 m(1.0f);
+	const float tx = (float)m_texTransX;
+	const float ty = (float)m_texTransY;
+	const float c  = std::cos(glm::radians((float)m_texRotate));
+	const float s  = std::sin(glm::radians((float)m_texRotate));
+	const float sx = (float)m_texScaleX;
+	const float sy = (float)m_texScaleY;
 
-	if ((m_texTransX != 0.0) || (m_texTransY != 0.0))
-		m = glm::translate(glm::mat3(1.0f), glm::vec2((float)m_texTransX, (float)m_texTransY));
+	// glm::mat3 takes columns, so each row below is one column of the matrix.
 
-	if (m_texRotate != 0.0)
-		m = m * glm::mat3(glm::rotate(glm::mat3(1.0f), glm::radians((float)m_texRotate)));
+	const glm::mat3 translate(1.0f, 0.0f, 0.0f,
+	                          0.0f, 1.0f, 0.0f,
+	                          tx,   ty,   1.0f);
 
-	if ((m_texScaleX != 0.0) || (m_texScaleY != 0.0))
-		m = m * glm::mat3(glm::scale(glm::mat3(1.0f), glm::vec2((float)m_texScaleX, (float)m_texScaleY)));
+	const glm::mat3 rotate(c,    s,    0.0f,
+	                       -s,   c,    0.0f,
+	                       0.0f, 0.0f, 1.0f);
 
-	rcSetTextureMatrix(m);
+	const glm::mat3 scale(sx,   0.0f, 0.0f,
+	                      0.0f, sy,   0.0f,
+	                      0.0f, 0.0f, 1.0f);
+
+	rcSetTextureMatrix(translate * rotate * scale);
 }
