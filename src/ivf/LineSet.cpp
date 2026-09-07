@@ -61,7 +61,7 @@ void LineSet::doCreateGeometry()
 
 	if (m_idxLineWidth.empty())
 	{
-		if (buildAndDrawVAO(GL_LINES))
+		if (buildAndDrawVAO(GL_LINES, false, nullptr, m_lineWidth))
 		{
 			lgLineWidth(oldWidth[0]);
 			return;
@@ -69,7 +69,7 @@ void LineSet::doCreateGeometry()
 	}
 	else
 	{
-		if (buildAndDrawVAO(GL_LINES, false, &m_idxLineWidth))
+		if (buildAndDrawVAO(GL_LINES, false, &m_idxLineWidth, m_lineWidth))
 		{
 			lgLineWidth(oldWidth[0]);
 			return;

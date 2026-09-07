@@ -163,6 +163,28 @@ inline void lgLineWidth(GLfloat width)
     glLineWidth(rcLegacyAllowed() ? width : 1.0f);
 }
 
+// ---- Fog ----
+//
+// Fog mirrors these into RenderContext as well, where the fragment shader
+// reimplements the same three fog equations.
+
+inline void lgFogi(GLenum pname, GLint param)     { if (rcLegacyAllowed()) glFogi(pname, param); }
+inline void lgFogf(GLenum pname, GLfloat param)   { if (rcLegacyAllowed()) glFogf(pname, param); }
+inline void lgFogfv(GLenum pname, const GLfloat* params)
+                                                  { if (rcLegacyAllowed()) glFogfv(pname, params); }
+
+// ---- Texture environment ----
+
+inline void lgTexEnvi(GLenum target, GLenum pname, GLint param)
+                                                  { if (rcLegacyAllowed()) glTexEnvi(target, pname, param); }
+inline void lgTexEnvfv(GLenum target, GLenum pname, const GLfloat* params)
+                                                  { if (rcLegacyAllowed()) glTexEnvfv(target, pname, params); }
+
+// ---- Alpha test ----
+
+inline void lgAlphaFunc(GLenum func, GLclampf ref)
+                                                  { if (rcLegacyAllowed()) glAlphaFunc(func, ref); }
+
 // ---- Selection ----
 //
 // Replaced by colour-id picking against an offscreen target in Phase 5. Until

@@ -111,8 +111,35 @@ private:
 	int m_childCount;
 	GLuint m_selectBuf[512];
 
+	// Offscreen target for colour-id picking. Kept between picks and resized
+	// only when the viewport changes, because a pick happens on every mouse move
+	// in some handlers.
+	GLuint m_pickFbo;
+	GLuint m_pickColorRb;
+	GLuint m_pickDepthRb;
+	int m_pickWidth;
+	int m_pickHeight;
+
 	void nameChildren(Shape* shape);
 	void processHits(GLint hits, GLuint buffer []);
+
+	/**
+	 * Pick by drawing object ids into an offscreen buffer and reading them back.
+	 *
+	 * Used whenever the shader path is active, because GL_SELECT does not exist
+	 * in a core profile. Produces the same three results as the GL_SELECT path --
+	 * the list of shapes under the cursor, the nearest one, and a hit count -- so
+	 * nothing above this class can tell the difference.
+	 *
+	 * Returns the number of hits, or -1 if the pick could not be set up.
+	 */
+	int pickColorId(int x, int y);
+
+	/** Create or resize the offscreen pick target. Returns false on failure. */
+	bool ensurePickBuffer(int width, int height);
+
+	/** Release the offscreen pick target. */
+	void releasePickBuffer();
 public:
 	/** CIvfBufferSelection constructor */
 	BufferSelection();

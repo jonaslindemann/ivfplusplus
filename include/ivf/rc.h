@@ -49,6 +49,12 @@ inline void rcUseShader() {
 /** Unbind any program, so following calls reach the fixed-function pipeline. */
 inline void rcUnuseShader()                              { glUseProgram(0); }
 
+// ---- Picking ----
+inline ShaderProgram* rcUsePickShader()                  { return RenderContext::instance().usePickShader(); }
+inline void rcSetPickMode(bool flag)                     { RenderContext::instance().setPickMode(flag); }
+inline bool rcPickMode()                                 { return RenderContext::instance().pickMode(); }
+inline void rcSetPickName(unsigned int name)             { RenderContext::instance().setPickName(name); }
+
 // ---- Shader update ----
 inline void rcUpdateShader() {
     RenderContext::instance().updateShader(RenderContext::instance().shader());
@@ -62,6 +68,23 @@ inline void rcSetGlobalAmbient(float r, float g, float b, float a = 1.0f)
     { RenderContext::instance().setGlobalAmbient(r, g, b, a); }
 inline void rcSetUseTexture(bool flag)                   { RenderContext::instance().setUseTexture(flag); }
 inline bool rcUseTexture()                               { return RenderContext::instance().useTexture(); }
+
+// ---- Fixed-function state mirrored for the shader ----
+inline void rcSetTextureMode(int mode)                   { RenderContext::instance().setTextureMode(mode); }
+inline void rcSetTextureEnvColor(float r, float g, float b, float a)
+    { RenderContext::instance().setTextureEnvColor(r, g, b, a); }
+inline void rcSetTextureMatrix(const glm::mat3& m)       { RenderContext::instance().setTextureMatrix(m); }
+inline void rcSetFogMode(int mode)                       { RenderContext::instance().setFogMode(mode); }
+inline void rcSetFogColor(float r, float g, float b, float a)
+    { RenderContext::instance().setFogColor(r, g, b, a); }
+inline void rcSetFogDensity(float d)                     { RenderContext::instance().setFogDensity(d); }
+inline void rcSetFogRange(float s, float e)              { RenderContext::instance().setFogRange(s, e); }
+inline int  rcFogMode()                                  { return RenderContext::instance().fogMode(); }
+inline void rcSetTwoSided(bool flag)                     { RenderContext::instance().setTwoSided(flag); }
+inline void rcSetAlphaTest(GLenum func, float ref)       { RenderContext::instance().setAlphaTest(func, ref); }
+inline void rcDisableAlphaTest()                         { RenderContext::instance().disableAlphaTest(); }
+inline bool rcNeedsWideLineExpansion(float w)            { return RenderContext::instance().needsWideLineExpansion(w); }
+inline void rcSetWideLineDraw(bool flag)                 { RenderContext::instance().setWideLineDraw(flag); }
 
 // ---- Matrices ----
 inline void rcSetProjection(const glm::mat4& m)          { RenderContext::instance().setProjection(m); }

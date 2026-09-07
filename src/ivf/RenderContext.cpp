@@ -23,6 +23,7 @@
 //
 
 #include <ivf/RenderContext.h>
+#include <ivf/PickShader.h>
 #include <ivf/BlinnPhongShader.h>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -53,6 +54,21 @@ RenderContext::RenderContext()
     , m_unlitVao(0)
     , m_unlitVbo(0)
     , m_unlitCapacity(0)
+    , m_pickMode(false)
+    , m_pickColor(0.0f, 0.0f, 0.0f, 1.0f)
+    , m_textureMode(0)
+    , m_textureEnvColor(1.0f, 1.0f, 1.0f, 1.0f)
+    , m_textureMatrix(1.0f)
+    , m_fogMode(0)
+    , m_fogColor(0.0f, 0.0f, 0.0f, 1.0f)
+    , m_fogDensity(1.0f)
+    , m_fogStart(0.0f)
+    , m_fogEnd(1.0f)
+    , m_twoSided(false)
+    , m_alphaTestFunc(0)
+    , m_alphaTestRef(0.0f)
+    , m_wideLineDraw(false)
+    , m_whiteTexture(0)
 {
     m_modelStack.push(glm::mat4(1.0f));
 }
@@ -252,8 +268,39 @@ void RenderContext::updateShader(ShaderProgram* prog) const
 
     prog->setUniformVec4("uGlobalAmbient", m_globalAmbient);
     prog->setUniformInt("uUseTexture",     m_useTexture ? 1 : 0);
+
+    prog->setUniformInt("uTextureMode",       m_textureMode);
+    prog->setUniformVec4("uTextureEnvColor",  m_textureEnvColor);
+    prog->setUniformMat3("uTextureMatrix",    m_textureMatrix);
+
+    prog->setUniformInt("uFogMode",     m_fogMode);
+    prog->setUniformVec4("uFogColor",   m_fogColor);
+    prog->setUniformFloat("uFogDensity", m_fogDensity);
+    prog->setUniformFloat("uFogStart",   m_fogStart);
+    prog->setUniformFloat("uFogEnd",     m_fogEnd);
+
+    prog->setUniformInt("uWideLine", m_wideLineDraw ? 1 : 0);
+
+    if (m_wideLineDraw)
+    {
+        GLint viewport[4] = { 0, 0, 1, 1 };
+        glGetIntegerv(GL_VIEWPORT, viewport);
+        prog->setUniformVec2("uViewportSize",
+                             glm::vec2((float)viewport[2], (float)viewport[3]));
+    }
+
+    prog->setUniformInt("uTwoSided",       m_twoSided ? 1 : 0);
+    prog->setUniformInt("uAlphaTestFunc",  m_alphaTestFunc);
+    prog->setUniformFloat("uAlphaTestRef", m_alphaTestRef);
     prog->setUniformInt("uUnlit",          0); // reset; GLPrimitive sets 1 for points/lines
     prog->setUniformInt("uUseVertexColor", 0); // reset; GLPrimitive sets 1 for colored geometry
+
+    // Re-assert the pick colour every draw. setPickName() uploads it when the
+    // name changes, but a draw path that rebinds or a shader swap in between
+    // would otherwise leave the previous shape's id in place.
+
+    if (m_pickMode)
+        prog->setUniformVec4("uPickColor", m_pickColor);
 
     prog->setUniformInt("uLightCount", m_lightCount);
 
@@ -383,6 +430,9 @@ void RenderContext::useBlinnPhong()
     }
     m_shader = (ShaderProgram*)m_ownedShader;
     m_shader->use();
+    m_shader->setUniformInt("uTexture", 0);
+
+    ensureWhiteTexture();
     applyDefaultMaterial();
 }
 
@@ -390,6 +440,152 @@ void RenderContext::setShader(ShaderProgram* prog)
 {
     m_shader = prog;
     applyDefaultMaterial();
+}
+
+ShaderProgram* RenderContext::usePickShader()
+{
+    if (!m_pickShader || !m_pickShader->isLinked())
+    {
+        m_pickShader = PickShader::create();
+
+        if (!m_pickShader->isLinked())
+        {
+            std::cerr << "RenderContext: PickShader failed to compile/link\n";
+            return nullptr;
+        }
+    }
+
+    ShaderProgram* previous = m_shader;
+
+    m_shader = (ShaderProgram*)m_pickShader;
+    m_shader->use();
+
+    return previous;
+}
+
+void RenderContext::setPickMode(bool flag)
+{
+    m_pickMode = flag;
+}
+
+bool RenderContext::pickMode() const
+{
+    return m_pickMode;
+}
+
+void RenderContext::setPickName(unsigned int name)
+{
+    // Zero is background, so shift by one. 24 bits is 16.7 million shapes, well
+    // past anything the scene graph will hold.
+
+    const unsigned int encoded = name + 1;
+
+    m_pickColor = glm::vec4(static_cast<float>((encoded)       & 0xffu) / 255.0f,
+                            static_cast<float>((encoded >>  8) & 0xffu) / 255.0f,
+                            static_cast<float>((encoded >> 16) & 0xffu) / 255.0f,
+                            1.0f);
+
+    if (m_shader && m_shader->isLinked())
+        m_shader->setUniformVec4("uPickColor", m_pickColor);
+}
+
+unsigned int RenderContext::decodePickName(unsigned char r, unsigned char g, unsigned char b, bool& valid)
+{
+    const unsigned int encoded = (unsigned int)r | ((unsigned int)g << 8) | ((unsigned int)b << 16);
+
+    valid = (encoded != 0);
+    return valid ? (encoded - 1) : 0;
+}
+
+// ---- Fixed-function state mirrored for the shader ----
+
+void RenderContext::setTextureMode(int mode)
+{
+    m_textureMode = mode;
+}
+
+void RenderContext::setTextureEnvColor(float r, float g, float b, float a)
+{
+    m_textureEnvColor = glm::vec4(r, g, b, a);
+}
+
+void RenderContext::setTextureMatrix(const glm::mat3& m)
+{
+    m_textureMatrix = m;
+}
+
+void RenderContext::setFogMode(int mode)
+{
+    m_fogMode = mode;
+}
+
+int RenderContext::fogMode() const
+{
+    return m_fogMode;
+}
+
+void RenderContext::setFogColor(float r, float g, float b, float a)
+{
+    m_fogColor = glm::vec4(r, g, b, a);
+}
+
+void RenderContext::setFogDensity(float density)
+{
+    m_fogDensity = density;
+}
+
+void RenderContext::setFogRange(float start, float end)
+{
+    m_fogStart = start;
+    m_fogEnd = end;
+}
+
+void RenderContext::setTwoSided(bool flag)
+{
+    m_twoSided = flag;
+}
+
+void RenderContext::setAlphaTest(GLenum func, float ref)
+{
+    m_alphaTestFunc = (int)func;
+    m_alphaTestRef = ref;
+}
+
+void RenderContext::disableAlphaTest()
+{
+    m_alphaTestFunc = 0;
+}
+
+bool RenderContext::needsWideLineExpansion(float width) const
+{
+    return (m_profile == RenderProfile::Core) && (width > 1.0f);
+}
+
+void RenderContext::setWideLineDraw(bool flag)
+{
+    m_wideLineDraw = flag;
+}
+
+void RenderContext::ensureWhiteTexture()
+{
+    if (m_whiteTexture != 0)
+        return;
+
+    const unsigned char white[4] = { 255, 255, 255, 255 };
+
+    GLint previous = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &previous);
+
+    glGenTextures(1, &m_whiteTexture);
+    glBindTexture(GL_TEXTURE_2D, m_whiteTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, white);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // Leave whatever the caller had bound in place, but if that was nothing,
+    // leave the white one -- an incomplete unit 0 is what this exists to avoid.
+
+    glBindTexture(GL_TEXTURE_2D, (previous != 0) ? (GLuint)previous : m_whiteTexture);
 }
 
 void RenderContext::applyDefaultMaterial()

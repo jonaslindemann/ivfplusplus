@@ -117,6 +117,13 @@ void ShaderProgram::setUniformFloat(const std::string& name, float value)
         glUniform1f(loc, value);
 }
 
+void ShaderProgram::setUniformVec2(const std::string& name, const glm::vec2& value)
+{
+    GLint loc = uniformLocation(name);
+    if (loc >= 0)
+        glUniform2fv(loc, 1, &value[0]);
+}
+
 void ShaderProgram::setUniformVec3(const std::string& name, const glm::vec3& value)
 {
     GLint loc = uniformLocation(name);

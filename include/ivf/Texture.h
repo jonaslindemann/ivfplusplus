@@ -71,6 +71,9 @@ public:
 	IvfClassInfo("Texture",GLBase);
 	IvfStdFactory(Texture);
 
+	/** Mirror the texture environment and matrix into RenderContext. */
+	void syncToRenderContext();
+
 	/**
 	 * A state object, not geometry. Nothing here needs the fixed-function
 	 * pipeline, so the program stays bound across it.

@@ -88,6 +88,7 @@ private:
 	GLsizei  m_vaoVertexCount = 0;
 	bool     m_vaoDirty = true;
 	bool     m_vaoWireframe = false;
+	bool     m_vaoExpandedLines = false;
 
 	// First vertex and vertex count of each coordinate index set within the
 	// packed buffer, so they can be drawn separately when they need different
@@ -121,10 +122,16 @@ protected:
 	 * kept Grid, whose outline and corners are drawn thicker than its rules,
 	 * from ever reaching the modern path.
 	 *
+	 * lineWidth -- the width the subclass would pass to glLineWidth. In a core
+	 * profile anything above 1.0 is illegal, so line primitives are expanded into
+	 * triangles instead; elsewhere glLineWidth still does the job and this is
+	 * ignored.
+	 *
 	 * Returns true if drawn (shader was active), false to fall through to legacy code.
 	 */
 	bool buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe = false,
-	                     const std::vector<float>* indexSetLineWidths = nullptr);
+	                     const std::vector<float>* indexSetLineWidths = nullptr,
+	                     float lineWidth = 1.0f);
 
 	std::vector<Vec3d*>		m_coordSet;
 	std::vector<Color*>		m_colorSet;

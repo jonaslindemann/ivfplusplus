@@ -69,13 +69,15 @@ Light::~Light()
 
 void Light::enable()
 {
-	glEnable(GL_LIGHT0 + m_lightn);
+	// GL_LIGHTn is fixed-function state. The shader path learns about this
+	// light from rcAddLight() in doCreateGeometry() instead.
+	lgEnableLegacy(GL_LIGHT0 + m_lightn);
 	m_enabled = true;
 }
 
 void Light::disable()
 {
-	glDisable(GL_LIGHT0 + m_lightn);
+	lgDisableLegacy(GL_LIGHT0 + m_lightn);
 	m_enabled = false;
 }
 

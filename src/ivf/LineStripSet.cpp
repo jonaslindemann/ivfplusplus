@@ -47,7 +47,7 @@ void LineStripSet::doCreateGeometry()
 	glGetFloatv(GL_LINE_WIDTH, oldWidth);
 	lgLineWidth(m_lineWidth);
 
-	if (buildAndDrawVAO(GL_LINE_STRIP))
+	if (buildAndDrawVAO(GL_LINE_STRIP, false, nullptr, m_lineWidth))
 	{
 		lgLineWidth(oldWidth[0]);
 		return;

@@ -56,7 +56,8 @@ void GLPrimitive::markVAODirty()
 
 // ------------------------------------------------------------
 bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
-                                  const std::vector<float>* indexSetLineWidths)
+                                  const std::vector<float>* indexSetLineWidths,
+                                  float lineWidth)
 {
 	ShaderProgram* prog = rcShader();
 	if (!rcIsShaderActive())
@@ -67,6 +68,25 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
 
 	if (wireframe != m_vaoWireframe) {
 		m_vaoWireframe = wireframe;
+		m_vaoDirty = true;
+	}
+
+	// Wide lines in core are built from triangles, which is a different vertex
+	// layout again -- and the widest of the per-index widths decides, since one
+	// buffer serves them all.
+
+	float widest = lineWidth;
+
+	if (indexSetLineWidths != nullptr)
+		for (float w : *indexSetLineWidths)
+			if (w > widest)
+				widest = w;
+
+	const bool isLine = (legacyPrimitive == GL_LINES) || (legacyPrimitive == GL_LINE_STRIP);
+	const bool expandLines = isLine && !wireframe && rcNeedsWideLineExpansion(widest);
+
+	if (expandLines != m_vaoExpandedLines) {
+		m_vaoExpandedLines = expandLines;
 		m_vaoDirty = true;
 	}
 
@@ -190,6 +210,68 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
 					packed.push_back(getVertex(j+3, fi));
 					packed.push_back(getVertex(j+2, fi));
 				}
+			} else if (expandLines) {
+				// Each segment becomes a quad. The vertex shader does the actual
+				// widening, because the width is in pixels and so is only known
+				// after projection; all that is prepared here is, per vertex, the
+				// segment's other endpoint (in the normal slot) and which side to
+				// step to plus how far (in the texture coordinate slot).
+
+				// Each index set carries its own width -- Grid draws its outline
+				// four pixels wide and its rules one -- so the half width has to
+				// be per set, not the widest of them. Taking the widest is only
+				// how the decision to expand at all is made.
+
+				float setWidth = lineWidth;
+
+				if ((indexSetLineWidths != nullptr) && !indexSetLineWidths->empty())
+				{
+					const size_t w = ((size_t)i < indexSetLineWidths->size())
+					                     ? (size_t)i
+					                     : indexSetLineWidths->size() - 1;
+					setWidth = (*indexSetLineWidths)[w];
+				}
+
+				const float halfWidth = 0.5f * setWidth;
+
+				auto emitSegment = [&](int ja, int jb, int fi) {
+					GpuVertex a = getVertex(ja, fi);
+					GpuVertex b = getVertex(jb, fi);
+
+					auto corner = [&](const GpuVertex& at, const GpuVertex& other, float side) {
+						GpuVertex v = at;
+						v.normal[0] = other.position[0];
+						v.normal[1] = other.position[1];
+						v.normal[2] = other.position[2];
+						v.texcoord[0] = side;
+						v.texcoord[1] = halfWidth;
+						return v;
+					};
+
+					// At b the direction runs the other way, so the side has to be
+					// negated for the corner to land on the same edge of the quad.
+
+					GpuVertex aMinus = corner(a, b, -1.0f);
+					GpuVertex aPlus  = corner(a, b,  1.0f);
+					GpuVertex bMinus = corner(b, a,  1.0f);
+					GpuVertex bPlus  = corner(b, a, -1.0f);
+
+					packed.push_back(aMinus);
+					packed.push_back(aPlus);
+					packed.push_back(bPlus);
+
+					packed.push_back(aMinus);
+					packed.push_back(bPlus);
+					packed.push_back(bMinus);
+				};
+
+				if (effPrim == GL_LINE_STRIP) {
+					for (int j = 0; j + 1 < n; ++j)
+						emitSegment(j, j + 1, j);
+				} else {
+					for (int j = 0; j + 1 < n; j += 2)
+						emitSegment(j, j + 1, j / 2);
+				}
 			} else {
 				// GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_LINES, GL_LINE_STRIP, GL_POINTS
 				for (int j = 0; j < n; ++j) {
@@ -240,6 +322,11 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
 	if (wireframe)
 		drawMode = GL_LINES;
 
+	if (m_vaoExpandedLines)
+		drawMode = GL_TRIANGLES;
+
+	rcSetWideLineDraw(m_vaoExpandedLines);
+
 	rcUseShader();
 	rcUpdateShader(prog);
 
@@ -278,6 +365,12 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
 		glDrawArrays(drawMode, 0, m_vaoVertexCount);
 
 	glBindVertexArray(0);
+
+	// Leave the flag off: the next object to draw is almost certainly not a wide
+	// line, and a stale flag would send its vertices through the expansion.
+
+	if (m_vaoExpandedLines)
+		rcSetWideLineDraw(false);
 
 	return true;
 }

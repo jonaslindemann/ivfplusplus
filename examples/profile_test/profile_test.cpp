@@ -28,6 +28,10 @@
 //   --list        List the registered cases and exit without a GL context.
 //   --only NAME   Run just the case whose name matches NAME.
 //   --notify      Report driver messages of Notification severity as well.
+//   --pick        Sweep a grid of pick samples over a small scene and print the
+//                 shape picked at each one as a character map. Diff the maps for
+//                 two profiles to check that colour-id picking agrees with
+//                 GL_SELECT. Implies --headless.
 //   --shot DIR    Render each case alone from a fixed camera into
 //                 DIR/<profile>_<case>.bmp. Run it for two profiles and diff
 //                 the images to see which classes changed appearance. Implies
@@ -41,6 +45,7 @@
 #include <ivf/Arrow.h>
 #include <ivf/Axis.h>
 #include <ivf/Brick.h>
+#include <ivf/BufferSelection.h>
 #include <ivf/Camera.h>
 #include <ivf/Composite.h>
 #include <ivf/Cone.h>
@@ -72,6 +77,7 @@
 #include <ivf/Sphere.h>
 #include <ivf/SweptExtrusion.h>
 #include <ivf/SweptSolidLine.h>
+#include <ivf/Texture.h>
 #include <ivf/Transform.h>
 #include <ivf/TriSet.h>
 #include <ivf/TriStripSet.h>
@@ -648,6 +654,37 @@ void registerCases()
         return ShapePtr(v);
     });
 
+    // A checkerboard built in memory, so the case needs no image file. Exercises
+    // uUseTexture, the texture environment mode and the texture matrix.
+
+    addCase("TexturedPlane", [] {
+        static unsigned char checker[16 * 16 * 4];
+
+        for (int y = 0; y < 16; y++)
+            for (int x = 0; x < 16; x++)
+            {
+                const bool on = (((x / 4) + (y / 4)) % 2) == 0;
+                unsigned char *p = &checker[(y * 16 + x) * 4];
+                p[0] = on ? 240 : 40;
+                p[1] = on ? 200 : 40;
+                p[2] = on ? 60 : 90;
+                p[3] = 255;
+            }
+
+        auto tex = Texture::create();
+        tex->setImageMap(checker);
+        tex->setSize(16, 16);
+        tex->setMode(GL_MODULATE);
+        tex->setFilters(GL_NEAREST, GL_NEAREST);
+
+        auto q = QuadPlane::create();
+        q->setSize(1.4, 1.4);
+        q->setMaterial(defaultMaterial());
+        q->setTexture(tex);
+
+        return ShapePtr(q);
+    });
+
     addCase("Composite", [] {
         auto c = Composite::create();
 
@@ -685,6 +722,7 @@ void registerCases()
 TestProfile g_profile = TestProfile::Mixed;
 bool g_headless = false;
 bool g_reportNotifications = false;
+bool g_pickTest = false;
 std::string g_only;
 std::string g_shotDir;
 
@@ -953,6 +991,178 @@ int runShots(const std::string &dir)
 }
 
 // ============================================================
+// Picking
+//
+// GL_SELECT is gone in core, so picking is done by drawing object ids into an
+// offscreen buffer. The two implementations have to agree about which shape is
+// under a given pixel, and the only convincing way to show that is to ask them
+// both the same questions.
+//
+// This sweeps a grid of sample points over the viewport and prints the index of
+// the shape picked at each one, as a small character map. Run it for two
+// profiles and diff the maps: identical output means the replacement picks the
+// same shapes as GL_SELECT did, pixel region for pixel region.
+
+int runPickTest()
+{
+    auto scene = Composite::create();
+    std::vector<Shape *> pickable;
+
+    // Three spheres and a cube, spread across the view and overlapping in depth
+    // so the "nearest wins" rule is actually exercised.
+
+    struct Placement {
+        double x, y, z, r;
+    };
+
+    const Placement places[] = {{-1.3, 0.6, 0.0, 0.55},
+                                {1.3, 0.6, 0.0, 0.55},
+                                {-1.3, -0.8, 0.8, 0.55},
+                                {1.2, -0.8, -0.6, 0.55}};
+
+    for (int i = 0; i < 4; i++)
+    {
+        auto s = Sphere::create();
+        s->setRadius(places[i].r);
+        s->setSlices(24);
+        s->setStacks(16);
+        s->setPosition(places[i].x, places[i].y, places[i].z);
+        s->setMaterial(defaultMaterial());
+        s->setUseName(true);
+
+        scene->addChild(s);
+        pickable.push_back((Shape *)s);
+    }
+
+    // A composite in the middle, named as a whole: picking any of its children
+    // must report the composite, which is the inherited-name case.
+
+    auto group = Composite::create();
+    group->setUseName(true);
+    group->setPosition(0.0, -0.1, 0.0);
+
+    for (int i = 0; i < 2; i++)
+    {
+        auto c = Cube::create();
+        c->setSize(0.5);
+        c->setPosition(-0.25 + 0.5 * i, 0.0, 0.0);
+        c->setMaterial(defaultMaterial());
+        c->setUseName(false);
+        group->addChild(c);
+    }
+
+    scene->addChild(group);
+    pickable.push_back((Shape *)group);
+
+    BufferSelectionPtr selection = BufferSelection::create();
+    selection->setView((View *)g_camera);
+    selection->setComposite(group ? (Composite *)scene : nullptr);
+    selection->update();
+
+    const int width = 640;
+    const int height = 480;
+
+    glViewport(0, 0, width, height);
+    g_camera->setPerspective(45.0, 0.1, 100.0);
+    g_camera->setViewPort(width, height);
+    g_camera->initialize();
+    g_camera->setPosition(0.0, 0.0, 6.0);
+    g_camera->setTarget(0.0, 0.0, 0.0);
+
+    // Draw the scene once normally first. Picking is supposed to work in the
+    // middle of ordinary rendering, and doing it this way would catch a pick
+    // pass that failed to put the framebuffer or shader back.
+
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    beginTestFrame();
+    scene->render();
+    glFinish();
+
+    // Read back what was actually drawn. That, not the other implementation, is
+    // the ground truth a pick has to agree with: a sample where something is
+    // visible must pick something, and a sample showing background must not.
+
+    std::vector<unsigned char> rendered((size_t)width * height * 3, 0);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, rendered.data());
+
+    auto litAt = [&](int px, int py) {
+        const int ry = height - 1 - py;
+
+        if ((px < 0) || (px >= width) || (ry < 0) || (ry >= height))
+            return false;
+
+        const size_t o = ((size_t)ry * width + px) * 3;
+        return (rendered[o] != 0) || (rendered[o + 1] != 0) || (rendered[o + 2] != 0);
+    };
+
+    std::printf("pick map (%s), . = nothing, digit = shape index\n\n", profileName(g_profile));
+
+    const int cols = 40;
+    const int rows = 20;
+    int hitSamples = 0;
+    int litButNotPicked = 0;
+    int pickedButNotLit = 0;
+
+    for (int r = 0; r < rows; r++)
+    {
+        std::string line;
+
+        for (int c = 0; c < cols; c++)
+        {
+            const int px = (int)((c + 0.5) * width / cols);
+            const int py = (int)((r + 0.5) * height / rows);
+
+            selection->pick(px, py);
+            Shape *picked = selection->getSelectedShape();
+
+            char ch = '.';
+
+            for (size_t i = 0; i < pickable.size(); i++)
+                if (pickable[i] == picked)
+                {
+                    ch = (char)('0' + (int)i);
+                    hitSamples++;
+                    break;
+                }
+
+            const bool lit = litAt(px, py);
+
+            if (lit && (ch == '.'))
+                litButNotPicked++;
+            if (!lit && (ch != '.'))
+                pickedButNotLit++;
+
+            line += ch;
+        }
+
+        std::printf("  %s\n", line.c_str());
+    }
+
+    std::printf("\n%d of %d samples hit a shape\n", hitSamples, cols * rows);
+    std::printf("visible but not picked: %d    picked but not visible: %d\n",
+                litButNotPicked, pickedButNotLit);
+
+    // A map that is entirely empty means the pick never worked, which would
+    // otherwise read as "both profiles agree".
+
+    if (hitSamples == 0)
+    {
+        std::printf("FAIL: nothing was picked anywhere\n");
+        return 1;
+    }
+
+    const int errors = checkGLError("pick test");
+
+    if (errors != 0)
+        std::printf("FAIL: %d GL errors during picking\n", errors);
+
+    return errors;
+}
+
+// ============================================================
 // Viewer
 
 double g_angleH = 30.0;
@@ -1107,6 +1317,11 @@ int main(int argc, char **argv)
             g_headless = true;
         else if (arg == "--notify")
             g_reportNotifications = true;
+        else if (arg == "--pick")
+        {
+            g_pickTest = true;
+            g_headless = true;
+        }
         else if ((arg == "--only") && (i + 1 < argc))
             g_only = argv[++i];
         else if ((arg == "--shot") && (i + 1 < argc))
@@ -1255,6 +1470,21 @@ int main(int argc, char **argv)
     // would not be doing its job.
 
     glEnable(GL_DEPTH_TEST);
+
+    if (g_pickTest)
+    {
+        const int pickFailures = runPickTest();
+
+        g_cases.clear();
+        g_material = nullptr;
+        g_camera = nullptr;
+        g_light = nullptr;
+
+        disableDebugOutput();
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return (pickFailures == 0) ? 0 : 1;
+    }
 
     int failures = runChecks();
 

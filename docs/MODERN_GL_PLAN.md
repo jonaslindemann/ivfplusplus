@@ -558,7 +558,58 @@ Ordered by ObjectiveFrame's dependency list, so its cutover unblocks earliest:
 Each class: modern branch first, `if (...) return;` guard, legacy body untouched
 below it. Add the class to `profile_test`.
 
-### Phase 5 — Picking without `GL_SELECT` *(medium)*
+### Phase 5 — Picking without `GL_SELECT` — **done**
+
+- ✅ `PickShader` (`include/ivf/PickShader.h`) — a flat-colour program that writes
+  `uPickColor` unchanged. No lighting, no texturing, no vertex colour: the value
+  is an identifier travelling through a colour channel, not a colour.
+- ✅ `RenderContext` gained `usePickShader()`, `setPickMode()`, `setPickName()`
+  and `decodePickName()`. Names are encoded into 24 bits with zero reserved for
+  background, so the value written is `name + 1`.
+- ✅ `Shape::doBeginTransform()` reports the object name through `setPickName()`
+  alongside its existing `glLoadName()`. Driving both from the same place is what
+  makes the two implementations agree — including the inherited case, where a
+  child with `setUseName(false)` keeps whatever its parent last set.
+- ✅ `BufferSelection::pick()` switches to `pickColorId()` whenever the shader
+  path is active: render the scene into an offscreen FBO, read back a 4×4 region
+  around the cursor, decode the ids, and take the nearest by depth. It produces
+  the same three answers as the `GL_SELECT` path — the shape list, the nearest
+  shape, and a count.
+- ✅ `profile_test --pick` sweeps a grid of sample points over a small scene and
+  prints the shape picked at each as a character map.
+
+**Deviation from the plan:** the replacement lives inside `BufferSelection`
+rather than in a sibling `ColorPickSelection`. `SceneBase` holds a
+`BufferSelectionPtr` and `Scene`/`Workspace` delegate straight to it, so putting
+both implementations behind the same `pick()` means ObjectiveFrame gets working
+picking in every profile with no plumbing change at all. `GL_SELECT` is still
+used, unchanged, whenever the profile is `Legacy`.
+
+#### The pick test checks against the rendered image, not against GL_SELECT
+
+Comparing the two implementations to each other would only show they agree. The
+test instead reads back what was actually drawn and asks whether every visible
+sample picks something and no background sample does.
+
+| Profile | visible but not picked | picked but not visible |
+| --- | --- | --- |
+| `legacy` (GL_SELECT) | **103** | 23 |
+| `mixed` (colour id) | **0** | 15 |
+| `core` (colour id) | **0** | 15 |
+
+Colour-id picking turns out to be strictly *more* accurate than what it replaces:
+every visible sample picks a shape. The `GL_SELECT` path missed 103 of 800
+samples that plainly had geometry on them. The small "picked but not visible"
+figure is the 4×4 region deliberately reaching slightly past a silhouette edge,
+which is the click tolerance both implementations are meant to have.
+
+**One more core violation found:** `Light::enable()` called `glEnable(GL_LIGHTn)`
+directly — the earlier conversion of `Light.cpp` had only covered `glLight*`. It
+escaped the error gate because it runs once during setup, before the per-case
+measurement begins, so its error was drained rather than attributed. Now routed
+through `lgEnableLegacy()`.
+
+### Phase 5 — original plan *(for reference)*
 
 Fix D. Keep `Scene::pick(x,y)`, `getSelectedShape()` and `getSelectedShapes()`
 identical in signature and semantics; replace the implementation:
@@ -573,7 +624,81 @@ identical in signature and semantics; replace the implementation:
 - Watch the depth-precision and `GL_MULTISAMPLE` pitfalls: the pick FBO must be
   single-sampled and must not dither.
 
-### Phase 6 — Text and textures *(medium)*
+### Phases 6 and 7 — Text, textures and fixed-function parity — **mostly done**
+
+The two phases collapsed into one piece of work. `TextLabel` already builds
+`QuadPlane` children carrying texture coordinates, so text was never a geometry
+problem: what it needed was the texture environment and the alpha test, both of
+which are Phase 7 items. Doing them together avoided writing a text-specific
+path that the general one would then replace.
+
+**The fragment shader gained the remaining fixed-function stages**, each mirrored
+into `RenderContext` by the class that owns the legacy call:
+
+| Feature | Uniforms | Fed by |
+| --- | --- | --- |
+| Texture environment | `uTextureMode`, `uTextureEnvColor` | `Texture::syncToRenderContext()` |
+| `GL_TEXTURE` matrix | `uTextureMatrix` (mat3) | same |
+| Fog | `uFogMode`, `uFogColor`, `uFogDensity`, `uFogStart`, `uFogEnd` | `Fog::syncToRenderContext()` |
+| Two-sided lighting | `uTwoSided` | `Lighting::setTwoSide()` |
+| Alpha test | `uAlphaTestFunc`, `uAlphaTestRef` → `discard` | `TextLabel::doPreGeometry()` |
+
+Alpha handling had to move: the shader assigned `color.a = diffuseColor.a`
+*after* texturing, which threw away the texture's alpha — the exact channel a
+glyph atlas carries its shape in. Alpha now comes from the material first and
+texturing modifies it, which is the order GL uses.
+
+**Wide lines in core.** A forward-compatible core context accepts only
+`glLineWidth(1.0)`, so wide lines are expanded into screen-facing quads. The
+expansion happens in the vertex shader, because a line width is a screen
+measurement and expanding before projection would give a width that shrank with
+distance. No new vertex attributes were needed: a wide-line vertex reuses the
+existing layout, with `aNormal` carrying the segment's other endpoint and
+`aTexCoord` carrying (side, half width). Lines draw unlit, so both slots are free.
+
+The half width is per index set, not per draw. Taking the widest of them — which
+is how the decision to expand at all is made — drew `Grid`'s one-pixel rules four
+pixels wide and put its coverage 60% over legacy.
+
+**Two more pre-existing bugs:**
+
+- `Fog::setDensity()` wrote `GL_FOG_END` rather than `GL_FOG_DENSITY`. Setting a
+  density therefore did nothing to the exponential fog modes and quietly moved
+  the far plane of the linear one instead. `Fog` also read its whole state back
+  out of GL, with queries that are illegal in core; it now keeps its own.
+- The Blinn-Phong shader declares a sampler, and drivers validate it whether or
+  not the branch reading it is taken — NVIDIA warned about an incomplete texture
+  on **every draw**. `RenderContext` now keeps a 1×1 white texture bound to unit
+  0. That single change took the harness from "32 of 35 cases clean but warned"
+  to **zero warnings in every profile**.
+
+#### Results after Phases 6 and 7
+
+| Profile | Errors | Warnings | Coverage vs `legacy` |
+| --- | --- | --- | --- |
+| `legacy` | 0/36 | 0 | reference |
+| `legacy-shader` | 0/36 | 0 | pixel-identical |
+| `mixed` | 0/36 | 0 | **0 coverage problems** |
+| `core` | 0/36 | 0 | 3 problems, down from 5 |
+
+`LineSet` (488 → 514 px), `LineStripSet` (745 → 841) and `Grid` (5300 → 5804)
+now draw at the right width in core; all three were coverage failures before.
+
+#### Still open
+
+- **`FaceSet`, `Mesh`, `VertexElements`** draw nothing in core — Phase 4's
+  remaining conversions, unchanged by this work.
+- **`TexturedPlane` differs 12.5% between `legacy` and the shader path.** The
+  texture itself is right — same coverage, same UVs, same checker — but legacy
+  renders it at full texture brightness while the shader path modulates it with
+  the material. The two disagree about the texture environment or about what
+  lighting contributes, and it needs one more look before texturing can be called
+  done.
+- `src/ivffont`'s `RasterFont`, `PixmapFont` and `BitmapFont` still use
+  `glBitmap`/`glDrawPixels`, which have no core equivalent. `TextLabel` does not
+  depend on them, so this is lower priority than it looked.
+
+### Phase 6 — original plan *(for reference)*
 
 - `BitmapFont` / `TextLabel`: already quad-based — route through `MeshBuffer` and
   add a `uUnlit` plus `uUseTexture` text material.
@@ -627,9 +752,9 @@ compile-time signal before anything is removed. Delete `src/gle`, `OldLight`,
 | 2 Core-clean shared path - **done** | 1 | - |
 | 3 Camera completeness - **done** | 1 | - |
 | 4 Remaining geometry - **mostly done** | 2 | yes, per class |
-| 5 Colour picking | 2, 3 | yes, with 4 |
-| 6 Text and textures | 2 | yes, with 4 and 5 |
-| 7 Shader feature parity | 2 | yes, with 4, 5 and 6 |
+| 5 Colour picking - **done** | 2, 3 | - |
+| 6 Text and textures - **mostly done** | 2 | - |
+| 7 Shader feature parity - **done** | 2 | - |
 | 8.1 ImGui GL3 backend (ObjectiveFrame) | — | **start now, independent** |
 | 8.2-8.4 ObjectiveFrame port | 4 | — |
 | 8.5 ObjectiveFrame on Core | 5, 6, 7 | — |

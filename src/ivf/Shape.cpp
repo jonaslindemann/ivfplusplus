@@ -210,8 +210,19 @@ bool Shape::useDisplayList()
 
 void Shape::doBeginTransform()
 {
+	// glLoadName is the fixed-function way of saying "everything drawn from here
+	// belongs to this object". Colour picking says the same thing by painting the
+	// object in a colour that encodes the name, so both are driven from the same
+	// place and pick out the same shape -- including the inherited case, where a
+	// child with setUseName(false) stays whatever its parent last set.
+
 	if (m_renderName)
+	{
 		lgLoadName(m_objectName);
+
+		if (rcPickMode())
+			rcSetPickName(m_objectName);
+	}
 
 	lgPushMatrix();
 

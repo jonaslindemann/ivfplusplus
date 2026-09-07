@@ -271,6 +271,41 @@ public:
     /** Set the shader program to use. Does not call use() on it. */
     void setShader(ShaderProgram* prog);
 
+    // ---- Picking ----
+
+    /**
+     * Activate the built-in flat-colour pick shader and return the shader that
+     * was active, so the caller can put it back.
+     *
+     * Creates the program on first use. Returns nullptr if it will not link, in
+     * which case the caller should fall back to GL_SELECT.
+     */
+    ShaderProgram* usePickShader();
+
+    /**
+     * Turn colour-id picking on for the duration of a pick pass.
+     *
+     * While this is set, Shape::doBeginTransform() reports each shape's object
+     * name through setPickName() instead of glLoadName(), which is the same
+     * mechanism the GL_SELECT path used and so gives the same answer about which
+     * shape a pixel belongs to.
+     */
+    void setPickMode(bool flag);
+    bool pickMode() const;
+
+    /**
+     * Set the object name the next draws are painted with.
+     *
+     * The name is encoded into 24 bits of colour, with zero reserved for
+     * background -- so the value written is name + 1. Alpha is forced to 1: a
+     * zero alpha would let a blending stage that should not be running destroy
+     * the id silently.
+     */
+    void setPickName(unsigned int name);
+
+    /** Decode an object name from a pixel read back from the pick target. */
+    static unsigned int decodePickName(unsigned char r, unsigned char g, unsigned char b, bool& valid);
+
     /** Returns the currently assigned shader, or nullptr. */
     ShaderProgram* shader() const;
 
@@ -288,6 +323,59 @@ public:
      */
     void setUseTexture(bool flag);
     bool useTexture() const;
+
+    // ---- Fixed-function state the shader has to reproduce ----
+    //
+    // Each of these mirrors a piece of GL state the core profile removed. The
+    // class that owns the legacy call sets the matching value here, so the two
+    // pipelines stay described by the same numbers.
+
+    /**
+     * Texture environment, mirroring glTexEnv.
+     * mode: 0 modulate (GL's default), 1 decal, 2 replace, 3 blend.
+     */
+    void setTextureMode(int mode);
+    void setTextureEnvColor(float r, float g, float b, float a);
+
+    /** The GL_TEXTURE matrix, as the 2D affine transform it always was. */
+    void setTextureMatrix(const glm::mat3& m);
+
+    /**
+     * Fog, mirroring glFog.
+     * mode: 0 off, 1 GL_LINEAR, 2 GL_EXP, 3 GL_EXP2.
+     */
+    void setFogMode(int mode);
+    void setFogColor(float r, float g, float b, float a);
+    void setFogDensity(float density);
+    void setFogRange(float start, float end);
+    int  fogMode() const;
+
+    /** GL_LIGHT_MODEL_TWO_SIDE. */
+    void setTwoSided(bool flag);
+
+    /**
+     * Alpha test, mirroring glAlphaFunc plus GL_ALPHA_TEST.
+     * func is the GL comparison enum, or 0 to turn the test off. The shader
+     * discards fragments that fail, which is the core-profile equivalent.
+     */
+    void setAlphaTest(GLenum func, float ref);
+    void disableAlphaTest();
+
+    /**
+     * Whether a line of this width has to be built from triangles.
+     *
+     * A forward-compatible core context accepts only glLineWidth(1.0) and
+     * raises GL_INVALID_VALUE for anything wider, so wide lines there have to be
+     * expanded into screen-facing quads. Outside Core, glLineWidth still works
+     * and is both cheaper and better looking, so this returns false.
+     */
+    bool needsWideLineExpansion(float width) const;
+
+    /**
+     * Tell the shader a draw carries expanded line vertices, and how big the
+     * viewport is -- the expansion is measured in pixels, so it needs to know.
+     */
+    void setWideLineDraw(bool flag);
 
 private:
     RenderContext();
@@ -314,6 +402,35 @@ private:
     bool              m_useTexture;
     RenderProfile     m_profile;
     int               m_legacyDrawDepth;
+
+    ShaderProgramPtr  m_pickShader;
+    bool              m_pickMode;
+    glm::vec4         m_pickColor;
+
+    int               m_textureMode;
+    glm::vec4         m_textureEnvColor;
+    glm::mat3         m_textureMatrix;
+
+    int               m_fogMode;
+    glm::vec4         m_fogColor;
+    float             m_fogDensity;
+    float             m_fogStart;
+    float             m_fogEnd;
+
+    bool              m_twoSided;
+    int               m_alphaTestFunc;
+    float             m_alphaTestRef;
+    bool              m_wideLineDraw;
+
+    // A 1x1 opaque white texture kept bound to unit 0.
+    //
+    // The fragment shader declares a sampler, and drivers validate it whether or
+    // not the branch that reads it is taken -- NVIDIA warns about an incomplete
+    // texture on every single draw otherwise. Binding something valid costs one
+    // texture object and silences a warning that would bury real ones.
+    GLuint            m_whiteTexture;
+
+    void ensureWhiteTexture();
 
     // Scratch buffers for drawUnlit(). Helper geometry -- cursors, grids, rulers
     // -- changes every frame, so there is nothing to cache, but generating and

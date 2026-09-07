@@ -47,6 +47,15 @@ out vec3 vNormal;
 out vec2 vTexCoord;
 out vec4 vColor;
 
+// ---- Wide lines ----
+//
+// Nonzero when this draw is a line expanded into triangles. See
+// GLPrimitive::buildAndDrawVAO(): aNormal then holds the segment's other
+// endpoint and aTexCoord holds (side, half width in pixels).
+uniform int  uWideLine;
+uniform vec2 uViewportSize;
+
+
 void main()
 {
     vec4 viewPos  = uView * uModel * vec4(aPosition, 1.0);
@@ -54,7 +63,41 @@ void main()
     vNormal       = normalize(uNormalMatrix * aNormal);
     vTexCoord     = aTexCoord;
     vColor        = aColor;
+
     gl_Position   = uProjection * viewPos;
+
+    if (uWideLine != 0)
+    {
+        // Project both ends, measure the segment direction in pixels, and step
+        // sideways from it. Doing this before projection would give a width that
+        // shrank with distance; a line width is a screen measurement.
+
+        vec4 other = uProjection * uView * uModel * vec4(aNormal, 1.0);
+
+        // A vertex behind the eye has no meaningful screen position, so leave
+        // the segment unexpanded rather than reflecting it through the origin.
+
+        if ((gl_Position.w > 0.0) && (other.w > 0.0))
+        {
+            vec2 half_ = uViewportSize * 0.5;
+            vec2 s0 = gl_Position.xy / gl_Position.w * half_;
+            vec2 s1 = other.xy / other.w * half_;
+            vec2 d  = s1 - s0;
+
+            if (dot(d, d) > 1e-12)
+            {
+                vec2 n = normalize(vec2(-d.y, d.x));
+
+                // aTexCoord.x is which side, aTexCoord.y the half width.
+                vec2 offset = n * aTexCoord.x * aTexCoord.y;
+
+                gl_Position.xy += offset / half_ * gl_Position.w;
+            }
+        }
+
+        // The texture coordinate was carrying geometry, not a texture lookup.
+        vTexCoord = vec2(0.0);
+    }
 }
 )GLSL";
 
@@ -140,14 +183,120 @@ vec4 computeLight(Light light, vec3 N, vec3 V, vec4 ambientColor, vec4 diffuseCo
     return ambient + attenuation * (diffuse + specular);
 }
 
+// ---- Texture environment ----
+//
+// Mirrors glTexEnv. GL applies the texture to the lit colour, so this happens
+// after the lighting loop, not to the material going into it.
+//   0 modulate (the GL default), 1 decal, 2 replace, 3 blend
+uniform int  uTextureMode;
+uniform vec4 uTextureEnvColor;
+
+// The GL_TEXTURE matrix stack, as the 2D affine transform it always really was.
+uniform mat3 uTextureMatrix;
+
+// ---- Fog ----
+// 0 none, 1 linear, 2 exp, 3 exp2 -- matching GL_FOG_MODE.
+uniform int   uFogMode;
+uniform vec4  uFogColor;
+uniform float uFogDensity;
+uniform float uFogStart;
+uniform float uFogEnd;
+
+// ---- Two-sided lighting ----
+// GL_LIGHT_MODEL_TWO_SIDE: flip the normal on back faces so the far side of an
+// open surface is lit rather than black.
+uniform bool uTwoSided;
+
+// ---- Alpha test ----
+// The GL comparison enum, or 0 for off. Removed from core, where the equivalent
+// is to discard the fragment -- which is what this does.
+uniform int   uAlphaTestFunc;
+uniform float uAlphaTestRef;
+
+// ---- Helpers ----
+
+vec4 applyTexture(vec4 color)
+{
+    vec2 uv = (uTextureMatrix * vec3(vTexCoord, 1.0)).xy;
+    vec4 texel = texture(uTexture, uv);
+
+    if (uTextureMode == 1)
+    {
+        // Decal: the texture replaces colour in proportion to its own alpha and
+        // leaves the fragment alpha alone.
+        return vec4(mix(color.rgb, texel.rgb, texel.a), color.a);
+    }
+    else if (uTextureMode == 2)
+    {
+        return texel;
+    }
+    else if (uTextureMode == 3)
+    {
+        // Blend: the texture selects between the fragment colour and the
+        // constant environment colour, per channel.
+        return vec4(mix(color.rgb, uTextureEnvColor.rgb, texel.rgb), color.a * texel.a);
+    }
+
+    return color * texel;
+}
+
+float fogFactor()
+{
+    // Distance from the eye. Everything reaching here is already in view space,
+    // where the eye sits at the origin.
+    float d = length(vFragPos);
+
+    if (uFogMode == 1)
+    {
+        float span = uFogEnd - uFogStart;
+        return clamp((uFogEnd - d) / max(span, 1e-6), 0.0, 1.0);
+    }
+    else if (uFogMode == 2)
+    {
+        return clamp(exp(-uFogDensity * d), 0.0, 1.0);
+    }
+
+    float e = uFogDensity * d;
+    return clamp(exp(-e * e), 0.0, 1.0);
+}
+
+bool alphaTestPasses(float a)
+{
+    if (uAlphaTestFunc == 0x0200) return false;                 // NEVER
+    if (uAlphaTestFunc == 0x0201) return a <  uAlphaTestRef;    // LESS
+    if (uAlphaTestFunc == 0x0202) return a == uAlphaTestRef;    // EQUAL
+    if (uAlphaTestFunc == 0x0203) return a <= uAlphaTestRef;    // LEQUAL
+    if (uAlphaTestFunc == 0x0204) return a >  uAlphaTestRef;    // GREATER
+    if (uAlphaTestFunc == 0x0205) return a != uAlphaTestRef;    // NOTEQUAL
+    if (uAlphaTestFunc == 0x0206) return a >= uAlphaTestRef;    // GEQUAL
+    return true;                                                // ALWAYS
+}
+
 void main()
 {
+    // Unlit path: use vertex color when present, otherwise material diffuse.
     if (uUnlit) {
-        fragColor = uUseVertexColor ? vColor : uMatDiffuse;
+        vec4 flat_ = uUseVertexColor ? vColor : uMatDiffuse;
+
+        if (uUseTexture)
+            flat_ = applyTexture(flat_);
+
+        if (!alphaTestPasses(flat_.a))
+            discard;
+
+        if (uFogMode != 0)
+            flat_.rgb = mix(uFogColor.rgb, flat_.rgb, fogFactor());
+
+        fragColor = clamp(flat_, 0.0, 1.0);
         return;
     }
 
     vec3 N = normalize(vNormal);
+
+    // Back faces of an open surface get the flipped normal, otherwise they
+    // face away from every light and render black.
+    if (uTwoSided && !gl_FrontFacing)
+        N = -N;
     vec3 V = normalize(-vFragPos);
 
     // Vertex colour replaces ambient as well as diffuse, matching the
@@ -160,10 +309,23 @@ void main()
     for (int i = 0; i < uLightCount; ++i)
         color += computeLight(uLights[i], N, V, ambientColor, diffuseColor);
 
-    if (uUseTexture)
-        color *= texture(uTexture, vTexCoord);
-
+    // Alpha comes from the material before texturing, so that a texture with an
+    // alpha channel can then modify it. Assigning it afterwards -- as this used
+    // to -- threw the texture's alpha away, which is exactly the channel a glyph
+    // atlas carries its shape in.
     color.a = diffuseColor.a;
+
+    if (uUseTexture)
+        color = applyTexture(color);
+
+    if (!alphaTestPasses(color.a))
+        discard;
+
+    // Fog is applied last and to colour only: it is how far away the surface is,
+    // not how transparent it is.
+    if (uFogMode != 0)
+        color.rgb = mix(uFogColor.rgb, color.rgb, fogFactor());
+
     fragColor = clamp(color, 0.0, 1.0);
 }
 )GLSL";

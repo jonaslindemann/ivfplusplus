@@ -26,6 +26,7 @@
 
 #include <ivf/GL.h>
 #include <ivf/LegacyGL.h>
+#include <ivf/rc.h>
 
 using namespace ivf;
 Lighting* Lighting::m_instance = 0;
@@ -106,6 +107,7 @@ void Lighting::setTwoSide(bool flag)
 {
 	m_twoside[0] = ( flag ) ? 1 : 0;
 	lgLightModeliv( GL_LIGHT_MODEL_TWO_SIDE, m_twoside );
+	rcSetTwoSided(flag);
 }
 
 bool Lighting::getTwoSide()

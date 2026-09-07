@@ -58,10 +58,18 @@ public:
 private:
 	static Fog* m_instance;
 	static SingletonDestroyer<Fog> m_destroyer;
+	// Fog keeps its own state rather than reading it back from GL. The
+	// glGet*(GL_FOG_*) queries it used to use are illegal in a core profile, and
+	// the shader path needs these values regardless.
 	float m_fogColor[4];
 	double m_fogStart;
 	double m_fogEnd;
+	double m_fogDensity;
+	bool m_enabled;
 	TFogType m_type;
+
+	/** Push the current settings to RenderContext for the shader path. */
+	void syncToRenderContext();
 public:
 	/** Returns the blending singleton */
 	static Fog* getInstance();

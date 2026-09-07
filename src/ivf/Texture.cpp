@@ -25,6 +25,9 @@
 #include <ivf/config.h>
 #include <ivf/Texture.h>
 #include <ivf/LegacyGL.h>
+#include <ivf/rc.h>
+
+#include <glm/gtx/matrix_transform_2d.hpp>
 
 using namespace ivf;
 
@@ -110,8 +113,9 @@ void Texture::bind()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrapS);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrapT);
 
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
-	glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
+	lgTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
+	lgTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
+	syncToRenderContext();
 
 	if (!m_loadImages)
 	{
@@ -160,18 +164,20 @@ void Texture::apply()
 			s_currentBoundTexture = m_textureName;
 		}
 
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
-		glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
+		lgTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
+		lgTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
 
-		lgMatrixMode(GL_TEXTURE); 
+		lgMatrixMode(GL_TEXTURE);
 		lgLoadIdentity();
 		if ((m_texTransX!=0.0)||(m_texTransY!=0.0))
 			lgTranslated(m_texTransX, m_texTransY, 0.0);
 		if (m_texRotate!=0.0)
 			lgRotated(m_texRotate, 0.0, 0.0, 1.0);
 		if ((m_texScaleX!=0.0)||(m_texScaleY!=0.0))
-			lgScaled(m_texScaleX, m_texScaleY, 1.0); 
+			lgScaled(m_texScaleX, m_texScaleY, 1.0);
 		lgMatrixMode(GL_MODELVIEW);
+
+		syncToRenderContext();
 	}
 	else
 		lgDisableLegacy(GL_TEXTURE_2D);
@@ -366,4 +372,42 @@ void Texture::refresh()
 bool Texture::hasModernPath()
 {
 	return true;
+}
+
+// ------------------------------------------------------------
+void Texture::syncToRenderContext()
+{
+	// The texture environment and the GL_TEXTURE matrix stack both disappear in
+	// a core profile, so hand the same information to the shader, which applies
+	// them itself.
+
+	int mode = 0; // modulate
+
+	switch (m_textureMode)
+	{
+	case GL_DECAL:   mode = 1; break;
+	case GL_REPLACE: mode = 2; break;
+	case GL_BLEND:   mode = 3; break;
+	default:         mode = 0; break;
+	}
+
+	rcSetTextureMode(mode);
+	rcSetTextureEnvColor(m_textureEnvColor[0], m_textureEnvColor[1],
+	                     m_textureEnvColor[2], m_textureEnvColor[3]);
+
+	// The same translate, rotate, scale the legacy path builds above, as one 3x3
+	// affine transform on texture coordinates.
+
+	glm::mat3 m(1.0f);
+
+	if ((m_texTransX != 0.0) || (m_texTransY != 0.0))
+		m = glm::translate(glm::mat3(1.0f), glm::vec2((float)m_texTransX, (float)m_texTransY));
+
+	if (m_texRotate != 0.0)
+		m = m * glm::mat3(glm::rotate(glm::mat3(1.0f), glm::radians((float)m_texRotate)));
+
+	if ((m_texScaleX != 0.0) || (m_texScaleY != 0.0))
+		m = m * glm::mat3(glm::scale(glm::mat3(1.0f), glm::vec2((float)m_texScaleX, (float)m_texScaleY)));
+
+	rcSetTextureMatrix(m);
 }
