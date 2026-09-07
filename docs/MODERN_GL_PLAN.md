@@ -684,6 +684,32 @@ pixels wide and put its coverage 60% over legacy.
 `LineSet` (488 → 514 px), `LineStripSet` (745 → 841) and `Grid` (5300 → 5804)
 now draw at the right width in core; all three were coverage failures before.
 
+#### The gate is only as strict as the driver under it
+
+Two machines other than the development one found things this harness could not,
+and the reason is worth writing down: **a clean run proves the driver had no
+complaint, not that the code is correct.**
+
+- **Intel, core profile:** `Lighting::isEnabled()` called
+  `glGetBooleanv(GL_LIGHTING)`. That pname does not exist in a core profile, so
+  it is a `GL_INVALID_ENUM` — once per `Ruler` drawn, every frame. NVIDIA
+  answers compatibility queries on a core context anyway and raises nothing, so
+  the error gate reported zero on the development machine while Intel reported
+  it correctly. Now cached in `m_lightingEnabled`, like `Fog`.
+- **AMD, legacy profile:** a stream of `API_ID_DEPRECATED_TARGET` and
+  `API_ID_LINE_WIDTH` messages for `GL_LIGHTING` and `glLineWidth(2..4)`. Those
+  are *correct and expected* — they are exactly what `legacy` mode exists to keep
+  doing — but NVIDIA never mentions them, so "0 warnings in every profile" was
+  only ever true of one driver.
+
+The lesson for the remaining phases: **state queries need the same treatment as
+state changes.** The `lg*` shim covers calls, but `glGet*`/`glIsEnabled` with a
+compatibility-only enum is just as illegal in core and has no wrapper. A sweep of
+every `glGet*v` and `glIsEnabled` in `src/ivf` found `GL_LIGHTING` to be the only
+live offender — everything else queries a core-valid enum, and the two remaining
+compatibility queries (`SweptExtrusion`, gle's `port.h`) sit behind an early
+return that core never reaches. Prefer remembering state to asking GL for it.
+
 #### Build fixes found on a second machine
 
 - **Nothing ever linked GLU.** The library calls `gluPerspective`, `gluLookAt`,

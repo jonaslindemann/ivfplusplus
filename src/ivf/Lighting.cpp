@@ -54,6 +54,7 @@ Lighting::Lighting()
 		m_lights.push_back(light);
 	}
 
+	m_lightingEnabled = false;
 	m_ambient[0] = 0.2f;
 	m_ambient[1] = 0.2f;
 	m_ambient[2] = 0.2f;
@@ -83,11 +84,13 @@ Lighting::~Lighting()
 
 void Lighting::enable()
 {
+	m_lightingEnabled = true;
 	lgEnableLegacy(GL_LIGHTING);
 }
 
 void Lighting::disable()
 {
+	m_lightingEnabled = false;
 	lgDisableLegacy(GL_LIGHTING);
 }
 
@@ -166,9 +169,12 @@ void Lighting::render()
 
 bool Lighting::isEnabled()
 {
-	GLboolean lightEnabled;
-	glGetBooleanv(GL_LIGHTING, &lightEnabled);
-	return (bool)lightEnabled;
+	// Was glGetBooleanv(GL_LIGHTING). That pname does not exist in a core
+	// profile, so the query is a GL_INVALID_ENUM there -- once per Ruler drawn,
+	// every frame. It went unnoticed because NVIDIA answers compatibility
+	// queries on a core context anyway; Intel reports it, correctly.
+
+	return m_lightingEnabled;
 }
 
 void Lighting::saveState()
