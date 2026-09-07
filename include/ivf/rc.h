@@ -16,6 +16,17 @@ inline bool rcNeedsLegacyDraw(bool objectHasModernPath)
 inline void rcBeginLegacyDraw()                          { RenderContext::instance().beginLegacyDraw(); }
 inline void rcEndLegacyDraw()                            { RenderContext::instance().endLegacyDraw(); }
 
+/**
+ * Whether an object with this modern-path answer can draw at all.
+ *
+ * False only in Core for an object that has no modern path: there is nothing
+ * behind the shader for its fixed-function code to reach.
+ */
+inline bool rcCanDrawGeometry(bool objectHasModernPath)
+{
+    return objectHasModernPath || (RenderContext::instance().profile() != RenderProfile::Core);
+}
+
 // ---- Shader activation ----
 inline void rcUseBlinnPhong()                            { RenderContext::instance().useBlinnPhong(); }
 inline void rcSetShader(ShaderProgram* prog)             { RenderContext::instance().setShader(prog); }

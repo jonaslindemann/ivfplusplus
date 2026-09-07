@@ -25,6 +25,7 @@
 #include <ivf/Shape.h>
 #include <ivf/GlobalState.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -210,9 +211,9 @@ bool Shape::useDisplayList()
 void Shape::doBeginTransform()
 {
 	if (m_renderName)
-		glLoadName(m_objectName);
+		lgLoadName(m_objectName);
 
-	glPushMatrix();
+	lgPushMatrix();
 
 	// Mirror the transform into RenderContext for the modern shader path. This
 	// costs a glm::mat4 stack push plus a matrix product per transform component,
@@ -226,48 +227,51 @@ void Shape::doBeginTransform()
 
 	if (!((m_position[0]==0.0)&&(m_position[1]==0.0)&&(m_position[2]==0.0)))
 	{
-		glTranslated(m_position[0],m_position[1],m_position[2]);
+		lgTranslated(m_position[0],m_position[1],m_position[2]);
 		if (m_mirrorTransform)
 			rcTranslate((float)m_position[0], (float)m_position[1], (float)m_position[2]);
 	}
 
 	if (m_rotation[0]!=0.0)
 	{
-		glRotated(m_rotation[0], 1.0, 0.0, 0.0);
+		lgRotated(m_rotation[0], 1.0, 0.0, 0.0);
 		if (m_mirrorTransform)
 			rcRotate((float)m_rotation[0], 1.0f, 0.0f, 0.0f);
 	}
 
 	if (m_rotation[1]!=0.0)
 	{
-		glRotated(m_rotation[1], 0.0, 1.0, 0.0);
+		lgRotated(m_rotation[1], 0.0, 1.0, 0.0);
 		if (m_mirrorTransform)
 			rcRotate((float)m_rotation[1], 0.0f, 1.0f, 0.0f);
 	}
 
 	if (m_rotation[2]!=0.0)
 	{
-		glRotated(m_rotation[2], 0.0, 0.0, 1.0);
+		lgRotated(m_rotation[2], 0.0, 0.0, 1.0);
 		if (m_mirrorTransform)
 			rcRotate((float)m_rotation[2], 0.0f, 0.0f, 1.0f);
 	}
 
 	if (m_rotQuat[3]!=0.0)
 	{
-		glRotated(m_rotQuat[3], m_rotQuat[0], m_rotQuat[1], m_rotQuat[2]);
+		lgRotated(m_rotQuat[3], m_rotQuat[0], m_rotQuat[1], m_rotQuat[2]);
 		if (m_mirrorTransform)
 			rcRotate((float)m_rotQuat[3], (float)m_rotQuat[0], (float)m_rotQuat[1], (float)m_rotQuat[2]);
 	}
 
+	// GL_NORMALIZE has no core equivalent and needs none: the vertex shader
+	// normalizes what the normal matrix produces on every vertex anyway.
+
 	if (m_normalize)
-		glEnable(GL_NORMALIZE);
+		lgEnableLegacy(GL_NORMALIZE);
 
 	// The identity scale is (1,1,1), not (0,0,0) -- testing against zero meant
 	// this early-out never fired and every shape paid for a redundant glScaled().
 
 	if (!((m_scale[0]==1.0)&&(m_scale[1]==1.0)&&(m_scale[2]==1.0)))
 	{
-		glScaled(m_scale[0],m_scale[1],m_scale[2]);
+		lgScaled(m_scale[0],m_scale[1],m_scale[2]);
 		if (m_mirrorTransform)
 			rcScale((float)m_scale[0], (float)m_scale[1], (float)m_scale[2]);
 	}
@@ -278,9 +282,13 @@ void Shape::doBeginTransform()
 		{
 			if (m_texture->isActive())
 			{
-				glPushAttrib(GL_TEXTURE_2D|GL_TEXTURE_1D);
-				glEnable(GL_TEXTURE_1D);
-				glEnable(GL_TEXTURE_2D);
+				// The texture enables are fixed-function only. In core it is the
+				// shader that decides whether to sample, which is what
+				// rcSetUseTexture() below tells it.
+
+				lgPushAttrib(GL_TEXTURE_2D|GL_TEXTURE_1D);
+				lgEnableLegacy(GL_TEXTURE_1D);
+				lgEnableLegacy(GL_TEXTURE_2D);
 				if (!m_texture->isBound())
 					m_texture->bind();
 				else
@@ -300,19 +308,19 @@ void Shape::doEndTransform()
 			if (m_texture->isActive())
 			{
 				rcSetUseTexture(false);
-				glDisable(GL_TEXTURE_2D);
-				glDisable(GL_TEXTURE_1D);
-				glPopAttrib();
+				lgDisableLegacy(GL_TEXTURE_2D);
+				lgDisableLegacy(GL_TEXTURE_1D);
+				lgPopAttrib();
 			}
 		}
 	}
-	glPopMatrix();
+	lgPopMatrix();
 
 	if (m_mirrorTransform)
 		rcPopMatrix();
 
 	if (m_normalize)
-		glDisable(GL_NORMALIZE);
+		lgDisableLegacy(GL_NORMALIZE);
 }
 
 void Shape::setRotationQuat(double vx, double vy, double vz, double theta)

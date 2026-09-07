@@ -24,6 +24,7 @@
 
 #include <ivf/Cone.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 #include <ivf/config.h>
 
@@ -268,10 +269,10 @@ void Cone::doCreateGeometry()
 	}
 
 	// Legacy path
-	glPushMatrix();
-		glPushMatrix();
-			glTranslated(0.0,-getHeight()/2.0,0.0);
-			glRotated(-90,1.0,0.0,0.0);
+	lgPushMatrix();
+		lgPushMatrix();
+			lgTranslated(0.0,-getHeight()/2.0,0.0);
+			lgRotated(-90,1.0,0.0,0.0);
 
 			GLUquadricObj* cylinder = gluNewQuadric();
 			gluQuadricNormals(cylinder,GLU_SMOOTH);
@@ -291,13 +292,13 @@ void Cone::doCreateGeometry()
 				0.0, getBottomRadius(),
 				getSlices(),1);
 			gluDeleteQuadric(bottom);
-		glPopMatrix();
+		lgPopMatrix();
 
 		if (getTopRadius()>0.0)
 		{
-			glPushMatrix();
-				glTranslated(0.0,getHeight()/2.0,0.0);
-				glRotated(-90,1.0,0.0,0.0);
+			lgPushMatrix();
+				lgTranslated(0.0,getHeight()/2.0,0.0);
+				lgRotated(-90,1.0,0.0,0.0);
 
 				GLUquadricObj* top = gluNewQuadric();
 				gluQuadricNormals(top,GLU_SMOOTH);
@@ -307,10 +308,10 @@ void Cone::doCreateGeometry()
 					0.0, getTopRadius(),
 					getSlices(),1);
 				gluDeleteQuadric(top);
-			glPopMatrix();
+			lgPopMatrix();
 		}
 
-	glPopMatrix();
+	lgPopMatrix();
 }
 
 

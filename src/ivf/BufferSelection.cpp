@@ -23,6 +23,7 @@
 //
 
 #include <ivf/BufferSelection.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -52,24 +53,24 @@ int BufferSelection::pick(int x, int y)
 		
 		glRenderMode(GL_SELECT);
 		
-		glInitNames();
-		glPushName(IVF_NONAME);
+		lgInitNames();
+		lgPushName(IVF_NONAME);
 		
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
+		lgMatrixMode(GL_PROJECTION);
+		lgPushMatrix();
 
-		glLoadIdentity();
+		lgLoadIdentity();
 		
 		m_camera->initializeSelect(x, y, 4, 4);
 		
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
+		lgMatrixMode(GL_MODELVIEW);
+		lgPushMatrix();
 		m_camera->render();
 		m_composite->render();
-		glPopMatrix();
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
+		lgPopMatrix();
+		lgMatrixMode(GL_PROJECTION);
+		lgPopMatrix();
+		lgMatrixMode(GL_MODELVIEW);
 		
 		hits = glRenderMode(GL_RENDER);
 		

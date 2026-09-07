@@ -23,6 +23,7 @@
 //
 
 #include <ivf/BlendState.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -52,7 +53,7 @@ void BlendState::doState()
 void BlendState::doSaveState()
 {
 	m_oldState = glIsEnabled(GL_BLEND);
-	glPushAttrib(GL_BLEND);
+	lgPushAttrib(GL_BLEND);
 }
 
 void BlendState::doRestoreState()
@@ -62,7 +63,7 @@ void BlendState::doRestoreState()
 	else
 		glDisable(GL_BLEND);
 
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void BlendState::setFunction(GLenum sfactor, GLenum dfactor)

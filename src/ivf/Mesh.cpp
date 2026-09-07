@@ -23,6 +23,7 @@
 //
 
 #include <ivf/Mesh.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -69,8 +70,8 @@ void Mesh::initialize()
 void Mesh::doCreateGeometry()
 {
 
-	glPushAttrib(GL_LIGHTING|GL_AUTO_NORMAL|GL_NORMALIZE);
-	glEnable(GL_AUTO_NORMAL);
+	lgPushAttrib(GL_LIGHTING|GL_AUTO_NORMAL|GL_NORMALIZE);
+	lgEnableLegacy(GL_AUTO_NORMAL);
 	switch (m_meshOrientation) {
 	case MO_CW:
 		glFrontFace(GL_CW);
@@ -79,7 +80,7 @@ void Mesh::doCreateGeometry()
 		glFrontFace(GL_CCW);
 		break;
 	}
-	glEnable(GL_NORMALIZE);
+	lgEnableLegacy(GL_NORMALIZE);
 	glEnable(GL_MAP2_VERTEX_3);
 	switch (m_meshType) {
 	case MT_ORDER_2:
@@ -113,7 +114,7 @@ void Mesh::doCreateGeometry()
 
 	glEvalMesh2(GL_FILL, 0, m_meshCols, 0, m_meshRows);
 	glFrontFace(GL_CCW);
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void Mesh::setControlPoint(int i, int j, double x, double y, double z)

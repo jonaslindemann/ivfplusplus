@@ -25,6 +25,7 @@
 #include <ivf/CullState.h>
 
 #include <ivf/GL.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -41,7 +42,7 @@ CullState::~CullState()
 
 void CullState::doSaveState()
 {
-	glPushAttrib(GL_ENABLE_BIT);
+	lgPushAttrib(GL_ENABLE_BIT);
 }
 
 void CullState::doState()
@@ -56,7 +57,7 @@ void CullState::doState()
 
 void CullState::doRestoreState()
 {
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void CullState::setCulling(bool flag)

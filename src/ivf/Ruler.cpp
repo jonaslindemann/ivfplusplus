@@ -26,6 +26,7 @@
 
 #include <ivf/Lighting.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 #include <vector>
 
@@ -72,7 +73,7 @@ void Ruler::doCreateGeometry()
 
 	nSteps = (int)(m_length/m_tickStep);
 
-	glLineWidth(1.0);
+	lgLineWidth(1.0);
 
 	if (rcIsShaderActive())
 	{
@@ -110,35 +111,35 @@ void Ruler::doCreateGeometry()
 	}
 
 	Lighting::getInstance()->disable();
-	glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
-	glBegin(GL_LINES);
-	glVertex3dv(m_startPoint.getComponents());
-	glVertex3dv(m_endPoint.getComponents());
-	glEnd();
+	lgColor4f(0.3f, 0.3f, 0.3f, 1.0f);
+	lgBegin(GL_LINES);
+	lgVertex3dv(m_startPoint.getComponents());
+	lgVertex3dv(m_endPoint.getComponents());
+	lgEnd();
 
-	glColor4f(0.6f, 0.6f, 0.6f, 1.0f);
-	glLineWidth(1.0);
+	lgColor4f(0.6f, 0.6f, 0.6f, 1.0f);
+	lgLineWidth(1.0);
 	glDisable(GL_DEPTH_TEST);
-	glBegin(GL_LINES);
+	lgBegin(GL_LINES);
 	for (i=0; i<nSteps; i++)
 	{
 		p = m_startPoint + i*m_tickStep*m_direction;
 		p.getComponents(x, y, z);
 
-		glVertex3d(x - m_tickStep*0.1, y, z);
-		glVertex3d(x + m_tickStep*0.1 , y, z);
-		glVertex3d(x, y, z - m_tickStep*0.1);
-		glVertex3d(x, y, z + m_tickStep*0.1);
-		//glVertex3d(x, y - m_tickStep*0.1, z);
-		//glVertex3d(x, y + m_tickStep*0.1, z);
+		lgVertex3d(x - m_tickStep*0.1, y, z);
+		lgVertex3d(x + m_tickStep*0.1 , y, z);
+		lgVertex3d(x, y, z - m_tickStep*0.1);
+		lgVertex3d(x, y, z + m_tickStep*0.1);
+		//lgVertex3d(x, y - m_tickStep*0.1, z);
+		//lgVertex3d(x, y + m_tickStep*0.1, z);
 	}
-	glEnd();
+	lgEnd();
 	glEnable(GL_DEPTH_TEST);
 
 	// Restore the default width. Zero is not a legal line width -- it raises
 	// GL_INVALID_VALUE -- so the intended "put it back" value is 1.0.
 
-	glLineWidth(1.0);
+	lgLineWidth(1.0);
 	if (oldLightingState)
 		Lighting::getInstance()->enable();
 	else

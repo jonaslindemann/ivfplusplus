@@ -25,6 +25,7 @@
 
 #include <ivf/config.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 #include <algorithm>
 #include <cmath>
@@ -762,14 +763,14 @@ void SweptExtrusion::doCreateGeometry()
 
     if (m_useColors && !hadColorMaterial)
     {
-        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-        glEnable(GL_COLOR_MATERIAL);
+        lgColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+        lgEnableLegacy(GL_COLOR_MATERIAL);
     }
 
     m_buffer.drawFixedFunction(GL_TRIANGLES, m_useColors);
 
     if (m_useColors && !hadColorMaterial)
-        glDisable(GL_COLOR_MATERIAL);
+        lgDisableLegacy(GL_COLOR_MATERIAL);
 
     if (m_useColors)
     {
@@ -822,13 +823,13 @@ void SweptExtrusion::doCreateSelect()
     {
         GLboolean hadLighting = glIsEnabled(GL_LIGHTING);
 
-        glDisable(GL_LIGHTING);
-        glColor3f(1.0f, 1.0f, 1.0f);
+        lgDisableLegacy(GL_LIGHTING);
+        lgColor3f(1.0f, 1.0f, 1.0f);
 
         m_selectBuffer.drawFixedFunction(GL_TRIANGLES, false);
 
         if (hadLighting)
-            glEnable(GL_LIGHTING);
+            lgEnableLegacy(GL_LIGHTING);
 
         // Setting the current colour tracks into the material whenever
         // GL_COLOR_MATERIAL happens to be enabled, so the cache can no longer

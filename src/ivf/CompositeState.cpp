@@ -25,6 +25,7 @@
 #include <ivf/CompositeState.h>
 
 #include <ivf/GL.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -49,7 +50,7 @@ void CompositeState::doSaveState()
 		state->doSaveState();
 	}
 	*/
-	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	lgPushAttrib(GL_ALL_ATTRIB_BITS);
 }
 
 void CompositeState::doState()
@@ -74,7 +75,7 @@ void CompositeState::doRestoreState()
 		state->doRestoreState();
 	}
 	*/
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void CompositeState::addChild(RenderState *state)

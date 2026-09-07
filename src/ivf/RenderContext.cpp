@@ -50,6 +50,9 @@ RenderContext::RenderContext()
     , m_useTexture(false)
     , m_profile(RenderProfile::Mixed)
     , m_legacyDrawDepth(0)
+    , m_unlitVao(0)
+    , m_unlitVbo(0)
+    , m_unlitCapacity(0)
 {
     m_modelStack.push(glm::mat4(1.0f));
 }
@@ -307,24 +310,53 @@ bool RenderContext::drawUnlit(GLenum primitive, const float* positions, const fl
         vertices.push_back(v);
     }
 
-    GLuint vao = 0;
-    GLuint vbo = 0;
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
+    // Reuse one VAO and buffer across calls. Helper geometry changes every frame
+    // so there is nothing worth caching in it, but generating and deleting a VAO
+    // and a VBO on every call of every frame is overhead for nothing. The vertex
+    // layout never varies, so the VAO only needs setting up once.
 
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)(vertices.size() * sizeof(GpuVertex)), vertices.data(), GL_STREAM_DRAW);
+    const bool firstUse = (m_unlitVao == 0);
 
-    GLsizei stride = sizeof(GpuVertex);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, position));
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, normal));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, texcoord));
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, color));
-    glEnableVertexAttribArray(3);
+    if (firstUse)
+    {
+        glGenVertexArrays(1, &m_unlitVao);
+        glGenBuffers(1, &m_unlitVbo);
+    }
+
+    glBindVertexArray(m_unlitVao);
+    glBindBuffer(GL_ARRAY_BUFFER, m_unlitVbo);
+
+    const GLsizeiptr needed = (GLsizeiptr)(vertices.size() * sizeof(GpuVertex));
+
+    if (needed > m_unlitCapacity)
+    {
+        // Grow, and only grow. Reallocating to the exact size each time would
+        // reintroduce the churn this is meant to avoid.
+
+        glBufferData(GL_ARRAY_BUFFER, needed, vertices.data(), GL_STREAM_DRAW);
+        m_unlitCapacity = needed;
+    }
+    else
+    {
+        // Orphan the previous contents so the driver hands back fresh storage
+        // rather than stalling until the last draw that read this buffer retires.
+
+        glBufferData(GL_ARRAY_BUFFER, m_unlitCapacity, nullptr, GL_STREAM_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, needed, vertices.data());
+    }
+
+    if (firstUse)
+    {
+        GLsizei stride = sizeof(GpuVertex);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, position));
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, normal));
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, texcoord));
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(GpuVertex, color));
+        glEnableVertexAttribArray(3);
+    }
 
     m_shader->use();
     updateShader(m_shader);
@@ -334,8 +366,6 @@ bool RenderContext::drawUnlit(GLenum primitive, const float* positions, const fl
     glDrawArrays(primitive, 0, vertexCount);
 
     glBindVertexArray(0);
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
 
     return true;
 }

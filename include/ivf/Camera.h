@@ -320,6 +320,19 @@ public:
 	glm::mat4 glmProjectionMatrix();
 
 	/**
+	 * Compute the pick matrix for a small region around a window coordinate.
+	 *
+	 * The glm equivalent of gluPickMatrix(), for a picking pass that renders ids
+	 * into a framebuffer instead of using GL_SELECT. Pre-multiply it onto the
+	 * projection matrix to restrict rendering to the region of interest.
+	 *
+	 * @param x,y   window coordinates, y measured from the top as the mouse
+	 *              reports it -- this flips it internally, as View does.
+	 * @param w,h   size of the pick region in pixels.
+	 */
+	glm::mat4 glmPickMatrix(int x, int y, int w, int h);
+
+	/**
 	 * Compute the view matrix using glm.
 	 *
 	 * Returns the same look-at matrix that viewTransform() sets via gluLookAt,

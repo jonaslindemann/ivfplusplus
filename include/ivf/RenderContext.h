@@ -314,6 +314,15 @@ private:
     bool              m_useTexture;
     RenderProfile     m_profile;
     int               m_legacyDrawDepth;
+
+    // Scratch buffers for drawUnlit(). Helper geometry -- cursors, grids, rulers
+    // -- changes every frame, so there is nothing to cache, but generating and
+    // deleting a VAO and VBO per call per frame is pure overhead. These are kept
+    // and refilled instead. Mutable because drawUnlit() is const from the
+    // caller's point of view: it draws, it does not change the context.
+    mutable GLuint    m_unlitVao;
+    mutable GLuint    m_unlitVbo;
+    mutable GLsizeiptr m_unlitCapacity;
 };
 
 } // namespace ivf

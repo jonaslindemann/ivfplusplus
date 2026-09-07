@@ -25,6 +25,7 @@
 #include <ivf/SceneBase.h>
 #include <ivf/GlobalState.h>
 #include <ivf/Material.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -133,11 +134,11 @@ void SceneBase::defaultSceneRender(int pass)
     
     if (m_renderFlatShadow)
     {
-        glPushMatrix();
-        glScaled(1.0, 0.0, 1.0);
-        glPushAttrib(GL_ENABLE_BIT);
-        glDisable(GL_LIGHTING);
-        glDisable(GL_TEXTURE_2D);
+        lgPushMatrix();
+        lgScaled(1.0, 0.0, 1.0);
+        lgPushAttrib(GL_ENABLE_BIT);
+        lgDisableLegacy(GL_LIGHTING);
+        lgDisableLegacy(GL_TEXTURE_2D);
         GlobalState::getInstance()->disableColorOutput();
         GlobalState::getInstance()->disableTextureRendering();
         glColor3d(m_shadowColor[0], m_shadowColor[1], m_shadowColor[2]);
@@ -152,8 +153,8 @@ void SceneBase::defaultSceneRender(int pass)
 
 		GlobalState::getInstance()->enableColorOutput();
         GlobalState::getInstance()->enableTextureRendering();
-        glPopAttrib();
-        glPopMatrix();
+        lgPopAttrib();
+        lgPopMatrix();
     }
 }
 
@@ -178,18 +179,18 @@ void SceneBase::defaultRendering()
 
 		for (renderPass = 0; renderPass<m_nPasses; renderPass++)
 		{
-			glMatrixMode(GL_PROJECTION);
-			glPushMatrix();
-			glMatrixMode(GL_MODELVIEW);
-			glPushMatrix();
+			lgMatrixMode(GL_PROJECTION);
+			lgPushMatrix();
+			lgMatrixMode(GL_MODELVIEW);
+			lgPushMatrix();
 			if (m_multipassEvent!=nullptr)
 				m_multipassEvent->onMultipass(renderPass);
 			else
 				this->doMultipass(renderPass);	
-			glMatrixMode(GL_PROJECTION);
-			glPopMatrix();
-			glMatrixMode(GL_MODELVIEW);
-			glPopMatrix();
+			lgMatrixMode(GL_PROJECTION);
+			lgPopMatrix();
+			lgMatrixMode(GL_MODELVIEW);
+			lgPopMatrix();
 		}
 	}
 	else
@@ -225,7 +226,7 @@ void SceneBase::doCreateGeometry()
 			View* view = m_view;
 			Camera* camera = (Camera*)view;
 
-			glPushMatrix();
+			lgPushMatrix();
 
 			switch (m_colorPair) {
 			case CP_RED_GREEN:
@@ -258,9 +259,9 @@ void SceneBase::doCreateGeometry()
 			m_composite->render();
 			m_postComposite->render();
 
-			glPopMatrix();
+			lgPopMatrix();
 
-			glPushMatrix();
+			lgPushMatrix();
 
 			glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -297,7 +298,7 @@ void SceneBase::doCreateGeometry()
 
 			glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
 
-			glPopMatrix();
+			lgPopMatrix();
 		}
 		else
 			defaultRendering();
@@ -311,7 +312,7 @@ void SceneBase::doCreateGeometry()
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
 
-			glPushMatrix();
+			lgPushMatrix();
 
 			if (m_lightMode == LM_LOCAL)
 				if (m_lighting != nullptr)
@@ -329,9 +330,9 @@ void SceneBase::doCreateGeometry()
 			m_composite->render();
 			m_postComposite->render();
 
-			glPopMatrix();
+			lgPopMatrix();
 
-			glPushMatrix();
+			lgPushMatrix();
 
 			glDrawBuffer(GL_BACK_RIGHT);
 			glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
@@ -352,7 +353,7 @@ void SceneBase::doCreateGeometry()
 			m_composite->render();
 			m_postComposite->render();
 
-			glPopMatrix();
+			lgPopMatrix();
 		}
 		else
 			defaultRendering();

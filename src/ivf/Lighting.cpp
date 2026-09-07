@@ -25,6 +25,7 @@
 #include <ivf/Lighting.h>
 
 #include <ivf/GL.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 Lighting* Lighting::m_instance = 0;
@@ -81,18 +82,18 @@ Lighting::~Lighting()
 
 void Lighting::enable()
 {
-	glEnable(GL_LIGHTING);
+	lgEnableLegacy(GL_LIGHTING);
 }
 
 void Lighting::disable()
 {
-	glDisable(GL_LIGHTING);
+	lgDisableLegacy(GL_LIGHTING);
 }
 
 void Lighting::setLocalViewer(bool flag)
 {
 	m_local[0] = ( flag ) ? 1 : 0;
-	glLightModeliv( GL_LIGHT_MODEL_LOCAL_VIEWER, m_local );
+	lgLightModeliv( GL_LIGHT_MODEL_LOCAL_VIEWER, m_local );
 
 }
 
@@ -104,7 +105,7 @@ bool Lighting::getLocalViewer()
 void Lighting::setTwoSide(bool flag)
 {
 	m_twoside[0] = ( flag ) ? 1 : 0;
-	glLightModeliv( GL_LIGHT_MODEL_TWO_SIDE, m_twoside );
+	lgLightModeliv( GL_LIGHT_MODEL_TWO_SIDE, m_twoside );
 }
 
 bool Lighting::getTwoSide()
@@ -118,7 +119,7 @@ void Lighting::setAmbientColor(float red, float green, float blue, float alpha)
 	m_ambient[1] = green;
 	m_ambient[2] = blue;
 	m_ambient[3] = alpha;
-	glLightModelfv( GL_LIGHT_MODEL_AMBIENT, m_ambient );
+	lgLightModelfv( GL_LIGHT_MODEL_AMBIENT, m_ambient );
 }
 
 int Lighting::getSize()
@@ -170,12 +171,12 @@ bool Lighting::isEnabled()
 
 void Lighting::saveState()
 {
-	glPushAttrib(GL_LIGHTING);
+	lgPushAttrib(GL_LIGHTING);
 }
 
 void Lighting::restoreState()
 {
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void Lighting::saveEnabledState()

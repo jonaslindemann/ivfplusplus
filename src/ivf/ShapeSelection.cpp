@@ -24,6 +24,7 @@
 
 #include <ivf/ShapeSelection.h>
 #include <ivf/SolidLine.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -59,15 +60,15 @@ void ShapeSelection::doCreateGeometry()
 
 		if (!shape->isClass("SolidLine"))
 		{
-			glPushMatrix();
-			glTranslated(m_offset[0], m_offset[1], m_offset[2]);
+			lgPushMatrix();
+			lgTranslated(m_offset[0], m_offset[1], m_offset[2]);
 			MaterialPtr oldMat = shape->getMaterial();
 			shape->setMaterial(m_hlMaterial);
 			shape->setScale(1.4, 1.4, 1.4);
 			shape->render();
 			shape->setScale(1.0, 1.0, 1.0);
 			shape->setMaterial(oldMat);
-			glPopMatrix();
+			lgPopMatrix();
 		}
 		else
 		{

@@ -21,6 +21,7 @@
 
 #include <ivf/config.h>
 #include <ivf/Billboard.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -97,18 +98,18 @@ void BillBoard::doCreateGeometry()
 	if (m_alignObject!=IVF_ALIGN_NONE)
 	{
 		this->updateRotation();
-		glPushMatrix();
-		glRotated(-m_angle1 * 180.0 / M_PI + 90, 0.0, 1.0, 0.0);
-		glPushMatrix();
-		glRotated(m_angle2 * 180.0 / M_PI - 90, 1.0, 0.0, 0.0);
+		lgPushMatrix();
+		lgRotated(-m_angle1 * 180.0 / M_PI + 90, 0.0, 1.0, 0.0);
+		lgPushMatrix();
+		lgRotated(m_angle2 * 180.0 / M_PI - 90, 1.0, 0.0, 0.0);
 	}
 
 	Composite::doCreateGeometry();
 
 	if (m_alignObject != IVF_ALIGN_NONE)
 	{
-		glPopMatrix();
-		glPopMatrix();
+		lgPopMatrix();
+		lgPopMatrix();
 	}
 }
 

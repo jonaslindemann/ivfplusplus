@@ -24,6 +24,7 @@
 
 #include <ivf/Light.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 #include <ivf/GL.h>
 
@@ -99,36 +100,36 @@ void Light::doCreateGeometry()
 
 		//glEnable( light );
 
-		glLightfv( light, GL_AMBIENT, m_ambient );
-		glLightfv( light, GL_DIFFUSE, m_diffuse );
-		glLightfv( light, GL_SPECULAR, m_specular );
+		lgLightfv( light, GL_AMBIENT, m_ambient );
+		lgLightfv( light, GL_DIFFUSE, m_diffuse );
+		lgLightfv( light, GL_SPECULAR, m_specular );
 
 		switch (m_lightType) {
 		case LT_POINT:
 			m_position[3] = 1.0;
-			glLightfv( light, GL_POSITION, m_position );
-			glLightf(light, GL_SPOT_CUTOFF, 180.0f);
+			lgLightfv( light, GL_POSITION, m_position );
+			lgLightf(light, GL_SPOT_CUTOFF, 180.0f);
 			break;
 		case LT_DIRECTIONAL:
 			m_position[3] = 0.0;
-			glLightfv( light, GL_POSITION, m_position );
-			glLightf(light, GL_SPOT_CUTOFF, 180.0f);
+			lgLightfv( light, GL_POSITION, m_position );
+			lgLightf(light, GL_SPOT_CUTOFF, 180.0f);
 			break;
 		case LT_SPOT:
 			m_position[3] = 1.0;
-			glLightfv( light, GL_POSITION, m_position );
-			glLightf(light, GL_SPOT_CUTOFF, m_spotCutoff);
-			glLightfv(light, GL_SPOT_DIRECTION, m_spotDirection);
-			glLightf(light, GL_SPOT_EXPONENT, m_spotExponent);
+			lgLightfv( light, GL_POSITION, m_position );
+			lgLightf(light, GL_SPOT_CUTOFF, m_spotCutoff);
+			lgLightfv(light, GL_SPOT_DIRECTION, m_spotDirection);
+			lgLightf(light, GL_SPOT_EXPONENT, m_spotExponent);
 			break;
 		default:
 
 			break;
 		}
 
-		glLighti( light, GL_CONSTANT_ATTENUATION, m_constatt );
-		glLighti( light, GL_LINEAR_ATTENUATION, m_linatt );
-		glLighti( light, GL_QUADRATIC_ATTENUATION, m_quadatt );
+		lgLighti( light, GL_CONSTANT_ATTENUATION, m_constatt );
+		lgLighti( light, GL_LINEAR_ATTENUATION, m_linatt );
+		lgLighti( light, GL_QUADRATIC_ATTENUATION, m_quadatt );
 
 		// Modern path: build LightData and add to RenderContext.
 		// Store the light position in world space (model matrix only).

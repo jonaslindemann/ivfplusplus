@@ -20,6 +20,7 @@
 //
 
 #include <ivf/PointSet.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -60,15 +61,15 @@ void PointSet::doCreateGeometry()
 		return;
 	}
 
-	glPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
-	glDisable(GL_LIGHTING);
+	lgPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
+	lgDisableLegacy(GL_LIGHTING);
 
 	if (m_useColor)
-		glEnable(GL_COLOR_MATERIAL);
+		lgEnableLegacy(GL_COLOR_MATERIAL);
 
 	for (i=0; i<(int)m_coordIndexSet.size(); i++)
 	{
-		glBegin(GL_POINTS);
+		lgBegin(GL_POINTS);
 
 		coordIdx = m_coordIndexSet[i];
 		if (m_useColor)
@@ -81,21 +82,21 @@ void PointSet::doCreateGeometry()
 		for (j=0; j<coordIdx->getSize(); j++)
 		{
 			if (m_useColor)
-				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+				lgColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 			else
 				if (Shape::getMaterial()!=nullptr)
 					Shape::getMaterial()->render();
 				else
-					glColor3f(1.0f, 1.0f, 1.0f);
+					lgColor3f(1.0f, 1.0f, 1.0f);
 
-			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
+			lgVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
 		}
-		glEnd();
+		lgEnd();
 	}
 
 	glPointSize(oldSize);
 
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void PointSet::setUseColor(bool flag)

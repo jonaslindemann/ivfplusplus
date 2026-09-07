@@ -24,6 +24,7 @@
 
 #include <ivf/config.h>
 #include <ivf/Texture.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -144,7 +145,7 @@ void Texture::bind()
 	}
 
 	if (!m_active)
-		glDisable(GL_TEXTURE_2D);
+		lgDisableLegacy(GL_TEXTURE_2D);
 }
 
 // ------------------------------------------------------------
@@ -162,18 +163,18 @@ void Texture::apply()
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
 		glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
 
-		glMatrixMode (GL_TEXTURE); 
-		glLoadIdentity ();
+		lgMatrixMode(GL_TEXTURE); 
+		lgLoadIdentity();
 		if ((m_texTransX!=0.0)||(m_texTransY!=0.0))
-			glTranslated(m_texTransX, m_texTransY, 0.0);
+			lgTranslated(m_texTransX, m_texTransY, 0.0);
 		if (m_texRotate!=0.0)
-			glRotated(m_texRotate, 0.0, 0.0, 1.0);
+			lgRotated(m_texRotate, 0.0, 0.0, 1.0);
 		if ((m_texScaleX!=0.0)||(m_texScaleY!=0.0))
-			glScaled (m_texScaleX, m_texScaleY, 1.0); 
-		glMatrixMode (GL_MODELVIEW);
+			lgScaled(m_texScaleX, m_texScaleY, 1.0); 
+		lgMatrixMode(GL_MODELVIEW);
 	}
 	else
-		glDisable(GL_TEXTURE_2D);
+		lgDisableLegacy(GL_TEXTURE_2D);
 }
 
 // ------------------------------------------------------------

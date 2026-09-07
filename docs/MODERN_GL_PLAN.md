@@ -354,7 +354,7 @@ Three things the design did not anticipate, each found by the gates:
   shader — which is what makes the switch work on its own, without the caller
   remembering to unbind.
 
-#### Results
+#### Results after Phase 1
 
 `profile_test` gained a fourth mode, `legacy-shader`: build and link the shader,
 then select `RenderProfile::Legacy` anyway. That is exactly ObjectiveFrame's
@@ -390,34 +390,81 @@ draws unlit; worth revisiting in Phase 4.
 *Exit criterion met: both gates pass for `legacy`, `legacy-shader` and `mixed`,
 with every case rendered in isolation.*
 
-### Phase 2 — Core-clean the shared path *(medium)*
+### Phase 2 — Core-clean the shared path — **done**
 
-Convert the code every draw goes through, in this order:
+1. ✅ `Shape::doBeginTransform`/`doEndTransform` — matrix calls, `glLoadName`,
+   `GL_NORMALIZE` and the texture enables all through `lg*`.
+2. ✅ `Material::doCreateMaterial` — the `glMaterialfv` calls, and the
+   `glIsEnabled(GL_LIGHTING)` gate itself, which raises `GL_INVALID_ENUM` in core
+   and so had to be checked behind `rcLegacyAllowed()` rather than inside.
+3. ✅ `Light` / `Lighting` — `glLight*`, `glLightModel*`, `GL_LIGHTING`.
+4. ✅ `GLPrimitive` subclasses — the `glPushAttrib`/`GL_COLOR_MATERIAL` preamble
+   and the whole `glBegin` body, across `TriSet`, `TriStripSet`, `QuadSet`,
+   `QuadStripSet`, `PolySet`, `LineSet`, `LineStripSet`, `PointSet`, `FaceSet`,
+   `SimpleLineSet`, `Mesh`, `Brick`, `SelectionBox`.
+5. ✅ `Blending`, `BlendState`, `CullState`, `CompositeState`, plus `Cursor`,
+   `Ruler`, `Workspace`, `Cone`, `Billboard`, `Extrusion`, `TextLabel`,
+   `Texture`, `SceneBase`, and the `GL_SELECT` users (`SelectComposite`,
+   `BufferSelection`, `ShapeSelection`, `SelectOrtho`) — the last of which now
+   go quiet in core rather than erroring, pending Phase 5.
+6. ✅ **Fix G:** `drawUnlit` keeps one VAO and buffer and orphans-then-refills
+   instead of generating and deleting a pair per call per frame.
 
-1. `Shape::doBeginTransform`/`doEndTransform` — `lg*` the matrix calls.
-2. `Material::doCreateMaterial` — `lg*` the `glMaterialfv` calls; make
-   `uploadToShader` the only path in `Core`.
-3. `Light` / `Lighting` / `LightingState` — `lg*` the `glLight*` and `GL_LIGHTING`
-   calls.
-4. `GLPrimitive` subclasses — `lg*` the `glPushAttrib`/`GL_COLOR_MATERIAL`
-   preamble and the whole `glBegin` fallback body.
-5. `GlobalState`, `RenderState` and subclasses (`BlendState`, `CullState`,
-   `DepthBufferState`, `PolyState`, `LightingState`, `CompositeState`) — split into
-   core-legal and legacy-only, route the latter through `lg*`.
-6. **Fix G:** give `drawUnlit` a persistent ring of VAO/VBOs in `RenderContext`
-   (orphan with `glBufferData(nullptr)`, then upload) instead of gen/delete per call.
+Also added: in `Core`, `GLBase::renderImmediate()` skips `doCreateGeometry()`
+for an object with no modern path (`rcCanDrawGeometry()`). Its geometry code is
+all `lg*` no-ops by then, so calling it achieves nothing; skipping says so
+plainly and keeps the report about coverage rather than about a flood of errors
+from calls that were going to be ignored anyway.
 
-### Phase 3 — Camera completeness *(small to medium)*
+### Phase 3 — Camera completeness — **done**
 
-Fix F. Add to `Camera`, mirroring what `projectionTransform()` actually does:
+`glmProjectionMatrix()` now mirrors everything `projectionTransform()` can do,
+not just the plain perspective case:
 
-- `glm::ortho` for `OrthoCamera` / `SelectOrtho`.
-- `glm::frustum`-based tiled and jittered projections matching
-  `tilePerspective()` / `accPerspective()`.
-- Asymmetric stereo frustums — currently only the eye *position* is mirrored, not
-  the frustum shear.
-- `lg*` the `gluPerspective` / `gluLookAt` / `glMatrixMode` / `glLoadIdentity` calls.
-- Add `glmPickMatrix()` as groundwork for Phase 5.
+- Tiled rendering (`tilePerspective`) and accumulation-buffer jitter
+  (`accPerspective`/`accFrustum`), both via `glm::frustum` — jitter reads the
+  viewport to convert its pixel offset, exactly as `accFrustum()` does.
+- Stereo, which shears the frustum sideways by half an eye separation scaled by
+  the near/far ratio. Previously only the eye *position* was mirrored, so the
+  shader and fixed-function paths disagreed on the frustum shape.
+- `glmPickMatrix()` added as groundwork for Phase 5.
+- `gluPerspective` / `gluLookAt` / `glFrustum` / `glOrtho` / `gluPickMatrix` /
+  `glMatrixMode` / `glLoadIdentity` routed through `lg*` in `Camera`, `View` and
+  `SelectOrtho`.
+
+`glm::ortho` turned out not to be needed: `OrthoCamera` is an empty stub that
+never overrides `projectionTransform()`. The only real orthographic projection in
+the library is in `SelectOrtho`, which belongs to the picking work in Phase 5.
+
+#### Results after Phases 2 and 3
+
+| Profile | Errors | Draws like `legacy`? |
+| --- | --- | --- |
+| `legacy` | 31/31 clean | reference |
+| `legacy-shader` | 31/31 clean | **pixel-identical** |
+| `mixed` | 31/31 clean | 0 coverage problems |
+| `core` | **31/31 clean** — was 32/32 failing | 23/31 cases draw correctly |
+
+The library now runs on a genuine OpenGL 3.3 core forward-compatible context
+with **zero GL errors**. Three files — `Shape`, `Material`, `Light` — accounted
+for three quarters of that on their own, exactly as the Phase 0 measurement
+predicted.
+
+What `core` still cannot draw, and why:
+
+| Case | Reason |
+| --- | --- |
+| `Extrusion`, `TubeExtrusion`, `SolidLine` | gle-based; no modern path yet (Phase 4.1) |
+| `Grid` | its `LineSet`s carry per-index line widths, which force the legacy branch |
+| `WireBrick`, `SelectionBox` | deliberately marked legacy-only until wireframe quads get an edge-list path |
+| `LineSet`, `LineStripSet` | draw, but thinner — see below |
+
+**A core-profile limitation worth knowing:** a forward-compatible core context
+accepts only `glLineWidth(1.0)` and raises `GL_INVALID_VALUE` for anything wider.
+`lgLineWidth()` clamps rather than suppresses, so wide lines still draw, just
+thin — which is why `LineSet` covers 488 pixels in legacy and 244 in core. Real
+wide lines in core have to be built from triangles; that belongs with the other
+shader-side feature parity in Phase 7.
 
 ### Phase 4 — Remaining geometry *(the bulk of the work)*
 
@@ -505,8 +552,8 @@ compile-time signal before anything is removed. Delete `src/gle`, `OldLight`,
 | --- | --- | --- |
 | 0 Baseline and `profile_test` — **done** | — | yes |
 | 1 `RenderProfile`, fallback, display-list fix - **done** | 0 | - |
-| 2 Core-clean shared path | 1 | — |
-| 3 Camera completeness | 1 | yes, with 2 |
+| 2 Core-clean shared path - **done** | 1 | - |
+| 3 Camera completeness - **done** | 1 | - |
 | 4 Remaining geometry | 2 | yes, per class |
 | 5 Colour picking | 2, 3 | yes, with 4 |
 | 6 Text and textures | 2 | yes, with 4 and 5 |

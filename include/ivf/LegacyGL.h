@@ -92,6 +92,29 @@ inline void lgMultMatrixd(const GLdouble* m)      { if (rcLegacyAllowed()) glMul
 inline void lgMultMatrixf(const GLfloat* m)       { if (rcLegacyAllowed()) glMultMatrixf(m); }
 inline void lgLoadMatrixd(const GLdouble* m)      { if (rcLegacyAllowed()) glLoadMatrixd(m); }
 
+// ---- Projection helpers ----
+//
+// glFrustum and glOrtho load the fixed-function projection matrix, and the GLU
+// helpers are thin wrappers that end in glMultMatrix. Camera mirrors all of them
+// into RenderContext::projection() as glm matrices, which is what the shader
+// path reads.
+
+inline void lgFrustum(GLdouble l, GLdouble r, GLdouble b, GLdouble t, GLdouble n, GLdouble f)
+                                                  { if (rcLegacyAllowed()) glFrustum(l, r, b, t, n, f); }
+inline void lgOrtho(GLdouble l, GLdouble r, GLdouble b, GLdouble t, GLdouble n, GLdouble f)
+                                                  { if (rcLegacyAllowed()) glOrtho(l, r, b, t, n, f); }
+inline void lgPerspective(GLdouble fovy, GLdouble aspect, GLdouble n, GLdouble f)
+                                                  { if (rcLegacyAllowed()) gluPerspective(fovy, aspect, n, f); }
+inline void lgLookAt(GLdouble ex, GLdouble ey, GLdouble ez,
+                     GLdouble cx, GLdouble cy, GLdouble cz,
+                     GLdouble ux, GLdouble uy, GLdouble uz)
+                                                  { if (rcLegacyAllowed()) gluLookAt(ex, ey, ez, cx, cy, cz, ux, uy, uz); }
+// gluPickMatrix takes its viewport as a non-const GLint[4], so take one too
+// rather than casting the constness away at every call site.
+
+inline void lgPickMatrix(GLdouble x, GLdouble y, GLdouble w, GLdouble h, GLint* viewport)
+                                                  { if (rcLegacyAllowed()) gluPickMatrix(x, y, w, h, viewport); }
+
 // ---- Attribute stack ----
 
 inline void lgPushAttrib(GLbitfield mask)         { if (rcLegacyAllowed()) glPushAttrib(mask); }
@@ -123,6 +146,19 @@ inline void lgMaterialf(GLenum face, GLenum pname, GLfloat param)
                                                   { if (rcLegacyAllowed()) glMaterialf(face, pname, param); }
 inline void lgColorMaterial(GLenum face, GLenum mode)
                                                   { if (rcLegacyAllowed()) glColorMaterial(face, mode); }
+
+// ---- Line width ----
+//
+// glLineWidth itself survives in core, but its useful range does not: a
+// forward-compatible core context accepts only 1.0 and raises GL_INVALID_VALUE
+// for anything wider. This clamps rather than suppresses, so a wide line still
+// draws -- just thin. Real wide lines in core need to be built from triangles;
+// until then this keeps the geometry visible instead of erroring it away.
+
+inline void lgLineWidth(GLfloat width)
+{
+    glLineWidth(rcLegacyAllowed() ? width : 1.0f);
+}
 
 // ---- Selection ----
 //

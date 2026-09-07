@@ -23,6 +23,7 @@
 
 #include <ivf/config.h>
 #include <ivf/SimpleLineSet.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -53,9 +54,9 @@ SimpleLineSet::~SimpleLineSet ()
 void SimpleLineSet::doCreateGeometry()
 {
 	int i;
-	glPushAttrib(GL_LIGHTING);
-	glDisable(GL_LIGHTING);
-	glBegin(GL_LINE_STRIP);
+	lgPushAttrib(GL_LIGHTING);
+	lgDisableLegacy(GL_LIGHTING);
+	lgBegin(GL_LINE_STRIP);
 	for (i = 0; i<m_nCoordIndex; i++)
 	{
 		if ((m_colors!=nullptr)&&(m_coordIndex[i]>=0))
@@ -67,14 +68,14 @@ void SimpleLineSet::doCreateGeometry()
 		}
 		if (m_coordIndex[i] == -1)
 		{
-			glEnd();
+			lgEnd();
 			if (i != m_nCoordIndex-1)
-				glBegin(GL_LINE_STRIP);
+				lgBegin(GL_LINE_STRIP);
 		}
 		else
-			glVertex3dv(m_coords[ m_coordIndex[i] ]);
+			lgVertex3dv(m_coords[ m_coordIndex[i] ]);
 	}
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 // ------------------------------------------------------------

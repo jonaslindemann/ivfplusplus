@@ -1105,6 +1105,38 @@ int main(int argc, char **argv)
     setDebugReportNotifications(g_reportNotifications);
     enableDebugOutput(true);
 
+    // Select the profile before touching anything else. Camera::initialize() and
+    // Lighting::enable() emit fixed-function calls on the spot, so setting the
+    // profile after them would let a core run make exactly the calls the profile
+    // exists to suppress.
+
+    switch (g_profile)
+    {
+    case TestProfile::Legacy:
+    case TestProfile::LegacyWithShader:
+        rcSetProfile(RenderProfile::Legacy);
+        break;
+    case TestProfile::Mixed:
+        rcSetProfile(RenderProfile::Mixed);
+        break;
+    default:
+        rcSetProfile(RenderProfile::Core);
+        break;
+    }
+
+    if (shaderRequested())
+    {
+        rcUseBlinnPhong();
+
+        if (rcShader() == nullptr || !rcShader()->isLinked())
+        {
+            std::printf("the Blinn-Phong shader failed to link -- see the messages above\n");
+            glfwDestroyWindow(window);
+            glfwTerminate();
+            return 2;
+        }
+    }
+
     // ---- Camera and light, shared by checks and viewer ----
 
     g_camera = Camera::create();
@@ -1128,40 +1160,10 @@ int main(int argc, char **argv)
     // shader if the profile wants one. Legacy deliberately gets no shader at
     // all, so this run reproduces what the library did before the modern path.
 
-    // Build the shader first where one is wanted, then set the profile. For
-    // legacy-shader that order matters: the shader is created and linked, and
-    // only then is the library told to ignore it.
-
-    if (shaderRequested())
-    {
-        rcUseBlinnPhong();
-
-        if (rcShader() == nullptr || !rcShader()->isLinked())
-        {
-            std::printf("the Blinn-Phong shader failed to link -- see the messages above\n");
-            glfwDestroyWindow(window);
-            glfwTerminate();
-            return 2;
-        }
-    }
-
-    switch (g_profile)
-    {
-    case TestProfile::Legacy:
-    case TestProfile::LegacyWithShader:
-        rcSetProfile(RenderProfile::Legacy);
-        break;
-    case TestProfile::Mixed:
-        rcSetProfile(RenderProfile::Mixed);
-        break;
-    default:
-        rcSetProfile(RenderProfile::Core);
-        break;
-    }
-
-    // Deliberately nothing else here for legacy-shader. Selecting the profile
-    // has to be enough on its own -- if this had to call rcUnuseShader() to get
-    // legacy rendering, the switch would not be doing its job.
+    // Nothing further for legacy-shader: the shader above was built and linked
+    // while RenderProfile::Legacy was already selected, and selecting it has to
+    // be enough on its own. If this had to unbind anything by hand, the switch
+    // would not be doing its job.
 
     glEnable(GL_DEPTH_TEST);
 

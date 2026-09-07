@@ -23,6 +23,7 @@
 //
 
 #include <ivf/LineSet.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -52,29 +53,29 @@ void LineSet::doCreateGeometry()
     // this stays a plain gl call.
 
     glGetFloatv(GL_LINE_WIDTH, oldWidth);
-    glLineWidth(m_lineWidth);
+    lgLineWidth(m_lineWidth);
 
 	if (m_idxLineWidth.empty())
 		if (buildAndDrawVAO(GL_LINES))
 		{
-			glLineWidth(oldWidth[0]);
+			lgLineWidth(oldWidth[0]);
 			return;
 		}
 
-    glPushAttrib(GL_LIGHTING | GL_COLOR_MATERIAL);
-    glDisable(GL_LIGHTING);
+    lgPushAttrib(GL_LIGHTING | GL_COLOR_MATERIAL);
+    lgDisableLegacy(GL_LIGHTING);
 
     if (m_useColor)
-        glEnable(GL_COLOR_MATERIAL);
+        lgEnableLegacy(GL_COLOR_MATERIAL);
 
     for (i = 0; i < (int)m_coordIndexSet.size(); i++)
     {
         if (m_idxLineWidth.size() > 0)
         {
             if (i < m_idxLineWidth.size())
-                glLineWidth(m_idxLineWidth[i]);
+                lgLineWidth(m_idxLineWidth[i]);
         }
-        glBegin(GL_LINES);
+        lgBegin(GL_LINES);
 
         coordIdx = m_coordIndexSet[i];
         if (m_useColor)
@@ -93,28 +94,28 @@ void LineSet::doCreateGeometry()
             if (m_useColor)
             {
                 if (m_useAlpha)
-                    glColor4fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+                    lgColor4fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
                 else
-                    glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+                    lgColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
             }
             else if (Shape::getMaterial() != nullptr)
                 Shape::getMaterial()->render();
             else if (Shape::getMaterial() != nullptr)
                 Shape::getMaterial()->render();
             else
-                glColor3f(1.0f, 1.0f, 1.0f);
+                lgColor3f(1.0f, 1.0f, 1.0f);
 
             if (textureIdx != nullptr)
-                glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
+                lgTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
 
-            glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
+            lgVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
         }
-        glEnd();
+        lgEnd();
     }
 
-    glLineWidth(oldWidth[0]);
+    lgLineWidth(oldWidth[0]);
 
-    glPopAttrib();
+    lgPopAttrib();
 }
 
 void LineSet::setUseColor(bool flag)

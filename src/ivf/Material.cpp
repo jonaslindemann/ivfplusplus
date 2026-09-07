@@ -25,6 +25,7 @@
 #include <ivf/Material.h>
 #include <ivf/GlobalState.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 #include <glm/glm.hpp>
 
@@ -299,7 +300,11 @@ bool Material::setStateCacheEnabled(bool flag)
 
 void Material::doCreateMaterial()
 {
-	if (glIsEnabled(GL_LIGHTING))
+	// The whole fixed-function branch hinges on a query that is itself illegal in
+	// core -- glIsEnabled(GL_LIGHTING) raises GL_INVALID_ENUM there -- so the
+	// profile has to be checked before the query, not inside it.
+
+	if (rcLegacyAllowed() && glIsEnabled(GL_LIGHTING))
 	{
 		const bool greyscale = GlobalState::getInstance()->isGreyscaleRenderingEnabled();
 
@@ -347,15 +352,15 @@ void Material::doCreateMaterial()
 		{
 			if (!colorMaterial)
 			{
-				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+				lgMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+				lgMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 			}
 			else
-				glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+				lgColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
-			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
-			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_shininess);
+			lgMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+			lgMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
+			lgMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_shininess);
 
 			if (g_cacheEnabled)
 			{
@@ -372,7 +377,7 @@ void Material::doCreateMaterial()
 	}
 	else
         if (GlobalState::getInstance()->isColorOutputEnabled())
-            glColor4fv(m_diffuseColor);
+            lgColor4fv(m_diffuseColor);
 
 	// Modern path: upload to active shader if one is set in RenderContext.
 	if (rcIsShaderActive())

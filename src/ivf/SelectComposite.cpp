@@ -20,6 +20,7 @@
 //
 
 #include <ivf/SelectComposite.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -60,7 +61,7 @@ void SelectComposite::doCreateGeometry()
 // ------------------------------------------------------------
 void SelectComposite::doBeginTransform()
 {
-	glPushMatrix();
+	lgPushMatrix();
 	if (m_renderCamera)
 	{
 		if (m_camera!=nullptr)
@@ -76,7 +77,7 @@ void SelectComposite::doBeginTransform()
 void SelectComposite::doEndTransform()
 {
 		Shape::doEndTransform();
-	glPopMatrix();
+	lgPopMatrix();
 }
 
 // ------------------------------------------------------------
@@ -90,28 +91,28 @@ GLint SelectComposite::pick(int x, int y)
 
 	glRenderMode(GL_SELECT);
 
-	glInitNames();
-	glPushName(IVF_NONAME);
+	lgInitNames();
+	lgPushName(IVF_NONAME);
 
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
+	lgMatrixMode(GL_PROJECTION);
+	lgPushMatrix();
 		if (m_renderCamera)
-			glLoadIdentity();
+			lgLoadIdentity();
 
 		if (m_camera!=nullptr)
 			m_camera->initializeSelect(x, y, 4, 4);
 		else
 			this->initializeSelect(x, y, 4, 4);
 
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
+		lgMatrixMode(GL_MODELVIEW);
+		lgPushMatrix();
 			doBeginTransform();
 			doCreateGeometry();
 			doEndTransform();
-		glPopMatrix();
-		glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
+		lgPopMatrix();
+		lgMatrixMode(GL_PROJECTION);
+    lgPopMatrix();
+    lgMatrixMode(GL_MODELVIEW);
 
 	hits = glRenderMode(GL_RENDER);
 

@@ -151,7 +151,16 @@ void GLBase::renderImmediate ()
 		doCreateMaterial();
 
 	doPreGeometry();
-	doCreateGeometry();
+
+	// In Core there is no fixed-function pipeline behind the shader, so an object
+	// that has not been ported simply cannot draw. Its geometry code is all lg*
+	// no-ops by now, so calling it would achieve nothing; skipping it says so
+	// plainly and keeps the profile_test report about coverage rather than about
+	// a flood of errors from calls that were going to be ignored anyway.
+
+	if (rcCanDrawGeometry(this->hasModernPath()))
+		doCreateGeometry();
+
 	doPostGeometry();
 	doEndTransform();
 

@@ -25,6 +25,7 @@
 #include <ivf/Extrusion.h>
 
 #include <ivf/config.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -431,9 +432,9 @@ void Extrusion::doCreateSelect()
 {
     gleTextureMode(m_textureMode);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glPushAttrib(GL_LIGHTING_BIT);
-    glDisable(GL_LIGHTING);
-    glColor3f(1.0f, 1.0f, 1.0f);
+    lgPushAttrib(GL_LIGHTING_BIT);
+    lgDisableLegacy(GL_LIGHTING);
+    lgColor3f(1.0f, 1.0f, 1.0f);
     if (m_useColors)
     {
         if (!m_useTwist)
@@ -474,7 +475,7 @@ void Extrusion::doCreateSelect()
                 nullptr,
                 m_twist);
     }
-    glPopAttrib();
+    lgPopAttrib();
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     gleTextureMode(0);
 }

@@ -21,6 +21,7 @@
 
 #include <ivf/PolySet.h>
 #include <ivf/GlobalState.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -48,10 +49,10 @@ void PolySet::doCreateGeometry()
 
 	long i, j;
 
-	glPushAttrib(GL_COLOR_MATERIAL);
+	lgPushAttrib(GL_COLOR_MATERIAL);
 
 	if (m_useColor)
-		glEnable(GL_COLOR_MATERIAL);
+		lgEnableLegacy(GL_COLOR_MATERIAL);
 
 
 	for (i=0; i<(int)m_coordIndexSet.size(); i++)
@@ -76,12 +77,12 @@ void PolySet::doCreateGeometry()
 		coordIdx = m_coordIndexSet[i];
 		if (coordIdx->getTopology()==IVF_IDX_QUADS)
 		{
-			glBegin(GL_QUADS);
+			lgBegin(GL_QUADS);
 			topoHop = 4;
 		}
 		else
 		{
-			glBegin(GL_TRIANGLES);
+			lgBegin(GL_TRIANGLES);
 			topoHop = 3;
 		}
 
@@ -100,64 +101,64 @@ void PolySet::doCreateGeometry()
 		for (j=0; j<coordIdx->getSize(); j+=topoHop)
 		{
 			if (getUseVertexNormals())
-				glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j)]->getComponents());
+				lgNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j)]->getComponents());
 			else
-				glNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
+				lgNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
 
 			if (m_useColor)
-				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+				lgColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 
 			if (textureIdx!=nullptr)
-				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
+				lgTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
 
-			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
+			lgVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
 
 			if (getUseVertexNormals())
-				glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+1)]->getComponents());
+				lgNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+1)]->getComponents());
 			else
-				glNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
+				lgNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
 
 			if (m_useColor)
-				glColor3fv(m_colorSet[colorIdx->getIndex(j+1)]->getColor());
+				lgColor3fv(m_colorSet[colorIdx->getIndex(j+1)]->getColor());
 
 			if (textureIdx!=nullptr)
-				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+1)]->getComponents());
+				lgTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+1)]->getComponents());
 
-			glVertex3dv(m_coordSet[coordIdx->getIndex(j+1)]->getComponents());
+			lgVertex3dv(m_coordSet[coordIdx->getIndex(j+1)]->getComponents());
 
 			if (getUseVertexNormals())
-				glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+2)]->getComponents());
+				lgNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+2)]->getComponents());
 			else
-				glNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
+				lgNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
 
 			if (m_useColor)
-				glColor3fv(m_colorSet[colorIdx->getIndex(j+2)]->getColor());
+				lgColor3fv(m_colorSet[colorIdx->getIndex(j+2)]->getColor());
 
 			if (textureIdx!=nullptr)
-				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+2)]->getComponents());
+				lgTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+2)]->getComponents());
 
-			glVertex3dv(m_coordSet[coordIdx->getIndex(j+2)]->getComponents());
+			lgVertex3dv(m_coordSet[coordIdx->getIndex(j+2)]->getComponents());
 
 			if (topoHop==4)
 			{
 				if (getUseVertexNormals())
-					glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+3)]->getComponents());
+					lgNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+3)]->getComponents());
 				else
-					glNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
+					lgNormal3dv(m_normalSet[normalIdx->getIndex(j/topoHop)]->getComponents());
 
 				if (m_useColor)
-					glColor3fv(m_colorSet[colorIdx->getIndex(j+3)]->getColor());
+					lgColor3fv(m_colorSet[colorIdx->getIndex(j+3)]->getColor());
 
 				if (textureIdx!=nullptr)
-					glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+3)]->getComponents());
+					lgTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+3)]->getComponents());
 
-				glVertex3dv(m_coordSet[coordIdx->getIndex(j+3)]->getComponents());
+				lgVertex3dv(m_coordSet[coordIdx->getIndex(j+3)]->getComponents());
 			}
 		}
-		glEnd();
+		lgEnd();
 	}
 
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void PolySet::setUseColor(bool flag)

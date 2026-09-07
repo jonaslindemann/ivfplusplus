@@ -22,6 +22,7 @@
 // Implementation of: public class CIvfCamera
 
 #include <ivf/View.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -53,11 +54,11 @@ void View::initialize()
 {
 	m_viewport->apply();
 	//glViewport(m_viewX, m_viewY, m_viewWidth, m_viewHeight);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	lgMatrixMode(GL_PROJECTION);
+	lgLoadIdentity();
 	this->projectionTransform();
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	lgMatrixMode(GL_MODELVIEW);
+	lgLoadIdentity();
 }
 
 // ------------------------------------------------------------
@@ -115,7 +116,7 @@ void View::initializeSelect(int x, int y, int w, int h)
 	viewport[2] = viewWidth;
 	viewport[3] = viewHeight;
 
-	gluPickMatrix((GLdouble)(x), (GLdouble)viewHeight - (GLdouble)(y), (GLdouble)w, (GLdouble)h, viewport);
+	lgPickMatrix((GLdouble)(x), (GLdouble)viewHeight - (GLdouble)(y), (GLdouble)w, (GLdouble)h, viewport);
 	if (m_selectTransform)
 		this->projectionTransform();
 }

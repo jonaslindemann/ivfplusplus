@@ -24,6 +24,7 @@
 
 #include <ivf/config.h>
 #include <ivf/SelectionBox.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -46,10 +47,10 @@ SelectionBox::~SelectionBox ()
 // ------------------------------------------------------------
 void SelectionBox::doCreateGeometry()
 {
-	glPushAttrib(GL_LIGHTING);
-		glDisable(GL_LIGHTING);
-		glColor3f(1.0, 1.0, 1.0);
+	lgPushAttrib(GL_LIGHTING);
+		lgDisableLegacy(GL_LIGHTING);
+		lgColor3f(1.0, 1.0, 1.0);
 		WireBrick::doCreateGeometry();
-	glPopAttrib();
+	lgPopAttrib();
 }
 
