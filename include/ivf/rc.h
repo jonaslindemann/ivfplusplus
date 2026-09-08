@@ -49,6 +49,13 @@ inline void rcUseShader() {
 /** Unbind any program, so following calls reach the fixed-function pipeline. */
 inline void rcUnuseShader()                              { glUseProgram(0); }
 
+/**
+ * Draw following geometry unlit, the shader-path equivalent of the
+ * glDisable(GL_LIGHTING) a class used to wrap around a legacy draw.
+ */
+inline void rcSetForceUnlit(bool flag)                   { RenderContext::instance().setForceUnlit(flag); }
+inline bool rcForceUnlit()                               { return RenderContext::instance().forceUnlit(); }
+
 // ---- Picking ----
 inline ShaderProgram* rcUsePickShader()                  { return RenderContext::instance().usePickShader(); }
 inline void rcSetPickMode(bool flag)                     { RenderContext::instance().setPickMode(flag); }

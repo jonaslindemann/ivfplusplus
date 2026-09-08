@@ -88,6 +88,11 @@ void LineStripSet::doCreateGeometry()
 	lgPopAttrib();
 }
 
+bool LineStripSet::usesVertexColors() const
+{
+	return m_useColor && GLPrimitive::usesVertexColors();
+}
+
 void LineStripSet::setUseColor(bool flag)
 {
 	m_useColor = flag;

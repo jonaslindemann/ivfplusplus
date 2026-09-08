@@ -89,6 +89,7 @@ private:
 	bool     m_vaoDirty = true;
 	bool     m_vaoWireframe = false;
 	bool     m_vaoExpandedLines = false;
+	bool     m_vaoUseColors = false;
 
 	// First vertex and vertex count of each coordinate index set within the
 	// packed buffer, so they can be drawn separately when they need different
@@ -132,6 +133,17 @@ protected:
 	bool buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe = false,
 	                     const std::vector<float>* indexSetLineWidths = nullptr,
 	                     float lineWidth = 1.0f);
+
+	/**
+	 * Whether this primitive's per-vertex colours should be used.
+	 *
+	 * Having colours is not the same as wanting them: LineSet, LineStripSet and
+	 * PointSet keep a setUseColor() flag and fall back to plain white when it is
+	 * off, whatever their colour set holds. The modern path asked only whether
+	 * the colour set was populated, which drew a set of coloured lines that the
+	 * legacy path drew white. Subclasses with such a flag override this.
+	 */
+	virtual bool usesVertexColors() const;
 
 	std::vector<Vec3d*>		m_coordSet;
 	std::vector<Color*>		m_colorSet;

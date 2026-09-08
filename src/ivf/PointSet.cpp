@@ -99,6 +99,11 @@ void PointSet::doCreateGeometry()
 	lgPopAttrib();
 }
 
+bool PointSet::usesVertexColors() const
+{
+	return m_useColor && GLPrimitive::usesVertexColors();
+}
+
 void PointSet::setUseColor(bool flag)
 {
 	m_useColor = flag;

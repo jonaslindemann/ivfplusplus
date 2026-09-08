@@ -132,6 +132,11 @@ void LineSet::doCreateGeometry()
     lgPopAttrib();
 }
 
+bool LineSet::usesVertexColors() const
+{
+	return m_useColor && GLPrimitive::usesVertexColors();
+}
+
 void LineSet::setUseColor(bool flag)
 {
     m_useColor = flag;

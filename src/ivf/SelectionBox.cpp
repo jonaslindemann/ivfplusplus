@@ -47,10 +47,20 @@ SelectionBox::~SelectionBox ()
 // ------------------------------------------------------------
 void SelectionBox::doCreateGeometry()
 {
-	lgPushAttrib(GL_LIGHTING);
+	// The box marks a selection, so it is drawn flat white rather than shaded.
+	// The legacy calls say so to the fixed-function pipeline and the
+	// rcSetForceUnlit() bracket says the same thing to the shader; without the
+	// latter the box came out shaded like ordinary geometry, which made it hard
+	// to tell a selected object from an unselected one.
+
+	rcSetForceUnlit(true);
+
+	lgPushAttrib(GL_LIGHTING_BIT);
 		lgDisableLegacy(GL_LIGHTING);
 		lgColor3f(1.0, 1.0, 1.0);
 		WireBrick::doCreateGeometry();
 	lgPopAttrib();
+
+	rcSetForceUnlit(false);
 }
 

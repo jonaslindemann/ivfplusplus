@@ -49,6 +49,11 @@ GLPrimitive::~GLPrimitive()
 	this->clear();
 }
 
+bool GLPrimitive::usesVertexColors() const
+{
+	return !m_colorSet.empty() && !m_colorIndexSet.empty();
+}
+
 void GLPrimitive::markVAODirty()
 {
 	m_vaoDirty = true;
@@ -87,6 +92,16 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
 
 	if (expandLines != m_vaoExpandedLines) {
 		m_vaoExpandedLines = expandLines;
+		m_vaoDirty = true;
+	}
+
+	// Whether the colour set is being used is packed into the buffer, so a
+	// setUseColor() after the first draw has to rebuild it.
+
+	const bool useColors = this->usesVertexColors();
+
+	if (useColors != m_vaoUseColors) {
+		m_vaoUseColors = useColors;
 		m_vaoDirty = true;
 	}
 
@@ -158,8 +173,9 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
 					}
 				}
 
-				// Color
-				if (colorIdx && j < colorIdx->getSize()) {
+				// Color. Skipped entirely when the subclass says its colours are
+				// not in use, which leaves the white the legacy path drew.
+				if (useColors && colorIdx && j < colorIdx->getSize()) {
 					int ki = colorIdx->getIndex(j);
 					if (ki < (int)m_colorSet.size()) {
 						const float* c = m_colorSet[ki]->getColor();
@@ -330,13 +346,21 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
 	rcUseShader();
 	rcUpdateShader(prog);
 
-	// Unlit mode for point/line primitives (legacy path disabled GL_LIGHTING for these).
-	bool isUnlit = (legacyPrimitive == GL_POINTS ||
+	// Unlit mode for point/line primitives (legacy path disabled GL_LIGHTING for
+	// these), and for a caller that disabled lighting around geometry this
+	// cannot recognise from the primitive alone -- a wireframe box, say.
+	bool isUnlit = rcForceUnlit() ||
+	               (legacyPrimitive == GL_POINTS ||
 	                legacyPrimitive == GL_LINES  ||
 	                legacyPrimitive == GL_LINE_STRIP);
-	bool hasVertexColors = !m_colorSet.empty() && !m_colorIndexSet.empty();
+	// An unlit primitive with no colours of its own draws white: the legacy
+	// path reached this state by disabling GL_LIGHTING and calling
+	// glColor3f(1,1,1), and the packed vertex colour defaults to the same
+	// white. Reading the material diffuse instead -- which is what the shader
+	// falls back to -- drew those lines in the object's material colour.
+
 	prog->setUniformInt("uUnlit",           isUnlit ? 1 : 0);
-	prog->setUniformInt("uUseVertexColor",  hasVertexColors ? 1 : 0);
+	prog->setUniformInt("uUseVertexColor",  (useColors || isUnlit) ? 1 : 0);
 
 	glBindVertexArray(m_vao);
 

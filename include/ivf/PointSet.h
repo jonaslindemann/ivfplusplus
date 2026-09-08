@@ -54,6 +54,9 @@ public:
 	/** Enable or disable the use of color values when rendering */
 	void setUseColor(bool flag);
 
+	/** Colours are only used when setUseColor() has turned them on. */
+	virtual bool usesVertexColors() const override;
+
 	/** Return color usage */
 	bool getUseColor();
 

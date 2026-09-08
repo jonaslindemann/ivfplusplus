@@ -377,6 +377,22 @@ public:
      */
     void setWideLineDraw(bool flag);
 
+    /**
+     * Draw following geometry unlit, whatever primitive it is.
+     *
+     * The shader picks unlit rendering automatically for points and lines,
+     * which covers the classes that disabled GL_LIGHTING around a legacy
+     * glBegin. It cannot see a class that disables lighting around geometry of
+     * some other primitive -- SelectionBox draws a wireframe box that way --
+     * because by then the disable has gone through the lg* shim and left no
+     * trace the shader can read. Such a class brackets its draw with this
+     * instead, which is the shader-path equivalent of that glDisable.
+     */
+    void setForceUnlit(bool flag);
+
+    /** Returns true while geometry is being forced unlit. */
+    bool forceUnlit() const;
+
 private:
     RenderContext();
 
@@ -406,6 +422,8 @@ private:
     ShaderProgramPtr  m_pickShader;
     bool              m_pickMode;
     glm::vec4         m_pickColor;
+
+    bool              m_forceUnlit;
 
     int               m_textureMode;
     glm::vec4         m_textureEnvColor;

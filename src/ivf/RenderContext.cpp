@@ -68,6 +68,7 @@ RenderContext::RenderContext()
     , m_alphaTestFunc(0)
     , m_alphaTestRef(0.0f)
     , m_wideLineDraw(false)
+    , m_forceUnlit(false)
     , m_whiteTexture(0)
 {
     m_modelStack.push(glm::mat4(1.0f));
@@ -559,6 +560,16 @@ void RenderContext::disableAlphaTest()
 bool RenderContext::needsWideLineExpansion(float width) const
 {
     return (m_profile == RenderProfile::Core) && (width > 1.0f);
+}
+
+void RenderContext::setForceUnlit(bool flag)
+{
+    m_forceUnlit = flag;
+}
+
+bool RenderContext::forceUnlit() const
+{
+    return m_forceUnlit;
 }
 
 void RenderContext::setWideLineDraw(bool flag)
