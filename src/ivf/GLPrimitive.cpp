@@ -26,6 +26,8 @@
 #include <ivf/rc.h>
 #include <ivf/LegacyGL.h>
 #include <ivf/ShaderProgram.h>
+#include <ivf/GlobalState.h>
+#include <ivf/Material.h>
 
 #include <ivf/config.h>
 
@@ -362,9 +364,44 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
 	prog->setUniformInt("uUnlit",           isUnlit ? 1 : 0);
 	prog->setUniformInt("uUseVertexColor",  (useColors || isUnlit) ? 1 : 0);
 
+	// A primitive read from a file usually carries one material per index set --
+	// the AC3D loader builds them that way, so a model's parts are different
+	// colours. The legacy loop applies each of those before drawing its own
+	// index set. This path drew everything in a single call, so the whole model
+	// came out in whatever material happened to be current: an AC3D wind turbine
+	// lost its green ground and yellow blades and turned uniformly blue, and the
+	// fly example's asteroids inherited the near-black of the last star drawn.
+
+	const bool perFaceMaterials = !useColors &&
+	                              !m_materialIndexSet.empty() &&
+	                              (m_vaoRangeStart.size() == m_vaoRangeCount.size()) &&
+	                              GlobalState::getInstance()->isMaterialRenderingEnabled();
+
 	glBindVertexArray(m_vao);
 
-	if ((indexSetLineWidths != nullptr) && !indexSetLineWidths->empty() &&
+	if (perFaceMaterials)
+	{
+		// One draw per index set, because the material is per draw call.
+
+		for (size_t i = 0; i < m_vaoRangeStart.size(); ++i)
+		{
+			if (m_vaoRangeCount[i] <= 0)
+				continue;
+
+			const int idx = this->getMaterialIndex((int)i);
+
+			if (idx >= 0)
+			{
+				Material* material = this->getMaterialAt(idx);
+
+				if (material != nullptr)
+					material->render();
+			}
+
+			glDrawArrays(drawMode, m_vaoRangeStart[i], m_vaoRangeCount[i]);
+		}
+	}
+	else if ((indexSetLineWidths != nullptr) && !indexSetLineWidths->empty() &&
 	    (m_vaoRangeStart.size() == m_vaoRangeCount.size()))
 	{
 		// One draw per index set, because line width is per draw call.

@@ -689,7 +689,21 @@ bool Ac3DReader::parseTexture(string &row)
 
 	auto image = PngImage::create();
 	image->setFileName(params.c_str());
-	image->read();
+
+	if (!image->read())
+	{
+		// An .ac file stores whatever path the modelling tool happened to have,
+		// which is routinely absolute and from another machine entirely --
+		// asteroid01.ac asks for C:/Work/gamedev/fly/textures/asteroid.rgb.
+		// Attaching the texture regardless bound an empty one, and the model
+		// then drew black instead of in its own material, which is why the fly
+		// example showed a starfield and no asteroids.
+
+		IvfLog("Ac3DReader: texture could not be read, ignoring: " << params.c_str());
+
+		m_lastTexture = nullptr;
+		return true;
+	}
 
 	auto texture = Texture::create();
 	texture->setImage(image);

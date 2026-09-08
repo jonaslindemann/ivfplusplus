@@ -159,7 +159,7 @@ void GlfwWindow::create()
     glfwSetWindowUserPointer(m_window, this);
 
     if (m_monitor == nullptr)
-        glfwSetWindowPos(m_window, m_pos[0], m_pos[1]);
+        this->applyPosition();
 
     glfwSetFramebufferSizeCallback(m_window, cbFramebufferSize);
     glfwSetWindowPosCallback(m_window, cbWindowPos);
@@ -245,6 +245,22 @@ void GlfwWindow::swapBuffers()
 GLFWwindow *GlfwWindow::handle() const
 {
     return m_window;
+}
+
+void GlfwWindow::applyPosition()
+{
+    if ((m_window == nullptr) || (m_monitor != nullptr))
+        return;
+
+    // glfwSetWindowPos places the *client area*, so a window asked for at
+    // (0, 0) -- which is what most of the examples ask for -- ends up with its
+    // title bar off the top of the screen. The position is treated as where the
+    // frame goes, which is what the caller means and what GLUT appeared to do.
+
+    int left = 0, top = 0, right = 0, bottom = 0;
+    glfwGetWindowFrameSize(m_window, &left, &top, &right, &bottom);
+
+    glfwSetWindowPos(m_window, m_pos[0] + left, m_pos[1] + top);
 }
 
 void GlfwWindow::updateFramebufferSize()
@@ -554,6 +570,8 @@ void GlfwWindow::leaveFullscreen()
     m_monitor = nullptr;
     m_fullScreen = false;
 
+    this->applyPosition();
+
     this->updateFramebufferSize();
     this->doResize(m_fbSize[0], m_fbSize[1]);
 }
@@ -688,8 +706,7 @@ void GlfwWindow::doSetPosition(int x, int y)
     m_pos[0] = x;
     m_pos[1] = y;
 
-    if ((m_window != nullptr) && (m_monitor == nullptr))
-        glfwSetWindowPos(m_window, x, y);
+    this->applyPosition();
 }
 
 void GlfwWindow::doSetSize(int w, int h)
@@ -748,8 +765,14 @@ void GlfwWindow::cbWindowPos(GLFWwindow *window, int x, int y)
 
     if (self->m_monitor == nullptr)
     {
-        self->m_pos[0] = x;
-        self->m_pos[1] = y;
+        // The callback reports the client position; m_pos holds the frame
+        // position, so the frame extents come back off again.
+
+        int left = 0, top = 0, right = 0, bottom = 0;
+        glfwGetWindowFrameSize(window, &left, &top, &right, &bottom);
+
+        self->m_pos[0] = x - left;
+        self->m_pos[1] = y - top;
     }
 }
 

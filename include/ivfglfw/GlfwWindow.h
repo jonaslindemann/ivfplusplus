@@ -129,6 +129,7 @@ private:
     bool m_destroyDispatched;
 
     void applyWindowHints();
+    void applyPosition();
     void parseModeString();
     void updateFramebufferSize();
     void dispatchTimeout(int nbr);
