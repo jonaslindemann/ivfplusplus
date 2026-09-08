@@ -220,7 +220,12 @@ void WidgetBase::doDraw()
 	lgPushMatrix();
 
 	doRender();
-	
+
+	// The overlay draws fixed function, and so does whatever the application
+	// composites after this. Both need the shader out of the way first.
+
+	rcEndFrame();
+
 	if (m_doOverlay)
 	{
 		lgPushAttrib(GL_ENABLE_BIT);

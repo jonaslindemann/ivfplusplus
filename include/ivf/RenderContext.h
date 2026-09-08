@@ -388,6 +388,24 @@ public:
      * trace the shader can read. Such a class brackets its draw with this
      * instead, which is the shader-path equivalent of that glDisable.
      */
+    /**
+     * Restores the state the library's own drawing changed.
+     *
+     * The counterpart to beginFrame(). Scene traversal leaves a program bound,
+     * and may leave a vertex array object or a buffer bound with it. Anything
+     * composited afterwards through the fixed-function pipeline -- an ImGui GL2
+     * backend, an FLTK widget, an application's overlay -- silently draws
+     * nothing under that state, which is a hard failure to diagnose from the
+     * outside. Ending the frame here means an application does not have to know
+     * any of it.
+     *
+     * Only state this library itself sets is restored. The active texture unit
+     * and the scissor box are deliberately not touched: nothing here changes
+     * them, so resetting them would be overreach into the application's own
+     * state.
+     */
+    void endFrame();
+
     void setForceUnlit(bool flag);
 
     /** Returns true while geometry is being forced unlit. */

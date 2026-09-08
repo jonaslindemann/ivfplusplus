@@ -26,6 +26,7 @@
 #include <ivf/GlobalState.h>
 #include <ivf/Material.h>
 #include <ivf/LegacyGL.h>
+#include <ivf/ShaderProgram.h>
 
 using namespace ivf;
 
@@ -134,14 +135,53 @@ void SceneBase::defaultSceneRender(int pass)
     
     if (m_renderFlatShadow)
     {
+        // Everything this pass does to set itself up -- the flatten, the
+        // lighting and texture disables, the shadow colour -- is fixed-function
+        // only. On the shader path none of it arrived: the scene redrew at full
+        // height on top of itself, untextured and in whatever material each
+        // shape carried. A black text label came out as a solid black rectangle
+        // sitting over the model rather than as a shadow on the ground.
+
+        const bool shaderPath = rcIsShaderActive();
+
         lgPushMatrix();
         lgScaled(1.0, 0.0, 1.0);
+
+        if (shaderPath)
+        {
+            rcPushMatrix();
+            rcScale(1.0f, 0.0f, 1.0f);
+        }
+
         lgPushAttrib(GL_ENABLE_BIT);
         lgDisableLegacy(GL_LIGHTING);
         lgDisableLegacy(GL_TEXTURE_2D);
         GlobalState::getInstance()->disableColorOutput();
         GlobalState::getInstance()->disableTextureRendering();
         glColor3d(m_shadowColor[0], m_shadowColor[1], m_shadowColor[2]);
+
+        if (shaderPath)
+        {
+            // The shader is told the same three things. Emission carries the
+            // colour, with every lit term zeroed, so the result is flat whatever
+            // the lights are doing -- the shader has no "lighting disabled"
+            // switch and this needs none. Diffuse alpha stays at 1 so the alpha
+            // test does not throw the shadow away.
+
+            rcSetUseTexture(false);
+
+            ShaderProgram *prog = rcShader();
+
+            if (prog != nullptr)
+            {
+                prog->setUniformVec4("uMatAmbient", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+                prog->setUniformVec4("uMatDiffuse", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+                prog->setUniformVec4("uMatSpecular", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+                prog->setUniformVec4("uMatEmission",
+                                     glm::vec4((float)m_shadowColor[0], (float)m_shadowColor[1],
+                                               (float)m_shadowColor[2], 1.0f));
+            }
+        }
 
 		if (m_preShadow)
 			m_preComposite->render();
@@ -154,6 +194,20 @@ void SceneBase::defaultSceneRender(int pass)
 		GlobalState::getInstance()->enableColorOutput();
         GlobalState::getInstance()->enableTextureRendering();
         lgPopAttrib();
+
+        if (shaderPath)
+        {
+            // Emission is sticky, so clear it rather than leaving every later
+            // unmaterialled object glowing in the shadow colour.
+
+            ShaderProgram *prog = rcShader();
+
+            if (prog != nullptr)
+                prog->setUniformVec4("uMatEmission", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+
+            rcPopMatrix();
+        }
+
         lgPopMatrix();
     }
 }

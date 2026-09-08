@@ -7,6 +7,15 @@ namespace ivf {
 // ---- Frame lifecycle ----
 inline void rcBeginFrame()                               { RenderContext::instance().beginFrame(); }
 
+/**
+ * Hands the pipeline back in the state it was found in.
+ *
+ * Call it once the scene has been drawn, before anything else draws into the
+ * same context. WidgetBase does this for the widget classes; an application
+ * driving its own render loop calls it itself.
+ */
+inline void rcEndFrame()                                 { RenderContext::instance().endFrame(); }
+
 // ---- Render profile ----
 inline void rcSetProfile(RenderProfile p)                { RenderContext::instance().setProfile(p); }
 inline RenderProfile rcProfile()                         { return RenderContext::instance().profile(); }

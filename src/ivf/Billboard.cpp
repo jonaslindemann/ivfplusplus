@@ -95,13 +95,36 @@ int BillBoard::getBillboardType()
 
 void BillBoard::doCreateGeometry()
 {
+	// The rotation has to reach both matrix stacks, exactly as Shape's does.
+	// Sending it only to the fixed-function stack left the children -- which
+	// take their model matrix from RenderContext -- facing wherever they were
+	// modelled, so the billboard stopped turning towards the camera as soon as
+	// a shader was in use.
+
+	const bool mirrorTransform = rcIsShaderActive();
+
 	if (m_alignObject!=IVF_ALIGN_NONE)
 	{
 		this->updateRotation();
+
+		const double angle1 = -m_angle1 * 180.0 / M_PI + 90;
+		const double angle2 = m_angle2 * 180.0 / M_PI - 90;
+
 		lgPushMatrix();
-		lgRotated(-m_angle1 * 180.0 / M_PI + 90, 0.0, 1.0, 0.0);
+		if (mirrorTransform)
+			rcPushMatrix();
+
+		lgRotated(angle1, 0.0, 1.0, 0.0);
+		if (mirrorTransform)
+			rcRotate((float)angle1, 0.0f, 1.0f, 0.0f);
+
 		lgPushMatrix();
-		lgRotated(m_angle2 * 180.0 / M_PI - 90, 1.0, 0.0, 0.0);
+		if (mirrorTransform)
+			rcPushMatrix();
+
+		lgRotated(angle2, 1.0, 0.0, 0.0);
+		if (mirrorTransform)
+			rcRotate((float)angle2, 1.0f, 0.0f, 0.0f);
 	}
 
 	Composite::doCreateGeometry();
@@ -110,6 +133,12 @@ void BillBoard::doCreateGeometry()
 	{
 		lgPopMatrix();
 		lgPopMatrix();
+
+		if (mirrorTransform)
+		{
+			rcPopMatrix();
+			rcPopMatrix();
+		}
 	}
 }
 

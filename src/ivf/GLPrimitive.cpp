@@ -323,6 +323,16 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
 		glEnableVertexAttribArray(3);
 
 		glBindVertexArray(0);
+
+		// Unbinding the array buffer matters beyond tidiness. It is not part of
+		// vertex array object state, so it outlives the glBindVertexArray(0)
+		// above and stays bound for the rest of the process. Any later
+		// fixed-function client array draw -- an ImGui GL2 backend, an FLTK
+		// widget, an application's own glVertexPointer -- then has its pointer
+		// read as a byte offset into this buffer and draws nothing recognisable.
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 		m_vaoDirty = false;
 	}
 

@@ -136,6 +136,13 @@ void RenderContext::beginFrame()
 
     clearLights();
 
+    // The view belongs to the frame, not to the context. Leaving the previous
+    // frame's view in place meant a light rendered before the camera -- which is
+    // exactly what LM_LOCAL does -- was captured against a stale view instead of
+    // against the identity the fixed-function pipeline would have given it.
+
+    m_view = glm::mat4(1.0f);
+
     // Activate the shader so it is ready for per-shape uploads -- but only if the
     // profile actually wants it. Binding it unconditionally meant that selecting
     // RenderProfile::Legacy did nothing once a shader had been created: the
@@ -309,9 +316,11 @@ void RenderContext::updateShader(ShaderProgram* prog) const
         const LightData& l = m_lights[i];
         std::string base = "uLights[" + std::to_string(i) + "].";
 
-        // Transform light position and spot direction from world space to view space.
-        glm::vec4 posView      = m_view * l.position;
-        glm::vec3 spotDirView  = glm::mat3(m_view) * l.spotDirection;
+        // Already in eye space: Light::doCreateGeometry() applies the modelview
+        // in force when the light was rendered, which is what glLightfv did and
+        // what makes SceneBase's LM_LOCAL and LM_WORLD differ.
+        const glm::vec4& posView     = l.position;
+        const glm::vec3& spotDirView = l.spotDirection;
 
         prog->setUniformVec4(base + "position",      posView);
         prog->setUniformVec4(base + "ambient",       l.ambient);
@@ -560,6 +569,14 @@ void RenderContext::disableAlphaTest()
 bool RenderContext::needsWideLineExpansion(float width) const
 {
     return (m_profile == RenderProfile::Core) && (width > 1.0f);
+}
+
+void RenderContext::endFrame()
+{
+    glUseProgram(0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void RenderContext::setForceUnlit(bool flag)

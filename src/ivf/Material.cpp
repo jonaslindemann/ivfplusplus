@@ -23,6 +23,7 @@
 
 #include <ivf/config.h>
 #include <ivf/Material.h>
+#include <ivf/Lighting.h>
 #include <ivf/GlobalState.h>
 #include <ivf/rc.h>
 #include <ivf/LegacyGL.h>
@@ -304,7 +305,14 @@ void Material::doCreateMaterial()
 	// core -- glIsEnabled(GL_LIGHTING) raises GL_INVALID_ENUM there -- so the
 	// profile has to be checked before the query, not inside it.
 
-	if (rcLegacyAllowed() && glIsEnabled(GL_LIGHTING))
+	// Whether lighting is on decides what a material does, on either path. In
+	// Legacy and Mixed that is a question for GL; in Core the query does not
+	// exist, so the Lighting cache answers instead.
+
+	const bool lightingActive = rcLegacyAllowed() ? (glIsEnabled(GL_LIGHTING) == GL_TRUE)
+	                                              : Lighting::getInstance()->isEnabled();
+
+	if (lightingActive && rcLegacyAllowed())
 	{
 		const bool greyscale = GlobalState::getInstance()->isGreyscaleRenderingEnabled();
 
@@ -379,9 +387,24 @@ void Material::doCreateMaterial()
         if (GlobalState::getInstance()->isColorOutputEnabled())
             lgColor4fv(m_diffuseColor);
 
-	// Modern path: upload to active shader if one is set in RenderContext.
+	// Modern path, gated the way the fixed-function branch above is.
+	//
+	// With lighting off the legacy path applies no material at all -- at most it
+	// sets the current colour, and not even that when colour output is disabled.
+	// SceneBase's flat shadow pass relies on exactly that: it turns both off and
+	// then draws the whole scene in one flat colour. Uploading here regardless
+	// meant every shape re-established its own material mid-shadow-pass and the
+	// shadow colour never survived a single object.
+
 	if (rcIsShaderActive())
-		uploadToShader(rcShader());
+	{
+		if (lightingActive)
+			uploadToShader(rcShader());
+		else if (GlobalState::getInstance()->isColorOutputEnabled())
+			rcShader()->setUniformVec4("uMatDiffuse",
+			                           glm::vec4(m_diffuseColor[0], m_diffuseColor[1],
+			                                     m_diffuseColor[2], m_diffuseColor[3]));
+	}
 }
 
 void Material::setEmissionColor(const float red, const float green, const float blue, const float alfa)
