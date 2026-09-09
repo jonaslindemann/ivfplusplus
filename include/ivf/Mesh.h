@@ -25,15 +25,24 @@
 #pragma once
 
 #include <ivf/Shape.h>
+#include <ivf/MeshBuffer.h>
 
 namespace ivf {
 
 IvfSmartPointer(Mesh);
 
-/** 
+/**
  * Mesh class
  *
- * Implements a mesh using OpenGL glEvalMesh2 function
+ * Implements a Bezier patch over a grid of control points -- bilinear for
+ * MT_ORDER_2 and bicubic for MT_ORDER_4.
+ *
+ * The fixed-function path evaluates the patch with glMap2d/glEvalMesh2. Those
+ * evaluators do not exist in a core profile, so the modern path evaluates the
+ * same patch on the CPU, at the same grid resolution and with the same analytic
+ * normals GL_AUTO_NORMAL produced, and draws the result as an indexed triangle
+ * mesh. Both paths are fed from the same control points and are meant to be
+ * indistinguishable.
  */
 class IVF_API Mesh : public Shape {
 public:
@@ -54,6 +63,15 @@ private:
 	TMeshOrientation m_meshOrientation;
 	int m_meshRows;
 	int m_meshCols;
+
+	MeshBuffer m_buffer;
+	bool m_meshDirty;
+
+	/** Evaluates the patch into m_buffer at the current grid resolution. */
+	void updateGeometry();
+
+	/** Surface point and analytic normal at (u, v), both in 0..1. */
+	void evalPatch(double u, double v, glm::vec3 &position, glm::vec3 &normal) const;
 public:
 	/** Mesh constructor */
 	Mesh();
@@ -103,6 +121,7 @@ public:
 
 	/** Set position of control point */
 	void setControlPoint(int i, int j, double y);
+	virtual bool hasModernPath() override;
 protected:
 	void doCreateGeometry();
 	void initialize();

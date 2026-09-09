@@ -23,8 +23,10 @@
 
 #include <ivf/config.h>
 #include <ivf/Material.h>
+#include <ivf/Lighting.h>
 #include <ivf/GlobalState.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 #include <glm/glm.hpp>
 
@@ -299,7 +301,18 @@ bool Material::setStateCacheEnabled(bool flag)
 
 void Material::doCreateMaterial()
 {
-	if (glIsEnabled(GL_LIGHTING))
+	// The whole fixed-function branch hinges on a query that is itself illegal in
+	// core -- glIsEnabled(GL_LIGHTING) raises GL_INVALID_ENUM there -- so the
+	// profile has to be checked before the query, not inside it.
+
+	// Whether lighting is on decides what a material does, on either path. In
+	// Legacy and Mixed that is a question for GL; in Core the query does not
+	// exist, so the Lighting cache answers instead.
+
+	const bool lightingActive = rcLegacyAllowed() ? (glIsEnabled(GL_LIGHTING) == GL_TRUE)
+	                                              : Lighting::getInstance()->isEnabled();
+
+	if (lightingActive && rcLegacyAllowed())
 	{
 		const bool greyscale = GlobalState::getInstance()->isGreyscaleRenderingEnabled();
 
@@ -347,15 +360,15 @@ void Material::doCreateMaterial()
 		{
 			if (!colorMaterial)
 			{
-				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+				lgMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+				lgMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 			}
 			else
-				glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+				lgColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
-			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
-			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_shininess);
+			lgMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+			lgMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
+			lgMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_shininess);
 
 			if (g_cacheEnabled)
 			{
@@ -372,11 +385,26 @@ void Material::doCreateMaterial()
 	}
 	else
         if (GlobalState::getInstance()->isColorOutputEnabled())
-            glColor4fv(m_diffuseColor);
+            lgColor4fv(m_diffuseColor);
 
-	// Modern path: upload to active shader if one is set in RenderContext.
+	// Modern path, gated the way the fixed-function branch above is.
+	//
+	// With lighting off the legacy path applies no material at all -- at most it
+	// sets the current colour, and not even that when colour output is disabled.
+	// SceneBase's flat shadow pass relies on exactly that: it turns both off and
+	// then draws the whole scene in one flat colour. Uploading here regardless
+	// meant every shape re-established its own material mid-shadow-pass and the
+	// shadow colour never survived a single object.
+
 	if (rcIsShaderActive())
-		uploadToShader(rcShader());
+	{
+		if (lightingActive)
+			uploadToShader(rcShader());
+		else if (GlobalState::getInstance()->isColorOutputEnabled())
+			rcShader()->setUniformVec4("uMatDiffuse",
+			                           glm::vec4(m_diffuseColor[0], m_diffuseColor[1],
+			                                     m_diffuseColor[2], m_diffuseColor[3]));
+	}
 }
 
 void Material::setEmissionColor(const float red, const float green, const float blue, const float alfa)
@@ -561,4 +589,10 @@ void Material::uploadToShader(ShaderProgram* prog)
 	prog->setUniformVec4("uMatSpecular", glm::vec4(m_specularColor[0], m_specularColor[1], m_specularColor[2], m_specularColor[3]));
 	prog->setUniformVec4("uMatEmission", glm::vec4(m_emissionColor[0], m_emissionColor[1], m_emissionColor[2], m_emissionColor[3]));
 	prog->setUniformFloat("uMatShininess", m_shininess);
+}
+
+// ------------------------------------------------------------
+bool Material::hasModernPath()
+{
+	return true;
 }

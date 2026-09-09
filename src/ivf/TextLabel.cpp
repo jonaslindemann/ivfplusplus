@@ -7,6 +7,8 @@
 #include <ivf/PolyState.h>
 #include <ivf/PixelOps.h>
 #include <ivfimage/PngImage.h>
+#include <ivf/LegacyGL.h>
+#include <ivf/rc.h>
 
 // https://www.gamedev.net/forums/topic.asp?topic_id=330742
 
@@ -192,15 +194,22 @@ void ivf::TextLabel::setAlignment(HorizontalAlignment alignX, VerticalAlignment 
 
 void ivf::TextLabel::doPreGeometry()
 {
-	glPushAttrib(GL_BLEND | GL_ALPHA_TEST);
+	lgPushAttrib(GL_BLEND | GL_ALPHA_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glAlphaFunc(GL_GEQUAL, 0.05);
-	glEnable(GL_ALPHA_TEST);
+	// Glyphs carry their shape in the atlas alpha channel, so the near-empty
+	// texels between them have to be thrown away rather than blended. The alpha
+	// test does that on the legacy path; on the shader path the same comparison
+	// becomes a discard.
+
+	lgAlphaFunc(GL_GEQUAL, 0.05f);
+	lgEnableLegacy(GL_ALPHA_TEST);
+	rcSetAlphaTest(GL_GEQUAL, 0.05f);
 }
 
 void ivf::TextLabel::doPostGeometry()
 {
-	glPopAttrib();
+	rcDisableAlphaTest();
+	lgPopAttrib();
 }

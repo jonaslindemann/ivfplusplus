@@ -23,6 +23,7 @@
 //
 
 #include <ivf/LineSet.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -39,9 +40,6 @@ LineSet::~LineSet()
 
 void LineSet::doCreateGeometry()
 {
-	if (m_idxLineWidth.empty())
-		if (buildAndDrawVAO(GL_LINES)) return;
-
     Index* coordIdx;
     Index* colorIdx;
     Index* textureIdx;
@@ -49,24 +47,49 @@ void LineSet::doCreateGeometry()
     long i, j;
     float oldWidth[1];
 
-    glPushAttrib(GL_LIGHTING | GL_COLOR_MATERIAL);
-    glDisable(GL_LIGHTING);
+    // Line width has to be applied before the modern path draws. It is ordinary
+    // state the VAO knows nothing about, and the early return below used to skip
+    // it, so every line came out one pixel wide. glLineWidth is valid in core, so
+    // this stays a plain gl call.
 
     glGetFloatv(GL_LINE_WIDTH, oldWidth);
+    lgLineWidth(m_lineWidth);
 
-    glLineWidth(m_lineWidth);
+	// Per-index widths used to force the legacy path, because one draw call
+	// cannot vary line width. buildAndDrawVAO() now issues one call per index
+	// set instead, so both cases go through the modern path.
+
+	if (m_idxLineWidth.empty())
+	{
+		if (buildAndDrawVAO(GL_LINES, false, nullptr, m_lineWidth))
+		{
+			lgLineWidth(oldWidth[0]);
+			return;
+		}
+	}
+	else
+	{
+		if (buildAndDrawVAO(GL_LINES, false, &m_idxLineWidth, m_lineWidth))
+		{
+			lgLineWidth(oldWidth[0]);
+			return;
+		}
+	}
+
+    lgPushAttrib(GL_LIGHTING | GL_COLOR_MATERIAL);
+    lgDisableLegacy(GL_LIGHTING);
 
     if (m_useColor)
-        glEnable(GL_COLOR_MATERIAL);
+        lgEnableLegacy(GL_COLOR_MATERIAL);
 
     for (i = 0; i < (int)m_coordIndexSet.size(); i++)
     {
         if (m_idxLineWidth.size() > 0)
         {
             if (i < m_idxLineWidth.size())
-                glLineWidth(m_idxLineWidth[i]);
+                lgLineWidth(m_idxLineWidth[i]);
         }
-        glBegin(GL_LINES);
+        lgBegin(GL_LINES);
 
         coordIdx = m_coordIndexSet[i];
         if (m_useColor)
@@ -85,28 +108,33 @@ void LineSet::doCreateGeometry()
             if (m_useColor)
             {
                 if (m_useAlpha)
-                    glColor4fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+                    lgColor4fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
                 else
-                    glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+                    lgColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
             }
             else if (Shape::getMaterial() != nullptr)
                 Shape::getMaterial()->render();
             else if (Shape::getMaterial() != nullptr)
                 Shape::getMaterial()->render();
             else
-                glColor3f(1.0f, 1.0f, 1.0f);
+                lgColor3f(1.0f, 1.0f, 1.0f);
 
             if (textureIdx != nullptr)
-                glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
+                lgTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
 
-            glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
+            lgVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
         }
-        glEnd();
+        lgEnd();
     }
 
-    glLineWidth(oldWidth[0]);
+    lgLineWidth(oldWidth[0]);
 
-    glPopAttrib();
+    lgPopAttrib();
+}
+
+bool LineSet::usesVertexColors() const
+{
+	return m_useColor && GLPrimitive::usesVertexColors();
 }
 
 void LineSet::setUseColor(bool flag)
@@ -150,4 +178,10 @@ void ivf::LineSet::clearIndexWidths()
 {
     m_idxLineWidth.clear();
     markVAODirty();
+}
+
+// ------------------------------------------------------------
+bool LineSet::hasModernPath()
+{
+	return true;
 }

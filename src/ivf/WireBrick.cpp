@@ -40,8 +40,21 @@ WireBrick::~WireBrick ()
 // ------------------------------------------------------------
 void WireBrick::doCreateGeometry()
 {
+	// Draw the box edges directly rather than filling triangles and asking for
+	// GL_LINE polygon mode. The triangulation the modern path does is invisible
+	// when filled but not when outlined -- every quad would gain a diagonal.
+
+	if (buildAndDrawVAO(GL_QUADS, true))
+		return;
+
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 	Brick::doCreateGeometry();
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }
 
+
+// ------------------------------------------------------------
+bool WireBrick::hasModernPath()
+{
+	return true;
+}

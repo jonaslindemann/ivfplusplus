@@ -24,6 +24,7 @@
 #include <ivf/config.h>
 #include <ivf/Camera.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
@@ -66,9 +67,9 @@ void accFrustum(GLdouble left, GLdouble right, GLdouble bottom,
    dx = -(pixdx*xwsize/(GLdouble) viewport[2] + eyedx*nnear/focus);
    dy = -(pixdy*ywsize/(GLdouble) viewport[3] + eyedy*nnear/focus);
 	
-   glMatrixMode(GL_PROJECTION);
-   glLoadIdentity();
-   glFrustum (left + dx, right + dx, bottom + dy, top + dy, nnear, ffar);
+   lgMatrixMode(GL_PROJECTION);
+   lgLoadIdentity();
+   lgFrustum(left + dx, right + dx, bottom + dy, top + dy, nnear, ffar);
    //glMatrixMode(GL_MODELVIEW);
    //glLoadIdentity();
    //glTranslatef (-eyedx, -eyedy, 0.0);
@@ -495,7 +496,7 @@ void Camera::projectionTransform()
 		else
 		{
 			if (!m_jitter)
-				gluPerspective(m_fov, getAspect(), m_zNear, m_zFar);
+				lgPerspective(m_fov, getAspect(), m_zNear, m_zFar);
 			else
 				accPerspective(m_fov, getAspect(), m_zNear, m_zFar, m_jitterX, m_jitterY, 0.0, 0.0, 0.1);
 		}
@@ -560,7 +561,7 @@ void Camera::viewTransform()
 
 	//std::cout << upX << ", " << upY << ", " << upZ << std::endl;
 
-	gluLookAt(eyeX, eyeY, eyeZ,
+	lgLookAt(eyeX, eyeY, eyeZ,
 		centerX, centerY, centerZ,
 		upX, upY, upZ);
 
@@ -739,7 +740,7 @@ void Camera::stereoTransform()
 	top    =   wd2;
 	bottom = - wd2;
 
-    glFrustum(left,right,bottom,top,znear,zfar);
+    lgFrustum(left,right,bottom,top,znear,zfar);
 }
 
 void Camera::setStereo(bool flag)
@@ -855,11 +856,92 @@ void Camera::getTileRect(double &left, double &right, double &bottom, double &to
 // ------------------------------------------------------------
 glm::mat4 Camera::glmProjectionMatrix()
 {
-	return glm::perspective(
-		glm::radians((float)m_fov),
-		(float)getAspect(),
-		(float)m_zNear,
-		(float)m_zFar);
+	// Mirrors everything projectionTransform() can do, not just the plain
+	// perspective case: tiled rendering, accumulation-buffer jitter and stereo
+	// all produce asymmetric frusta, and a shader given only the symmetric one
+	// would render a different image from the fixed-function path beside it.
+
+	if (m_stereo)
+	{
+		// The same derivation as stereoTransform(): shift the frustum sideways
+		// by half an eye separation scaled by the near/far ratio, which shears
+		// the view without rotating either eye.
+
+		double fov, znear, zfar;
+		getPerspective(fov, znear, zfar);
+
+		const double ratio   = getAspect();
+		const double radians = (fov / 2.0) * M_PI / 180.0;
+		const double wd2     = znear * tan(radians);
+		const double ndfl    = znear / zfar;
+		const double shift   = (m_stereoEye == SE_LEFT) ? -0.5 * m_eyeSeparation * ndfl
+		                                                : +0.5 * m_eyeSeparation * ndfl;
+
+		return glm::frustum((float)(-ratio * wd2 + shift), (float)(ratio * wd2 + shift),
+		                    (float)(-wd2), (float)(wd2),
+		                    (float)znear, (float)zfar);
+	}
+
+	// Symmetric half-extents at the near plane -- the derivation accPerspective()
+	// uses, and identical to what lgPerspective() produces.
+
+	const double fov2   = ((m_fov * M_PI) / 180.0) / 2.0;
+	const double top    = m_zNear * tan(fov2);
+	const double right  = top * getAspect();
+
+	double frustumLeft   = -right;
+	double frustumRight  = right;
+	double frustumBottom = -top;
+	double frustumTop    = top;
+
+	if (m_tileRendering)
+	{
+		// tilePerspective() scales the full frustum bounds by the tile fractions,
+		// carving one tile out of the whole image.
+
+		frustumLeft   = right * m_tileLeft;
+		frustumRight  = right * m_tileRight;
+		frustumBottom = top * m_tileBottom;
+		frustumTop    = top * m_tileTop;
+	}
+
+	double dx = 0.0;
+	double dy = 0.0;
+
+	if (m_jitter)
+	{
+		// accFrustum() offsets the frustum by a sub-pixel amount expressed in
+		// pixels, so it needs the viewport to convert. The eye-jitter term that
+		// accFrustum() also supports is always passed as zero here.
+
+		GLint viewport[4] = { 0, 0, 1, 1 };
+		glGetIntegerv(GL_VIEWPORT, viewport);
+
+		if (viewport[2] > 0)
+			dx = -(m_jitterX * (frustumRight - frustumLeft) / (double)viewport[2]);
+		if (viewport[3] > 0)
+			dy = -(m_jitterY * (frustumTop - frustumBottom) / (double)viewport[3]);
+	}
+
+	return glm::frustum((float)(frustumLeft + dx), (float)(frustumRight + dx),
+	                    (float)(frustumBottom + dy), (float)(frustumTop + dy),
+	                    (float)m_zNear, (float)m_zFar);
+}
+
+// ------------------------------------------------------------
+glm::mat4 Camera::glmPickMatrix(int x, int y, int w, int h)
+{
+	GLint viewport[4] = { 0, 0, 1, 1 };
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	// The mouse reports y from the top, GL measures it from the bottom.
+
+	const float flippedY = (float)(viewport[3] - y);
+
+	return glm::pickMatrix(glm::vec2((float)x, flippedY),
+	                       glm::vec2((float)w, (float)h),
+	                       glm::vec4((float)viewport[0], (float)viewport[1],
+	                                 (float)viewport[2], (float)viewport[3]));
 }
 
 // ------------------------------------------------------------

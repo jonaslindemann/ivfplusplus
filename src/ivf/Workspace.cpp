@@ -24,6 +24,7 @@
 
 #include <ivf/Workspace.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -157,9 +158,9 @@ void Workspace::doCreateGeometry()
                 m_cursorShape->render();
             }
 
-            glPushAttrib(GL_ENABLE_BIT);
+            lgPushAttrib(GL_ENABLE_BIT);
 
-            glDisable(GL_LIGHTING);
+            lgDisableLegacy(GL_LIGHTING);
 
             glEnable(GL_BLEND);
             glBlendFunc(GL_ONE, GL_ONE);
@@ -181,23 +182,23 @@ void Workspace::doCreateGeometry()
                 };
                 if (rcDrawUnlit(GL_LINES, positions, colors, 6))
                 {
-                    glPopAttrib();
+                    lgPopAttrib();
                     return;
                 }
 
-                glBegin(GL_LINES);
-                glColor3f(0.3, 0.3, 0.3);
-                glVertex3d(x, 0.0, z);
-                glVertex3d(x, y, z);
-                glEnd();
+                lgBegin(GL_LINES);
+                lgColor3f(0.3, 0.3, 0.3);
+                lgVertex3d(x, 0.0, z);
+                lgVertex3d(x, y, z);
+                lgEnd();
 
-                glBegin(GL_LINES);
-                glColor3f(0.3, 0.3, 0.3);
-                glVertex3d(-w / 2.0, 0.002, z);
-                glVertex3d(+w / 2.0, 0.002, z);
-                glVertex3d(x, 0.002, -w / 2.0);
-                glVertex3d(x, 0.002, w / 2.0);
-                glEnd();
+                lgBegin(GL_LINES);
+                lgColor3f(0.3, 0.3, 0.3);
+                lgVertex3d(-w / 2.0, 0.002, z);
+                lgVertex3d(+w / 2.0, 0.002, z);
+                lgVertex3d(x, 0.002, -w / 2.0);
+                lgVertex3d(x, 0.002, w / 2.0);
+                lgEnd();
             }
             else
             {
@@ -213,20 +214,20 @@ void Workspace::doCreateGeometry()
                 };
                 if (rcDrawUnlit(GL_LINES, positions, colors, 4))
                 {
-                    glPopAttrib();
+                    lgPopAttrib();
                     return;
                 }
 
-                glBegin(GL_LINES);
-                glColor3f(0.3, 0.3, 0.3);
-                glVertex3d(-w / 2.0, y + 0.002, z);
-                glVertex3d(+w / 2.0, y + 0.002, z);
-                glVertex3d(x, y + 0.002, -w / 2.0);
-                glVertex3d(x, y + 0.002, w / 2.0);
-                glEnd();
+                lgBegin(GL_LINES);
+                lgColor3f(0.3, 0.3, 0.3);
+                lgVertex3d(-w / 2.0, y + 0.002, z);
+                lgVertex3d(+w / 2.0, y + 0.002, z);
+                lgVertex3d(x, y + 0.002, -w / 2.0);
+                lgVertex3d(x, y + 0.002, w / 2.0);
+                lgEnd();
             }
 
-            glPopAttrib();
+            lgPopAttrib();
         }
     }
 }

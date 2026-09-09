@@ -53,6 +53,14 @@ public:
 	IvfStdFactory(Material);
 
 	/**
+	 * A state object, not geometry -- and the one that feeds the shader its
+	 * material uniforms. It must never have the program unbound around it, or
+	 * every object drawn after it renders with the default material.
+	 */
+	virtual bool hasModernPath() override;
+
+
+	/**
 	 * Sets the shininess property.
 	 * 
 	 * See OpenGL documentation

@@ -414,3 +414,9 @@ Cursor* ConstructionPlane::getCursor()
     return m_cursor;
 }
 
+
+// ------------------------------------------------------------
+bool ConstructionPlane::hasModernPath()
+{
+	return true;
+}

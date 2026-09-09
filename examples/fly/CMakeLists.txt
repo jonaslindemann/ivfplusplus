@@ -1,5 +1,5 @@
 SET(IVFAPP_NAME fly )
-SET(IVFAPP_LIBS ivf ivfglut ivffile ivfctl glad)
-SET(IVFAPP_DEBUG_LIBS ivfd ivfglutd ivffiled ivfctld gladd)
+SET(IVFAPP_LIBS ivf ivfglfw ivffile ivfctl glad)
+SET(IVFAPP_DEBUG_LIBS ivfd ivfglfwd ivffiled ivfctld gladd)
 
 IVFAPP_SETUP()

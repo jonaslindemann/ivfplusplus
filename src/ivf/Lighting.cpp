@@ -25,6 +25,8 @@
 #include <ivf/Lighting.h>
 
 #include <ivf/GL.h>
+#include <ivf/LegacyGL.h>
+#include <ivf/rc.h>
 
 using namespace ivf;
 Lighting* Lighting::m_instance = 0;
@@ -52,6 +54,7 @@ Lighting::Lighting()
 		m_lights.push_back(light);
 	}
 
+	m_lightingEnabled = false;
 	m_ambient[0] = 0.2f;
 	m_ambient[1] = 0.2f;
 	m_ambient[2] = 0.2f;
@@ -62,27 +65,39 @@ Lighting::~Lighting()
 { 
     int i;
 
+	// The constructor took a reference on each light, so drop that reference
+	// rather than deleting outright. An application that kept a LightPtr --
+	// getLight() hands out a pointer callers are expected to hold -- still owns
+	// its light after the singleton goes away, and deleting here would leave that
+	// pointer dangling. Since this runs during static destruction, the resulting
+	// double free lands as heap corruption at process exit with no useful stack.
+
 	for (i=0; i<8; i++)
 	{
 		Light* light = m_lights[i];
-		delete light;
+		light->deleteReference();
+
+		if (!light->referenced())
+			delete light;
 	}
 }
 
 void Lighting::enable()
 {
-	glEnable(GL_LIGHTING);
+	m_lightingEnabled = true;
+	lgEnableLegacy(GL_LIGHTING);
 }
 
 void Lighting::disable()
 {
-	glDisable(GL_LIGHTING);
+	m_lightingEnabled = false;
+	lgDisableLegacy(GL_LIGHTING);
 }
 
 void Lighting::setLocalViewer(bool flag)
 {
 	m_local[0] = ( flag ) ? 1 : 0;
-	glLightModeliv( GL_LIGHT_MODEL_LOCAL_VIEWER, m_local );
+	lgLightModeliv( GL_LIGHT_MODEL_LOCAL_VIEWER, m_local );
 
 }
 
@@ -94,7 +109,8 @@ bool Lighting::getLocalViewer()
 void Lighting::setTwoSide(bool flag)
 {
 	m_twoside[0] = ( flag ) ? 1 : 0;
-	glLightModeliv( GL_LIGHT_MODEL_TWO_SIDE, m_twoside );
+	lgLightModeliv( GL_LIGHT_MODEL_TWO_SIDE, m_twoside );
+	rcSetTwoSided(flag);
 }
 
 bool Lighting::getTwoSide()
@@ -108,7 +124,7 @@ void Lighting::setAmbientColor(float red, float green, float blue, float alpha)
 	m_ambient[1] = green;
 	m_ambient[2] = blue;
 	m_ambient[3] = alpha;
-	glLightModelfv( GL_LIGHT_MODEL_AMBIENT, m_ambient );
+	lgLightModelfv( GL_LIGHT_MODEL_AMBIENT, m_ambient );
 }
 
 int Lighting::getSize()
@@ -153,19 +169,22 @@ void Lighting::render()
 
 bool Lighting::isEnabled()
 {
-	GLboolean lightEnabled;
-	glGetBooleanv(GL_LIGHTING, &lightEnabled);
-	return (bool)lightEnabled;
+	// Was glGetBooleanv(GL_LIGHTING). That pname does not exist in a core
+	// profile, so the query is a GL_INVALID_ENUM there -- once per Ruler drawn,
+	// every frame. It went unnoticed because NVIDIA answers compatibility
+	// queries on a core context anyway; Intel reports it, correctly.
+
+	return m_lightingEnabled;
 }
 
 void Lighting::saveState()
 {
-	glPushAttrib(GL_LIGHTING);
+	lgPushAttrib(GL_LIGHTING);
 }
 
 void Lighting::restoreState()
 {
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void Lighting::saveEnabledState()

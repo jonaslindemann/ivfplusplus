@@ -55,8 +55,19 @@ public:
 	IvfClassInfo("LineSet",GLPrimitive);
 	IvfStdFactory(LineSet);
 
+	/**
+	 * Drawn through buildAndDrawVAO(), including the per-index line width case:
+	 * the buffer is issued as one draw call per index set so each can carry its
+	 * own width.
+	 */
+	virtual bool hasModernPath() override;
+
+
 	/** Enable usage of color set */
 	void setUseColor(bool flag);
+
+	/** Colours are only used when setUseColor() has turned them on. */
+	virtual bool usesVertexColors() const override;
 
 	/** Return color set usage */
 	bool getUseColor();

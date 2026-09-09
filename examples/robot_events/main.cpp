@@ -11,8 +11,8 @@
 // Include files
 // ------------------------------------------------------------
 
-#include <ivfglut/GlutApplication.h>
-#include <ivfglut/GlutBase.h>
+#include <ivfglfw/GlfwApplication.h>
+#include <ivfglfw/GlfwWindow.h>
 
 #include <ivf/Camera.h>
 #include <ivf/Sphere.h>
@@ -34,7 +34,7 @@ using namespace ivf;
 
 IvfSmartPointer(ExampleWindow);
 
-class ExampleWindow: public GlutBase, 
+class ExampleWindow: public GlfwWindow, 
 	RenderEvent,
 	ResizeEvent,
 	InitEvent,
@@ -81,7 +81,7 @@ ExampleWindowPtr ExampleWindow::create(int X, int Y, int W, int H)
 }
 
 ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
-		:GlutBase(X, Y, W, H) 
+		:GlfwWindow(X, Y, W, H) 
 { 
 	addRenderEvent(this);
 	addResizeEvent(this);
@@ -303,7 +303,7 @@ int main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	auto app = GlutApplication::getInstance(&argc, argv);
+	auto app = GlfwApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGB|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window

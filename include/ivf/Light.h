@@ -81,6 +81,13 @@ public:
 	IvfClassInfo("Light",Shape);
 	IvfStdFactory(Light);
 
+	/**
+	 * Contributes a LightData to the render context rather than drawing, so it
+	 * has nothing that needs the fixed-function pipeline.
+	 */
+	virtual bool hasModernPath() override;
+
+
 	/** Set ambient light components */
 	void setAmbientColor( const float r, const float g, 
 		const float b, const float a );

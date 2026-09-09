@@ -54,6 +54,25 @@ struct PathFrame {
      * colors, twist, section scale -- can be interpolated onto the stations.
      */
     float source{0.0f};
+
+    /**
+     * In-plane stretch that mitres the profile at an angle-join corner.
+     *
+     * A mitred corner does not simply place the profile in the bisecting plane.
+     * gle slides every contour point along the segment axis until it meets that
+     * plane (`ex_angle.c`, the INNERSECT calls), which keeps the cross-section
+     * measured perpendicular to each leg exactly equal to the profile. Placing
+     * the profile in the bisecting plane unchanged foreshortens it instead, and
+     * the tube visibly pinches at the corner.
+     *
+     * The correction is a pure stretch by 1/cos(a) along the one axis of the
+     * profile plane that lies in the plane of the bend, where a is the angle
+     * between a segment and the bisector -- half the turn. Everything
+     * perpendicular to the bend is untouched. Expressed in this frame's
+     * (normal, binormal) basis, that is this matrix; identity everywhere the
+     * path runs straight.
+     */
+    glm::mat2 mitre{1.0f};
 };
 
 /** How control points are turned into a continuous spine. */

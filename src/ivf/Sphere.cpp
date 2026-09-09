@@ -225,3 +225,9 @@ void Sphere::doUpdateBoundingSphere()
     if (getBoundingSphere() != nullptr)
         getBoundingSphere()->setRadius(m_radius);
 }
+
+// ------------------------------------------------------------
+bool Sphere::hasModernPath()
+{
+	return true;
+}

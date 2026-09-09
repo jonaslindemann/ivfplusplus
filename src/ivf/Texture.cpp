@@ -24,6 +24,12 @@
 
 #include <ivf/config.h>
 #include <ivf/Texture.h>
+#include <ivf/LegacyGL.h>
+#include <ivf/rc.h>
+
+#include <glm/glm.hpp>
+
+#include <cmath>
 
 using namespace ivf;
 
@@ -109,8 +115,9 @@ void Texture::bind()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrapS);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrapT);
 
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
-	glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
+	lgTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
+	lgTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
+	syncToRenderContext();
 
 	if (!m_loadImages)
 	{
@@ -120,31 +127,40 @@ void Texture::bind()
 	// Only upload texture data once
 	if (!m_textureDataUploaded)
 	{
+		// gluBuild2DMipmaps was the one GLU call in this library that ran on every
+		// profile rather than only the legacy path, and GLU is not available in
+		// core. glTexImage2D plus glGenerateMipmap does the same job and has been
+		// core since 3.0. It also drops GLU's power-of-two rescale, which nothing
+		// has needed since non-power-of-two textures became standard.
+
 		if (m_ivfImage!=nullptr)
 		{
-			if (!m_generateMipmaps)
-				glTexImage2D(GL_TEXTURE_2D, 0, m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(),
-					0, m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
-			else
-				gluBuild2DMipmaps(GL_TEXTURE_2D, /*0,*/ m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(), 
-				/*0,*/ m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
+			glTexImage2D(GL_TEXTURE_2D, 0, m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(),
+				0, m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
+
+			if (m_generateMipmaps)
+				glGenerateMipmap(GL_TEXTURE_2D);
 		}
 
 		if (m_imageMap!=nullptr)
 		{
-			if (!m_generateMipmaps)
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height,
-					0, GL_RGBA, GL_UNSIGNED_BYTE, m_imageMap);
-			else
-				gluBuild2DMipmaps(GL_TEXTURE_2D, /*0,*/ GL_RGBA, m_width, m_height, 
-				/*0,*/ GL_RGBA, GL_UNSIGNED_BYTE, m_imageMap);
+			// The internal format here used to be GL_RGB while the data handed in
+			// was GL_RGBA, so the alpha channel was discarded on upload and every
+			// texel came back opaque. The mipmapped branch alongside it already
+			// used GL_RGBA, so the two disagreed about the same image.
+
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height,
+				0, GL_RGBA, GL_UNSIGNED_BYTE, m_imageMap);
+
+			if (m_generateMipmaps)
+				glGenerateMipmap(GL_TEXTURE_2D);
 		}
 
 		m_textureDataUploaded = true;
 	}
 
 	if (!m_active)
-		glDisable(GL_TEXTURE_2D);
+		lgDisableLegacy(GL_TEXTURE_2D);
 }
 
 // ------------------------------------------------------------
@@ -159,21 +175,29 @@ void Texture::apply()
 			s_currentBoundTexture = m_textureName;
 		}
 
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
-		glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
+		lgTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_textureMode);
+		lgTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_textureEnvColor);
 
-		glMatrixMode (GL_TEXTURE); 
-		glLoadIdentity ();
+		lgMatrixMode(GL_TEXTURE);
+		lgLoadIdentity();
 		if ((m_texTransX!=0.0)||(m_texTransY!=0.0))
-			glTranslated(m_texTransX, m_texTransY, 0.0);
+			lgTranslated(m_texTransX, m_texTransY, 0.0);
 		if (m_texRotate!=0.0)
-			glRotated(m_texRotate, 0.0, 0.0, 1.0);
+			lgRotated(m_texRotate, 0.0, 0.0, 1.0);
 		if ((m_texScaleX!=0.0)||(m_texScaleY!=0.0))
-			glScaled (m_texScaleX, m_texScaleY, 1.0); 
-		glMatrixMode (GL_MODELVIEW);
+			lgScaled(m_texScaleX, m_texScaleY, 1.0);
+		lgMatrixMode(GL_MODELVIEW);
+
+		syncToRenderContext();
 	}
 	else
-		glDisable(GL_TEXTURE_2D);
+		lgDisableLegacy(GL_TEXTURE_2D);
+}
+
+// ------------------------------------------------------------
+void Texture::invalidateBindCache()
+{
+	s_currentBoundTexture = 0;
 }
 
 // ------------------------------------------------------------
@@ -359,4 +383,63 @@ bool Texture::isActive()
 void Texture::refresh()
 {
 	m_textureDataUploaded = false;
+}
+
+// ------------------------------------------------------------
+bool Texture::hasModernPath()
+{
+	return true;
+}
+
+// ------------------------------------------------------------
+void Texture::syncToRenderContext()
+{
+	// The texture environment and the GL_TEXTURE matrix stack both disappear in
+	// a core profile, so hand the same information to the shader, which applies
+	// them itself.
+
+	int mode = 0; // modulate
+
+	switch (m_textureMode)
+	{
+	case GL_DECAL:   mode = 1; break;
+	case GL_REPLACE: mode = 2; break;
+	case GL_BLEND:   mode = 3; break;
+	default:         mode = 0; break;
+	}
+
+	rcSetTextureMode(mode);
+	rcSetTextureEnvColor(m_textureEnvColor[0], m_textureEnvColor[1],
+	                     m_textureEnvColor[2], m_textureEnvColor[3]);
+
+	// The same translate, rotate, scale the legacy path builds above, as one 3x3
+	// affine transform on texture coordinates, in that order.
+	//
+	// Built by hand rather than with glm::translate/rotate/scale for mat3: those
+	// live in GLM_GTX_matrix_transform_2d, which is an experimental extension and
+	// refuses to compile without GLM_ENABLE_EXPERIMENTAL. Three literals are
+	// cheaper than taking that on.
+
+	const float tx = (float)m_texTransX;
+	const float ty = (float)m_texTransY;
+	const float c  = std::cos(glm::radians((float)m_texRotate));
+	const float s  = std::sin(glm::radians((float)m_texRotate));
+	const float sx = (float)m_texScaleX;
+	const float sy = (float)m_texScaleY;
+
+	// glm::mat3 takes columns, so each row below is one column of the matrix.
+
+	const glm::mat3 translate(1.0f, 0.0f, 0.0f,
+	                          0.0f, 1.0f, 0.0f,
+	                          tx,   ty,   1.0f);
+
+	const glm::mat3 rotate(c,    s,    0.0f,
+	                       -s,   c,    0.0f,
+	                       0.0f, 0.0f, 1.0f);
+
+	const glm::mat3 scale(sx,   0.0f, 0.0f,
+	                      0.0f, sy,   0.0f,
+	                      0.0f, 0.0f, 1.0f);
+
+	rcSetTextureMatrix(translate * rotate * scale);
 }

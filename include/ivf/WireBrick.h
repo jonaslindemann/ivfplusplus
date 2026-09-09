@@ -46,6 +46,17 @@ public:
 
 	IvfClassInfo("WireBrick",Brick);
 	IvfStdFactory(WireBrick);
+
+	/**
+	 * Drawn as an edge list on the modern path.
+	 *
+	 * The inherited fill path triangulates the quads, and outlining that
+	 * would show every triangulation diagonal as an extra edge -- a box with
+	 * its faces crossed out. buildAndDrawVAO()'s wireframe mode emits the
+	 * real face edges instead.
+	 */
+	virtual bool hasModernPath() override;
+
 protected:
     virtual void doCreateGeometry() override;
 };

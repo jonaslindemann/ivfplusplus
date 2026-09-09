@@ -24,6 +24,7 @@
 
 #include <ivf/config.h>
 #include <ivf/SelectionBox.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -46,10 +47,20 @@ SelectionBox::~SelectionBox ()
 // ------------------------------------------------------------
 void SelectionBox::doCreateGeometry()
 {
-	glPushAttrib(GL_LIGHTING);
-		glDisable(GL_LIGHTING);
-		glColor3f(1.0, 1.0, 1.0);
+	// The box marks a selection, so it is drawn flat white rather than shaded.
+	// The legacy calls say so to the fixed-function pipeline and the
+	// rcSetForceUnlit() bracket says the same thing to the shader; without the
+	// latter the box came out shaded like ordinary geometry, which made it hard
+	// to tell a selected object from an unselected one.
+
+	rcSetForceUnlit(true);
+
+	lgPushAttrib(GL_LIGHTING_BIT);
+		lgDisableLegacy(GL_LIGHTING);
+		lgColor3f(1.0, 1.0, 1.0);
 		WireBrick::doCreateGeometry();
-	glPopAttrib();
+	lgPopAttrib();
+
+	rcSetForceUnlit(false);
 }
 

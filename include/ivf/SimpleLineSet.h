@@ -47,6 +47,10 @@ public:
 	IvfClassInfo("SimpleLineSet",Shape);
 	IvfStdFactory(SimpleLineSet);
 
+	/** Drawn as unlit line segments through RenderContext::drawUnlit(). */
+	virtual bool hasModernPath() override;
+
+
 	/** Set size of color list */
 	void setColorSize(int n);
 

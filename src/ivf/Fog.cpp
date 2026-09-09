@@ -25,6 +25,8 @@
 #include <ivf/Fog.h>
 
 #include <ivf/GL.h>
+#include <ivf/LegacyGL.h>
+#include <ivf/rc.h>
 
 using namespace ivf;
 
@@ -43,92 +45,118 @@ Fog* Fog::getInstance ()
 
 Fog::Fog()
 {
+	m_fogColor[0] = 0.0f;
+	m_fogColor[1] = 0.0f;
+	m_fogColor[2] = 0.0f;
+	m_fogColor[3] = 1.0f;
+	m_fogStart = 0.0;
+	m_fogEnd = 1.0;
+	m_fogDensity = 1.0;
+	m_enabled = false;
+	m_type = FT_LINEAR;
+}
 
+void Fog::syncToRenderContext()
+{
+	// The shader reads a single mode value, with zero meaning no fog, so
+	// enable/disable and the fog equation collapse into one number.
+
+	int mode = 0;
+
+	if (m_enabled)
+	{
+		switch (m_type)
+		{
+		case FT_LINEAR: mode = 1; break;
+		case FT_EXP:    mode = 2; break;
+		case FT_EXP2:   mode = 3; break;
+		default:        mode = 1; break;
+		}
+	}
+
+	rcSetFogMode(mode);
+	rcSetFogColor(m_fogColor[0], m_fogColor[1], m_fogColor[2], m_fogColor[3]);
+	rcSetFogDensity((float)m_fogDensity);
+	rcSetFogRange((float)m_fogStart, (float)m_fogEnd);
 }
 
 void Fog::enable()
 {
-	glEnable(GL_FOG);
+	m_enabled = true;
+	lgEnableLegacy(GL_FOG);
+	syncToRenderContext();
 }
 
 void Fog::disable()
 {
-	glDisable(GL_FOG);
+	m_enabled = false;
+	lgDisableLegacy(GL_FOG);
+	syncToRenderContext();
 }
 
 bool Fog::isEnabled()
 {
-	GLboolean fogEnabled;
-	glGetBooleanv(GL_FOG, &fogEnabled);
-	return fogEnabled;
+	return m_enabled;
 }
 
 void Fog::setType(TFogType type)
 {
+	m_type = type;
+
 	switch (type) {
 	case FT_LINEAR:
-		glFogi(GL_FOG_MODE, GL_LINEAR);
+		lgFogi(GL_FOG_MODE, GL_LINEAR);
 		break;
 	case FT_EXP:
-		glFogi(GL_FOG_MODE, GL_EXP);
+		lgFogi(GL_FOG_MODE, GL_EXP);
 		break;
 	case FT_EXP2:
-		glFogi(GL_FOG_MODE, GL_EXP2);
+		lgFogi(GL_FOG_MODE, GL_EXP2);
 		break;
 	default:
 
 		break;
 	}
+
+	syncToRenderContext();
 }
 
 Fog::TFogType Fog::getType()
 {
-	GLint fogMode;
-	glGetIntegerv(GL_FOG_MODE, &fogMode);
-	switch (fogMode) {
-	case GL_LINEAR:
-		return FT_LINEAR;
-		break;
-	case GL_EXP:
-		return FT_EXP;
-		break;
-	case GL_EXP2:
-		return FT_EXP2;
-		break;
-	default:
-		return FT_LINEAR;
-		break;
-	}
+	return m_type;
 }
 
 void Fog::setLimits(double start, double end)
 {
-	glFogf(GL_FOG_START, (GLfloat)start);
-	glFogf(GL_FOG_END, (GLfloat)end);
+	m_fogStart = start;
+	m_fogEnd = end;
+	lgFogf(GL_FOG_START, (GLfloat)start);
+	lgFogf(GL_FOG_END, (GLfloat)end);
+	syncToRenderContext();
 }
 
 void Fog::setStart(double start)
 {
-	glFogf(GL_FOG_START, (GLfloat)start);
+	m_fogStart = start;
+	lgFogf(GL_FOG_START, (GLfloat)start);
+	syncToRenderContext();
 }
 
 void Fog::setEnd(double end)
 {
-	glFogf(GL_FOG_END, (GLfloat)end);
+	m_fogEnd = end;
+	lgFogf(GL_FOG_END, (GLfloat)end);
+	syncToRenderContext();
 }
 
 double Fog::getStart()
 {
-	GLfloat fogStart;
-	glGetFloatv(GL_FOG_START, &fogStart);
-	return fogStart;
+	return m_fogStart;
 }
 
 double Fog::getEnd()
 {
-	GLfloat fogEnd;
-	glGetFloatv(GL_FOG_END, &fogEnd);
-	return fogEnd;
+	return m_fogEnd;
 }
 
 void Fog::getLimits(double &start, double &end)
@@ -144,27 +172,30 @@ void Fog::setColor(float red, float green, float blue, float alpha)
 	m_fogColor[2] = blue;
 	m_fogColor[3] = alpha;
 
-	glFogfv(GL_FOG_COLOR, m_fogColor);
+	lgFogfv(GL_FOG_COLOR, m_fogColor);
+	syncToRenderContext();
 }
 
 void Fog::getColor(float &red, float &green, float &blue, float &alpha)
 {
-	GLfloat fogColor[4];
-	glGetFloatv(GL_FOG_COLOR, fogColor);
-	red = fogColor[0];
-	green = fogColor[1];
-	blue = fogColor[2];
-	alpha = fogColor[3];
+	red = m_fogColor[0];
+	green = m_fogColor[1];
+	blue = m_fogColor[2];
+	alpha = m_fogColor[3];
 }
 
 void Fog::setDensity(double density)
 {
-	glFogf(GL_FOG_END, (GLfloat)density);
+	// This wrote GL_FOG_END rather than GL_FOG_DENSITY, so setting a density had
+	// no effect on the exponential fog modes and quietly moved the far plane of
+	// the linear one instead.
+
+	m_fogDensity = density;
+	lgFogf(GL_FOG_DENSITY, (GLfloat)density);
+	syncToRenderContext();
 }
 
 double Fog::getDensity()
 {
-	GLfloat fogEnd;
-	glGetFloatv(GL_FOG_END, &fogEnd);
-	return (double)fogEnd;
+	return m_fogDensity;
 }

@@ -25,6 +25,9 @@
 #include <ivf/SceneBase.h>
 #include <ivf/GlobalState.h>
 #include <ivf/Material.h>
+#include <ivf/LegacyGL.h>
+#include <ivf/ShaderProgram.h>
+#include <ivf/Lighting.h>
 
 using namespace ivf;
 
@@ -133,14 +136,61 @@ void SceneBase::defaultSceneRender(int pass)
     
     if (m_renderFlatShadow)
     {
-        glPushMatrix();
-        glScaled(1.0, 0.0, 1.0);
-        glPushAttrib(GL_ENABLE_BIT);
-        glDisable(GL_LIGHTING);
-        glDisable(GL_TEXTURE_2D);
+        // Everything this pass does to set itself up -- the flatten, the
+        // lighting and texture disables, the shadow colour -- is fixed-function
+        // only. On the shader path none of it arrived: the scene redrew at full
+        // height on top of itself, untextured and in whatever material each
+        // shape carried. A black text label came out as a solid black rectangle
+        // sitting over the model rather than as a shadow on the ground.
+
+        const bool shaderPath = rcIsShaderActive();
+
+        lgPushMatrix();
+        lgScaled(1.0, 0.0, 1.0);
+
+        if (shaderPath)
+        {
+            rcPushMatrix();
+            rcScale(1.0f, 0.0f, 1.0f);
+        }
+
+        // Turning lighting off has to go through Lighting rather than straight
+        // to GL. lgDisableLegacy() is a no-op in core, where glDisable(GL_LIGHTING)
+        // does not exist, so the cache that Material consults would still have
+        // said "lit" and every shape would have re-uploaded its own material over
+        // the shadow colour. Only in core, which is exactly where nobody looks.
+
+        const bool lightingWasEnabled = Lighting::getInstance()->isEnabled();
+
+        lgPushAttrib(GL_ENABLE_BIT);
+        Lighting::getInstance()->disable();
+        lgDisableLegacy(GL_TEXTURE_2D);
         GlobalState::getInstance()->disableColorOutput();
         GlobalState::getInstance()->disableTextureRendering();
-        glColor3d(m_shadowColor[0], m_shadowColor[1], m_shadowColor[2]);
+        lgColor3d(m_shadowColor[0], m_shadowColor[1], m_shadowColor[2]);
+
+        if (shaderPath)
+        {
+            // The shader is told the same three things. Emission carries the
+            // colour, with every lit term zeroed, so the result is flat whatever
+            // the lights are doing -- the shader has no "lighting disabled"
+            // switch and this needs none. Diffuse alpha stays at 1 so the alpha
+            // test does not throw the shadow away.
+
+            rcSetUseTexture(false);
+
+            ShaderProgram *prog = rcShader();
+
+            if (prog != nullptr)
+            {
+                prog->setUniformVec4("uMatAmbient", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+                prog->setUniformVec4("uMatDiffuse", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+                prog->setUniformVec4("uMatSpecular", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+                prog->setUniformVec4("uMatEmission",
+                                     glm::vec4((float)m_shadowColor[0], (float)m_shadowColor[1],
+                                               (float)m_shadowColor[2], 1.0f));
+            }
+        }
 
 		if (m_preShadow)
 			m_preComposite->render();
@@ -152,8 +202,26 @@ void SceneBase::defaultSceneRender(int pass)
 
 		GlobalState::getInstance()->enableColorOutput();
         GlobalState::getInstance()->enableTextureRendering();
-        glPopAttrib();
-        glPopMatrix();
+
+        if (lightingWasEnabled)
+            Lighting::getInstance()->enable();
+
+        lgPopAttrib();
+
+        if (shaderPath)
+        {
+            // Emission is sticky, so clear it rather than leaving every later
+            // unmaterialled object glowing in the shadow colour.
+
+            ShaderProgram *prog = rcShader();
+
+            if (prog != nullptr)
+                prog->setUniformVec4("uMatEmission", glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+
+            rcPopMatrix();
+        }
+
+        lgPopMatrix();
     }
 }
 
@@ -178,18 +246,18 @@ void SceneBase::defaultRendering()
 
 		for (renderPass = 0; renderPass<m_nPasses; renderPass++)
 		{
-			glMatrixMode(GL_PROJECTION);
-			glPushMatrix();
-			glMatrixMode(GL_MODELVIEW);
-			glPushMatrix();
+			lgMatrixMode(GL_PROJECTION);
+			lgPushMatrix();
+			lgMatrixMode(GL_MODELVIEW);
+			lgPushMatrix();
 			if (m_multipassEvent!=nullptr)
 				m_multipassEvent->onMultipass(renderPass);
 			else
 				this->doMultipass(renderPass);	
-			glMatrixMode(GL_PROJECTION);
-			glPopMatrix();
-			glMatrixMode(GL_MODELVIEW);
-			glPopMatrix();
+			lgMatrixMode(GL_PROJECTION);
+			lgPopMatrix();
+			lgMatrixMode(GL_MODELVIEW);
+			lgPopMatrix();
 		}
 	}
 	else
@@ -225,7 +293,7 @@ void SceneBase::doCreateGeometry()
 			View* view = m_view;
 			Camera* camera = (Camera*)view;
 
-			glPushMatrix();
+			lgPushMatrix();
 
 			switch (m_colorPair) {
 			case CP_RED_GREEN:
@@ -258,9 +326,9 @@ void SceneBase::doCreateGeometry()
 			m_composite->render();
 			m_postComposite->render();
 
-			glPopMatrix();
+			lgPopMatrix();
 
-			glPushMatrix();
+			lgPushMatrix();
 
 			glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -297,7 +365,7 @@ void SceneBase::doCreateGeometry()
 
 			glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
 
-			glPopMatrix();
+			lgPopMatrix();
 		}
 		else
 			defaultRendering();
@@ -311,7 +379,7 @@ void SceneBase::doCreateGeometry()
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
 
-			glPushMatrix();
+			lgPushMatrix();
 
 			if (m_lightMode == LM_LOCAL)
 				if (m_lighting != nullptr)
@@ -329,9 +397,9 @@ void SceneBase::doCreateGeometry()
 			m_composite->render();
 			m_postComposite->render();
 
-			glPopMatrix();
+			lgPopMatrix();
 
-			glPushMatrix();
+			lgPushMatrix();
 
 			glDrawBuffer(GL_BACK_RIGHT);
 			glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
@@ -352,7 +420,7 @@ void SceneBase::doCreateGeometry()
 			m_composite->render();
 			m_postComposite->render();
 
-			glPopMatrix();
+			lgPopMatrix();
 		}
 		else
 			defaultRendering();
@@ -570,3 +638,9 @@ void ivf::SceneBase::setShadowPrePost(bool renderPre, bool renderPost)
 	m_postShadow = renderPost;
 }
 
+
+// ------------------------------------------------------------
+bool SceneBase::hasModernPath()
+{
+	return true;
+}

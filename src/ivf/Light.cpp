@@ -24,6 +24,7 @@
 
 #include <ivf/Light.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 #include <ivf/GL.h>
 
@@ -68,13 +69,15 @@ Light::~Light()
 
 void Light::enable()
 {
-	glEnable(GL_LIGHT0 + m_lightn);
+	// GL_LIGHTn is fixed-function state. The shader path learns about this
+	// light from rcAddLight() in doCreateGeometry() instead.
+	lgEnableLegacy(GL_LIGHT0 + m_lightn);
 	m_enabled = true;
 }
 
 void Light::disable()
 {
-	glDisable(GL_LIGHT0 + m_lightn);
+	lgDisableLegacy(GL_LIGHT0 + m_lightn);
 	m_enabled = false;
 }
 
@@ -99,48 +102,60 @@ void Light::doCreateGeometry()
 
 		//glEnable( light );
 
-		glLightfv( light, GL_AMBIENT, m_ambient );
-		glLightfv( light, GL_DIFFUSE, m_diffuse );
-		glLightfv( light, GL_SPECULAR, m_specular );
+		lgLightfv( light, GL_AMBIENT, m_ambient );
+		lgLightfv( light, GL_DIFFUSE, m_diffuse );
+		lgLightfv( light, GL_SPECULAR, m_specular );
 
 		switch (m_lightType) {
 		case LT_POINT:
 			m_position[3] = 1.0;
-			glLightfv( light, GL_POSITION, m_position );
-			glLightf(light, GL_SPOT_CUTOFF, 180.0f);
+			lgLightfv( light, GL_POSITION, m_position );
+			lgLightf(light, GL_SPOT_CUTOFF, 180.0f);
 			break;
 		case LT_DIRECTIONAL:
 			m_position[3] = 0.0;
-			glLightfv( light, GL_POSITION, m_position );
-			glLightf(light, GL_SPOT_CUTOFF, 180.0f);
+			lgLightfv( light, GL_POSITION, m_position );
+			lgLightf(light, GL_SPOT_CUTOFF, 180.0f);
 			break;
 		case LT_SPOT:
 			m_position[3] = 1.0;
-			glLightfv( light, GL_POSITION, m_position );
-			glLightf(light, GL_SPOT_CUTOFF, m_spotCutoff);
-			glLightfv(light, GL_SPOT_DIRECTION, m_spotDirection);
-			glLightf(light, GL_SPOT_EXPONENT, m_spotExponent);
+			lgLightfv( light, GL_POSITION, m_position );
+			lgLightf(light, GL_SPOT_CUTOFF, m_spotCutoff);
+			lgLightfv(light, GL_SPOT_DIRECTION, m_spotDirection);
+			lgLightf(light, GL_SPOT_EXPONENT, m_spotExponent);
 			break;
 		default:
 
 			break;
 		}
 
-		glLighti( light, GL_CONSTANT_ATTENUATION, m_constatt );
-		glLighti( light, GL_LINEAR_ATTENUATION, m_linatt );
-		glLighti( light, GL_QUADRATIC_ATTENUATION, m_quadatt );
+		lgLighti( light, GL_CONSTANT_ATTENUATION, m_constatt );
+		lgLighti( light, GL_LINEAR_ATTENUATION, m_linatt );
+		lgLighti( light, GL_QUADRATIC_ATTENUATION, m_quadatt );
 
 		// Modern path: build LightData and add to RenderContext.
-		// Store the light position in world space (model matrix only).
-		// RenderContext::updateShader() will transform it to view space at upload
-		// time, so the render order of lights vs camera does not matter.
+		//
+		// glLightfv(GL_POSITION) transforms the position by the modelview in
+		// force at the moment of the call, and that is the whole of what
+		// SceneBase's light modes mean. LM_LOCAL renders lights before the
+		// camera, so the modelview is still identity and the position is
+		// therefore given in eye coordinates -- a light that follows the
+		// viewer. LM_WORLD renders them after, so the same position is
+		// transformed by the view and stays put in the world.
+		//
+		// Capturing view * model here reproduces both, and the result is already
+		// in eye space, so updateShader() uploads it unchanged. Storing world
+		// space and transforming at upload time -- as this used to -- made light
+		// placement independent of render order, which sounds like an
+		// improvement but silently turned every LM_LOCAL headlight into a
+		// world-fixed lamp.
 		LightData data;
-		glm::mat4 model = rcModelMatrix();
-		data.position     = model * glm::vec4(m_position[0], m_position[1], m_position[2], m_position[3]);
+		glm::mat4 modelView = rcView() * rcModelMatrix();
+		data.position     = modelView * glm::vec4(m_position[0], m_position[1], m_position[2], m_position[3]);
 		data.ambient      = glm::vec4(m_ambient[0],  m_ambient[1],  m_ambient[2],  m_ambient[3]);
 		data.diffuse      = glm::vec4(m_diffuse[0],  m_diffuse[1],  m_diffuse[2],  m_diffuse[3]);
 		data.specular     = glm::vec4(m_specular[0], m_specular[1], m_specular[2], m_specular[3]);
-		data.spotDirection = glm::vec3(m_spotDirection[0], m_spotDirection[1], m_spotDirection[2]);
+		data.spotDirection = glm::mat3(modelView) * glm::vec3(m_spotDirection[0], m_spotDirection[1], m_spotDirection[2]);
 		data.spotCutoff   = (m_lightType == LT_SPOT) ? m_spotCutoff : 180.0f;
 		data.spotExponent = m_spotExponent;
 		data.constAtt     = (float)m_constatt;
@@ -317,4 +332,10 @@ float Light::getSpotExponent()
 void Light::setNumber(int number)
 {
 	m_lightn = number;
+}
+
+// ------------------------------------------------------------
+bool Light::hasModernPath()
+{
+	return true;
 }

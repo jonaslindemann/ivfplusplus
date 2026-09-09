@@ -87,6 +87,15 @@ private:
 	GLuint   m_vbo = 0;
 	GLsizei  m_vaoVertexCount = 0;
 	bool     m_vaoDirty = true;
+	bool     m_vaoWireframe = false;
+	bool     m_vaoExpandedLines = false;
+	bool     m_vaoUseColors = false;
+
+	// First vertex and vertex count of each coordinate index set within the
+	// packed buffer, so they can be drawn separately when they need different
+	// state. Parallel to m_coordIndexSet.
+	std::vector<GLsizei> m_vaoRangeStart;
+	std::vector<GLsizei> m_vaoRangeCount;
 
 protected:
 	void markVAODirty();
@@ -100,9 +109,41 @@ protected:
 	 *   GL_LINES, GL_LINE_STRIP, GL_POINTS.
 	 *
 	 * GL_QUADS and GL_QUAD_STRIP are triangulated automatically.
+	 *
+	 * wireframe — draw the outline of each face rather than the filled face,
+	 * for subclasses that would have used glPolygonMode(GL_LINE). Do not
+	 * triangulate and then set polygon mode: every triangulation diagonal shows
+	 * up as an extra edge, so a box comes out with its faces crossed out. This
+	 * emits the real face edges instead.
+	 *
+	 * indexSetLineWidths — one line width per coordinate index set. A single draw
+	 * call cannot vary line width, so when this is given the buffer is drawn as
+	 * one call per index set with the matching width. Without it, per-index
+	 * widths would force the whole class down the legacy path -- which is what
+	 * kept Grid, whose outline and corners are drawn thicker than its rules,
+	 * from ever reaching the modern path.
+	 *
+	 * lineWidth -- the width the subclass would pass to glLineWidth. In a core
+	 * profile anything above 1.0 is illegal, so line primitives are expanded into
+	 * triangles instead; elsewhere glLineWidth still does the job and this is
+	 * ignored.
+	 *
 	 * Returns true if drawn (shader was active), false to fall through to legacy code.
 	 */
-	bool buildAndDrawVAO(GLenum legacyPrimitive);
+	bool buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe = false,
+	                     const std::vector<float>* indexSetLineWidths = nullptr,
+	                     float lineWidth = 1.0f);
+
+	/**
+	 * Whether this primitive's per-vertex colours should be used.
+	 *
+	 * Having colours is not the same as wanting them: LineSet, LineStripSet and
+	 * PointSet keep a setUseColor() flag and fall back to plain white when it is
+	 * off, whatever their colour set holds. The modern path asked only whether
+	 * the colour set was populated, which drew a set of coloured lines that the
+	 * legacy path drew white. Subclasses with such a flag override this.
+	 */
+	virtual bool usesVertexColors() const;
 
 	std::vector<Vec3d*>		m_coordSet;
 	std::vector<Color*>		m_colorSet;
@@ -127,6 +168,13 @@ public:
 
 	IvfClassInfo("GLPrimitive",Shape);
 	IvfStdFactory(GLPrimitive);
+
+	/**
+	 * Every subclass draws through buildAndDrawVAO(), which packs the indexed
+	 * sets into a VBO and feeds the shader itself.
+	 */
+	virtual bool hasModernPath() override;
+
 
 	/** Clear all sets */
 	void clear();

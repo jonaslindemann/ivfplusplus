@@ -71,6 +71,16 @@ public:
 	IvfClassInfo("Texture",GLBase);
 	IvfStdFactory(Texture);
 
+	/** Mirror the texture environment and matrix into RenderContext. */
+	void syncToRenderContext();
+
+	/**
+	 * A state object, not geometry. Nothing here needs the fixed-function
+	 * pipeline, so the program stays bound across it.
+	 */
+	virtual bool hasModernPath() override;
+
+
 	/** 
 	 * Set texture environment color (Obsolete! Use setEnvColor() instead)
 	 *
@@ -244,6 +254,16 @@ public:
 	 * the geometry.
 	 */
 	GLuint getName();
+
+	/**
+	 * Forgets which texture this class believes is bound.
+	 *
+	 * Texture skips redundant glBindTexture calls by remembering the last one it
+	 * made. Anything that binds a texture without going through this class --
+	 * RenderContext's placeholder, an ImGui backend, application code -- has to
+	 * say so, or the next bind here is skipped and the wrong texture is sampled.
+	 */
+	static void invalidateBindCache();
 
 	/**
 	 * Image loading flag

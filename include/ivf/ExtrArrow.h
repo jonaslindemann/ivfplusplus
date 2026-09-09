@@ -25,6 +25,7 @@
 #pragma once
 
 #include <ivf/Shape.h>
+#include <ivf/MeshBuffer.h>
 
 namespace ivf {
 
@@ -48,6 +49,11 @@ private:
 	double m_tailRadius;
 	double m_coords[6][3];
 	double m_radius[6];
+
+	MeshBuffer m_buffer;
+	bool m_meshDirty{true};
+
+	void updateGeometry();
 	double m_direction[3];
 	double m_position[3];
 	double m_offset;
@@ -61,6 +67,10 @@ public:
 
 	IvfClassInfo("ExtrArrow",Shape);
 	IvfStdFactory(ExtrArrow);
+
+	/** Draws through the shader when one is active. */
+	virtual bool hasModernPath() override;
+
 
 	/** Set the arrow radiuses */
 	void setRadius(double head, double tail);

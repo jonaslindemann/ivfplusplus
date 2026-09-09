@@ -23,6 +23,10 @@
 
 #include <ivf/config.h>
 #include <ivf/SimpleLineSet.h>
+#include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
+
+#include <vector>
 
 using namespace ivf;
 
@@ -53,28 +57,110 @@ SimpleLineSet::~SimpleLineSet ()
 void SimpleLineSet::doCreateGeometry()
 {
 	int i;
-	glPushAttrib(GL_LIGHTING);
-	glDisable(GL_LIGHTING);
-	glBegin(GL_LINE_STRIP);
+
+	if (rcIsShaderActive())
+	{
+		// Same strip walk as below, but emitted as independent line segments:
+		// one draw call cannot express several strips, and this geometry is
+		// unlit either way, which is exactly what drawUnlit() provides.
+
+		std::vector<float> positions;
+		std::vector<float> colors;
+
+		int prev = -1;
+
+		auto emit = [&](int idx) {
+			positions.push_back((float)m_coords[idx][0]);
+			positions.push_back((float)m_coords[idx][1]);
+			positions.push_back((float)m_coords[idx][2]);
+
+			if (m_colors != nullptr)
+			{
+				colors.push_back((float)m_colors[idx][0]);
+				colors.push_back((float)m_colors[idx][1]);
+				colors.push_back((float)m_colors[idx][2]);
+			}
+			else
+			{
+				colors.push_back(1.0f);
+				colors.push_back(1.0f);
+				colors.push_back(1.0f);
+			}
+
+			colors.push_back(1.0f);
+		};
+
+		for (i = 0; i < m_nCoordIndex; i++)
+		{
+			const int idx = m_coordIndex[i];
+
+			if (idx == -1)
+			{
+				prev = -1;
+				continue;
+			}
+
+			if (prev >= 0)
+			{
+				emit(prev);
+				emit(idx);
+			}
+
+			prev = idx;
+		}
+
+		if (positions.empty())
+			return;
+
+		if (rcDrawUnlit(GL_LINES, positions.data(), colors.data(), (int)(positions.size() / 3)))
+			return;
+	}
+
+	lgPushAttrib(GL_LIGHTING);
+	lgDisableLegacy(GL_LIGHTING);
+
+	// A -1 in the index array ends the current strip. Track whether one is open
+	// rather than assuming the array ends with a terminator: an index array
+	// without one used to leave the primitive unclosed, and an unmatched
+	// glBegin() wedges the context for the rest of the frame -- every later call
+	// fails with "invalid from the current immediate mode state", which reads as
+	// a fault in whatever happened to be drawn next.
+
+	bool stripOpen = false;
+
 	for (i = 0; i<m_nCoordIndex; i++)
 	{
 		if ((m_colors!=nullptr)&&(m_coordIndex[i]>=0))
 		{
-			glColor3d(
+			lgColor3d(
 				m_colors[ m_coordIndex[i] ][0],
 				m_colors[ m_coordIndex[i] ][1],
 				m_colors[ m_coordIndex[i] ][2]);
 		}
 		if (m_coordIndex[i] == -1)
 		{
-			glEnd();
-			if (i != m_nCoordIndex-1)
-				glBegin(GL_LINE_STRIP);
+			if (stripOpen)
+			{
+				lgEnd();
+				stripOpen = false;
+			}
 		}
 		else
-			glVertex3dv(m_coords[ m_coordIndex[i] ]);
+		{
+			if (!stripOpen)
+			{
+				lgBegin(GL_LINE_STRIP);
+				stripOpen = true;
+			}
+
+			lgVertex3dv(m_coords[ m_coordIndex[i] ]);
+		}
 	}
-	glPopAttrib();
+
+	if (stripOpen)
+		lgEnd();
+
+	lgPopAttrib();
 }
 
 // ------------------------------------------------------------
@@ -144,3 +230,9 @@ void SimpleLineSet::setColor(int n, double red, double green, double blue)
 	}
 }
 
+
+// ------------------------------------------------------------
+bool SimpleLineSet::hasModernPath()
+{
+	return true;
+}

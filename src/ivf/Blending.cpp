@@ -25,6 +25,7 @@
 #include <ivf/Blending.h>
 
 #include <ivf/GL.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -152,12 +153,12 @@ void Blending::setFunction(TBlendFactor src, TBlendFactor dst)
 
 void Blending::saveState()
 {
-	glPushAttrib(GL_BLEND);
+	lgPushAttrib(GL_BLEND);
 }
 
 void Blending::restoreState()
 {
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void Blending::defineAddFunction()

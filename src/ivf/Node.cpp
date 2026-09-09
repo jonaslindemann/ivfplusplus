@@ -129,3 +129,9 @@ void Node::doUpdateBoundingSphere()
 		radius = sqrt(2.0*pow(m_nodeSize,2));
 	}
 }
+
+// ------------------------------------------------------------
+bool Node::hasModernPath()
+{
+	return true;
+}

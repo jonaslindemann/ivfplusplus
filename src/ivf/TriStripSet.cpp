@@ -20,6 +20,7 @@
 //
 
 #include <ivf/TriStripSet.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -43,14 +44,14 @@ void TriStripSet::doCreateGeometry()
 	Index* textureIdx;
 	long i, j;
 
-	glPushAttrib(GL_COLOR_MATERIAL);
+	lgPushAttrib(GL_COLOR_MATERIAL);
 
 	if (m_useColor)
-		glEnable(GL_COLOR_MATERIAL);
+		lgEnableLegacy(GL_COLOR_MATERIAL);
 
 	for (i=0; i<(int)m_coordIndexSet.size(); i++)
 	{
-		glBegin(GL_TRIANGLE_STRIP);
+		lgBegin(GL_TRIANGLE_STRIP);
 
 		coordIdx = m_coordIndexSet[i];
 		if (m_useColor)
@@ -67,21 +68,21 @@ void TriStripSet::doCreateGeometry()
 
 		for (j=0; j<coordIdx->getSize(); j++)
 		{
-			glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j)]->getComponents());
+			lgNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j)]->getComponents());
 
 			if (m_useColor)
-				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+				lgColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 
 			if (textureIdx!=nullptr)
-				glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
+				lgTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
 
-			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
+			lgVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
 		}
 
-		glEnd();
+		lgEnd();
 	}
 
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void TriStripSet::setUseColor(bool flag)

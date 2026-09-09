@@ -122,3 +122,9 @@ void Multiply::refresh()
 	if (m_shape!=nullptr)
 		m_shape->refresh();
 }
+
+// ------------------------------------------------------------
+bool Multiply::hasModernPath()
+{
+	return true;
+}

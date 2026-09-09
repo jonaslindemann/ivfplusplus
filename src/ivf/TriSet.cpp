@@ -20,6 +20,7 @@
 //
 
 #include <ivf/TriSet.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -49,15 +50,15 @@ void TriSet::doCreateGeometry()
 	Index* textureIdx;
 	long i, j;
 
-	glPushAttrib(GL_COLOR_MATERIAL);
+	lgPushAttrib(GL_COLOR_MATERIAL);
 
 	if (m_useColor)
-		glEnable(GL_COLOR_MATERIAL);
+		lgEnableLegacy(GL_COLOR_MATERIAL);
 
 
 	for (i=0; i<(int)m_coordIndexSet.size(); i++)
 	{
-		glBegin(GL_TRIANGLES);
+		lgBegin(GL_TRIANGLES);
 
 		coordIdx = m_coordIndexSet[i];
 		if (m_useColor)
@@ -82,52 +83,52 @@ void TriSet::doCreateGeometry()
 			{
 */
 				if (getUseVertexNormals())
-					glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j)]->getComponents());
+					lgNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j)]->getComponents());
 				else
-					glNormal3dv(m_normalSet[normalIdx->getIndex(j/3)]->getComponents());
+					lgNormal3dv(m_normalSet[normalIdx->getIndex(j/3)]->getComponents());
 
 				if (m_useColor)
-					glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+					lgColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 
 				if (textureIdx!=nullptr)
-					glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
+					lgTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j)]->getComponents());
 
-				glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
+				lgVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
 
 				if (getUseVertexNormals())
-					glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+1)]->getComponents());
+					lgNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+1)]->getComponents());
 				else
-					glNormal3dv(m_normalSet[normalIdx->getIndex(j/3)]->getComponents());
+					lgNormal3dv(m_normalSet[normalIdx->getIndex(j/3)]->getComponents());
 
 				if (m_useColor)
-					glColor3fv(m_colorSet[colorIdx->getIndex(j+1)]->getColor());
+					lgColor3fv(m_colorSet[colorIdx->getIndex(j+1)]->getColor());
 
 				if (textureIdx!=nullptr)
-					glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+1)]->getComponents());
+					lgTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+1)]->getComponents());
 
-				glVertex3dv(m_coordSet[coordIdx->getIndex(j+1)]->getComponents());
+				lgVertex3dv(m_coordSet[coordIdx->getIndex(j+1)]->getComponents());
 
 				if (getUseVertexNormals())
-					glNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+2)]->getComponents());
+					lgNormal3dv(m_vertexNormalSet[coordIdx->getIndex(j+2)]->getComponents());
 				else
-					glNormal3dv(m_normalSet[normalIdx->getIndex(j/3)]->getComponents());
+					lgNormal3dv(m_normalSet[normalIdx->getIndex(j/3)]->getComponents());
 
 				if (m_useColor)
-					glColor3fv(m_colorSet[colorIdx->getIndex(j+2)]->getColor());
+					lgColor3fv(m_colorSet[colorIdx->getIndex(j+2)]->getColor());
 
 				if (textureIdx!=nullptr)
-					glTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+2)]->getComponents());
+					lgTexCoord2dv(m_textureCoordSet[textureIdx->getIndex(j+2)]->getComponents());
 
-				glVertex3dv(m_coordSet[coordIdx->getIndex(j+2)]->getComponents());
+				lgVertex3dv(m_coordSet[coordIdx->getIndex(j+2)]->getComponents());
 /*
 			}
 */
 			j+=m_drawInterval*3;
 		}
-		glEnd();
+		lgEnd();
 	}
 
-	glPopAttrib();
+	lgPopAttrib();
 }
 
 void TriSet::setUseColor(bool flag)

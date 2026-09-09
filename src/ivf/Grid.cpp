@@ -378,3 +378,9 @@ void Grid::setMinorColor(float red, float green, float blue, float alpha)
 }
 
 
+
+// ------------------------------------------------------------
+bool Grid::hasModernPath()
+{
+	return true;
+}

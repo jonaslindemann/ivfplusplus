@@ -1,5 +1,5 @@
-#include <ivfglut/GlutApplication.h>
-#include <ivfglut/GlutBase.h>
+#include <ivfglfw/GlfwApplication.h>
+#include <ivfglfw/GlfwWindow.h>
 
 #include "IvfFlyWidget.h"
 
@@ -10,7 +10,7 @@ main(int argc, char **argv)
 {
 	// Create Ivf++ application object.
 
-	auto app = GlutApplication::getInstance(&argc, argv);
+	auto app = GlfwApplication::getInstance(&argc, argv);
 	app->setDisplayMode(IVF_DOUBLE|IVF_RGBA|IVF_DEPTH|IVF_MULTISAMPLE);
 
 	// Create a window

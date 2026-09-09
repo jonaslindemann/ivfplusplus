@@ -23,6 +23,7 @@
 #include <ivf/FaceSet.h>
 
 #include <ivfmath/Vec3d.h>
+#include <ivf/LegacyGL.h>
 
 namespace std {};
 using namespace std;
@@ -69,32 +70,32 @@ void FaceSet::doCreateGeometry()
 
 	if (m_useColor==true)
 	{
-		glPushAttrib(GL_COLOR_MATERIAL);
-		glEnable(GL_COLOR_MATERIAL);
+		lgPushAttrib(GL_COLOR_MATERIAL);
+		lgEnableLegacy(GL_COLOR_MATERIAL);
 	}
 
 	for ( i = 0; i<m_nFaces; i++)
 	{
-		glBegin(GL_QUADS);
+		lgBegin(GL_QUADS);
 		for (j = 0; j<4; j++)
 		{
 			if (m_coordIndex[i][j]!=-1)
 			{
 				if (m_useTexture==TRUE)
-					glTexCoord2d(
+					lgTexCoord2d(
 					   m_textureCoords[m_textureCoordIndex[i][j]][0],
 					   m_textureCoords[m_textureCoordIndex[i][j]][1]);
-				glNormal3dv(m_normals[i]);
+				lgNormal3dv(m_normals[i]);
 				if (m_useColor == TRUE)
-					glColor3fv(m_colors[ m_coordIndex[i][j] ]);
-				glVertex3dv(m_coords[ m_coordIndex[i][j] ]);
+					lgColor3fv(m_colors[ m_coordIndex[i][j] ]);
+				lgVertex3dv(m_coords[ m_coordIndex[i][j] ]);
 			}
 		}
-		glEnd();
+		lgEnd();
 	}
 
 	if (m_useColor==true)
-		glPopAttrib();
+		lgPopAttrib();
 }
 
 // ------------------------------------------------------------

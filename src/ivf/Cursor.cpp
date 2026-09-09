@@ -23,6 +23,7 @@
 
 #include <ivf/Cursor.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -113,22 +114,22 @@ void Cursor::doCreateGeometry()
 		if (rcDrawUnlit(GL_LINES, positions, colors, 6))
 			return;
 
-		glPushAttrib(GL_LIGHTING);
-		glDisable(GL_LIGHTING);
+		lgPushAttrib(GL_LIGHTING);
+		lgDisableLegacy(GL_LIGHTING);
         glLineWidth(2.0);
-		glBegin(GL_LINES);
+		lgBegin(GL_LINES);
 			glColor3d(1.0, 1.0, 0.0);
-			glVertex3d(-m_size/2.0,0.0,0.0);
-			glVertex3d(m_size/2.0,0.0,0.0);
+			lgVertex3d(-m_size/2.0,0.0,0.0);
+			lgVertex3d(m_size/2.0,0.0,0.0);
 			glColor3d(1.0, 1.0, 0.0);
-			glVertex3d(0.0,-m_size/2.0,0.0);
-			glVertex3d(0.0, m_size/2.0,0.0);
+			lgVertex3d(0.0,-m_size/2.0,0.0);
+			lgVertex3d(0.0, m_size/2.0,0.0);
 			glColor3d(1.0, 1.0, 0.0);
-			glVertex3d(0.0, 0.0, -m_size/2);
-			glVertex3d(0.0, 0.0,  m_size/2);
-		glEnd();
+			lgVertex3d(0.0, 0.0, -m_size/2);
+			lgVertex3d(0.0, 0.0,  m_size/2);
+		lgEnd();
         glLineWidth(1.0);
-		glPopAttrib();
+		lgPopAttrib();
 	}
 }
 

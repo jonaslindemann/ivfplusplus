@@ -24,7 +24,10 @@
 
 #include <ivf/GLPrimitive.h>
 #include <ivf/rc.h>
+#include <ivf/LegacyGL.h>
 #include <ivf/ShaderProgram.h>
+#include <ivf/GlobalState.h>
+#include <ivf/Material.h>
 
 #include <ivf/config.h>
 
@@ -48,17 +51,61 @@ GLPrimitive::~GLPrimitive()
 	this->clear();
 }
 
+bool GLPrimitive::usesVertexColors() const
+{
+	return !m_colorSet.empty() && !m_colorIndexSet.empty();
+}
+
 void GLPrimitive::markVAODirty()
 {
 	m_vaoDirty = true;
 }
 
 // ------------------------------------------------------------
-bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
+bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
+                                  const std::vector<float>* indexSetLineWidths,
+                                  float lineWidth)
 {
 	ShaderProgram* prog = rcShader();
 	if (!rcIsShaderActive())
 		return false;
+
+	// Filled and wireframe need different vertex data, so a subclass that
+	// switches between them has to rebuild rather than replay.
+
+	if (wireframe != m_vaoWireframe) {
+		m_vaoWireframe = wireframe;
+		m_vaoDirty = true;
+	}
+
+	// Wide lines in core are built from triangles, which is a different vertex
+	// layout again -- and the widest of the per-index widths decides, since one
+	// buffer serves them all.
+
+	float widest = lineWidth;
+
+	if (indexSetLineWidths != nullptr)
+		for (float w : *indexSetLineWidths)
+			if (w > widest)
+				widest = w;
+
+	const bool isLine = (legacyPrimitive == GL_LINES) || (legacyPrimitive == GL_LINE_STRIP);
+	const bool expandLines = isLine && !wireframe && rcNeedsWideLineExpansion(widest);
+
+	if (expandLines != m_vaoExpandedLines) {
+		m_vaoExpandedLines = expandLines;
+		m_vaoDirty = true;
+	}
+
+	// Whether the colour set is being used is packed into the buffer, so a
+	// setUseColor() after the first draw has to rebuild it.
+
+	const bool useColors = this->usesVertexColors();
+
+	if (useColors != m_vaoUseColors) {
+		m_vaoUseColors = useColors;
+		m_vaoDirty = true;
+	}
 
 	if (m_vaoDirty) {
 		struct GpuVertex {
@@ -70,7 +117,11 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 
 		std::vector<GpuVertex> packed;
 
+		m_vaoRangeStart.clear();
+		m_vaoRangeCount.clear();
+
 		for (int i = 0; i < (int)m_coordIndexSet.size(); ++i) {
+			const GLsizei rangeStart = (GLsizei)packed.size();
 			Index* coordIdx = m_coordIndexSet[i];
 			Index* normalIdx  = (i < (int)m_normalIndexSet.size())  ? (Index*)m_normalIndexSet[i]  : nullptr;
 			Index* texIdx     = (i < (int)m_textureIndexSet.size())  ? (Index*)m_textureIndexSet[i]  : nullptr;
@@ -124,8 +175,9 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 					}
 				}
 
-				// Color
-				if (colorIdx && j < colorIdx->getSize()) {
+				// Color. Skipped entirely when the subclass says its colours are
+				// not in use, which leaves the white the legacy path drew.
+				if (useColors && colorIdx && j < colorIdx->getSize()) {
 					int ki = colorIdx->getIndex(j);
 					if (ki < (int)m_colorSet.size()) {
 						const float* c = m_colorSet[ki]->getColor();
@@ -139,7 +191,22 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 				return v;
 			};
 
-			if (effPrim == GL_QUADS) {
+			if (wireframe && ((effPrim == GL_QUADS) || (effPrim == GL_TRIANGLES))) {
+				// One GL_LINES pair per real face edge. Triangulating first and
+				// then asking for GL_LINE polygon mode would draw the
+				// triangulation diagonals as well.
+
+				const int per = (effPrim == GL_QUADS) ? 4 : 3;
+
+				for (int j = 0; j + per - 1 < n; j += per) {
+					int fi = j / per;
+
+					for (int e = 0; e < per; e++) {
+						packed.push_back(getVertex(j + e, fi));
+						packed.push_back(getVertex(j + ((e + 1) % per), fi));
+					}
+				}
+			} else if (effPrim == GL_QUADS) {
 				// Split each quad (j, j+1, j+2, j+3) into two triangles.
 				for (int j = 0; j + 3 < n; j += 4) {
 					int fi = j / 4;
@@ -161,6 +228,68 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 					packed.push_back(getVertex(j+3, fi));
 					packed.push_back(getVertex(j+2, fi));
 				}
+			} else if (expandLines) {
+				// Each segment becomes a quad. The vertex shader does the actual
+				// widening, because the width is in pixels and so is only known
+				// after projection; all that is prepared here is, per vertex, the
+				// segment's other endpoint (in the normal slot) and which side to
+				// step to plus how far (in the texture coordinate slot).
+
+				// Each index set carries its own width -- Grid draws its outline
+				// four pixels wide and its rules one -- so the half width has to
+				// be per set, not the widest of them. Taking the widest is only
+				// how the decision to expand at all is made.
+
+				float setWidth = lineWidth;
+
+				if ((indexSetLineWidths != nullptr) && !indexSetLineWidths->empty())
+				{
+					const size_t w = ((size_t)i < indexSetLineWidths->size())
+					                     ? (size_t)i
+					                     : indexSetLineWidths->size() - 1;
+					setWidth = (*indexSetLineWidths)[w];
+				}
+
+				const float halfWidth = 0.5f * setWidth;
+
+				auto emitSegment = [&](int ja, int jb, int fi) {
+					GpuVertex a = getVertex(ja, fi);
+					GpuVertex b = getVertex(jb, fi);
+
+					auto corner = [&](const GpuVertex& at, const GpuVertex& other, float side) {
+						GpuVertex v = at;
+						v.normal[0] = other.position[0];
+						v.normal[1] = other.position[1];
+						v.normal[2] = other.position[2];
+						v.texcoord[0] = side;
+						v.texcoord[1] = halfWidth;
+						return v;
+					};
+
+					// At b the direction runs the other way, so the side has to be
+					// negated for the corner to land on the same edge of the quad.
+
+					GpuVertex aMinus = corner(a, b, -1.0f);
+					GpuVertex aPlus  = corner(a, b,  1.0f);
+					GpuVertex bMinus = corner(b, a,  1.0f);
+					GpuVertex bPlus  = corner(b, a, -1.0f);
+
+					packed.push_back(aMinus);
+					packed.push_back(aPlus);
+					packed.push_back(bPlus);
+
+					packed.push_back(aMinus);
+					packed.push_back(bPlus);
+					packed.push_back(bMinus);
+				};
+
+				if (effPrim == GL_LINE_STRIP) {
+					for (int j = 0; j + 1 < n; ++j)
+						emitSegment(j, j + 1, j);
+				} else {
+					for (int j = 0; j + 1 < n; j += 2)
+						emitSegment(j, j + 1, j / 2);
+				}
 			} else {
 				// GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_LINES, GL_LINE_STRIP, GL_POINTS
 				for (int j = 0; j < n; ++j) {
@@ -168,6 +297,9 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 					packed.push_back(getVertex(j, fi));
 				}
 			}
+
+			m_vaoRangeStart.push_back(rangeStart);
+			m_vaoRangeCount.push_back((GLsizei)packed.size() - rangeStart);
 		}
 
 		m_vaoVertexCount = (GLsizei)packed.size();
@@ -191,6 +323,16 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 		glEnableVertexAttribArray(3);
 
 		glBindVertexArray(0);
+
+		// Unbinding the array buffer matters beyond tidiness. It is not part of
+		// vertex array object state, so it outlives the glBindVertexArray(0)
+		// above and stays bound for the rest of the process. Any later
+		// fixed-function client array draw -- an ImGui GL2 backend, an FLTK
+		// widget, an application's own glVertexPointer -- then has its pointer
+		// read as a byte offset into this buffer and draws nothing recognisable.
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 		m_vaoDirty = false;
 	}
 
@@ -205,20 +347,101 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive)
 		default:            drawMode = legacyPrimitive; break;
 	}
 
+	if (wireframe)
+		drawMode = GL_LINES;
+
+	if (m_vaoExpandedLines)
+		drawMode = GL_TRIANGLES;
+
+	rcSetWideLineDraw(m_vaoExpandedLines);
+
 	rcUseShader();
 	rcUpdateShader(prog);
 
-	// Unlit mode for point/line primitives (legacy path disabled GL_LIGHTING for these).
-	bool isUnlit = (legacyPrimitive == GL_POINTS ||
+	// Unlit mode for point/line primitives (legacy path disabled GL_LIGHTING for
+	// these), and for a caller that disabled lighting around geometry this
+	// cannot recognise from the primitive alone -- a wireframe box, say.
+	bool isUnlit = rcForceUnlit() ||
+	               (legacyPrimitive == GL_POINTS ||
 	                legacyPrimitive == GL_LINES  ||
 	                legacyPrimitive == GL_LINE_STRIP);
-	bool hasVertexColors = !m_colorSet.empty() && !m_colorIndexSet.empty();
+	// An unlit primitive with no colours of its own draws white: the legacy
+	// path reached this state by disabling GL_LIGHTING and calling
+	// glColor3f(1,1,1), and the packed vertex colour defaults to the same
+	// white. Reading the material diffuse instead -- which is what the shader
+	// falls back to -- drew those lines in the object's material colour.
+
 	prog->setUniformInt("uUnlit",           isUnlit ? 1 : 0);
-	prog->setUniformInt("uUseVertexColor",  hasVertexColors ? 1 : 0);
+	prog->setUniformInt("uUseVertexColor",  (useColors || isUnlit) ? 1 : 0);
+
+	// A primitive read from a file usually carries one material per index set --
+	// the AC3D loader builds them that way, so a model's parts are different
+	// colours. The legacy loop applies each of those before drawing its own
+	// index set. This path drew everything in a single call, so the whole model
+	// came out in whatever material happened to be current: an AC3D wind turbine
+	// lost its green ground and yellow blades and turned uniformly blue, and the
+	// fly example's asteroids inherited the near-black of the last star drawn.
+
+	const bool perFaceMaterials = !useColors &&
+	                              !m_materialIndexSet.empty() &&
+	                              (m_vaoRangeStart.size() == m_vaoRangeCount.size()) &&
+	                              GlobalState::getInstance()->isMaterialRenderingEnabled();
 
 	glBindVertexArray(m_vao);
-	glDrawArrays(drawMode, 0, m_vaoVertexCount);
+
+	if (perFaceMaterials)
+	{
+		// One draw per index set, because the material is per draw call.
+
+		for (size_t i = 0; i < m_vaoRangeStart.size(); ++i)
+		{
+			if (m_vaoRangeCount[i] <= 0)
+				continue;
+
+			const int idx = this->getMaterialIndex((int)i);
+
+			if (idx >= 0)
+			{
+				Material* material = this->getMaterialAt(idx);
+
+				if (material != nullptr)
+					material->render();
+			}
+
+			glDrawArrays(drawMode, m_vaoRangeStart[i], m_vaoRangeCount[i]);
+		}
+	}
+	else if ((indexSetLineWidths != nullptr) && !indexSetLineWidths->empty() &&
+	    (m_vaoRangeStart.size() == m_vaoRangeCount.size()))
+	{
+		// One draw per index set, because line width is per draw call.
+
+		GLfloat oldWidth = 1.0f;
+		glGetFloatv(GL_LINE_WIDTH, &oldWidth);
+
+		for (size_t i = 0; i < m_vaoRangeStart.size(); ++i)
+		{
+			if (m_vaoRangeCount[i] <= 0)
+				continue;
+
+			const size_t w = (i < indexSetLineWidths->size()) ? i : indexSetLineWidths->size() - 1;
+			lgLineWidth((*indexSetLineWidths)[w]);
+
+			glDrawArrays(drawMode, m_vaoRangeStart[i], m_vaoRangeCount[i]);
+		}
+
+		lgLineWidth(oldWidth);
+	}
+	else
+		glDrawArrays(drawMode, 0, m_vaoVertexCount);
+
 	glBindVertexArray(0);
+
+	// Leave the flag off: the next object to draw is almost certainly not a wide
+	// line, and a stale flag would send its vertices through the expansion.
+
+	if (m_vaoExpandedLines)
+		rcSetWideLineDraw(false);
 
 	return true;
 }
@@ -670,4 +893,10 @@ void GLPrimitive::clearMaterial()
 int GLPrimitive::getCoordIndexSetSize()
 {
 	return static_cast<int>(m_coordIndexSet.size());
+}
+
+// ------------------------------------------------------------
+bool GLPrimitive::hasModernPath()
+{
+	return true;
 }

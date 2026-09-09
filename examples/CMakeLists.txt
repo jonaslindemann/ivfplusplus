@@ -55,6 +55,7 @@ if (IVF_EXAMPLES)
 		add_subdirectory(meshbuffer_test)
 		add_subdirectory(swept_test)
 		add_subdirectory(sphere_test)
+		add_subdirectory(profile_test)
 	if (IVF_EXAMPLES_FLTK)
 		add_subdirectory(objframe2)
 		add_subdirectory(fibrescope)
@@ -68,10 +69,4 @@ if (IVF_EXAMPLES)
 		
 	endif (IVF_EXAMPLES_ASSIMP)
 	
-	if (IVF_EXAMPLES_FONTS)
-	
-		add_subdirectory(fonts)
-		
-	endif (IVF_EXAMPLES_FONTS)
-
 endif (IVF_EXAMPLES)

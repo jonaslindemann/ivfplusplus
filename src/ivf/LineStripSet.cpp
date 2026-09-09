@@ -20,6 +20,7 @@
 //
 
 #include <ivf/LineStripSet.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -36,25 +37,31 @@ LineStripSet::~LineStripSet()
 
 void LineStripSet::doCreateGeometry()
 {
-	if (buildAndDrawVAO(GL_LINE_STRIP)) return;
-
 	Index* coordIdx;
 	Index* colorIdx;
 	long i, j;
 	float oldWidth[1];
 
-	glPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
-	glDisable(GL_LIGHTING);
+	// Applied before the modern path draws -- see the note in LineSet.cpp.
 
 	glGetFloatv(GL_LINE_WIDTH, oldWidth);
-	glLineWidth(m_lineWidth);
+	lgLineWidth(m_lineWidth);
+
+	if (buildAndDrawVAO(GL_LINE_STRIP, false, nullptr, m_lineWidth))
+	{
+		lgLineWidth(oldWidth[0]);
+		return;
+	}
+
+	lgPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
+	lgDisableLegacy(GL_LIGHTING);
 
 	if (m_useColor)
-		glEnable(GL_COLOR_MATERIAL);
+		lgEnableLegacy(GL_COLOR_MATERIAL);
 
 	for (i=0; i<(int)m_coordIndexSet.size(); i++)
 	{
-		glBegin(GL_LINE_STRIP);
+		lgBegin(GL_LINE_STRIP);
 
 		coordIdx = m_coordIndexSet[i];
 		if (m_useColor)
@@ -67,18 +74,23 @@ void LineStripSet::doCreateGeometry()
 		for (j=0; j<coordIdx->getSize(); j++)
 		{
 			if (m_useColor)
-				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+				lgColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 			else
-				glColor3f(1.0f, 1.0f, 1.0f);
+				lgColor3f(1.0f, 1.0f, 1.0f);
 
-			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
+			lgVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
 		}
-		glEnd();
+		lgEnd();
 	}
 
-	glLineWidth(oldWidth[0]);
+	lgLineWidth(oldWidth[0]);
 
-	glPopAttrib();
+	lgPopAttrib();
+}
+
+bool LineStripSet::usesVertexColors() const
+{
+	return m_useColor && GLPrimitive::usesVertexColors();
 }
 
 void LineStripSet::setUseColor(bool flag)

@@ -20,6 +20,7 @@
 //
 
 #include <ivf/PointSet.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -41,25 +42,34 @@ PointSet::~PointSet()
 
 void PointSet::doCreateGeometry()
 {
-	if (buildAndDrawVAO(GL_POINTS)) return;
-
 	Index* coordIdx;
 	Index* colorIdx;
 	long i, j;
 	int oldSize;
 
-	glPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
-	glDisable(GL_LIGHTING);
+	// Point size has to be applied before the modern path draws, not after --
+	// glPointSize is ordinary state that the VAO knows nothing about, and the
+	// early return below used to skip it entirely, leaving every point one pixel
+	// across. It stays a plain gl call because glPointSize is valid in core.
 
 	glGetIntegerv(GL_POINT_SIZE, &oldSize);
 	glPointSize(m_pointSize);
 
+	if (buildAndDrawVAO(GL_POINTS))
+	{
+		glPointSize((GLfloat)oldSize);
+		return;
+	}
+
+	lgPushAttrib(GL_LIGHTING|GL_COLOR_MATERIAL);
+	lgDisableLegacy(GL_LIGHTING);
+
 	if (m_useColor)
-		glEnable(GL_COLOR_MATERIAL);
+		lgEnableLegacy(GL_COLOR_MATERIAL);
 
 	for (i=0; i<(int)m_coordIndexSet.size(); i++)
 	{
-		glBegin(GL_POINTS);
+		lgBegin(GL_POINTS);
 
 		coordIdx = m_coordIndexSet[i];
 		if (m_useColor)
@@ -72,21 +82,26 @@ void PointSet::doCreateGeometry()
 		for (j=0; j<coordIdx->getSize(); j++)
 		{
 			if (m_useColor)
-				glColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
+				lgColor3fv(m_colorSet[colorIdx->getIndex(j)]->getColor());
 			else
 				if (Shape::getMaterial()!=nullptr)
 					Shape::getMaterial()->render();
 				else
-					glColor3f(1.0f, 1.0f, 1.0f);
+					lgColor3f(1.0f, 1.0f, 1.0f);
 
-			glVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
+			lgVertex3dv(m_coordSet[coordIdx->getIndex(j)]->getComponents());
 		}
-		glEnd();
+		lgEnd();
 	}
 
 	glPointSize(oldSize);
 
-	glPopAttrib();
+	lgPopAttrib();
+}
+
+bool PointSet::usesVertexColors() const
+{
+	return m_useColor && GLPrimitive::usesVertexColors();
 }
 
 void PointSet::setUseColor(bool flag)

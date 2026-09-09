@@ -1,5 +1,5 @@
 SET(IVFAPP_NAME lod )
-SET(IVFAPP_LIBS ivf ivfglut glad)
-SET(IVFAPP_DEBUG_LIBS ivfd ivfglutd gladd)
+SET(IVFAPP_LIBS ivf ivfglfw glad)
+SET(IVFAPP_DEBUG_LIBS ivfd ivfglfwd gladd)
 
 IVFAPP_SETUP()

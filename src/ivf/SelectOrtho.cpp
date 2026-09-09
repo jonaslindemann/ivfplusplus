@@ -27,6 +27,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <ivf/SelectOrtho.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -46,7 +47,7 @@ SelectOrtho::~SelectOrtho()
 
 void SelectOrtho::customView()
 {
-	glOrtho(0.0, m_width, m_height, 0.0, 0.0, 1.0);
+	lgOrtho(0.0, m_width, m_height, 0.0, 0.0, 1.0);
 }
 
 void SelectOrtho::initializeSelect(int x, int y, int w, int h)
@@ -56,7 +57,7 @@ void SelectOrtho::initializeSelect(int x, int y, int w, int h)
 	viewport[1] = 0;
 	viewport[2] = m_width;
 	viewport[3] = m_height;
-	gluPickMatrix((GLdouble)(x), (GLdouble)m_height - (GLdouble)(y), (GLdouble)w, (GLdouble)h, viewport);
+	lgPickMatrix((GLdouble)(x), (GLdouble)m_height - (GLdouble)(y), (GLdouble)w, (GLdouble)h, viewport);
 	this->customView();
 }
 

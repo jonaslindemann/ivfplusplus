@@ -23,6 +23,7 @@
 
 #include <ivf/config.h>
 #include <ivf/Brick.h>
+#include <ivf/LegacyGL.h>
 
 using namespace ivf;
 
@@ -135,13 +136,13 @@ void Brick::setSize(Point3d* p1, Point3d* p2)
 void Brick::doCreateSelect()
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glPushMatrix();
-			//glScaled(m_size[0]*1.05,m_size[1]*1.05,m_size[2]*1.05);
-			glScaled(1.05, 1.05, 1.05);
+		lgPushMatrix();
+			//lgScaled(m_size[0]*1.05,m_size[1]*1.05,m_size[2]*1.05);
+			lgScaled(1.05, 1.05, 1.05);
 			Material* hMaterial = this->getHightlightMaterial();
 			hMaterial->render();
 			QuadSet::doCreateGeometry();
-		glPopMatrix();
+		lgPopMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

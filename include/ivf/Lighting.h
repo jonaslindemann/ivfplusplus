@@ -57,6 +57,11 @@ private:
 	std::vector<Light*> m_lights;
 	GLfloat m_ambient[4];
 	GLint m_local[1], m_twoside[1];
+
+	// Remembered rather than queried back from GL. glGetBooleanv(GL_LIGHTING) is
+	// not valid in a core profile: NVIDIA answers it anyway, Intel correctly
+	// raises GL_INVALID_ENUM, and Ruler asks on every draw.
+	bool m_lightingEnabled;
 	std::vector<bool> m_enabled;
 public:	/** Return instance of Lighting */
 	static Lighting* getInstance();

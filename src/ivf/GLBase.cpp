@@ -22,8 +22,11 @@
 // Implementation of: public class CIvfGLBase
 
 #include <ivf/config.h>
+#include <set>
+#include <iostream>
 #include <ivf/GLBase.h>
 #include <ivf/Material.h>
+#include <ivf/rc.h>
 
 using namespace ivf;
 
@@ -114,8 +117,58 @@ void GLBase::render ()
 }
 
 // ------------------------------------------------------------
+bool GLBase::hasModernPath ()
+{
+	return false;
+}
+namespace {
+
+// A class with no modern path draws nothing in Core. That is correct, but it is
+// silent: the object simply is not there, with no GL error and nothing in the
+// debug output to say why, which reads as a bug in the geometry.
+//
+// It bites hardest on a subclass that only composes other shapes and has no
+// geometry of its own. It inherits the default answer of "no modern path" and
+// takes all of its children down with it, however well converted they are.
+// Naming the class once is usually enough to see what has happened.
+
+void reportSkippedInCore(const std::string& className)
+{
+	static std::set<std::string> reported;
+
+	if (reported.count(className) != 0)
+		return;
+
+	reported.insert(className);
+
+	std::cout << "ivf: " << className
+	          << " has no modern path and draws nothing in RenderProfile::Core."
+	          << " If it only composes other shapes, override hasModernPath()."
+	          << std::endl;
+}
+
+} // namespace
+
 void GLBase::renderImmediate ()
 {
+	// An object with no modern path has to draw against the fixed-function
+	// pipeline, which means no program may be bound while it runs. Binding one
+	// globally and leaving it bound was the reason unported classes drew nothing:
+	// their glVertex calls went through a shader whose matrices nobody had
+	// uploaded, so every vertex collapsed to a point.
+	//
+	// The bracket covers the transform and material calls as well as the
+	// geometry, because those are where the fixed-function state the legacy
+	// drawing code reads gets established.
+
+	const bool suppressShader = rcNeedsLegacyDraw(this->hasModernPath());
+
+	if (suppressShader)
+	{
+		rcUnuseShader();
+		rcBeginLegacyDraw();
+	}
+
 	if (m_renderState!=nullptr)
 		m_renderState->apply();
 
@@ -128,17 +181,43 @@ void GLBase::renderImmediate ()
 		doCreateMaterial();
 
 	doPreGeometry();
-	doCreateGeometry();
+
+	// In Core there is no fixed-function pipeline behind the shader, so an object
+	// that has not been ported simply cannot draw. Its geometry code is all lg*
+	// no-ops by now, so calling it would achieve nothing; skipping it says so
+	// plainly and keeps the profile_test report about coverage rather than about
+	// a flood of errors from calls that were going to be ignored anyway.
+
+	if (rcCanDrawGeometry(this->hasModernPath()))
+		doCreateGeometry();
+	else
+		reportSkippedInCore(this->getClassName());
+
 	doPostGeometry();
 	doEndTransform();
 
 	if (m_renderState!=nullptr)
 		m_renderState->remove();
+
+	if (suppressShader)
+	{
+		rcEndLegacyDraw();
+		rcUseShader();
+	}
 }
 
 // ------------------------------------------------------------
 bool GLBase::useDisplayList ()
 {
+	// Display lists are a legacy-profile feature and cannot be combined with the
+	// shader path. glNewList records drawing commands, but glUniform calls
+	// execute immediately rather than being recorded -- so a replayed list draws
+	// with whatever matrices were current when it was compiled. The result is
+	// silently wrong rather than an error, which is the worst way to fail.
+
+	if (rcIsShaderActive())
+		return false;
+
 	return m_useList && !m_dynamic;
 }
 

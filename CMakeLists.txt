@@ -34,7 +34,7 @@ project(ivf)
 option(IVF_UI "Build user interface integration libraries." ON) 
 option(IVF_UI_FLTK "Build user interface integration libraries." ON)
 option(IVF_UI_WIN32 "Build user interface integration libraries." OFF)
-option(IVF_UI_GLUT "Build user interface integration libraries." ON)
+option(IVF_UI_GLFW "Build the GLFW integration library." ON)
 option(IVF_IMAGE "Build Ivf++ image support." ON)
 option(IVF_FONT "Build Ivf++ with font support." OFF)
 option(IVF_EXAMPLES "Build Ivf++ examples." ON)
@@ -42,7 +42,6 @@ option(IVF_EXAMPLES_GENERIC "Build Ivf++ generic examples" ON)
 option(IVF_EXAMPLES_GLE "Build Ivf++ GLE examples" ON)
 option(IVF_EXAMPLES_FLTK "Build Ivf++ FLTK examples" ON)
 option(IVF_EXAMPLES_WIN32 "Build Ivf++ WIN32 examples" OFF)
-option(IVF_EXAMPLES_FONTS "Build Ivf++ font support examples" OFF)
 option(IVF_EXAMPLES_ASSIMP "Build Ivf++ assimp examples" OFF)
 option(IVF_DEBUG "Build Ivf++ with debug information." OFF)
 option(IVF_SHARED "Build Ivf++ as shared libraries." OFF)
@@ -56,7 +55,29 @@ find_package(FLTK CONFIG REQUIRED)
 
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(FreeGLUT CONFIG REQUIRED)
+
+# GLU is used directly -- gluPerspective, gluLookAt and gluPickMatrix in the
+# camera, the quadrics in Cone and Sphere, gluBuild2DMipmaps in Texture, and the
+# tessellator throughout the vendored gle library. Nothing here ever linked it
+# explicitly; it built only where some other package happened to drag glu32 in,
+# and failed with a page of unresolved externals where none did.
+#
+# It is attached to the ivf and gleivf targets below, so anything linking them
+# picks it up. Phases 2-7 replace the GLU calls one by one; this can go when the
+# last of them does.
+
+if(TARGET OpenGL::GLU)
+	set(IVF_GLU_LIBRARY OpenGL::GLU)
+elseif(OPENGL_glu_LIBRARY)
+	set(IVF_GLU_LIBRARY ${OPENGL_glu_LIBRARY})
+elseif(WIN32)
+	set(IVF_GLU_LIBRARY glu32)
+else()
+	set(IVF_GLU_LIBRARY "")
+	message(WARNING "GLU not found -- linking will fail until the remaining GLU calls are replaced.")
+endif()
+
+message(STATUS "Ivf++ GLU library: ${IVF_GLU_LIBRARY}")
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
@@ -94,7 +115,8 @@ macro(IVFAPP_SETUP)
 	add_executable(${IVFAPP_NAME} ${SOURCE_FILES} ${INCLUDE_FILES})
 	target_link_libraries(${IVFAPP_NAME} PRIVATE 
 		${IVFAPP_LIBS}
-		PNG::PNG JPEG::JPEG ZLIB::ZLIB glfw GLEW::GLEW OpenGL::GL FreeGLUT::freeglut glm::glm)
+		PNG::PNG JPEG::JPEG ZLIB::ZLIB glfw GLEW::GLEW OpenGL::GL ${IVF_GLU_LIBRARY}
+		glm::glm)
 	install(TARGETS ${IVFAPP_NAME} DESTINATION bin)
 
 endmacro(IVFAPP_SETUP)
