@@ -24,6 +24,10 @@
 
 #include <ivfgle/GleSpiral.h>
 
+#include <ivf/rc.h>
+
+#include <cmath>
+
 using namespace ivf;
 
 GleSpiral::GleSpiral()
@@ -39,6 +43,8 @@ GleSpiral::GleSpiral()
     , m_zChangePerRev(1.0)
     , m_totalSpiralAngle(360.0 * 10)
     , m_sides(32)
+    , m_swept(nullptr)
+    , m_sweptDirty(true)
 {
     int i, j;
 
@@ -53,10 +59,98 @@ GleSpiral::GleSpiral()
     m_startXfm[1][1] = 1.0;
 }
 
+void GleSpiral::markSweptDirty()
+{
+    m_sweptDirty = true;
+}
+
+void GleSpiral::updateSweptGeometry()
+{
+    m_sweptDirty = false;
+
+    if (m_contour == nullptr)
+    {
+        m_swept = nullptr;
+        return;
+    }
+
+    if (m_swept == nullptr)
+        m_swept = SweptExtrusion::create();
+
+    // The spine is the one gleSpiral() builds in extrude.c, point for point.
+    //
+    // Three details there are load bearing. The point count comes from the side
+    // count rather than from the sweep alone; the sweep is divided over
+    // npoints-3 steps, not npoints-1; and the whole path is back-stepped by one
+    // increment before it starts. That back-step is what leaves a spare point at
+    // each end -- gle never sweeps the first or last spine vertex, it only reads
+    // them to orient the ends, and SweptExtrusion follows the same rule.
+
+    const double sweepTheta = m_totalSpiralAngle;
+    const int npoints = (int)(((double)m_sides / 360.0) * std::fabs(sweepTheta)) + 4;
+
+    const double deltaAngle = (M_PI / 180.0) * sweepTheta / (double)(npoints - 3);
+
+    const double delta = deltaAngle / (2.0 * M_PI);
+    const double dz = m_zChangePerRev * delta;
+    const double dr = m_radiusChangePerRev * delta;
+
+    double theta = m_startAngle * M_PI / 180.0 - deltaAngle;
+    double z = m_startZ - dz;
+    double radius = m_startRadius - dr;
+
+    m_swept->setSpineSize(npoints);
+
+    for (int i = 0; i < npoints; i++)
+    {
+        m_swept->setSpineCoord(i, radius * std::cos(theta), radius * std::sin(theta), z);
+
+        theta += deltaAngle;
+        z += dz;
+        radius += dr;
+    }
+
+    // The section is the contour verbatim, normals included -- calcNormals() has
+    // already run on it and gle would have used exactly these.
+
+    const int ncp = m_contour->getSize();
+    const double(*normals)[2] = (const double(*)[2])m_contour->getNormalData();
+
+    m_swept->setSectionSize(ncp);
+
+    for (int i = 0; i < ncp; i++)
+    {
+        double x, y;
+        m_contour->getCoord(i, x, y);
+        m_swept->setSectionCoord(i, x, y);
+
+        if (normals != nullptr)
+            m_swept->setSectionNormal(i, normals[i][0], normals[i][1]);
+    }
+
+    m_swept->setUpVector(m_up[0], m_up[1], m_up[2]);
+}
+
+bool GleSpiral::hasModernPath()
+{
+    return true;
+}
+
 void GleSpiral::doCreateGeometry()
 {
     if (m_contour == nullptr)
         return;
+
+    if (rcIsShaderActive())
+    {
+        if (m_sweptDirty)
+            this->updateSweptGeometry();
+
+        if (m_swept != nullptr)
+            m_swept->drawGeometry();
+
+        return;
+    }
 
     gleDouble(*temp2)[2];
     temp2 = (double(*)[2])m_contour->getCoordData();
@@ -88,6 +182,8 @@ void GleSpiral::doCreateGeometry()
 void GleSpiral::setContour(GleContour* contour)
 {
     m_contour = contour;
+
+    this->markSweptDirty();
 }
 
 void GleSpiral::setContourUp(double vx, double vy, double vz)
@@ -95,6 +191,8 @@ void GleSpiral::setContourUp(double vx, double vy, double vz)
     m_up[0] = vx;
     m_up[1] = vy;
     m_up[2] = vz;
+
+    this->markSweptDirty();
 }
 
 void GleSpiral::setContourUp(Vec3d& vec)
@@ -104,41 +202,57 @@ void GleSpiral::setContourUp(Vec3d& vec)
     m_up[0] = vx;
     m_up[1] = vy;
     m_up[2] = vz;
+
+    this->markSweptDirty();
 }
 
 void ivf::GleSpiral::setStartRadius(double valkue)
 {
     m_startRadius = valkue;
+
+    this->markSweptDirty();
 }
 
 void ivf::GleSpiral::setRadiusChangePerRev(double value)
 {
     m_radiusChangePerRev = value;
+
+    this->markSweptDirty();
 }
 
 void ivf::GleSpiral::setStartZ(double value)
 {
     m_startZ = value;
+
+    this->markSweptDirty();
 }
 
 void ivf::GleSpiral::setZChangePerRev(double value)
 {
     m_zChangePerRev = value;
+
+    this->markSweptDirty();
 }
 
 void ivf::GleSpiral::setStartAngle(double value)
 {
     m_startAngle = value;
+
+    this->markSweptDirty();
 }
 
 void ivf::GleSpiral::setTotalSpiralAngle(double value)
 {
     m_totalSpiralAngle = value;
+
+    this->markSweptDirty();
 }
 
 void ivf::GleSpiral::setSides(int value)
 {
     m_sides = value;
+
+    this->markSweptDirty();
 }
 
 double ivf::GleSpiral::startRadius() const

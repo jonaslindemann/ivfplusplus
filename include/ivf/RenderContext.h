@@ -135,6 +135,15 @@ public:
     RenderProfile profile() const;
 
     /**
+     * True when the live OpenGL context is a core profile context.
+     *
+     * Determined once, at the first beginFrame(). Distinct from the render
+     * profile: the profile says what the library intends to do, this says what
+     * the driver will actually accept.
+     */
+    bool isCoreContext() const;
+
+    /**
      * True when fixed-function calls are permitted, i.e. anywhere but Core.
      *
      * Call sites that must not emit deprecated GL in a core context test this.
@@ -435,6 +444,11 @@ private:
     glm::vec4         m_globalAmbient;
     bool              m_useTexture;
     RenderProfile     m_profile;
+
+    // Whether the live context is a core profile one. -1 until asked, which
+    // beginFrame() does once, where a context is guaranteed to exist.
+
+    int               m_coreContext;
     int               m_legacyDrawDepth;
 
     ShaderProgramPtr  m_pickShader;

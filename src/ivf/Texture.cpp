@@ -127,24 +127,33 @@ void Texture::bind()
 	// Only upload texture data once
 	if (!m_textureDataUploaded)
 	{
+		// gluBuild2DMipmaps was the one GLU call in this library that ran on every
+		// profile rather than only the legacy path, and GLU is not available in
+		// core. glTexImage2D plus glGenerateMipmap does the same job and has been
+		// core since 3.0. It also drops GLU's power-of-two rescale, which nothing
+		// has needed since non-power-of-two textures became standard.
+
 		if (m_ivfImage!=nullptr)
 		{
-			if (!m_generateMipmaps)
-				glTexImage2D(GL_TEXTURE_2D, 0, m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(),
-					0, m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
-			else
-				gluBuild2DMipmaps(GL_TEXTURE_2D, /*0,*/ m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(), 
-				/*0,*/ m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
+			glTexImage2D(GL_TEXTURE_2D, 0, m_ivfImage->getInternalFormat(), m_ivfImage->getWidth(), m_ivfImage->getHeight(),
+				0, m_ivfImage->getFormat(), GL_UNSIGNED_BYTE, m_ivfImage->getImageMap());
+
+			if (m_generateMipmaps)
+				glGenerateMipmap(GL_TEXTURE_2D);
 		}
 
 		if (m_imageMap!=nullptr)
 		{
-			if (!m_generateMipmaps)
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height,
-					0, GL_RGBA, GL_UNSIGNED_BYTE, m_imageMap);
-			else
-				gluBuild2DMipmaps(GL_TEXTURE_2D, /*0,*/ GL_RGBA, m_width, m_height, 
-				/*0,*/ GL_RGBA, GL_UNSIGNED_BYTE, m_imageMap);
+			// The internal format here used to be GL_RGB while the data handed in
+			// was GL_RGBA, so the alpha channel was discarded on upload and every
+			// texel came back opaque. The mipmapped branch alongside it already
+			// used GL_RGBA, so the two disagreed about the same image.
+
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height,
+				0, GL_RGBA, GL_UNSIGNED_BYTE, m_imageMap);
+
+			if (m_generateMipmaps)
+				glGenerateMipmap(GL_TEXTURE_2D);
 		}
 
 		m_textureDataUploaded = true;
@@ -183,6 +192,12 @@ void Texture::apply()
 	}
 	else
 		lgDisableLegacy(GL_TEXTURE_2D);
+}
+
+// ------------------------------------------------------------
+void Texture::invalidateBindCache()
+{
+	s_currentBoundTexture = 0;
 }
 
 // ------------------------------------------------------------

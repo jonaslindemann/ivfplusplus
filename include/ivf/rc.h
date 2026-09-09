@@ -33,7 +33,12 @@ inline void rcEndLegacyDraw()                            { RenderContext::instan
  */
 inline bool rcCanDrawGeometry(bool objectHasModernPath)
 {
-    return objectHasModernPath || (RenderContext::instance().profile() != RenderProfile::Core);
+    // legacyAllowed() rather than a profile test: an unported object can draw
+    // only where fixed function actually works, and that depends on the context
+    // as well as on the profile. Mixed on a core context satisfied the profile
+    // test and then filled the log with GL_INVALID_OPERATION per vertex.
+
+    return objectHasModernPath || RenderContext::instance().legacyAllowed();
 }
 
 // ---- Shader activation ----

@@ -256,6 +256,16 @@ public:
 	GLuint getName();
 
 	/**
+	 * Forgets which texture this class believes is bound.
+	 *
+	 * Texture skips redundant glBindTexture calls by remembering the last one it
+	 * made. Anything that binds a texture without going through this class --
+	 * RenderContext's placeholder, an ImGui backend, application code -- has to
+	 * say so, or the next bind here is skipped and the wrong texture is sampled.
+	 */
+	static void invalidateBindCache();
+
+	/**
 	 * Image loading flag
 	 * 
 	 * if set to true textures are not bound using

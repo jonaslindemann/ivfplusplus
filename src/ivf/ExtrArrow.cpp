@@ -26,6 +26,7 @@
 
 #include <ivf/config.h>
 #include <ivf/rc.h>
+#include <ivf/MeshData.h>
 
 #include <ivfmath/BoundingSphere.h>
 #include <ivfmath/Vec3d.h>
@@ -57,9 +58,11 @@ ExtrArrow::~ExtrArrow()
 }
 
 // ------------------------------------------------------------
-void ExtrArrow::doCreateGeometry()
+void ExtrArrow::updateGeometry()
 {
-	if (rcIsShaderActive())
+	m_meshDirty = false;
+	m_buffer.clear();
+
 	{
 		Vec3d axis(m_direction[0], m_direction[1], m_direction[2]);
 		axis.normalize();
@@ -104,28 +107,101 @@ void ExtrArrow::doCreateGeometry()
 		// all five gaps drew those two phantom segments as real geometry, which
 		// is why the arrow came out longer than the fixed-function one.
 
+		MeshData mesh;
+
 		for (int ring = 1; ring < 4; ++ring)
 		{
+			// Analytic normal for a truncated cone. Parametrise the surface as
+			// P(t) + R(t) u; the cross product of the two partials comes out as
+			// L u - dR a, which is radial for a cylinder, tilted for a cone, and
+			// axial for the flat annulus at the head where L is zero.
+
+			Vec3d p0(m_coords[ring][0], m_coords[ring][1], m_coords[ring][2]);
+			Vec3d p1(m_coords[ring + 1][0], m_coords[ring + 1][1], m_coords[ring + 1][2]);
+
+			Vec3d segment = p1 - p0;
+			double length = segment.length();
+
+			Vec3d segAxis = axis;
+
+			if (length > 1e-12)
+			{
+				segAxis = segment;
+				segAxis.normalize();
+			}
+
+			const double dR = m_radius[ring + 1] - m_radius[ring];
+
+			const unsigned int base = (unsigned int)mesh.positions.size();
+
 			for (int sideIdx = 0; sideIdx < sides; ++sideIdx)
 			{
-				int nextSide = (sideIdx + 1) % sides;
-				Vec3d p0 = ringPoint(ring, sideIdx);
-				Vec3d p1 = ringPoint(ring + 1, sideIdx);
-				Vec3d p2 = ringPoint(ring + 1, nextSide);
-				Vec3d p3 = ringPoint(ring, nextSide);
+				double angle = 2.0 * M_PI * (double)sideIdx / (double)sides;
+				double c = cos(angle);
+				double s = sin(angle);
 
-				addPoint(p0);
-				addPoint(p1);
-				addPoint(p2);
+				Vec3d radial = side * c + binormal * s;
 
-				addPoint(p0);
-				addPoint(p2);
-				addPoint(p3);
+				Vec3d n = radial * length - segAxis * dR;
+
+				if (n.length() > 1e-12)
+					n.normalize();
+				else
+					n = radial;
+
+				double nx, ny, nz;
+				n.getComponents(nx, ny, nz);
+
+				Vec3d a0 = ringPoint(ring, sideIdx);
+				Vec3d a1 = ringPoint(ring + 1, sideIdx);
+
+				double x, y, z;
+
+				a0.getComponents(x, y, z);
+				mesh.positions.push_back(glm::vec3((float)x, (float)y, (float)z));
+				mesh.normals.push_back(glm::vec3((float)nx, (float)ny, (float)nz));
+				mesh.texCoords.push_back(glm::vec2((float)sideIdx / (float)sides, 0.0f));
+				mesh.colors.push_back(glm::vec4(1.0f));
+
+				a1.getComponents(x, y, z);
+				mesh.positions.push_back(glm::vec3((float)x, (float)y, (float)z));
+				mesh.normals.push_back(glm::vec3((float)nx, (float)ny, (float)nz));
+				mesh.texCoords.push_back(glm::vec2((float)sideIdx / (float)sides, 1.0f));
+				mesh.colors.push_back(glm::vec4(1.0f));
+			}
+
+			// Same winding the immediate mode version used.
+
+			for (int sideIdx = 0; sideIdx < sides; ++sideIdx)
+			{
+				unsigned int cur = base + 2u * (unsigned int)sideIdx;
+				unsigned int nxt = base + 2u * (unsigned int)((sideIdx + 1) % sides);
+
+				mesh.indices.push_back(glm::uvec3(cur, cur + 1u, nxt + 1u));
+				mesh.indices.push_back(glm::uvec3(cur, nxt + 1u, nxt));
 			}
 		}
 
-		if (rcDrawUnlit(GL_TRIANGLES, positions.data(), nullptr, (int)(positions.size() / 3)))
-			return;
+		m_buffer.setMesh(mesh);
+	}
+}
+
+// ------------------------------------------------------------
+void ExtrArrow::doCreateGeometry()
+{
+	if (rcIsShaderActive())
+	{
+		if (m_meshDirty)
+			this->updateGeometry();
+
+		if (!m_buffer.isEmpty())
+		{
+			rcUseShader();
+			rcUpdateShader();
+			m_buffer.drawShader(GL_TRIANGLES);
+		}
+
+		return;
 	}
 
 	glePolyCone(6,m_coords,nullptr,m_radius);
@@ -153,6 +229,8 @@ void ExtrArrow::getDirection(double &ex, double &ey, double &ez)
 // ------------------------------------------------------------
 void ExtrArrow::initExtrusion()
 {
+	m_meshDirty = true;
+
 	m_coords[0][0] = (m_offset-1.0)*m_direction[0];
 	m_coords[0][1] = (m_offset-1.0)*m_direction[1];
 	m_coords[0][2] = (m_offset-1.0)*m_direction[2];

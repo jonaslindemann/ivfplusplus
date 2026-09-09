@@ -25,6 +25,7 @@
 #pragma once
 
 #include <ivf/Shape.h>
+#include <ivf/SweptExtrusion.h>
 
 #include <GL/gle.h>
 
@@ -53,6 +54,17 @@ private:
     gleDouble m_totalSpiralAngle;
     int m_sides;
 
+    // Modern path. gleSpiral() is immediate mode and its tessellator is GLU, so
+    // neither exists in a core profile. The spine it would have generated is
+    // generated here instead and swept by SweptExtrusion, which already
+    // reproduces gle's framing conventions.
+
+    SweptExtrusionPtr m_swept;
+    bool m_sweptDirty;
+
+    void updateSweptGeometry();
+    void markSweptDirty();
+
 public:
     GleSpiral();
 
@@ -70,6 +82,8 @@ public:
     void setStartAngle(double value);
     void setTotalSpiralAngle(double value);
     void setSides(int value);
+
+	virtual bool hasModernPath() override;
 
     double startRadius() const;
     double radiusChangePerRev() const;

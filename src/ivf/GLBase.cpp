@@ -22,6 +22,8 @@
 // Implementation of: public class CIvfGLBase
 
 #include <ivf/config.h>
+#include <set>
+#include <iostream>
 #include <ivf/GLBase.h>
 #include <ivf/Material.h>
 #include <ivf/rc.h>
@@ -119,6 +121,34 @@ bool GLBase::hasModernPath ()
 {
 	return false;
 }
+namespace {
+
+// A class with no modern path draws nothing in Core. That is correct, but it is
+// silent: the object simply is not there, with no GL error and nothing in the
+// debug output to say why, which reads as a bug in the geometry.
+//
+// It bites hardest on a subclass that only composes other shapes and has no
+// geometry of its own. It inherits the default answer of "no modern path" and
+// takes all of its children down with it, however well converted they are.
+// Naming the class once is usually enough to see what has happened.
+
+void reportSkippedInCore(const std::string& className)
+{
+	static std::set<std::string> reported;
+
+	if (reported.count(className) != 0)
+		return;
+
+	reported.insert(className);
+
+	std::cout << "ivf: " << className
+	          << " has no modern path and draws nothing in RenderProfile::Core."
+	          << " If it only composes other shapes, override hasModernPath()."
+	          << std::endl;
+}
+
+} // namespace
+
 void GLBase::renderImmediate ()
 {
 	// An object with no modern path has to draw against the fixed-function
@@ -160,6 +190,8 @@ void GLBase::renderImmediate ()
 
 	if (rcCanDrawGeometry(this->hasModernPath()))
 		doCreateGeometry();
+	else
+		reportSkippedInCore(this->getClassName());
 
 	doPostGeometry();
 	doEndTransform();

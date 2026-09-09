@@ -42,6 +42,18 @@
 //
 // ------------------------------------------------------------
 
+#include <ivfgle/GleSpiralCylinder.h>
+
+#include <ivf/BitmapFont.h>
+#include <ivf/Billboard.h>
+#include <ivf/CoordinateSystem.h>
+#include <ivf/CulledScene.h>
+#include <ivf/Fog.h>
+#include <ivf/GenericButton.h>
+#include <ivf/SelectOrtho.h>
+#include <ivf/TextLabel.h>
+#include <ivf/Workspace.h>
+
 #include <ivf/Arrow.h>
 #include <ivf/Axis.h>
 #include <ivf/Brick.h>
@@ -137,6 +149,17 @@ struct TestCase {
     std::string name;
     std::function<ShapePtr()> make;
 
+    // Scene cases draw their own frame instead of handing back a shape.
+    //
+    // Everything above tests a class in isolation, which is the right shape for
+    // geometry but says nothing about the machinery that composes it -- light
+    // modes, the flat shadow pass, billboard orientation, fog. Every rendering
+    // bug found while porting ObjectiveFrame lived in exactly that machinery and
+    // not one was caught here, because none of it is reachable from a lone
+    // shape. These cases own the frame so that setup is under test too.
+
+    std::function<void()> drawScene;
+
     // Filled in by runChecks()
     ShapePtr shape;
     int glErrors = 0;
@@ -155,9 +178,28 @@ void addCase(const std::string &name, std::function<ShapePtr()> make)
     g_cases.push_back(c);
 }
 
+void addSceneCase(const std::string &name, std::function<void()> draw)
+{
+    TestCase c;
+    c.name = name;
+    c.drawScene = draw;
+    g_cases.push_back(c);
+}
+
+/** True for a case that draws its own frame rather than returning a shape. */
+bool isSceneCase(const TestCase &c)
+{
+    return (bool)c.drawScene;
+}
+
 // ------------------------------------------------------------
 // Shared materials. Created once the context exists, because Material has no
 // GL state of its own but the shapes that reference it are built alongside.
+
+CameraPtr g_camera;
+LightPtr g_light;
+
+bool shaderUsed();
 
 MaterialPtr g_material;
 
@@ -519,6 +561,25 @@ void registerCases()
         return ShapePtr(s);
     });
 
+    // GleSpiralCylinder draws through gleSpiral() on the legacy path and through
+    // SweptExtrusion on the modern one. The two have to agree: ObjectiveFrame
+    // builds all three reaction moments from this class, and gle cannot run in a
+    // core profile at all.
+
+    addCase("GleSpiralCylinder", [] {
+        auto s = GleSpiralCylinder::create();
+        s->setSides(12);
+        s->setRadius(0.06);
+        s->setStartRadius(0.45);
+        s->setRadiusChangePerRev(0.0);
+        s->setStartZ(-0.35);
+        s->setZChangePerRev(0.35);
+        s->setStartAngle(0.0);
+        s->setTotalSpiralAngle(360.0 * 2.0);
+        s->setMaterial(defaultMaterial());
+        return ShapePtr(s);
+    });
+
     addCase("ExtrArrow", [] {
         auto a = ExtrArrow::create();
         a->setSize(1.2, 0.4);
@@ -703,6 +764,223 @@ void registerCases()
         return ShapePtr(c);
     });
 
+    // ------------------------------------------------------------------
+    // Classes ObjectiveFrame depends on that had no coverage at all.
+    // ------------------------------------------------------------------
+
+    addCase("Billboard", [] {
+        // An asymmetric child, so a billboard that fails to turn shows up as a
+        // different silhouette rather than as nothing at all.
+
+        auto b = BillBoard::create();
+        b->setCamera(g_camera);
+        b->setBillboardType(IVF_BILLBOARD_XY);
+
+        auto brick = Brick::create();
+        brick->setSize(0.9, 0.35, 0.35);
+        brick->setMaterial(defaultMaterial());
+        b->addChild(brick);
+
+        return ShapePtr(b);
+    });
+
+    addCase("TextLabel", [] {
+        // Exercises BitmapFont as well: the glyph atlas, its alpha test and the
+        // GL_BLEND texture environment all have to survive the shader path.
+
+        auto label = TextLabel::create();
+
+        auto font = BitmapFont::create("data/fonts/white_font.fnt");
+        label->setFont(font);
+        label->setText("Ivf", 1.2f);
+        label->setCamera(g_camera);
+        label->setBillboardType(IVF_BILLBOARD_XY);
+
+        return ShapePtr(label);
+    });
+
+    addCase("GenericButton", [] {
+        // A Switch subclass: it draws one of its children according to the
+        // button state, so the case checks that the selected child is the one
+        // that reaches the shader.
+
+        auto b = GenericButton::create();
+
+        auto normal = Brick::create();
+        normal->setSize(0.8, 0.5, 0.5);
+        normal->setMaterial(defaultMaterial());
+        b->addChild(normal);
+
+        auto checked = Sphere::create();
+        checked->setRadius(0.45);
+        checked->setMaterial(defaultMaterial());
+        b->addChild(checked);
+
+        b->setButtonState(GenericButton::BS_NORMAL);
+
+        return ShapePtr(b);
+    });
+
+    addCase("CoordinateSystem", [] {
+        auto cs = CoordinateSystem::create();
+        return ShapePtr(cs);
+    });
+
+    addCase("SelectOrtho", [] {
+        auto so = SelectOrtho::create();
+
+        auto brick = Brick::create();
+        brick->setSize(0.7, 0.7, 0.7);
+        brick->setMaterial(defaultMaterial());
+        so->addChild(brick);
+
+        return ShapePtr(so);
+    });
+
+    // ------------------------------------------------------------------
+    // Scene level cases. These own their frame, because the machinery under
+    // test is the frame setup: which order lights and the camera render in,
+    // what the flat shadow pass does to the pipeline, whether fog reaches the
+    // shader. A lone shape cannot reach any of it.
+    // ------------------------------------------------------------------
+
+    addSceneCase("Scene+headlight", [] {
+        // SceneBase::LM_LOCAL renders lights before the camera, which in the
+        // fixed-function pipeline means the light position is given in eye
+        // coordinates -- a light that follows the viewer. The shader path has to
+        // reproduce that and not silently turn it into a world-fixed lamp.
+
+        static ScenePtr scene;
+
+        if (scene == nullptr)
+        {
+            scene = Scene::create();
+            scene->setCamera(g_camera);
+            scene->setLightMode(SceneBase::LM_LOCAL);
+
+            auto sphere = Sphere::create();
+            sphere->setRadius(0.7);
+            sphere->setMaterial(defaultMaterial());
+            scene->addChild(sphere);
+        }
+
+        rcBeginFrame();
+
+        if (shaderUsed())
+            rcSetGlobalAmbient(0.15f, 0.15f, 0.15f, 1.0f);
+
+        scene->render();
+    });
+
+    addSceneCase("Scene+shadow", [] {
+        // The flat shadow pass redraws the scene flattened onto the ground in a
+        // single colour. Every part of that setup is fixed-function, so on the
+        // shader path it has to be mirrored explicitly or the pass draws the
+        // scene again, unflattened, on top of itself.
+
+        static ScenePtr scene;
+
+        if (scene == nullptr)
+        {
+            scene = Scene::create();
+            scene->setCamera(g_camera);
+            scene->setRenderFlatShadow(true);
+            scene->setShadowColor(0.25f, 0.25f, 0.25f);
+
+            auto brick = Brick::create();
+            brick->setSize(0.8, 0.8, 0.8);
+            brick->setPosition(0.0, 0.8, 0.0);
+            brick->setMaterial(defaultMaterial());
+            scene->addChild(brick);
+        }
+
+        rcBeginFrame();
+
+        if (shaderUsed())
+            rcSetGlobalAmbient(0.15f, 0.15f, 0.15f, 1.0f);
+
+        scene->render();
+    });
+
+    addSceneCase("Scene+fog", [] {
+        static ScenePtr scene;
+        static FogPtr fog;
+
+        if (scene == nullptr)
+        {
+            scene = Scene::create();
+            scene->setCamera(g_camera);
+
+            auto sphere = Sphere::create();
+            sphere->setRadius(0.7);
+            sphere->setMaterial(defaultMaterial());
+            scene->addChild(sphere);
+
+            fog = Fog::create();
+            fog->setType(Fog::FT_LINEAR);
+            fog->setColor(0.0f, 0.0f, 0.0f, 1.0f);
+            fog->setLimits(1.0f, 8.0f);
+        }
+
+        rcBeginFrame();
+
+        if (shaderUsed())
+            rcSetGlobalAmbient(0.15f, 0.15f, 0.15f, 1.0f);
+
+        fog->enable();
+        scene->render();
+        fog->disable();
+    });
+
+    addSceneCase("CulledScene", [] {
+        static CulledScenePtr scene;
+
+        if (scene == nullptr)
+        {
+            scene = CulledScene::create();
+            scene->setCamera(g_camera);
+            scene->setUseCulling(true);
+
+            for (int i = -1; i <= 1; i++)
+            {
+                auto sphere = Sphere::create();
+                sphere->setRadius(0.35);
+                sphere->setPosition(i * 0.9, 0.0, 0.0);
+                sphere->setMaterial(defaultMaterial());
+                scene->addChild(sphere);
+            }
+        }
+
+        rcBeginFrame();
+
+        if (shaderUsed())
+            rcSetGlobalAmbient(0.15f, 0.15f, 0.15f, 1.0f);
+
+        scene->render();
+    });
+
+    addSceneCase("Workspace", [] {
+        static WorkspacePtr workspace;
+
+        if (workspace == nullptr)
+        {
+            workspace = Workspace::create();
+            workspace->setCamera(g_camera);
+
+            auto brick = Brick::create();
+            brick->setSize(0.7, 0.7, 0.7);
+            brick->setMaterial(defaultMaterial());
+            workspace->addChild(brick);
+        }
+
+        rcBeginFrame();
+
+        if (shaderUsed())
+            rcSetGlobalAmbient(0.15f, 0.15f, 0.15f, 1.0f);
+
+        workspace->render();
+    });
+
     addCase("Transform", [] {
         auto t = Transform::create();
         t->setRotation(0.0, 30.0, 0.0);
@@ -722,12 +1000,12 @@ void registerCases()
 TestProfile g_profile = TestProfile::Mixed;
 bool g_headless = false;
 bool g_reportNotifications = false;
+bool g_coreContext = false;
 bool g_pickTest = false;
 std::string g_only;
 std::string g_shotDir;
 
-CameraPtr g_camera;
-LightPtr g_light;
+
 
 int g_setupGlErrors = 0;
 int g_setupDriverErrors = 0;
@@ -741,6 +1019,16 @@ int g_setupDriverWarnings = 0;
 
 bool shaderRequested()
 {
+    // A core context has no fixed-function pipeline, so a shader has to be built
+    // whatever the profile asks for -- otherwise legacy --core-context has no
+    // pipeline at all and every case fails for a reason that says nothing about
+    // the library. RenderContext makes the matching decision in
+    // shaderPathActive(): a Legacy profile on a core context uses the shader,
+    // because there is nothing else there.
+
+    if (g_coreContext)
+        return true;
+
     return g_profile != TestProfile::Legacy;
 }
 
@@ -748,6 +1036,14 @@ bool shaderRequested()
 
 bool shaderUsed()
 {
+    // A core context has no fixed-function pipeline, so a shader is the only way
+    // to draw anything there whatever the profile says. Without this, running
+    // legacy --core-context builds no shader, leaving no pipeline at all, and
+    // every case reports failures that say nothing about the library.
+
+    if (g_coreContext)
+        return true;
+
     return (g_profile == TestProfile::Mixed) || (g_profile == TestProfile::Core);
 }
 
@@ -774,19 +1070,30 @@ void beginTestFrame()
 
 void runCase(TestCase &c)
 {
-    if (!c.built)
+    if (!c.built && !isSceneCase(c))
     {
         c.shape = c.make();
         c.built = true;
     }
 
     // Frame setup first, then drain, so only what the shape does is counted.
+    // A scene case sets up its own frame, and that setup is part of what is
+    // being tested, so the drain happens before it rather than after.
 
-    beginTestFrame();
-    clearGLErrors();
-    resetDebugMessageCount();
+    if (isSceneCase(c))
+    {
+        clearGLErrors();
+        resetDebugMessageCount();
+        c.drawScene();
+    }
+    else
+    {
+        beginTestFrame();
+        clearGLErrors();
+        resetDebugMessageCount();
 
-    c.shape->render();
+        c.shape->render();
+    }
 
     // The driver reports asynchronously unless debug output is synchronous.
     // glFinish() makes the attribution reliable either way.
@@ -954,7 +1261,7 @@ int runShots(const std::string &dir)
         if (!g_only.empty() && (c.name != g_only))
             continue;
 
-        if (!c.built)
+        if (!c.built && !isSceneCase(c))
         {
             c.shape = c.make();
             c.built = true;
@@ -970,10 +1277,17 @@ int runShots(const std::string &dir)
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        beginTestFrame();
+        if (isSceneCase(c))
+        {
+            c.drawScene();
+        }
+        else
+        {
+            beginTestFrame();
 
-        c.shape->setPosition(0.0, 0.0, 0.0);
-        c.shape->render();
+            c.shape->setPosition(0.0, 0.0, 0.0);
+            c.shape->render();
+        }
 
         glFinish();
         glReadPixels(0, 0, SHOT_SIZE, SHOT_SIZE, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
@@ -1277,6 +1591,9 @@ void runViewer(GLFWwindow *window)
             if (!g_only.empty() && (c.name != g_only))
                 continue;
 
+            if (isSceneCase(c))
+                continue; // owns its own frame; not placeable on the grid
+
             if (!c.built)
             {
                 c.shape = c.make();
@@ -1313,6 +1630,8 @@ int main(int argc, char **argv)
             g_profile = TestProfile::Mixed;
         else if (arg == "core")
             g_profile = TestProfile::Core;
+        else if (arg == "--core-context")
+            g_coreContext = true;
         else if (arg == "--headless")
             g_headless = true;
         else if (arg == "--notify")
@@ -1367,7 +1686,13 @@ int main(int argc, char **argv)
         return 2;
     }
 
-    if (g_profile == TestProfile::Core)
+    // The context and the render profile are separate choices, and --core-context
+    // lets them be set separately. "Mixed on a core context" is not a silly
+    // combination: it is what an application in the middle of a port lands on the
+    // moment it flips its context hints before its profile, and nothing here
+    // covered it until it broke ObjectiveFrame's specular highlights.
+
+    if ((g_profile == TestProfile::Core) || g_coreContext)
     {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

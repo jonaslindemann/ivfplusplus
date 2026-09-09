@@ -27,6 +27,7 @@
 #include <ivf/Material.h>
 #include <ivf/LegacyGL.h>
 #include <ivf/ShaderProgram.h>
+#include <ivf/Lighting.h>
 
 using namespace ivf;
 
@@ -153,12 +154,20 @@ void SceneBase::defaultSceneRender(int pass)
             rcScale(1.0f, 0.0f, 1.0f);
         }
 
+        // Turning lighting off has to go through Lighting rather than straight
+        // to GL. lgDisableLegacy() is a no-op in core, where glDisable(GL_LIGHTING)
+        // does not exist, so the cache that Material consults would still have
+        // said "lit" and every shape would have re-uploaded its own material over
+        // the shadow colour. Only in core, which is exactly where nobody looks.
+
+        const bool lightingWasEnabled = Lighting::getInstance()->isEnabled();
+
         lgPushAttrib(GL_ENABLE_BIT);
-        lgDisableLegacy(GL_LIGHTING);
+        Lighting::getInstance()->disable();
         lgDisableLegacy(GL_TEXTURE_2D);
         GlobalState::getInstance()->disableColorOutput();
         GlobalState::getInstance()->disableTextureRendering();
-        glColor3d(m_shadowColor[0], m_shadowColor[1], m_shadowColor[2]);
+        lgColor3d(m_shadowColor[0], m_shadowColor[1], m_shadowColor[2]);
 
         if (shaderPath)
         {
@@ -193,6 +202,10 @@ void SceneBase::defaultSceneRender(int pass)
 
 		GlobalState::getInstance()->enableColorOutput();
         GlobalState::getInstance()->enableTextureRendering();
+
+        if (lightingWasEnabled)
+            Lighting::getInstance()->enable();
+
         lgPopAttrib();
 
         if (shaderPath)

@@ -23,6 +23,7 @@
 //
 
 #include <ivf/RenderContext.h>
+#include <ivf/Texture.h>
 #include <ivf/PickShader.h>
 #include <ivf/BlinnPhongShader.h>
 
@@ -50,6 +51,7 @@ RenderContext::RenderContext()
     , m_globalAmbient(0.0f, 0.0f, 0.0f, 1.0f)
     , m_useTexture(false)
     , m_profile(RenderProfile::Mixed)
+    , m_coreContext(-1)
     , m_legacyDrawDepth(0)
     , m_unlitVao(0)
     , m_unlitVbo(0)
@@ -84,14 +86,35 @@ RenderProfile RenderContext::profile() const
     return m_profile;
 }
 
+bool RenderContext::isCoreContext() const
+{
+    return m_coreContext == 1;
+}
+
 bool RenderContext::legacyAllowed() const
 {
-    return m_profile != RenderProfile::Core;
+    // Two separate questions, and this used to ask only the first: does the
+    // library intend to use fixed function, and will the context accept it.
+    //
+    // Mixed on a core context answered "yes" to the first and got a torrent of
+    // GL_INVALID_OPERATION for the second -- and quietly broke lighting, because
+    // Material asks glIsEnabled(GL_LIGHTING), which is itself illegal there and
+    // returns false, so no material was ever uploaded and specular vanished.
+    // That combination is exactly what an application hits when it flips its
+    // context hints before its render profile.
+
+    return (m_profile != RenderProfile::Core) && (m_coreContext != 1);
 }
 
 bool RenderContext::shaderPathActive() const
 {
-    if (m_profile == RenderProfile::Legacy)
+    // Legacy asks for the fixed-function pipeline. On a core context there is
+    // none, so honouring it literally would draw nothing at all and report an
+    // error for every call that tried. The shader is the only pipeline present,
+    // so use it: a mismatched profile degrades to something that works rather
+    // than to a black window.
+
+    if ((m_profile == RenderProfile::Legacy) && (m_coreContext != 1))
         return false;
 
     // While an object is drawing with the program unbound, there is no active
@@ -134,6 +157,24 @@ void RenderContext::beginFrame()
         m_modelStack.pop();
     m_modelStack.push(glm::mat4(1.0f));
 
+    // Ask the context what it is, once. A context is guaranteed to exist here,
+    // which is not true everywhere legacyAllowed() is called from.
+
+    if (m_coreContext < 0)
+    {
+        GLint mask = 0;
+        glGetIntegerv(GL_CONTEXT_PROFILE_MASK, &mask);
+
+        // A context too old to know the query will have raised an error for it;
+        // clear that rather than leaving it for the next thing to trip over.
+
+        while (glGetError() != GL_NO_ERROR)
+        {
+        }
+
+        m_coreContext = ((mask & GL_CONTEXT_CORE_PROFILE_BIT) != 0) ? 1 : 0;
+    }
+
     clearLights();
 
     // The view belongs to the frame, not to the context. Leaving the previous
@@ -142,6 +183,27 @@ void RenderContext::beginFrame()
     // against the identity the fixed-function pipeline would have given it.
 
     m_view = glm::mat4(1.0f);
+
+    // The shader's uTexture sampler always points at unit 0, so the driver
+    // treats that unit as used on every draw -- even the ones where uUseTexture
+    // is 0 and the sample never happens. If nothing is bound there it warns
+    // about an incomplete texture, once per draw, which buries anything else
+    // the debug output has to say.
+    //
+    // Binding the placeholder at the top of the frame keeps the unit complete.
+    // Texture's own bind cache has to be told, or it will skip the next real
+    // bind believing it is already current.
+
+    if (shaderPathActive())
+    {
+        ensureWhiteTexture();
+
+        if (m_whiteTexture != 0)
+        {
+            glBindTexture(GL_TEXTURE_2D, m_whiteTexture);
+            Texture::invalidateBindCache();
+        }
+    }
 
     // Activate the shader so it is ready for per-shape uploads -- but only if the
     // profile actually wants it. Binding it unconditionally meant that selecting
