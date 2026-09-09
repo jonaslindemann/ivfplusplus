@@ -30,6 +30,9 @@
 
 #include <ivf/Culling.h>
 #include <ivf/BufferSelection.h>
+#include <ivf/ShadowMap.h>
+
+#include <glm/glm.hpp>
 
 namespace ivf {
 
@@ -115,6 +118,39 @@ private:
 	bool m_preShadow;
 	bool m_postShadow;
     double m_shadowColor[3];
+
+	ShadowMapPtr m_shadowMap;
+	bool m_useShadowMap;
+	bool m_shadowDirty;
+	int m_shadowMapSize;
+	glm::vec3 m_shadowLightDir;
+	glm::vec3 m_shadowCenter;
+	float m_shadowRadius;
+	float m_shadowStrength;
+
+	/**
+	 * Bring the shadow map up to date and hand it to the shader.
+	 *
+	 * Runs before the visible pass. The depth pass itself only happens when the
+	 * map is dirty; on every other frame this just re-binds what is already
+	 * there, which is the whole point of the cache.
+	 */
+	void renderShadowMap();
+
+	/**
+	 * Draw the scene into the shadow map from the light's point of view.
+	 *
+	 * Leaves the framebuffer, viewport, cull state, depth state and
+	 * RenderContext matrices as it found them -- it happens in the middle of the
+	 * caller's frame, not instead of it.
+	 *
+	 * Returns false if the pass could not run, in which case the map holds
+	 * nothing and must not be handed to the shader.
+	 */
+	bool renderShadowDepth(const glm::mat4& lightSpaceMatrix);
+
+	/** projection * view for the current light direction and shadow bounds. */
+	glm::mat4 calcLightSpaceMatrix() const;
 
 public:
 	void doResize(int width, int height);
@@ -228,6 +264,61 @@ public:
     void setShadowColor(double red, double green, double blue);
 
 	void setShadowPrePost(bool renderPre, bool renderPost);
+
+	/**
+	 * Turn shadow mapping on.
+	 *
+	 * The scene is drawn once into a depth texture from the light's point of
+	 * view, and the visible pass samples it. Unlike the flat projected shadow
+	 * this replaces, it costs no second colour pass, falls on whatever geometry
+	 * is actually below rather than only on y = 0, and follows the light
+	 * direction instead of always pointing straight down.
+	 *
+	 * Requires the shader path; in RenderProfile::Legacy this has no effect and
+	 * setRenderFlatShadow() remains the only shadow available.
+	 */
+	void setUseShadowMap(bool flag);
+	bool useShadowMap() const;
+
+	/** Edge length of the depth texture. Default 2048. */
+	void setShadowMapSize(int size);
+	int shadowMapSize() const;
+
+	/**
+	 * World-space direction the light travels in, pointing away from the light.
+	 *
+	 * Deliberately independent of any Light in the scene. The scene light in a
+	 * viewer is usually a headlight fixed to the camera, and a shadow that
+	 * followed it would swing around the model as it is orbited, which reads as
+	 * a bug. Default is a high light from the front left.
+	 */
+	void setShadowLightDirection(double x, double y, double z);
+
+	/**
+	 * The sphere the light frustum is fitted to.
+	 *
+	 * Everything meant to cast or receive has to be inside it: geometry outside
+	 * is simply absent from the map, and so is lit. Default is the origin with a
+	 * radius of 10.
+	 */
+	void setShadowBounds(double centerX, double centerY, double centerZ, double radius);
+
+	/** How dark a fully shadowed surface goes, 0 to 1. Default 0.5. */
+	void setShadowStrength(double strength);
+	double shadowStrength() const;
+
+	/**
+	 * Mark the shadow map as out of date, so the next frame redraws it.
+	 *
+	 * The map only depends on the geometry, the light direction and the bounds,
+	 * so moving the camera does not invalidate it -- which is what makes it worth
+	 * caching in a viewer, where the camera is what moves nearly all the time.
+	 * Every shadow setter here calls this for itself; what the application has to
+	 * report is a change to the scene.
+	 *
+	 * Calling it more than once between frames costs nothing.
+	 */
+	void invalidateShadowMap();
 
 protected:
     virtual void doPostClear();

@@ -371,8 +371,14 @@ bool GLPrimitive::buildAndDrawVAO(GLenum legacyPrimitive, bool wireframe,
 	// white. Reading the material diffuse instead -- which is what the shader
 	// falls back to -- drew those lines in the object's material colour.
 
-	prog->setUniformInt("uUnlit",           isUnlit ? 1 : 0);
-	prog->setUniformInt("uUseVertexColor",  (useColors || isUnlit) ? 1 : 0);
+	// Both describe how the fragment should be coloured, which a depth pass has
+	// no opinion about and no uniforms for.
+
+	if (!rcDepthPass())
+	{
+		prog->setUniformInt("uUnlit",           isUnlit ? 1 : 0);
+		prog->setUniformInt("uUseVertexColor",  (useColors || isUnlit) ? 1 : 0);
+	}
 
 	// A primitive read from a file usually carries one material per index set --
 	// the AC3D loader builds them that way, so a model's parts are different

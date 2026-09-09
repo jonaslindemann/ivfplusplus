@@ -61,6 +61,11 @@ GLBase::GLBase ()
 	// Set objectname to nullptr
 
 	m_renderMaterial = true;
+
+	// Everything casts unless it says otherwise. Annotation classes turn this
+	// off in their own constructors.
+
+	m_castShadow = true;
 }
 
 // ------------------------------------------------------------
@@ -88,6 +93,14 @@ GLBase& GLBase::operator = (const GLBase &arg)
 // ------------------------------------------------------------
 void GLBase::render ()
 {
+	// A shadow map records occlusion, not appearance, so an object that has been
+	// told it does not cast has nothing to contribute. Testing here rather than
+	// inside renderImmediate() means a Composite marked this way takes its whole
+	// subtree out of the pass with it.
+
+	if (rcDepthPass() && !m_castShadow)
+		return;
+
 	if ((m_state == OS_ON)&&(!m_culled))
 	{
 		if (useDisplayList())
@@ -174,10 +187,17 @@ void GLBase::renderImmediate ()
 
 	doBeginTransform();
 
-	if ((m_selectState == SS_ON)&&(m_useSelectShape))
+	// Neither of these changes the depth the pass is there to record: the select
+	// shape is extra annotation geometry, and the material only sets uniforms the
+	// depth program does not have. Skipping them is most of what makes the depth
+	// pass cheaper than a second full draw.
+
+	const bool depthPass = rcDepthPass();
+
+	if ((m_selectState == SS_ON)&&(m_useSelectShape)&&(!depthPass))
 		doCreateSelect();
 
-	if (m_renderMaterial)
+	if (m_renderMaterial && !depthPass)
 		doCreateMaterial();
 
 	doPreGeometry();
@@ -531,4 +551,14 @@ void GLBase::setRenderMaterial(bool flag)
 bool GLBase::getRenderMaterial()
 {
 	return m_renderMaterial;
+}
+
+void GLBase::setCastShadow(bool flag)
+{
+	m_castShadow = flag;
+}
+
+bool GLBase::castsShadow()
+{
+	return m_castShadow;
 }

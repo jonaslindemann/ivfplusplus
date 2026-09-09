@@ -30,6 +30,13 @@ BillBoard::BillBoard()
 	m_camera = nullptr;
 	m_alignObject = IVF_ALIGN_CAMERA;
 	this->setBillboardType(IVF_BILLBOARD_Y);
+
+	// A billboard turns to face the camera, so what it would cast into a shadow
+	// map is a quad that swings around as the view moves -- annotation, not an
+	// obstruction. TextLabel inherits this, which is what keeps node numbers
+	// from laying black rectangles across the model.
+
+	this->setCastShadow(false);
 }
 
 BillBoard::~BillBoard()

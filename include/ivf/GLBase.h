@@ -68,11 +68,26 @@ private:
 	bool m_useSelectShape;
 	bool m_culled;
 	bool m_renderMaterial;
+	bool m_castShadow;
 	RenderStatePtr m_renderState;
 
 public:
 	bool getRenderMaterial();
 	void setRenderMaterial(bool flag);
+
+	/**
+	 * Whether this object is drawn into a shadow map.
+	 *
+	 * Default is true. Turn it off for anything whose silhouette is not a
+	 * physical obstruction -- text labels, billboards, grids, cursors and other
+	 * annotation. Such an object would otherwise cast the shadow of its quad,
+	 * which reads as a black rectangle lying across the model.
+	 *
+	 * Setting it on a Composite covers everything below it: the depth pass skips
+	 * the object before it traverses its children.
+	 */
+	void setCastShadow(bool flag);
+	bool castsShadow();
 	bool isSelectEnabled();
 	void disableSelect();
 	void enableSelect();

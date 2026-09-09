@@ -76,6 +76,26 @@ inline void rcSetPickMode(bool flag)                     { RenderContext::instan
 inline bool rcPickMode()                                 { return RenderContext::instance().pickMode(); }
 inline void rcSetPickName(unsigned int name)             { RenderContext::instance().setPickName(name); }
 
+// ---- Shadow mapping ----
+inline ShaderProgram* rcUseDepthShader()                 { return RenderContext::instance().useDepthShader(); }
+inline void rcSetDepthPass(bool flag)                    { RenderContext::instance().setDepthPass(flag); }
+
+/**
+ * True while the scene is being drawn into a shadow map.
+ *
+ * Only depth matters in that pass, so anything that contributes colour rather
+ * than occlusion should test this and skip itself, in the same way it tests
+ * rcPickMode().
+ */
+inline bool rcDepthPass()                                { return RenderContext::instance().depthPass(); }
+inline void rcSetShadowMap(GLuint tex, int unit)         { RenderContext::instance().setShadowMap(tex, unit); }
+inline void rcSetLightSpaceMatrix(const glm::mat4& m)    { RenderContext::instance().setLightSpaceMatrix(m); }
+inline const glm::mat4& rcLightSpaceMatrix()             { return RenderContext::instance().lightSpaceMatrix(); }
+inline void rcSetShadowLightDirection(const glm::vec3& d) { RenderContext::instance().setShadowLightDirection(d); }
+inline const glm::vec3& rcShadowLightDirection()         { return RenderContext::instance().shadowLightDirection(); }
+inline void rcSetShadowStrength(float s)                 { RenderContext::instance().setShadowStrength(s); }
+inline float rcShadowStrength()                          { return RenderContext::instance().shadowStrength(); }
+
 // ---- Shader update ----
 inline void rcUpdateShader() {
     RenderContext::instance().updateShader(RenderContext::instance().shader());

@@ -25,6 +25,7 @@
 #include <ivf/RenderContext.h>
 #include <ivf/Texture.h>
 #include <ivf/PickShader.h>
+#include <ivf/DepthShader.h>
 #include <ivf/BlinnPhongShader.h>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -58,6 +59,12 @@ RenderContext::RenderContext()
     , m_unlitCapacity(0)
     , m_pickMode(false)
     , m_pickColor(0.0f, 0.0f, 0.0f, 1.0f)
+    , m_depthPass(false)
+    , m_shadowTexture(0)
+    , m_shadowTextureUnit(4)
+    , m_lightSpaceMatrix(1.0f)
+    , m_shadowLightDir(0.0f, -1.0f, 0.0f)
+    , m_shadowStrength(0.5f)
     , m_textureMode(0)
     , m_textureEnvColor(1.0f, 1.0f, 1.0f, 1.0f)
     , m_textureMatrix(1.0f)
@@ -332,6 +339,14 @@ void RenderContext::updateShader(ShaderProgram* prog) const
     prog->setUniformMat4("uView",       m_view);
     prog->setUniformMat4("uProjection", m_projection);
 
+    // The depth program has three uniforms and needs no more: nothing below
+    // affects the depth that gets written. Stopping here is not only tidier than
+    // uploading three dozen values the program does not declare -- it is most of
+    // why a depth pass is cheaper than a second full traversal.
+
+    if (m_depthPass)
+        return;
+
     // Normal matrix: transpose of inverse of upper-left 3x3 of (view * model)
     glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(m_view * model));
     prog->setUniformMat3("uNormalMatrix", normalMatrix);
@@ -371,6 +386,25 @@ void RenderContext::updateShader(ShaderProgram* prog) const
 
     if (m_pickMode)
         prog->setUniformVec4("uPickColor", m_pickColor);
+
+    // Shadow state. A texture of 0 means no map has been rendered, so nothing to
+    // sample and the shader takes its unshadowed path.
+
+    const bool sampleShadow = (m_shadowTexture != 0);
+
+    prog->setUniformInt("uUseShadow", sampleShadow ? 1 : 0);
+
+    if (sampleShadow)
+    {
+        prog->setUniformMat4("uLightSpaceMatrix", m_lightSpaceMatrix);
+        prog->setUniformFloat("uShadowStrength", m_shadowStrength);
+
+        // The bias test compares against the interpolated normal, which arrives
+        // in eye space, so the light direction has to be put there too.
+
+        prog->setUniformVec3("uShadowLightDirView",
+                             glm::normalize(glm::mat3(m_view) * -m_shadowLightDir));
+    }
 
     prog->setUniformInt("uLightCount", m_lightCount);
 
@@ -503,6 +537,7 @@ void RenderContext::useBlinnPhong()
     m_shader = (ShaderProgram*)m_ownedShader;
     m_shader->use();
     m_shader->setUniformInt("uTexture", 0);
+    m_shader->setUniformInt("uShadowMap", m_shadowTextureUnit);
 
     ensureWhiteTexture();
     applyDefaultMaterial();
@@ -567,6 +602,86 @@ unsigned int RenderContext::decodePickName(unsigned char r, unsigned char g, uns
 
     valid = (encoded != 0);
     return valid ? (encoded - 1) : 0;
+}
+
+// ---- Shadow mapping ----
+
+ShaderProgram* RenderContext::useDepthShader()
+{
+    if (!m_depthShader || !m_depthShader->isLinked())
+    {
+        m_depthShader = DepthShader::create();
+
+        if (!m_depthShader->isLinked())
+        {
+            std::cerr << "RenderContext: DepthShader failed to compile/link" << std::endl;
+            return nullptr;
+        }
+    }
+
+    ShaderProgram* previous = m_shader;
+
+    m_shader = (ShaderProgram*)m_depthShader;
+    m_shader->use();
+
+    return previous;
+}
+
+void RenderContext::setDepthPass(bool flag)
+{
+    m_depthPass = flag;
+}
+
+bool RenderContext::depthPass() const
+{
+    return m_depthPass;
+}
+
+void RenderContext::setShadowMap(GLuint texture, int textureUnit)
+{
+    m_shadowTexture = texture;
+
+    if (textureUnit != m_shadowTextureUnit)
+    {
+        m_shadowTextureUnit = textureUnit;
+
+        // The sampler is otherwise assigned only when the shader changes, so a
+        // unit changed mid-run would leave the shader reading the old one.
+
+        if (m_shader && m_shader->isLinked())
+            m_shader->setUniformInt("uShadowMap", m_shadowTextureUnit);
+    }
+}
+
+void RenderContext::setLightSpaceMatrix(const glm::mat4& m)
+{
+    m_lightSpaceMatrix = m;
+}
+
+const glm::mat4& RenderContext::lightSpaceMatrix() const
+{
+    return m_lightSpaceMatrix;
+}
+
+void RenderContext::setShadowLightDirection(const glm::vec3& worldDirection)
+{
+    if (glm::dot(worldDirection, worldDirection) > 1e-12f)
+        m_shadowLightDir = glm::normalize(worldDirection);
+}
+
+const glm::vec3& RenderContext::shadowLightDirection() const
+{
+    return m_shadowLightDir;
+}
+
+void RenderContext::setShadowStrength(float strength)
+{
+    m_shadowStrength = (strength < 0.0f) ? 0.0f : ((strength > 1.0f) ? 1.0f : strength);
+}
+
+float RenderContext::shadowStrength() const
+{
+    return m_shadowStrength;
 }
 
 // ---- Fixed-function state mirrored for the shader ----

@@ -274,7 +274,23 @@ void Grid::refresh()
 void Grid::doCreateGeometry()
 {
 	if (m_useAxis) m_axis->render();
-	if (m_useSurface) m_surface->render();
+
+	if (m_useSurface)
+	{
+		// The surface, the corners, the outline and the grid lines all lie at the
+		// plane's own y. Drawing the filled quad first at exactly that depth
+		// leaves every line that follows failing a GL_LESS test against it, so
+		// the grid comes out stippled or missing entirely. Pushing only the fill
+		// away from the eye keeps the plane where it was and lets the lines win.
+
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glPolygonOffset(1.0f, 1.0f);
+
+		m_surface->render();
+
+		glDisable(GL_POLYGON_OFFSET_FILL);
+	}
+
 	if (m_useCorners) m_corners->render();
 	if (m_useOutline) m_outline->render();
 	if (m_useGrid) m_gridLines->render();

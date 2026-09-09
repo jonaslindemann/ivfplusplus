@@ -318,6 +318,58 @@ public:
     /** Returns the currently assigned shader, or nullptr. */
     ShaderProgram* shader() const;
 
+    // ---- Shadow mapping ----
+
+    /**
+     * Activate the built-in depth-only shader and return the shader that was
+     * active, so the caller can put it back.
+     *
+     * Creates the program on first use. Returns nullptr if it will not link, in
+     * which case the caller should skip the depth pass and leave shadows off.
+     */
+    ShaderProgram* useDepthShader();
+
+    /**
+     * Mark the depth pass as running.
+     *
+     * While this is set the traversal skips everything that does not contribute
+     * depth -- materials, select geometry, and objects that have been told they
+     * do not cast. Anything drawing its own colour has to test it, in the same
+     * way it tests pickMode().
+     */
+    void setDepthPass(bool flag);
+    bool depthPass() const;
+
+    /**
+     * The shadow map to sample while shading, and the texture unit it is bound
+     * to. Setting a texture of 0 turns shadow sampling off.
+     */
+    void setShadowMap(GLuint texture, int textureUnit);
+
+    /** projection * view of the light the shadow map was rendered from. */
+    void setLightSpaceMatrix(const glm::mat4& m);
+    const glm::mat4& lightSpaceMatrix() const;
+
+    /**
+     * World-space direction the shadow-casting light travels in.
+     *
+     * Used only to scale the depth bias by how obliquely a surface faces the
+     * light. The shadow itself comes from the map, so this does not have to
+     * agree with any Light in the scene -- and in a viewer it usually should
+     * not, since a headlight that follows the camera would swing the shadow
+     * around the model as it is orbited.
+     */
+    void setShadowLightDirection(const glm::vec3& worldDirection);
+    const glm::vec3& shadowLightDirection() const;
+
+    /**
+     * How dark a fully shadowed surface goes, 0 (no shadow) to 1 (no direct
+     * light at all). Ambient and emission are never attenuated, so even 1.0
+     * leaves a surface readable rather than black.
+     */
+    void setShadowStrength(float strength);
+    float shadowStrength() const;
+
     // ---- Global shader parameters ----
 
     /**
@@ -454,6 +506,14 @@ private:
     ShaderProgramPtr  m_pickShader;
     bool              m_pickMode;
     glm::vec4         m_pickColor;
+
+    ShaderProgramPtr  m_depthShader;
+    bool              m_depthPass;
+    GLuint            m_shadowTexture;
+    int               m_shadowTextureUnit;
+    glm::mat4         m_lightSpaceMatrix;
+    glm::vec3         m_shadowLightDir;
+    float             m_shadowStrength;
 
     bool              m_forceUnlit;
 

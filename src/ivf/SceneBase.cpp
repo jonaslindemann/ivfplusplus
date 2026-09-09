@@ -28,6 +28,11 @@
 #include <ivf/LegacyGL.h>
 #include <ivf/ShaderProgram.h>
 #include <ivf/Lighting.h>
+#include <ivf/rc.h>
+
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <cmath>
 
 using namespace ivf;
 
@@ -65,6 +70,14 @@ SceneBase::SceneBase()
 
 	m_preShadow = true;
 	m_postShadow = true;
+
+	m_useShadowMap = false;
+	m_shadowDirty = true;
+	m_shadowMapSize = 2048;
+	m_shadowLightDir = glm::normalize(glm::vec3(-0.45f, -1.0f, -0.35f));
+	m_shadowCenter = glm::vec3(0.0f, 0.0f, 0.0f);
+	m_shadowRadius = 10.0f;
+	m_shadowStrength = 0.5f;
 }
 
 SceneBase::~SceneBase()
@@ -130,6 +143,8 @@ void SceneBase::doWorldLighting(int pass)
 
 void SceneBase::defaultSceneRender(int pass)
 {
+	this->renderShadowMap();
+
 	m_preComposite->render();
 	m_composite->render();
 	m_postComposite->render();
@@ -469,24 +484,38 @@ void SceneBase::addChild(Shape *shape)
 
 	m_composite->addChild(shape);
 	m_dirty = true;
+	this->invalidateShadowMap();
 }
 
 Shape* SceneBase::removeChild(int idx)
 {
-	return m_composite->removeChild(idx);
+	// The two assignments below used to sit after the return, where they never
+	// ran. That left m_dirty false after a removal, so pick() went on consulting
+	// a selection map that still held the shape that had just been taken out.
+
+	Shape* removed = m_composite->removeChild(idx);
+
 	m_dirty = true;
+	this->invalidateShadowMap();
+
+	return removed;
 }
 
 Shape* SceneBase::removeChild(Shape *shape)
 {
-	return m_composite->removeShape(shape);
+	Shape* removed = m_composite->removeShape(shape);
+
 	m_dirty = true;
+	this->invalidateShadowMap();
+
+	return removed;
 }
 
 void SceneBase::deleteAll()
 {
 	m_composite->deleteAll();
 	m_dirty = true;
+	this->invalidateShadowMap();
     this->doPostClear();
 }
 
@@ -494,6 +523,7 @@ void SceneBase::clear()
 {
 	m_composite->clear();
 	m_dirty = true;
+	this->invalidateShadowMap();
     this->doPostClear();
 }
 
@@ -630,6 +660,270 @@ void SceneBase::setShadowColor(double red, double green, double blue)
     m_shadowColor[0] = red;
     m_shadowColor[1] = green;
     m_shadowColor[2] = blue;
+}
+
+glm::mat4 SceneBase::calcLightSpaceMatrix() const
+{
+	const glm::vec3 dir = glm::normalize(m_shadowLightDir);
+	const float radius = (m_shadowRadius > 1e-4f) ? m_shadowRadius : 1.0f;
+
+	// Stand the light off by twice the radius, so the whole sphere sits in front
+	// of it whatever direction it comes from.
+
+	const glm::vec3 eye = m_shadowCenter - dir * (radius * 2.0f);
+
+	// lookAt degenerates when the up vector is parallel to the view direction,
+	// which is exactly the case a light straight overhead produces.
+
+	const glm::vec3 up = (std::fabs(dir.y) > 0.99f) ? glm::vec3(0.0f, 0.0f, 1.0f)
+	                                                : glm::vec3(0.0f, 1.0f, 0.0f);
+
+	const glm::mat4 lightView = glm::lookAt(eye, m_shadowCenter, up);
+
+	// Fitted to the bounding sphere and no larger. Every unit of slack here is
+	// resolution thrown away: the map is a fixed number of texels spread over
+	// whatever the frustum covers.
+
+	const glm::mat4 lightProj = glm::ortho(-radius, radius, -radius, radius,
+	                                       radius * 0.5f, radius * 3.5f);
+
+	return lightProj * lightView;
+}
+
+void SceneBase::renderShadowMap()
+{
+	// Shadow mapping is a shader technique; there is nothing behind the fixed
+	// function pipeline to sample a depth texture with. Picking renders the same
+	// composites to answer a different question and must not pay for this.
+
+	if (!m_useShadowMap || !rcIsShaderActive() || rcPickMode() || rcDepthPass())
+		return;
+
+	if (m_shadowMap == nullptr)
+		m_shadowMap = new ShadowMap();
+
+	const bool wasValid = m_shadowMap->isValid();
+
+	if (!m_shadowMap->initialize(m_shadowMapSize))
+	{
+		// A target that will not complete is not worth retrying every frame, and
+		// leaving m_useShadowMap set would keep the shader sampling a texture
+		// that was never rendered.
+
+		m_useShadowMap = false;
+		rcSetShadowMap(0, 4);
+		return;
+	}
+
+	// A map that was just created holds nothing yet, whatever the flag says.
+
+	if (!wasValid)
+		m_shadowDirty = true;
+
+	if (m_shadowDirty)
+	{
+		const glm::mat4 lightSpaceMatrix = this->calcLightSpaceMatrix();
+
+		m_shadowMap->setLightSpaceMatrix(lightSpaceMatrix);
+
+		if (!this->renderShadowDepth(lightSpaceMatrix))
+			return;
+
+		m_shadowDirty = false;
+	}
+
+	// Done every frame, cached or not: the texture unit and the uniforms are
+	// global state that anything else drawing in this context may have changed,
+	// and re-asserting them costs a handful of calls per frame rather than per
+	// shape.
+
+	glActiveTexture(GL_TEXTURE0 + 4);
+	glBindTexture(GL_TEXTURE_2D, m_shadowMap->depthTexture());
+	glActiveTexture(GL_TEXTURE0);
+
+	rcSetShadowMap(m_shadowMap->depthTexture(), 4);
+	rcSetLightSpaceMatrix(m_shadowMap->lightSpaceMatrix());
+	rcSetShadowLightDirection(m_shadowLightDir);
+	rcSetShadowStrength(m_shadowStrength);
+}
+
+bool SceneBase::renderShadowDepth(const glm::mat4& lightSpaceMatrix)
+{
+	// Save what the pass is about to change. This runs inside the caller's frame,
+	// so everything here has to be handed back.
+
+	GLint previousFbo = 0;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFbo);
+
+	GLint previousViewport[4];
+	glGetIntegerv(GL_VIEWPORT, previousViewport);
+
+	const GLboolean hadCullFace = glIsEnabled(GL_CULL_FACE);
+	const GLboolean hadDepthTest = glIsEnabled(GL_DEPTH_TEST);
+	const GLboolean hadBlend = glIsEnabled(GL_BLEND);
+
+	GLint previousCullMode = GL_BACK;
+	glGetIntegerv(GL_CULL_FACE_MODE, &previousCullMode);
+
+	GLboolean previousDepthMask = GL_TRUE;
+	glGetBooleanv(GL_DEPTH_WRITEMASK, &previousDepthMask);
+
+	GLint previousDepthFunc = GL_LESS;
+	glGetIntegerv(GL_DEPTH_FUNC, &previousDepthFunc);
+
+	const glm::mat4 savedProjection = rcProjection();
+	const glm::mat4 savedView = rcView();
+
+	// rcIsShaderActive() above guarantees a program was bound, so the previous
+	// shader is only null if the depth program would not link -- in which case
+	// the scene shader is still current and drawing the scene now would fill the
+	// map with nonsense.
+
+	ShaderProgram* previousShader = rcUseDepthShader();
+
+	if (previousShader == nullptr)
+	{
+		m_useShadowMap = false;
+		rcSetShadowMap(0, 4);
+		return false;
+	}
+
+	m_shadowMap->bind();
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LESS);
+	glDisable(GL_BLEND);
+
+	// Culling front faces means the depth written is the far side of each solid,
+	// which puts the bias error inside the object where it cannot show. Beams are
+	// closed tubes, so this is safe for them; it is the reason a flat receiver
+	// like a ground plane still needs a bias at all.
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	// The depth program takes uProjection and uView like any other, so installing
+	// the light's matrices is all it takes for the existing traversal to draw
+	// from the light instead of from the camera.
+
+	rcSetProjection(lightSpaceMatrix);
+	rcSetView(glm::mat4(1.0f));
+	rcSetDepthPass(true);
+
+	if (m_preShadow)
+		m_preComposite->render();
+
+	m_composite->render();
+
+	if (m_postShadow)
+		m_postComposite->render();
+
+	rcSetDepthPass(false);
+
+	// Restore
+
+	rcSetProjection(savedProjection);
+	rcSetView(savedView);
+
+	rcSetShader(previousShader);
+	rcUseShader();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, (GLuint)previousFbo);
+	glViewport(previousViewport[0], previousViewport[1], previousViewport[2], previousViewport[3]);
+
+	glCullFace((GLenum)previousCullMode);
+	glDepthMask(previousDepthMask);
+	glDepthFunc((GLenum)previousDepthFunc);
+
+	if (!hadCullFace)
+		glDisable(GL_CULL_FACE);
+	if (!hadDepthTest)
+		glDisable(GL_DEPTH_TEST);
+	if (hadBlend)
+		glEnable(GL_BLEND);
+
+	return true;
+}
+
+void SceneBase::setUseShadowMap(bool flag)
+{
+	if (flag && !m_useShadowMap)
+		m_shadowDirty = true;
+
+	m_useShadowMap = flag;
+
+	if (!flag)
+		rcSetShadowMap(0, 4);
+}
+
+bool SceneBase::useShadowMap() const
+{
+	return m_useShadowMap;
+}
+
+void SceneBase::setShadowMapSize(int size)
+{
+	if ((size > 0) && (size != m_shadowMapSize))
+	{
+		m_shadowMapSize = size;
+		m_shadowDirty = true;
+	}
+}
+
+int SceneBase::shadowMapSize() const
+{
+	return m_shadowMapSize;
+}
+
+void SceneBase::setShadowLightDirection(double x, double y, double z)
+{
+	const glm::vec3 dir((float)x, (float)y, (float)z);
+
+	if (glm::dot(dir, dir) > 1e-12f)
+	{
+		const glm::vec3 normalized = glm::normalize(dir);
+
+		if (normalized != m_shadowLightDir)
+		{
+			m_shadowLightDir = normalized;
+			m_shadowDirty = true;
+		}
+	}
+}
+
+void SceneBase::setShadowBounds(double centerX, double centerY, double centerZ, double radius)
+{
+	const glm::vec3 center((float)centerX, (float)centerY, (float)centerZ);
+	const float r = (radius > 0.0) ? (float)radius : m_shadowRadius;
+
+	// Compared rather than assigned unconditionally: this is re-applied whenever
+	// the application re-states its shadow settings, and an invalidation on every
+	// such call would defeat the cache for no change at all.
+
+	if ((center != m_shadowCenter) || (r != m_shadowRadius))
+	{
+		m_shadowCenter = center;
+		m_shadowRadius = r;
+		m_shadowDirty = true;
+	}
+}
+
+void SceneBase::setShadowStrength(double strength)
+{
+	m_shadowStrength = (float)((strength < 0.0) ? 0.0 : ((strength > 1.0) ? 1.0 : strength));
+}
+
+double SceneBase::shadowStrength() const
+{
+	return (double)m_shadowStrength;
+}
+
+void SceneBase::invalidateShadowMap()
+{
+	m_shadowDirty = true;
 }
 
 void ivf::SceneBase::setShadowPrePost(bool renderPre, bool renderPost)

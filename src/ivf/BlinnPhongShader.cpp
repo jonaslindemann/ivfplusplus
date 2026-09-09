@@ -47,6 +47,14 @@ out vec3 vNormal;
 out vec2 vTexCoord;
 out vec4 vColor;
 
+// Position in the shadow map's clip space. Computed here rather than in the
+// fragment shader because vFragPos is in eye space -- the world position the
+// light matrix expects is gone by then, and reconstructing it would mean
+// carrying an inverse view matrix for no reason.
+out vec4 vShadowCoord;
+
+uniform mat4 uLightSpaceMatrix;
+
 // ---- Wide lines ----
 //
 // Nonzero when this draw is a line expanded into triangles. See
@@ -63,6 +71,7 @@ void main()
     vNormal       = normalize(uNormalMatrix * aNormal);
     vTexCoord     = aTexCoord;
     vColor        = aColor;
+    vShadowCoord  = uLightSpaceMatrix * uModel * vec4(aPosition, 1.0);
 
     gl_Position   = uProjection * viewPos;
 
@@ -111,6 +120,7 @@ in vec3 vFragPos;
 in vec3 vNormal;
 in vec2 vTexCoord;
 in vec4 vColor;
+in vec4 vShadowCoord;
 
 uniform vec4  uMatAmbient;
 uniform vec4  uMatDiffuse;
@@ -181,6 +191,57 @@ vec4 computeLight(Light light, vec3 N, vec3 V, vec4 ambientColor, vec4 diffuseCo
     }
 
     return ambient + attenuation * (diffuse + specular);
+}
+
+// ---- Shadow mapping ----
+//
+// A sampler2DShadow does the depth comparison in the sampler, so each fetch
+// returns a filtered fraction of four comparisons rather than a depth. Four
+// fetches on a half-texel grid therefore cover the same neighbourhood a 3x3
+// pattern of plain samples would, at less than half the cost.
+
+uniform bool      uUseShadow;
+uniform sampler2DShadow uShadowMap;
+uniform float     uShadowStrength;
+
+// Direction towards the shadow-casting light, in eye space -- the space the
+// interpolated normal is already in. Only the depth bias uses it; the shadow
+// itself comes from the map.
+uniform vec3      uShadowLightDirView;
+
+float shadowVisibility(vec3 N)
+{
+    if (!uUseShadow)
+        return 1.0;
+
+    vec3 proj = vShadowCoord.xyz / vShadowCoord.w;
+    proj = proj * 0.5 + 0.5;
+
+    // Beyond the far plane of the light there is no information, so treat it as
+    // lit. The sides are handled by the map's border colour instead of by a test
+    // here, which keeps the common case branch-free.
+
+    if (proj.z > 1.0)
+        return 1.0;
+
+    // Slope-scaled depth bias. A surface seen edge-on from the light crosses
+    // many texels within one fragment, so it needs more slack than one facing
+    // the light square on, which needs almost none.
+
+    float cosTheta = clamp(dot(normalize(N), normalize(uShadowLightDirView)), 0.0, 1.0);
+    float bias = mix(0.0035, 0.0004, cosTheta);
+
+    proj.z -= bias;
+
+    vec2 texel = 1.0 / vec2(textureSize(uShadowMap, 0));
+
+    float sum = 0.0;
+    sum += texture(uShadowMap, vec3(proj.xy + vec2(-0.5, -0.5) * texel, proj.z));
+    sum += texture(uShadowMap, vec3(proj.xy + vec2( 0.5, -0.5) * texel, proj.z));
+    sum += texture(uShadowMap, vec3(proj.xy + vec2(-0.5,  0.5) * texel, proj.z));
+    sum += texture(uShadowMap, vec3(proj.xy + vec2( 0.5,  0.5) * texel, proj.z));
+
+    return sum * 0.25;
 }
 
 // ---- Texture environment ----
@@ -306,8 +367,15 @@ void main()
 
     vec4 color = uMatEmission + uGlobalAmbient * ambientColor;
 
+    vec4 lit = vec4(0.0);
+
     for (int i = 0; i < uLightCount; ++i)
-        color += computeLight(uLights[i], N, V, ambientColor, diffuseColor);
+        lit += computeLight(uLights[i], N, V, ambientColor, diffuseColor);
+
+    // Emission and global ambient are deliberately outside this: a shadowed
+    // surface loses direct light, it does not stop being lit by the room.
+
+    color += lit * (1.0 - uShadowStrength * (1.0 - shadowVisibility(N)));
 
     // Alpha comes from the material before texturing, so that a texture with an
     // alpha channel can then modify it. Assigning it afterwards -- as this used
