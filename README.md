@@ -115,10 +115,8 @@ Configure build options with CMake:
 ```cmake
 option(IVF_UI "Build user interface integration libraries." ON) 
 option(IVF_UI_FLTK "Build FLTK integration." ON)
-option(IVF_UI_WIN32 "Build Win32 integration." OFF)
 option(IVF_UI_GLFW "Build GLFW integration." ON)
 option(IVF_IMAGE "Build image support." ON)
-option(IVF_FONT "Build font support." OFF)
 option(IVF_EXAMPLES "Build examples." ON)
 option(IVF_DEBUG "Build with debug information." OFF)
 option(IVF_SHARED "Build as shared libraries." OFF)

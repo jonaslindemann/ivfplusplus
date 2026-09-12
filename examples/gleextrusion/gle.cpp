@@ -16,16 +16,9 @@
 #include <ivf/Switch.h>
 
 #include <ivfgle/Gle.h>
-#include <ivfgle/GleColorArray.h>
 #include <ivfgle/GleContour.h>
-#include <ivfgle/GleCoordArray.h>
-#include <ivfgle/GleExtrusion.h>
-#include <ivfgle/GlePolyCone.h>
-#include <ivfgle/GlePolyCylinder.h>
-#include <ivfgle/GleScalarArray.h>
 #include <ivfgle/GleSpiral.h>
 #include <ivfgle/GleSpiralCylinder.h>
-#include <ivfgle/GleTwistExtrusion.h>
 
 using namespace std;
 using namespace ivf;
@@ -84,11 +77,6 @@ ExampleWindow::ExampleWindow(int X, int Y, int W, int H)
     addClearEvent(this);
 }
 
-double rnd()
-{
-    return (double)rand() / (double)RAND_MAX;
-}
-
 void ExampleWindow::onInit(int width, int height)
 {
     enableBlinnPhongShader(0.2f, 0.2f, 0.2f);
@@ -114,51 +102,7 @@ void ExampleWindow::onInit(int width, int height)
     gle->setJoinStyle(TUBE_JN_ANGLE | TUBE_NORM_EDGE);
 
     ////////////////////////////////////////////////////////////////////
-    // Testing poly cylinder
-
-    int nPoints = 100;
-    double x = -2 * M_PI;
-    double y;
-    double deltaX = 4 * M_PI / (nPoints - 1);
-    int i;
-
-    GleColorArrayPtr colorArray = GleColorArray::create(nPoints + 2);
-    GleCoordArrayPtr coordArray = GleCoordArray::create(nPoints + 2);
-    GleScalarArrayPtr radiusArray = GleScalarArray::create(nPoints + 2);
-    GleScalarArrayPtr twistArray = GleScalarArray::create(nPoints + 2);
-
-    for (i = 0; i < nPoints; i++)
-    {
-        y = sin(x);
-        coordArray->setCoord(i + 1, x, y, 0.0);
-        colorArray->setColor(i + 1, rnd(), rnd(), rnd());
-        radiusArray->setValue(i + 1, rnd() * 0.2);
-        twistArray->setValue(i + 1, 10.0 - 20.0 * rnd());
-        x += deltaX;
-    }
-
-    coordArray->calcFirstAndLast();
-
-    auto polyCylinder = GlePolyCylinder::create();
-    polyCylinder->setPoints(coordArray);
-    polyCylinder->setColors(colorArray);
-    polyCylinder->setMaterial(material);
-
-    m_gleShapes->addChild(polyCylinder);
-
-    ////////////////////////////////////////////////////////////////////
-    // Testing poly cone
-
-    auto polyCone = GlePolyCone::create();
-    polyCone->setPoints(coordArray);
-    polyCone->setColors(colorArray);
-    polyCone->setRadius(radiusArray);
-    polyCone->setMaterial(material);
-
-    m_gleShapes->addChild(polyCone);
-
-    ////////////////////////////////////////////////////////////////////
-    // Test extrusion
+    // Contour swept by the spiral shapes below
 
     auto contourArray = GleContour::create(5);
     contourArray->setCoord(0, -0.2, -0.2);
@@ -167,28 +111,6 @@ void ExampleWindow::onInit(int width, int height)
     contourArray->setCoord(3, -0.2, 0.2);
     contourArray->setCoord(4, -0.2, -0.2);
     contourArray->calcNormals();
-
-    auto extrusion = GleExtrusion::create();
-    extrusion->setPoints(coordArray);
-    extrusion->setColors(colorArray);
-    extrusion->setContour(contourArray);
-    extrusion->setContourUp(0.0, 1.0, 0.0);
-    extrusion->setMaterial(material);
-
-    m_gleShapes->addChild(extrusion);
-
-    ////////////////////////////////////////////////////////////////////
-    // Test twist extrusion
-
-    auto twistExtrusion = GleTwistExtrusion::create();
-    twistExtrusion->setPoints(coordArray);
-    twistExtrusion->setColors(colorArray);
-    twistExtrusion->setContour(contourArray);
-    twistExtrusion->setContourUp(0.0, 1.0, 0.0);
-    twistExtrusion->setTwist(twistArray);
-    twistExtrusion->setMaterial(material);
-
-    m_gleShapes->addChild(twistExtrusion);
 
     ////////////////////////////////////////////////////////////////////
     // Test spiral

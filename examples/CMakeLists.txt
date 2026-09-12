@@ -63,10 +63,4 @@ if (IVF_EXAMPLES)
 	
 	endif (IVF_EXAMPLES_GENERIC)
 	
-	if (IVF_EXAMPLES_ASSIMP)
-	
-		add_subdirectory(assimp)
-		
-	endif (IVF_EXAMPLES_ASSIMP)
-	
 endif (IVF_EXAMPLES)

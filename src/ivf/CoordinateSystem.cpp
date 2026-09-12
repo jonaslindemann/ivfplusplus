@@ -44,11 +44,6 @@ CoordinateSystem::CoordinateSystem ()
 	//  	m_pointWorld.SetSize(4,1);
 	//  	m_pointTransformed.SetSize(4,1);
 
-	/*
-	m_grid = new OldGrid();
-	m_axis = new CIvfAxis();
-	*/
-
 	m_grid = new Grid();
 
 	setSnapUnit(1.0);

@@ -101,10 +101,8 @@ Available options:
 
 - `IVF_UI` - Build user interface integration libraries (default: ON)
 - `IVF_UI_FLTK` - Build FLTK integration (default: ON)
-- `IVF_UI_WIN32` - Build Win32 integration (default: OFF)
 - `IVF_UI_GLFW` - Build GLFW integration (default: ON)
 - `IVF_IMAGE` - Build image support (default: ON)
-- `IVF_FONT` - Build font support (default: OFF)
 - `IVF_EXAMPLES` - Build examples (default: ON)
 - `IVF_SHARED` - Build shared libraries (default: OFF)
 

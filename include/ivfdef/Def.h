@@ -117,12 +117,6 @@
 			#define IVFFLTK_API __declspec(dllimport)
 		#endif
 
-		#ifdef IVFUI_LIB
-			#define IVFUI_API __declspec(dllexport)
-		#else
-			#define IVFUI_API __declspec(dllimport)
-		#endif
-
 		#ifdef IVFWIDGET_LIB
 			#define IVFWIDGET_API __declspec(dllexport)
 		#else
@@ -147,18 +141,6 @@
 			#define IVFEXT_API __declspec(dllimport)
 		#endif
 
-		#ifdef IVFWIN32_LIB
-			#define IVFWIN32_API __declspec(dllexport)
-		#else
-			#define IVFWIN32_API __declspec(dllimport)
-		#endif
-
-		#ifdef IVFFONT_LIB
-			#define IVFFONT_API __declspec(dllexport)
-		#else
-			#define IVFFONT_API __declspec(dllimport)
-		#endif
-
 		#ifdef IVFGLE_LIB
 			#define IVFGLE_API __declspec(dllexport)
 		#else
@@ -171,14 +153,11 @@
 		#define IVF_API
 		#define IVFIMAGE_API
 		#define IVFFILE_API
-		#define IVFUI_API
 		#define IVFFLTK_API
 		#define IVFWIDGET_API
 		#define IVF3DUI_API
 		#define IVFCTL_API
 		#define IVFEXT_API
-		#define IVFWIN32_API
-		#define IVFFONT_API
 		#define IVFGLE_API
 	#endif
 #else
@@ -186,14 +165,11 @@
 		#define IVF_API
 		#define IVFIMAGE_API
 		#define IVFFILE_API
-		#define IVFUI_API
 		#define IVFFLTK_API
 		#define IVFWIDGET_API
 		#define IVF3DUI_API
 		#define IVFCTL_API
 		#define IVFEXT_API
-		#define IVFWIN32_API
-		#define IVFFONT_API
 		#define IVFGLE_API
 #endif
 

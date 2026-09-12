@@ -50,7 +50,6 @@
 #include <ivf/CulledScene.h>
 #include <ivf/Fog.h>
 #include <ivf/GenericButton.h>
-#include <ivf/SelectOrtho.h>
 #include <ivf/TextLabel.h>
 #include <ivf/Workspace.h>
 
@@ -65,7 +64,6 @@
 #include <ivf/Cursor.h>
 #include <ivf/Cylinder.h>
 #include <ivf/ExtrArrow.h>
-#include <ivf/FaceSet.h>
 #include <ivf/Extrusion.h>
 #include <ivf/GLDebug.h>
 #include <ivf/Grid.h>
@@ -94,9 +92,6 @@
 #include <ivf/TriSet.h>
 #include <ivf/TriStripSet.h>
 #include <ivf/TubeExtrusion.h>
-#include <ivf/VertexElements.h>
-#include <ivf/VertexIndex.h>
-#include <ivf/VertexList.h>
 #include <ivf/WireBrick.h>
 #include <ivf/rc.h>
 
@@ -632,31 +627,6 @@ void registerCases()
         return ShapePtr(r);
     });
 
-    // ---- Classes with no modern path yet (Phase 4 work in progress) ----
-
-    addCase("FaceSet", [] {
-        auto f = FaceSet::create();
-        f->setCoordSize(8);
-
-        const double c[8][3] = {{-0.5, -0.5, 0.5},  {0.5, -0.5, 0.5},  {0.5, -0.5, -0.5},
-                                {-0.5, -0.5, -0.5}, {-0.5, 0.5, 0.5},  {0.5, 0.5, 0.5},
-                                {0.5, 0.5, -0.5},   {-0.5, 0.5, -0.5}};
-
-        for (long i = 0; i < 8; i++)
-            f->setCoord(i, c[i][0], c[i][1], c[i][2]);
-
-        f->setCoordIndexSize(6);
-        f->setCoordIndex(0, 0, 1, 5, 4);
-        f->setCoordIndex(1, 1, 2, 6, 5);
-        f->setCoordIndex(2, 2, 3, 7, 6);
-        f->setCoordIndex(3, 3, 0, 4, 7);
-        f->setCoordIndex(4, 4, 5, 6, 7);
-        f->setCoordIndex(5, 0, 3, 2, 1);
-
-        f->setMaterial(defaultMaterial());
-        return ShapePtr(f);
-    });
-
     addCase("SimpleLineSet", [] {
         auto l = SimpleLineSet::create();
         l->setCoordSize(8);
@@ -693,26 +663,6 @@ void registerCases()
         m->setMeshResolution(8, 8);
         m->setMaterial(defaultMaterial());
         return ShapePtr(m);
-    });
-
-    addCase("VertexElements", [] {
-        auto v = VertexElements::create();
-
-        auto verts = VertexList::create();
-        verts->add(-0.7, -0.5, 0.0);
-        verts->add(0.7, -0.5, 0.0);
-        verts->add(0.0, 0.7, 0.0);
-        verts->add(0.0, -0.5, -0.7);
-
-        auto idx = VertexIndex::create();
-        long tris[12] = {0, 1, 2, 1, 3, 2, 3, 0, 2, 0, 3, 1};
-        idx->addArray(tris, 12);
-
-        v->setVertices(verts);
-        v->setIndices(idx);
-        v->setPrimitive(VertexElements::PT_TRIANGLES);
-        v->setMaterial(defaultMaterial());
-        return ShapePtr(v);
     });
 
     // A checkerboard built in memory, so the case needs no image file. Exercises
@@ -824,17 +774,6 @@ void registerCases()
     addCase("CoordinateSystem", [] {
         auto cs = CoordinateSystem::create();
         return ShapePtr(cs);
-    });
-
-    addCase("SelectOrtho", [] {
-        auto so = SelectOrtho::create();
-
-        auto brick = Brick::create();
-        brick->setSize(0.7, 0.7, 0.7);
-        brick->setMaterial(defaultMaterial());
-        so->addChild(brick);
-
-        return ShapePtr(so);
     });
 
     // ------------------------------------------------------------------

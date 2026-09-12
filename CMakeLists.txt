@@ -33,16 +33,11 @@ project(ivf)
 
 option(IVF_UI "Build user interface integration libraries." ON) 
 option(IVF_UI_FLTK "Build user interface integration libraries." ON)
-option(IVF_UI_WIN32 "Build user interface integration libraries." OFF)
 option(IVF_UI_GLFW "Build the GLFW integration library." ON)
 option(IVF_IMAGE "Build Ivf++ image support." ON)
-option(IVF_FONT "Build Ivf++ with font support." OFF)
 option(IVF_EXAMPLES "Build Ivf++ examples." ON)
 option(IVF_EXAMPLES_GENERIC "Build Ivf++ generic examples" ON)
-option(IVF_EXAMPLES_GLE "Build Ivf++ GLE examples" ON)
 option(IVF_EXAMPLES_FLTK "Build Ivf++ FLTK examples" ON)
-option(IVF_EXAMPLES_WIN32 "Build Ivf++ WIN32 examples" OFF)
-option(IVF_EXAMPLES_ASSIMP "Build Ivf++ assimp examples" OFF)
 option(IVF_DEBUG "Build Ivf++ with debug information." OFF)
 option(IVF_SHARED "Build Ivf++ as shared libraries." OFF)
 
@@ -81,14 +76,37 @@ message(STATUS "Ivf++ GLU library: ${IVF_GLU_LIBRARY}")
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
-if(IVF_EXAMPLES_ASSIMP)
-find_package(assimp CONFIG REQUIRED)
-endif()
-
 set( LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib )
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin )
 
-include_directories( ${PROJECT_SOURCE_DIR}/include/vc ${PROJECT_SOURCE_DIR}/include )
+# Runtime data.
+#
+# Examples open their assets through relative paths -- "data/images/ivf.png",
+# "data/fonts/white_font.fnt" -- so the tree has to sit beside the executable
+# rather than at the source root, or running one from its own directory fails
+# on a missing file. Multi-config generators put executables in bin/<config>,
+# single-config ones in bin, and EXECUTABLE_OUTPUT_PATH follows the same rule.
+
+if(CMAKE_CONFIGURATION_TYPES)
+	set(IVF_DATA_DESTINATION "${EXECUTABLE_OUTPUT_PATH}/$<CONFIG>/data")
+else()
+	set(IVF_DATA_DESTINATION "${EXECUTABLE_OUTPUT_PATH}/data")
+endif()
+
+# copy_directory rewrites the whole tree on every build. That is a few dozen
+# small files, and it is worth the cost: making it incremental needs a stamp
+# file per configuration, and a stale stamp silently leaves an example running
+# against data that no longer matches the source.
+
+add_custom_target(ivfdata ALL
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+		"${PROJECT_SOURCE_DIR}/data" "${IVF_DATA_DESTINATION}"
+	COMMENT "Copying data to ${IVF_DATA_DESTINATION}"
+	VERBATIM)
+
+set_target_properties(ivfdata PROPERTIES FOLDER "build")
+
+include_directories( ${PROJECT_SOURCE_DIR}/include )
 link_directories(${PROJECT_SOURCE_DIR}/lib )
 
 if(WIN32)

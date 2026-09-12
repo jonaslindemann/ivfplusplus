@@ -124,7 +124,6 @@ public:
 private:
 	double m_snapUnit;
 	//CIvfAxis* m_axis;
-	//OldGrid* m_grid;
 	Grid* m_grid;
 
 	Vec3d m_zAxis;

@@ -35,8 +35,6 @@
 
 #include <ivf/Scene.h>
 #include <ivf/View.h>
-#include <ivf/OldLightModel.h>
-#include <ivf/OldLight.h>
 
 #include <ivfwidget/WorkspaceWidget.h>
 

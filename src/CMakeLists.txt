@@ -12,11 +12,6 @@ if (IVF_UI)
 	if (IVF_UI_FLTK)
 		add_subdirectory(ivffltk)
 	endif (IVF_UI_FLTK)
-	
-	if (IVF_UI_WIN32)
-		add_subdirectory(ivfwin32)
-	endif (IVF_UI_WIN32)
-
 
 	if (IVF_UI_GLFW)
 		add_subdirectory(ivfglfw)
@@ -30,7 +25,3 @@ if (IVF_IMAGE)
 	add_subdirectory(ivfimage)
 	add_subdirectory(ivfext)
 endif(IVF_IMAGE)
-
-if (IVF_FONT)
-	add_subdirectory(ivffont)
-endif(IVF_FONT)

@@ -62,11 +62,12 @@ IvfSmartPointer(SceneBase);
  *
  *	  // Create a light
  *
- *	  OldLight* light = new OldLight();
- *	  light->setPosition(1.0, 1.0, 1.0, 0.0);
- *	  light->setAmbient(0.2f, 0.2f, 0.2f, 1.0f); 
+ *	  auto lighting = Lighting::getInstance();
  *
- *	  m_scene->getLightModel()->addLight(light);
+ *	  LightPtr light = lighting->getLight(0);
+ *	  light->setLightPosition(1.0, 1.0, 1.0, 0.0);
+ *	  light->setAmbientColor(0.2f, 0.2f, 0.2f, 1.0f);
+ *	  light->enable();
  * }
  * 
  * CExampleWindow::onRender()
