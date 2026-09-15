@@ -78,6 +78,7 @@ SceneBase::SceneBase()
 	m_shadowCenter = glm::vec3(0.0f, 0.0f, 0.0f);
 	m_shadowRadius = 10.0f;
 	m_shadowStrength = 0.5f;
+	m_selfShadowEnabled = true;
 }
 
 SceneBase::~SceneBase()
@@ -145,10 +146,27 @@ void SceneBase::defaultSceneRender(int pass)
 {
 	this->renderShadowMap();
 
+	// The composites can be made to cast into the shadow map above without
+	// sampling it back on themselves, leaving only the ground plane -- which
+	// Workspace renders after this returns -- shadowed by the model. See
+	// setSelfShadowEnabled(). Mirrors renderShadowMap()'s own guard: with
+	// shadow mapping not actually active this pass there is nothing bound to
+	// suppress, and toggling it here would just rebind whatever the last
+	// active frame left behind.
+
+	const bool suppressSelfShadow = !m_selfShadowEnabled && m_useShadowMap && (m_shadowMap != nullptr) &&
+	                                rcIsShaderActive() && !rcPickMode() && !rcDepthPass();
+
+	if (suppressSelfShadow)
+		rcSetShadowMap(0, 4);
+
 	m_preComposite->render();
 	m_composite->render();
 	m_postComposite->render();
-    
+
+	if (suppressSelfShadow)
+		rcSetShadowMap(m_shadowMap->depthTexture(), 4);
+
     if (m_renderFlatShadow)
     {
         // Everything this pass does to set itself up -- the flatten, the
@@ -924,6 +942,16 @@ double SceneBase::shadowStrength() const
 void SceneBase::invalidateShadowMap()
 {
 	m_shadowDirty = true;
+}
+
+void SceneBase::setSelfShadowEnabled(bool flag)
+{
+	m_selfShadowEnabled = flag;
+}
+
+bool SceneBase::getSelfShadowEnabled() const
+{
+	return m_selfShadowEnabled;
 }
 
 void ivf::SceneBase::setShadowPrePost(bool renderPre, bool renderPost)

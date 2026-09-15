@@ -183,6 +183,13 @@ void Workspace::doCreateGeometry()
                 if (rcDrawUnlit(GL_LINES, positions, colors, 6))
                 {
                     lgPopAttrib();
+
+                    // GL_ENABLE_BIT does not cover the blend function, only
+                    // GL_BLEND's on/off state -- so glBlendFunc(GL_ONE, GL_ONE)
+                    // above would otherwise leak into every later alpha-blended
+                    // draw this frame and beyond, turning them additive.
+
+                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                     return;
                 }
 
@@ -215,6 +222,7 @@ void Workspace::doCreateGeometry()
                 if (rcDrawUnlit(GL_LINES, positions, colors, 4))
                 {
                     lgPopAttrib();
+                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                     return;
                 }
 
@@ -228,6 +236,7 @@ void Workspace::doCreateGeometry()
             }
 
             lgPopAttrib();
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
     }
 }

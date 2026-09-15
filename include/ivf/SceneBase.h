@@ -128,6 +128,7 @@ private:
 	glm::vec3 m_shadowCenter;
 	float m_shadowRadius;
 	float m_shadowStrength;
+	bool m_selfShadowEnabled;
 
 	/**
 	 * Bring the shadow map up to date and hand it to the shader.
@@ -307,6 +308,22 @@ public:
 	/** How dark a fully shadowed surface goes, 0 to 1. Default 0.5. */
 	void setShadowStrength(double strength);
 	double shadowStrength() const;
+
+	/**
+	 * Whether the composites receive the shadow map, as opposed to only
+	 * casting into it. Default true.
+	 *
+	 * With a light near the horizon, the model shadowing itself is exactly
+	 * what makes the shadow read as three-dimensional. Straight overhead,
+	 * though, that same self-shadowing tends to be one part directly above
+	 * another that is barely offset, so it reads as acne inside the model
+	 * rather than useful shading. Disabling this leaves the ground plane
+	 * shadowed by the model -- it still receives, and the model still casts
+	 * into the map either way -- while the model itself no longer darkens
+	 * where it shadows itself.
+	 */
+	void setSelfShadowEnabled(bool flag);
+	bool getSelfShadowEnabled() const;
 
 	/**
 	 * Mark the shadow map as out of date, so the next frame redraws it.
